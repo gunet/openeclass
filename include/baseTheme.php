@@ -1100,6 +1100,17 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button{
+                    background-color:  $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -1157,6 +1168,28 @@ function view($view_file, $view_data = array()) {
                 .btn.btn-default {
                     border-color: $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
+                }
+
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after{
+                    color: $theme_options_styles[whiteButtonTextColor];
+                }
+
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button{
+                    border-color: $theme_options_styles[whiteButtonTextColor];
                 }
 
             ";
@@ -1225,6 +1258,18 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after{
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -1275,6 +1320,17 @@ function view($view_file, $view_data = array()) {
 
                 .btn.btn-default:hover,
                 .btn.btn-default:focus {
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button:hover,
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button:hover,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button:hover,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button:hover,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button:hover,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
             ";

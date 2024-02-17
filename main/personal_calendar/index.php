@@ -694,9 +694,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         
                                 var calendar = $('#EditCalendarEvents').fullCalendar({
                                     header:{
-                                        left: 'prev,next today',
+                                        left: 'prev,next ',
                                         center: 'title',
-                                        right: 'agendaDay,agendaWeek'
+                                        right: ''
                                     },
                                     defaultView: 'agendaWeek',
                                     defaultDate: '{$startDateEvent}',
@@ -1096,9 +1096,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     
                             var calendar = $('#calendarEvents').fullCalendar({
                                 header:{
-                                    left: 'prev,next today',
+                                    left: 'prev,next ',
                                     center: 'title',
-                                    right: 'agendaDay,agendaWeek'
+                                    right: ''
                                 },
                                 defaultView: 'agendaWeek',
                                 slotDuration: '00:30' ,

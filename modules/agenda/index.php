@@ -531,9 +531,9 @@ if ($is_editor) {
 
                                 var calendar = $('#editAgendaEvents').fullCalendar({
                                     header:{
-                                        left: 'prev,next today',
+                                        left: 'prev,next ',
                                         center: 'title',
-                                        right: 'agendaDay,agendaWeek'
+                                        right: ''
                                     },
                                     defaultView: 'agendaWeek',
                                     defaultDate: '{$startDateEvent}',
@@ -904,9 +904,9 @@ if ($is_editor) {
 
                         var calendar = $('#AgendaEvents').fullCalendar({
                             header:{
-                                left: 'prev,next today',
+                                left: 'prev,next ',
                                 center: 'title',
-                                right: 'agendaDay,agendaWeek'
+                                right: ''
                             },
                             defaultView: 'agendaWeek',
                             slotDuration: '00:30' ,

@@ -77,7 +77,7 @@
                                                             @php $image_tutor = profile_image($tutor->user_id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
                                                             {!! $image_tutor !!}
                                                             <h4 class='mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</h4>
-                                                            <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
+                                                            <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1 mb-3">{{ trans('langGroupTutor')}}</p>
                                                             @if(count($nextAvDate) > 0)
                                                                 @foreach($nextAvDate as $d)
                                                                     @foreach(array_keys($d) as $key)
@@ -88,7 +88,9 @@
                                                                     @endforeach
                                                                 @endforeach
                                                             @endif
-                                                            <a class='btn submitAdminBtnDefault d-inline-flex mt-2' href="{{ $urlAppend }}modules/group/booking.php?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;tutor_id={{ $tutor->user_id }}">
+
+
+                                                            </br><a class='btn submitAdminBtnDefault d-inline-flex' href="{{ $urlAppend }}modules/group/booking.php?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;tutor_id={{ $tutor->user_id }}">
                                                                 {{ trans('langDoBooking')}}
                                                             </a></br>
 

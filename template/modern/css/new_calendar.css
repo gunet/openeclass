@@ -411,6 +411,33 @@
   font-weight: 700;
 }
 
+/******************** table header - buttons  **********************/
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button,
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button,
+.calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button,
+.calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button,
+.bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button,
+.bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button,
+.myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button,
+.myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button{
+  margin-right: 10px;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  background-image: none;
+  background-color: #ffffff;
+  border-color: #0073E6;
+}
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after,
+.calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+.calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after,
+.bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+.bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after,
+.myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button .fc-icon::after,
+.myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button .fc-icon::after{
+  color: #0073E6;
+}
 
 
 /************************** table body **************************/

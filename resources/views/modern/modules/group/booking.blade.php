@@ -116,9 +116,9 @@
 
         var calendar = $('#calendarBooking').fullCalendar({
             header:{
-                left: 'prev,next today',
+                left: 'prev,next ',
                 center: 'title',
-                right: 'agendaDay,agendaWeek'
+                right: ''
             },
             defaultView: 'agendaWeek',
             slotDuration: '00:30' ,

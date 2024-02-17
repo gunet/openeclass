@@ -88,12 +88,15 @@
                                                                         @endforeach
                                                                     @endforeach
                                                                 @endif
-                                                                <a class='btn submitAdminBtnDefault d-inline-flex mt-2' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
-                                                                    {{ trans('langAddAvailability')}}
-                                                                </a>
+
                                                                 <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $tutor->user_id }}">
                                                                     {{ trans('langAvailableTutorBookings')}}
                                                                 </a>
+                                                                
+                                                                <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
+                                                                    {{ trans('langAddAvailability')}}
+                                                                </a>
+                                                                
                                                             </div>
                                                         </div>
                                                         <div class="col-md-8">
@@ -128,12 +131,15 @@
                                                                 @endforeach
                                                             @endforeach
                                                         @endif
-                                                        <a class='btn submitAdminBtnDefault d-inline-flex mt-2' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
-                                                            {{ trans('langAddAvailability')}}
-                                                        </a>
+                                                        
                                                         <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $uid }}">
                                                             {{ trans('langMyAvailableBookings')}}
                                                         </a>
+
+                                                        <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
+                                                            {{ trans('langAddAvailability')}}
+                                                        </a>
+                                                        
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8">
