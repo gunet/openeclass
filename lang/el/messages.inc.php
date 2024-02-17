@@ -2368,17 +2368,19 @@ $langGroupFilledGroups = "Οι ομάδες χρηστών έχουν συμπλ
 $langGroupInfo = "Στοιχεία Ομάδας";
 $langGroupMembersInfo = "Μέλη Ομάδας";
 
+// Group - bookings
+$langBooking = "Κράτηση";
 $langBookings = "Κρατήσεις";
 $langAddAvailableDateForGroupAdmin = "Προσθήκη διαθεσιμότητας στην ομάδα"; 
 $langAddAvailability = "Προσθήκη διαθέσιμης ημερομηνίας";
-$langRedInfoRentezvousOtherProgram = "Με ΚΟΚΚΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως υπεύθυνος ομάδας σε άλλα μαθήματα.";
-$langSuccessInfoRentezvous = "Με ΠΡΑΣΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει στο τρέχων μάθημα</br>
-                           στην τρέχων ομάδα ως υπεύθυνος.";
-$langWarningInfoRentezvous = "Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχει καταχωρίσει κάποιος άλλος</br>
-                              υπεύθυνος ομάδας στο τρέχων μάθημα στη τρέχων ομάδα.";
-$langInfoInfoRentezvous = "Με ΓΑΛΑΖΙΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως</br>
-                              υπεύθυνος ομάδας στο τρέχων μάθημα σε άλλη ομάδα.";
-$langPinkInfoRentezvous = "Με ΡΟΖ χρώμα εμφανίζεται η κράτηση που έχει γίνει από κάποιο μέλος της ομάδας.";
+$langRedInfoRentezvousOtherProgram = "<div class='Accent-200-cl TextBold'>Με ΚΟΚΚΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως υπεύθυνος ομάδας σε άλλα μαθήματα.</div>";
+$langSuccessInfoRentezvous = "<div class='Success-200-cl TextBold'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει στο τρέχων μάθημα</br>
+                           στην τρέχων ομάδα ως υπεύθυνος.</div>";
+$langWarningInfoRentezvous = "<div class='Warning-200-cl TextBold'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχει καταχωρίσει κάποιος άλλος</br>
+                              υπεύθυνος ομάδας στο τρέχων μάθημα στη τρέχων ομάδα.</div>";
+$langInfoInfoRentezvous = "<div class='Primary-400-cl TextBold'>Με ΓΑΛΑΖΙΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως</br>
+                              υπεύθυνος ομάδας στο τρέχων μάθημα σε άλλη ομάδα.</div>";
+$langPinkInfoRentezvous = "<div class='Pink-cl TextBold'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση που έχει γίνει από κάποιο μέλος της ομάδας.</div>";
 $langChangeDateSuccess = "Η ημερομηνία άλλαξε επιτυχώς.";
 $langNoChangeDateOtherUser = "Δεν μπορείτε να αλλάξατε την ημερομηνία άλλου χρήστη.";
 $langExistBookingForThisDate = "Δεν μπορείτε να αλλάξατε την συγκεκριμένη ημερομηνία.";
@@ -2393,6 +2395,22 @@ $langAddAVailableDateWith ="Προσθήκη διαθέσιμης ημερομη
 $langAvailableDateForGroupAdmin = "Διαθέσιμη ημερομηνία υπεύθυνου ομάδας";
 $langDoBooking = "Κάντε κράτηση";
 $langNextAvailableDate = "Επόμενη διαθέσιμη ημερομηνία";
+$langAddBooking = "Κράτηση στον υπεύθυνο ομάδας";
+$langdobookingwithtutor = "Θέλετε να κάνετε κρατήση για να επικοινωνήσετε με τον συγκεκριμένο υπεύθυνο?";
+$langAddBookingSuccess = "Η κράτησή σας έγινε επιτυχώς. Έχει σταλθεί ενημερωτικό email στον υπεύθυνο.";
+$langAddBookingNoSuccess = "Η κράτηση δεν ολοκληρώθηκε καθώς κάποιος άλλος χρήστης χρησιμοποίησε την συγκεκριμένη ημερομηνία.";
+$langMentorHasRemovedTheDate = "Η κράτηση δεν ολοκληρώθηκε καθώς ο υπεύθυνος έχει αφαιρέσει την διαθέσιμη ημερομηνία του.";
+$langDeleteBookingSuccess = "Η κράτησή σας διαγράφηκε επιτυχώς.";
+$langdelbookingwithtutor = "Θέλετε να ακυρώσετε την συγκεκριμένη κράτηση?";
+$langAddBookingByUser = "Κράτηση για επικοινωνία";
+$langDetailsBooking = "Τα στοιχεία της κράτησης είναι τα εξής:";
+$langDeleteBookingByUser = "Ακύρωση κράτησης";
+$langPlsWait = "Περιμένετε...";
+$langHaveDoneBooking = "ΑΚΥΡΩΣΗ ΚΡΑΤΗΣΗΣ";
+$langDoBooking = "ΚΑΝΤΕ ΚΡΑΤΗΣΗ";
+$langDisableBooking = "ΜΗ ΔΙΑΘΕΣΙΜΟ";
+$langBookingIsDone = "ΕΙΝΑΙ ΚΛΕΙΣΜΕΝΟ";
+$langAcceptBooking = "Αποδοχή από τον υπεύθυνο";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";

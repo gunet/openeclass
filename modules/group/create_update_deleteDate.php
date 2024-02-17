@@ -100,7 +100,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                                                             AND start = ?t
                                                             AND end = ?t",$old_course,$old_group_id,$old_tutor,$old_start,$old_end)->c;
 
-        $is_editor_course = access_update_delete_Date();
+        $is_editor_course = access_update_delete_Date($_POST['group_id']);
 
         if($checkExistSimpleUser == 0 and (($old_tutor == $uid && $is_editor_course) or $is_course_admin)){
             if($_POST['user_id'] == $uid or $is_editor_course or $is_course_admin){
@@ -132,25 +132,25 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         if($old_date){
             $old_tutor = $old_date->user_id;
             $old_group_id = $old_date->group_id;
-            $old_course = $old_date->mentoring_program_id;
+            $old_course = $old_date->lesson_id;
             $old_start = $old_date->start;
             $old_end = $old_date->end;
         }
         
-
-         //check if exists simple user who have been made a book 
+        
+         //check if exists simple user who have made a book 
          $checkExistSimpleUser = Database::get()->querySingle("SELECT COUNT(id) as c FROM booking
                                                             WHERE lesson_id = ?d
                                                             AND group_id = ?d
                                                             AND tutor_id = ?d
                                                             AND start = ?t
                                                             AND end = ?t",$old_course,$old_group_id,$old_tutor,$old_start,$old_end)->c;
-        
+
         if($checkExistSimpleUser == 0){
             $event_id = $_POST['id'];
             $check = Database::get()->querySingle("SELECT user_id FROM tutor_availability_group WHERE id = ?d",$event_id)->user_id;
 
-            $is_editor_course = access_update_delete_Date();
+            $is_editor_course = access_update_delete_Date($_POST['group_id']);
 
             if(($check == $uid && $is_editor_course) or $is_course_admin){
                 $del = Database::get()->query("DELETE FROM tutor_availability_group WHERE id = ?d",$event_id);
@@ -172,7 +172,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
 
 function getBackgroundEvent($lessonId,$group,$userId,$start,$end,$tutor_id,$group_id){
-    global $course_id, $uid, $is_editor_course, $is_course_admin;
+    global $course_id;
   
     $color = '';
 
@@ -292,7 +292,7 @@ function nameTutor($userId,$lessonId,$group,$start,$end,$tutor_id,$group_id){
 }
 
 function dontShowTutorIfIsNotTutorOfGroup($lessonId,$userId,$tutor_id,$group,$group_id){
-    global $course_id, $uid, $is_editor_course, $is_course_admin;
+    global $course_id;
     $html = "";
 
     // in current group then
@@ -321,14 +321,19 @@ function dontShowTutorIfIsNotTutorOfGroup($lessonId,$userId,$tutor_id,$group,$gr
 
 
 
-function access_update_delete_Date(){
-    //an uid einai ekpaideuths-diaxeirisths
+function access_update_delete_Date($g_id){
+    //an uid einai upeuthinos omadas
     global $course_id, $uid, $is_course_admin;
 
-    $check_2 = Database::get()->queryArray("SELECT * FROM course_user
-                                            WHERE course_id = ?d
-                                            AND user_id = ?d
-                                            AND editor = ?d",$course_id,$uid,1);
+    // $check_2 = Database::get()->queryArray("SELECT * FROM course_user
+    //                                         WHERE course_id = ?d
+    //                                         AND user_id = ?d
+    //                                         AND editor = ?d",$course_id,$uid,1);
+
+    $check_2 = Database::get()->queryArray("SELECT * FROM group_members
+                                                    WHERE group_id = ?d
+                                                    AND user_id = ?d
+                                                    AND is_tutor = ?d",$g_id,$uid,1);
 
     $is_editor_course = false;
     if(count($check_2) > 0 or $is_course_admin){

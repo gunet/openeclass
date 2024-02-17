@@ -88,7 +88,7 @@
                                                                         @endforeach
                                                                     @endforeach
                                                                 @endif
-                                                                <a class='btn submitAdminBtnDefault mt-2' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
+                                                                <a class='btn submitAdminBtnDefault d-inline-flex mt-2' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
                                                                     {{ trans('langAddAvailability')}}
                                                                 </a>
                                                             </div>
@@ -125,7 +125,7 @@
                                                                 @endforeach
                                                             @endforeach
                                                         @endif
-                                                        <a class='btn submitAdminBtnDefault mt-2' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
+                                                        <a class='btn submitAdminBtnDefault d-inline-flex mt-2' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
                                                             {{ trans('langAddAvailability')}}
                                                         </a>
                                                     </div>

@@ -88,7 +88,7 @@
                                                                     @endforeach
                                                                 @endforeach
                                                             @endif
-                                                            <a class='btn submitAdminBtnDefault mt-2' href="{{ $urlAppend }}modules/group/booking.php?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;tutor_id={{ $tutor->user_id }}">
+                                                            <a class='btn submitAdminBtnDefault d-inline-flex mt-2' href="{{ $urlAppend }}modules/group/booking.php?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;tutor_id={{ $tutor->user_id }}">
                                                                 {{ trans('langDoBooking')}}
                                                             </a>
                                                             

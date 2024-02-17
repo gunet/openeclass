@@ -69,9 +69,8 @@
                     @endif
 
                     <div class='col-12'>
-                        <div class='alert alert-info'>
-                            <i class='fa-solid fa-circle-info fa-lg'></i>
-                            <span>
+                        <div class='card border-card'>
+                            <div class='card-body'>
                                 <ul>
                                     <li class='mb-2'><p>{!! trans('langRedInfoRentezvousOtherProgram') !!}</p></li>
                                     <li class='mb-2'><p>{!! trans('langInfoInfoRentezvous') !!}</p></li>
@@ -79,9 +78,8 @@
                                     <li class='mb-2'><p>{!! trans('langSuccessInfoRentezvous') !!}</p></li>
                                     <li><p>{!! trans('langPinkInfoRentezvous') !!}</p></li>
                                 </ul>
-                            </span>
+                            </div>
                         </div>
-                     
                     </div>
                     
                     <div class="col-12 mt-3 overflow-auto">
@@ -102,7 +100,7 @@
                                         <div class='form-wrapper form-edit rounded'>
 
                                             
-                                            <div class="controls controls-row TextSemiBold text-secondary" id="when"></div>
+                                            <div class="controls controls-row" id="when"></div>
                                             
                                             <input type="hidden" id="startTime">
                                             <input type="hidden" id="endTime">
@@ -185,7 +183,6 @@
                 title.html( title.text() );
 
                 var timee = element.find( '.fc-time span' );
-                //console.log(timee[0].innerText);
                 
                 element.popover({
                     title: timee[0].innerText+event.title,
@@ -208,7 +205,7 @@
                 if(confirm("{{ js_escape(trans('langDeleteAvailableDate')) }}")){
                     $.ajax({
                         url: '{{ $urlAppend }}modules/group/create_update_deleteDate.php',
-                        data: 'action=delete&id='+id,
+                        data: 'action=delete&id='+id+'&group_id='+event.group_id,
                         type: "POST",
                         success: function(json) {
                             if(json == 1){
