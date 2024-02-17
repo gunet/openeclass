@@ -2602,18 +2602,9 @@ function view($view_file, $view_data = array()) {
                 .myPersonalCalendar {
                     background-color: $theme_options_styles[bgAgenda];
                 }
-                .myCalendarEvents table tr td{
-                    background-color: $theme_options_styles[bgAgenda];
-                    opacity: 0.8;
-                }
-                .myCalendarEvents .fc-widget-content table tbody td {
-                    border: solid 1px rgba(79, 104, 147, 0.3)
-                }
+
                 
-                .myCalendarEvents .fc-head-container.fc-widget-header,
-                .myCalendarEvents .fc-head-container thead{
-                    background: $theme_options_styles[bgAgenda];
-                }
+
                 .myPersonalCalendar .cal-row-fluid.cal-row-head {
                     background: $theme_options_styles[bgAgenda];
                 }
@@ -2712,9 +2703,7 @@ function view($view_file, $view_data = array()) {
                 #calendar-header {
                     background: $theme_options_styles[BgColorHeaderAgenda];
                 }
-                .myCalendarEvents .fc-header-toolbar {
-                    background: $theme_options_styles[BgColorHeaderAgenda];
-                }
+
 
 
 
@@ -2835,18 +2824,9 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
 
-                .myCalendarEvents .fc-today-button {
-                    color: $theme_options_styles[clColorHeaderAgenda] !important;
-                }
+     
 
-                .myCalendarEvents .fc-header-toolbar .fc-next-button .fc-icon-right-single-arrow,
-                .myCalendarEvents .fc-header-toolbar .fc-prev-button .fc-icon-left-single-arrow,
-                .myCalendarEvents .fc-header-toolbar .fc-center h2,
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button,
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button {
-                    color: $theme_options_styles[clColorHeaderAgenda] !important;
-                }
+            
 
 
 
@@ -2929,12 +2909,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clColorBodyAgenda];
                 }
 
-                .myCalendarEvents .fc-widget-header table thead span {
-                    color: $theme_options_styles[clColorBodyAgenda] !important;
-                }
-                .myCalendarEvents .fc-widget-content table tbody span {
-                    color: $theme_options_styles[clColorBodyAgenda] !important;
-                }
+        
 
 
                 .datepicker-centuries .table-condensed thead tr th.dow,
@@ -3006,6 +2981,51 @@ function view($view_file, $view_data = array()) {
                 .fc-unthemed th, 
                 .fc-unthemed thead {
                     border-color: $theme_options_styles[BgBorderColorAgenda];
+                }
+
+                .calendarViewDatesTutorGroup table,
+                .calendarAddDaysCl table,
+                .bookingCalendarByUser table,
+                .myCalendarEvents table {
+                    border-color:  $theme_options_styles[BgBorderColorAgenda];
+                }
+
+                .calendarViewDatesTutorGroup .fc-widget-header,
+                .calendarAddDaysCl .fc-widget-header,
+                .bookingCalendarByUser .fc-widget-header,
+                .myCalendarEvents .fc-widget-header,
+                .calendarViewDatesTutorGroup table .fc-head table thead tr th,
+                .calendarAddDaysCl table .fc-head table thead tr th,
+                .bookingCalendarByUser table .fc-head table thead tr th,
+                .myCalendarEvents table .fc-head table thead tr th{
+                    border-color:  $theme_options_styles[BgBorderColorAgenda];
+                }
+                .calendarViewDatesTutorGroup table .fc-head,
+                .calendarAddDaysCl table .fc-head,
+                .bookingCalendarByUser table .fc-head,
+                .myCalendarEvents table .fc-head{
+                    border-color:  $theme_options_styles[BgBorderColorAgenda];
+                }
+
+                .calendarViewDatesTutorGroup table .fc-body .fc-widget-content,
+                .calendarAddDaysCl table .fc-body .fc-widget-content,
+                .bookingCalendarByUser table .fc-body .fc-widget-content,
+                .myCalendarEvents table .fc-body .fc-widget-content{
+                    border-color:  $theme_options_styles[BgBorderColorAgenda];
+                }
+
+                .calendarViewDatesTutorGroup table .fc-body tbody tr td,
+                .calendarAddDaysCl table .fc-body tbody tr td,
+                .bookingCalendarByUser table .fc-body tbody tr td,
+                .myCalendarEvents table .fc-body tbody tr td{
+                    border-color: $theme_options_styles[BgBorderColorAgenda] ;
+                }
+
+                .calendarViewDatesTutorGroup table .fc-body tbody tr,
+                .calendarAddDaysCl table .fc-body tbody tr,
+                .bookingCalendarByUser table .fc-body tbody tr,
+                .myCalendarEvents table .fc-body tbody tr{
+                    border-color: $theme_options_styles[BgBorderColorAgenda] ;
                 }
 
             ";
@@ -3551,6 +3571,13 @@ function view($view_file, $view_data = array()) {
               .bodyChat::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
+
+              .calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+              .calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+              .bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+              .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
               
               
             ";
@@ -3604,6 +3631,13 @@ function view($view_file, $view_data = array()) {
 
               .bodyChat::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+              .calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+              .bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+              .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb {
+                 background-color: $theme_options_styles[BgColorScrollBar];
               }
             
               
@@ -3660,6 +3694,14 @@ function view($view_file, $view_data = array()) {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
               
+
+              .calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+              .calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+              .bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+              .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover{
+                    background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
             ";
         }
 
@@ -3870,6 +3912,7 @@ function view($view_file, $view_data = array()) {
                 a, .toolAdminText{
                     color: $theme_options_styles[linkColor];
                 }
+
 
                 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
                 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active,

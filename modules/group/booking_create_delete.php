@@ -12,6 +12,7 @@ $require_help = true;
 $helpTopic = 'available_dates';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 
@@ -97,52 +98,52 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                     
                     
                 //send email to the tutor about the booking from user
-                // $userName = $_POST['title'];
-                // $tutorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$_POST["tutor_Id"])->givenname;
-                // $tutorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$_POST["tutor_Id"])->surname;
-                // $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST["tutor_Id"])->email;
-                // $dateFrom = $_POST["start"];
-                // $dateEnd = $_POST["end"];
+                $userName = $_POST['title'];
+                $tutorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$_POST["tutor_Id"])->givenname;
+                $tutorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$_POST["tutor_Id"])->surname;
+                $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST["tutor_Id"])->email;
+                $dateFrom = $_POST["start"];
+                $dateEnd = $_POST["end"];
 
-                // $emailHeader = "
-                // <!-- Header Section -->
-                //         <div id='mail-header'>
-                //             <br>
-                //             <div>
-                //                 <div id='header-title'>$langAddBookingByUser</div>
-                //             </div>
-                //         </div>";
+                $emailHeader = "
+                <!-- Header Section -->
+                        <div id='mail-header'>
+                            <br>
+                            <div>
+                                <div id='header-title'>$langAddBookingByUser</div>
+                            </div>
+                        </div>";
 
-                // $emailMain = "
-                // <!-- Body Section -->
-                //     <div id='mail-body'>
-                //         <br>
-                //         <div>$langDetailsBooking</div>
-                //         <div id='mail-body-inner'>
-                //             <ul id='forum-category'>
-                //                 <li><span><b>$langName: </b></span> <span>$userName</span></li>
-                //                 <li><span><b>$langTutor: </b></span> <span>$tutorName $tutorSurname</span></li>
-                //                 <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
-                //             </ul>
-                //         </div>
-                //         <div>
-                //             <br>
-                //             <p>$langProblem</p><br>" . get_config('admin_name') . "
-                //             <ul id='forum-category'>
-                //                 <li>$langManager: $siteName</li>
-                //                 <li>$langTel: -</li>
-                //                 <li>$langEmail: " . get_config('email_helpdesk') . "</li>
-                //             </ul>
-                //         </div>
-                //     </div>";
+                $emailMain = "
+                <!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div>$langDetailsBooking</div>
+                        <div id='mail-body-inner'>
+                            <ul id='forum-category'>
+                                <li><span><b>$langName: </b></span> <span>$userName</span></li>
+                                <li><span><b>$langTutor: </b></span> <span>$tutorName $tutorSurname</span></li>
+                                <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <br>
+                            <p>$langProblem</p><br>" . get_config('admin_name') . "
+                            <ul id='forum-category'>
+                                <li>$langManager: $siteName</li>
+                                <li>$langTel: -</li>
+                                <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                            </ul>
+                        </div>
+                    </div>";
 
-                // $emailsubject = $siteName.':'.$langAddBookingByUser;
+                $emailsubject = $siteName.':'.$langAddBookingByUser;
 
-                // $emailbody = $emailHeader.$emailMain;
+                $emailbody = $emailHeader.$emailMain;
 
-                // $emailPlainBody = html2text($emailbody);
+                $emailPlainBody = html2text($emailbody);
                 
-                // send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+                send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
                 
                 echo 1;
                    
@@ -204,45 +205,45 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
             if($del){
 
-                // $emailHeader = "
-                // <!-- Header Section -->
-                //         <div id='mail-header'>
-                //             <br>
-                //             <div>
-                //                 <div id='header-title'>$langDeleteBookingByUser</div>
-                //             </div>
-                //         </div>";
+                $emailHeader = "
+                <!-- Header Section -->
+                        <div id='mail-header'>
+                            <br>
+                            <div>
+                                <div id='header-title'>$langDeleteBookingByUser</div>
+                            </div>
+                        </div>";
 
-                // $emailMain = "
-                // <!-- Body Section -->
-                //     <div id='mail-body'>
-                //         <br>
-                //         <div>$langDetailsBooking</div>
-                //         <div id='mail-body-inner'>
-                //             <ul id='forum-category'>
-                //                 <li><span><b>$langName: </b></span> <span>$userName</span></li>
-                //                 <li><span><b>$langTutor: </b></span> <span>$tutorName $tutorSurname</span></li>
-                //                 <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
-                //             </ul>
-                //         </div>
-                //         <div>
-                //             <br>
-                //             <p>$langProblem</p><br>" . get_config('admin_name') . "
-                //             <ul id='forum-category'>
-                //                 <li>$langManager: $siteName</li>
-                //                 <li>$langTel: -</li>
-                //                 <li>$langEmail: " . get_config('email_helpdesk') . "</li>
-                //             </ul>
-                //         </div>
-                //     </div>";
+                $emailMain = "
+                <!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div>$langDetailsBooking</div>
+                        <div id='mail-body-inner'>
+                            <ul id='forum-category'>
+                                <li><span><b>$langName: </b></span> <span>$userName</span></li>
+                                <li><span><b>$langTutor: </b></span> <span>$tutorName $tutorSurname</span></li>
+                                <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <br>
+                            <p>$langProblem</p><br>" . get_config('admin_name') . "
+                            <ul id='forum-category'>
+                                <li>$langManager: $siteName</li>
+                                <li>$langTel: -</li>
+                                <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                            </ul>
+                        </div>
+                    </div>";
 
-                // $emailsubject = $siteName.':'.$langDeleteBookingByUser.'--'.$userName;
+                $emailsubject = $siteName.':'.$langDeleteBookingByUser.'--'.$userName;
 
-                // $emailbody = $emailHeader.$emailMain;
+                $emailbody = $emailHeader.$emailMain;
 
-                // $emailPlainBody = html2text($emailbody);
+                $emailPlainBody = html2text($emailbody);
                 
-                // send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+                send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
 
                 echo 1;
             }
@@ -331,22 +332,22 @@ function TitleBooking($bookingTutorStart,$bookingTutorEnd,$tutor_id,$group_id){
                                                     AND id IN (SELECT booking_id FROM booking_user WHERE simple_user_id = ?d)",$course_id,$group_id,$tutor_id,$bookingTutorStart,$bookingTutorEnd,$uid);
 
         if(count($BookingByUser) > 0){
-            $html_bookingTitle .= "<p class='text-center TextBold smallText'>$langHaveDoneBooking</p>";
+            $html_bookingTitle .= "<p class='text-center TextBold smallText simple-user-booking-event'>$langHaveDoneBooking</p>";
             foreach($BookingByUser as $b){
                 if($b->accepted == 1){
-                    $html_bookingTitle .= "<p class='text-center TextBold smallText mt-1'>$langAcceptBooking: $langYes</p>";
+                    $html_bookingTitle .= "<p class='text-center TextBold smallText simple-user-booking-event mt-1'>$langAcceptBooking: $langYes</p>";
                 }else{
-                    $html_bookingTitle .= "<p class='text-center TextBold smallText mt-1'>$langAcceptBooking: $langNo</p>";
+                    $html_bookingTitle .= "<p class='text-center TextBold smallText simple-user-booking-event mt-1'>$langAcceptBooking: $langNo</p>";
                 }
             }
         }else{
-            $html_bookingTitle .= "<p class='text-center TextBold smallText'>$langDoBooking<p>";
+            $html_bookingTitle .= "<p class='text-center TextBold simple-user-booking-event smallText'>$langDoBooking<p>";
         }
     }else{
         if($hasExpired){
-            $html_bookingTitle .= "<p class='text-center TextBold smallText'>$langDisableBooking</p>";
+            $html_bookingTitle .= "<p class='text-center TextBold simple-user-booking-event smallText'>$langDisableBooking</p>";
         }else{
-            $html_bookingTitle .= "<p class='text-center TextBold smallText'>$langBookingIsDone</p>";
+            $html_bookingTitle .= "<p class='text-center TextBold simple-user-booking-event smallText'>$langBookingIsDone</p>";
         }
         
     }
@@ -384,12 +385,12 @@ function ColorExistBooking($bookingTutorStart,$bookingTutorEnd,$tutor_id,$group_
                                                         AND id IN (SELECT booking_id FROM booking_user WHERE simple_user_id = ?d)",$course_id,$group_id,$tutor_id,$bookingTutorStart,$bookingTutorEnd,$uid);
 
         if(count($BookingByUser) > 0){
-            $html_bookingExist = '#82AC64';
+            $html_bookingExist = '#1E7E0E';
             foreach($BookingByUser as $b){
                 if($b->accepted == 1){
                     $html_bookingExist = '#FFC0CB';
                 }else{
-                    $html_bookingExist = '#82AC64';
+                    $html_bookingExist = '#1E7E0E';
                 }
             }
         }else{

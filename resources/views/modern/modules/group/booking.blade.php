@@ -71,10 +71,23 @@
                     <div id="loaderBooking" class="modal fade in" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <div class="modal-body bg-light d-flex justify-content-center align-items-center">
+                                <div class="modal-body bg-transparent d-flex justify-content-center align-items-center">
                                     <img src='{{ $urlAppend }}template/modern/img/ajax-loader.gif' alt='Loading'>
                                     <span>{{ trans('langPlsWait') }}</span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='col-12'>
+                        <div class='card border-card'>
+                            <div class='card-body'>
+                                <ul>
+                                    <li class='mb-2'><p>{!! trans('langBlueInfoBooking') !!}</p></li>
+                                    <li class='mb-2'><p>{!! trans('langSuccessInfoBooking') !!}</p></li>
+                                    <li class='mb-2'><p>{!! trans('langPinkInfoBooking') !!}</p></li>
+                                    <li><p>{!! trans('langWarningInfoBooking') !!}</p></li>
+                                </ul>
                             </div>
                         </div>
                     </div>

@@ -383,7 +383,7 @@ if ($is_editor) {
                     $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
 
                     $tool_content .= "
-                                <div class='col-12 overflow-auto'>
+                                <div class='col-12 calendar-events-container'>
                                     <div id='editAgendaEvents' class='myCalendarEvents'></div>
                                 </div>
 
@@ -555,7 +555,7 @@ if ($is_editor) {
                                         title.addClass('text-center');
 
                                         var time = element.find( '.fc-time' );
-                                        time.addClass('text-center mb-2 bagde bg-default Primary-600-cl');
+                                        time.addClass('text-center');
                                     },
 
                                     eventClick:  function(event) {
@@ -768,7 +768,7 @@ if ($is_editor) {
             $event_title = '';
 
             $tool_content .= "
-                <div class='col-12 overflow-auto'>
+                <div class='col-12 calendar-events-container'>
                     <div id='AgendaEvents' class='myCalendarEvents'></div>
                 </div>
 

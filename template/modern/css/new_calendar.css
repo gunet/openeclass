@@ -155,7 +155,7 @@
   align-items: center ;
 }
 
-
+/* 
 .myCalendarEvents table {
   width: 100% !important;
   box-sizing: border-box;
@@ -291,7 +291,267 @@
   display: flex ;
   justify-content: center ;
   align-items: center ;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/********************************************* DATES TUTOR CALENDAR VIEW **********************************************/
+
+@media(max-width:991px){
+  .calendar-events-container{
+    overflow: auto;
+  }
 }
+
+
+.calendarViewDatesTutorGroup .fc-view-container *, 
+.calendarViewDatesTutorGroup .fc-view-container :after, 
+.calendarViewDatesTutorGroup .fc-view-container :before,
+.calendarAddDaysCl .fc-view-container *, 
+.calendarAddDaysCl .fc-view-container :after, 
+.calendarAddDaysCl .fc-view-container :before,
+.bookingCalendarByUser .fc-view-container *, 
+.bookingCalendarByUser .fc-view-container :after, 
+.bookingCalendarByUser .fc-view-container :before,
+.myCalendarEvents .fc-view-container *, 
+.myCalendarEvents .fc-view-container :after, 
+.myCalendarEvents .fc-view-container :before {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* table */
+
+.calendarViewDatesTutorGroup table,
+.calendarAddDaysCl table,
+.bookingCalendarByUser table,
+.myCalendarEvents table {
+  width: 100%;
+  box-sizing: border-box ;
+  table-layout: fixed !important;
+  border-collapse: collapse ;
+  border-spacing: 0 ;
+  border-color: #EFF6FF;
+}
+.calendarViewDatesTutorGroup .fc-toolbar .fc-state-active, 
+.calendarViewDatesTutorGroup .fc-toolbar .ui-state-active,
+.calendarAddDaysCl .fc-toolbar .fc-state-active, 
+.calendarAddDaysCl .fc-toolbar .ui-state-active,
+.bookingCalendarByUser .fc-toolbar .fc-state-active, 
+.bookingCalendarByUser .fc-toolbar .ui-state-active,
+.myCalendarEvents .fc-toolbar .fc-state-active, 
+.myCalendarEvents .fc-toolbar .ui-state-active {
+  z-index: 0;
+}
+@media(max-width:991px){
+  .calendarViewDatesTutorGroup,
+  .calendarAddDaysCl,
+  .bookingCalendarByUser,
+  .myCalendarEvents{
+    width: 768px;
+    overflow-x: auto;
+  }
+}
+
+.calendarViewDatesTutorGroup .fc-basic-view .fc-day-top .fc-day-number {
+  font-weight: 700;
+}
+
+/************************* table header ****************************/
+.calendarViewDatesTutorGroup .fc-widget-header,
+.calendarAddDaysCl .fc-widget-header,
+.bookingCalendarByUser .fc-widget-header,
+.myCalendarEvents .fc-widget-header,
+.calendarViewDatesTutorGroup table .fc-head table thead tr th,
+.calendarAddDaysCl table .fc-head table thead tr th,
+.bookingCalendarByUser table .fc-head table thead tr th,
+.myCalendarEvents table .fc-head table thead tr th{
+  border-color:  #EFF6FF;
+}
+.calendarViewDatesTutorGroup table .fc-head,
+.calendarAddDaysCl table .fc-head,
+.bookingCalendarByUser table .fc-head,
+.myCalendarEvents table .fc-head{
+  border-color:  #EFF6FF;
+}
+.calendarViewDatesTutorGroup table .fc-head table thead tr th span,
+.calendarAddDaysCl table .fc-head table thead tr th span,
+.bookingCalendarByUser table .fc-head table thead tr th span,
+.myCalendarEvents table .fc-head table thead tr th span{
+  font-weight: 700;
+}
+
+
+
+/************************** table body **************************/
+.calendarViewDatesTutorGroup .fc-body table tbody tr td.fc-axis,
+.calendarViewDatesTutorGroup .fc-body table tbody tr td.fc-axis span,
+.calendarAddDaysCl .fc-body table tbody tr td.fc-axis,
+.calendarAddDaysCl .fc-body table tbody tr td.fc-axis span,
+.bookingCalendarByUser .fc-body table tbody tr td.fc-axis,
+.bookingCalendarByUser .fc-body table tbody tr td.fc-axis span,
+.myCalendarEvents .fc-body table tbody tr td.fc-axis,
+.myCalendarEvents .fc-body table tbody tr td.fc-axis span{
+  font-weight: 700;
+}
+.calendarViewDatesTutorGroup table .fc-body thead,
+.calendarAddDaysCl table .fc-body thead,
+.bookingCalendarByUser table .fc-body thead,
+.myCalendarEvents table .fc-body thead{
+  border-color: transparent ;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content,
+.calendarAddDaysCl table .fc-body .fc-widget-content,
+.bookingCalendarByUser table .fc-body .fc-widget-content,
+.myCalendarEvents table .fc-body .fc-widget-content{
+  border-color:  #EFF6FF;
+}
+
+/************************** table body - scrollbar **************************/
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar,
+.bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar,
+.myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+.bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+.myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+.bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+.myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+.bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+.myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover{
+  background: #ffffff;
+}
+
+
+/************************** table body - events  **************************/
+.calendarViewDatesTutorGroup table .fc-body tbody tr td,
+.calendarAddDaysCl table .fc-body tbody tr td,
+.bookingCalendarByUser table .fc-body tbody tr td,
+.myCalendarEvents table .fc-body tbody tr td{
+  border-color: #EFF6FF ;
+}
+
+.calendarAddDaysCl table .fc-body tbody tr,
+.bookingCalendarByUser table .fc-body tbody tr,
+.myCalendarEvents table .fc-body tbody tr{
+  height: 40px;
+}
+
+.calendarAddDaysCl table .fc-body tbody tr td .fc-time-grid-event,
+.myCalendarEvents table .fc-body tbody tr td .fc-time-grid-event{
+  color:#ffffff !important; 
+  font-weight: 700;
+}
+
+.calendarAddDaysCl .fc-time-grid-event,
+.myCalendarEvents .fc-time-grid-event,
+.bookingCalendarByUser .fc-time-grid-event{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+.calendarAddDaysCl .fc-time-grid-event .fc-time span,
+.myCalendarEvents .fc-time-grid-event .fc-time span,
+.bookingCalendarByUser .fc-time-grid-event .fc-time span{
+  font-weight: 700;
+  color:#ffffff !important; 
+}
+.calendarAddDaysCl .fc-time-grid-event .fc-title,
+.myCalendarEvents .fc-time-grid-event .fc-title,
+.bookingCalendarByUser .fc-time-grid-event .fc-title {
+  display: none;
+}
+
+.bookingCalendarByUser table .fc-body tbody tr td .fc-time-grid-event,
+.calendarAddDaysCl table .fc-body tbody tr td .fc-time-grid-event,
+.bookingCalendarByUser .fc-body tbody tr td .fc-time-grid-event,
+.myCalendarEvents .fc-body tbody tr td .fc-time-grid-event{
+  border: none;
+  transition: 0.3s ease;
+}
+.bookingCalendarByUser table .fc-body tbody tr td .fc-time-grid-event:hover,
+.calendarAddDaysCl table .fc-body tbody tr td .fc-time-grid-event:hover,
+.bookingCalendarByUser .fc-body tbody tr td .fc-time-grid-event:hover,
+.myCalendarEvents .fc-body tbody tr td .fc-time-grid-event:hover{
+  filter: brightness(90%);
+}
+
+.popover.fade.show:has(.container-events-available) *,
+.popover.fade.show:has(.tutor-available-event-date) *,
+.popover.fade.show:has(.simple-user-booking-event) *{
+  background-color: #000000 !important;
+  color:#ffffff !important;
+}
+.popover.fade.show .popover-header:has(.container-events-available) *,
+.popover.fade.show .popover-header:has(.tutor-available-event-date) *,
+.popover.fade.show .popover-header:has(.simple-user-booking-event) *{
+  color:#ffffff !important;
+  background-color: #000000 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

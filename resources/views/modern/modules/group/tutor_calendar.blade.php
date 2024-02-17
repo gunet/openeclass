@@ -11,7 +11,7 @@
             eventTextColor : 'white',
             selectable : false,
             locale: '{{ $language }}',
-            //height   : 500,
+            height   : 500,
             editable : false,
             header:{
                 left: 'prev,next today',

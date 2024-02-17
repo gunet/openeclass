@@ -524,7 +524,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     
 
                     $tool_content .= "
-                        <div class='col-12 overflow-auto'>
+                        <div class='col-12 calendar-events-container'>
                             <div id='EditCalendarEvents' class='myCalendarEvents'></div>
                         </div>";
 
@@ -718,7 +718,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         title.addClass('text-center');
 
                                         var time = element.find( '.fc-time' );
-                                        time.addClass('text-center mb-2 bagde bg-default Primary-600-cl');
+                                        time.addClass('text-center');
 
                                     },
 
@@ -934,7 +934,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 $tool_content .= "
 
 
-                            <div class='col-12 overflow-auto'>
+                            <div class='col-12 calendar-events-container'>
                                 <div id='calendarEvents' class='myCalendarEvents'></div>
                             </div>
 

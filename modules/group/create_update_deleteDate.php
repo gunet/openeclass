@@ -188,10 +188,10 @@ function getBackgroundEvent($lessonId,$group,$userId,$start,$end,$tutor_id,$grou
             if($existBooking > 0){
                 $color = '#FFC0CB';
             }else{
-                $color .= '#a6c7a3';
+                $color .= '#1E7E0E';
             }
         }else{//afora allon upeuthino sthn idia omada gia portokali xrwma
-            $color = '#e8c34d';
+            $color = '#F57600';
         }
     }elseif($course_id == $lessonId && $group_id != $group){
         if($tutor_id == $userId){// afora ton current upeuthino gia allh omada sto idio mathima ara me galazio xrwma
@@ -224,7 +224,7 @@ function nameTutor($userId,$lessonId,$group,$start,$end,$tutor_id,$group_id){
                                                     WHERE lesson_id = ?d AND group_id = ?d AND tutor_id = ?d
                                                     AND start = ?t AND end = ?t",$lessonId,$group,$userId,$start,$end);
 
-    $name .= "<div class='col-12 px-2'>";
+    $name .= "<div class='col-12 container-events-available px-2'>";
     if($booking){
         if($course_id == $lessonId && $group_id == $group && $tutor_id == $userId){
             $name .= "

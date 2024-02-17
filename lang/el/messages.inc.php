@@ -2411,6 +2411,27 @@ $langDoBooking = "ΚΑΝΤΕ ΚΡΑΤΗΣΗ";
 $langDisableBooking = "ΜΗ ΔΙΑΘΕΣΙΜΟ";
 $langBookingIsDone = "ΕΙΝΑΙ ΚΛΕΙΣΜΕΝΟ";
 $langAcceptBooking = "Αποδοχή από τον υπεύθυνο";
+$langWarningInfoBooking = "<div class='TextBold' style='color:#ffa500;'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζεται η κράτηση προς τον υπεύθυνου ομάδας από άλλον χρήστη.";
+$langBlueInfoBooking = "<div class='TextBold' style='color:#337ab7;'>Με ΜΠΛΕ χρώμα εμφανίζεται η διαθέσιμη ημερομηνία του υπευθύνου ομάδας για να κάνετε κράτηση.</br>Κάντε κλικ στο διαθέσιμο slot για υποβολή κράτησης.</div>";
+$langSuccessInfoBooking = "<div class='TextBold' style='color:#1E7E0E;'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζεται κράτηση που κάνετε προς τον υπεύθυνο ομάδας (Αναμονή έγκρισης ή απορρίψης από τον υπεύθυνο).</br>Δυνατότητα ακύρωσης κάνοντας κλικ στο slot της κράτησης.</div>";
+$langPinkInfoBooking = "<div class='TextBold Pink-cl'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση σας προς τομ υπεύθυνο ομάδας (Εγκριση αιτήματος από τον υπεύθυνο).</br>Κάντε κλικ στο διαθέσιμο slot για ακύρωση κράτησης.</div>";
+$langAvailableTutorBookings = "Διαθέσιμες κρατήσεις υπεύθυνου";
+$langAVailableBookingsForTutor = "Διαθέσιμες κρατήσεις για τον υπεύθυνο:";
+$langMyAvailableBookings = "Οι διαθέσιμες κρατήσεις μου";
+$langContinueToBooking = "Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
+$langCancelBooking = "Ακύρωση κράτησης";
+$langAcceptBooking = "Αποδοχή κράτησης";
+$langBookingHasAccepted = "Έγινε αποδοχή της κράτησης. Έχει σταλθεί ενημερωτικό email στον χρήστη ";
+$langYourBookingHasAccepted = "Η κράτηση σας έγινε αποδεκτή";
+$langDetailsBooking = "Τα στοιχεία της κράτησης είναι τα εξής:";
+$langUpdateSoon = "Θα ενημερωθείτε σύντομα σχετικά με την συναντήση σας με τον υπεύθυνο.";
+$langHasAcceptedBookingAndContinue = "Έχει γίνει αποδοχή της κράτησης.</br> Μπορείτε να την ακυρώσετε ανά πάσα στιγμή.";
+$langBookingHasCalceled = "Η κράτηση ακυρώθηκε επιτυχώς. Έχει σταλθεί ενημερωτικό email στον χρήστη.";
+$langYourBookingHasCanceled = "Η κράτηση σας ακυρώθηκε";
+$langNoAcceptanceOfBooking = "Δεν έχει γίνει αποδοχή της κράτησης.</br> Πατώντας το κουμπί << Αποδοχή κράτησης >> αποδέχεστε το αίτημα.";
+$langMYBookings = "Οι κρατήσεις μου";
+$langBookingWithTutor = "Οι κρατήσεις μου με τον υπεύθυνο:";
+$langBookingAgenda = "Κάντε κράτηση";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
