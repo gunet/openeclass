@@ -469,7 +469,7 @@
 .calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar,
 .bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar,
 .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar{
-  width: 8px;
+  width: 0px;
   height: 8px;
 }
 .calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
