@@ -268,6 +268,7 @@ function showgroupsofcategory($catid) {
                 $visibility_url = 'choice=enable';
             }
             $tool_content .= "<td class='option-btn-cell'>";
+            $group_id_indirect = getIndirectReference($group_id);
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
@@ -276,12 +277,12 @@ function showgroupsofcategory($catid) {
                     'url' => "muladduser.php?course=$course_code&amp;group_id=$group_id",
                     'icon' => 'fa-plus-circle'),
                 array('title' => $visibility_text,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;$visibility_url",
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id_indirect&amp;$visibility_url",
                     'icon' => $visibility_icom),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group_id_indirect",
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
