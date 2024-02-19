@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2024-01-24 11:05:21
+// Generated 2024-02-19 16:49:59
 
 $langYes = "Sì";
 $langNo = "No";
@@ -5712,3 +5712,19 @@ $langLoginAndRegister = 'Login and Register';
 $langInviteEclassLoginCreate = 'Please enter the required information below to register to the platform.';
 $langInviteEclassLoginAlt = "Alternatively, if you <strong>don't have a Central Authentication Service account</strong>, please enter below the details needed to create a guest account on the platform.";
 $langSameAsYourEmail = 'same as your e-mail address';
+$langWithRights = "with course creation rights";
+$langWithCourseCreationRights = "course creation";
+$langWithNoCourseCreationRights = "no course creation";
+$langUserLastLogins = "Login history";
+$langNoUserLastLogins = "The user has never logged in to the platform.";
+$langLastYear = 'Last year';
+$langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
+$langCourseDeleted = "Delete of $langsCourse";
+$langCourseDeletedBy = "Deleted by";
+$langNoticeCourseDeleted = "If the $langsCourse was deleted by you, you can ignore this email. If the deletion was done by mistake and you wish to restore your $langsCourse, please contact the platform administrators.";
+$langExercisePreventCopy = 'Prevent Text Copying';
+$langExercisePreventCopyExplanation = 'Prevent copying and pasting text during execution of the exercise';
+$langDoubleLoginLock = 'You have logged into the platform from another device
+    with the same account. Double logins are disabled, so your current login has
+    been disconnected.';
+$langUserCreated = "New account created successfully!";
