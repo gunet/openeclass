@@ -169,6 +169,15 @@ if ($data['userdata']) {
 
 }
 
+
+//Get status for user
+$is_user_teacher = false;
+$user_status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d",$uid)->status;
+if($user_status == USER_TEACHER){
+    $is_user_teacher = true;
+}
+$data['is_user_teacher'] = $is_user_teacher;
+
 $data['menuTypeID'] = 1;
 view('main.profile.index', $data);
 

@@ -2896,6 +2896,37 @@ function upgrade_to_4_0($tbl_options): void {
                                 FOREIGN KEY (booking_id) REFERENCES booking(id) ON DELETE CASCADE) $tbl_options");
     }
 
+    if (!DBHelper::tableExists('date_availability_user')) {
+        Database::get()->query("CREATE TABLE `date_availability_user` (
+                                `id` int(11) NOT NULL auto_increment,
+                                `user_id` int(11) NOT NULL default 0,
+                                `start` DATETIME DEFAULT NULL,
+                                `end` DATETIME DEFAULT NULL,
+                                PRIMARY KEY  (`id`)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('date_booking')) {
+        Database::get()->query("CREATE TABLE `date_booking` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                                `teacher_id` INT(11) NOT NULL,
+                                `title` VARCHAR(255) NOT NULL,
+                                `start` DATETIME NOT NULL,
+                                `end` DATETIME NOT NULL,
+                                `accepted` INT(11) NOT NULL DEFAULT 0,
+                                PRIMARY KEY(id),
+                                FOREIGN KEY (teacher_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('date_booking_user')) {
+        Database::get()->query("CREATE TABLE `date_booking_user` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                                `booking_id` INT(11) NOT NULL,
+                                `student_id` INT(11) NOT NULL,
+                                PRIMARY KEY(id),
+                                FOREIGN KEY (booking_id) REFERENCES date_booking(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+
 }
 
 

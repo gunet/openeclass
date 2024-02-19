@@ -74,21 +74,34 @@
                                     </p>
 
                                     @if(get_config('eportfolio_enable'))
-                                    <p class='text-center mt-2'>
-                                        <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate("eportfolio" . $id) }}'>
-                                            {{ trans('langMyePortfolio') }}
-                                        </a>
-                                    </p>
+                                        <p class='text-center mt-2'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate("eportfolio" . $id) }}'>
+                                                {{ trans('langMyePortfolio') }}
+                                            </a>
+                                        </p>
                                     @endif
 
                                     @if(get_config('personal_blog'))
-                                    <p class='text-center mt-2'>
-                                        <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate("personal_blog" . $id) }}'>
-                                            {{ trans('langUserBlog') }}
-                                        </a>
-                                    </p>
+                                        <p class='text-center mt-2'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate("personal_blog" . $id) }}'>
+                                                {{ trans('langUserBlog') }}
+                                            </a>
+                                        </p>
                                     @endif
 
+                                    @if($is_user_teacher)
+                                        <p class='text-center mt-2'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/profile/add_available_dates.php?user_id={{ $uid }}&token={{ token_generate("available_date" . $id) }}'>
+                                                {{ trans('langAvailableDateForUser') }}
+                                            </a>
+                                        </p>
+                                    @else
+                                        <p class='text-center mt-2'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/profile/add_available_dates.php?user_id={{ $uid }}&token={{ token_generate("booking_date" . $id) }}&do_booking=1&show_all_users=1'>
+                                                {{ trans('langDisplayAvailableUsersForBooking') }}
+                                            </a>
+                                        </p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
