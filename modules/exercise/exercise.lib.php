@@ -394,7 +394,7 @@ function display_exercise($exercise_id) {
                     <strong><u>$langQuestion</u>: $i</strong>";
             if ($is_editor) {
                 $tool_content .= "<a $modal_params href = 'admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid' >
-                    <span class='fa fa-edit' data - bs - toggle = 'tooltip' data - bs - placement = 'bottom' data - bs - original - title = '$langModify' ></span >
+                    <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement ='bottom' data-bs-original-title ='$langModify' ></span >
                     </a >";
             }
                 $tool_content .= "</td>

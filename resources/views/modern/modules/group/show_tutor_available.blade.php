@@ -62,6 +62,7 @@
                         </div>
                     @endif
 
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     @if($is_member && !$is_tutor)
                         @if(count($group_tutors) > 0)

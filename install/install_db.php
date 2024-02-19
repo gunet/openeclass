@@ -456,6 +456,35 @@ $db->query("CREATE TABLE IF NOT EXISTS `group_members` (
     `description` TEXT,
     PRIMARY KEY (`group_id`, `user_id`)) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `tutor_availability_group` (
+    `id` int(11) NOT NULL auto_increment,
+    `user_id` int(11) NOT NULL default 0,
+    `group_id` int(11) NOT NULL default 0,
+    `start` DATETIME DEFAULT NULL,
+    `end` DATETIME DEFAULT NULL,
+    `lesson_id` int(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY  (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `booking` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `lesson_id` INT(11) NOT NULL,
+    `group_id` INT(11) NOT NULL DEFAULT 0,
+    `tutor_id` INT(11) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `start` DATETIME NOT NULL,
+    `end` DATETIME NOT NULL,
+    `accepted` INT(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY(id),
+    FOREIGN KEY (lesson_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (tutor_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `booking_user` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `booking_id` INT(11) NOT NULL,
+    `simple_user_id` INT(11) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (booking_id) REFERENCES booking(id) ON DELETE CASCADE) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `group_category` (
     `id` INT(6) NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) NOT NULL,

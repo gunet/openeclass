@@ -228,9 +228,9 @@ function showgroupsofcategory($catid) {
             if ($student_desc) {
                 if ($user_group_description) {
                     $tool_content .= "<br>
-                            <span class='small'>$user_group_description</span> &nbsp;" .
-                            icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                            icon('fa-xmark', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                            <span class='small'>$user_group_description</span> &nbsp; <div class='d-flex flex-wrap gap-2 mt-2'>" .
+                            icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "" .
+                            icon('fa-xmark Accent-200-cl', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"') ."</div>";
                 } elseif ($is_member) {
                     $tool_content .= "
                             <a href='group_description.php?course=$course_code&amp;group_id=$group_id'>

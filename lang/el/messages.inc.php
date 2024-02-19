@@ -2432,6 +2432,8 @@ $langNoAcceptanceOfBooking = "Δεν έχει γίνει αποδοχή της �
 $langMYBookings = "Οι κρατήσεις μου";
 $langBookingWithTutor = "Οι κρατήσεις μου με τον υπεύθυνο:";
 $langBookingAgenda = "Κάντε κράτηση";
+$langAvailableHistoryBookings = "Κρατήσεις που έχουν παρέλθει";
+$langDelHistoryBook = "Η διαγραφή ολοκληρώθηκε με επιτυχία!";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";

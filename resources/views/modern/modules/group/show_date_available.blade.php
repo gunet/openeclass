@@ -27,9 +27,9 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @if($is_editor)
-                        {!! isset($action_bar) ?  $action_bar : '' !!}
-                    @endif
+                    
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    
 
                     @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
@@ -92,10 +92,16 @@
                                                                 <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $tutor->user_id }}">
                                                                     {{ trans('langAvailableTutorBookings')}}
                                                                 </a>
+
+                                                                <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $tutor->user_id }}">
+                                                                    {{ trans('langAvailableHistoryBookings')}}
+                                                                </a>
                                                                 
                                                                 <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
                                                                     {{ trans('langAddAvailability')}}
                                                                 </a>
+
+                                                                
                                                                 
                                                             </div>
                                                         </div>
@@ -136,9 +142,15 @@
                                                             {{ trans('langMyAvailableBookings')}}
                                                         </a>
 
+                                                        <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $uid }}">
+                                                            {{ trans('langAvailableHistoryBookings')}}
+                                                        </a>
+
                                                         <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
                                                             {{ trans('langAddAvailability')}}
                                                         </a>
+
+                                                        
                                                         
                                                     </div>
                                                 </div>

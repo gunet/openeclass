@@ -97,6 +97,12 @@ if(isset($_GET['add_for_tutor'])){
     $toolName = $langAvailableDateForGroupAdmin;
     $pageName = $langAvailableDateForGroupAdmin;
     $data['is_member'] = $is_member;
+    $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+            'url' => "group_space.php?course=$course_code&group_id=$group_id",
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        )));
     view('modules.group.show_tutor_available', $data);
 }elseif(isset($_GET['bookings_of_tutor'])){
     $data['tutor_id'] = $tutor_id = intval($_GET['bookings_of_tutor']);
@@ -289,6 +295,32 @@ if(isset($_GET['add_for_tutor'])){
             'level' => 'primary'
         )));
     view('modules.group.show_user_bookings', $data);
+}elseif(isset($_GET['history_booking'])){
+    $data['tutor'] = $tutor = intval($_GET['history_booking']);
+    if(isset($_POST['delete_history_booking_id'])){
+        $del = Database::get()->query("DELETE FROM booking WHERE id = ?d",$_POST['del_booking_id']);
+        if($del){
+            Session::flash('message',$langDelHistoryBook);
+            Session::flash('alert-class', 'alert-success');
+        }
+        redirect_to_home_page("modules/group/date_available.php?course=".$course_code."&group_id=".$group_id."&history_booking=".$tutor);
+    }
+
+    if($is_tutor or $is_course_admin){
+        $data['booking_history'] = Database::get()->queryArray("SELECT booking.id,booking.tutor_id,booking.title,booking.start,booking.end,booking.accepted,user.givenname,user.surname FROM booking 
+                                                                INNER JOIN user 
+                                                                ON booking.tutor_id = user.id 
+                                                                WHERE booking.end < NOW() 
+                                                                AND booking.group_id = ?d 
+                                                                AND booking.tutor_id = ?d",$group_id, $tutor);
+        $data['action_bar'] = action_bar(array(
+            array('title' => $langBack,
+                'url' => "date_available.php?course=$course_code&group_id=$group_id",
+                'icon' => 'fa-reply',
+                'level' => 'primary'
+            )));                                                   
+    }
+    view('modules.group.show_history_bookings', $data);
 }else{
     view('modules.group.show_date_available', $data);
 }
