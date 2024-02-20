@@ -604,16 +604,15 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>" .
                     eClassTag::tagInput($exerciseId) . "
                 </div>
+
                 <div class='row form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>
-                      
-                           
                              ".
                              form_buttons([
                                  [ 'text'  => $langSave,
                                    'class' => 'submitAdminBtn',
                                    'name'  => 'submitExercise',
-                                   'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
+                                   'value' => $langSubmit,
                                    'javascript' => "selectAll('assignee_box',true)"
                                   ],
                                   [ 'href' => $exerciseId ?
@@ -622,9 +621,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     'class' => 'cancelAdminBtn ms-1',
                                   ]
                              ]) . "
-                           
-                           
-                       
                     </div>
                  </div>
              </fieldset>

@@ -3275,7 +3275,6 @@ $langSurveysInactive = "Ανενεργές Έρευνες Μαθησιακού �
 $langSurveyDateCreated = "Δημιουργήθηκε την";
 $langSurveyStart = "Ξεκίνησε την";
 $langSurveyEnd = "και τελείωσε την";
-$langSurveyAddAnswer = "Προσθήκη Απαντήσεων";
 $langSurveyMC = "Πολλαπλής Επιλογής";
 $langSurveyFillText = "Συμπληρώστε το κενό";
 $langSurveyMoreAnswers = "+ απαντήσεις";

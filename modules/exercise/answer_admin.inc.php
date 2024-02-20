@@ -434,7 +434,7 @@ if (isset($_GET['modifyAnswers'])) {
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<br><small class='msmall-text'>$langNegativeScoreLegend</small>";
                              }
-                            
+
         $tool_content .= "   </h3>
                            </div>
                        <div class='card-body'>";
@@ -498,7 +498,7 @@ if (isset($_GET['modifyAnswers'])) {
                 $tool_content .= "<td><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
-                    <td class='text-start' colspan='3'><strong>$langSurveyAddAnswer :</strong>
+                    <td class='text-start' colspan='3'><strong>$langPollAddAnswer :</strong>
                         <div class='d-flex gap-2 flex-wrap mt-2'>
                             <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
                             <input type='submit' name='lessAnswers' value='$langLessAnswers' />
@@ -728,8 +728,9 @@ if (isset($_GET['modifyAnswers'])) {
      }
 
      $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
-     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
+     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langSubmit;
      $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn submitAdminBtn' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
+
      $tool_content .= "
                      <div class='row'>
                          <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
