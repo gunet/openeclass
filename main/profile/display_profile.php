@@ -53,8 +53,11 @@ $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, use
 
 //Get status for user
 $is_user_teacher = false;
+$myBooks = '';
 if($data['userdata']->status == USER_TEACHER){
     $is_user_teacher = true;
+}else{
+    $myBooks = '&myBooks=true';
 }
 $data['is_user_teacher'] = $is_user_teacher;
 
@@ -100,7 +103,13 @@ if ($data['userdata']) {
                       'icon' => 'fa-solid fa-users',
                       'button-class' => 'submitAdminBtn',
                       'level' => 'primary-label',
-                      'show' => (!$is_user_teacher && get_config('individual_group_bookings')))
+                      'show' => (!$is_user_teacher && get_config('individual_group_bookings'))),
+                array('title' => $langMYBookings,
+                      'url' => "available_booking.php?user_id=$uid$myBooks",
+                      'icon' => 'fa-solid fa-book',
+                      'button-class' => 'submitAdminBtn',
+                      'level' => 'primary-label',
+                      'show' => (get_config('individual_group_bookings')))
                 ));
 
         $data['action_bar_unreg'] = 1;

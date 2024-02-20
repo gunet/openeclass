@@ -23,9 +23,7 @@ $require_login = true;
 $require_valid_uid = TRUE;
 $require_help = TRUE;
 $helpTopic = 'date_user';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 

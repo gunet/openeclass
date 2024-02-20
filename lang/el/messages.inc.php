@@ -6570,3 +6570,7 @@ $langBlueInfoBookingTutor = "<div class='TextBold' style='color:#337ab7;'>Με �
 $langSuccessInfoBookingTutor = "<div class='TextBold' style='color:#1E7E0E;'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζεται κράτηση που κάνετε προς τον υπεύθυνο (Αναμονή έγκρισης ή απορρίψης από τον υπεύθυνο).</br>Δυνατότητα ακύρωσης κάνοντας κλικ στο slot της κράτησης.</div>";
 $langPinkInfoBookingTutor = "<div class='TextBold Pink-cl'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση σας προς τον υπεύθυνο (Εγκριση αιτήματος από τον υπεύθυνο).</br>Κάντε κλικ στο διαθέσιμο slot για ακύρωση κράτησης.</div>";
 $langIndividualGroupBookings = "Ενεργοποίηση εργαλείου κρατήσεων στο προφίλ του χρήστη και στις ομάδες χρηστών";
+$langWithTutor = "Στον υπεύθυνο";
+$langHistoyBooking = "Κρατήσεις που έχουν παρέλθει";
+$langBookingHasDeleted = "Η κράτηση διαγράφηκε επιτυχώς!";
+$ThereIsABookingWithTheSameSlot = "Η κράτησή σας με τον συγκεκριμένο χρήστη δεν ολοκληρώθηκε καθώς έχετε κάνει κράτηση σε κάποιον άλλον την ίδια ημέρα και ώρα έναρξης.";
