@@ -130,25 +130,21 @@ if (isset($_POST['submit'])) {
         }
 
         if ($pstatus == 1) {
-            $message = $profsuccess;
             $reqtype = '';
-            $type_message = $langAsProf;
         } else {
-            $message = $usersuccess;
             $reqtype = '?type=user';
-            $type_message = '';
         }
 
         // send email
         $telephone = get_config('phone');
-        $emailsubject = "$langYourReg $siteName $type_message";
+        $emailsubject = "$langYourReg $siteName";
 
         $emailheader = "
             <!-- Header Section -->
             <div id='mail-header'>
                 <br>
                 <div>
-                    <div id='header-title'>$langYouAreReg $siteName $type_message $langWithSuccess</div>
+                    <div id='header-title'>$langYouAreReg $siteName $langWithSuccess</div>
                 </div>
             </div>";
 
@@ -181,8 +177,10 @@ if (isset($_POST['submit'])) {
         $emailbodyplain = html2text($emailbody);
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
-        Session::flash('message', array($message, "$langTheU \"$givenname_form $surname_form\" $langAddedU"));
+
+        Session::flash('message', "$langTheU '$givenname_form $surname_form' $langAddedU");
         Session::flash('alert-class', 'alert-success');
+
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
             redirect_to_home_page('modules/admin/listreq.php' .
@@ -225,12 +223,12 @@ if (isset($_GET['id'])) {
     if (isset($rid) and $rid) {
         $backlink = "$_SERVER[SCRIPT_NAME]?id=$rid";
     } else {
-        $backlink = $_SERVER['SCRIPT_NAME'];
+        $backlink = 'index.php';
     }
 
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
-              'url' => 'index.php',
+              'url' => $backlink,
               'class' => 'back_btn',
               'icon' => 'fa-reply',
               'level' => 'primary')));
@@ -247,7 +245,7 @@ if (isset($_GET['id'])) { // if we come from prof request
     $data['id'] = $id = intval($_GET['id']);
 
     $res = Database::get()->querySingle("SELECT givenname, surname, username, email, faculty_id, phone, am,
-                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id =?d", $id);
+                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id = ?d", $id);
     if ($res) {
         $data['ext_uid'] = $ext_uid = Database::get()->querySingle('SELECT *
             FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
@@ -261,8 +259,22 @@ if (isset($_GET['id'])) { // if we come from prof request
         $data['pphone'] = $res->phone;
         $data['pcom'] = $res->comment;
         $data['language'] = $res->lang;
-        $data['pstatus'] = intval($res->status);
+        $data['pstatus'] = $pstatus = intval($res->status);
+        if ($pstatus == USER_TEACHER) {
+            $cpf_context = array('origin' => 'teacher_register');
+            $data['params'] = $params = "?type=prof";
+            $data['prof_selected'] = 'checked';
+            $data['user_selected'] = '';
+        } else {
+            $pstatus = USER_STUDENT;
+            $cpf_context = array('origin' => 'student_register');
+            $pageName = $langCreateAccount;
+            $data['params'] =  $params = '';
+            $data['prof_selected'] = '';
+            $data['user_selected'] = 'checked';
+        }
         $data['pdate'] = format_locale_date(strtotime($res->date_open), 'short', false);
+
         // faculty id validation
         if ($res->faculty_id) {
             validateNode($depid, isDepartmentAdmin());
@@ -271,25 +283,15 @@ if (isset($_GET['id'])) { // if we come from prof request
     } else {
         $data['cpf_context'] = array('origin' => 'teacher_register');
     }
-    $data['params'] = $params = '';
-    $data['prof_selected'] = 'checked';
-    $data['user_selected'] = '';
-} elseif (@$_GET['type'] == 'user') {
+
+} else {
     $data['pstatus'] =  $pstatus = USER_STUDENT;
-    $data['cpf_context'] =  array('origin' => 'student_register');
-    $title = $langInsertUserInfo;
-    $data['params'] =  $params = "?type=user";
+    $data['cpf_context'] = array('origin' => 'student_register');
+    $title = $langNewProf;
+    $data['params'] =  $params = '';
     $data['prof_selected'] = '';
     $data['user_selected'] = 'checked';
-} else {
-    $data['pstatus'] =  $pstatus = USER_TEACHER;
-    $data['cpf_context'] = array('origin' => 'teacher_register');
-    $title = $langNewProf;
-    $data['params'] =  $params = "?type=";
-    $data['prof_selected'] = 'checked';
-    $data['user_selected'] = '';
 }
-
 
 $active_auth_methods = get_auth_active_methods();
 $data['eclass_method_unique'] = $eclass_method_unique = count($active_auth_methods) == 1 && $active_auth_methods[0] == 1;
@@ -308,10 +310,19 @@ list($tree_js, $tree_html) = $tree->buildUserNodePicker($nodePickerParams);
 $head_content .= $tree_js;
 $data['tree_html'] = $tree_html;
 
+
 if (!$eclass_method_unique) {
     $data['auth_m'] = $auth_m = array();
     foreach ($active_auth_methods as $m) {
         $data['auth_m'][$m] = $auth_m[$m] = get_auth_info($m);
+    }
+}
+
+if ($pstatus == USER_STUDENT) { // only for students
+    if (get_config('am_required')) {
+        $am_message = $langCompulsory;
+    } else {
+        $am_message = $langOptional;
     }
 }
 

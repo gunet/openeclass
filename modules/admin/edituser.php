@@ -172,9 +172,12 @@ if ($u) {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         }
         $head_content .= $js;
+
         $data['html'] = $html;
-        $data['reg_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
+        $data['reg_date'] = $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
+        $reg_date_format = $reg_date? $reg_date->format("d-m-Y H:i"): '-';
         $data['exp_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
+
         $last_login = Database::get()->querySingle('SELECT `when` FROM loginout
             WHERE id_user = ?d ORDER BY idLog DESC LIMIT 1', $u);
         if ($last_login) {

@@ -118,30 +118,30 @@
                                             </div>
                                         </div>
 
-                                        <div class='form-group mt-4'>
-                                            <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>
-                                            <div class='col-sm-12'>
-
-                                                    @if ($info->status == USER_GUEST)
-                                                        {!! selection(array(USER_GUEST => trans('langGuest')), 'newstatus', intval($info->status), "class='form-control'") !!}
-                                                    @else
-                                                        {!! selection(array(USER_TEACHER => trans('langTeacher'),
-                                                            USER_STUDENT => trans('langStudent')), 'newstatus', intval($info->status), "class='form-control'") !!}
-                                                    @endif
-
-                                            </div>
-                                        </div>
-
-                                        <div class='form-group mt-4'>
-                                            <label class='label-container'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'>
-                                                        <input type='checkbox' name='enable_course_registration' value='1' {!! $checked !!}>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langInfoEnableCourseRegistration') }}
+                                        <div class="form-group mt-4">
+                                            @if ($info->status == USER_GUEST)
+                                                <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>{{ trans('langGuest') }}
+                                            @else
+                                                <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langUserPermissions') }}</label>
+                                                <div class="radio mb-2 d-flex justify-content-start align-items-center">
+                                                    <label>
+                                                        <input type='radio' name='newstatus' value='" . USER_STUDENT . "' {!! ($info->status == USER_STUDENT) ? 'checked' : '';  !!} >
+                                                        {{ trans('langWithNoCourseCreationRights') }}
                                                     </label>
                                                 </div>
-                                            </label>
+                                                <div class="radio mb-2 d-flex justify-content-start align-items-center">
+                                                    <label>
+                                                        <input type='radio' name='newstatus' value='" . USER_TEACHER . "'{!! ($info->status == USER_TEACHER) ? 'checked' : ''; !!} >
+                                                        {{ trans('langWithCourseCreationRights') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox mb-2'>
+                                                    <label class='label-container'>
+                                                        <input type='checkbox' name='enable_course_registration' value='1' {!! (!$info->disable_course_registration) ? 'checked' : ''; !!}>
+                                                        <span class='checkmark'></span>{{ trans('langInfoEnableCourseRegistration') }}
+                                                    </label>
+                                                </div>
+                                            @endif
                                         </div>
 
                                         <div class='form-group mt-4'>

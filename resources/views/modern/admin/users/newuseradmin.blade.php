@@ -186,13 +186,13 @@
                             <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                 <label>
                                     <input type='radio' name='pstatus' value='5' id='norights-option' {!! $user_selected !!}>
-                                    {{ trans('langUserWithNoRights') }}
+                                    {{ trans('langWithNoCourseCreationRights') }}
                                 </label>
                             </div>
                             <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                 <label>
                                     <input type="radio" name="pstatus" value="1" id="rights-option" {!! $prof_selected !!}>
-                                    {{ trans('langUserWithRights') }}
+                                    {{ trans('langWithCourseCreationRights') }}
                                 </label>
                             </div>
                             <div class='checkbox mb-2'>

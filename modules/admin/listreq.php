@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,18 +35,18 @@ $close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_PO
 $id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
 $show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
 
-$columns = 'null, null, null, null, { orderable: false }';
+$columns = 'null, null, null, null, null, { orderable: false }';
 
 // Deal with navigation
 switch ($show) {
     case "closed":
         $toolName = $langReqHaveClosed;
         $pagination_link = '&amp;show=closed';
-        $columns = 'null, null, null, null, null, { orderable: false }';
+        $columns = 'null, null, null, null, null, null, { orderable: false }';
         break;
     case "rejected":
         $toolName = $langReqHaveBlocked;
-        $columns = 'null, null, null, null, null, { orderable: false }';
+        $columns = 'null, null, null, null, null, null, { orderable: false }';
         break;
 }
 
@@ -83,14 +83,12 @@ $head_content .= "<script type='text/javascript'>
 
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
-    $list_status = 5;
     $toolName = $langUserOpenRequests;
     $data['reqtype'] = $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
     $linkreg = $langUserDetails;
     $linkget = '?type=user';
 } else {
-    $list_status = 1;
     $toolName = $langOpenProfessorRequests;
     $data['reqtype'] = $reqtype = '';
     $linkreg = $langProfReg;
@@ -116,10 +114,6 @@ if (isDepartmentAdmin()) {
 // Display Actions Toolbar
 $data['action_bar'] =
         action_bar(array(
-            array('title' => $langBack,
-                'url' => "$basetoolurl",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $linkreg,
                 'url' => "newuseradmin.php$linkget",
                 'icon' => 'fa-plus-circle',
@@ -128,13 +122,16 @@ $data['action_bar'] =
             array('title' => $langReqHaveClosed,
                 'url' => "$_SERVER[SCRIPT_NAME]?show=closed$reqtype",
                 'icon' => 'fa-close',
-                'level' => 'primary'),
+                'level' => 'primary-label'),
             array('title' => $langReqHaveBlocked,
                 'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
                 'icon' => 'fa-ban',
+                'level' => 'primary-label'),
+            array('title' => $langBack,
+                'url' => "$basetoolurl",
+                'icon' => 'fa-reply',
                 'level' => 'primary')
-
-                ));
+        ));
 
 // -----------------------------------
 // display closed requests
@@ -143,20 +140,17 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) and $id > 0) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        //Session::Messages($langReintroductionApplication, 'alert-success');
-        Session::flash('message',$langReintroductionApplication);
+        Session::flash('message', $langReintroductionApplication);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
-        $count_req = count(Database::get()->queryArray("SELECT * FROM user_request WHERE (state = 2 AND status = ?d)", $list_status));
-
         $q = "SELECT id, givenname, surname, username, email, faculty_id,
-                             phone, am, date_open, date_closed, comment
+                             phone, am, date_open, date_closed, comment, status
                           FROM user_request
-                          WHERE (state = 2 AND status = $list_status) ORDER BY date_closed DESC";
+                          WHERE state = 2 ORDER BY date_closed DESC";
+
 
         $data['user_requests'] = Database::get()->queryArray($q);
-
         $view = 'admin.users.listreq.closedRequests';
     }
 
@@ -167,15 +161,14 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) && ($id > 0)) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        Session::flash('message',$langReintroductionApplication);
+        Session::flash('message', $langReintroductionApplication);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
         $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
-                                        faculty_id, phone, am, date_open, date_closed, comment
+                                        faculty_id, phone, am, date_open, date_closed, comment, status
                                         FROM user_request
-                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_closed DESC");
-
+                                        WHERE (state = 3 $depqryadd) ORDER BY date_closed DESC");
         $view = 'admin.users.listreq.rejectedRequests';
     }
 
@@ -189,12 +182,13 @@ if (!empty($show) and $show == 'closed') {
                                        SET state = 2,
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
+
             if ($list_status == 1) {
-                Session::flash('message',$langProfessorRequestClosed);
+                Session::flash('message', $langProfessorRequestClosed);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/admin/listreq.php');
             } else {
-                Session::flash('message',$langRequestStudent);
+                Session::flash('message', $langRequestStudent);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/admin/listreq.php');
             }
@@ -273,10 +267,9 @@ if (!empty($show) and $show == 'closed') {
 // display all requests
 // -----------------------------------
 else {
-    $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password FROM user_request
-                                WHERE (state = 1 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
+    $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password, status FROM user_request
+                                              WHERE (state = 1 $depqryadd) ORDER BY date_open DESC");
     $view = 'admin.users.listreq.index';
-
 }
 
 view($view, $data);
@@ -287,7 +280,8 @@ view($view, $data);
  */
 function table_header($addon = FALSE) {
 
-    global $langSurnameName, $langFaculty, $langUsername, $langDateRequest, $langDateClosed, $langDateReject;
+    global $langSurnameName, $langFaculty, $langUsername, $langDateRequest,
+           $langDateClosed, $langDateReject, $langUserPermissions;
 
     $string = "<thead>";
     $datestring = '';
@@ -296,12 +290,13 @@ function table_header($addon = FALSE) {
     } else if ($addon == 2) {
         $datestring = "<th>$langDateReject</th>";
     }
-
     $string .= "<tr class='list-header'>
-                    <th scope='col'>$langSurnameName</th>
-                    <th scope='col'>$langUsername</th>
-                    <th scope='col'>$langFaculty</th>
-                    <th>$langDateRequest</th>";
+                <th scope='col'><div class='text-center'>$langSurnameName</div></th>
+                <th scope='col'><div class='text-center'>$langUsername</div></th>
+                <th scope='col'><div class='text-center'>$langFaculty</div></th>
+                <th scope='col'><div class='text-center'>$langUserPermissions</div></th>
+                <th class='text-center'>$langDateRequest</th>";
+
     $string .= $datestring;
     $string .= "<th scope='col'>" . icon('fa-gears') . "</th>";
     $string .= "</tr></thead>";

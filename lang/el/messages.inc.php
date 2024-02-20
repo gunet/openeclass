@@ -63,6 +63,9 @@ $langUserWithRights = "Χρήστη με δικαιώματα δημιουργί
 $langUserWithNoRights = "Χρήστη χωρίς δικαιώματα δημιουργίας μαθημάτων";
 $langUsersWithTeacherRights = "Χρήστες με δικαιώματα δημιουργίας μαθημάτων";
 $langUsersWithNoTeacherRights = "Χρήστες χωρίς δικαιώματα δημιουργίας μαθημάτων";
+$langWithRights = "με δικαίωμα δημιουργίας μαθημάτων";
+$langWithCourseCreationRights = "δημουργίας μαθημάτων";
+$langWithNoCourseCreationRights = "όχι δημουργίας μαθημάτων";
 $langSupportUser = "Υποστήριξη";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
@@ -147,7 +150,7 @@ $langInfoMail = "Ενημερωτικό email";
 $langProfReg = "Εγγραφή $langOfTeacher";
 $langProfOpen = "Αιτήσεις $langOfTeachers";
 $langUserOpen = "Αιτήσεις $langOfStudents";
-$langUserRequests = "Αιτήσεις χρηστών";
+$langUserRequests = "Αιτήσεις Χρηστών";
 $langsUserRequests = "αιτήσεις χρηστών";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Εγχειρίδια";
@@ -405,14 +408,16 @@ $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστο�
 $langPassCode = "Συνθηματικό πρόσβασης";
 
 // listreq.php
+
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
-$langProfessorRequestClosed = "Η αίτηση του " . $langsOfTeacher . " έκλεισε!";
-$langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
-$langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
-$langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
+$langProfessorRequestClosed = "Η αίτηση έκλεισε!";
+$langReqHaveClosed = "Κλειστές αιτήσεις";
+$langReqHaveBlocked = "Απορριπτέες Αιτήσεις";
+$langReqHaveFinished = "Ολοκληρωμένες αιτήσεις";
+
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langCourseUserRequestReject = "Απόρριψη αίτησης εγγραφής";
-$langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα " . $siteName . " απορρίφθηκε.";
+$langemailbodyBlocked = "Η αίτηση σας για εγγραφή στην πλατφόρμα " . $siteName . " απορρίφθηκε.";
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication = "Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
 $langBackRequests = "Επιστροφή στις αιτήσεις";
@@ -2371,7 +2376,7 @@ $langGroupMembersInfo = "Μέλη Ομάδας";
 // Group - bookings
 $langBooking = "Κράτηση";
 $langBookings = "Κρατήσεις";
-$langAddAvailableDateForGroupAdmin = "Προσθήκη διαθεσιμότητας στην ομάδα"; 
+$langAddAvailableDateForGroupAdmin = "Προσθήκη διαθεσιμότητας στην ομάδα";
 $langAddAvailability = "Προσθήκη διαθέσιμης ημερομηνίας";
 $langRedInfoRentezvousOtherProgram = "<div class='Accent-200-cl TextBold'>Με ΚΟΚΚΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως υπεύθυνος ομάδας σε άλλα μαθήματα.</div>";
 $langSuccessInfoRentezvous = "<div class='Success-200-cl TextBold'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει στο τρέχων μάθημα</br>
@@ -3675,7 +3680,6 @@ $langProfEmail = "e-mail Χρήστη";
 $reguserldap = "Εγγραφή Χρήστη μέσω LDAP";
 $langByLdap = "Μέσω LDAP";
 $langNewProf = "Εισαγωγή στοιχείων νέου λογαριασμού $langsOfTeacher";
-$profsuccess = "Η δημιουργία νέου λογαριασμού $langsOfTeacher πραγματοποιήθηκε με επιτυχία!";
 $langDearProf = "Αγαπητέ χρήστη";
 $success = "Η καταγραφή των στοιχείων σας έγινε με επιτυχία!";
 $langBackPage = "για να επιστρέψετε στην αρχική σελίδα.";
@@ -3769,13 +3773,13 @@ $langDateCompleted_small = "Oλοκλήρωσης";
 
 $langRejectRequest = "Απόρριψη";
 $langListRequest = "Λίστα Αιτήσεων";
-$langTeacherRequestHasDeleted = "Η αίτηση του $langsOfTeacher διαγράφηκε!";
+$langTeacherRequestHasDeleted = "Η αίτηση διαγράφηκε!";
 $langRejectRequestSubject = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
-$langGoingRejectRequest = "Πρόκειται να απορρίψετε την αίτηση $langsOfTeacher με στοιχεία:";
+$langGoingRejectRequest = "Πρόκειται να απορρίψετε την αίτηση με στοιχεία:";
 $langRequestSendMessage = "Αποστολή μηνύματος στο χρήστη στην διεύθυνση:";
 $langRequestDisplayMessage = "στο μήνυμα θα αναφέρεται και το παραπάνω σχόλιο";
 $langNoSuchRequest = "Δεν υπάρχει κάποια σχετική αίτηση με αυτό το ID. Δεν είναι δυνατή η επεξεργασία της αίτησης.";
-$langTeacherRequestHasRejected = "Η αίτηση του $langsOfTeacher απορρίφθηκε";
+$langTeacherRequestHasRejected = "Η αίτηση απορρίφθηκε";
 $langRequestMessageHasSent = " και στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση ";
 $langRequestHasRejected = "Η αίτησή σας για εγγραφή στην πλατφόρμα $siteName απορρίφθηκε.";
 $langRegistrationDateShort = "Ημ. εγγραφής";
@@ -3823,7 +3827,7 @@ $langUserConsentUnknown = "Δεν έχει συναινέσει ακόμα ή δ
 $langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού $langOfStudent";
 $langUserFillData = "Συμπλήρωση στοιχείων";
 $langUserOpenRequests = "Ανοικτές αιτήσεις $langOfStudents";
-$langWarnReject = "Πρόκειται να απορρίψετε την αίτηση $langsOfStudent";
+$langWarnReject = "Πρόκειται να απορρίψετε την αίτηση!";
 $langWithDetails = "με στοιχεία";
 $langNewUserDetails = "Στοιχεία Λογαριασμού Χρήστη-$langOfStudent";
 $langInfoProfReq = "Αν επιθυμείτε να έχετε πρόβαση στην πλατφόρμα με δικαιώματα δημιουργίας $langsOfCourses, παρακαλώ συμπληρώστε την παρακάτω αίτηση. Η αίτηση θα σταλεί στον υπεύθυνο διαχειριστή ο οποίος θα δημιουργήσει το λογαριασμό και θα σας στείλει τα στοιχεία μέσω ηλεκτρονικού ταχυδρομείου.";
@@ -3834,7 +3838,8 @@ $langInfoProf = "Σύντομα θα σας σταλεί mail από την Ομ
 $langDearUser = "Αγαπητέ χρήστη";
 $langMailErrorMessage = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος.<br/>Η αίτησή σας καταχωρήθηκε στην πλατφόρμα, αλλά δεν στάλθηκε ενημερωτικό email στο διαχειριστή του συστήματος. <br/>Παρακαλούμε επικοινωνήστε με το διαχειριστή στη διεύθυνση:";
 $langUserSuccess = "Νέος λογαριασμός $langOfStudent";
-$usersuccess = "Η δημιουργία νέου λογαριασμού πραγματοποιήθηκε με επιτυχία!";
+$langUserCreated = "Η δημιουργία νέου λογαριασμού πραγματοποιήθηκε με επιτυχία!";
+
 $langAsUser = "(Λογαριασμός $langOfStudent)";
 $langChooseReg = "Επιλογή τρόπου εγγραφής";
 $langTryAgain = "Δοκιμάστε ξανά!";

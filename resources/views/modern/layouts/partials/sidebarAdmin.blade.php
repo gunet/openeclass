@@ -107,26 +107,14 @@
                             </a>
                         </li>
                         <li class="list-group-item element">
-                        @if (get_config('eclass_prof_reg') == 1 or get_config('alt_auth_prof_reg') == 1)
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/listreq.php">
-                                {!! trans('langProfOpen') !!}
-                            </a>
-                        @else
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/newuseradmin.php">
-                                {!! trans('langProfReq') !!}
+                                {!! trans('langNewAccount') !!}
                             </a>
-                        @endif
                         </li>
                         <li class="list-group-item element">
-                        @if (get_config('eclass_stud_reg') == 1 or get_config('alt_auth_stud_reg') == 1)
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/listreq.php?type=user">
-                                {!! trans('langUserOpen') !!}
+                            <a class='TextBold' href="{{$urlAppend}}modules/admin/listreq.php">
+                                {!! trans('langUserRequests') !!}
                             </a>
-                        @else
-                            <a class='TextBold' href="{{$urlAppend}}modules/admin/newuseradmin.php?type=user">
-                                {!! trans('langCreateAccount') !!}
-                            </a>
-                        @endif
                         </li>
                         @if ($is_admin)
                             <li class="list-group-item element">
