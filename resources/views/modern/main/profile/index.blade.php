@@ -89,19 +89,6 @@
                                         </p>
                                     @endif
 
-                                    @if($is_user_teacher)
-                                        <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/profile/add_available_dates.php?user_id={{ $uid }}&token={{ token_generate("available_date" . $id) }}'>
-                                                {{ trans('langAvailableDateForUser') }}
-                                            </a>
-                                        </p>
-                                    @else
-                                        <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/profile/add_available_dates.php?user_id={{ $uid }}&token={{ token_generate("booking_date" . $id) }}&do_booking=1&show_all_users=1'>
-                                                {{ trans('langDisplayAvailableUsersForBooking') }}
-                                            </a>
-                                        </p>
-                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -466,20 +466,24 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                         </label>
                     </div>
                 </div>
-            </div>
+            </div>";
 
-            <div class='form-group mt-4'>
-                <div class='col-12'>
-                    <div class='checkbox'>
-                        <label class='label-container'>
-                            <input type='checkbox' name='booking' $checked[booking]>
-                            <span class='checkmark'></span>
-                            $langBookings
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <input type='hidden' name='group_id' value=$group_id></input>
+            if(get_config('individual_group_bookings')){
+                $tool_content .= "
+                    <div class='form-group mt-4'>
+                        <div class='col-12'>
+                            <div class='checkbox'>
+                                <label class='label-container'>
+                                    <input type='checkbox' name='booking' $checked[booking]>
+                                    <span class='checkmark'></span>
+                                    $langBookings
+                                </label>
+                            </div>
+                        </div>
+                    </div>";
+            }
+            
+    $tool_content .= "<input type='hidden' name='group_id' value=$group_id></input>
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center'>
                

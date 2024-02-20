@@ -56,10 +56,9 @@ $pageName = $langAddAvailableDateForGroupAdmin;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 $navigation[] = array('url' => "group_space.php?course=$course_code&group_id=$group_id", 'name' => q($group_name));
 
-$data['group_tutors'] = $group_tutors = group_tutors($group_id);
+$data['group_tutors'] = $group_tutors = $tutors;
 $data['group_id'] = $group_id;
 $data['is_tutor'] = $is_tutor;
-
 
 $group_tutor_ids = array();
 $data['tutor_name'] = '';
@@ -322,7 +321,14 @@ if(isset($_GET['add_for_tutor'])){
     }
     view('modules.group.show_history_bookings', $data);
 }else{
-    view('modules.group.show_date_available', $data);
+    if($is_course_admin or $is_tutor){
+        view('modules.group.show_date_available', $data);
+    }else{
+        Session::flash('message',$langForbidden);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/group/index.php?course=$course_code");
+    }
+    
 }
 
 

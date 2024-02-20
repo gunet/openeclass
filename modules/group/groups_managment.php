@@ -512,19 +512,21 @@ $tool_content .= "<div class='col-12'>
                                                                                                     $langWiki
                                                                                                 </label>
                                                                                             </div>
-                                                                                        </div>
+                                                                                        </div>";
 
-                                                                                        <div class='col-12 form-group mt-2'>
-                                                                                            <div class='checkbox'>
-                                                                                                <label class='label-container'>
-                                                                                                    <input type='checkbox' name='booking_$gr->id' $checked[$booking]>
-                                                                                                    <span class='checkmark'></span>
-                                                                                                    $langBookings
-                                                                                                </label>
-                                                                                            </div>
-                                                                                        </div>
+                                                                                        if(get_config('individual_group_bookings')){
+                                                                                            $tool_content .= "<div class='col-12 form-group mt-2'>
+                                                                                                <div class='checkbox'>
+                                                                                                    <label class='label-container'>
+                                                                                                        <input type='checkbox' name='booking_$gr->id' $checked[$booking]>
+                                                                                                        <span class='checkmark'></span>
+                                                                                                        $langBookings
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </div>";
+                                                                                        }
 
-                                                                                    </div>";
+                                                                 $tool_content .= " </div>";
 
                                                                 $tool_content .="</div>
                                                                             </div>

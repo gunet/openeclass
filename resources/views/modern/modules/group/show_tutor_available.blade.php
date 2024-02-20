@@ -97,7 +97,7 @@
 
                                                             
                                                             <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $urlAppend }}modules/group/date_available.php?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;booking_with_tutor={{ $tutor->user_id }}">
-                                                                {{ trans('langAvailableTutorBookings')}}
+                                                                {{ trans('langMYBookings')}}
                                                             </a>
                                                             
                                                         </div>

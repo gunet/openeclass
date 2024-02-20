@@ -936,6 +936,13 @@
                                                                 {{ trans('langUnsubscribeCourse') }}
                                                             </label>
                                                         </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input id='individual_group_bookings' type='checkbox' name='individual_group_bookings' value='1' {{ $cbox_individual_group_bookings }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langIndividualGroupBookings') }}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <hr><br>

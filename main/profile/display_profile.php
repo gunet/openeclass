@@ -50,6 +50,14 @@ $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, use
                                             email_public, phone_public, am_public
                                         FROM user
                                         WHERE id = ?d", $data['id']);
+
+//Get status for user
+$is_user_teacher = false;
+if($data['userdata']->status == USER_TEACHER){
+    $is_user_teacher = true;
+}
+$data['is_user_teacher'] = $is_user_teacher;
+
 if ($data['userdata']) {
     $auth = array_search($data['userdata']->password, $auth_ids);
     if (!$auth) {
@@ -64,18 +72,6 @@ if ($data['userdata']) {
         $passurl = $urlServer . 'main/profile/password.php';
         $data['action_bar'] =
             action_bar(array(
-                // array('title' => $langUserBlog,
-                //     'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $id) . "",
-                //     'icon' => 'fa-columns',
-                //     'level' => 'primary-label',
-                //     'button-class' => 'submitAdminBtn mb-2 me-2',
-                //     'show' => get_config('personal_blog')),
-                // array('title' => $langMyePortfolio,
-                //     'url' => "../eportfolio/index.php?id=$uid&token=" . token_generate("eportfolio" . $id) . "",
-                //     'icon' => 'fa-briefcase',
-                //     'level' => 'primary-label',
-                //     'button-class' => 'submitAdminBtn mb-2 me-2',
-                //     'show' => get_config('eportfolio_enable')),
                 array('title' => $langModProfile,
                     'url' => "profile.php?edProfile=true",
                     'icon' => 'fa-edit',
@@ -92,39 +88,20 @@ if ($data['userdata']) {
                     'icon' => 'fa-envelope',
                     'button-class' => 'submitAdminBtn',
                     'level' => 'primary-label',
-                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))
-                // array('title' => $langUnregUser,
-                //     'url' => $urlAppend."main/unreguser.php",
-                //     'icon' => 'fa-trash-o',
-                //     'button-class' => 'deleteAdminBtn mb-2 me-2 rounded-pill',
-                //     'level' => 'primary-label')
+                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses']))),
+                array('title' => $langAvailableDateForUser,
+                      'url' => "add_available_dates.php?user_id=$uid",
+                      'icon' => 'fa-solid fa-calendar',
+                      'button-class' => 'submitAdminBtn',
+                      'level' => 'primary-label',
+                      'show' => ($is_user_teacher && get_config('individual_group_bookings'))),
+                array('title' => $langDisplayAvailableUsersForBooking,
+                      'url' => "add_available_dates.php?user_id=$uid&do_booking=1&show_all_users=1",
+                      'icon' => 'fa-solid fa-users',
+                      'button-class' => 'submitAdminBtn',
+                      'level' => 'primary-label',
+                      'show' => (!$is_user_teacher && get_config('individual_group_bookings')))
                 ));
-
-
-        // $data['action_bar_blog_portfolio'] =
-        //     action_bar(array(
-                // array('title' => $langUserBlog,
-                //     'url' => "../../modules/blog/index.php?user_id=$uid&token=" . token_generate("personal_blog" . $id) . "",
-                //     'icon' => 'fa-columns',
-                //     'level' => 'primary-label',
-                //     'button-class' => 'btn-success',
-                //     'show' => get_config('personal_blog')),
-                // array('title' => $langMyePortfolio,
-                //     'url' => "../eportfolio/index.php?id=$uid&token=" . token_generate("eportfolio" . $id) . "",
-                //     'icon' => 'fa-briefcase',
-                //     'level' => 'primary-label',
-                //     'button-class' => 'btn-success',
-                //     'show' => get_config('eportfolio_enable')
-                //)));
-
-        // $data['action_bar_unreg'] =
-        //     action_bar(array(
-        //         array('title' => $langUnregUser,
-        //             'url' => "../unreguser.php",
-        //             'icon' => 'fa-trash-o',
-        //             'level' => 'primary-label',
-        //             'button-class' => 'btn-danger')
-        //         ));
 
         $data['action_bar_unreg'] = 1;
         
@@ -168,15 +145,6 @@ if ($data['userdata']) {
     $data['badge_completed'] = Database::get()->queryArray($gameQ, $uid);
 
 }
-
-
-//Get status for user
-$is_user_teacher = false;
-$user_status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d",$uid)->status;
-if($user_status == USER_TEACHER){
-    $is_user_teacher = true;
-}
-$data['is_user_teacher'] = $is_user_teacher;
 
 $data['menuTypeID'] = 1;
 view('main.profile.index', $data);

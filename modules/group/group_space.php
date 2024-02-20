@@ -362,7 +362,7 @@ if (isset($_GET['group_as'])) {
                                                     </li>";
                                 }
 
-                                if($booking){
+                                if($booking && get_config('individual_group_bookings')){
                                     if($is_editor or $is_tutor){
                                         $tool_content .= "<li>
                                                             <a class='d-flex justify-content-start align-items-start' href='date_available.php?course=$course_code&amp;group_id=$group_id'>

@@ -88,6 +88,7 @@ if (isset($_POST['submit'])) {
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('show_modal_openCourses', $_POST['show_modal_openCourses']);
+    set_config('individual_group_bookings', $_POST['individual_group_bookings']);
 
     //Maintenance Text set
     foreach ($session->active_ui_languages as $langcode) {
@@ -174,7 +175,8 @@ if (isset($_POST['submit'])) {
         'allow_rec_video' => true,
         'allow_rec_audio' => true,
         'course_invitation' => true,
-        'show_modal_openCourses' => true
+        'show_modal_openCourses' => true,
+        'individual_group_bookings' => true
         ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -368,6 +370,7 @@ else {
     $data['cbox_allow_rec_audio'] = get_config('allow_rec_audio') ? 'checked' : '';
     $data['cbox_allow_modal_courses'] = get_config('show_modal_openCourses') ? 'checked' : '';
     $data['cbox_course_invitation'] = get_config('course_invitation') ? 'checked' : '';
+    $data['cbox_individual_group_bookings'] = get_config('individual_group_bookings') ? 'checked' : '';
 }
 
 view('admin.other.eclassconf', $data);

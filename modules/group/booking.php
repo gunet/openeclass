@@ -50,6 +50,19 @@ if(!is_group_visible($group_id, $course_id) and !$is_editor){
     redirect_to_home_page("modules/group/index.php?course=$course_code");
 }
 
+$gr_tutor_ids = array();
+if(count($tutors) > 0){
+    foreach($tutors as $t){
+        array_push($gr_tutor_ids,$t->user_id);
+    }
+    if(isset($_GET['tutor_id']) && !in_array($_GET['tutor_id'],$gr_tutor_ids)){
+        Session::flash('message',$langForbidden);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/group/index.php?course=$course_code");
+    }
+}
+
+
 $toolName = $langAddBooking;
 $pageName = $langAddBooking;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
