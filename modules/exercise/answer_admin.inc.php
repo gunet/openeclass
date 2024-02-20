@@ -489,7 +489,7 @@ if (isset($_GET['modifyAnswers'])) {
                 $tool_content .= "<td class='text-center'><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
-                    <td class='text-left' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
+                    <td class='text-left' colspan='3'><strong>$langPollAddAnswer :</strong>&nbsp;
                         <input type='submit' name='moreAnswers' value='$langMoreAnswers' />&nbsp;
                       <input type='submit' name='lessAnswers' value='$langLessAnswers' />
                     </td>
@@ -706,7 +706,7 @@ if (isset($_GET['modifyAnswers'])) {
      }
 
      $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
-     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
+     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langSubmit;
      $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
      $tool_content .= "
                      <div class='row'>

@@ -604,7 +604,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         form_buttons([
                             [ 'text'  => $langSave,
                               'name'  => 'submitExercise',
-                              'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
+                              'value' => $langSubmit,
                               'javascript' => "selectAll('assignee_box',true)"
                             ],
                             [ 'href' => $exerciseId ?
