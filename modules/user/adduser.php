@@ -141,7 +141,7 @@ if (isset($_GET['add'])) {
     foreach (array('surname', 'givenname', 'username', 'am') as $term) {
         $tvar = 'search_' . $term;
         if (!empty($GLOBALS[$tvar])) {
-            $search[] = "u.$term LIKE ?s";
+            $search[] = "u.$term LIKE LOWER(?s)";
             $values[] = $GLOBALS[$tvar] . '%';
         }
     }
