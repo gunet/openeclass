@@ -64,7 +64,9 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">{{ trans('langAdd') }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class='bg-transparent border-0' data-bs-dismiss="modal" aria-label="Close">
+                                    <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 <div class='form-wrapper form-edit rounded'>
@@ -81,8 +83,8 @@
                         
                         
                             <div class="modal-footer">
-                                <button class="btn btn-outline-secondary small-text rounded-2" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
-                                <button type="submit" class="btn btn-success small-text rounded-2" id="submitButton">{{trans('langSubmit')}}</button>
+                                <button class="btn cancelAdminBtn" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
+                                <button type="submit" class="btn submitAdminBtnDefault" id="submitButton">{{trans('langSubmit')}}</button>
                             </div>
                         </div>
 
@@ -105,8 +107,8 @@
                         
                     </div>
                     <div class="modal-footer">
-                        <button id="cancelModal" class="btn btn-outline-secondary small-text rounded-2" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
-                        <button type="submit" class="btn btn-danger small-text rounded-2" id="deleteButton">{{trans('langDelete')}}</button>
+                        <button id="cancelModal" class="btn cancelAdminBtn" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
+                        <button type="submit" class="btn deleteAdminBtn" id="deleteButton">{{trans('langDelete')}}</button>
                     </div>
                     </div>
 

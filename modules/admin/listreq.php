@@ -291,11 +291,11 @@ function table_header($addon = FALSE) {
         $datestring = "<th>$langDateReject</th>";
     }
     $string .= "<tr class='list-header'>
-                <th scope='col'><div class='text-center'>$langSurnameName</div></th>
-                <th scope='col'><div class='text-center'>$langUsername</div></th>
-                <th scope='col'><div class='text-center'>$langFaculty</div></th>
-                <th scope='col'><div class='text-center'>$langUserPermissions</div></th>
-                <th class='text-center'>$langDateRequest</th>";
+                <th scope='col'><div>$langSurnameName</div></th>
+                <th scope='col'><div>$langUsername</div></th>
+                <th scope='col'><div>$langFaculty</div></th>
+                <th scope='col'><div>$langUserPermissions</div></th>
+                <th>$langDateRequest</th>";
 
     $string .= $datestring;
     $string .= "<th scope='col'>" . icon('fa-gears') . "</th>";

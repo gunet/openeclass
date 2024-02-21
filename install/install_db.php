@@ -485,6 +485,30 @@ $db->query("CREATE TABLE IF NOT EXISTS `booking_user` (
     PRIMARY KEY(id),
     FOREIGN KEY (booking_id) REFERENCES booking(id) ON DELETE CASCADE) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `date_availability_user` (
+        `id` int(11) NOT NULL auto_increment,
+        `user_id` int(11) NOT NULL default 0,
+        `start` DATETIME DEFAULT NULL,
+        `end` DATETIME DEFAULT NULL,
+        PRIMARY KEY  (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `date_booking` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `teacher_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `start` DATETIME NOT NULL,
+            `end` DATETIME NOT NULL,
+            `accepted` INT(11) NOT NULL DEFAULT 0,
+            PRIMARY KEY(id),
+            FOREIGN KEY (teacher_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `date_booking_user` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `booking_id` INT(11) NOT NULL,
+            `student_id` INT(11) NOT NULL,
+            PRIMARY KEY(id),
+            FOREIGN KEY (booking_id) REFERENCES date_booking(id) ON DELETE CASCADE) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `group_category` (
     `id` INT(6) NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) NOT NULL,
@@ -1542,6 +1566,7 @@ $default_config = array(
     'visits_per_week', 0,
     'show_only_loginScreen', 0,
     'show_modal_openCourses', 0,
+    'individual_group_bookings', 0,
     'email_required', 0,
     'email_from', 1,
     'email_verification_required', 0,

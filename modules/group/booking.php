@@ -36,7 +36,7 @@ require_once 'modules/group/group_functions.php';
 
 initialize_group_id();
 
-if (!is_group_visible($group_id, $course_id) and !$is_editor) {
+if (!is_group_visible($group_id, $course_id)) {
     Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -44,7 +44,7 @@ if (!is_group_visible($group_id, $course_id) and !$is_editor) {
 
 initialize_group_info($group_id);
 
-if(!is_group_visible($group_id, $course_id) and !$is_editor){
+if(!$is_member){
     Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("modules/group/index.php?course=$course_code");

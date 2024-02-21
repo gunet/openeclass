@@ -325,11 +325,6 @@ function access_update_delete_Date($g_id){
     //an uid einai upeuthinos omadas
     global $course_id, $uid, $is_course_admin;
 
-    // $check_2 = Database::get()->queryArray("SELECT * FROM course_user
-    //                                         WHERE course_id = ?d
-    //                                         AND user_id = ?d
-    //                                         AND editor = ?d",$course_id,$uid,1);
-
     $check_2 = Database::get()->queryArray("SELECT * FROM group_members
                                                     WHERE group_id = ?d
                                                     AND user_id = ?d

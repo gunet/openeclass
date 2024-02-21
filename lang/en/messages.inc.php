@@ -878,7 +878,11 @@ $langNoChangeDateOtherUser = "You cannot change another user's date.";
 $langExistBookingForThisDate = "You cannot change this date.";
 $langDeleteDateSuccess = "Date deleted successfully.";
 $langDeleteDateNoUser = "You cannot delete another user's date.";
-$langExistBookingForThisDateMessageDetlete = "You cannot delete this date.";
+$langExistBookingForThisDateMessageDetlete = "You cannot delete this date.
+A user has reserved this slot.
+Edit the request from -- My bookings -- and try again.
+If the slot you selected is in orange, then it concerns another manager of the same group and in any case it cannot be deleted.
+Please contact the course administrator if you have any problems.";
 $langDateHasExpired = "Problem! Select a date from the current date onwards.";
 $langAddDatesSuccess = "Date successfully added.";
 $langDateMaxHour = "Your available time should be half an hour or an hour long";
@@ -891,7 +895,7 @@ $langAddBooking = "Reservation to team manager";
 $langdobookingwithtutor = "Do you want to make a reservation to contact the specific person in charge?";
 $langAddBookingSuccess = "Your reservation has been successfully made. An informative email has been sent to the person in charge.";
 $langAddBookingNoSuccess = "The reservation was not completed because another user has used the specified date.";
-$langMentorHasRemovedTheDate = "The booking has not been completed as the person in charge has removed their available date.";
+$langTutorHasRemovedTheDate = "The booking has not been completed as the person in charge has removed their available date.";
 $langDeleteBookingSuccess = "Your reservation has been successfully deleted.";
 $langdelbookingwithtutor = "Do you want to cancel this reservation?";
 $langAddBookingByUser = "Book to contact";

@@ -242,7 +242,7 @@
                                         alert("{{ js_escape(trans('langAddBookingNoSuccess')) }}");
                                         window.location.reload();
                                     }else if(json == 2){
-                                        alert("{{ js_escape(trans('langMentorHasRemovedTheDate')) }}");
+                                        alert("{{ js_escape(trans('langTutorHasRemovedTheDate')) }}");
                                         window.location.reload();
                                     }else if(json == 3){
                                         alert("{{ js_escape(trans('ThereIsABookingWithTheSameSlot')) }}");
