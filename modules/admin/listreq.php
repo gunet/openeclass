@@ -35,8 +35,6 @@ $close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_PO
 $id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
 $show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
 
-$columns = 'null, null, null, null, null, { orderable: false }';
-
 // Deal with navigation
 switch ($show) {
     case "closed":
@@ -47,6 +45,10 @@ switch ($show) {
     case "rejected":
         $toolName = $langReqHaveBlocked;
         $columns = 'null, null, null, null, null, null, { orderable: false }';
+        break;
+    default:
+        $toolName = $langUserOpenRequests;
+        $columns = 'null, null, null, null, null, { orderable: false }';
         break;
 }
 
@@ -83,13 +85,11 @@ $head_content .= "<script type='text/javascript'>
 
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
-    $toolName = $langUserOpenRequests;
     $data['reqtype'] = $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
     $linkreg = $langUserDetails;
     $linkget = '?type=user';
 } else {
-    $toolName = $langOpenProfessorRequests;
     $data['reqtype'] = $reqtype = '';
     $linkreg = $langProfReg;
     $linkget = '';

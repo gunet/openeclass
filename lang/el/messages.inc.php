@@ -3825,7 +3825,7 @@ $langUserConsentUnknown = "Δεν έχει συναινέσει ακόμα ή δ
 // formuser.php
 $langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού $langOfStudent";
 $langUserFillData = "Συμπλήρωση στοιχείων";
-$langUserOpenRequests = "Ανοικτές αιτήσεις $langOfStudents";
+$langUserOpenRequests = "Ανοικτές αιτήσεις";
 $langWarnReject = "Πρόκειται να απορρίψετε την αίτηση!";
 $langWithDetails = "με στοιχεία";
 $langNewUserDetails = "Στοιχεία Λογαριασμού Χρήστη-$langOfStudent";
