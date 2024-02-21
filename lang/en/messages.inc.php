@@ -6118,3 +6118,19 @@ $langLoginAndRegister = 'Login and Register';
 $langInviteEclassLoginCreate = 'Please enter the required information below to register to the platform.';
 $langInviteEclassLoginAlt = "Alternatively, if you <strong>don't have a Central Authentication Service account</strong>, please enter below the details needed to create a guest account on the platform.";
 $langSameAsYourEmail = 'same as your e-mail address';
+
+/* * **********************************************************
+ * User available date for reservation
+ * ********************************************************** */
+
+ $langAvailableDateForUser = "My available days";
+ $langDisplayAvailableUsersForBooking = "Users available for booking";
+ $langWarningInfoBookingTutor = "<div class='TextBold' style='color:#ffa500;'>In ORANGE color is displayed the reservation to the manager from another user.";
+ $langBlueInfoBookingTutor = "<div class='TextBold' style='color:#337ab7;'>The available date of the person in charge to make a reservation is shown in BLUE.</br>Click on the available slot to submit a reservation.</ div>";
+ $langSuccessInfoBookingTutor = "<div class='TextBold' style='color:#1E7E0E;'>The reservation you make to the person in charge is displayed in GREEN (Awaiting approval or rejection by the person in charge).</br>Possibility of cancellation by clicking on the slot of the reservation. </div>";
+ $langPinkInfoBookingTutor = "<div class='TextBold Pink-cl'>Your reservation to the person in charge is displayed in PINK color (Request approval by the person in charge).</br>Click on the available slot to cancel a reservation.</div>";
+ $langIndividualGroupBookings = "Enable booking tool in user profile and user groups";
+ $langWithTutor = "To the person in charge";
+ $langHistoyBooking = "Expired bookings";
+ $langBookingHasDeleted = "Booking successfully deleted!";
+ $ThereIsABookingWithTheSameSlot = "Your booking with this user has not been completed as you have booked someone else on the same day and start time.";

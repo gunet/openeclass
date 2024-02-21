@@ -66,75 +66,84 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                                                                         AND start = ?t
                                                                         AND end = ?t",$_POST['tutor_Id'],$_POST["start"],$_POST["end"])->c;
 
+            //check if current uid has booked to another same slot for other user
+            $hasBookedToOtherUser = Database::get()->querySingle("SELECT COUNT(id) AS c FROM date_booking
+                                                                    WHERE id IN (SELECT booking_id FROM date_booking_user WHERE student_id = ?d)
+                                                                    AND teacher_id <> ?d
+                                                                    AND start = ?t",$uid,$_POST['tutor_Id'],date('Y-m-d H:i:s', strtotime($_POST["start"])))->c;
+           
+            if($hasBookedToOtherUser == 0){
+                if($checkOtherUserBooking == 0){
 
-            if($checkOtherUserBooking == 0){
-
-                $add = Database::get()->query("INSERT INTO date_booking SET
-                                    teacher_id = ?d,
-                                    title = ?s,
-                                    start = ?s,
-                                    end = ?s",$_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
-            
-
+                    $add = Database::get()->query("INSERT INTO date_booking SET
+                                        teacher_id = ?d,
+                                        title = ?s,
+                                        start = ?s,
+                                        end = ?s",$_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
                 
-                $add_bookind_by_user = Database::get()->query("INSERT INTO date_booking_user SET
-                                                booking_id = ?d,
-                                                student_id = ?d",$add->lastInsertID,$uid);
-                    
-                    
-                //send email to the tutor about the booking from user
-                $userName = $_POST['title'];
-                $tutorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$_POST["tutor_Id"])->givenname;
-                $tutorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$_POST["tutor_Id"])->surname;
-                $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST["tutor_Id"])->email;
-                $dateFrom = $_POST["start"];
-                $dateEnd = $_POST["end"];
 
-                $emailHeader = "
-                <!-- Header Section -->
-                        <div id='mail-header'>
+                    
+                    $add_bookind_by_user = Database::get()->query("INSERT INTO date_booking_user SET
+                                                    booking_id = ?d,
+                                                    student_id = ?d",$add->lastInsertID,$uid);
+                        
+                        
+                    //send email to the tutor about the booking from user
+                    $userName = $_POST['title'];
+                    $tutorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$_POST["tutor_Id"])->givenname;
+                    $tutorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$_POST["tutor_Id"])->surname;
+                    $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST["tutor_Id"])->email;
+                    $dateFrom = $_POST["start"];
+                    $dateEnd = $_POST["end"];
+
+                    $emailHeader = "
+                    <!-- Header Section -->
+                            <div id='mail-header'>
+                                <br>
+                                <div>
+                                    <div id='header-title'>$langAddBookingByUser</div>
+                                </div>
+                            </div>";
+
+                    $emailMain = "
+                    <!-- Body Section -->
+                        <div id='mail-body'>
                             <br>
+                            <div>$langDetailsBooking</div>
+                            <div id='mail-body-inner'>
+                                <ul id='forum-category'>
+                                    <li><span><b>$langName: </b></span> <span>$userName</span></li>
+                                    <li><span><b>$langTutor: </b></span> <span>$tutorName $tutorSurname</span></li>
+                                    <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
+                                </ul>
+                            </div>
                             <div>
-                                <div id='header-title'>$langAddBookingByUser</div>
+                                <br>
+                                <p>$langProblem</p><br>" . get_config('admin_name') . "
+                                <ul id='forum-category'>
+                                    <li>$langManager: $siteName</li>
+                                    <li>$langTel: -</li>
+                                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                                </ul>
                             </div>
                         </div>";
 
-                $emailMain = "
-                <!-- Body Section -->
-                    <div id='mail-body'>
-                        <br>
-                        <div>$langDetailsBooking</div>
-                        <div id='mail-body-inner'>
-                            <ul id='forum-category'>
-                                <li><span><b>$langName: </b></span> <span>$userName</span></li>
-                                <li><span><b>$langTutor: </b></span> <span>$tutorName $tutorSurname</span></li>
-                                <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <br>
-                            <p>$langProblem</p><br>" . get_config('admin_name') . "
-                            <ul id='forum-category'>
-                                <li>$langManager: $siteName</li>
-                                <li>$langTel: -</li>
-                                <li>$langEmail: " . get_config('email_helpdesk') . "</li>
-                            </ul>
-                        </div>
-                    </div>";
+                    $emailsubject = $siteName.':'.$langAddBookingByUser;
 
-                $emailsubject = $siteName.':'.$langAddBookingByUser;
+                    $emailbody = $emailHeader.$emailMain;
 
-                $emailbody = $emailHeader.$emailMain;
-
-                $emailPlainBody = html2text($emailbody);
-                
-                send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-                
-                echo 1;
-                   
-                
+                    $emailPlainBody = html2text($emailbody);
+                    
+                    send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+                    
+                    echo 1;
+                    
+                    
+                }else{
+                    echo 0;
+                }
             }else{
-                echo 0;
+                echo 3;
             }
             
         }else{

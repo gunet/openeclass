@@ -244,6 +244,9 @@
                                     }else if(json == 2){
                                         alert("{{ js_escape(trans('langMentorHasRemovedTheDate')) }}");
                                         window.location.reload();
+                                    }else if(json == 3){
+                                        alert("{{ js_escape(trans('ThereIsABookingWithTheSameSlot')) }}");
+                                        window.location.reload();
                                     }
                                     
                                 },
