@@ -4393,7 +4393,6 @@ function get_theme_options() {
                 .panelCard,
                 .cardLogin,
                 .statistics-card,
-                .cardLogin-secondary,
                 .bodyChat{
                     background-color:$theme_options_styles[BgPanels] ;
                 }
@@ -4453,8 +4452,7 @@ function get_theme_options() {
                 .panel-danger,
                 .panel-primary,
                 .panel-info,
-                .panel-action-btn-default,
-                .cardLogin-secondary{
+                .panel-action-btn-default{
                     border: solid 1px $theme_options_styles[clBorderPanels];
                 }
 

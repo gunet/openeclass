@@ -31,7 +31,11 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
 
-              <div class='col-12'><a class='btn w-100 login-form-submit d-flex justify-content-center align-items-center mt-4' href='$authUrl'>$langEnter</a></div>
+              <div class='col-12 d-flex justify-content-center align-items-center'>
+                <a class='btn submitAdminBtnDefault d-inline-flex' href='$authUrl'>
+                  ".(!empty($authTitle) ? $authTitle : $langEnter)."
+                </a>
+              </div>
             ", $authTitle, $authInstructions);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
@@ -56,14 +60,23 @@ foreach ($q as $l) {
             <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
               $next
               <div>
+                <div class='form-group text-start'>
                   <label for='username_id' class='form-label'>$langUsername</label>
                   <input id='username_id' class='login-input w-100' placeholder='&#xf007' type='text' id='uname' name='uname' autocomplete='on' />
+                </div>
+                <div class='form-group text-start mt-3'>
                   <label for='password_id' class='form-label mt-4'>$langPassword&nbsp;(password)</label>
-                  <input id='password_id' class='login-input w-100' placeholder='&#xf084' type='password' id='pass' name='pass' autocomplete='on'>
-                  <input class='btn w-100 login-form-submit mt-4' type='submit' name='submit' value='$langEnter'>
+                  <div class='input-group flex-nowrap'>
+                    <input id='password_id' class='login-input border-end-0 w-100 mt-0' placeholder='&#xf084' type='password' name='pass' autocomplete='on'>
+                    <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-transparent input-border-color'>
+                        <i class='fa-solid fa-eye fa-md'></i>
+                    </span>
+                  </div>
+                </div>
+                <input class='btn w-100 login-form-submit mt-4' type='submit' name='submit' value='$langEnter'>
               </div>
             </form>
-            <div class='col-12 text-center mt-4'>
+            <div class='col-12 text-md-start text-center mt-4'>
                 <a class='text-decoration-underline' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
             </div>
         </div>", $authTitle, $authInstructions);
@@ -73,112 +86,316 @@ foreach ($q as $l) {
 $columns = 12 / count($authLink);
 $pageName = $langUserLogin;
 
-$tool_content .= "<div class='col-12'>
-                    <h1>$langUserLogin</h1>
-                  </div>";
-
-$tool_content .= "<div class='col-12 mt-5'>";
-  $tool_content .= "<div class='row m-auto'>";
-    $tool_content .= "<div class='col-12 px-0'>";
-      $counter = 0;
-      $active = '';
-        foreach ($authLink as $authInfo) {
-
-            if (Session::has('login_error') and $authInfo[0]) {
-                $tool_content .= "<div class='col-12'>
-                                    <input id='showWarningModal2' type='hidden' value='1'>
-                                    <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1'>
-                                        <div class='modal-dialog modal-dialog-centered'>
-                                            <div class='modal-content border-0 p-0'>
-                                                <div class='modal-header d-flex justify-content-between align-items-center'>
-                                                    <h5 class='modal-title'>$langError</h5>
-                                                    <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
-                                                      <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                                                    </button>
-
-                                                </div>
-                                                <div class='modal-body'>
-                                                  ".Session::get('login_error')."
-                                                </div>
-                                            </div>
-                                        </div>
+$Page = '';
+$auth_enabled_method = 0;
+  $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default = ?d OR auth_default = ?d",1,2);
+  if(count($active_method) > 0){
+      $auth_enabled_method = 1;
+  }
+$tool_content .= "<h1>$langUserLogin</h1>";
+$tool_content .= "
+                  <div class='padding-default mt-4'>
+                    <div class='row row-cols-1 row-cols-lg-2 g-4'>
+                      <div class='col ms-auto me-auto'>";
+                        if($auth_enabled_method == 1){
+                          if(count($authLink) == 1){
+            $tool_content .= "<div class='card form-homepage-login h-100 px-lg-4 py-lg-3 p-3'>";
+                                $k = 0;
+                                foreach($authLink as $authInfo){
+                  $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                      <h2 class='mb-3'>".(!empty($authInfo[2]) ? $authInfo[2] : $langLogin)."</h2>";
+                                      if(!empty($authInfo[3])){
+                        $tool_content .= "<a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction$k'>
+                                              $langInstructions
+                                          </a>
+                                          <div class='modal fade' id='authInstruction$k' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
+                                              <div class='modal-dialog'>
+                                                  <div class='modal-content'>
+                                                      <div class='modal-header'>
+                                                          <div class='modal-title' id='authInstructionLabel'>$langInstructionsAuth</div>
+                                                          <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                                              <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
+                                                          </button>
+                                                      </div>
+                                                      <div class='modal-body'>
+                                                          <div class='col-12'>
+                                                              <div class='alert alert-info'>
+                                                                  <i class='fa-solid fa-circle-info fa-lg'></i>
+                                                                  <span>".$authInfo[3]."</span>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>";
+                                      }
+                $tool_content .= "</div>
+                                  <div class='card-body d-flex justify-content-center align-items-center'>";
+                  $tool_content .= "<div class='w-100'>
+                                      ".$authInfo[1]."
                                     </div>
                                   </div>";
-            }
+                                }
+            $tool_content .= "</div>";
+                          }elseif(count($authLink) > 1){
+          $tool_content .= "<div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
+                              <div class='card-body d-flex justify-content-center align-items-center'>";
+                                  $i = 0;
+                                  $j = 0;
+                $tool_content .= "<div class='w-100 h-100'>
+                                      <div class='col-12 container-pages d-flex align-items-center h-100'>";
+                                          
+                                          foreach($authLink as $authInfo){
+                                              if($i==0){
+                                                $Page = 'slide-page';
+                                              }else{
+                                                $Page = 'current-page';
+                                              }
+                                              
+                            $tool_content .= "<div class='col-12 page $Page h-100'>
+                                                  <div class='row h-100'>
+                                                      <div class='col-12 align-self-start'>
+                                                          <div class='d-flex justify-content-between align-items-center flex-wrap gap-3'>
+                                                              <h2 class='mb-3'>".(!empty($authInfo[2]) ? $authInfo[2] : $langLogin)."</h2>";
+                                                              if(!empty($authInfo[3])){
+                                               $tool_content .= " <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction".$j."'>
+                                                                      $langInstructions
+                                                                  </a>
+                                                                  <div class='modal fade' id='authInstruction".$j."' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
+                                                                      <div class='modal-dialog'>
+                                                                          <div class='modal-content'>
+                                                                              <div class='modal-header'>
+                                                                                  <div class='modal-title' id='authInstructionLabel'>$langInstructionsAuth</div>
+                                                                                  <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                                                                      <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
+                                                                                  </button>
+                                                                              </div>
+                                                                              <div class='modal-body'>
+                                                                                  <div class='col-12'>
+                                                                                      <div class='alert alert-info'>
+                                                                                          <i class='fa-solid fa-circle-info fa-lg'></i>
+                                                                                          <span>".$authInfo[3]."</span>
+                                                                                      </div>
+                                                                                  </div>
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>";
+                                                              }
+                                      $tool_content .= "</div>
+                                                      </div>
+                                                  
+                                                      <div class='col-12 align-self-center'>
+                                                          <div class='text-center'>".$authInfo[1]."</div>
+                                                      </div>
+                                                  
+                                                
+                                                      <div class='col-12 align-self-end pt-4'>";
+                                                          if($i == 0){
+                                              $tool_content .= "<div class='d-flex justify-content-md-end justify-content-center align-items-center'>
+                                                                  <button class='btn submitAdminBtn firstNext next'>
+                                                                      $langNextAuthMethod
+                                                                      <i class='fa-solid fa-chevron-right settings-icons'></i>
+                                                                  </button>
+                                                              </div>";
+                                                          }else{
+                                                              
+                                            $tool_content .= "<div class='d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap'>";
+                                                                  if($i == 1 or $i == (count($authLink)-1)){
+                                                    $tool_content .= "<button class='btn submitAdminBtn prev-$i prev'>
+                                                                          <i class='fa-solid fa-chevron-left settings-icons'></i>
+                                                                          $langPrevStep
+                                                                      </button>";
+                                                                  }
+                                                                  if($i+1 <= (count($authLink)-1)){
+                                                    $tool_content .= "<button class='btn submitAdminBtn next-$i next'>
+                                                                          $langNextAuthMethod
+                                                                          <i class='fa-solid fa-chevron-right settings-icons'></i>
+                                                                      </button>";
+                                                                  }
+                                          $tool_content .= "  </div>";
+                                                          }
+                                    $tool_content .= "</div>
+                                                    </div>
+                                              </div>";
+                                              $i++;
+                                              $j++;
 
-            if($counter == 0){
-              $active = 'active';
-            }else{
-              $active = '';
-            }
 
-            if($counter == 0){
-              $tool_content .= "<ul class='nav nav-tabs ms-auto me-auto'>";
-            }
+                                              if (Session::has('login_error') and $authInfo[0]) {
+                              $tool_content .= "<div class='col-12'>
+                                                  <input id='showWarningModal2' type='hidden' value='1'>
+                                                  <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                                      <div class='modal-dialog modal-dialog-centered'>
+                                                          <div class='modal-content border-0 p-0'>
+                                                              <div class='modal-header d-flex justify-content-between align-items-center'>
+                                                                  <h5 class='modal-title'>$langError</h5>
+                                                                  <button aria-label='Close' type='button' class='close close-error border-0 bg-transparent' data-bs-dismiss='modal'>
+                                                                    <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                                  </button>
+              
+                                                              </div>
+                                                              <div class='modal-body'>
+                                                                ".Session::get('login_error')."
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                </div>";
+                                            }
 
-            if($counter >= 0){
-              $tool_content .= "
-                <li class='nav-item' role='presentation'>
-                    <button class='nav-link $active' id='reg-student$counter' data-bs-toggle='tab' data-bs-target='#regStudent$counter' type='button' role='tab' aria-controls='regStudent$counter' aria-selected='true' aria-current='page'>
-                        " . q($authInfo[2]) . "
-                    </button>
-                </li>
-              ";
-            }
 
-            if($counter == count($authLink) - 1){
-              $tool_content .= "</ul>";
-            }
 
-            $counter++;
-        }
 
-        $counter = 0;
-        $active = '';
+                                          }
+                  $tool_content .= "</div>
+                                  </div>
+                              </div>
+                            </div>";
+                          } 
+                        }else{
+          $tool_content .= "<div class='card cardLogin h-100 p-3'>
+                              <div class='card-body py-1'>
+                                <h2>$langUserLogin</h2>
+                                <div class='col-12 mt-3'>
+                                  <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>$langAllAuthMethodsAreDisable</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>";
+                        }
+    $tool_content .= "</div>
+                    </div>
+                  </div>";
 
-        foreach ($authLink as $authInfo) {
 
-          if($counter == 0) {
-            $active = 'active show';
-          } else {
-            $active = '';
-          }
+
+
+
+
+
+
+
+
+// $tool_content .= "<div class='col-12 mt-5'>";
+//   $tool_content .= "<div class='row m-auto'>";
+//     $tool_content .= "<div class='col-12 px-0'>";
+//       $counter = 0;
+//       $active = '';
+//       print_a($authLink);
+//         foreach ($authLink as $authInfo) {
+
+//             if (Session::has('login_error') and $authInfo[0]) {
+//                 $tool_content .= "<div class='col-12'>
+//                                     <input id='showWarningModal2' type='hidden' value='1'>
+//                                     <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+//                                         <div class='modal-dialog modal-dialog-centered'>
+//                                             <div class='modal-content border-0 p-0'>
+//                                                 <div class='modal-header d-flex justify-content-between align-items-center'>
+//                                                     <h5 class='modal-title'>$langError</h5>
+//                                                     <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
+//                                                       <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+//                                                     </button>
+
+//                                                 </div>
+//                                                 <div class='modal-body'>
+//                                                   ".Session::get('login_error')."
+//                                                 </div>
+//                                             </div>
+//                                         </div>
+//                                     </div>
+//                                   </div>";
+//             }
+
+//             if($counter == 0){
+//               $active = 'active';
+//             }else{
+//               $active = '';
+//             }
+
+//             if($counter == 0){
+//               $tool_content .= "<ul class='nav nav-tabs ms-auto me-auto'>";
+//             }
+
+//             if($counter >= 0){
+//               $tool_content .= "
+//                 <li class='nav-item' role='presentation'>
+//                     <button class='nav-link $active' id='reg-student$counter' data-bs-toggle='tab' data-bs-target='#regStudent$counter' type='button' role='tab' aria-controls='regStudent$counter' aria-selected='true' aria-current='page'>
+//                         " . q($authInfo[2]) . "
+//                     </button>
+//                 </li>
+//               ";
+//             }
+
+//             if($counter == count($authLink) - 1){
+//               $tool_content .= "</ul>";
+//             }
+
+//             $counter++;
+//         }
+
+//         $counter = 0;
+//         $active = '';
+
+//         foreach ($authLink as $authInfo) {
+
+//           if($counter == 0) {
+//             $active = 'active show';
+//           } else {
+//             $active = '';
+//           }
 
           
 
-          if($counter == 0) {
-            $tool_content .= "<div class='col-lg-5 col-md-6 col-12 ms-auto me-auto tab-content mt-5'>";
-          }
+//           if($counter == 0) {
+//             $tool_content .= "<div class='col-lg-5 col-md-6 col-12 ms-auto me-auto tab-content mt-5'>";
+//           }
 
-          if($counter >= 0) {
-            $tool_content .= "
-                                <div class='tab-pane fade $active' id='regStudent$counter' role='tabpanel' aria-labelledby='reg-student$counter'>";
-
-
-                $tool_content .= " <h2 class='mb-4'>" . q($authInfo[2]) . "</h2>";
-                if(!empty($authInfo[3])){
-                  $tool_content .= " <div class='alert alert-info mt-0 mb-4'>
-                                         <i class='fa-solid fa-circle-info fa-lg'></i>
-                                         <span><strong>$langInstructionsAuth</strong></br>" .q($authInfo[3]). "</span>
-                                     </div>";
-                                    }
+//           if($counter >= 0) {
+//             $tool_content .= "
+//                                 <div class='tab-pane fade $active' id='regStudent$counter' role='tabpanel' aria-labelledby='reg-student$counter'>";
 
 
-                $tool_content .="  " . $authInfo[1] . "
+//                 $tool_content .= " <h2 class='mb-4'>" . q($authInfo[2]) . "</h2>";
+//                 if(!empty($authInfo[3])){
+//                   $tool_content .= " <div class='alert alert-info mt-0 mb-4'>
+//                                          <i class='fa-solid fa-circle-info fa-lg'></i>
+//                                          <span><strong>$langInstructionsAuth</strong></br>" .q($authInfo[3]). "</span>
+//                                      </div>";
+//                                     }
+
+
+//                 $tool_content .="  " . $authInfo[1] . "
                                   
-                                </div>";
-          }
+//                                 </div>";
+//           }
 
-          if($counter == count($authLink) - 1){
-              $tool_content .= "</div>";
-          }
-          $counter++;
-        }
+//           if($counter == count($authLink) - 1){
+//               $tool_content .= "</div>";
+//           }
+//           $counter++;
+//         }
 
-       $tool_content .= "
-                      </div>
-                    </div>
-                  </div>";
+//        $tool_content .= "
+//                       </div>
+//                     </div>
+//                   </div>";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 $head_content .= "
 <script type='text/javascript'>
@@ -187,6 +404,18 @@ $head_content .= "
       var myModal = new bootstrap.Modal(document.getElementById('WarningModal2'));
       myModal.show();
     }
+    $('.close-error').on('click',function(){
+      window.location.reload();
+    });
+  });
+</script>
+<script>
+  $(function() {
+      $('#revealPass').mousedown(function () {
+          $('#password_id').attr('type', 'text');
+      }).mouseup(function () {
+          $('#password_id').attr('type', 'password');
+      })
   });
 </script>
 ";

@@ -92,16 +92,16 @@
                                     @if(count($authLinks) == 1)
                                         <div class='card cardLogin h-100 px-lg-4 py-lg-3 p-3'>
                                             @foreach($authLinks as $auth => $key)
-                                            <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                                <h3 class='mb-0'>
+                                            <div class="card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                                                <h2 class='mb-0'>
                                                     @if(!empty($key['title']))
                                                         {!! $key['title'] !!}
                                                     @else
                                                         {{ trans('langLogin') }}
                                                     @endif
-                                                </h3>
+                                                </h2>
                                                 @if(!empty($key['authInstructions']))
-                                                    <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target="#authInstruction{{ $key['authId'] }}">
+                                                    <a href='#' class='text-decoration-underline vsmall-text mb-0' data-bs-toggle='modal' data-bs-target="#authInstruction{{ $key['authId'] }}">
                                                         {{ trans('langInstructions') }}
                                                     </a>
                                                     <div class='modal fade' id="authInstruction{{ $key['authId']}}" tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
@@ -148,13 +148,13 @@
                                                                 <div class="row h-100">
                                                                     <div class='col-12 align-self-start'>
                                                                         <div class='d-flex justify-content-between align-items-center flex-wrap gap-3'>
-                                                                            <h3 class='mb-3'>
+                                                                            <h2 class='mb-3'>
                                                                                 @if(!empty($key['title']))
                                                                                     {!! $key['title'] !!}
                                                                                 @else
                                                                                     {{ trans('langLogin') }}
                                                                                 @endif
-                                                                            </h3>
+                                                                            </h2>
                                                                             @if(!empty($key['authInstructions']))
                                                                                 <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target="#authInstruction{{ $key['authId'] }}">
                                                                                     {{ trans('langInstructions') }}
@@ -244,7 +244,7 @@
                                 <div class='col d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
                                     <div class='card h-100 border-0 p-0'>
                                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                            <img class='jumbotron-image-default' src='{{ $loginIMG }}' alt="{{ trans('langLogin') }}" />
+                                            <img class='jumbotron-image-default @if($auth_enabled_method == 1 && count($authLinks) > 1) jumbotron-image-auth-default @endif' src='{{ $loginIMG }}' alt="{{ trans('langLogin') }}" />
                                         </div>
                                     </div>
                                 </div>
