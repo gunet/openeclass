@@ -2371,6 +2371,10 @@ function upgrade_to_3_13($tbl_options): void
             ADD CONSTRAINT FOREIGN KEY (copy_of_qid) REFERENCES exercise_question(id) ON DELETE SET NULL");
     }
 
+    if (!DBHelper::fieldExists('monthly_summary', 'details')) {
+        Database::get()->query("ALTER TABLE `monthly_summary` ADD `details` MEDIUMTEXT DEFAULT NULL");
+    }
+
 }
 
 /**
