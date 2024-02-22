@@ -6,7 +6,7 @@
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
                 <div class='col-md-6 col-12 ms-auto me-auto'>
-                    <div class='form-wrapper form-edit p-3 wrapper-lostpass'>
+                    <div class='form-wrapper form-edit px-lg-4 py-lg-3 p-3 wrapper-lostpass'>
                         <form class='form-horizontal' role='form' action='{{ $urlServer }}' method='post'>
                             <input type='hidden' name='admin_login' value='true'>
                             <div class='col-12'>

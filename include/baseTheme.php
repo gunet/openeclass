@@ -2080,6 +2080,16 @@ function view($view_file, $view_data = array()) {
                 .form-control:disabled {
                     background-color: $theme_options_styles[BgInput];
                 }
+
+                input:-webkit-autofill, 
+                input:-webkit-autofill:hover, 
+                input:-webkit-autofill:focus, 
+                textarea:-webkit-autofill, 
+                textarea:-webkit-autofill:hover, 
+                textarea:-webkit-autofill:focus {
+                    background-color: $theme_options_styles[BgInput];
+                    -webkit-box-shadow: 0 0 0 30px $theme_options_styles[BgInput] inset !important;
+                }
                 
 
             ";
@@ -4150,6 +4160,10 @@ function view($view_file, $view_data = array()) {
                 .carousel-next-btn:hover{
                     color: $theme_options_styles[linkColor];
                 }
+
+                .link-color{
+                    color: $theme_options_styles[linkColor];
+                }
             
             ";
         }
@@ -4180,6 +4194,10 @@ function view($view_file, $view_data = array()) {
 
                 .btn.showCoursesBars:hover,
                 .btn.showCoursesPics:hover{
+                    color: $theme_options_styles[linkHoverColor];
+                }
+
+                .link-color:hover{
                     color: $theme_options_styles[linkHoverColor];
                 }
 

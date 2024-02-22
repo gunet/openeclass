@@ -441,6 +441,8 @@ $langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του $lang
 $langCourseStatusChange = "Αλλαγή τύπου πρόσβασης $langsOfCourse";
 
 // authentication
+$langNextAuthMethod = "Επόμενη επιλογή σύνδεσης";
+$langPrevStep = "Πίσω";
 $langMethods = "Ενεργοί τρόποι πιστοποίησης:";
 $langActivate = "Ενεργοποίηση";
 $langDeactivate = "Απενεργοποίηση";
@@ -564,6 +566,7 @@ $langConnectWith = "γίνεται σύνδεση με";
 $langNotSSL = "Δεν πραγματοποιήθηκε σύνδεση μέσω SSL γιατί δεν δόθηκε πιστοποιητικό ή το πιστοποιητικό δεν μπορεί να διαβαστεί";
 $langCASRetAttr = "Ιδιότητες αντικειμένου χρήστη";
 $langMergeUserWithSelf = 'Δεν μπορείτε να συγχωνεύσετε ένα λογαριασμό με τον εαυτό του.';
+$langAllAuthMethodsAreDisabled = "Όλοι οι τρόποι πιστοποίησης είναι απενεργοποιημένοι.";
 
 // other
 $langVisitor = "Επισκέπτης";

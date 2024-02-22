@@ -398,7 +398,9 @@ a:hover,button:hover{
   background-color: #0073E6;
 }
 
-.Primary-500-cl{
+.Primary-500-cl,
+.link-color,
+.link-color:hover{
   color:#0073E6;
 }
 
@@ -3492,6 +3494,7 @@ body .delThemeBtn{
 @media(max-width:991px){
   .cardLogin{
       max-width: 100%;
+      min-height: 250px;
   }
 }
 
@@ -4897,3 +4900,48 @@ div[role="progressbar"]::before {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .form-homepage-login{
+  max-height: 500px;
+} */
+.container-pages{
+  overflow: hidden;
+}
+.container-pages .page{
+  min-width: 100%;
+  position: relative;
+  min-height: 100%;
+  transition: margin-left 0.3s ease-in-out;
+}

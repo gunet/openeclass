@@ -62,6 +62,7 @@ $(document).ready(function(){
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
     topFunction();
+    nextAuthedicationMethod();
 
 
     //fix modal appearance
@@ -253,4 +254,46 @@ function validator_rubric(){
 function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+}
+
+
+function nextAuthedicationMethod(){
+    const slidePage = document.querySelector(".slide-page");
+    const currentPage = document.querySelector(".current-page");
+    const nextBtnFirst = document.querySelector(".firstNext");
+    const prevBtnSec = document.querySelector(".prev-1");
+    const nextBtnSec = document.querySelector(".next-1");
+    const prevBtnThird = document.querySelector(".prev-2");
+
+    if(nextBtnFirst != null){
+        nextBtnFirst.addEventListener("click", function(event){
+            event.preventDefault();
+            slidePage.style.marginLeft = "-100%";
+        
+        });
+    }
+
+    if(nextBtnSec != null){
+        nextBtnSec.addEventListener("click", function(event){
+            event.preventDefault();
+            currentPage.style.marginLeft = "-100%";
+            
+        });
+    }
+
+    if(prevBtnSec != null){
+        prevBtnSec.addEventListener("click", function(event){
+            event.preventDefault();
+            slidePage.style.marginLeft = "0%";
+            
+        });
+    }
+
+    if(prevBtnThird != null){
+        prevBtnThird.addEventListener("click", function(event){
+            event.preventDefault();
+            currentPage.style.marginLeft = "0%";
+            
+        });
+    }
 }

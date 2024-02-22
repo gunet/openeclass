@@ -150,21 +150,34 @@ if (!$upgrade_begin and $uid) {
     $authLinks = array();
     if (!$upgrade_begin) {
         $loginFormEnabled = false;
-        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
+        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title, auth_instructions
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
         foreach ($q as $l) {
             if (in_array($l->auth_name, $extAuthMethods)) {
+                $authNameDefault = '';
+                if(!empty($l->auth_title)){
+                    $authNameDefault = $l->auth_title;
+                }else{
+                    $authNameDefault = $langEnter;
+                }
                 $authLinks[] = array(
+                    'authId' => $l->auth_id,
+                    'is_primary' => $l->auth_default,
+                    'authInstructions' => $l->auth_instructions,
+                    'nameAuth' => $l->auth_name,
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<a class='btn btn-default btn-login' href='" . $urlServer .
-                              ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$langEnter</a><br>");
+                    'html' => "<a class='btn submitAdminBtnDefault d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a><br>");
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
                     $authLinks[] = array(
+                        'authId' => $l->auth_id,
+                        'is_primary' => $l->auth_default,
+                        'authInstructions' => $l->auth_instructions,
+                        'nameAuth' => $l->auth_name,
                         'showTitle' => true,
                         'class' => 'login-option',
                         'title' => $langViaSocialNetwork);
@@ -174,28 +187,37 @@ if (!$upgrade_begin and $uid) {
                 $autofocus = count($authLinks)? '' : 'autofocus' ;
                 $loginFormEnabled = true;
                 $authLinks[] = array(
+                    'authId' => $l->auth_id,
+                    'is_primary' => $l->auth_default,
+                    'authInstructions' => $l->auth_instructions,
+                    'nameAuth' => $l->auth_name,
                     'showTitle' => false,
                     'class' => 'login-option',
                     'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<form action='$urlServer' method='post'>
-                             <div class='form-group'>
-                                <label for='uname' class='sr-only'>$langUsername</label>
-                                <input type='text' id='uname' name='uname' placeholder='$langUsername' $autofocus><span class='col-xs-2 col-sm-2 col-md-2 fa-solid fa-user'></span>
-                             </div>
-                             <div class='form-group mt-3'>
-                                <label for='pass' class='sr-only'>$langPass</label>
-                                <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa-solid fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<span class='col-xs-2 col-sm-2 col-md-2 fa-solid fa-lock'></span>
-                             </div>
-                             <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
-                           </form>
-                           <div class='text-end'>
-                             <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                           </div>");
+                    'html' => " <form action='$urlServer' method='post'>
+                                    <div class='form-group text-start'>
+                                        <label for='uname' class='form-label'>$langUsername</label>
+                                        <input type='text' id='uname' name='uname' class='login-input w-100' placeholder='&#xf007' $autofocus>
+                                    </div>
+                                    <div class='form-group text-start mt-3'>
+                                        <label for='pass' class='form-label'>$langPass</label>
+                                        <div class='input-group flex-nowrap'>
+                                            <input type='password' id='pass' class='login-input border-end-0 w-100 mt-0' name='pass' placeholder='&#xf084' aria-describedby='revealPass'>
+                                            <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-transparent input-border-color'>
+                                                <i class='fa-solid fa-eye fa-md'></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button type='submit' name='submit' class='btn w-100 login-form-submit mt-4'>$langEnter</button>
+                                </form>
+                                <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center mt-4'>
+                                    <a class='text-decoration-underline' href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                                </div>");
             }
         }
 
         if (count($hybridProviders)) {
-            $authLinks[$hybridLinkId]['html'] = '<div>';
+            $authLinks[$hybridLinkId]['html'] = '<div class="col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap">';
             $beginHybridHTML = true;
             foreach ($hybridProviders as $provider) {
                 if ($beginHybridHTML) {
@@ -204,7 +226,7 @@ if (!$upgrade_begin and $uid) {
                     $authLinks[$hybridLinkId]['html'] .= '<br>';
                 }
                 $authLinks[$hybridLinkId]['html'] .=
-                    "<a href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
+                    "<a class='btn submitAdminBtnDefault' href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
             }
             $authLinks[$hybridLinkId]['html'] .= '</div>';
         }
@@ -245,8 +267,11 @@ if (!$upgrade_begin and $uid) {
     $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,1);
     $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,2);
 
-    $active_method = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name = ?s",'eclass');
-    $data['auth_enabled_method'] = $active_method->auth_default;
+    $data['auth_enabled_method'] = 0;
+    $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default = ?d OR auth_default = ?d",1,2);
+    if(count($active_method) > 0){
+        $data['auth_enabled_method'] = 1;
+    }
 
     //priotities
     $priority_order = 0;
