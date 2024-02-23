@@ -66,7 +66,7 @@ function showTimeEvent($startTime,$endTime,$evtId){
 
     global $urlAppend,$langViewHour;
 
-    $availableTime = "<span style='background-color:transparent;' class='badge tutor-available-event-date'>".date('H:i', strtotime($startTime)).' - '.date('H:i', strtotime($endTime))."</span>";
+    $availableTime = "<span style='background-color:transparent;' class=' tutor-available-event-date'>".date('H:i', strtotime($startTime)).' - '.date('H:i', strtotime($endTime))."</span>";
 
     return $availableTime;
 

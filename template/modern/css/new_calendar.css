@@ -503,6 +503,34 @@
   border-color: #EFF6FF ;
 }
 
+/******** About list-table for available dates of tutor *********/
+.calendarViewDatesTutorGroup .fc-list-table .fc-list-heading .fc-widget-header {
+  background: #EFF6FF ;
+}
+.calendarViewDatesTutorGroup .fc-list-table .fc-list-heading .fc-list-heading-main,
+.calendarViewDatesTutorGroup .fc-list-table .fc-list-heading .fc-list-heading-alt{
+  font-weight: 700;
+}
+.calendarViewDatesTutorGroup .fc-list-table .fc-list-item:hover td{ 
+  background-color: transparent;
+}
+.fc-unthemed .fc-content, 
+.fc-unthemed .fc-divider, 
+.fc-unthemed .fc-list-heading td, 
+.fc-unthemed .fc-list-view, 
+.fc-unthemed .fc-popover, 
+.fc-unthemed .fc-row, 
+.fc-unthemed tbody, 
+.fc-unthemed td, 
+.fc-unthemed th, 
+.fc-unthemed thead {
+  border-color: #EFF6FF;
+}
+.fc-unthemed .fc-list-empty {
+  background-color: transparent;
+}
+/***************************************************************/
+
 .calendarAddDaysCl table .fc-body tbody tr,
 .bookingCalendarByUser table .fc-body tbody tr,
 .myCalendarEvents table .fc-body tbody tr{

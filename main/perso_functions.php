@@ -305,7 +305,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_content .= "
                     <li class='list-group-item element'>
                         <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                        <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
+                        <p class='TextBold mb-0'>$langAdminAn&nbsp; <i class='fa-solid fa-user'></i></p>
                         <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                     </li>";
                 }

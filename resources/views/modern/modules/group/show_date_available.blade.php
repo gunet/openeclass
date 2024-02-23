@@ -106,7 +106,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-8">
-                                                            <div class="card-body overflow-auto">
+                                                            <div class="card-body ">
                                                                 @include('modules.group.tutor_calendar',['editorId' => $tutor->user_id, 'CourseID' => $course_id])
                                                             </div>
                                                         </div>

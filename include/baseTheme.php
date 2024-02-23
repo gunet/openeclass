@@ -301,6 +301,10 @@ function view($view_file, $view_data = array()) {
             .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{
                 color: #C44601;
             }
+
+            .calendarViewDatesTutorGroup .fc-list-table .fc-list-heading .fc-widget-header {
+                background: transparent;
+            }
         
         ";
 
@@ -3094,6 +3098,10 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[BgBorderColorAgenda] ;
                 }
 
+                .calendarViewDatesTutorGroup .fc-list-table  tbody tr {
+                    border-bottom: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                }
+
             ";
         }
 
@@ -3644,8 +3652,6 @@ function view($view_file, $view_data = array()) {
               .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
-              
-              
             ";
         }
 
