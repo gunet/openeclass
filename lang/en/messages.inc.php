@@ -933,6 +933,7 @@ $langBookingWithTutor = "My reservations with the manager:";
 $langBookingAgenda = "Book";
 $langAvailableHistoryBookings = "Expired bookings";
 $langDelHistoryBook = "Deletion completed successfully!";
+$langInfoColourEvent = "Information about colourful calendar events";
 
 $langNameSurname = "Name Surname";
 $langEmail = "Email";
@@ -6141,3 +6142,11 @@ $langSameAsYourEmail = 'same as your e-mail address';
  $langHistoyBooking = "Expired bookings";
  $langBookingHasDeleted = "Booking successfully deleted!";
  $ThereIsABookingWithTheSameSlot = "Your booking with this user has not been completed as you have booked someone else on the same day and start time.";
+ $langExistBookingForThisDateDelete = "You cannot delete this date.
+ A user has reserved this slot.
+ Edit the request from -- My bookings -- and try again.
+ Please contact the platform administrator if you experience any problem.";
+$langSuccessBookingUser = "<div class='TextBold' style='color:#1E7E0E;'>Your available date for reservation by a user is displayed in GREEN.</br>
+Possibility of cancellation by clicking on the date slot only if it has not been booked by a user.</br>
+Otherwise, the cancellation is made from the page of my reservations.</div>";
+$langPinkBookingUser = "<div class='TextBold' style='color:#ffc0cb;'>The reservation by a user is displayed in PINK.</br>Possibility to cancel a reservation only from the --My reservations-- page.</div>";

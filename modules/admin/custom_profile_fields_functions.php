@@ -99,7 +99,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         $form_class = 'form-group has-error mt-4';
                         $help_block = '<span class="help-block Accent-200-cl">' . Session::getError('cpf_'.$f->shortname) . '</span>';
                     } else {
-                        $form_class = 'input-group mt-4';
+                        $form_class = 'form-group mt-4';
                         $help_block = '';
                     }
                 } else {

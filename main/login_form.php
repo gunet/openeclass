@@ -85,24 +85,44 @@ foreach ($q as $l) {
 
 $columns = 12 / count($authLink);
 $pageName = $langUserLogin;
+$Position = '';
+$PositionForm = 'd-lg-block';
+$themeId = get_config('theme_options_id');
+$login_img = $urlAppend . 'template/modern/img/loginIMG.png';
+if($themeId > 0){
+  $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $themeId);
+  $theme_options_styles = unserialize($theme_options->styles);
+  $urlThemeData = $urlAppend . 'courses/theme_data/' . $themeId;
+  if(isset($theme_options_styles['loginImgL'])){
+    $login_img = "$urlThemeData/$theme_options_styles[loginImgL]";
+  }
+  if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
+    $Position = 'ms-auto me-auto';
+    $PositionForm = 'd-lg-none';
+  }
+}
 
 $Page = '';
 $auth_enabled_method = 0;
-  $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default = ?d OR auth_default = ?d",1,2);
-  if(count($active_method) > 0){
-      $auth_enabled_method = 1;
-  }
+$active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default = ?d OR auth_default = ?d",1,2);
+if(count($active_method) > 0){
+    $auth_enabled_method = 1;
+}
+$class_login_img = '';
+if($auth_enabled_method == 1 && count($authLink) > 1){ 
+  $class_login_img = 'jumbotron-image-auth-default'; 
+}
 $tool_content .= "<h1>$langUserLogin</h1>";
 $tool_content .= "
                   <div class='padding-default mt-4'>
                     <div class='row row-cols-1 row-cols-lg-2 g-4'>
-                      <div class='col ms-auto me-auto'>";
+                      <div class='col $Position'>";
                         if($auth_enabled_method == 1){
                           if(count($authLink) == 1){
             $tool_content .= "<div class='card form-homepage-login h-100 px-lg-4 py-lg-3 p-3'>";
                                 $k = 0;
                                 foreach($authLink as $authInfo){
-                  $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                  $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-2 flex-wrap'>
                                       <h2 class='mb-3'>".(!empty($authInfo[2]) ? $authInfo[2] : $langLogin)."</h2>";
                                       if(!empty($authInfo[3])){
                         $tool_content .= "<a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction$k'>
@@ -155,7 +175,7 @@ $tool_content .= "
                             $tool_content .= "<div class='col-12 page $Page h-100'>
                                                   <div class='row h-100'>
                                                       <div class='col-12 align-self-start'>
-                                                          <div class='d-flex justify-content-between align-items-center flex-wrap gap-3'>
+                                                          <div class='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                                               <h2 class='mb-3'>".(!empty($authInfo[2]) ? $authInfo[2] : $langLogin)."</h2>";
                                                               if(!empty($authInfo[3])){
                                                $tool_content .= " <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction".$j."'>
@@ -267,6 +287,15 @@ $tool_content .= "
                             </div>";
                         }
     $tool_content .= "</div>
+
+                      
+                        <div class='col d-none $PositionForm'>
+                            <div class='card h-100 border-0 p-0'>
+                                <div class='card-body d-flex justify-content-center align-items-center p-0'>
+                                    <img class='jumbotron-image-default $class_login_img' src='".$login_img."' alt='".$langLogin."'  />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                   </div>";
 

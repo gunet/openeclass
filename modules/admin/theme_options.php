@@ -588,8 +588,8 @@ if (isset($_POST['optionsSave'])) {
                         <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPreviewState &nbsp;".$themes_arr[$preview_theme].".</span>
                         </div>
                         <div class='d-lg-flex'>
-                            <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a>
-                            <a href='theme_options.php?reset_theme_options=true' class='btn cancelAdminBtn ms-lg-2 mt-lg-0 mt-2'>$langLogout</a>
+                            <a href='#' class='theme_enable TextBold'>$langActivate</a>
+                            <a href='theme_options.php?reset_theme_options=true' class='TextBold ms-lg-2 mt-lg-0 mt-2'>$langLogout</a>
                         </div>
 
                 </div>

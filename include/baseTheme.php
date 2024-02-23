@@ -4496,10 +4496,6 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
                 }
 
-                .wrapper-lostpass{
-                    border: solid 1px $theme_options_styles[clBorderPanels];
-                }
-
                 #jsmind_container {
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
                 }

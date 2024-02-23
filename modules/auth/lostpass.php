@@ -155,6 +155,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => $urlServer,
         'icon' => 'fa-reply',
+        'level' => 'primary',
         'button-class' => 'btn-secondary')
 ), false);
 

@@ -92,7 +92,7 @@
                                     @if(count($authLinks) == 1)
                                         <div class='card cardLogin h-100 px-lg-4 py-lg-3 p-3'>
                                             @foreach($authLinks as $auth => $key)
-                                            <div class="card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                                            <div class="card-header border-0 d-flex justify-content-between align-items-center gap-2 flex-wrap">
                                                 <h2 class='mb-0'>
                                                     @if(!empty($key['title']))
                                                         {!! $key['title'] !!}
@@ -147,7 +147,7 @@
                                                             <div class="col-12 page @if($i == 0) slide-page @else current-page @endif h-100">
                                                                 <div class="row h-100">
                                                                     <div class='col-12 align-self-start'>
-                                                                        <div class='d-flex justify-content-between align-items-center flex-wrap gap-3'>
+                                                                        <div class='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                                                             <h2 class='mb-3'>
                                                                                 @if(!empty($key['title']))
                                                                                     {!! $key['title'] !!}

@@ -2381,14 +2381,14 @@ $langBooking = "Κράτηση";
 $langBookings = "Κρατήσεις";
 $langAddAvailableDateForGroupAdmin = "Προσθήκη διαθεσιμότητας στην ομάδα";
 $langAddAvailability = "Προσθήκη διαθέσιμης ημερομηνίας";
-$langRedInfoRentezvousOtherProgram = "<div class='Accent-200-cl TextBold'>Με ΚΟΚΚΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως υπεύθυνος ομάδας σε άλλα μαθήματα.</div>";
-$langSuccessInfoRentezvous = "<div class='Success-200-cl TextBold'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει στο τρέχων μάθημα</br>
+$langRedInfoRentezvousOtherProgram = "<div style='color:#C44601;' class='TextBold'>Με ΚΟΚΚΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως υπεύθυνος ομάδας σε άλλα μαθήματα.</div>";
+$langSuccessInfoRentezvous = "<div style='color:#1E7E0E;' class='TextBold'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει στο τρέχων μάθημα</br>
                            στην τρέχων ομάδα ως υπεύθυνος.</div>";
-$langWarningInfoRentezvous = "<div class='Warning-200-cl TextBold'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχει καταχωρίσει κάποιος άλλος</br>
+$langWarningInfoRentezvous = "<div style='color:#F57600;' class='TextBold'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχει καταχωρίσει κάποιος άλλος</br>
                               υπεύθυνος ομάδας στο τρέχων μάθημα στη τρέχων ομάδα.</div>";
-$langInfoInfoRentezvous = "<div class='Primary-400-cl TextBold'>Με ΓΑΛΑΖΙΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως</br>
+$langInfoInfoRentezvous = "<div style='color:#74AFE9;' class='TextBold'>Με ΓΑΛΑΖΙΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως</br>
                               υπεύθυνος ομάδας στο τρέχων μάθημα σε άλλη ομάδα.</div>";
-$langPinkInfoRentezvous = "<div class='Pink-cl TextBold'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση που έχει γίνει από κάποιο μέλος της ομάδας.</div>";
+$langPinkInfoRentezvous = "<div style='color:#ffc0cb;' class='TextBold'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση που έχει γίνει από κάποιο μέλος της ομάδας.</div>";
 $langChangeDateSuccess = "Η ημερομηνία άλλαξε επιτυχώς.";
 $langNoChangeDateOtherUser = "Δεν μπορείτε να αλλάξατε την ημερομηνία άλλου χρήστη.";
 $langExistBookingForThisDate = "Δεν μπορείτε να αλλάξατε την συγκεκριμένη ημερομηνία.";
@@ -2423,10 +2423,10 @@ $langDoBooking = "ΚΑΝΤΕ ΚΡΑΤΗΣΗ";
 $langDisableBooking = "ΜΗ ΔΙΑΘΕΣΙΜΟ";
 $langBookingIsDone = "ΕΙΝΑΙ ΚΛΕΙΣΜΕΝΟ";
 $langAcceptBooking = "Αποδοχή από τον υπεύθυνο";
-$langWarningInfoBooking = "<div class='TextBold' style='color:#ffa500;'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζεται η κράτηση προς τον υπεύθυνου ομάδας από άλλον χρήστη.";
+$langWarningInfoBooking = "<div class='TextBold' style='color:#ffa500;'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζεται η κράτηση προς τον υπεύθυνου ομάδας από άλλον χρήστη.</div>";
 $langBlueInfoBooking = "<div class='TextBold' style='color:#337ab7;'>Με ΜΠΛΕ χρώμα εμφανίζεται η διαθέσιμη ημερομηνία του υπευθύνου ομάδας για να κάνετε κράτηση.</br>Κάντε κλικ στο διαθέσιμο slot για υποβολή κράτησης.</div>";
 $langSuccessInfoBooking = "<div class='TextBold' style='color:#1E7E0E;'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζεται κράτηση που κάνετε προς τον υπεύθυνο ομάδας (Αναμονή έγκρισης ή απορρίψης από τον υπεύθυνο).</br>Δυνατότητα ακύρωσης κάνοντας κλικ στο slot της κράτησης.</div>";
-$langPinkInfoBooking = "<div class='TextBold Pink-cl'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση σας προς τομ υπεύθυνο ομάδας (Εγκριση αιτήματος από τον υπεύθυνο).</br>Κάντε κλικ στο διαθέσιμο slot για ακύρωση κράτησης.</div>";
+$langPinkInfoBooking = "<div class='TextBold' style='color:#ffc0cb;'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση σας προς τομ υπεύθυνο ομάδας (Εγκριση αιτήματος από τον υπεύθυνο).</br>Κάντε κλικ στο διαθέσιμο slot για ακύρωση κράτησης.</div>";
 $langAvailableTutorBookings = "Κρατήσεις υπεύθυνου";
 $langAVailableBookingsForTutor = "Διαθέσιμες κρατήσεις για τον υπεύθυνο:";
 $langMyAvailableBookings = "Οι κρατήσεις μου";
@@ -2443,9 +2443,10 @@ $langYourBookingHasCanceled = "Η κράτηση σας ακυρώθηκε";
 $langNoAcceptanceOfBooking = "Δεν έχει γίνει αποδοχή της κράτησης.</br> Πατώντας το κουμπί << Αποδοχή κράτησης >> αποδέχεστε το αίτημα.";
 $langMYBookings = "Οι κρατήσεις μου";
 $langBookingWithTutor = "Οι κρατήσεις μου με τον υπεύθυνο:";
-$langBookingAgenda = "Κάντε κράτηση";
+$langBookingAgenda = "Κάντε κράτηση στον υπεύθυνο";
 $langAvailableHistoryBookings = "Κρατήσεις που έχουν παρέλθει";
 $langDelHistoryBook = "Η διαγραφή ολοκληρώθηκε με επιτυχία!";
+$langInfoColourEvent = "Πληροφορίες χρωμάτων ημερολογίου";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
@@ -5834,8 +5835,8 @@ $langLoginConfiguration = "Ρυθμίσεις Οθόνης Σύνδεσης";
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα φόντου οθόνης σύνδεσης";
 $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
-$langFormLoginPlacementCenter = "Κεντρική Στοίχιση";
-$langFormLoginPlacementLeft = "Στοίχιση στα αριστερά";
+$langFormLoginPlacementCenter = "Κεντρική Στοίχιση (Με αφαίρεση εικόνας σύνδεσης αν υπάρχει)";
+$langFormLoginPlacementLeft = "Στοίχιση στα αριστερά (Με εικόνας σύνδεσης στο δεξί μέρος αν υπάρχει)";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 $langLinkColorHeader = 'Χρώμα Συνδέσμων Header';
 $langHoverLinkColorHeader = 'Χρώμα Hovered Συνδέσμων Header';
@@ -6571,12 +6572,20 @@ $langCourseInvitation = 'Πρόσκληση εγγραφής στο μάθημα
 
 $langAvailableDateForUser = "Οι διαθέσιμες ημέρες μου";
 $langDisplayAvailableUsersForBooking = "Διαθέσιμοι χρήστες για κράτηση";
-$langWarningInfoBookingTutor = "<div class='TextBold' style='color:#ffa500;'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζεται η κράτηση προς τον υπεύθυνο από άλλον χρήστη.";
+$langWarningInfoBookingTutor = "<div class='TextBold' style='color:#ffa500;'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζεται η κράτηση προς τον υπεύθυνο από άλλον χρήστη.</br>(Μη δυνατότητα κράτησης).</div>";
 $langBlueInfoBookingTutor = "<div class='TextBold' style='color:#337ab7;'>Με ΜΠΛΕ χρώμα εμφανίζεται η διαθέσιμη ημερομηνία του υπευθύνου για να κάνετε κράτηση.</br>Κάντε κλικ στο διαθέσιμο slot για υποβολή κράτησης.</div>";
 $langSuccessInfoBookingTutor = "<div class='TextBold' style='color:#1E7E0E;'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζεται κράτηση που κάνετε προς τον υπεύθυνο (Αναμονή έγκρισης ή απορρίψης από τον υπεύθυνο).</br>Δυνατότητα ακύρωσης κάνοντας κλικ στο slot της κράτησης.</div>";
-$langPinkInfoBookingTutor = "<div class='TextBold Pink-cl'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση σας προς τον υπεύθυνο (Εγκριση αιτήματος από τον υπεύθυνο).</br>Κάντε κλικ στο διαθέσιμο slot για ακύρωση κράτησης.</div>";
+$langPinkInfoBookingTutor = "<div class='TextBold' style='color:#ffc0cb;'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση σας προς τον υπεύθυνο (Εγκριση αιτήματος από τον υπεύθυνο).</br>Κάντε κλικ στο διαθέσιμο slot για ακύρωση κράτησης.</div>";
 $langIndividualGroupBookings = "Ενεργοποίηση εργαλείου κρατήσεων στο προφίλ του χρήστη και στις ομάδες χρηστών";
 $langWithTutor = "Στον υπεύθυνο";
 $langHistoyBooking = "Κρατήσεις που έχουν παρέλθει";
 $langBookingHasDeleted = "Η κράτηση διαγράφηκε επιτυχώς!";
 $ThereIsABookingWithTheSameSlot = "Η κράτησή σας με τον συγκεκριμένο χρήστη δεν ολοκληρώθηκε καθώς έχετε κάνει κράτηση σε κάποιον άλλον την ίδια ημέρα και ώρα έναρξης.";
+$langExistBookingForThisDateDelete = "Δεν μπορείτε να διαγράψετε την συγκεκριμένη ημερομηνία. 
+                                      Κάποιος χρήστης έχει κάνει κράτηση στο συγκεκριμένο slot. 
+                                      Επεξεργαστείτε το αίτημα από την επιλογή -- Οι κρατήσεις μου -- και δοκιμάστε πάλι.
+                                      Επικοινωνήστε με τον διαχειριστή της πλατφόρμας αν αντιμετωπίζετε κάποιο πρόβλημα.";
+$langSuccessBookingUser = "<div class='TextBold' style='color:#1E7E0E;'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζεται η διαθέσιμη ημερομηνία σας για κράτηση από κάποιον χρήστη.</br>
+                            Δυνατότητα ακύρωσης κάνοντας κλικ στο slot της ημερομηνίας μόνο σε ενδεχόμενο που δεν έχει γίνει κράτηση από κάποιον χρήστη.</br>
+                            Σε διαφορετική περίπτωση , η ακύρωση γίνεται από την σελίδα των κρατήσεων μου.</div>";
+$langPinkBookingUser = "<div class='TextBold' style='color:#ffc0cb;'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση από κάποιον χρήστη.</br>Δυνατότητα ακύρωσης κράτησης μόνο από την σελίδα --Οι κρατήσεις μου-- .</div>";

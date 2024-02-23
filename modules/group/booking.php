@@ -63,7 +63,7 @@ if(count($tutors) > 0){
 }
 
 
-$toolName = $langAddBooking;
+
 $pageName = $langAddBooking;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 $navigation[] = array('url' => "group_space.php?course=$course_code&group_id=$group_id", 'name' => q($group_name));
@@ -72,10 +72,13 @@ $data['group_id'] = $group_id;
 $data['tutor_id_for_booking'] = '';
 if(isset($_GET['tutor_id'])){
     $data['tutor_id_for_booking'] = intval($_GET['tutor_id']);
+    $booking_to_the_username = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$data['tutor_id_for_booking'])->givenname;
+    $booking_to_the_surname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$data['tutor_id_for_booking'])->surname;
+    $toolName = $langAddBooking."(".$booking_to_the_username." ".$booking_to_the_surname.")";
 }
 
-$data['booking_by_username'] = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$uid)->givenname;
-$data['booking_by_surname'] = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$uid)->surname;
+$data['booking_by_username'] = $booking_by_username = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$uid)->givenname;
+$data['booking_by_surname'] = $booking_by_surname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$uid)->surname;
 
 $data['action_bar'] = action_bar(array(
     array('title' => $langBack,

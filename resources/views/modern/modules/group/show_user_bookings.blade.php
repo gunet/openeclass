@@ -66,7 +66,7 @@
                     @if($is_member && !$is_tutor)
                         @if(count($bookings_user) > 0)
                             <div class='col-12'>
-                                    <a class='btn submitAdminBtnDefault d-inline-flex' href="{{ $urlAppend }}modules/group/booking.php?course={{ $course_code}}&amp;group_id={{ $group_id}}&amp;tutor_id={{ $tutor_id }}">
+                                    <a class='btn submitAdminBtn d-inline-flex' href="{{ $urlAppend }}modules/group/booking.php?course={{ $course_code}}&amp;group_id={{ $group_id}}&amp;tutor_id={{ $tutor_id }}">
                                         {{ trans('langBookingAgenda') }}:&nbsp;({{ $TutorGivenname }}&nbsp;{{ $TutorSurname }})
                                     </a>
                                     <div class='table-responsive'>

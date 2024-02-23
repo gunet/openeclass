@@ -80,14 +80,27 @@
                     </div>
 
                     <div class='col-12'>
-                        <div class='card border-card'>
-                            <div class='card-body'>
-                                <ul>
-                                    <li class='mb-2'><p>{!! trans('langBlueInfoBooking') !!}</p></li>
-                                    <li class='mb-2'><p>{!! trans('langSuccessInfoBooking') !!}</p></li>
-                                    <li class='mb-2'><p>{!! trans('langPinkInfoBooking') !!}</p></li>
-                                    <li><p>{!! trans('langWarningInfoBooking') !!}</p></li>
-                                </ul>
+                        <a class='btn submitAdminBtn d-inline-flex' href='#' data-bs-toggle='modal' data-bs-target='#infoEvents'>{{ trans('langInfoColourEvent') }}</a>
+                        <div class='modal fade' id='infoEvents' tabindex='-1' role='dialog' aria-labelledby='infoEventsLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <div class='modal-title' id='infoEventsLabel'>{{ trans('langInfoColourEvent') }}</div>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                            <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
+                                        </button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='col-12'>
+                                            <ul>
+                                                <li class='mb-2'><p>{!! trans('langBlueInfoBooking') !!}</p></li>
+                                                <li class='mb-2'><p>{!! trans('langSuccessInfoBooking') !!}</p></li>
+                                                <li class='mb-2'><p>{!! trans('langPinkInfoBooking') !!}</p></li>
+                                                <li><p>{!! trans('langWarningInfoBooking') !!}</p></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
