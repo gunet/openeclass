@@ -621,12 +621,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $lti_hidden = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' hidden';
         $lti_disabled = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' disabled';
         $lti_launchcontainer = (isset($poll)) ? $poll->launchcontainer : LTI_LAUNCHCONTAINER_EMBED;
-        $tool_content .= "<div class='container-fluid form-group $lti_hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
-                <h4 class='col-sm-offset-1'>$langLimesurveyLTIOptions</h4>
+        $tool_content .= "<div class='container-fluid form-group $lti_hidden p-3 mt-4' id='lti_label'>
+                <h3>$langLimesurveyLTIOptions</h3>
                 <div class='form-group $lti_hidden' style='margin-top: 30px;'>
-                    <label for='title' class='col-sm-2 control-label'>$langLimesurveyApp:</label>
-                    <div class='col-sm-10'>
-                      <select name='lti_template' class='form-control' id='lti_templates' $lti_disabled>
+                    <label for='lti_templates' class='col-sm-12 control-label-notes'>$langLimesurveyApp:</label>
+                    <div class='col-sm-12'>
+                      <select name='lti_template' class='form-select' id='lti_templates' $lti_disabled>
                             $lti_template_options
                       </select>
                     </div>

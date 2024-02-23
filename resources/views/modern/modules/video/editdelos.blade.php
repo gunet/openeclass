@@ -89,7 +89,7 @@
                                             <th>{{ trans('langDate') }}</th>
                                             <th>{{ trans('langSelect') }}</th>
                                         </tr>
-                                        <tr class="bg-light">
+                                        <tr>
                                             <th class='p-3' colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
                                         </tr>
                                         @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0)

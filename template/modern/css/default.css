@@ -1058,19 +1058,29 @@ b a {
   margin-bottom:20px;
 }
 
-.alert .fa-solid{
+/* .alert .fa-solid{
   display:table-cell;
   padding-right: 10px;
-}
+} */
 
 .alert div, .alert span, .alert p{
-  display:table-cell;
+  /* display:table-cell; */
   font-weight: 400;
   font-style: normal;
   line-height: 16px;
   letter-spacing: 0px;
   font-size: 14px;
   margin-bottom: 0px;
+}
+.alert:has(.fa-solid){
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 8px;
+}
+.alert .fa-solid::before{
+  display: block;
+  padding-top: 8px;
 }
 
 .alert-dismissible .btn-close {
@@ -4122,9 +4132,9 @@ div[role="progressbar"]::before {
 .radio label:has(.input-Questionnaire) .fa {
   font-size: 14px;
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 11%;
-  transform: translate(-213%, -50%); 
+  transform: translate(-206%, -45%); 
 }
 
 .input-Questionnaire:checked{
