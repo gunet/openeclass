@@ -6102,6 +6102,7 @@ function download_assignments($id) {
                 $onlinetext->WriteHTML($data->submission_text);
                 $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
                 $onlinetext->Output($pdfname, 'F');
+                unset($onlinetext);
                 $zip->addFile($pdfname);
             }
             $zip->addFile($workPath . "/" . $secret . "/index.html", "index.html");
