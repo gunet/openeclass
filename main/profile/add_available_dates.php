@@ -41,7 +41,7 @@ if(isset($_GET['do_booking'])){
         load_js('datatables_bootstrap');
         $toolName = $langDisplayAvailableUsersForBooking;
         $pageName = $toolName;
-        $data['user_teachers'] = $user_teachers = Database::get()->queryArray("SELECT DISTINCT user.id,user.givenname,user.surname FROM user 
+        $data['user_teachers'] = $user_teachers = Database::get()->queryArray("SELECT DISTINCT user.id,user.givenname,user.surname,user.email FROM user 
                                                                                 LEFT JOIN date_availability_user
                                                                                 ON user.id = date_availability_user.user_id
                                                                                 WHERE user.status = ?d

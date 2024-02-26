@@ -583,7 +583,7 @@
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else
                                                                     @if(get_config('theme_options_id') > 0)
-                                                                        <div role="progressbar" aria-valuenow="{{ $percentage_t }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage_t }}; --size: 9rem;"></div>
+                                                                        <div class='progress-circle-bar' role="progressbar" aria-valuenow="{{ $percentage_t }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage_t }}; --size: 9rem;"></div>
                                                                     @else
                                                                         <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $angle }}deg;">{{ $percentage_t }}%</div>
                                                                     @endif
@@ -601,7 +601,7 @@
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else
                                                                     @if(get_config('theme_options_id') > 0)
-                                                                        <div role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage }}; --size: 9rem;"></div>
+                                                                        <div class='progress-circle-bar' role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage }}; --size: 9rem;"></div>
                                                                     @else
                                                                         <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
                                                                     @endif

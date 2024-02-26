@@ -474,7 +474,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                             </td>
                             <td>
                                 
-                                <div role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
+                                <div class='progress-circle-bar' role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
                             </td>
                             <td>
                                 <div>

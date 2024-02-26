@@ -2610,12 +2610,11 @@ function student_view_progress() {
                                     <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>                                      
                                     </div>
-                                    <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                      <div role='progressbar' aria-valuenow='$percentage_num' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage_num;'>
-                                        <p class='progress-bar active from-control-static' role='progressbar'
-                                                aria-valuenow='$percentage_num'
-                                                aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage_num%;'>$percentage
-                                        </p>                                      
+                                    <div class='col-md-4 col-12  mt-md-0 mt-3'>
+                                           
+                                        <div class='progress progress-line'>
+                                            <div class='progress-line-bar' role='progressbar' style='width: $percentage_num%;' aria-valuenow='$percentage_num' aria-valuemin='0' aria-valuemax='100'>$percentage</div>
+                                        </div>                                
                                     </div>
                                 </div>
                             </div>
@@ -2691,11 +2690,10 @@ function student_view_progress() {
                                         <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
                                             <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user'>" . ellipsize($badge->title, 40) . "</a>
                                         </div>
-                                        <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                            <p class='progress-bar active from-control-static' role='progressbar'
-                                                    aria-valuenow='$badge_percentage_num'
-                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
-                                            </p>
+                                        <div class='col-md-4 col-12 mt-md-0 mt-3'>
+                                            <div class='progress progress-line'>
+                                                <div class='progress-line-bar' role='progressbar' style='width: $badge_percentage;' aria-valuenow='$badge_percentage_num' aria-valuemin='0' aria-valuemax='100'>$badge_percentage</div>
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>";
@@ -2935,10 +2933,11 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                         }
                                         $percentage = $percentage_value . '%';
                                         $tool_content .= "<div class='pn-info-text-sct text-md-end'>
-                                            <p class='progress-bar active from-control-static' role='progressbar'
-                                                    aria-valuenow='$percentage_value'
-                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
-                                            </p>
+                                            
+                                            <div class='progress progress-line'>
+                                                <div class='progress-line-bar' role='progressbar' style='width: $percentage;' aria-valuenow='$percentage_value' aria-valuemin='0' aria-valuemax='100'>$percentage</div>
+                                            </div> 
+
                                         </div>";
                             $tool_content .="</div></div>";
                             $cert_desc = get_cert_desc($element, $element_id);

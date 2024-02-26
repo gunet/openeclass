@@ -13,6 +13,7 @@
                     {'bSortable' : false, 'sWidth': '5%' },
                     {'bSortable' : false },
                     {'bSortable' : false },
+                    {'bSortable' : false },
                 ],
                 'order' : [],
                 'oLanguage': {
@@ -101,6 +102,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>{{ trans('langUser') }}</th>
+                                        <th>{{ trans('langEmail') }}</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -110,6 +112,13 @@
                                         <tr>
                                             <td>{{ $i }}</td>
                                             <td>{{ $u->givenname }}&nbsp;{{ $u->surname }}</td>
+                                            <td>
+                                                @if(!empty($u->email))
+                                                    {{ $u->email }}
+                                                @else
+                                                    {{ trans('langNoInfoAvailable') }}
+                                                @endif
+                                            </td>
                                             <td class='text-end'>
                                                 <a class='btn submitAdminBtn d-inline-flex text-decoration-none' 
                                                     href="{{ $_SERVER['SCRIPT_NAME'] }}?uBook={{ $u->id }}&amp;bookWith=1&amp;do_booking=1">

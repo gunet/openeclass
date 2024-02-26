@@ -86,7 +86,7 @@
                                         <label class='col-sm-3 control-label-notes'>{{ trans('langQuotaPercentage') }}:</label>
                                         <div class='col-sm-9'>
                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="min-width: 2em; width: {{$diskUsedPercentage}}%;" aria-valuenow="{{$diskUsedPercentage}}" aria-valuemin="0" aria-valuemax="100">{{$diskUsedPercentage}}%</div>
+                                                <div class='progress-circle-bar' role="progressbar" style="min-width: 2em; width: {{$diskUsedPercentage}}%;" aria-valuenow="{{$diskUsedPercentage}}" aria-valuemin="0" aria-valuemax="100">{{$diskUsedPercentage}}%</div>
                                             </div>
                                         </div>
                                     </div>

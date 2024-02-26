@@ -1424,7 +1424,7 @@ function disp_progress_bar($progress, $factor) {
     // </div>";
 
     $progressBar = "
-    <div role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
+    <div class='progress-circle-bar' role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
 
     return $progressBar;
 }

@@ -2339,7 +2339,8 @@ body .form-action-button-mydropdowns{
 .menu-popover .list-group-item:has(.fa-xmark) .fa::before,
 .menu-popover .list-group-item:has(.fa-trash) .fa::before,
 .menu-popover .list-group-item:has(.fa-eraser) .fa::before,
-.menu-popover .list-group-item:has(.fa-times) .fa::before{
+.menu-popover .list-group-item:has(.fa-times) .fa::before,
+.menu-popover .list-group-item.warning-delete{
   color: #C44601 !important;
 }
 .menu-popover .list-group-item:has(.fa-xmark) .fa,
@@ -3294,9 +3295,15 @@ th .fa-gears{
 tr.warning{
   background-color: #FFF4D1;
 }
+tr.warning > td{
+  color: #2B3944;
+}
 
 tr.danger{
   background-color: #FDEFE9;
+}
+tr.danger > td{
+  color: #2B3944;
 }
 
 
@@ -3871,7 +3878,7 @@ body .delThemeBtn{
   initial-value: 0;
 }
 
-div[role="progressbar"] {
+.progress-circle-bar {
   --size: 9rem;
   --fg: #0073E6;
   --bg: #e8e8e8;
@@ -3892,9 +3899,20 @@ div[role="progressbar"] {
   color: var(--fg);
 }
 
-div[role="progressbar"]::before {
+.progress-circle-bar::before {
   counter-reset: percentage var(--value);
   content: counter(percentage) '%';
+}
+
+.progress-line-bar{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #0073E6;
 }
 
 .state_success { color: #22b473; }
@@ -4387,10 +4405,10 @@ div[role="progressbar"]::before {
   height: 50px;
 }
 
-.progressbar-plr div[role="progressbar"]{
+.progressbar-plr .progress-circle-bar{
   --size: 2.5rem !important;
 }
-.progressbar-plr div[role="progressbar"]::before{
+.progressbar-plr .progress-circle-bar::before{
   font-size: 11px;
   font-weight: 600;
 }

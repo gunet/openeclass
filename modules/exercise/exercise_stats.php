@@ -216,7 +216,7 @@ foreach($questionList as $id) {
             <tr>
                 <td>".q_math($objQuestionTmp->selectTitle())."</td>
                 <td>
-                    <div role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='--value: ".$objQuestionTmp->successRate($exerciseId)."; --size: 6rem;'></div>
+                    <div class='progress-circle-bar' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='--value: ".$objQuestionTmp->successRate($exerciseId)."; --size: 6rem;'></div>
                 </td>                   
             </tr>";
     }

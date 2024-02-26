@@ -676,6 +676,10 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
+                .split-left{
+                    border-left: solid 1px $theme_options_styles[linkColorHeader];
+                }
+
             ";
         }
 
@@ -3788,7 +3792,7 @@ function view($view_file, $view_data = array()) {
                             !empty($theme_options_styles['BgColorProgressBarAndText'])){
 
             $styles_str .= "
-                div[role='progressbar'] {
+                .progress-circle-bar{
                     --size: 9rem;
                     --fg: $theme_options_styles[BgColorProgressBarAndText];
                     --bg: $theme_options_styles[BgProgressBar];
@@ -3811,6 +3815,20 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .progress-bar {
+                    background-color: $theme_options_styles[BgColorProgressBarAndText];
+                }
+
+                .progress-line{
+                    background-color: $theme_options_styles[BgProgressBar];
+                }
+                .progress-line-bar{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    overflow: hidden;
+                    color: $theme_options_styles[BgProgressBar];
+                    text-align: center;
+                    white-space: nowrap;
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
             ";
@@ -4336,6 +4354,22 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////// TEXT COLOR OF HOMEPAGE ANNOUNCEMENTS ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['TextColorAnnouncementHomepage'])){
+            $styles_str .= "
+                .homepage-annnouncements-container .card h3,
+                .homepage-annnouncements-container .card .Neutral-900-cl{
+                    color: $theme_options_styles[TextColorAnnouncementHomepage];
+                }
+                
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ////////////// BACKGROUND COLOR OF PORTFOLIO - COURSES CONTAINER ////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -4512,6 +4546,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .panel-default:has(.panel-heading) {
+                    border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                .panel-default:not(:has(.panel-heading)){
                     border: solid 1px $theme_options_styles[clBorderPanels];
                 }
 
