@@ -2371,10 +2371,6 @@ function upgrade_to_3_13($tbl_options): void
             ADD CONSTRAINT FOREIGN KEY (copy_of_qid) REFERENCES exercise_question(id) ON DELETE SET NULL");
     }
 
-    if (!DBHelper::fieldExists('monthly_summary', 'details')) {
-        Database::get()->query("ALTER TABLE `monthly_summary` ADD `details` MEDIUMTEXT DEFAULT NULL");
-    }
-
 }
 
 /**
@@ -3395,7 +3391,6 @@ function convert_db_encoding_to_utf8mb4(): void
         "ALTER TABLE `lti_apps` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `lti_apps` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `monthly_summary` CHANGE month month varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
-        "ALTER TABLE `monthly_summary` CHANGE details details mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `note` CHANGE title title varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `note` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `note` CHANGE `reference_obj_type` `reference_obj_type` enum('course','personalevent','user',
