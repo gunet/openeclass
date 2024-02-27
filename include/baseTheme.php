@@ -4544,6 +4544,7 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
 
                 .user-info-card,
+                .form-homepage-login,
                 .panelCard,
                 .cardLogin,
                 .border-card,

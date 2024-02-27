@@ -119,7 +119,7 @@ $tool_content .= "
                       <div class='col $Position'>";
                         if($auth_enabled_method == 1){
                           if(count($authLink) == 1){
-            $tool_content .= "<div class='card form-homepage-login h-100 px-lg-4 py-lg-3 p-3'>";
+            $tool_content .= "<div class='card cardLogin h-100 px-lg-4 py-lg-3 p-3'>";
                                 $k = 0;
                                 foreach($authLink as $authInfo){
                   $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-2 flex-wrap'>
