@@ -263,8 +263,8 @@
                             <div class='col'>
                                 <div class='card card-transparent bg-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
+                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                            <h3>{{ trans('langAnnouncements') }}</h3>
                                             <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
                                         </div>
                                         <div class='d-flex justify-content-end align-items-center'>
@@ -312,7 +312,7 @@
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                             <div class='d-flex justify-content-start align-items-center'>
-                                                <h3 class='pe-2'>
+                                                <h3>
                                                     {{trans('langPopularCourse')}}
                                                 </h3>
                                             </div>
@@ -362,7 +362,7 @@
                                         <div class='card card-transparent bg-transparent border-0'>
                                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                                 <div class='d-flex justify-content-start align-items-center'>
-                                                    <h3 class='pe-2'>
+                                                    <h3>
                                                         {!! $text->title !!}
                                                     </h3>
                                                 </div>
@@ -421,7 +421,7 @@
                                 <div class='card card-transparent bg-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                         <div class='d-flex justify-content-start align-items-center'>
-                                            <h3 class='pe-2'>{{ trans('langViewStatics') }}</h3>
+                                            <h3>{{ trans('langViewStatics') }}</h3>
                                         </div>
                                     </div>
                                     <div class='card-body px-0 py-3'>

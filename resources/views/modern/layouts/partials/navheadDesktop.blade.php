@@ -59,7 +59,7 @@
                 @if(!isset($_SESSION['uid']))
                     <div class='h-100 d-flex justify-content-start align-items-center'>
                         <div class="d-flex justify-content-start align-items-center h-40px @if(get_config('dont_display_login_form')) pe-3 @endif">
-                            {!! lang_selections_Desktop() !!}
+                            {!! lang_selections_Desktop('idLangSelectionDesktop') !!}
                         </div>
                         @if(get_config('dont_display_login_form'))
                             <div class='split-left h-40px ps-0 pe-3'></div>
@@ -238,7 +238,7 @@
 
             <div class='d-flex justify-content-start align-items-center gap-2'>
 
-                <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrolling" aria-label="Registration and available courses">
+                <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrollingTools" aria-label="Registration and available courses">
                     <i class="fa-solid fa-ellipsis-vertical fa-lg"></i>
                 </a>
 
@@ -249,7 +249,7 @@
 
             @if (!isset($_SESSION['uid']))
                 <div class='d-flex justify-content-start align-items-center gap-3'>
-                    {!! lang_selections_Desktop() !!}
+                    {!! lang_selections_Desktop('idLangSelectionMobile') !!}
                     @if(get_config('dont_display_login_form'))
                         <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
                             {{ trans('langUserLogin') }}

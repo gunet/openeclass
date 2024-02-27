@@ -4893,7 +4893,7 @@ function array2html($TheArray) {
  * @brief displays lang selection box
  * @return string|void
  */
-function lang_selections_Desktop() {
+function lang_selections_Desktop($idLanguage) {
 
     global $session, $native_language_names_init;
 
@@ -4910,12 +4910,12 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="'.$idLanguage.'" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Link to language">
                             <span class="d-none d-lg-block">'. $Selected_Language .'</span>
                             <span class="fa-solid fa-earth-europe d-block d-lg-none"></span>
                             <i class="fa-solid fa-chevron-down" role="presentation"></i> 
                         </a>
-                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3" role="menu" aria-labelledby="Dropdown">
+                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3" role="menu" aria-labelledby="'.$idLanguage.'">
                             <ul class="list-group list-group-flush">';
                             foreach ($session->active_ui_languages as $code) {
                                 $class = ($code == $session->language)? ' class="active"': '';
