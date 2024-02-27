@@ -97,7 +97,7 @@
                                                     {{ trans('langYes') }}
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class='text-end'>
                                                 {!! action_button(array(
                                                     array('title' => trans('langDelete'),
                                                             'url' => "#",

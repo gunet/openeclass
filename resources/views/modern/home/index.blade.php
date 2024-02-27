@@ -394,15 +394,13 @@
                                                 <div class="col-12 testimonials my-0">
                                                     @foreach($testimonials as $t)
                                                         <div class="d-flex align-items-start flex-column testimonial">
-
-                                                                <div class="testimonial-body mb-auto">
-                                                                    <p>{!! $t->body !!}</p>
-                                                                </div>
-                                                                <div class="testimonial-person w-100">
-                                                                    <div class="form-label text-end mt-4">{!! $t->title !!}</div>
-                                                                </div>
+                                                            <div class="testimonial-body mb-auto">
+                                                                <p>{!! $t->body !!}</p>
                                                             </div>
-
+                                                            <div class="testimonial-person w-100">
+                                                                <div class="form-label text-end mt-4">{!! $t->title !!}</div>
+                                                            </div>
+                                                        </div>
                                                     @endforeach
                                                 </div>
                                             </div>

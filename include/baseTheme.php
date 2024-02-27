@@ -1119,6 +1119,15 @@ function view($view_file, $view_data = array()) {
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .showCoursesBars,
+                .showCoursesBars:hover,
+                .showCoursesBars:focus,
+                .showCoursesPics,
+                .showCoursesPics:hover,
+                .showCoursesPics:focus{
+                    background-color:  $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -1278,6 +1287,15 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+
+                .showCoursesBars,
+                .showCoursesBars:hover,
+                .showCoursesBars:focus,
+                .showCoursesPics,
+                .showCoursesPics:hover,
+                .showCoursesPics:focus{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -1427,8 +1445,41 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                     border-color: $theme_options_styles[buttonBgColor];
                 }
+
+                .showCoursesBars.active,
+                .showCoursesPics.active{
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
                   
 
+            ";
+
+            $colorChevronLeftRight = "$theme_options_styles[buttonBgColor]";
+
+            $FirstLeftSVG = "svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='$colorChevronLeftRight' d='M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z'/%3E%3C/svg";
+            $SecondLeftSVG = 'url("data:image/svg+xml,%3C' . $FirstLeftSVG .'%3E")';
+
+            $FirstRightSVG = "svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='$colorChevronLeftRight' d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'/%3E%3C/svg";
+            $SecondRightSVG = 'url("data:image/svg+xml,%3C' . $FirstRightSVG .'%3E")';
+
+            $styles_str .= "
+                .testimonials .slick-prev.slick-arrow {
+                    background: $SecondLeftSVG no-repeat center;
+                    background-size: contain;
+                    height: 24px;
+                    width: 24px;
+                    border-radius: 50%;
+                    z-index: 1;
+                }
+
+                .testimonials .slick-next.slick-arrow {
+                    background: $SecondRightSVG no-repeat center;
+                    background-size: contain;
+                    height: 24px;
+                    width: 24px;
+                    border-radius: 50%;
+                    z-index: 1;
+                }
             ";
         }
 
@@ -1515,6 +1566,13 @@ function view($view_file, $view_data = array()) {
                 .myProfileBtn:focus{
                     background-color: $theme_options_styles[buttonHoverBgColor];
                     border-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+                .showCoursesBars.active:hover,
+                .showCoursesBars.active:focus,
+                .showCoursesPics.active:hover,
+                .showCoursesPics.active:focus{
+                    background-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
             ";
@@ -1615,6 +1673,16 @@ function view($view_file, $view_data = array()) {
                 .myProfileBtn,
                 .myProfileBtn:hover,
                 .myProfileBtn:focus{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                
+                .showCoursesBars.active,
+                .showCoursesBars.active:hover,
+                .showCoursesBars.active:focus,
+                .showCoursesPics.active,
+                .showCoursesPics.active:hover,
+                .showCoursesPics.active:focus{
                     color: $theme_options_styles[buttonTextColor] ;
                 }
                 
@@ -4036,15 +4104,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor] !important;
                 }
                 
-                .btn.showCoursesBars,
-                .btn.showCoursesPics{
-                    color: $theme_options_styles[linkColor];
-                }
-
-
-
-
-
                 .dataTables_paginate.paging_simple_numbers span .paginate_button, 
                 .dataTables_paginate.paging_full_numbers span .paginate_button{
                     color: $theme_options_styles[linkColor] !important;
@@ -4213,11 +4272,6 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .nav-link-adminTools:hover{
-                    color: $theme_options_styles[linkHoverColor];
-                }
-
-                .btn.showCoursesBars:hover,
-                .btn.showCoursesPics:hover{
                     color: $theme_options_styles[linkHoverColor];
                 }
 

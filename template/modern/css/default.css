@@ -770,7 +770,9 @@ b a {
 }
 @media(min-width:992px) and (max-width:1199px){
   .container-items {
-    max-width: 450px;
+    min-width: 250px;
+    max-width: 380px;
+    gap: 25px;
   }
 }
 .container-items::-webkit-scrollbar{
