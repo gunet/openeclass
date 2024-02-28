@@ -176,7 +176,7 @@ $tool_content .= "
       </div>
     </div>
     <div class='col-lg-6 col-12 d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
   </div>";
 

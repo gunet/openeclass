@@ -296,7 +296,7 @@ $tool_content .= '<div class="form-group mt-4">
       </div>
   </div>
 </form></div></div><div class="d-none d-lg-block">
-<img class="form-image-modules" src="/template/modern/img/form-image.png" alt="form-image">
+<img class="form-image-modules" src="'.get_form_image().'" alt="form-image">
 </div>
 </div>';
 

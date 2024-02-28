@@ -144,7 +144,7 @@ if ($is_editor) {
 
         $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'></div>";
         $tool_content .= "</form></div></div><div class='d-none d-lg-block'>
-                                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                             </div>
                         </div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
@@ -347,7 +347,7 @@ if ($is_editor) {
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
         $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div></div><div class='d-none d-lg-block'>
-                                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                             </div>
                         </div>";
         $tool_content .='<script language="javaScript" type="text/javascript">

@@ -56,7 +56,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
 </div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
@@ -108,7 +108,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                     </div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -143,7 +143,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                     </div></div>";
 
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
@@ -200,7 +200,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                     </div></div>";
 
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -376,7 +376,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langSave'></div>";
         $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
         <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                     </div></div>";
 
         $tool_content .='<script language="javaScript" type="text/javascript">

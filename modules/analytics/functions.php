@@ -925,7 +925,7 @@ function edit_analytics_settings ($analytics_id = 0)
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
     </div>";
 }
@@ -1047,7 +1047,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         </div>
     </div>
     <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
     </div>
 </div>";
 }

@@ -4737,3 +4737,26 @@ function set_content_disposition($disposition, $filename) {
     //$filename = strtr($filename, '"\'', '__');
     header("Content-Disposition: $disposition; filename*=UTF-8''" . rawurlencode($filename));
 }
+
+
+/**
+ * @brief Show the form image regarding active theme
+ */
+function get_form_image() {
+    global $urlAppend, $themeimg;
+
+    $theme_id = get_config('theme_options_id');
+    $form_image = $themeimg.'/form-image.png';
+
+    if ($theme_id) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+        $theme_options_styles = unserialize($theme_options->styles);
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+        if (isset($theme_options_styles['imageUploadForm'])) {
+            $form_image = "$urlThemeData/$theme_options_styles[imageUploadForm]";
+        }
+
+    }
+
+    return $form_image;
+}

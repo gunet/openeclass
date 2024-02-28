@@ -101,6 +101,9 @@ if (isset($_GET['export'])) {
         if (isset($styles['imageUploadFooter'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadFooter]");
         }
+        if (isset($styles['imageUploadForm'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadForm]");
+        }
         if (isset($styles['loginImg'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
         }
@@ -206,6 +209,25 @@ if (isset($_POST['optionsSave'])) {
         else{
             //serialize $_post login img jumbotron
             $_POST['loginImgL'] = $image_without_ext.".".$ext;
+        }
+    }
+
+    //form image
+    if(isset($_POST['choose_from_formlist']) && !empty($_POST['choose_from_formlist'])){
+        $imageName = $_POST['choose_from_formlist'];
+        $imagePath = "$webDir/template/modern/images/form_images/$imageName";
+        $newPath = "$webDir/courses/theme_data/$theme_id/";
+        $name = pathinfo($imageName, PATHINFO_FILENAME);
+        $ext =  get_file_extension($imageName);
+        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+        $newName  = $newPath.$image_without_ext.".".$ext;
+        $copied = copy($imagePath , $newName);
+        if ((!$copied)) {
+            echo "Error : Not Copied";
+        }
+        else{
+            //serialize $_post login img jumbotron
+            $_POST['imageUploadForm'] = $image_without_ext.".".$ext;
         }
     }
 
@@ -430,6 +452,16 @@ if (isset($_POST['optionsSave'])) {
 
             });
 
+            //form images upload
+            $('.chooseFormImage').on('click',function(){
+                var id_img = this.id;
+                alert('Selected image: '+id_img);
+                document.getElementById('choose_from_formlist').value = id_img;
+                $('#FormImagesModal').modal('hide');
+                document.getElementById('selectedImageForm').value = '$langSelect:'+id_img;
+
+            });
+
 
 
         });
@@ -567,6 +599,43 @@ if (isset($_POST['optionsSave'])) {
        ";
     }
 
+    if (isset($theme_options_styles['imageUploadForm'])) {
+        $form_image_fieldL = "
+            <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
+                <img src='$urlThemeData/$theme_options_styles[imageUploadForm]' style='max-height:100px;max-width:150px;' alt='Image upload'>
+                <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadForm'>$langDelete</a>
+            </div>
+            <input type='hidden' name='imageUploadForm' value='$theme_options_styles[imageUploadForm]'>
+        ";
+    } else {
+       $form_image_fieldL = "
+
+            <ul class='nav nav-tabs' id='nav-tab3' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='tabs-upload-tab3' data-bs-toggle='tab' data-bs-target='#tabs-upload3' type='button' role='tab' aria-controls='tabs-upload3' aria-selected='true'>$langUpload</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='tabs-selectImage-tab3' data-bs-toggle='tab' data-bs-target='#tabs-selectImage3' type='button' role='tab' aria-controls='tabs-selectImage3' aria-selected='false'>$langAddPicture</button>
+                </li>
+            </ul>
+            <div class='tab-content mt-3' id='tabs-tabContent3'>
+                <div class='tab-pane fade show active' id='tabs-upload3' role='tabpanel' aria-labelledby='tabs-upload-tab3'>
+                    <input type='file' name='imageUploadForm' id='imageUploadForm'>
+                </div>
+                <div class='tab-pane fade' id='tabs-selectImage3' role='tabpanel' aria-labelledby='tabs-selectImage-tab3'>
+                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#FormImagesModal'>
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
+                    </button>
+                    <input type='hidden' id='choose_from_formlist' name='choose_from_formlist'>
+                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageForm'>
+                </div>
+            </div>
+
+
+
+       ";
+    }
+
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -608,6 +677,11 @@ if (isset($_POST['optionsSave'])) {
     $dirname2 = getcwd();
     $dirname2 = $dirname2 . '/template/modern/images/login_images';
     $dir_login_images = scandir($dirname2);
+
+    // Get all images from dir form_images
+    $dirname3 = getcwd();
+    $dirname3= $dirname3 . '/template/modern/images/form_images';
+    $dir_form_images = scandir($dirname3);
 
 
     @$tool_content .= "
@@ -1399,6 +1473,12 @@ $tool_content .= "
                         <label for='clLabelForms' class='control-label-notes mb-2 me-2'>$langColorLabel:</label>
                         <input name='clLabelForms' type='text' class='form-control colorpicker' id='clLabelForms' value='$theme_options_styles[clLabelForms]'>
                     </div>
+                    <div class='form-group mt-4'>
+                        <label for='imageUploadForm' class='col-sm-12 control-label-notes mb-2'>$langFormUploadImage:</label>
+                        <div class='col-sm-12'>
+                            $form_image_fieldL
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1738,7 +1818,9 @@ $tool_content .= "
         <div class='modal-content'>
             <div class='modal-header'>
                 <h5 class='modal-title' id='JumbotronImagesModalLabel'>$langLoginImg (jumbotron)</h5>
-                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                </button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";
@@ -1776,7 +1858,9 @@ $tool_content .= "
         <div class='modal-content'>
             <div class='modal-header'>
                 <h5 class='modal-title' id='LoginImagesModalLabel'>$langLoginImg</h5>
-                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                </button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";
@@ -1792,6 +1876,44 @@ $tool_content .= "
                                                 <p>$image</p>
 
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseLoginImage mt-3' value='$langSelect'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                        }
+
+$tool_content .= "
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='modal fade' id='FormImagesModal' tabindex='-1' aria-labelledby='FormImagesModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='FormImagesModalLabel'>$langFormImg</h5>
+                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <div class='row row-cols-1 row-cols-md-2 g-4'>";
+                        foreach($dir_form_images as $image) {
+                            $extension = pathinfo($image, PATHINFO_EXTENSION);
+                            $imgExtArr = ['jpg', 'jpeg', 'png', 'svg'];
+                            if(in_array($extension, $imgExtArr)){
+                                $tool_content .= "
+                                    <div class='col'>
+                                        <div class='card panelCard h-100'>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/form_images/$image' alt='form image'/>
+                                            <div class='card-body'>
+                                                <p>$image</p>
+
+                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFormImage mt-3' value='$langSelect'>
                                             </div>
                                         </div>
                                     </div>
@@ -1835,7 +1957,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -1851,7 +1973,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];

@@ -165,7 +165,7 @@ function show_assignments() {
                 </fieldset>
             </form>
         </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
     </div>
     </div>";
 }

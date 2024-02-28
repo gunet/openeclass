@@ -591,7 +591,7 @@ function add_attendance_other_activity($attendance_id) {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
     </div>";
 }
@@ -838,7 +838,7 @@ function new_attendance() {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
     </div>";
 }
@@ -1117,7 +1117,7 @@ function attendance_settings($attendance_id) {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
     </div>";
 }
@@ -1258,7 +1258,7 @@ function user_attendance_settings($attendance_id) {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
     </div>
 </div>";

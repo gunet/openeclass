@@ -497,7 +497,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     if (($course_id == 0 && $type == 'cm') or ($course_id == 0 && $type == 'pm')){
         $tool_content .= "
                 <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-                    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                 </div>
             </div>";
     }

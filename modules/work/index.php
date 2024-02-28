@@ -2697,7 +2697,7 @@ function new_assignment() {
             </div>
         </fieldset>
         </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
     </div>
     </div>";
 }
@@ -3849,7 +3849,7 @@ function show_edit_assignment($id) {
             </div>
     </fieldset>
     </form></div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
 </div>
 </div>";
 }
@@ -4508,7 +4508,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </fieldset>
                      </form>
                      </div></div><div class='d-none d-lg-block'>
-                     <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                     <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                  </div>
                  </div>
                      <div class='float-end'><small>$GLOBALS[langMaxFileSize] " .
