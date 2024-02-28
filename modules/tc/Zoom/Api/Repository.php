@@ -105,6 +105,15 @@ class Repository
         return $dbToken->value;
     }
 
+    public function isEnabled() : bool
+    {
+        return (
+            !empty($this->getClientId())
+            && !empty($this->getClientSecret())
+            && !empty($this->getAccountId())
+        );
+    }
+
     private function generateAccessToken() : string
     {
         global $langZoomAccessTokenError;
@@ -152,17 +161,17 @@ class Repository
         }
     }
 
-    private function getAccountId() : string
+    private function getAccountId()
     {
         return get_config('ext_zoom_accountId');
     }
 
-    private function getClientId() : string
+    private function getClientId()
     {
         return get_config('ext_zoom_clientId');
     }
 
-    private function getClientSecret() : string
+    private function getClientSecret()
     {
         return get_config('ext_zoom_clientSecret');
     }

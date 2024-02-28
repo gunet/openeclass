@@ -2579,6 +2579,45 @@ function upgrade_to_3_15($tbl_options) : void
 }
 
 /**
+ * @brief upgrade queries to 3.16
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_3_16($tbl_options) : void
+{
+    if (!DBHelper::tableExists('login_lock')) {
+        Database::get()->query('CREATE TABLE `login_lock` (
+           `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+           `user_id` INT(11) NOT NULL,
+           `session_id` VARCHAR(48) NOT NULL COLLATE ascii_bin,
+           `ts` DATETIME NOT NULL,
+           FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+           UNIQUE KEY (session_id)) CHARACTER SET ascii ENGINE=InnoDB');
+    }
+    if (!DBHelper::fieldExists('exercise', 'options')) {
+        Database::get()->query("ALTER TABLE `exercise` ADD `options` text");
+    }
+
+    if (!DBHelper::tableExists('zoom_user')) {
+        Database::get()->querySingle("CREATE TABLE `zoom_user` (
+          `user_id` INT(10) NOT NULL,
+          `id` varchar(45) NOT NULL,
+          `first_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+          `last_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+          `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+          `type` TINYINT(1) NOT NULL DEFAULT 1,
+          `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id)) $tbl_options");
+    }
+
+    // Fix incorrect dates in course_user table
+    Database::get()->query('UPDATE course_user
+        SET document_timestamp = reg_date
+        WHERE document_timestamp < reg_date');
+}
+
+/**
  * @brief upgrade queries to 4.0
  * @param $tbl_options
  * @return void

@@ -58,7 +58,7 @@ class ZoomUserRepository
             "last_name": "'.$eclassUser->surname.'",
             "display_name": "'.$eclassUser->username.'",
             "password": "'.$password_encrypted.'",
-            "type": '.self::TYPE_LICENSED.',
+            "type": '.self::TYPE_BASIC.',
             "feature": {
               "zoom_phone": false
             }
@@ -183,6 +183,11 @@ class ZoomUserRepository
 
         $responseDataJson = $res->getBody()->getContents();
         return json_decode($responseDataJson);
+    }
+
+    public function zoomApiEnabled() : bool
+    {
+        return $this->zoomRepository->isEnabled();
     }
 
     private function saveInDatabase($userId, $data)
