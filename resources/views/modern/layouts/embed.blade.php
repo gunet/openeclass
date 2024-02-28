@@ -81,7 +81,7 @@
                             @foreach ($toolArr as $key => $tool_group)
                                 <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
                                     @foreach ($tool_group[1] as $key2 => $tool)
-                                        <a href="{{ $tool_group[2][$key2] }}" class="list-group-item d-flex justify-content-start align-items-start module-tool gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
+                                        <a href="{{ $tool_group[2][$key2] }}" class="list-group-item d-flex justify-content-start align-items-start module-tool rounded-0 gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
                                             <span class='menu-items TextBold w-100'>{!! $tool !!}</span>
                                         </a>
                                     @endforeach

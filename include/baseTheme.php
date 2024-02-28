@@ -618,6 +618,11 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[BgColorWrapperHeader];
                 }
 
+                .navbar-learningPath,
+                .header-container-learningPath{
+                    background: $theme_options_styles[BgColorWrapperHeader];
+                }
+
             ";
         }
 
@@ -1480,7 +1485,13 @@ function view($view_file, $view_data = array()) {
                     border-radius: 50%;
                     z-index: 1;
                 }
+
+                .mce-btn{
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
             ";
+
+            
         }
 
 
@@ -1573,6 +1584,11 @@ function view($view_file, $view_data = array()) {
                 .showCoursesPics.active:hover,
                 .showCoursesPics.active:focus{
                     background-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+                .mce-btn:hover,
+                .mce-btn:focus{
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
             ";
@@ -1684,6 +1700,11 @@ function view($view_file, $view_data = array()) {
                 .showCoursesPics.active:hover,
                 .showCoursesPics.active:focus{
                     color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                .mce-btn,
+                .mce-btn i{
+                    color: $theme_options_styles[buttonTextColor] !important;
                 }
                 
             ";
@@ -2434,6 +2455,10 @@ function view($view_file, $view_data = array()) {
                     border: 1px solid $theme_options_styles[clBorderSelect];
                 }
 
+                .mce-floatpanel {
+                    border: 1px solid $theme_options_styles[clBorderSelect] !important;;
+                }
+
             ";
         }
 
@@ -2501,6 +2526,14 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
+                .mce-menu-item{
+                    color: $theme_options_styles[clOptionSelect] !important;
+                }
+
+                .mce-menu-item .mce-text {
+                    color: $theme_options_styles[clOptionSelect] !important;
+                }
+
             ";
         }
 
@@ -2529,6 +2562,12 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
+                .mce-menu-item:hover{
+                    background-color: $theme_options_styles[bgHoveredSelectOption] !important;
+                }
+
+                
+
             ";
         }
 
@@ -2550,6 +2589,18 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+                    color: $theme_options_styles[clHoveredSelectOption] !important;
+                }
+
+                .mce-menu-item:hover{
+                    color: $theme_options_styles[clHoveredSelectOption] !important;
+                }
+
+                .mce-menu-item-normal.mce-active:hover .mce-text {
+                    color: $theme_options_styles[clHoveredSelectOption] !important;
+                }
+
+                .mce-menu-item:hover .mce-text {
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
@@ -2578,6 +2629,15 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
+                .mce-menu-item-normal.mce-active {
+                    background-color: $theme_options_styles[bgOptionSelected] !important;
+                }
+
+                .mce-menu-item:hover, 
+                .mce-menu-item.mce-selected, 
+                .mce-menu-item:focus {
+                    background-color: $theme_options_styles[bgOptionSelected] !important;
+                }
 
             ";
         }
@@ -2604,7 +2664,24 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
+                .mce-menu-item-normal.mce-active {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
 
+                .mce-menu-item:hover, 
+                .mce-menu-item.mce-selected, 
+                .mce-menu-item:focus {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
+
+                .mce-menu-item-normal.mce-active .mce-text {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
+
+                .mce-menu-item:hover .mce-text, 
+                .mce-menu-item.mce-selected .mce-text {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
 
 
             ";

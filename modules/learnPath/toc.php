@@ -178,17 +178,17 @@ foreach ($flatElementList as $module) {
         echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: normal\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "fa-edit text-dark";
+            $moduleImg = "fa-edit";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "fa-link text-dark";
+            $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "fa-info-circle text-dark";
+            $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
         } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "fa-file-code-o text-dark";
+            $moduleImg = "fa-file-code-o";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "fa-film text-dark";
+            $moduleImg = "fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -199,7 +199,7 @@ foreach ($flatElementList as $module) {
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-                $moduleImg = 'fa-file-code-o text-dark';
+                $moduleImg = 'fa-file-code-o';
                 $imagePassed = "<span style='color:green'>".icon('fa-check text-success')."</span>";
             } else {
                 $imagePassed = "<span style='color:green'>".icon('fa-check text-success', $module['lesson_status'])."</span>";
@@ -207,7 +207,7 @@ foreach ($flatElementList as $module) {
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
-            $moduleImg = 'fa-file-code-o text-dark';
+            $moduleImg = 'fa-file-code-o';
             $imagePassed = "<span style='color:red'>".icon('fa-xmark text-danger')."</span>";
         }
 
