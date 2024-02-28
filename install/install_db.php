@@ -173,7 +173,8 @@ $db->query("CREATE TABLE `agenda` (
 
 $db->query("CREATE TABLE `course` (
   `id` INT(11) NOT NULL auto_increment,
-  `code` VARCHAR(40) NOT NULL,
+  `uuid` VARCHAR(40) NOT NULL DEFAULT 0,
+  `code` VARCHAR(20) NOT NULL,
   `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
   `title` VARCHAR(255) NOT NULL DEFAULT '',
   `keywords` TEXT NOT NULL,
@@ -212,6 +213,7 @@ $db->query("CREATE TABLE `course_user` (
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       `document_timestamp` datetime NOT NULL,
       `favorite` datetime DEFAULT NULL,
+      `can_view_course` TINYINT(1) NOT NULL DEFAULT 1,
       PRIMARY KEY (course_id, user_id)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user_request` (
@@ -290,6 +292,7 @@ $db->query("CREATE TABLE `course_review` (
 
 $db->query("CREATE TABLE `user` (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    uuid VARCHAR(40) NOT NULL DEFAULT 0,
     surname VARCHAR(255) NOT NULL DEFAULT '',
     givenname VARCHAR(255) NOT NULL DEFAULT '',
     username VARCHAR(190) NOT NULL UNIQUE KEY COLLATE utf8mb4_bin,
@@ -1555,7 +1558,8 @@ $db->query("CREATE TABLE `cron_params` (
 
 // tables for units module
 $db->query("CREATE TABLE `course_units` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `uuid` VARCHAR(40) NOT NULL DEFAULT 0,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `comments` MEDIUMTEXT,
     `start_week` DATE,
@@ -2206,6 +2210,22 @@ $db->query("CREATE TABLE h5p_content_dependency (
     dependency_type VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)) $tbl_options");
 
+// tables for CCE API
+$db->query("CREATE TABLE `api_grade_analytics` (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    user_uuid VARCHAR(40) NOT NULL , 
+    course_uuid VARCHAR(40) NOT NULL , 
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE `api_course_completion` (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    user_id INT(10) NOT NULL , 
+    course_id INT(10) NOT NULL , 
+    is_locked BOOL NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
+
 $db->query("CREATE TABLE api_token (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
@@ -2248,6 +2268,17 @@ $db->query('CREATE TABLE `login_lock` (
    `ts` DATETIME NOT NULL,
    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
    UNIQUE KEY (session_id)) CHARACTER SET ascii ENGINE=InnoDB');
+
+$db->query("CREATE TABLE `zoom_user` (
+      `user_id` INT(10) NOT NULL,
+      `id` varchar(45) NOT NULL,
+      `first_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+      `last_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+      `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+      `type` TINYINT(1) NOT NULL DEFAULT 1,
+      `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (user_id)) $tbl_options");
 
 $_SESSION['theme'] = 'default';
 

@@ -2538,8 +2538,9 @@ function upgrade_to_3_15($tbl_options) : void
             MODIFY `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL');
     }
 
-    if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
-        Database::get()->query("ALTER TABLE `user` ADD `disable_course_registration` tinyint NULL DEFAULT 0");
+    if (DBHelper::fieldExists('course_user', 'can_view_generator')) {
+        Database::get()->query("ALTER TABLE course_user CHANGE can_view_generator can_view_course TINYINT(1) NOT NULL DEFAULT 1");
+        Database::get()->query("UPDATE course_user SET can_view_course = 1");
     }
 
     Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
@@ -2596,6 +2597,19 @@ function upgrade_to_3_16($tbl_options) : void
     }
     if (!DBHelper::fieldExists('exercise', 'options')) {
         Database::get()->query("ALTER TABLE `exercise` ADD `options` text");
+    }
+
+    if (!DBHelper::tableExists('zoom_user')) {
+        Database::get()->querySingle("CREATE TABLE `zoom_user` (
+          `user_id` INT(10) NOT NULL,
+          `id` varchar(45) NOT NULL,
+          `first_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+          `last_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+          `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+          `type` TINYINT(1) NOT NULL DEFAULT 1,
+          `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id)) $tbl_options");
     }
 
     // Fix incorrect dates in course_user table

@@ -21,6 +21,8 @@
  */
 
 
+use GuzzleHttp\Exception\GuzzleException;
+
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
@@ -168,7 +170,10 @@ if ($is_editor) {
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
     } else {
-        if (isset($_GET['id'])) {
+        if (
+            isset($_GET['id'])
+            || isset($_GET['zoom_not_registered'])
+        ) {
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -383,7 +388,14 @@ elseif(isset($_GET['choice']))
             } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
-                header("Location: " . $sess->meeting_id  . '/?pwd=' . $sess->mod_pw);
+                if (
+                    $is_editor
+//                    || $is_admin
+                ) {
+                    header("Location: " . unserialize($sess->options));
+                } else {
+                    header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '/?pwd=' . $sess->mod_pw);
+                }
             } elseif ($serv->type == 'webex') { // webex
                 header("Location: " . $sess->meeting_id);
             }
@@ -468,7 +480,7 @@ elseif(isset($_GET['choice']))
     } if ($tc_type == 'microsoftteams') {
         $options = $_POST['microsoft_teams_link'];
     } elseif ($tc_type == 'zoom') {
-        $options = "$_POST[zoom_link]";
+        $options = "";
     } elseif ($tc_type == 'webex') {
         $options = "$_POST[webex_link]";
     }
@@ -486,7 +498,11 @@ elseif(isset($_GET['choice']))
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }elseif (isset($_GET['new'])) {
     select_tc_server($course_id);
-} else { // display list of conferences
+} elseif (isset($_GET['zoom_not_registered'])) {
+    show_zoom_registration();
+} elseif (isset($_GET['register_zoom_user'])) {
+    register_zoom_user();
+}else { // display list of conferences
     tc_session_details();
 }
 

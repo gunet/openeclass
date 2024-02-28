@@ -21,9 +21,17 @@
  */
 
 
+use GuzzleHttp\Client;
+use modules\tc\Zoom\Api\Repository;
+use modules\tc\Zoom\Api\Service;
+use modules\tc\Zoom\User\ZoomUser;
+use modules\tc\Zoom\User\ZoomUserRepository;
+
 require_once 'bbb-api.php';
-require_once('modules/tc/Zoom/Service.php');
-require_once('modules/tc/Zoom/Repository.php');
+require_once('modules/tc/Zoom/Api/Service.php');
+require_once('modules/tc/Zoom/Api/Repository.php');
+require_once('modules/tc/Zoom/User/ZoomUserRepository.php');
+require_once('modules/tc/Zoom/User/ZoomUser.php');
 
 
 /**
@@ -272,17 +280,34 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
-            if ($hostname != 'zoom') { // zoom url supplied by end user
+            $client = new Client();
+            $db = Database::get();
+            $zoomApiRepo = new Repository($client);
+
+            if ($zoomApiRepo->isEnabled()) {
+                $zoomUserRepo = new ZoomUserRepository($client, $zoomApiRepo);
+                $user = $db->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
+
+                if (empty($user->email)) {
+                    Session::Messages("Δημιουργήθηκε πρόβλημα κατά την εύρεση του χρήστη.");
+                    redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
+                }
+
+                if (!$zoomUserRepo->userExists($user->email)) {
+                    Session::Messages("Δεν βρέθηκε εγγεγραμμένος χρήστης στην υπηρεσία UoA Zoom με διεύθυνση email: <b>" . $user->email . "</b>");
+                    redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
+                }
+            } else {
                 $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
                 $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='$hostname' target='_blank'>$langGoToZoomLinkText</a></div>";
-            }
 
-            $tool_content .= "<div class='form-group'>
+                $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langLink:</label>
                     <div class='col-sm-10'>
-                        <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
+                        <input class='form-control' type='text' name='webex_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
                     </div>
                 </div>";
+            }
         }
 
         if ($tc_type == 'webex') { // webex
@@ -821,6 +846,52 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         //]]></script>";
 }
 
+function show_zoom_registration() {
+    global $tool_content, $course_code, $urlServer;
+
+    $registrationUrl = $urlServer . 'modules/tc/index.php?course=' . $course_code . '&register_zoom_user=1';
+
+    $tool_content .= "  <div class='row'>
+                            <div class='col-xs-12'>
+                                <div class='panel panel-default'>
+                                    <div class='panel-body'>
+                                        <div class='inner-heading'>
+                                            <div class='row'>
+                                                <div class='col-sm-7'>
+                                                    <strong>Εγγραφή Χρήστη στην Υπηρεσία UoA Zoom</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='res-table-wrapper'>
+                                            <div class='row res-table-row'>
+                                                <div class='col-sm-12'>
+                                                    <div style='margin-top: 5px;'>
+                                                        <span>Resister new or existing zoom user under the uoa zoom account.</span>
+                                                        <div class='row'>
+                                                            <a href='$registrationUrl' class='btn btn-success' style='margin: 20px'>Εγγραφή</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+}
+
+function register_zoom_user()
+{
+    global $uid, $course_code;
+
+    $client = new Client();
+    $zoomUser = new ZoomUser(new ZoomUserRepository($client, new Repository($client)));
+    $eclassUser = Database::get()->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
+    $zoomUser->create($eclassUser);
+    Session::Messages('Επιτυχής δημιουργία λογαριασμού. Παρακαλώ ακολουθήστε τον σύνδεσμο στο email σας.', 'alert-success');
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
+}
+
 /**
  * @brief insert scheduled session data into database
  * @param string $tc_type
@@ -846,11 +917,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
-        $langDescription, $course_code, $course_id, $urlServer;
-
-    $zoomRepo = new \modules\tc\Zoom\Repository();
-    $zoomService = new \modules\tc\Zoom\Service($zoomRepo);
-    $zoomService->call();
+        $langDescription, $course_code, $course_id, $urlServer, $uid, $is_admin;
 
     // Groups of participants per session
     $r_group = '';
@@ -982,9 +1049,36 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '', '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'zoom') {
-            $data = parse_url($options);
-            $meeting_id = $data['path'];
-            $mod_pw = preg_replace('/pwd=/','', $data['query']);
+            $eclassUser = Database::get()->querySingle("SELECT * FROM user WHERE id = ".$uid);
+
+            if (
+                !$is_admin
+                && (
+                    empty($eclassUser->email)
+                    || empty($eclassUser->givenname)
+                    || empty($eclassUser->surname)
+                    || empty($eclassUser->id)
+                )
+            ) {
+                Session::Messages("TC user not found. Please contact Administrator.");
+                redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+            }
+
+            $guzzleClient = new Client();
+            $zoomRepo = new Repository($guzzleClient);
+            $zoomUserRepo = new ZoomUserRepository($guzzleClient, $zoomRepo);
+            $zoomUser = new ZoomUser($zoomUserRepo);
+            $zoomUser->get($eclassUser->email);
+
+            if (empty($zoomUser->id)) {
+                Session::Messages("Δεν βρέθηκε ο χρήστης στον λογαριασμό UoA Zoom. Παρακαλώ επικοινωνείστε με τον διαχειριστή του συστήματος.");
+                redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+            }
+
+            $zoomMeeting = new Service($zoomRepo, $zoomUser);
+            $meeting = $zoomMeeting->create($title , $desc, $start_session, $record);
+            $options = serialize($meeting->start_url);
+
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -999,12 +1093,13 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             unlock_interval = ?s,
                                                             external_users = ?s,
                                                             participants = ?s,
-                                                            record = 'false',
-                                                            sessionUsers = ?s",
+                                                            record = ?s,
+                                                            sessionUsers = ?s,
+                                                            options = ?s",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
-                $meeting_id, $mod_pw, '' ,
-                $minutes_before, $external_users, $r_group, $sessionUsers);
+                $meeting->id, $meeting->encrypted_password, '' ,
+                $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
         } elseif ($tc_type == 'webex') {
             $meeting_id = $options;
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
@@ -1028,6 +1123,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '', '',
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         }
+
 
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,

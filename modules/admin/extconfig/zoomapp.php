@@ -3,17 +3,19 @@ require_once 'genericrequiredparam.php';
 
 class ZoomApp extends ExtApp
 {
-    const ZOOMURL = "url";
     const ENABLEDCOURSES = "enabledcourses";
-    const ZOOMDEFAULTURL = "https://zoom.us/";
-    const ZOOMCUSTOMURL = 'custom_zoom_url';
+    const CLIENT_ID = "clientId";
+    const CLIENT_SECRET = "clientSecret";
+    const ACCOUNT_ID = "accountId";
+    const ZOOMURL = "https://zoom.us/";
 
     public function __construct()
     {
         parent::__construct();
-        $this->registerParam(new GenericRequiredParam($this->getName(), "Zoom URL", ZoomApp::ZOOMURL, ZoomApp::ZOOMDEFAULTURL));
         $this->registerParam(new GenericRequiredParam($this->getName(), "Enabled courses", ZoomApp::ENABLEDCOURSES, "0"));
-        $this->registerParam(new GenericRequiredParam($this->getName(), "Οι χρήστες συμπληρώνουν το Zoom URL", ZoomApp::ZOOMCUSTOMURL, "0"));
+        $this->registerParam(new GenericParam($this->getName(), "Account ID", ZoomApp::ACCOUNT_ID, null));
+        $this->registerParam(new GenericParam($this->getName(), "Client ID", ZoomApp::CLIENT_ID, null));
+        $this->registerParam(new GenericParam($this->getName(), "Client Secret", ZoomApp::CLIENT_SECRET, null));
     }
 
     public function getDisplayName()
