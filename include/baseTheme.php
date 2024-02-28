@@ -4011,6 +4011,175 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////// BACKGROUND COLOR AND TEXT COLOR TO ALERT COMPONENT /////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgAlertInfo'])){
+            $styles_str .= "
+                .alert-info { 
+                    background-color:$theme_options_styles[bgAlertInfo]; 
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clAlertInfo'])){
+            $SVGbtnClose = "svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='$theme_options_styles[clAlertInfo]' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg";
+            $SVGbtnClose2 = 'url("data:image/svg+xml,%3C' . $SVGbtnClose .'%3E")';
+            $styles_str .= "
+                .alert-info,
+                .alert-info h1,
+                .alert-info h2,
+                .alert-info h3,
+                .alert-info h4,
+                .alert-info h5,
+                .alert-info h6,
+                .alert-info div,
+                .alert-info small,
+                .alert-info span,
+                .alert-info p,
+                .alert-info b,
+                .alert-info strong,
+                .alert-info li,
+                .alert-info label{
+                    color: $theme_options_styles[clAlertInfo] !important; 
+                }
+
+                .alert-info .btn-close{
+                    background-image: $SVGbtnClose2;
+                    background-repeat: no-repeat;
+                    background-position: right 0.75rem center;
+                    background-size: 16px 12px;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgAlertWarning'])){
+            $styles_str .= "
+                .alert-warning { 
+                    background-color:$theme_options_styles[bgAlertWarning]; 
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clAlertWarning'])){
+            $SVGbtnClose = "svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='$theme_options_styles[clAlertWarning]' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg";
+            $SVGbtnClose2 = 'url("data:image/svg+xml,%3C' . $SVGbtnClose .'%3E")';
+            $styles_str .= "
+                .alert-warning,
+                .alert-warning h1,
+                .alert-warning h2,
+                .alert-warning h3,
+                .alert-warning h4,
+                .alert-warning h5,
+                .alert-warning h6,
+                .alert-warning div,
+                .alert-warning small,
+                .alert-warning span,
+                .alert-warning p,
+                .alert-warning b,
+                .alert-warning strong,
+                .alert-warning li,
+                .alert-warning label{
+                    color: $theme_options_styles[clAlertWarning] !important; 
+                }
+
+                .alert-warning .btn-close{
+                    background-image: $SVGbtnClose2;
+                    background-repeat: no-repeat;
+                    background-position: right 0.75rem center;
+                    background-size: 16px 12px;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgAlertSuccess'])){
+            $styles_str .= "
+                .alert-success { 
+                    background-color:$theme_options_styles[bgAlertSuccess]; 
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clAlertSuccess'])){
+            $SVGbtnClose = "svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='$theme_options_styles[clAlertSuccess]' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg";
+            $SVGbtnClose2 = 'url("data:image/svg+xml,%3C' . $SVGbtnClose .'%3E")';
+            $styles_str .= "
+                .alert-success,
+                .alert-success h1,
+                .alert-success h2,
+                .alert-success h3,
+                .alert-success h4,
+                .alert-success h5,
+                .alert-success h6,
+                .alert-success div,
+                .alert-success small,
+                .alert-success span,
+                .alert-success p,
+                .alert-success b,
+                .alert-success strong,
+                .alert-success li,
+                .alert-success label{
+                    color: $theme_options_styles[clAlertSuccess] !important; 
+                }
+
+                .alert-success .btn-close{
+                    background-image: $SVGbtnClose2;
+                    background-repeat: no-repeat;
+                    background-position: right 0.75rem center;
+                    background-size: 16px 12px;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgAlertDanger'])){
+            $styles_str .= "
+                .alert-danger { 
+                    background-color:$theme_options_styles[bgAlertDanger]; 
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clAlertDanger'])){
+            $SVGbtnClose = "svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='$theme_options_styles[clAlertDanger]' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg";
+            $SVGbtnClose2 = 'url("data:image/svg+xml,%3C' . $SVGbtnClose .'%3E")';
+            $styles_str .= "
+                .alert-danger,
+                .alert-danger h1,
+                .alert-danger h2,
+                .alert-danger h3,
+                .alert-danger h4,
+                .alert-danger h5,
+                .alert-danger h6,
+                .alert-danger div,
+                .alert-danger small,
+                .alert-danger span,
+                .alert-danger p,
+                .alert-danger b,
+                .alert-danger strong,
+                .alert-danger li,
+                .alert-danger label{
+                    color: $theme_options_styles[clAlertDanger] !important; 
+                }
+
+                .alert-danger .btn-close{
+                    background-image: $SVGbtnClose2;
+                    background-repeat: no-repeat;
+                    background-position: right 0.75rem center;
+                    background-size: 16px 12px;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                }
+            ";
+        }
 
 
 

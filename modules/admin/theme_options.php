@@ -53,6 +53,14 @@ $defaults = array(
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
+                "rgba(229, 244, 248, 1)" => array('bgAlertInfo'),
+                "rgba(59, 126, 148, 1)" => array('clAlertInfo'),
+                "rgba(251, 241, 221, 1)" => array('bgAlertWarning'),
+                "rgba(137, 97, 16, 1)" => array('clAlertWarning'),
+                "rgba(250, 228, 232, 1)" => array('bgAlertDanger'),
+                "rgba(176, 61, 80, 1)" => array('clAlertDanger'),
+                "rgba(161, 219, 184, 1)" => array('bgAlertSuccess'),
+                "rgba(12, 98, 46, 1)" => array('clAlertSuccess'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
@@ -740,6 +748,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsScrollBar' aria-controls='navsettingsScrollBar' role='tab' data-bs-toggle='tab'>$langNavSettingsScrollBar</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsProgressBar' aria-controls='navsettingsProgressBar' role='tab' data-bs-toggle='tab'>$langNavSettingsProgressBar</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsTooltip' aria-controls='navsettingsTooltip' role='tab' data-bs-toggle='tab'>$langNavSettingsTooltip</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAlerts' aria-controls='navsettingsAlerts' role='tab' data-bs-toggle='tab'>$langNavSettingsAlert</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
@@ -1001,6 +1010,56 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='TextColorTooltip' class='control-label-notes mb-2 me-2'>$langTextColorTooltip:</label>
                         <input name='TextColorTooltip' type='text' class='form-control colorpicker' id='TextColorTooltip' value='$theme_options_styles[TextColorTooltip]'>
+                    </div>
+                </div>
+            </div>
+
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsAlerts'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSettingsAlertInfo</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgAlertInfo' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='bgAlertInfo' type='text' class='form-control colorpicker' id='bgAlertInfo' value='$theme_options_styles[bgAlertInfo]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clAlertInfo' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clAlertInfo' type='text' class='form-control colorpicker' id='clAlertInfo' value='$theme_options_styles[clAlertInfo]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-3'>$langSettingsAlertWarning</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgAlertWarning' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='bgAlertWarning' type='text' class='form-control colorpicker' id='bgAlertWarning' value='$theme_options_styles[bgAlertWarning]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clAlertWarning' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clAlertWarning' type='text' class='form-control colorpicker' id='clAlertWarning' value='$theme_options_styles[clAlertWarning]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-3'>$langSettingsAlertSuccess</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgAlertSuccess' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='bgAlertSuccess' type='text' class='form-control colorpicker' id='bgAlertSuccess' value='$theme_options_styles[bgAlertSuccess]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clAlertSuccess' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clAlertSuccess' type='text' class='form-control colorpicker' id='clAlertSuccess' value='$theme_options_styles[clAlertSuccess]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-3'>$langSettingsAlertDanger</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgAlertDanger' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='bgAlertDanger' type='text' class='form-control colorpicker' id='bgAlertDanger' value='$theme_options_styles[bgAlertDanger]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clAlertDanger' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clAlertDanger' type='text' class='form-control colorpicker' id='clAlertDanger' value='$theme_options_styles[clAlertDanger]'>
                     </div>
                 </div>
             </div>
