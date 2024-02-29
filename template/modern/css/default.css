@@ -3791,6 +3791,13 @@ body .delThemeBtn{
 
 .showCoursesBars, .showCoursesPics{
   color: #9BA9C1;
+  height:38px;
+  width:38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  text-decoration: none !important;
 }
 .showCoursesBars.active, .showCoursesPics.active{
   height:38px;
@@ -4592,6 +4599,7 @@ body .delThemeBtn{
   text-decoration: none;
   color: #2B3944;
   font-weight: 700;
+  color: #0073E6;
 }
 
 .quickLink:hover{

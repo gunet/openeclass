@@ -22,52 +22,52 @@
 <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-start gap-3 flex-wrap pb-4'>
 
     <a class='quickLink' href="search_user.php">
-        <i class="fa-solid fa-user Primary-500-cl settings-icon"></i>{{ trans('langSearchUser') }}
+        <i class="fa-solid fa-user settings-icon"></i>{{ trans('langSearchUser') }}
     </a>
 
     @if($is_admin or $is_departmentmanage_user or $is_power_user)
         <a  href="searchcours.php" class='quickLink'>
-            <i class="fa-solid fa-book-open Primary-500-cl settings-icon"></i>{{ trans('langSearchCourse') }}
+            <i class="fa-solid fa-book-open settings-icon"></i>{{ trans('langSearchCourse') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-book-open Primary-500-cl settings-icon"></i>{{ trans('langSearchCourse') }}
+            <i class="fa-solid fa-book-open settings-icon"></i>{{ trans('langSearchCourse') }}
         </a>
     @endif
 
     @if($is_admin)
         <a href="hierarchy.php" class='quickLink'>
-            <i class="fa-solid fa-sitemap Primary-500-cl settings-icon"></i>{{ trans('langHierarchy') }}
+            <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-sitemap Primary-500-cl settings-icon"></i>{{ trans('langHierarchy') }}
+            <i class="fa-solid fa-sitemap settings-icon"></i>{{ trans('langHierarchy') }}
         </a>
     @endif
 
     @if($is_admin)
         <a href="eclassconf.php" class='quickLink'>
-            <i class="fa-solid fa-gear Primary-500-cl settings-icon"></i>{{ trans('langConfig') }}
+            <i class="fa-solid fa-gear settings-icon"></i>{{ trans('langConfig') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-gear Primary-500-cl settings-icon"></i>{{ trans('langConfig') }}
+            <i class="fa-solid fa-gear settings-icon"></i>{{ trans('langConfig') }}
         </a>
     @endif
 
     @if($is_admin)
         <a href="theme_options.php" class='quickLink'>
-            <i class="fa-solid fa-display Primary-500-cl settings-icon"></i>{{ trans('langThemeSettings') }}
+            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-display Primary-500-cl settings-icon"></i>{{ trans('langThemeSettings') }}
+            <i class="fa-solid fa-display settings-icon"></i>{{ trans('langThemeSettings') }}
         </a>
     @endif
 
     @if($is_admin)
         <a href="extapp.php" class='quickLink'>
-            <i class="fa-solid fa-wrench Primary-500-cl settings-icon"></i>{{ trans('langExternalTools') }}
+            <i class="fa-solid fa-wrench settings-icon"></i>{{ trans('langExternalTools') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>

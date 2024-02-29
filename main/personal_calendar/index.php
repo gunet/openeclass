@@ -525,7 +525,11 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                     $tool_content .= "
                         <div class='col-12 calendar-events-container'>
-                            <div id='EditCalendarEvents' class='myCalendarEvents'></div>
+                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                <div class='card-body'>
+                                    <div id='EditCalendarEvents' class='myCalendarEvents'></div>
+                                </div>
+                            </div>
                         </div>";
 
 
@@ -935,7 +939,11 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 
                             <div class='col-12 calendar-events-container'>
-                                <div id='calendarEvents' class='myCalendarEvents'></div>
+                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                    <div class='card-body'>
+                                        <div id='calendarEvents' class='myCalendarEvents'></div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id='createEventModal' class='modal fade in' role='dialog'>

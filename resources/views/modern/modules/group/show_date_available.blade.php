@@ -70,44 +70,46 @@
                                     <div class='row row-cols-1 g-4'>
                                         @foreach($group_tutors as $tutor)
                                             <div class='col'>
-                                                <div class="card panelCard mb-3">
-                                                    <div class="row g-0">
-                                                        <div class="col-md-4">
-                                                            <div class="card-body text-center">
-                                                                @php $image_tutor = profile_image($tutor->user_id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
-                                                                {!! $image_tutor !!}
-                                                                <h4 class='mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</h4>
-                                                                <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
-                                                                @if(count($nextAvDate) > 0)
-                                                                    @foreach($nextAvDate as $d)
-                                                                        @foreach(array_keys($d) as $key)
-                                                                            @if($key == $tutor->user_id)
-                                                                                <h5 class='mt-2 mb-0 text-decoration-underline'>{{ trans('langNextAvailableDate')}}</h5>
-                                                                                <h5>{{ format_locale_date(strtotime($d[$key]['start']), 'short') }} </h5>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @endforeach
-                                                                @endif
+                                                <div class="card panelCard px-lg-4 py-lg-3 h-100 mb-3">
+                                                    <div class='card-body'>
+                                                        <div class='col-12'>
+                                                            <div class="row m-auto g-4">
+                                                                <div class="col-md-4">
+                                                                    <div class="text-center">
+                                                                        @php $image_tutor = profile_image($tutor->user_id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
+                                                                        {!! $image_tutor !!}
+                                                                        <h4 class='mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</h4>
+                                                                        <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
+                                                                        @if(count($nextAvDate) > 0)
+                                                                            @foreach($nextAvDate as $d)
+                                                                                @foreach(array_keys($d) as $key)
+                                                                                    @if($key == $tutor->user_id)
+                                                                                        <h5 class='mt-2 mb-0 text-decoration-underline'>{{ trans('langNextAvailableDate')}}</h5>
+                                                                                        <h5>{{ format_locale_date(strtotime($d[$key]['start']), 'short') }} </h5>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endforeach
+                                                                        @endif
 
-                                                                <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $tutor->user_id }}">
-                                                                    {{ trans('langAvailableTutorBookings')}}
-                                                                </a>
+                                                                        <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $tutor->user_id }}">
+                                                                            {{ trans('langAvailableTutorBookings')}}
+                                                                        </a>
 
-                                                                <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $tutor->user_id }}">
-                                                                    {{ trans('langAvailableHistoryBookings')}}
-                                                                </a>
-                                                                
-                                                                <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
-                                                                    {{ trans('langAddAvailability')}}
-                                                                </a>
+                                                                        <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $tutor->user_id }}">
+                                                                            {{ trans('langAvailableHistoryBookings')}}
+                                                                        </a>
+                                                                        
+                                                                        <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
+                                                                            {{ trans('langAddAvailability')}}
+                                                                        </a>
 
-                                                                
-                                                                
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <div class="card-body ">
-                                                                @include('modules.group.tutor_calendar',['editorId' => $tutor->user_id, 'CourseID' => $course_id])
+                                                                        
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    @include('modules.group.tutor_calendar',['editorId' => $tutor->user_id, 'CourseID' => $course_id])
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -119,44 +121,46 @@
                             @else
                                 <div class='row row-cols-1 g-4'>
                                     <div class='col'>
-                                        <div class="card panelCard mb-3">
-                                            <div class="row g-0">
-                                                <div class="col-md-4">
-                                                    <div class="card-body text-center">
-                                                        @php $image_tutor = profile_image($uid, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
-                                                        {!! $image_tutor !!}
-                                                        <h4 class='mt-2'>{{ $tutor_name }}&nbsp;{{ $surname_name }}</h4>
-                                                        <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
-                                                        @if(count($nextAvDate) > 0)
-                                                            @foreach($nextAvDate as $d)
-                                                                @foreach(array_keys($d) as $key)
-                                                                    @if($key == $uid)
-                                                                        <h5 class='mt-2 mb-0 text-decoration-underline'>{{ trans('langNextAvailableDate')}}</h5>
-                                                                        <h5>{{ format_locale_date(strtotime($d[$key]['start']), 'short') }} </h5>
-                                                                    @endif
-                                                                @endforeach
-                                                            @endforeach
-                                                        @endif
-                                                        
-                                                        <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $uid }}">
-                                                            {{ trans('langMyAvailableBookings')}}
-                                                        </a>
+                                        <div class="card panelCard px-lg-4 py-lg-3 mb-3">
+                                            <div class='card-body'>
+                                                <div class='col-12'>
+                                                    <div class="row m-auto g-4">
+                                                        <div class="col-md-4">
+                                                            <div class="text-center">
+                                                                @php $image_tutor = profile_image($uid, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
+                                                                {!! $image_tutor !!}
+                                                                <h4 class='mt-2'>{{ $tutor_name }}&nbsp;{{ $surname_name }}</h4>
+                                                                <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
+                                                                @if(count($nextAvDate) > 0)
+                                                                    @foreach($nextAvDate as $d)
+                                                                        @foreach(array_keys($d) as $key)
+                                                                            @if($key == $uid)
+                                                                                <h5 class='mt-2 mb-0 text-decoration-underline'>{{ trans('langNextAvailableDate')}}</h5>
+                                                                                <h5>{{ format_locale_date(strtotime($d[$key]['start']), 'short') }} </h5>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endforeach
+                                                                @endif
+                                                                
+                                                                <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $uid }}">
+                                                                    {{ trans('langMyAvailableBookings')}}
+                                                                </a>
 
-                                                        <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $uid }}">
-                                                            {{ trans('langAvailableHistoryBookings')}}
-                                                        </a>
+                                                                <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $uid }}">
+                                                                    {{ trans('langAvailableHistoryBookings')}}
+                                                                </a>
 
-                                                        <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
-                                                            {{ trans('langAddAvailability')}}
-                                                        </a>
+                                                                <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
+                                                                    {{ trans('langAddAvailability')}}
+                                                                </a>
 
-                                                        
-                                                        
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="card-body overflow-auto">
-                                                        @include('modules.group.tutor_calendar',['editorId' => $uid, 'CourseID' => $course_id])
+                                                                
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            @include('modules.group.tutor_calendar',['editorId' => $uid, 'CourseID' => $course_id])
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

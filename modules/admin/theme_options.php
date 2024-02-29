@@ -718,7 +718,9 @@ if (isset($_POST['optionsSave'])) {
     </div></div>";
 
 $tool_content .= "
-<div class='col-12 border-card p-3'>
+<div class='col-12'>
+<div class='card panelCard px-lg-4 py-lg-3 h-100'>
+<div class='card-body'>
 <div role='tabpanel mt-4'>
 
   <!-- Nav tabs -->
@@ -1868,6 +1870,8 @@ $tool_content .= "
             ". generate_csrf_token_form_field() ."
         </form>
     </div>
+</div>
+</div>
 </div>
 </div>
 

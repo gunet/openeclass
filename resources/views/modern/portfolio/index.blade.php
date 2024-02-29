@@ -36,7 +36,7 @@
                 }
             });
 
-            $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap'>" +
+            $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap gap-2'>" +
                 "<a class='btn showCoursesBars active'>" +
                 "<i class='fa-solid fa-table-list'></i>" +
                 "</a>" +
@@ -627,7 +627,7 @@
 
                                         <div id="cources-pics">
 
-                                            <div class="d-flex justify-content-end flex-wrap mb-4">
+                                            <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
                                                 <a class="btn showCoursesBars">
                                                     <i class="fa-solid fa-table-list"></i>
                                                 </a>

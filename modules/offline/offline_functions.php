@@ -1283,6 +1283,11 @@ function get_theme_options() {
                     padding-left: 15px;
                     padding-right: 15px;
                 }
+
+                .homepage-annnouncements-container .list-group-item.element{
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
             ";
         }else{
             $styles_str .= " 
@@ -3226,9 +3231,6 @@ function get_theme_options() {
                     border: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
                 #calendar_wrapper{
-                    border: 0px;
-                }
-                .myPersonalCalendar{
                     border: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
 

@@ -384,7 +384,11 @@ if ($is_editor) {
 
                     $tool_content .= "
                                 <div class='col-12 calendar-events-container'>
-                                    <div id='editAgendaEvents' class='myCalendarEvents'></div>
+                                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                        <div class='card-body'>
+                                            <div id='editAgendaEvents' class='myCalendarEvents'></div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div id='editAgendaEventModal' class='modal fade in' role='dialog'>
@@ -394,7 +398,7 @@ if ($is_editor) {
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
                                                     <h2 class='mb-0'>$langAddEvent</h2>
-                                                    <button type='button' class='border-0' data-bs-dismiss='modal' aria-label='Close'>
+                                                    <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
                                                         <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                                                     </button>
                                                 </div>
@@ -769,7 +773,11 @@ if ($is_editor) {
 
             $tool_content .= "
                 <div class='col-12 calendar-events-container'>
-                    <div id='AgendaEvents' class='myCalendarEvents'></div>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card-body'>
+                            <div id='AgendaEvents' class='myCalendarEvents'></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id='createAgendaEventModal' class='modal fade in' role='dialog'>
@@ -780,7 +788,7 @@ if ($is_editor) {
                                 <div class='modal-content'>
                                     <div class='modal-header border-0'>
                                         <h2 class='mb-0'>$langAddEvent</h2>
-                                        <button type='button' class='border-0' data-bs-dismiss='modal' aria-label='Close'>
+                                        <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
                                             <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                                         </button>
                                     </div>

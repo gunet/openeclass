@@ -1059,6 +1059,11 @@ function view($view_file, $view_data = array()) {
                     padding-left: 15px;
                     padding-right: 15px;
                 }
+
+                .homepage-annnouncements-container .list-group-item.element{
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
             ";
         }else{
             $styles_str .= " 
@@ -1489,6 +1494,10 @@ function view($view_file, $view_data = array()) {
                 .mce-btn{
                     background-color: $theme_options_styles[buttonBgColor] !important;
                 }
+
+                .personal-calendar-header .btn-group .btn.active{
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
             ";
 
             
@@ -1588,6 +1597,10 @@ function view($view_file, $view_data = array()) {
 
                 .mce-btn:hover,
                 .mce-btn:focus{
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
+                }
+
+                .personal-calendar-header .btn-group .btn.active:hover{
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
@@ -1707,6 +1720,9 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
                 
+                .personal-calendar-header .btn-group .btn.active{
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
             ";
         }
 
@@ -2896,6 +2912,7 @@ function view($view_file, $view_data = array()) {
 
                 #cal-slide-content {
                     background: $theme_options_styles[bgAgenda] !important;
+                    box-shadow: none !important;
                 }
 
 
@@ -3180,14 +3197,22 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .panel-admin-calendar,
                 .panel-admin-calendar>.panel-body-calendar {
-                    border: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                    border-bottom: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                    border-left: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                    border-right: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                }
+                .panel-body-calendar {
+                    margin-top: -0.7px;
+                }
+                .panel-admin-calendar .panel-heading{
+                    border-top: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                    border-left: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                    border-right: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
                 #calendar_wrapper{
-                    border: 0px;
-                }
-                .myPersonalCalendar{
                     border: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
+                
 
                 .fc-unthemed .fc-content, 
                 .fc-unthemed .fc-divider, 
@@ -3515,6 +3540,10 @@ function view($view_file, $view_data = array()) {
 
                 user-details-exec{
                     background-color: $theme_options_styles[BgTables];
+                }
+
+                .border-bottom-table-head{
+                    background-color: $theme_options_styles[BgTables] !important;
                 }
 
             ";
@@ -4319,8 +4348,7 @@ function view($view_file, $view_data = array()) {
 
 
                 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active,
-                .personal-calendar-header .btn-group .btn.active{
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
                     background:$theme_options_styles[linkColor] !important;
                 }
 

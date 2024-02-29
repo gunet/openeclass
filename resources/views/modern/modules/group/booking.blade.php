@@ -105,8 +105,12 @@
                         </div>
                     </div>
                     
-                    <div class="col-12 mt-3 overflow-auto bookings-content">
-                        <div id='calendarBooking' class='bookingCalendarByUser'></div>
+                    <div class="col-12 mt-3 bookings-content">
+                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                            <div class='card-body'>
+                                <div id='calendarBooking' class='bookingCalendarByUser'></div>
+                            </div>
+                        </div>
                     </div>
 
                     <input type="hidden" id="titleSimpleUser" value="{{ $booking_by_username }} {{ $booking_by_surname }}">
