@@ -74,7 +74,8 @@ foreach ($sql as $user_data) {
 $sheet->mergeCells("A1:G1");
 $sheet->getCell('A1')->getStyle()->getFont()->setBold(true)->setSize(13);
 for ($i = 1; $i <= 7; $i++) {
-    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    $cells = [$i, 3];
+    $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
 }
 
 // create spreadsheet

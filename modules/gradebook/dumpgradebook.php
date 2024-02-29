@@ -74,7 +74,8 @@ if ($t == 1) { // download gradebook activities results
 
     // format first row
     for ($i=1; $i<=6; $i++) {
-        $sheet->getCellByColumnAndRow($i, 1)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 1];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
 
     $header_style = [
@@ -145,10 +146,11 @@ if ($t == 1) { // download gradebook activities results
 
     // format first row
     for ($i=1; $i < $columns; $i++) {
-        $sheet->getCellByColumnAndRow($i, 1)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 1];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
     // format `total grade` column
-    $sheet->getCellByColumnAndRow($columns, 1)->getStyle()->getFont()->setBold(true)->getColor()->setARGB(Color::COLOR_RED);
+    $sheet->getCell($columns, 1)->getStyle()->getFont()->setBold(true)->getColor()->setARGB(Color::COLOR_RED);
 
 } elseif ($t == 3) { // download gradebook activity results
     $activity_id = $_GET['activity_id'];
@@ -182,12 +184,14 @@ if ($t == 1) { // download gradebook activities results
     ];
     // format first row
     for ($i=1; $i <= 6; $i++) {
-        $sheet->getCellByColumnAndRow($i, 1)->getStyle()->applyFromArray($header_style);
+        $cells = [$i, 1];
+        $sheet->getCell($cells)->getStyle()->applyFromArray($header_style);
     }
     $sheet->mergeCells("A1:F1");
     // format second row
     for ($i=1; $i <= 6; $i++) {
-        $sheet->getCellByColumnAndRow($i, 2)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 2];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
 }
 
