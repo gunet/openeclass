@@ -77,7 +77,7 @@ $(function() {
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
                'fnDrawCallback': function( oSettings ) {
-                    $('#users_table{$course_id}_wrapper label input').attr({
+                    $('#users_table{$course_id}_wrapper label input[type=search]').attr({
                       class : 'form-control input-sm ms-0 mb-3',
                       placeholder : '$langSearch...'
                     });

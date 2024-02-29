@@ -2081,7 +2081,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['ClActiveCheckboxes'])){
             $styles_str .= "
-                .label-container:has(input[type='checkbox']:checked){
+                .label-container:has(input[type='checkbox']:checked),
+                .label-container:has(input[type='checkbox']:checked) .fa{
                     color: $theme_options_styles[ClActiveCheckboxes];
                 }
             ";
@@ -3551,26 +3552,6 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////// BORDER BOTTOM COLOR TO TABLE'S THEAD /////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        if(!empty($theme_options_styles['BgBorderBottomHeadTables'])){
-            $styles_str .= "
-                thead, 
-                tbody .list-header,
-                .border-bottom-table-head {
-                    border-bottom: solid 2px $theme_options_styles[BgBorderBottomHeadTables];
-                }
-                table.dataTable thead th, 
-                table.dataTable thead td {
-                    border-bottom: 1px solid $theme_options_styles[BgBorderBottomHeadTables] !important;
-                }
-            ";
-        }
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////// BORDER BOTTOM COLOR TO TABLE'S ROWS /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -3591,6 +3572,29 @@ function view($view_file, $view_data = array()) {
                 }
                 table.dataTable tfoot th, table.dataTable tfoot td {
                     border-top: 1px solid  $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BORDER BOTTOM COLOR TO TABLE'S THEAD /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgBorderBottomHeadTables'])){
+            $styles_str .= "
+                thead, 
+                tbody .list-header,
+                tbody tr.header-pollAnswers,
+                .border-bottom-table-head,
+                thead tr.list-header td,
+                tbody tr.list-header td {
+                    border-bottom: solid 2px $theme_options_styles[BgBorderBottomHeadTables] !important;
+                }
+                table.dataTable thead th, 
+                table.dataTable thead td {
+                    border-bottom: 1px solid $theme_options_styles[BgBorderBottomHeadTables] !important;
                 }
             ";
         }

@@ -194,8 +194,13 @@ function register_user_presences($attendance_id, $actID) {
                 <td>" . display_user($userID) . "</td>
                 <td>" . q($resultUser->am) . "</td>
                 <td>$reg_date</td>
-                <td><label class='label-container' style='width:24px; height:24px;'><input type='checkbox' value='1' name='attend[$userID]' $checked><span class='checkmark'></span></label>
-                <input type='hidden' name='updateUser[$userID]' value='1'></td>
+                <td>
+                    <label class='label-container'>
+                        <input type='checkbox' value='1' name='attend[$userID]' $checked>
+                        <span class='checkmark'></span>
+                    </label>
+                    <input type='hidden' name='updateUser[$userID]' value='1'>
+                </td>
               </tr>";
         }
         $tool_content .= "</tbody></table>";

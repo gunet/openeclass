@@ -552,25 +552,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <span>$langQuickSurvey</span>
                       </label>
                     </div>                                        
-                    <div class='radio mb-2'>
+                    <div class='radio mb-2 d-flex justify-content-start align-items-center gap-2'>
                       <label>
-                        <input class='input-Questionnaire' type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
-                        <label for='colles_type'>
-                            <span class='fa fa-info-circle fa-ls fa-fw  ' data-bs-toggle='tooltip' data-bs-placement='top' title='$colles_desc'></span>
-                            $langCollesSurvey
-                        </label>
-
+                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
+                        <span>$langCollesSurvey</span>
                       </label>
+                      <span class='fa-solid fa-circle-info' data-bs-toggle='tooltip' data-bs-placement='top' title='$colles_desc' style='margin-bottom: 10px;'></span>
                     </div>
                     
-                    <div class='radio'>
+                    <div class='radio d-flex justify-content-start align-items-center gap-2'>
                      <label>
-                     <input class='input-Questionnaire' type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
-                     <label for='attls_type'>   
-                        $langATTLSSurvey
-                        <span class='fa fa-info-circle fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$rate_scale'></span>
-                    </label>
-                  </label>";
+                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
+                        <span>$langATTLSSurvey</span>
+                    </label><span class='fa-solid fa-circle-info' data-bs-toggle='tooltip' data-bs-placement='top' title='$rate_scale' style='margin-bottom: 10px;'></span>";
 
                 $limesurveyapp = ExtAppManager::getApp(strtolower(LimesurveyApp::NAME));
                 if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
@@ -859,11 +853,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>$langQuestion&nbsp;"
-                    . icon('fa-edit Warning-200-cl', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
+                    . icon('fa-edit fa-lg', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
                 "</h3>
             </div>
             <div class='card-body'>
-                  <h6>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h6>
+                  <p>$question->question_text<br><small class='TextBold'><em>".$aType[$question->qtype - 1]."</em></small></p>
             </div>
         </div>
     </div>";
@@ -881,8 +875,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='form-group'>
 
 
-                            <div class='col-9 control-label-notes d-inline-flex'>
-                               <span class='mt-1 me-1'>$langPollAddAnswer: </span><input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
+                            <div class='col-9 d-inline-flex'>
+                               <span class='control-label-notes mt-2 me-1'>$langPollAddAnswer: </span><input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
                             </div>
 
                     </div><hr><br>";
@@ -1123,7 +1117,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='col-12'>
             <table class='table-default'>
                         <tbody id='pollAnswers'>
-                            <tr class='list-header'>
+                            <tr class='list-header header-pollAnswers'>
                               <th colspan='2'>$langQuesList</th>
                               <th class='text-end'>".icon('fa-gears', $langCommands)."</th>
                             </tr>";

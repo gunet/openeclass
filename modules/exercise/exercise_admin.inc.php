@@ -530,7 +530,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <div class='table-responsive mt-0'>
                             <table id='assignees_tbl' class='table-default".(in_array($exerciseAssignToSpecific, [1, 2]) ? '' : ' hide')."'>
                                 <thead>
-                                    <tr class='title1'>
+                                    <tr class='title1 list-header'>
                                         <td class='form-label' id='assignees'>$langStudents</td>
                                         <td class='form-label text-center'>$langMove</td>
                                         <td class='form-label'>$m[WorkAssignTo]</td>

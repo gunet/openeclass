@@ -255,16 +255,18 @@ function printPollForm() {
                 $tool_content .= "
                
                 <div class='$columnPanel'>
-                    <div class='panel panel-success h-100 poll-panel'>
-                        <div class='panel-heading'>
-                            $langQuestion $i
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100 poll-panel'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                            <h3>$langQuestion $i</h3>
                         </div>
-                        <div class='panel-body'>
+                        <div class='card-body'>
                             <p class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
                     $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+                    $class_type_attr = ($qtype == QTYPE_SINGLE)? "radio-label": "label-container";
+                    $checkMark_class = ($qtype == QTYPE_SINGLE)? "": "<span class='checkmark'></span>";
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                 WHERE pqid = ?d ORDER BY pqaid", $pqid);
                     if ($qtype == QTYPE_MULTIPLE) $tool_content .= "<input type='hidden' name='answer[$pqid]' value='-1'>";
@@ -273,9 +275,9 @@ function printPollForm() {
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
-                                    <label class='label-container'>
+                                    <label class='$class_type_attr'>
                                         <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>
-                                        <span class='checkmark'></span>
+                                        $checkMark_class
                                         ".q_math($theAnswer->answer_text)."
                                        
                                     </label>
@@ -288,9 +290,9 @@ function printPollForm() {
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
-                                    <label class='label-container'>
+                                    <label class='$class_type_attr'>
                                         <input type='$type_attr' name='answer[$pqid]' value='-1' checked>
-                                        <span class='checkmark'></span>
+                                        $checkMark_class
                                         $langPollUnknown
                                         
                                     </label>

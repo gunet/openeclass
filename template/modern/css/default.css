@@ -1474,15 +1474,15 @@ b a {
 /**********************************************************************************************************************/
 
 .radio label{ 
-  display:inline-flex; justify-content: center; align-items:center ; 
+  display:inline-flex; justify-content: center; align-items:start ; 
   color:#2B3944; font-size: 14px; 
   font-weight: 400; font-style: normal;
   position: relative;
   transition: 0.5s;
-  line-height: 16px;
-  letter-spacing: 0px;
+  /* line-height: 16px;
+  letter-spacing: 0px; */
   cursor: pointer;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 } 
 
 /***** Icons inside radios *****/
@@ -1495,7 +1495,7 @@ b a {
 }
 .radio:has(.input-StatusCourse) .fa::before{
   display: block;
-  padding-top: 3px;
+  padding-top: 16px;
 }
 /******************************/
 
@@ -1559,8 +1559,8 @@ input[type="radio"]:disabled{
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
   font-weight: 400; font-style: normal;
-  line-height: 16px;
-  letter-spacing: 0px;
+  /* line-height: 16px;
+  letter-spacing: 0px; */
   color:#2B3944;
 }
 
@@ -3260,7 +3260,9 @@ tbody tr{
 }
 
 tbody tr td,
-thead tr th{
+thead tr th,
+thead tr.list-header td,
+tbody tr.list-header td{
   padding: 10px 10px 10px 10px;
 }
 
@@ -4156,7 +4158,7 @@ body .delThemeBtn{
 /*************************************************** QUESTIONAIRE *****************************************************/
 /**********************************************************************************************************************/
 
-.radio label:has(.input-Questionnaire) .fa {
+/* .radio label:has(.input-Questionnaire) .fa {
   font-size: 14px;
   position: absolute;
   top: 60%;
@@ -4171,7 +4173,7 @@ body .delThemeBtn{
 }
 .radio:has(.input-Questionnaire:checked) .fa{
   color: #ffffff;
-}
+} */
 
 /**********************************************************************************************************************/
 /*************************************************** WALL *************************************************************/
