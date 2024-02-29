@@ -61,13 +61,15 @@ $header_style = [
 
 for ($j = 4; $j <= count($activities)*(count($entries)+1)+3; $j=$j+count($entries)+2) {
     $sheet->mergeCells("A$j:F$j");
-    $sheet->getCellByColumnAndRow(1, $j)->getStyle()->applyFromArray($header_style);
+    $cells = [1, $j];
+    $sheet->getCell($cells)->getStyle()->applyFromArray($header_style);
 }
 
 $sheet->mergeCells("A1:F1");
 $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
 for ($i = 1; $i <= 6; $i++) {
-    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    $cells = [$i, 3];
+    $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
 }
 // create spreadsheet
 $sheet->fromArray($data, NULL);

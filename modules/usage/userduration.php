@@ -222,7 +222,8 @@ if (isset($_GET['u'])) { //  stats per user
 
         $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
         for ($i=1; $i<=4; $i++) {
-            $sheet->getCellByColumnAndRow($i, 2)->getStyle()->getFont()->setBold(true);
+            $cells = [$i, 2];
+            $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
         }
 
         // create spreadsheet
@@ -304,7 +305,8 @@ if (isset($_GET['u'])) { //  stats per user
         $data[] = [ $langSurname, $langName, $langAm, $langGroup, $langDuration ];
 
         for ($i=1; $i<=5; $i++) { // format first row
-            $sheet->getCellByColumnAndRow($i, 1)->getStyle()->getFont()->setBold(true);
+            $cells = [$i, 1];
+            $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
         }
 
     } else {

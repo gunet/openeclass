@@ -137,7 +137,8 @@ if ($full) { // user questions results
     $sheet->mergeCells("A1:F1");
     $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
     for ($i = 1; $i <= 6; $i++) {
-        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 3];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
 
 } else { // percentage results
@@ -195,7 +196,8 @@ if ($full) { // user questions results
     $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
     for ($j = 3; $j <= count($data); $j = $j+6) {
         for ($i = 1; $i <= 3; $i++) {
-            $sheet->getCellByColumnAndRow($i, $j)->getStyle()->getFont()->setBold(true);
+            $cells = [$i, $j];
+            $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
         }
     }
 }

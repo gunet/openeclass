@@ -192,7 +192,8 @@ $sheet->mergeCells("A1:G1");
 $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
 $sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
 for ($i = 1; $i <= 5; $i++) {
-    $sheet->getCellByColumnAndRow($i, 4)->getStyle()->getFont()->setBold(true);
+    $cells = [$i, 4];
+    $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
 }
 // create spreadsheet
 $sheet->fromArray($out, NULL);

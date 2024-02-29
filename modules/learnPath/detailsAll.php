@@ -182,7 +182,8 @@ if (isset($_GET['xls'])) {
     $sheet->mergeCells("A1:F1");
     $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
     for ($i = 1; $i <= 6; $i++) {
-        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 3];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
 // create spreadsheet
     $sheet->fromArray($data, NULL);

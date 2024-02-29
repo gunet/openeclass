@@ -330,7 +330,8 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
     $filename = $course_code . "_tc_report.xlsx";
     $sheet->mergeCells("A1:B1");
     for ($i=1; $i<=4; $i++) {
-        $sheet->getCellByColumnAndRow($i, 4)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 4];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
     // create spreadsheet
     $sheet->fromArray($data, NULL);

@@ -1739,7 +1739,8 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                 continue;
             } else {
                 for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
-                    $value = trim($sheet->getCellByColumnAndRow($col, $row)->getValue());
+                    $cells = [$col, $row];
+                    $value = trim($sheet->getCell($cells)->getValue());
                     $data[] = $value;
                 }
                 if (!is_numeric($data[1]) or $data[1] < 0 or $data[1] > $gradebook_range) {

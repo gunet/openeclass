@@ -646,7 +646,8 @@ function export_grades_to_csv($id) {
     $sheet->mergeCells("A1:H1");
     $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
     for ($i = 1; $i <= 8; $i++) {
-        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+        $cells = [$i, 3];
+        $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
     // create spreadsheet
     $sheet->fromArray($data, NULL);
