@@ -55,6 +55,80 @@ $helpTopic = 'documents';
 
 doc_init();
 
+
+if ($is_editor && isset($_POST['bulk_submit'])) {
+
+    if ($_POST['selectedcbids']) {
+
+        $cbids = explode(',', $_POST['selectedcbids']);
+
+        if ($_POST['bulk_action'] == 'delete') {
+            $filepaths = explode(',', $_POST['filepaths']);
+            foreach (array_combine($cbids, $filepaths) as $row_id => $filePath) {
+
+                $curDirPath = my_dirname($filePath);
+                // Check if file actually exists
+                $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename, lock_user_id FROM document
+                                        WHERE $group_sql AND path = ?s", $filePath);
+                $delete_ok = true;
+                if ($r) {
+                    if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
+                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                    } else {
+                        // remove from index if relevant (except non-main sysbsystems and metadata)
+                        Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
+                                                AND format <> '.meta' AND path LIKE ?s",
+                            function ($r2) {
+                                Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                                if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
+                                    Session::Messages($langResourceBelongsToCert, "alert-warning");
+                                }
+                            },
+                            $filePath . '%');
+
+                        if (empty($r->extra_path)) {
+                            if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
+                                if (hasMetaData($filePath, $basedir, $group_sql)) {
+                                    $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
+                                }
+                                update_db_info('document', 'delete', $filePath, $r->filename);
+                            }
+                        } else {
+                            update_db_info('document', 'delete', $filePath, $r->filename);
+                        }
+                        if(isset($_GET['ebook_id'])){
+                            Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
+                        }
+                        if ($delete_ok) {
+                            Session::Messages($langDocDeleted, 'alert-success');
+                        } else {
+                            Session::Messages($langGeneralError, 'alert-danger');
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        if ($_POST['bulk_action'] == 'visible') {
+            foreach ($cbids as $row_id) {
+                Database::get()->query("UPDATE document SET visible = ?d WHERE $group_sql AND id = ?d", 1, $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+            }
+        }
+        if ($_POST['bulk_action'] == 'invisible') {
+            foreach ($cbids as $row_id) {
+                Database::get()->query("UPDATE document SET visible = ?d WHERE $group_sql AND id = ?d", 0, $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+            }
+        }
+
+    }
+
+}
+
+
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     /* save video recorded data */
     if (isset($_FILES['video-blob'])) {
@@ -1337,6 +1411,7 @@ $result = Database::get()->queryArray("SELECT id, path, filename,
     "$curDirPath/%", "$curDirPath/%/%");
 $fileinfo = array();
 foreach ($result as $row) {
+    $id = $row->id;
     $is_dir = $row->format == '.dir';
     if ($real_path = common_doc_path($row->extra_path, true)) {
         // common docs
@@ -1370,6 +1445,7 @@ foreach ($result as $row) {
         $updated = false;
     }
     $fileinfo[] = array(
+        'id' => $id,
         'is_dir' => $is_dir,
         'size' => $size,
         'title' => $row->title,
@@ -1450,6 +1526,11 @@ if ($can_upload or $user_upload) {
             array('title' => $langQuotaBar,
                   'url' => "{$base_url}showQuota=true",
                   'icon' => 'fa-pie-chart'),
+            array('title' => $langBulkProcessing,
+                'url' => '',
+                'icon' => 'fa-folder',
+                'class' => 'bulk-processing',
+                'show' => $is_editor),
             array('title' => $langBack,
                   'url' => "group_space.php?course=$course_code&group_id=$group_id",
                   'icon' => 'fa-reply',
@@ -1510,12 +1591,38 @@ if ($doc_count == 0) {
     $tool_content .= "</div>
             </div>
         </div>
-    </div>
-    <div class='row'>
+    </div>";
+    if ($is_editor) {
+        $tool_content .= "
+                        <div class='row bulk-processing-box hide'>
+                            <div class='col-md-12'>
+                                <div class='panel'>
+                                    <div class='panel-body'>
+                                        <strong>
+                                            <i class='fa fa-folder'></i>
+                                            $langBulkProcessing
+                                        </strong>
+                                        <form method='post' action='' style='display: flex;gap: 5px;margin: 10px 0 0'>
+                                            <select class='form-control' name='bulk_action' class='px-3' style='max-width:250px;'>
+                                                <option value='delete'>$langDelete</option>
+                                                <option value='visible'>$langNewBBBSessionStatus: $langVisible</option>
+                                                <option value='invisible'>$langNewBBBSessionStatus: $langInvisible</option>
+                                            </select>
+                                            <input type='submit' class='btn btn-default' name='bulk_submit' value='$langSubmit'>
+                                            <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
+                                            <input type='hidden' id='filepaths' name='filepaths' value=''>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+    }
+    $tool_content .= "<div class='row'>
         <div class='col-md-12'>
-                <div class='table-responsive'>
+                <div class='table-responsive qq'>
                 <table class='table-default'>
                     <tr class='list-header'>" .
+                     "<th class='checkbox_th hide'></th>" .
                      "<th class='text-left' width='60'>" . headlink($langType, 'type') . '</th>' .
                      "<th class='text-left'>" . headlink($langFileName, 'name') . '</th>' .
                      "<th class='text-left'>$langSize</th>" .
@@ -1534,6 +1641,7 @@ if ($doc_count == 0) {
     // -------------------------------------
     foreach (array(true, false) as $is_dir) {
         foreach ($fileinfo as $entry) {
+
             $link_title_extra = '';
             if (($entry['is_dir'] != $is_dir) or ( !$can_upload and ( !resource_access($entry['visible'], $entry['public'])))) {
                 continue;
@@ -1619,18 +1727,21 @@ if ($doc_count == 0) {
                 $link_title_extra .= '&nbsp;' . icon('fa-lock', $langNonPublicFile);
             }
 
+            $tool_content .= "<tr $style>";
+            $tool_content .= "<td class='text-center checkbox_td hide'><input type='checkbox' filepath='".$cmdDirName."' cbid='".$entry['id']."' value='".$entry['id']."'></td>";
+
             // open jm in mindmap module
             if ($entry['format'] == "jm"){
 
                 $jmpath = preg_replace('|^/[^/]+/|', '', explode('file.php', $file_url)[1]);
                 $jmname = q($entry['title']);
                 $edit_url = $urlAppend . "modules/mindmap/index.php?course=$course_code&amp;jmpath=" . urlencode($jmpath);
-                $tool_content .= "<tr $style><td class='text-center'>.jm</td>
+                $tool_content .= "<td class='text-center'>.jm</td>
                               <td><a href='$edit_url'>$jmname $link_title_extra</a>";
 
             } else {
 
-                $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
+                $tool_content .= "<td class='text-center'>$img_href</td>
                               <td><input type='hidden' value='$download_url'>$link_href $link_title_extra";
 
             }
@@ -1715,6 +1826,50 @@ if ($doc_count == 0) {
     load_js('screenfull/screenfull.min.js');
     $head_content .= "<script>
     $(function(){
+        
+        let checkboxStates = [];
+        
+        $(document).ready(function() {
+            
+            $('.table-default').on('change', 'input[type=checkbox]', function() {
+                let cbid = $(this).attr('cbid');
+                let filepath = $(this).attr('filepath');
+                checkboxStates[cbid] = this.checked;
+
+                let selectedCbidValues = $('#selectedcbids').val().split(',');
+                let filepaths = $('#filepaths').val().split(',');
+                
+                let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+                let filepathIndex = filepaths.indexOf(filepath);
+                
+                if (this.checked && cbidIndex === -1) {
+                    selectedCbidValues.push(cbid);
+                    filepaths.push(filepath);
+                    
+                } else if (!this.checked && cbidIndex !== -1) {
+                    selectedCbidValues.splice(cbidIndex, 1);
+                    filepaths.splice(filepathIndex, 1);
+                }
+                $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+                $('#filepaths').val(filepaths.filter(Boolean).join(','));
+                
+            });
+            
+            $('li.bulk-processing a').on('click', function(event) {
+                event.preventDefault();
+                $('.bulk-processing-box').toggleClass('hide');
+                $('.checkbox_th').toggleClass('hide');
+                $('.checkbox_td').toggleClass('hide');
+                if ($(this).find('span.fa.fa-check').length) {
+                    $(this).find('span.fa.fa-check').remove();
+                } else {
+                    $(this).append('<span class=\'fa fa-check text-success\' style=\'margin-left: 5px;\'></span>');
+                }
+            });
+            
+        });
+        
+        
         $('.fileModal').click(function (e)
         {
             e.preventDefault();
