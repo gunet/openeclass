@@ -1978,6 +1978,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[BgClRadios];
                 }
                 
+                .radio label:has(input[type='radio']:checked),
                 .radio:has(input[type='radio']:checked) .help-block{
                     color: $theme_options_styles[BgClRadios];
                 }
