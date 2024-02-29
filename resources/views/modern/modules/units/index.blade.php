@@ -155,7 +155,7 @@
                     @endif
 
 
-                  
+
                     @if(count($units) > 0)
                         <div class='col-12'>
                             <div class="card panelCard card-units px-lg-4 py-lg-3 p-3">
@@ -391,7 +391,13 @@
                                                             'url' => $base_url . 'progress&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
                                                             'icon' => 'fa-solid fa-arrow-trend-up',
                                                             'level' => 'secondary',
-                                                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS, $course_code, $id, $in_home->activity_id))
+                                                            'show' => !is_module_disable_FC(MODULE_ID_PROGRESS, $course_code, $id, $in_home->activity_id)),
+
+                                                        array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
+                                                           'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
+                                                           'icon' => 'fa fa-tablet',
+                                                           'level' => 'secondary',
+                                                           'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_home->activity_id))
 
                                                         ),'',true)
                                                     !!}
@@ -542,7 +548,13 @@
                                                                 'url' => $base_url . 'progress&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
                                                                 'icon' => 'fa-solid fa-arrow-trend-up',
                                                                 'level' => 'secondary',
-                                                                'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id))
+                                                                'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id)),
+
+                                                            array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
+                                                               'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
+                                                               'icon' => 'fa fa-tablet',
+                                                               'level' => 'secondary',
+                                                               'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_home->activity_id))
 
                                                         ),'',true) !!}
                                                     </td>
@@ -694,7 +706,13 @@
                                                         'url' => $base_url . 'progress&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
                                                         'icon' => 'fa-solid fa-arrow-trend-up',
                                                         'level' => 'secondary',
-                                                        'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id))
+                                                        'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id)),
+
+                                                    array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
+                                                           'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
+                                                           'icon' => 'fa fa-tablet',
+                                                           'level' => 'secondary',
+                                                           'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_home->activity_id))
 
                                                 ),'',true) !!}</td><td class='text-center'>
 
