@@ -507,6 +507,7 @@ if ($nbrQuestions) {
             $ewq_id = $q->id;
             $limit++;
         }
+        $questionWeight = $objQuestionTmp->selectWeighting();
         $aType = $objQuestionTmp->selectType();
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
@@ -521,24 +522,48 @@ if ($nbrQuestions) {
                 next($id);
                 $number = key($id);
                 $difficulty = $id[$number];
-                $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "'</em>";
+                $available_questions = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `exercise_question` WHERE course_id = ?d AND difficulty = ?d", $course_id, $difficulty)->cnt;
+                $color = ($available_questions <= $number)? "red" : "";
+                $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) . "'
+                    (<span style='color: $color;'>$langFrom2 $available_questions $langAvailable<span>)</em>";
             } else if ($id['criteria'] == 'category') {
                 next($id);
                 $number = key($id);
                 $category = $id[$number];
-                $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomCategoryQuestions '" . $objQuestionTmp->selectCategoryName($category) . "'</em>";
+                $available_questions = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `exercise_question` WHERE course_id = ?d AND category = ?d", $course_id, $category)->cnt;
+                $color = ($available_questions <= $number)? "red" : "";
+                $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span><em>$number $langFromRandomCategoryQuestions '" . $objQuestionTmp->selectCategoryName($category) . "'
+                        (<span style='color: $color;'>$langFrom2 $available_questions $langAvailable</span>)</em>";
             } else if ($id['criteria'] == 'difficultycategory') {
                 next($id);
                 $number = key($id);
                 $difficulty = $id[$number][0];
                 $category = $id[$number][1];
+                $available_questions = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `exercise_question` WHERE course_id = ?d AND difficulty = ?d AND category = ?d", $course_id, $difficulty, $category)->cnt;
+                $color = ($available_questions <= $number)? "red" : "";
                 $legend = "<span class='fa fa-random' style='margin-right:10px; color: grey'></span>
-                    <em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) ."' $langFrom2 '" . $objQuestionTmp->selectCategoryName($category) . "'</em>";
+                    <em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) ."' $langFrom2 '" . $objQuestionTmp->selectCategoryName($category) . "'
+                    (<span style='color: $color;'>$langFrom2 $available_questions $langAvailable</span>)</em>";
             }
         } else {
+            // check if question has weight
+            if (!$questionWeight) {
+                $question_excl_legend = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
+                    data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionWeight' data-original-title='' title=''></span>";
+            } else {
+                $question_excl_legend = '';
+            }
+            // check if question has answers
+            if ($aType != FREE_TEXT and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
+                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
+                        data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionAnswers' data-original-title='' title=''></span>";
+            } else {
+                $question_excl_legend_2 = '';
+            }
+
             $legend = "<a class='previewQuestion' data-qid='$id' data-nbr='" .
                 $objQuestionTmp->selectNbrExercises() . "' data-editurl='$editUrl' data-deleteurl='$deleteUrl' href='#'>" .
-                q_math($objQuestionTmp->selectTitle()) . "</a><br><small>" .
+                q_math($objQuestionTmp->selectTitle()) . "</a>$question_excl_legend $question_excl_legend_2<br><small>" .
                 $objQuestionTmp->selectTypeLegend($aType) .
                 "&nbsp;$question_difficulty_legend $question_category_legend</small>";
         }

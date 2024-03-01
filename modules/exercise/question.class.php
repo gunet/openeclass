@@ -698,6 +698,18 @@ if (!class_exists('Question')) {
         }
 
 
+        function hasAnswers() {
+            $question_id = $this->id;
+
+            $q = Database::get()->querySingle("SELECT * from exercise_answer WHERE question_id = ?d", $question_id);
+            if ($q) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        }
+
+
         /**
          * Split answer string from weighting string for fill-in-blanks answers
          */
