@@ -29,8 +29,8 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
-                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar', 'AboutCourseInfoContainer' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip'),
-                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor', 'clHoveredDeleteButtonColor'),
+                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage'),
@@ -62,6 +62,8 @@ $defaults = array(
                 "rgba(161, 219, 184, 1)" => array('bgAlertSuccess'),
                 "rgba(12, 98, 46, 1)" => array('clAlertSuccess'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
+                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor'),
+                "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -1420,6 +1422,28 @@ $tool_content .= "
                         <label for='whiteButtonHoveredBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
                         <input name='whiteButtonHoveredBgColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredBgColor' value='$theme_options_styles[whiteButtonHoveredBgColor]'>
                     </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorDel</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langbgDeleteButtonColor:</label>
+                        <input name='bgDeleteButtonColor' type='text' class='form-control colorpicker' id='bgDeleteButtonColor' value='$theme_options_styles[bgDeleteButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langclDeleteButtonColor:</label>
+                        <input name='clDeleteButtonColor' type='text' class='form-control colorpicker' id='clDeleteButtonColor' value='$theme_options_styles[clDeleteButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgHoveredDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langbgHoveredDeleteButtonColor:</label>
+                        <input name='bgHoveredDeleteButtonColor' type='text' class='form-control colorpicker' id='bgHoveredDeleteButtonColor' value='$theme_options_styles[bgHoveredDeleteButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredDeleteButtonColor:</label>
+                        <input name='clHoveredDeleteButtonColor' type='text' class='form-control colorpicker' id='clHoveredDeleteButtonColor' value='$theme_options_styles[clHoveredDeleteButtonColor]'>
+                    </div>
+
+
                 </div>
             </div>
 

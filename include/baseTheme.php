@@ -1726,6 +1726,115 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// BACKGROUND COLOR TO THE DELETION BUTTON //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgDeleteButtonColor'])) {
+            $styles_str .= "
+                .deleteAdminBtn, 
+                button[type=submit].deleteAdminBtn,
+                input[type=submit].deleteAdminBtn {
+                    border-color: $theme_options_styles[bgDeleteButtonColor];
+                    background-color: $theme_options_styles[bgDeleteButtonColor];
+                }
+
+                .btn.btn-danger,
+                .delete.confirmAction, 
+                .delete.delete_btn{
+                    border-color: $theme_options_styles[bgDeleteButtonColor];
+                    background-color: $theme_options_styles[bgDeleteButtonColor];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// TEXT COLOR TO THE DELETION BUTTON /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clDeleteButtonColor'])) {
+            $styles_str .= "
+                .deleteAdminBtn, 
+                button[type=submit].deleteAdminBtn,
+                input[type=submit].deleteAdminBtn {
+                    color: $theme_options_styles[clDeleteButtonColor];
+                }
+
+                .btn.btn-danger,
+                .delete.confirmAction, 
+                .delete.delete_btn{
+                    color: $theme_options_styles[clDeleteButtonColor];
+                }
+
+                .deleteAdminBtn .fa-solid::before, 
+                .deleteAdminBtn .fa-regular::before, 
+                .deleteAdminBtn .fa-brands::before, 
+                .deleteAdminBtn .fa::before{
+                    color: $theme_options_styles[clDeleteButtonColor] !important;
+                }
+                  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////// BACKGROUND HOVERED COLOR TO THE DELETION BUTTON ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgHoveredDeleteButtonColor'])) {
+            $styles_str .= "
+                .deleteAdminBtn:hover,
+                button[type=submit].deleteAdminBtn:hover,
+                input[type=submit].deleteAdminBtn:hover {
+                    border-color: $theme_options_styles[bgHoveredDeleteButtonColor];
+                    background-color: $theme_options_styles[bgHoveredDeleteButtonColor];
+                }
+
+                .btn.btn-danger:hover,
+                .delete.confirmAction:hover, 
+                .delete.delete_btn:hover{
+                    border-color: $theme_options_styles[bgHoveredDeleteButtonColor];
+                    background-color: $theme_options_styles[bgHoveredDeleteButtonColor];
+                }
+                  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////// TEXT HOVERED COLOR TO THE DELETION BUTTON //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clHoveredDeleteButtonColor'])) {
+            $styles_str .= "
+                .deleteAdminBtn:hover,
+                button[type=submit].deleteAdminBtn:hover,
+                input[type=submit].deleteAdminBtn:hover {
+                    color: $theme_options_styles[clHoveredDeleteButtonColor];
+                }
+
+                .btn.btn-danger:hover,
+                .delete.confirmAction:hover, 
+                .delete.delete_btn:hover{
+                    color: $theme_options_styles[clHoveredDeleteButtonColor];
+                }
+
+                .deleteAdminBtn:hover .fa-solid::before, 
+                .deleteAdminBtn:hover .fa-regular::before, 
+                .deleteAdminBtn:hover .fa-brands::before, 
+                .deleteAdminBtn:hover .fa::before{
+                    color: $theme_options_styles[clHoveredDeleteButtonColor] !important;
+                }
+                  
+            ";
+        }
+
         // Override button with white background if needed
         if (empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
