@@ -1938,6 +1938,7 @@ $langFromRandomDifficultyQuestions = "ερωτήσεις με βαθμό δυσ�
 $langFromRandomCategoryQuestions = "ερωτήσεις από την κατηγορία";
 $langRandomQuestionsWithCriteria = "Δυναμική επιλογή ερωτήσεων";
 $langSelectRandomCriteria = "Επιλέξτε κριτήρια τυχαιοποίησης";
+$langAvailable = "διαθέσιμες";
 $langPurgeExercises = "Εκκαθάριση αποτελεσμάτων";
 $langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
 $langConfirmModifyAttemptTitle = "Επιβεβαίωση αλλαγής κατάστασης";
@@ -2114,7 +2115,7 @@ $langDefineOptions = "Καθορίστε τις επιλογές";
 $langMakeCorrespond = "Κάντε την αντιστοιχία";
 $langFillLists = "Συμπληρώστε τις δύο λίστες που ακολουθούν";
 $langGiveText = "Πληκτρολογήστε το κείμενο";
-$langDefineBlanks = "Ορίστε τουλάχιστον ένα κενό με αγκύλες [...]";
+$langDefineBlanks = "Πληκτρολογήστε τουλάχιστον ένα κενό με αγκύλες [...]";
 $langGiveAnswers = "Δώστε τις απαντήσεις στις ερωτήσεις";
 $langChooseGoodAnswer = "Διαλέξτε την σωστή απάντηση";
 $langChooseGoodAnswers = "Διαλέξτε μία ή περισσότερες σωστές απαντήσεις";
@@ -2140,6 +2141,8 @@ $langGoBackToEx = "Επιστροφή στην άσκηση";
 $langReuse = "Επαναχρησιμοποίηση";
 $langUsed = "Χρησιμοποιούμενης";
 $langQuestionReused = "Η ερώτηση προστέθηκε στην άσκηση";
+$langNoQuestionWeight = "Η ερώτηση δεν έχει βαθμό";
+$langNoQuestionAnswers = "Η ερώτηση δεν έχει απαντήσεις";
 
 // exercise_result.php
 $langElementList = "Το στοιχείο";

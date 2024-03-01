@@ -441,10 +441,14 @@ function display_exercise($exercise_id) {
                     if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
                         list($answerTitle, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
                     } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                        $answer_array = unserialize($answerTitle);
-                        $answer_text = $answer_array[0]; // answer text
-                        $correct_answer = $answer_array[1]; // correct answer
-                        $answer_weight = implode(' : ', $answer_array[2]); // answer weight
+                        if (!empty($answerTitle)) {
+                            $answer_array = unserialize($answerTitle);
+                            $answer_text = $answer_array[0]; // answer text
+                            $correct_answer = $answer_array[1]; // correct answer
+                            $answer_weight = implode(' : ', $answer_array[2]); // answer weight
+                        } else {
+                            break;
+                        }
                     } elseif ($answerType == MATCHING) {
                         $answerTitle = q($answerTitle);
                     } else {
