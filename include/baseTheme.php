@@ -3392,6 +3392,27 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BORDER COLOR SLOTS TO AGENDA EVENTS ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['BgBorderColorAgendaEvent'])){
+            $styles_str .= "
+                .calendarAddDaysCl .fc-body table tbody tr td.fc-axis,
+                .calendarAddDaysCl .fc-body table tbody tr td{
+                    border:solid 1px $theme_options_styles[BgBorderColorAgendaEvent] !important;
+                }
+                
+                .myCalendarEvents .fc-body table tbody tr td.fc-axis,
+                .myCalendarEvents .fc-body table tbody tr td{
+                    border:solid 1px $theme_options_styles[BgBorderColorAgendaEvent] !important;
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ////////////////// BACKGROUND HOVERED COLOR TO AGENDA COMPONENT /////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -3460,6 +3481,59 @@ function view($view_file, $view_data = array()) {
                 .myPersonalCalendar .cal-week-box .row-fluid div:hover,
                 #cal-day-box .row-fluid div:hover{
                     background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// TEXT HOVERED COLOR TO AGENDA COMPONENT ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clColorHoveredBodyAgenda'])){
+            $styles_str .= "
+                .datetimepicker-years .table-condensed thead tr th:hover,
+                .datetimepicker-years .table-condensed tbody tr td .year:hover,
+                .datetimepicker-months .table-condensed thead tr th:hover,
+                .datetimepicker-months .table-condensed tbody tr td .month:hover,
+                .datetimepicker-days .table-condensed thead tr th:hover,
+                .datetimepicker-days .table-condensed tbody tr td:hover,
+                .datetimepicker-hours .table-condensed thead tr th:hover,
+                .datetimepicker-hours .table-condensed tbody tr td .hour:hover,
+                .datetimepicker-minutes .table-condensed thead tr th:hover,
+                .datetimepicker-minutes .table-condensed tbody tr td .minute:hover{
+                    color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
+                }
+
+
+
+                .datepicker-centuries .table-condensed thead tr th:hover,
+                .datepicker-decades .table-condensed thead tr th:hover,
+                .datepicker-years .table-condensed thead tr th:hover,
+                .datepicker-months .table-condensed thead tr th:hover,
+                .datepicker-days .table-condensed thead tr th:hover{ 
+                    color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
+                }
+                .datepicker-centuries .table-condensed tbody tr td .century:hover,
+                .datepicker-decades .table-condensed tbody tr td .decade:hover,
+                .datepicker-years .table-condensed tbody tr td .year:hover,
+                .datepicker-months .table-condensed tbody tr td .month:hover,
+                .datepicker-days .table-condensed tbody tr td:hover{ 
+                    color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
+                }
+
+
+                .panel-body-calendar .cal-row-head .cal-cell1:hover,
+                .panel-body-calendar .cal-month-box .cal-cell1:hover div{
+                    color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
+                }  
+
+
+                .myPersonalCalendar .cal-cell1:hover div,
+                .myPersonalCalendar .cal-cell:hover span{
+                    color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
                 }
 
             ";
@@ -3567,6 +3641,14 @@ function view($view_file, $view_data = array()) {
                 .datepicker table tr td span.active:hover.active, 
                 .datepicker table tr td span.active.disabled.active, 
                 .datepicker table tr td span.active.disabled:hover.active {
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;
+                }
+
+                .datepicker table tr td span.focused:active, 
+                .datepicker table tr td span.focused:hover:active, 
+                .datepicker table tr td span.focused.disabled:active, 
+                .datepicker table tr td span.focused.disabled:hover:active, 
+                .datepicker table tr td span.focused {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
@@ -4916,6 +4998,10 @@ function view($view_file, $view_data = array()) {
                 .panel-default .panel-heading, 
                 .panel-action-btn-default .panel-heading {
                     background: $theme_options_styles[BgPanels];
+                }
+
+                .admin-nav{
+                    background: $theme_options_styles[BgPanels] !important;
                 }
                
                 

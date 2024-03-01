@@ -28,7 +28,7 @@ $defaults = array(
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
-                                                    'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
+                                                    'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor', 'clHoveredDeleteButtonColor'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
@@ -40,14 +40,14 @@ $defaults = array(
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 
-                                                    'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 
+                                                    'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent', 
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
-                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda', 'BgBorderTextEditor'),
+                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda', 'clColorHoveredBodyAgenda', 'BgBorderTextEditor'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover', 'BorderLeftToRightColumnCourseBgColor'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
@@ -64,6 +64,7 @@ $defaults = array(
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
                 "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
+                "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -1625,6 +1626,10 @@ $tool_content .= "
                         <input name='BgBorderColorAgenda' type='text' class='form-control colorpicker' id='BgBorderColorAgenda' value='$theme_options_styles[BgBorderColorAgenda]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBorderColorAgendaEvent' class='control-label-notes mb-2 me-2'>$langBgBorderColorAgendaEvent:</label>
+                        <input name='BgBorderColorAgendaEvent' type='text' class='form-control colorpicker' id='BgBorderColorAgendaEvent' value='$theme_options_styles[BgBorderColorAgendaEvent]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgColorHeaderAgenda' class='control-label-notes mb-2 me-2'>$langBgColorHeaderAgenda:</label>
                         <input name='BgColorHeaderAgenda' type='text' class='form-control colorpicker' id='BgColorHeaderAgenda' value='$theme_options_styles[BgColorHeaderAgenda]'>
                     </div>
@@ -1639,6 +1644,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColorHoveredBodyAgenda' class='control-label-notes mb-2 me-2'>$langbgColorHoveredBodyAgenda:</label>
                         <input name='bgColorHoveredBodyAgenda' type='text' class='form-control colorpicker' id='bgColorHoveredBodyAgenda' value='$theme_options_styles[bgColorHoveredBodyAgenda]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clColorHoveredBodyAgenda' class='control-label-notes mb-2 me-2'>$langclColorHoveredBodyAgenda:</label>
+                        <input name='clColorHoveredBodyAgenda' type='text' class='form-control colorpicker' id='clColorHoveredBodyAgenda' value='$theme_options_styles[clColorHoveredBodyAgenda]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColorActiveDateTime' class='control-label-notes mb-2 me-2'>$langbgColorActiveDateTime:</label>

@@ -3296,18 +3296,18 @@ th .fa-gears{
   display: none;
 }
 
-tr.warning{
-  background-color: #FFF4D1;
+tr.warning td{
+  background-color: #FFF4D1 !important;
 }
 tr.warning > td{
-  color: #2B3944;
+  color: #2B3944 !important;
 }
 
-tr.danger{
-  background-color: #FDEFE9;
+tr.danger td{
+  background-color: #FDEFE9 !important;
 }
 tr.danger > td{
-  color: #2B3944;
+  color: #2B3944 !important;
 }
 
 
