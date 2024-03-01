@@ -1619,7 +1619,7 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutRegistrationImageUpload</h3>
                     <div class='form-group mt-4'>
-                        <label for='imageUploadForm' class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</label>
+                        <label for='imageUploadRegistration' class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</label>
                         <div class='col-sm-12'>
                             $registration_image_fieldL
                         </div>
