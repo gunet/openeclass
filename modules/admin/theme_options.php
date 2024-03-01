@@ -115,6 +115,9 @@ if (isset($_GET['export'])) {
         if (isset($styles['imageUploadRegistration'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadRegistration]");
         }
+        if (isset($styles['imageUploadFaq'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadFaq]");
+        }
         if (isset($styles['loginImg'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
         }
@@ -258,6 +261,25 @@ if (isset($_POST['optionsSave'])) {
         else{
             //serialize $_post login img jumbotron
             $_POST['imageUploadRegistration'] = $image_without_ext.".".$ext;
+        }
+    }
+
+    //FAQ image
+    if(isset($_POST['choose_from_faqlist']) && !empty($_POST['choose_from_faqlist'])){
+        $imageName = $_POST['choose_from_faqlist'];
+        $imagePath = "$webDir/template/modern/images/faq_images/$imageName";
+        $newPath = "$webDir/courses/theme_data/$theme_id/";
+        $name = pathinfo($imageName, PATHINFO_FILENAME);
+        $ext =  get_file_extension($imageName);
+        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+        $newName  = $newPath.$image_without_ext.".".$ext;
+        $copied = copy($imagePath , $newName);
+        if ((!$copied)) {
+            echo "Error : Not Copied";
+        }
+        else{
+            //serialize $_post login img jumbotron
+            $_POST['imageUploadFaq'] = $image_without_ext.".".$ext;
         }
     }
 
@@ -502,6 +524,16 @@ if (isset($_POST['optionsSave'])) {
 
             });
 
+            //faq images upload
+            $('.chooseFaqImage').on('click',function(){
+                var id_img = this.id;
+                alert('Selected image: '+id_img);
+                document.getElementById('choose_from_faqlist').value = id_img;
+                $('#FaqImagesModal').modal('hide');
+                document.getElementById('selectedImageFaq').value = '$langSelect:'+id_img;
+
+            });
+
 
 
         });
@@ -713,6 +745,43 @@ if (isset($_POST['optionsSave'])) {
        ";
     }
 
+    if (isset($theme_options_styles['imageUploadFaq'])) {
+        $faq_image_fieldL = "
+            <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
+                <img src='$urlThemeData/$theme_options_styles[imageUploadFaq]' style='max-height:100px;max-width:150px;' alt='Image upload'>
+                <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFaq'>$langDelete</a>
+            </div>
+            <input type='hidden' name='imageUploadFaq' value='$theme_options_styles[imageUploadFaq]'>
+        ";
+    } else {
+       $faq_image_fieldL = "
+
+            <ul class='nav nav-tabs' id='nav-tab5' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='tabs-upload-tab5' data-bs-toggle='tab' data-bs-target='#tabs-upload5' type='button' role='tab' aria-controls='tabs-upload5' aria-selected='true'>$langUpload</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='tabs-selectImage-tab5' data-bs-toggle='tab' data-bs-target='#tabs-selectImage5' type='button' role='tab' aria-controls='tabs-selectImage5' aria-selected='false'>$langAddPicture</button>
+                </li>
+            </ul>
+            <div class='tab-content mt-3' id='tabs-tabContent5'>
+                <div class='tab-pane fade show active' id='tabs-upload5' role='tabpanel' aria-labelledby='tabs-upload-tab5'>
+                    <input type='file' name='imageUploadFaq' id='imageUploadFaq'>
+                </div>
+                <div class='tab-pane fade' id='tabs-selectImage5' role='tabpanel' aria-labelledby='tabs-selectImage-tab5'>
+                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#FaqImagesModal'>
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
+                    </button>
+                    <input type='hidden' id='choose_from_faqlist' name='choose_from_faqlist'>
+                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageFaq'>
+                </div>
+            </div>
+
+
+
+       ";
+    }
+
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -764,6 +833,11 @@ if (isset($_POST['optionsSave'])) {
      $dirname4 = getcwd();
      $dirname4 = $dirname4 . '/template/modern/images/registration_images';
      $dir_registration_images = scandir($dirname4);
+
+     // Get all images from dir faq_images
+     $dirname5 = getcwd();
+     $dirname5 = $dirname5 . '/template/modern/images/faq_images';
+     $dir_faq_images = scandir($dirname5);
 
 
     @$tool_content .= "
@@ -1887,6 +1961,16 @@ $tool_content .= "
             <div role='tabpanel' class='tab-pane fade' id='navMoreOptions'>
                 <div class='form-wrapper form-edit rounded'>
 
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutFaqImageUpload</h3>
+                    <div class='form-group mt-4'>
+                        <label for='imageUploadFaq' class='col-sm-12 control-label-notes mb-2'>$langFaqUploadImage:</label>
+                        <div class='col-sm-12'>
+                            $faq_image_fieldL
+                        </div>
+                    </div>
+
+                    <hr>
+
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutChatContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutChatContainer' class='control-label-notes mb-2 me-2'>$langContainerBgColor:</label>
@@ -2107,6 +2191,44 @@ $tool_content .= "
                                                 <p>$image</p>
 
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseRegistrationImage mt-3' value='$langSelect'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                        }
+
+$tool_content .= "
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='modal fade' id='FaqImagesModal' tabindex='-1' aria-labelledby='FaqImagesModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='FaqImagesModalLabel'>$langfaqImg</h5>
+                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <div class='row row-cols-1 row-cols-md-2 g-4'>";
+                        foreach($dir_faq_images as $image) {
+                            $extension = pathinfo($image, PATHINFO_EXTENSION);
+                            $imgExtArr = ['jpg', 'jpeg', 'png', 'svg'];
+                            if(in_array($extension, $imgExtArr)){
+                                $tool_content .= "
+                                    <div class='col'>
+                                        <div class='card panelCard h-100'>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/faq_images/$image' alt='FAQ image'/>
+                                            <div class='card-body'>
+                                                <p>$image</p>
+
+                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFaqImage mt-3' value='$langSelect'>
                                             </div>
                                         </div>
                                     </div>
