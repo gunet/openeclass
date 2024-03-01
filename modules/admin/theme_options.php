@@ -112,6 +112,9 @@ if (isset($_GET['export'])) {
         if (isset($styles['imageUploadForm'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadForm]");
         }
+        if (isset($styles['imageUploadRegistration'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadRegistration]");
+        }
         if (isset($styles['loginImg'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
         }
@@ -236,6 +239,25 @@ if (isset($_POST['optionsSave'])) {
         else{
             //serialize $_post login img jumbotron
             $_POST['imageUploadForm'] = $image_without_ext.".".$ext;
+        }
+    }
+
+    //registration image
+    if(isset($_POST['choose_from_registrationlist']) && !empty($_POST['choose_from_registrationlist'])){
+        $imageName = $_POST['choose_from_registrationlist'];
+        $imagePath = "$webDir/template/modern/images/registration_images/$imageName";
+        $newPath = "$webDir/courses/theme_data/$theme_id/";
+        $name = pathinfo($imageName, PATHINFO_FILENAME);
+        $ext =  get_file_extension($imageName);
+        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+        $newName  = $newPath.$image_without_ext.".".$ext;
+        $copied = copy($imagePath , $newName);
+        if ((!$copied)) {
+            echo "Error : Not Copied";
+        }
+        else{
+            //serialize $_post login img jumbotron
+            $_POST['imageUploadRegistration'] = $image_without_ext.".".$ext;
         }
     }
 
@@ -470,6 +492,16 @@ if (isset($_POST['optionsSave'])) {
 
             });
 
+            //registration images upload
+            $('.chooseRegistrationImage').on('click',function(){
+                var id_img = this.id;
+                alert('Selected image: '+id_img);
+                document.getElementById('choose_from_registrationlist').value = id_img;
+                $('#RegistrationImagesModal').modal('hide');
+                document.getElementById('selectedImageRegistration').value = '$langSelect:'+id_img;
+
+            });
+
 
 
         });
@@ -644,6 +676,43 @@ if (isset($_POST['optionsSave'])) {
        ";
     }
 
+    if (isset($theme_options_styles['imageUploadRegistration'])) {
+        $registration_image_fieldL = "
+            <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
+                <img src='$urlThemeData/$theme_options_styles[imageUploadRegistration]' style='max-height:100px;max-width:150px;' alt='Image upload'>
+                <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadRegistration'>$langDelete</a>
+            </div>
+            <input type='hidden' name='imageUploadRegistration' value='$theme_options_styles[imageUploadRegistration]'>
+        ";
+    } else {
+       $registration_image_fieldL = "
+
+            <ul class='nav nav-tabs' id='nav-tab4' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='tabs-upload-tab4' data-bs-toggle='tab' data-bs-target='#tabs-upload4' type='button' role='tab' aria-controls='tabs-upload4' aria-selected='true'>$langUpload</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='tabs-selectImage-tab4' data-bs-toggle='tab' data-bs-target='#tabs-selectImage4' type='button' role='tab' aria-controls='tabs-selectImage4' aria-selected='false'>$langAddPicture</button>
+                </li>
+            </ul>
+            <div class='tab-content mt-3' id='tabs-tabContent4'>
+                <div class='tab-pane fade show active' id='tabs-upload4' role='tabpanel' aria-labelledby='tabs-upload-tab4'>
+                    <input type='file' name='imageUploadRegistration' id='imageUploadRegistration'>
+                </div>
+                <div class='tab-pane fade' id='tabs-selectImage4' role='tabpanel' aria-labelledby='tabs-selectImage-tab4'>
+                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#RegistrationImagesModal'>
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
+                    </button>
+                    <input type='hidden' id='choose_from_registrationlist' name='choose_from_registrationlist'>
+                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageRegistration'>
+                </div>
+            </div>
+
+
+
+       ";
+    }
+
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -690,6 +759,11 @@ if (isset($_POST['optionsSave'])) {
     $dirname3 = getcwd();
     $dirname3= $dirname3 . '/template/modern/images/form_images';
     $dir_form_images = scandir($dirname3);
+
+     // Get all images from dir form_images
+     $dirname4 = getcwd();
+     $dirname4 = $dirname4 . '/template/modern/images/registration_images';
+     $dir_registration_images = scandir($dirname4);
 
 
     @$tool_content .= "
@@ -1540,6 +1614,16 @@ $tool_content .= "
                             $form_image_fieldL
                         </div>
                     </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutRegistrationImageUpload</h3>
+                    <div class='form-group mt-4'>
+                        <label for='imageUploadForm' class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</label>
+                        <div class='col-sm-12'>
+                            $registration_image_fieldL
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1802,6 +1886,7 @@ $tool_content .= "
 
             <div role='tabpanel' class='tab-pane fade' id='navMoreOptions'>
                 <div class='form-wrapper form-edit rounded'>
+
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutChatContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutChatContainer' class='control-label-notes mb-2 me-2'>$langContainerBgColor:</label>
@@ -1812,6 +1897,8 @@ $tool_content .= "
                         <input name='AboutBorderChatContainer' type='text' class='form-control colorpicker' id='AboutBorderChatContainer' value='$theme_options_styles[AboutBorderChatContainer]'>
                     </div>
 
+                    <hr>
+
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutCourseInfoContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutCourseInfoContainer' class='control-label-notes mb-2 me-2'>$langContainerBgColor:</label>
@@ -1821,6 +1908,8 @@ $tool_content .= "
                         <label for='AboutBorderCourseInfoContainer' class='control-label-notes mb-2 me-2'>$langBorderContainerBgColor:</label>
                         <input name='AboutBorderCourseInfoContainer' type='text' class='form-control colorpicker' id='AboutBorderCourseInfoContainer' value='$theme_options_styles[AboutBorderCourseInfoContainer]'>
                     </div>
+
+                    <hr>
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutUnitsContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -1954,6 +2043,7 @@ $tool_content .= "
     </div>
 </div>
 
+
 <div class='modal fade' id='FormImagesModal' tabindex='-1' aria-labelledby='FormImagesModalLabel' aria-hidden='true'>
     <div class='modal-dialog modal-lg'>
         <div class='modal-content'>
@@ -1977,6 +2067,46 @@ $tool_content .= "
                                                 <p>$image</p>
 
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFormImage mt-3' value='$langSelect'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                        }
+
+$tool_content .= "
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class='modal fade' id='RegistrationImagesModal' tabindex='-1' aria-labelledby='RegistrationImagesModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='RegistrationImagesModalLabel'>$langFormRegistrationImg</h5>
+                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <div class='row row-cols-1 row-cols-md-2 g-4'>";
+                        foreach($dir_registration_images as $image) {
+                            $extension = pathinfo($image, PATHINFO_EXTENSION);
+                            $imgExtArr = ['jpg', 'jpeg', 'png', 'svg'];
+                            if(in_array($extension, $imgExtArr)){
+                                $tool_content .= "
+                                    <div class='col'>
+                                        <div class='card panelCard h-100'>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/registration_images/$image' alt='Registration image'/>
+                                            <div class='card-body'>
+                                                <p>$image</p>
+
+                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseRegistrationImage mt-3' value='$langSelect'>
                                             </div>
                                         </div>
                                     </div>
@@ -2020,7 +2150,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -2036,7 +2166,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];

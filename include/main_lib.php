@@ -4760,3 +4760,25 @@ function get_form_image() {
 
     return $form_image;
 }
+
+/**
+ * @brief Show the registration form image regarding active theme
+ */
+function get_registration_form_image() {
+    global $urlAppend, $themeimg;
+
+    $theme_id = get_config('theme_options_id');
+    $form_image = $themeimg.'/RegImg.png';
+
+    if ($theme_id) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+        $theme_options_styles = unserialize($theme_options->styles);
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+        if (isset($theme_options_styles['imageUploadRegistration'])) {
+            $form_image = "$urlThemeData/$theme_options_styles[imageUploadRegistration]";
+        }
+
+    }
+
+    return $form_image;
+}
