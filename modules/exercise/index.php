@@ -351,7 +351,7 @@ if (!$nbrExercises) {
                 $tr_class = 'not_visible';
             }
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$lock_description'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$lock_description'></span>";
         }
         if (!$row->public) {
             $lock_icon = "&nbsp;" . icon('fa-lock', $langNonPublicFile);

@@ -572,15 +572,15 @@ if ($nbrQuestions) {
         } else {
             // check if question has weight
             if (!$questionWeight) {
-                $question_excl_legend = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
-                    data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionWeight' data-original-title='' title=''></span>";
+                $question_excl_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+                    data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionWeight'></span>";
             } else {
                 $question_excl_legend = '';
             }
             // check if question has answers
             if ($aType != FREE_TEXT and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
-                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
-                        data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionAnswers' data-original-title='' title=''></span>";
+                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+                        data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
             } else {
                 $question_excl_legend_2 = '';
             }

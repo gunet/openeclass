@@ -47,7 +47,7 @@ $head_content .= "
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -418,15 +418,15 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             $editUrl = "{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;modifyAnswers={$row->id}";
             // check if question has weight
             if (!$questionWeight) {
-                $question_excl_legend = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
-                    data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionWeight' data-original-title='' title=''></span>";
+                $question_excl_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+                    data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionWeight'></span>";
             } else {
                 $question_excl_legend = '';
             }
             // check if question has answers
             if ($question_type != FREE_TEXT and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
-                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
-                        data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionAnswers' data-original-title='' title=''></span>";
+                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+                        data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
             } else {
                 $question_excl_legend_2 = '';
             }
