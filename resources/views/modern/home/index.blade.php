@@ -493,6 +493,24 @@
                     </div>
                 @endif
             @endif
+
+
+            @if(get_config('show_only_loginScreen') && get_config('dont_display_login_form'))
+                <div class='col-12'>
+                    <div class='{{ $container }} padding-default'>
+                        <div class="row row-cols-1 g-4">
+                            <div class='col'>
+                                <div class='alert alert-info'>
+                                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                                    <span>
+                                        {!! trans('langMoveOnLoginPage') !!}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         
         
         </div>
