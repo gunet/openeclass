@@ -42,11 +42,11 @@ if(isset($_POST['submit'])){
     set_config('homepage_name',$_POST['homepage_name']);
 
     set_config('homepage_intro', purify($_POST['homepage_intro']));
-    
-    set_config('show_only_loginScreen',$_POST['show_only_loginScreen']);
-    set_config('dont_display_login_form',$_POST['dont_display_login_form']);
-    set_config('hide_login_link',$_POST['hide_login_link']);
-    set_config('dont_display_testimonials',$_POST['dont_display_testimonials']);
+
+    set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
+    set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
+    set_config('hide_login_link', $_POST['hide_login_link'] ?? '');
+    set_config('dont_display_testimonials', $_POST['dont_display_testimonials'] ?? '');
 
 
     Session::flash('message',"$langRegDone");
@@ -64,25 +64,25 @@ $data['action_bar'] = action_bar(
     [
         [
             'title' => $langBack,
-            'url' => "{$urlServer}modules/admin/index.php",
+            'url' => "{$urlAppend}modules/admin/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary'
         ],
         [
             'title' => $langAdminCreateHomeTexts.'-'.'Testimonials',
-            'url' => "{$urlServer}modules/admin/homepageTexts_create.php",
+            'url' => "{$urlAppend}modules/admin/homepageTexts_create.php",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ],
         [
             'title' => $langAdminAn,
-            'url' => "{$urlServer}modules/admin/adminannouncements.php",
+            'url' => "{$urlAppend}modules/admin/adminannouncements.php",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ],
-    ],false); 
+    ],false);
 
 
 view('admin.other.manage_homepage', $data);
