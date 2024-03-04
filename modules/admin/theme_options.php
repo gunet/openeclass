@@ -29,9 +29,10 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 
-                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor', 'clHoveredDeleteButtonColor'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor', 
+                                                    'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
-                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
@@ -51,7 +52,7 @@ $defaults = array(
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover', 'BorderLeftToRightColumnCourseBgColor'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
-                "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
+                "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes', 'bgHelpButtonColor'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
                 "rgba(229, 244, 248, 1)" => array('bgAlertInfo'),
                 "rgba(59, 126, 148, 1)" => array('clAlertInfo'),
@@ -65,6 +66,9 @@ $defaults = array(
                 "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
+                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor'),
+                "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
+                "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -1416,8 +1420,16 @@ $tool_content .= "
                         <input name='whiteButtonTextColor' type='text' class='form-control colorpicker' id='whiteButtonTextColor' value='$theme_options_styles[whiteButtonTextColor]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='whiteButtonBorderTextColor' class='control-label-notes mb-2 me-2'>$langBorderTextColor:</label>
+                        <input name='whiteButtonBorderTextColor' type='text' class='form-control colorpicker' id='whiteButtonBorderTextColor' value='$theme_options_styles[whiteButtonBorderTextColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='whiteButtonHoveredTextColor' class='control-label-notes mb-2 me-2'>$langHoverTextColor:</label>
                         <input name='whiteButtonHoveredTextColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredTextColor' value='$theme_options_styles[whiteButtonHoveredTextColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='whiteButtonHoveredBorderTextColor' class='control-label-notes mb-2 me-2'>$langHoverBorderTextColor:</label>
+                        <input name='whiteButtonHoveredBorderTextColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredBorderTextColor' value='$theme_options_styles[whiteButtonHoveredBorderTextColor]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='whiteButtonHoveredBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
@@ -1442,6 +1454,46 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clHoveredDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredDeleteButtonColor:</label>
                         <input name='clHoveredDeleteButtonColor' type='text' class='form-control colorpicker' id='clHoveredDeleteButtonColor' value='$theme_options_styles[clHoveredDeleteButtonColor]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorSuccess</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgSuccessButtonColor' class='control-label-notes mb-2 me-2'>$langbgSuccessButtonColor:</label>
+                        <input name='bgSuccessButtonColor' type='text' class='form-control colorpicker' id='bgSuccessButtonColor' value='$theme_options_styles[bgSuccessButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clSuccessButtonColor' class='control-label-notes mb-2 me-2'>$langclSuccessButtonColor:</label>
+                        <input name='clSuccessButtonColor' type='text' class='form-control colorpicker' id='clSuccessButtonColor' value='$theme_options_styles[clSuccessButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgHoveredSuccessButtonColor' class='control-label-notes mb-2 me-2'>$langbgHoveredSuccessButtonColor:</label>
+                        <input name='bgHoveredSuccessButtonColor' type='text' class='form-control colorpicker' id='bgHoveredSuccessButtonColor' value='$theme_options_styles[bgHoveredSuccessButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredSuccessButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredSuccessButtonColor:</label>
+                        <input name='clHoveredSuccessButtonColor' type='text' class='form-control colorpicker' id='clHoveredSuccessButtonColor' value='$theme_options_styles[clHoveredSuccessButtonColor]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorHelp</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgHelpButtonColor' class='control-label-notes mb-2 me-2'>$langbgHelpButtonColor:</label>
+                        <input name='bgHelpButtonColor' type='text' class='form-control colorpicker' id='bgHelpButtonColor' value='$theme_options_styles[bgHelpButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHelpButtonColor' class='control-label-notes mb-2 me-2'>$langclHelpButtonColor:</label>
+                        <input name='clHelpButtonColor' type='text' class='form-control colorpicker' id='clHelpButtonColor' value='$theme_options_styles[clHelpButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgHoveredHelpButtonColor' class='control-label-notes mb-2 me-2'>$langbgHoveredHelpButtonColor:</label>
+                        <input name='bgHoveredHelpButtonColor' type='text' class='form-control colorpicker' id='bgHoveredHelpButtonColor' value='$theme_options_styles[bgHoveredHelpButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredHelpButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredHelpButtonColor:</label>
+                        <input name='clHoveredHelpButtonColor' type='text' class='form-control colorpicker' id='clHoveredHelpButtonColor' value='$theme_options_styles[clHoveredHelpButtonColor]'>
                     </div>
 
 
@@ -2068,9 +2120,9 @@ $tool_content .= "
         </div>
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap'>
-                    ".($theme_id ? "<input class='btn submitAdminBtn' name='optionsSave' type='submit' value='$langSave'>" : "")."
-                    <input class='btn submitAdminBtn' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
-                    ".($theme_id ? "<a class='btn submitAdminBtn' href='theme_options.php?export=true'>$langExport</a>" : "")."
+                    ".($theme_id ? "<input class='btn successAdminBtn' name='optionsSave' type='submit' value='$langSave'>" : "")."
+                    <input class='btn successAdminBtn' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
+                    ".($theme_id ? "<a class='btn btn-default' href='theme_options.php?export=true'>$langExport</a>" : "")."
                 </div>
             </div>
             ". generate_csrf_token_form_field() ."

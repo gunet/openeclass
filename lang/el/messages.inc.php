@@ -5821,10 +5821,12 @@ $langBgColorConfig = 'Ρυθμίσεις Φόντου';
 $langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
 $langBgHeaderCongiguration = "Χρώμα Φόντου Header";
 $langBgFooterCongiguration = "Χρώμα Φόντου Footer";
-$langButtonsColorCongiguration = "Ρυθμίσεις Κουμπιών Με Χρώμα";
+$langButtonsColorCongiguration = "Κουμπί Primary-button";
 $langTextColor = "Χρώμα Κειμένου";
-$langButtonsColorWhiteCongiguration = "Ρυθμίσεις Κουμπιών Με Άσπρο Χρώμα";
+$langBorderTextColor = "Χρώμα border";
+$langButtonsColorWhiteCongiguration = "Κουμπί Secondary-button";
 $langHoverTextColor = "Χρώμα Hovered Κειμένου";
+$langHoverBorderTextColor = "Χρώμα Hovered-border κουμπιου";
 $langHoverWhiteColorButton = "Χρώμα Hovered Κουμπιού";
 $langLinkColor = 'Χρώμα Συνδέσμων';
 $langLinkHoverColor = 'Χρώμα Hovered Συνδέσμων';
@@ -5907,11 +5909,26 @@ $langbgHoveredListMenu = "Χρώμα Hovered φόντου συνδέσμου ε�
 $langBgColorMenuCont = "Χρώμα φόντου μενού";
 $langAddPaddingListGroup = "Προσθήκη padding στη λίστα συνδέσμων";
 $langButtonColorWhiteCongiguration = "Χρώμα φόντου κουμπιού";
-$langButtonsColorDel = "Κουμπί διαγραφής";
+$langButtonsColorDel = "Κουμπί Delete-button";
 $langbgDeleteButtonColor = "Χρώμα φόντου";
 $langclDeleteButtonColor = "Χρώμα κειμένου";
 $langbgHoveredDeleteButtonColor = "Χρώμα hovered φόντου";
 $langclHoveredDeleteButtonColor = "Χρώμα hovered κειμένου";
+
+
+$langButtonsColorSuccess = "Κουμπί Save-button";
+$langbgSuccessButtonColor = "Χρώμα φόντου";
+$langclSuccessButtonColor = "Χρώμα κειμένου";
+$langbgHoveredSuccessButtonColor = "Χρώμα hovered φόντου";
+$langclHoveredSuccessButtonColor = "Χρώμα hovered κειμένου";
+$langButtonsColorHelp = "Κουμπί Help-button";
+$langbgHelpButtonColor = "Χρώμα φόντου";
+$langclHelpButtonColor = "Χρώμα κειμένου";
+$langbgHoveredHelpButtonColor = "Χρώμα hovered φόντου";
+$langclHoveredHelpButtonColor = "Χρώμα hovered κειμένου";
+
+
+
 $langBgBorderForms = "Χρώμα border φόρμας";
 $langSubmitComment = "Υποβολή σχόλιου";
 $langBriefProfilePortfolioTextColor = "Χρώμα κειμένων σύντομου προφίλ";

@@ -499,7 +499,7 @@ require_once 'include/lib/references.class.php';
                      'icon' => 'fa-edit' ],
                    [ 'title' => $langConfirmDeleteRecursive,
                      'url' => "?delete=$myrow->id&amp;et=admin&amp;rep=yes",
-                     'icon' => 'fa-times-circle-o',
+                     'icon' => 'fa-xmark',
                      'class' => 'delete',
                      'confirm' => $langConfirmDeleteRecursiveEvents,
                      'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end)) ],

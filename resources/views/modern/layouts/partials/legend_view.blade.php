@@ -56,12 +56,12 @@
                                 <input type="hidden" name="prev_url" value="{{$go_back_url}}">
                                 @if (display_activation_link($module_id))
                                     @if($visible_module == 0)
-                                        <a class='btn successAdminBtn gap-2 text-decoration-none' href="javascript:$('#form_id').submit();"
+                                        <a class='btn deleteAdminBtn text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}" aria-label="{{ trans('langActivate') }}">
                                             <i class="fa-regular fa-eye-slash"></i>
                                         </a>
                                     @else
-                                        <a class='btn deleteAdminBtn gap-2 text-decoration-none' href="javascript:$('#form_id').submit();"
+                                        <a class='btn successAdminBtn text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}" aria-label="{{ trans('langDeactivate') }}">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
@@ -73,19 +73,19 @@
                     @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                         @php $getToken = generate_csrf_token_link_parameter(); @endphp
                         @if($module_id == MODULE_ID_ANNOUNCE)
-                            <a class='btn warningAdminBtn gap-2 text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
+                            <a class='btn btn-default text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
                                 <i class="fa-solid fa-rss"></i>
                             </a>
                         @else
-                            <a class='btn warningAdminBtn gap-2 text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
+                            <a class='btn btn-default text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
                                 <i class="fa-solid fa-rss"></i>
                             </a>
                         @endif
                     @endif
                     @if($toolName)
-                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none gap-2' 
+                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none' 
                             data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
                             <i class="fa-solid fa-circle-info"></i>
                         </a>

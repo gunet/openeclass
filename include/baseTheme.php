@@ -389,7 +389,8 @@ function view($view_file, $view_data = array()) {
                 $styles_str .= "
                     .jumbotron.jumbotron-login{
                         background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
-                        border:0px; no-repeat center center fixed; 
+                        border:0px; 
+                        background-position: no-repeat center center fixed; 
                         -webkit-background-size: cover; 
                         -moz-background-size: cover; 
                         -o-background-size: cover; 
@@ -1152,18 +1153,15 @@ function view($view_file, $view_data = array()) {
                 .submitAdminBtn, 
                 .cancelAdminBtn,
                 .opencourses_btn {
-                    border-color: $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
                 .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
-                    border-color: $theme_options_styles[whiteButtonTextColor] !important;
                     color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
 
                 .btn-outline-primary {
-                    border-color: $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
@@ -1175,12 +1173,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .quickLink{
-                    border: solid 1px $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
                 .menu-popover{
-                    border: solid 1px $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
@@ -1193,7 +1189,6 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .btn.btn-default {
-                    border-color: $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
@@ -1208,6 +1203,44 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// BORDER COLOR OF WHITE BUTTON //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['whiteButtonBorderTextColor'])) {
+            $styles_str .= "
+                .submitAdminBtn, 
+                .cancelAdminBtn,
+                .opencourses_btn {
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor] !important;
+                }
+
+                .btn-outline-primary {
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .quickLink{
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .menu-popover{
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .btn.btn-default {
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
                 .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button,
                 .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button,
                 .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button,
@@ -1216,7 +1249,7 @@ function view($view_file, $view_data = array()) {
                 .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button{
-                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor];
                 }
 
             ";
@@ -1236,19 +1269,16 @@ function view($view_file, $view_data = array()) {
                 .submitAdminBtn:focus, 
                 .cancelAdminBtn:focus,
                 .opencourses_btn:focus {
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
                 .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover, 
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover {
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
 
                 .btn-outline-primary:hover,
                 .btn-outline-primary:focus{
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
@@ -1261,13 +1291,11 @@ function view($view_file, $view_data = array()) {
 
                 .quickLink:hover,
                 .quickLink:hover .fa-solid{
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
 
                 .menu-popover:hover,
                 .menu-popover:focus{
-                    border: solid 1px $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
@@ -1276,13 +1304,11 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .showSettings:hover{
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
 
                 .btn.btn-default:hover,
                 .btn.btn-default:focus {
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
@@ -1294,7 +1320,6 @@ function view($view_file, $view_data = array()) {
                 .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after{
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
@@ -1306,6 +1331,66 @@ function view($view_file, $view_data = array()) {
                 .showCoursesPics:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// HOVERED BORDER COLOR OF WHITE BUTTON /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['whiteButtonHoveredBorderTextColor'])) {
+            $styles_str .= "
+                .submitAdminBtn:hover, 
+                .cancelAdminBtn:hover,
+                .opencourses_btn:hover,
+                .submitAdminBtn:focus, 
+                .cancelAdminBtn:focus,
+                .opencourses_btn:focus {
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover, 
+                .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover {
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                }
+
+                .btn-outline-primary:hover,
+                .btn-outline-primary:focus{
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .quickLink:hover,
+                .quickLink:hover .fa-solid{
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .menu-popover:hover,
+                .menu-popover:focus{
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .showSettings:hover{
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .btn.btn-default:hover,
+                .btn.btn-default:focus {
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .calendarViewDatesTutorGroup .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .calendarAddDaysCl .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
+                .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after{
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
             ";
         }
 
@@ -1830,6 +1915,180 @@ function view($view_file, $view_data = array()) {
                 .deleteAdminBtn:hover .fa-brands::before, 
                 .deleteAdminBtn:hover .fa::before{
                     color: $theme_options_styles[clHoveredDeleteButtonColor] !important;
+                }
+                  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////// BACKGROUND COLOR TO THE SUCCESS BUTTON //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgSuccessButtonColor'])) {
+            $styles_str .= "
+                .successAdminBtn, 
+                button[type=submit].successAdminBtn,
+                input[type=submit].successAdminBtn {
+                    border-color: $theme_options_styles[bgSuccessButtonColor];
+                    background-color: $theme_options_styles[bgSuccessButtonColor];
+                }
+
+                .btn.btn-success{
+                    border-color: $theme_options_styles[bgSuccessButtonColor];
+                    background-color: $theme_options_styles[bgSuccessButtonColor];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// TEXT COLOR TO THE SUCCESS BUTTON //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clSuccessButtonColor'])) {
+            $styles_str .= "
+                .successAdminBtn, 
+                button[type=submit].successAdminBtn,
+                input[type=submit].successAdminBtn {
+                    color: $theme_options_styles[clSuccessButtonColor];
+                }
+
+                .btn.btn-success{
+                    color: $theme_options_styles[clSuccessButtonColor];
+                }
+
+                .successAdminBtn .fa-solid::before, 
+                .successAdminBtn .fa-regular::before, 
+                .successAdminBtn .fa-brands::before, 
+                .successAdminBtn .fa::before{
+                    color: $theme_options_styles[clSuccessButtonColor] !important;
+                }
+                  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////// BACKGROUND HOVERED COLOR TO THE SUCCESS BUTTON ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgHoveredSuccessButtonColor'])) {
+            $styles_str .= "
+                .successAdminBtn:hover,
+                button[type=submit].successAdminBtn:hover,
+                input[type=submit].successAdminBtn:hover {
+                    border-color: $theme_options_styles[bgHoveredSuccessButtonColor];
+                    background-color: $theme_options_styles[bgHoveredSuccessButtonColor];
+                }
+
+                .btn.btn-danger:hover{
+                    border-color: $theme_options_styles[bgHoveredSuccessButtonColor];
+                    background-color: $theme_options_styles[bgHoveredSuccessButtonColor];
+                }
+                  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////// TEXT HOVERED COLOR TO THE SUCCESS BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clHoveredSuccessButtonColor'])) {
+            $styles_str .= "
+                .successAdminBtn:hover,
+                button[type=submit].successAdminBtn:hover,
+                input[type=submit].successAdminBtn:hover {
+                    color: $theme_options_styles[clHoveredSuccessButtonColor];
+                }
+
+                .btn.btn-danger:hover{
+                    color: $theme_options_styles[clHoveredSuccessButtonColor];
+                }
+
+                .successAdminBtn:hover .fa-solid::before, 
+                .successAdminBtn:hover .fa-regular::before, 
+                .successAdminBtn:hover .fa-brands::before, 
+                .successAdminBtn:hover .fa::before{
+                    color: $theme_options_styles[clHoveredSuccessButtonColor] !important;
+                }
+                  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BACKGROUND COLOR TO THE HELP BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgHelpButtonColor'])) {
+            $styles_str .= "
+                .helpAdminBtn {
+                    border-color: $theme_options_styles[bgHelpButtonColor];
+                    background-color: $theme_options_styles[bgHelpButtonColor];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// TEXT COLOR TO THE HELP BUTTON ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clHelpButtonColor'])) {
+            $styles_str .= "
+                .helpAdminBtn {
+                    color: $theme_options_styles[clHelpButtonColor];
+                }
+
+                .helpAdminBtn .fa-solid::before, 
+                .helpAdminBtn .fa-regular::before, 
+                .helpAdminBtn .fa-brands::before, 
+                .helpAdminBtn .fa::before{
+                    color: $theme_options_styles[clHelpButtonColor] !important;
+                }  
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////// BACKGROUND HOVERED COLOR TO THE HELP BUTTON /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgHoveredHelpButtonColor'])) {
+            $styles_str .= "
+                .helpAdminBtn:hover {
+                    border-color: $theme_options_styles[bgHoveredHelpButtonColor];
+                    background-color: $theme_options_styles[bgHoveredHelpButtonColor];
+                } 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// TEXT HOVERED COLOR TO THE HELP BUTTON ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clHoveredHelpButtonColor'])) {
+            $styles_str .= "
+                .helpAdminBtn:hover {
+                    color: $theme_options_styles[clHoveredHelpButtonColor];
+                }
+
+                .helpAdminBtn:hover .fa-solid::before, 
+                .helpAdminBtn:hover .fa-regular::before, 
+                .helpAdminBtn:hover .fa-brands::before, 
+                .helpAdminBtn:hover .fa::before{
+                    color: $theme_options_styles[clHoveredHelpButtonColor] !important;
                 }
                   
             ";

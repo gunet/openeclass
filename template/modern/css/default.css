@@ -1929,7 +1929,7 @@ input[type="submit"].warningAdminBtn:hover {
   font-size: 14px; 
 }
 
-.submitAdminBtn .fa, .cancelAdminBtn .fs, .deleteAdminBtn .fa{
+.submitAdminBtn .fa, .cancelAdminBtn .fa, .deleteAdminBtn .fa{
   height:14px; 
   width:14px;
 }
@@ -1982,6 +1982,7 @@ input[type="submit"].warningAdminBtn:hover {
   border-color: #2546F0;
   color: #2546F0;
   background-color: #ffffff;
+  text-decoration: none;
 }
 
 .btn.btn-primary{

@@ -3894,6 +3894,19 @@ $langbgDeleteButtonColor = "Background color";
 $langclDeleteButtonColor = "Text color";
 $langbgHoveredDeleteButtonColor = "Color hovered background";
 $langclHoveredDeleteButtonColor = "Hovered text color";
+
+$langButtonsColorSuccess = "Save button";
+$langbgSuccessButtonColor = "Background color";
+$langclSuccessButtonColor = "Text color";
+$langbgHoveredSuccessButtonColor = "Hovered background color";
+$langclHoveredSuccessButtonColor = "Hovered text color";
+$langButtonsColorHelp = "Help button";
+$langbgHelpButtonColor = "Background color";
+$langclHelpButtonColor = "Text color";
+$langbgHoveredHelpButtonColor = "Hovered background color";
+$langclHoveredHelpButtonColor = "Hovered text color";
+
+
 $langBgBorderForms = "Form border color";
 $langSubmitComment = "Submit a comment";
 $langBriefProfilePortfolioTextColor = "Χρώμα κειμένων σύντομου προφίλ";
@@ -3984,11 +3997,7 @@ $langSettingsAlertDanger = "Alert-Danger Settings";
 $langSettingsTooltip = "Tooltip settings";
 $langbgColorTooltip = "Tooltip background color";
 $langTextColorTooltip = "Text color";
-
-
-
-
-
+$langBorderTextColor = "Border color"; 
 $langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Short note';
@@ -4168,9 +4177,11 @@ $langLinksHeaderFooterCongiguration = 'Header - Footer Link Settings';
 $langBgHeaderCongiguration = "Background color Header";
 $langBgFooterCongiguration = "Background color Footer";
 $langLoginConfiguration = "Login Screen Configuration";
-$langButtonsColorCongiguration = "Buttons Settings with color";
+$langButtonsColorCongiguration = "Primary button";
+$langButtonsColorWhiteCongiguration = "Secondary button";
 $langTextColor = "Text Color";
 $langHoverTextColor = "Color Hovered Text";
+$langHoverBorderTextColor = "Color Hovered-border button";
 $langHoverWhiteColorButton = "Background Color Hovered Button";
 $langTag = 'Tag';
 $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>

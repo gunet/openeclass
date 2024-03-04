@@ -378,52 +378,55 @@
                                     <h3>
                                         <div class='d-flex gap-2'>
                                             {{ trans('langCourseUnits') }}
-                                            <a id='cu-help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
-                                                <i class="fa-solid fa-circle-info settings-icon Neutral-600-cl pt-1"></i>
-                                            </a>
                                         </div>
                                     </h3>
 
-                                    @if($is_editor)
-                                        <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                        </button>
+                                    <div class='d-flex gap-2 flex-wrap'>
+                                        <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                        </a>
+                                        @if($is_editor)
+                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                            </button>
 
-                                        <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsUnit" style='z-index:1;'>
-                                            <ul class="list-group list-group-flush">
-                                                @if ($is_editor)
-                                                    <li>
-                                                        <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                            <i class='fa-solid fa-plus settings-icon'></i>
-                                                            {{ trans('langAddUnit') }}
-                                                        </a>
-                                                    </li>
-                                                    @if($course_info->flipped_flag == 2)
+                                            <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsUnit" style='z-index:1;'>
+                                                <ul class="list-group list-group-flush">
+                                                    @if ($is_editor)
                                                         <li>
-                                                            <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                                <i class='fa-solid fa-pen-to-square settings-icon'></i>
-                                                                {{ trans('langFlippedEdit') }}
+                                                            <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class='fa-solid fa-plus settings-icon'></i>
+                                                                {{ trans('langAddUnit') }}
+                                                            </a>
+                                                        </li>
+                                                        @if($course_info->flipped_flag == 2)
+                                                            <li>
+                                                                <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                    <i class='fa-solid fa-pen-to-square settings-icon'></i>
+                                                                    {{ trans('langFlippedEdit') }}
+                                                                </a>
+                                                            </li>
+                                                        @endif
+                                                    @endif
+                                                    @if($total_cunits > 0 and $is_editor)
+                                                        <li>
+                                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class="fa-solid fa-table-cells-large settings-icon"></i>
+                                                                {{ trans('langShowUnitCarousel') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class="fa-solid fa-table-list settings-icon"></i>
+                                                                {{ trans('langShowUnitRow') }}
                                                             </a>
                                                         </li>
                                                     @endif
-                                                @endif
-                                                @if($total_cunits > 0 and $is_editor)
-                                                    <li>
-                                                        <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                            <i class="fa-solid fa-table-cells-large settings-icon"></i>
-                                                            {{ trans('langShowUnitCarousel') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                            <i class="fa-solid fa-table-list settings-icon"></i>
-                                                            {{ trans('langShowUnitRow') }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </div>
-                                    @endif
+                                                </ul>
+                                            </div>
+                                        @endif
+                                        
+                                    </div>
                                 </div>
 
                                 <div class='card-body card-body-default px-0 pt-0' id='boxlistSort'>
