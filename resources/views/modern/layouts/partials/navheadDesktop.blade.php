@@ -58,7 +58,7 @@
                 @endif
                 @if(!isset($_SESSION['uid']))
                     <div class='h-100 d-flex justify-content-start align-items-center'>
-                        <div class="d-flex justify-content-start align-items-center h-40px @if(get_config('dont_display_login_form')) pe-3 @endif">
+                        <div class="d-flex justify-content-start align-items-center h-40px @if(get_config('dont_display_login_form') or ( !isset($_SESSION['uid']) and !get_config('dont_display_login_form') and !empty($authNameEnabled) )) pe-3 @endif">
                             {!! lang_selections_Desktop('idLangSelectionDesktop') !!}
                         </div>
                         @if(get_config('dont_display_login_form'))
@@ -69,9 +69,36 @@
                 <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
                     <div class='d-flex justify-content-start align-items-center h-80px'>
                         @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
-                            <a class='header-login-text' href="{{$urlAppend}}main/login_form.php">
-                                {{ trans('langUserLogin') }}
-                            </a>
+                            @if($authCase)
+                                @if(!empty($authNameEnabled))
+                                    @if($authNameEnabled == 'cas')
+                                        <a class='header-login-text' href="{{ $urlAppend }}modules/auth/cas.php">
+                                            {{ trans('langUserLogin') }}
+                                        </a>
+                                    @else
+                                        <a class='header-login-text' href="{{ $urlAppend }}secure/index.php">
+                                            {{ trans('langUserLogin') }}
+                                        </a>
+                                    @endif
+                                @endif
+                            @else
+                                <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
+                                    {{ trans('langUserLogin') }}
+                                </a>
+                            @endif
+                        @elseif(!isset($_SESSION['uid']) and !get_config('dont_display_login_form'))
+                             @if(!empty($authNameEnabled))
+                                <div class='split-left h-40px ps-0 pe-3'></div>
+                                @if($authNameEnabled == 'cas')
+                                    <a class='header-login-text' href="{{ $urlAppend }}modules/auth/cas.php">
+                                        {{ trans('langUserLogin') }}
+                                    </a>
+                                @else
+                                    <a class='header-login-text' href="{{ $urlAppend }}secure/index.php">
+                                        {{ trans('langUserLogin') }}
+                                    </a>
+                                @endif
+                            @endif
                         @endif
                         @if(isset($_SESSION['uid']))
                             <div class='d-flex justify-content-end p-0 h-80px'>

@@ -61,7 +61,8 @@ function view($view_file, $view_data = array()) {
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
             $require_editor, $langHomePage,
-            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg, $tmp_pageName, $courseLicense, $loginIMG;
+            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg, 
+            $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled;
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -251,6 +252,19 @@ function view($view_file, $view_data = array()) {
         });
         </script>
         ";
+    }
+
+    //Check if auth refers to cas or shibboleth and others available auth_ids are disabled.
+    $authCase = 0;
+    $authNameEnabled = '';
+    $aC = database::get()->queryArray("SELECT * FROM auth WHERE auth_default > ?d",0);
+    if(count($aC) == 1){
+        foreach($aC as $a){
+            if($a->auth_name == 'shibboleth' or $a->auth_name == 'cas'){
+                $authCase = 1;
+                $authNameEnabled = $a->auth_name;
+            }
+        }
     }
 
     // Add Theme Options styles
@@ -1078,7 +1092,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////// BACKGROUND COLOR OF WHITE BUTTON ////////////////////////////
+        ///////////////////// BACKGROUND COLOR OF SECONDARY BUTTON //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1144,7 +1158,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////// TEXT COLOR OF WHITE BUTTON ///////////////////////////////
+        //////////////////////// TEXT COLOR OF SECONDARY BUTTON /////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1208,7 +1222,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////// BORDER COLOR OF WHITE BUTTON //////////////////////////////
+        /////////////////////// BORDER COLOR OF SECONDARY BUTTON ////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1257,7 +1271,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////// HOVERED TEXT COLOR OF WHITE BUTTON //////////////////////
+        ///////////////////////// HOVERED TEXT COLOR OF SECONDARY BUTTON ////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1336,7 +1350,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////// HOVERED BORDER COLOR OF WHITE BUTTON /////////////////////
+        //////////////////////// HOVERED BORDER COLOR OF SECONDARY BUTTON ///////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1396,7 +1410,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////// HOVERED BACKGROUND COLOR OF WHITE BUTTON ////////////////////////
+        ///////////////// HOVERED BACKGROUND COLOR OF SECONDARY BUTTON //////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1460,18 +1474,13 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////// BACKGROUND COLOR OF COLORFUL BUTTON ////////////////////////
+        /////////////////////// BACKGROUND COLOR OF PRIMARY BUTTON //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
         if (!empty($theme_options_styles['buttonBgColor'])) {
             $styles_str .= "
                 .submitAdminBtn.active{
-                    border-color: $theme_options_styles[buttonBgColor];
-                    background-color: $theme_options_styles[buttonBgColor];
-                }
-
-                .submitAdminBtnDefault{
                     border-color: $theme_options_styles[buttonBgColor];
                     background-color: $theme_options_styles[buttonBgColor];
                 }
@@ -1591,7 +1600,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////// HOVERED BACKCKGROUND COLOR OF COLORFUL BUTTON ////////////////
+        ////////////////////// HOVERED BACKCKGROUND COLOR OF PRIMARY BUTTON /////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1603,20 +1612,10 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
                 
-                
-                .submitAdminBtnDefault:hover{
-                    border-color: $theme_options_styles[buttonHoverBgColor];
-                    background-color: $theme_options_styles[buttonHoverBgColor];
-                }
-                
-                
-                
                 .login-form-submit:hover {
                     border-color: $theme_options_styles[buttonHoverBgColor];
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
-                
-                
                 
                 .submitAdminBtnDefault:hover,
                 input[type=submit]:hover,
@@ -1625,15 +1624,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
                 
-    
-                
                 .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover, 
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
                     border-color: $theme_options_styles[buttonHoverBgColor] ;
                     background-color: $theme_options_styles[buttonHoverBgColor] ;
                 }
-                
-        
                 
                 .pagination-glossary .page-item.active .page-link:hover {
                     background-color: $theme_options_styles[buttonHoverBgColor];
@@ -5491,7 +5486,8 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 'courseLicense', 'loginIMG', 'image_footer');
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 
+            'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
