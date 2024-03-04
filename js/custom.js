@@ -259,41 +259,77 @@ function topFunction() {
 
 function nextAuthedicationMethod(){
     const slidePage = document.querySelector(".slide-page");
-    const currentPage = document.querySelector(".current-page");
-    const nextBtnFirst = document.querySelector(".firstNext");
-    const prevBtnSec = document.querySelector(".prev-1");
-    const nextBtnSec = document.querySelector(".next-1");
-    const prevBtnThird = document.querySelector(".prev-2");
+    const nextPage1 = document.querySelector(".next-page-1");
+    const nextPage2 = document.querySelector(".next-page-2");
 
-    if(nextBtnFirst != null){
-        nextBtnFirst.addEventListener("click", function(event){
+    const BtnFirst = document.querySelector(".firstNext");
+
+    const prevBtn1 = document.querySelector(".prev-1");
+    const prevBtn2 = document.querySelector(".prev-2");
+
+    const nextBtn1 = document.querySelector(".next-1");
+    const nextBtn2 = document.querySelector(".next-2");
+
+    const nextBtn3 = document.querySelector(".next-3");
+
+    if(BtnFirst != null){
+        BtnFirst.addEventListener("click", function(event){
             event.preventDefault();
             slidePage.style.marginLeft = "-100%";
+            nextPage1.style.marginLeft = "0%";
+            nextPage2.style.marginLeft = "100%";
         
         });
     }
 
-    if(nextBtnSec != null){
-        nextBtnSec.addEventListener("click", function(event){
+    if(nextBtn1 != null){
+        nextBtn1.addEventListener("click", function(event){
             event.preventDefault();
-            currentPage.style.marginLeft = "-100%";
-            
+            slidePage.style.marginLeft = "-100%";
+            nextPage1.style.marginLeft = "-100%";
+            nextPage2.style.marginLeft = "0%";
+        
         });
     }
 
-    if(prevBtnSec != null){
-        prevBtnSec.addEventListener("click", function(event){
+    if(prevBtn1 != null){
+        prevBtn1.addEventListener("click", function(event){
             event.preventDefault();
             slidePage.style.marginLeft = "0%";
-            
+            nextPage1.style.marginLeft = "100%";
+            nextPage2.style.marginLeft = "100%";
+        
         });
     }
 
-    if(prevBtnThird != null){
-        prevBtnThird.addEventListener("click", function(event){
+    if(nextBtn2 != null){
+        nextBtn2.addEventListener("click", function(event){
             event.preventDefault();
-            currentPage.style.marginLeft = "0%";
-            
+            slidePage.style.marginLeft = "-100%";
+            nextPage1.style.marginLeft = "-100%";
+            nextPage2.style.marginLeft = "0%";
+        
         });
     }
+
+    if(prevBtn2 != null){
+        prevBtn2.addEventListener("click", function(event){
+            event.preventDefault();
+            slidePage.style.marginLeft = "-100%";
+            nextPage1.style.marginLeft = "0%";
+            nextPage2.style.marginLeft = "100%";
+        
+        });
+    }
+
+    if(nextBtn3 != null){
+        nextBtn3.addEventListener("click", function(event){
+            event.preventDefault();
+            slidePage.style.marginLeft = "0%";
+            nextPage1.style.marginLeft = "100%";
+            nextPage2.style.marginLeft = "-100%";
+        
+        });
+    }
+
 }

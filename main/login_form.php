@@ -118,46 +118,7 @@ $tool_content .= "
                     <div class='row row-cols-1 row-cols-lg-2 g-4'>
                       <div class='col $Position'>";
                         if($auth_enabled_method == 1){
-                          if(count($authLink) == 1){
-            $tool_content .= "<div class='card cardLogin h-100 px-lg-4 py-lg-3 p-3'>";
-                                $k = 0;
-                                foreach($authLink as $authInfo){
-                  $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-2 flex-wrap'>
-                                      <h2 class='mb-3'>".(!empty($authInfo[2]) ? $authInfo[2] : $langLogin)."</h2>";
-                                      if(!empty($authInfo[3])){
-                        $tool_content .= "<a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction$k'>
-                                              $langInstructions
-                                          </a>
-                                          <div class='modal fade' id='authInstruction$k' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
-                                              <div class='modal-dialog'>
-                                                  <div class='modal-content'>
-                                                      <div class='modal-header'>
-                                                          <div class='modal-title' id='authInstructionLabel'>$langInstructionsAuth</div>
-                                                          <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                                              <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
-                                                          </button>
-                                                      </div>
-                                                      <div class='modal-body'>
-                                                          <div class='col-12'>
-                                                              <div class='alert alert-info'>
-                                                                  <i class='fa-solid fa-circle-info fa-lg'></i>
-                                                                  <span>".$authInfo[3]."</span>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>";
-                                      }
-                $tool_content .= "</div>
-                                  <div class='card-body d-flex justify-content-center align-items-center'>";
-                  $tool_content .= "<div class='w-100'>
-                                      ".$authInfo[1]."
-                                    </div>
-                                  </div>";
-                                }
-            $tool_content .= "</div>";
-                          }elseif(count($authLink) > 1){
+                          if(count($authLink) > 0){
           $tool_content .= "<div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
                               <div class='card-body d-flex justify-content-center align-items-center'>";
                                   $i = 0;
@@ -168,8 +129,10 @@ $tool_content .= "
                                           foreach($authLink as $authInfo){
                                               if($i==0){
                                                 $Page = 'slide-page';
-                                              }else{
-                                                $Page = 'current-page';
+                                              }elseif($i == 1){
+                                                $Page = 'next-page-1';
+                                              }elseif($i == 2){
+                                                $Page = 'next-page-2';
                                               }
                                               
                             $tool_content .= "<div class='col-12 page $Page h-100'>
@@ -210,31 +173,78 @@ $tool_content .= "
                                                       </div>
                                                   
                                                 
-                                                      <div class='col-12 align-self-end pt-4'>";
-                                                          if($i == 0){
-                                              $tool_content .= "<div class='d-flex justify-content-md-end justify-content-center align-items-center'>
-                                                                  <button class='btn submitAdminBtn firstNext next'>
-                                                                      $langNextAuthMethod
-                                                                      <i class='fa-solid fa-chevron-right settings-icons'></i>
-                                                                  </button>
-                                                              </div>";
-                                                          }else{
-                                                              
-                                            $tool_content .= "<div class='d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap'>";
-                                                                  if($i == 1 or $i == (count($authLink)-1)){
-                                                    $tool_content .= "<button class='btn submitAdminBtn prev-$i prev'>
-                                                                          <i class='fa-solid fa-chevron-left settings-icons'></i>
-                                                                          $langPrevStep
-                                                                      </button>";
-                                                                  }
-                                                                  if($i+1 <= (count($authLink)-1)){
-                                                    $tool_content .= "<button class='btn submitAdminBtn next-$i next'>
-                                                                          $langNextAuthMethod
-                                                                          <i class='fa-solid fa-chevron-right settings-icons'></i>
-                                                                      </button>";
-                                                                  }
-                                          $tool_content .= "  </div>";
-                                                          }
+                                                      <div class='col-12 align-self-end'>";
+                                                        if(count($authLink) > 1){
+                                                            $tool_content .= " <div id='or' class='ms-auto me-auto mb-2'>$langOr</div>";  
+                                                        }  
+                                                        if(count($authLink) == 2){
+                                            $tool_content .= "<div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
+                                                                <button class='btn submitAdminBtn " . ( ($i==0) ? 'firstNext' : 'prev-'.$i ) . " next'>";
+                                                                    if($i==0){
+                                                                        if(!empty($authLink[1][2])){
+                                                                            $tool_content .= "<span class='TextBold'>".$authLink[1][2]."</span>";
+                                                                        }else{
+                                                                            
+                                                                            $tool_content .= "<span class='TextBold'>".$langLogin."</span>";
+                                                                        }
+                                                                    }
+                                                                    if($i==1){
+                                                                        if(!empty($authLink[0][2])){
+                                                                            $tool_content .= "<span class='TextBold'>".$authLink[0][2]."</span>";
+                                                                        }else{
+                                                                          $tool_content .= "<span class='TextBold'>".$langLogin."</span>";
+                                                                        }
+                                                                        
+                                                                    }
+
+                                                                    
+                                                                    
+                                            $tool_content .= " </button>
+                                                            </div>";
+                                                        }
+
+                                                        if(count($authLink) == 3){
+                                        $tool_content .= "<div class='d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap'>";
+                                                                
+                                                                    if($i==0){
+                                                       $tool_content .= "<button class='btn submitAdminBtn firstNext next'>
+                                                                            
+                                                                            ".(!empty($authLink[1][2]) ? $authLink[1][2] : $langLogin)."
+                                                                        </button>
+                                                                        <button class='btn submitAdminBtn next-1 next'>
+                                                                            
+                                                                            ".(!empty($authLink[2][2]) ? $authLink[2][2] : $langLogin)."
+                                                                        </button>";
+                                                                        
+                                                                    }
+
+                                                                    if($i==1){
+                                                       $tool_content .= "<button class='btn submitAdminBtn prev-1 next'>
+                                                                            
+                                                                            ".(!empty($authLink[0][2]) ? $authLink[0][2] : $langLogin)."
+                                                                        </button>
+                                                                        <button class='btn submitAdminBtn next-2 next'>
+                                                                            
+                                                                            ".(!empty($authLink[2][2]) ? $authLink[2][2] : $langLogin)."
+                                                                        </button>";
+                                                                        
+                                                                    }
+
+                                                                    if($i==2){
+                                                      $tool_content .= "<button class='btn submitAdminBtn prev-2 next'>
+                                                                            
+                                                                            ".(!empty($authLink[1][2]) ? $authLink[1][2] : $langLogin)."
+                                                                        </button>
+                                                                        <button class='btn submitAdminBtn next-3 next'>
+                                                                            
+                                                                            ".(!empty($authLink[0][2]) ? $authLink[0][2] : $langLogin)."
+                                                                        </button>";
+                                                                        
+                                                                    }
+                                                                    
+                                                                
+                                          $tool_content .= "</div>";
+                                                      }
                                     $tool_content .= "</div>
                                                     </div>
                                               </div>";
