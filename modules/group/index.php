@@ -86,6 +86,7 @@ if ($is_editor) {
     }
     if (isset($_POST['creation'])) { // groups creation
         $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('group_name'));
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
         $v->rule('min', array('group_quantity'), 1);
@@ -93,6 +94,7 @@ if ($is_editor) {
         $v->rule('numeric', array('group_max'));
         $v->rule('min', array('group_max'), 0);
         $v->labels(array(
+            'group_name' => "$langTheField $langGroupName",
             'group_quantity' => "$langTheField $langNewGroups",
             'group_max' => "$langTheField $langNewGroupMembers"
         ));
