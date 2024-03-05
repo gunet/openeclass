@@ -55,7 +55,6 @@ if (isset($_POST['submit']) and isset($_FILES['userfile']) ) {
     $new_users_info = array();
     $newstatus = ($_POST['type'] == 'prof') ? USER_TEACHER : USER_STUDENT;
     $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
-    //$am = $_POST['am'];
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
 
     if ($auth_methods_form != 1) {
@@ -94,14 +93,26 @@ if (isset($_POST['submit']) and isset($_FILES['userfile']) ) {
             continue;
         } else {
             $info = $user_data = [];
+            if ($row->isEmpty()) {
+                continue;
+            }
             $cellIterator = $row->getCellIterator();
+            // ignore empty cells
+            $cellIterator->setIterateOnlyExistingCells(TRUE);
             foreach ($cellIterator as $cell) {
                 $user_data[] = trim($cell->getValue());
             }
+
             if (count($user_data) > count($fields)) { // we have course codes
                 $userl = array_splice($user_data, count($fields));
             }
-            $info = array_combine($fields, $user_data);
+
+            try {
+                $info = array_combine($fields, $user_data);
+            }
+            catch (ValueError) {  // ignore rows with empty cells (e.g. user details are missing)
+                continue;
+            }
             if (isset($info['email'])) {
                 if (!valid_email($info['email'])) {
                     Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email']));
