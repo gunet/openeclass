@@ -9,7 +9,8 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/googlemeetapp.php';
 
-global $urlServer;
+global $urlServer, $langShowZoomApiUsers, $langAdmin, $langExtAppConfig,
+       $langClearSettings, $langSubmit, $langCancel, $langConfig;
 
 $app = ExtAppManager::getApp('zoom');
 $toolName = $langConfig . ' ' . $app->getDisplayName();
@@ -146,7 +147,7 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page($app->getConfigUrl());
 } elseif (isset($_GET['zoom_type_api'])) {
     $tool_content .= action_bar(array(
-        array('title' => 'Show API Users',
+        array('title' => $langShowZoomApiUsers,
             'url' => 'zoomconf.php?show_api_users=1',
             'icon' => 'fa-user',
             'level' => 'primary-label',

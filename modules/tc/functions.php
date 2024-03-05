@@ -104,8 +104,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langInsertUserInfo, $langSurnameName, $langProfEmail, $langSelect,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
-        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText,
-        $langGoToWebexLink, $urlServer;
+        $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
+        $langGoToWebexLink, $urlServer, $langZoomUserNotFound;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -289,12 +289,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 $user = $db->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
 
                 if (empty($user->email)) {
-                    Session::Messages("Δημιουργήθηκε πρόβλημα κατά την εύρεση του χρήστη.");
+                    Session::Messages($langZoomUserNotFound);
                     redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
                 }
 
                 if (!$zoomUserRepo->userExists($user->email)) {
-                    Session::Messages("Δεν βρέθηκε εγγεγραμμένος χρήστης στην υπηρεσία UoA Zoom με διεύθυνση email: <b>" . $user->email . "</b>");
+                    Session::Messages($langZoomUserNotRegistered . "<b>" . $user->email . "</b>");
                     redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
                 }
             } else {
@@ -847,7 +847,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 }
 
 function show_zoom_registration() {
-    global $tool_content, $course_code, $urlServer;
+    global $tool_content, $course_code, $urlServer, $langRegistration;
 
     $registrationUrl = $urlServer . 'modules/tc/index.php?course=' . $course_code . '&register_zoom_user=1';
 
@@ -868,7 +868,7 @@ function show_zoom_registration() {
                                                     <div style='margin-top: 5px;'>
                                                         <span>Resister new or existing zoom user under the uoa zoom account.</span>
                                                         <div class='row'>
-                                                            <a href='$registrationUrl' class='btn btn-success' style='margin: 20px'>Εγγραφή</a>
+                                                            <a href='$registrationUrl' class='btn btn-success' style='margin: 20px'>$langRegistration</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -882,13 +882,13 @@ function show_zoom_registration() {
 
 function register_zoom_user()
 {
-    global $uid, $course_code;
+    global $uid, $course_code, $langZoomSuccessRegister;
 
     $client = new Client();
     $zoomUser = new ZoomUser(new ZoomUserRepository($client, new Repository($client)));
     $eclassUser = Database::get()->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
     $zoomUser->create($eclassUser);
-    Session::Messages('Επιτυχής δημιουργία λογαριασμού. Παρακαλώ ακολουθήστε τον σύνδεσμο στο email σας.', 'alert-success');
+    Session::Messages($langZoomSuccessRegister, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 

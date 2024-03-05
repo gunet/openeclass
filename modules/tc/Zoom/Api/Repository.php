@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use modules\tc\Zoom\User\ZoomUser;
+use Session;
 
 class Repository
 {
@@ -38,6 +39,8 @@ class Repository
 
     public function createMeeting(ZoomUser $zoomUser, string $agenda, string $topic, string $date, string $auto_recording)
     {
+        global $langZoomCreateMeetingError;
+
         $accessToken = $this->getAccessToken();
         $record = self::RECORDING_NONE;
         $this->dateTime->createFromFormat('Y-m-d H:i:s', $date);
@@ -72,9 +75,8 @@ class Repository
                 ]
             );
         } catch (ClientException $e) {
-            echo '<pre>';
-            print_r($e->getMessage());
-            exit;
+            Session::Messages($langZoomCreateMeetingError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
         $responseDataJson = $res->getBody()->getContents();
@@ -83,6 +85,8 @@ class Repository
 
     public function getAccessToken() : string
     {
+        global $langZoomAccessTokenError;
+
         $accessTokenCreated = $this->getAccessTokenCreation();
 
         if (
@@ -95,7 +99,8 @@ class Repository
         }
         $dbToken = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = 'zoomApiAccessToken'");
         if (empty($dbToken->value)) {
-            die('Something went wrong while generating access token');
+            Session::Messages($langZoomAccessTokenError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
         return $dbToken->value;
     }
@@ -111,6 +116,8 @@ class Repository
 
     private function generateAccessToken() : string
     {
+        global $langZoomAccessTokenError;
+
         $clientId = $this->getClientId();
         $clientSecret = $this->getClientSecret();
         $accountId = $this->getAccountId();
@@ -129,7 +136,8 @@ class Repository
                 ]
             );
         } catch (Exception|GuzzleException $e) {
-            die($e);
+            Session::Messages($langZoomAccessTokenError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
         $responseDataJson = $res->getBody()->getContents();
@@ -139,6 +147,8 @@ class Repository
 
     private function saveAccessTokenInDatabase(string $accessToken) : void
     {
+        global $langZoomAccessTokenError;
+
         $query = "REPLACE INTO `config` (`key`, `value`) 
                 VALUES ('zoomApiAccessToken', '".$accessToken."'), 
                 ('zoomApiAccessTokenCreated', '".strtotime('now')."')";
@@ -146,7 +156,8 @@ class Repository
         try {
             Database::get()->querySingle($query);
         } catch (Exception $e) {
-            die($e);
+            Session::Messages($langZoomAccessTokenError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
     }
 
@@ -171,10 +182,5 @@ class Repository
                                                     FROM `config` 
                                                     WHERE `key` = 'zoomApiAccessTokenCreated'");
         return $q->key_creation;
-    }
-
-    private function formatRequestDatetime(string $date)
-    {
-        return date(self::DATETIME_FORMAT, strtotime($date));
     }
 }
