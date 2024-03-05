@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_admin = true;
@@ -47,7 +47,7 @@ if (isset($_GET['del_badge'])) { // delete badge icon
     $sql_badge_icon = Database::get()->querySingle("SELECT id, filename FROM badge_icon WHERE id = ?d", $_GET['del_badge']);
     $badge_icon_id = $sql_badge_icon->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM badge WHERE icon = ?d", $badge_icon_id)->cnt;
-    if ($cnt > 0) {  // don't delete if it's used by a badge (foreing key constrain)
+    if ($cnt > 0) {  // don't delete if it's used by a badge (foreign key constraint)
         Session::Messages($langIconBelongsToBadge, 'alert-warning');
     } else {
         $badge_icon = $sql_badge_icon->filename;
@@ -88,7 +88,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                                         name = ?s,
                                                         description = ?s,
                                                         filename = ?s
-                                                       WHERE id = ?d", 
+                                                       WHERE id = ?d",
                                                     $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
                         Session::Messages($langDownloadEnd, 'alert-success');
                     } else {
@@ -101,7 +101,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                             name = ?s,
                                             description = ?s,
                                             orientation = ?s
-                                        WHERE id = ?d", 
+                                        WHERE id = ?d",
                                     $_POST['name'], $_POST['description'], $_POST['orientation'], $_POST['cert_id']);
         }
     } else {
@@ -111,7 +111,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
             if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename") == TRUE) {
                 if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
                     $archive->close();
-                    Database::get()->querySingle("INSERT INTO certificate_template SET 
+                    Database::get()->querySingle("INSERT INTO certificate_template SET
                                         name = ?s,
                                         description = ?s,
                                         filename = ?s,
@@ -124,34 +124,45 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
         }
     }
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
-    if (isset($_POST['badge_id'])) {        
-        if ($_FILES['icon']['size'] > 0) { // replace file if needed
-            $filename = $_FILES['icon']['name'];
-            if (move_uploaded_file($_FILES['icon']['tmp_name'], "$webDir" . BADGE_TEMPLATE_PATH . "$filename")) {
-                $old_icon = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $_POST['badge_id'])->filename;
-                unlink($webDir . BADGE_TEMPLATE_PATH . $old_icon); // delete old icon
-                Database::get()->querySingle("UPDATE badge_icon SET
-                                        name = ?s,
-                                        description = ?s,
-                                        filename = ?s
-                                       WHERE id = ?d", $_POST['name'], $_POST['description'], $filename, $_POST['badge_id']);
-            }
-        } else {
-            Database::get()->querySingle("UPDATE badge_icon SET
-                                        name = ?s,
-                                        description = ?s
-                                       WHERE id = ?d", $_POST['name'], $_POST['description'], $_POST['badge_id']);
-        }
-    } else {
+    if (!isset($_POST['token']) or !validate_csrf_token($_POST['token'])) { forbidden(); }
+    $new_icon = $old_icon = $filename = null;
+    $badge_id = isset($_POST['badge_id'])? $_POST['badge_id']: null;
+    if ($_FILES['icon']['size'] > 0) {
         $filename = $_FILES['icon']['name'];
-        if (move_uploaded_file($_FILES['icon']['tmp_name'], "$webDir" . BADGE_TEMPLATE_PATH . "$filename")) {
-            Database::get()->querySingle("INSERT INTO badge_icon SET 
-                                            name = ?s, 
-                                            description = ?s,
-                                            filename = ?s", $_POST['name'], $_POST['description'], $filename);
-            Session::Messages($langDownloadEnd, 'alert-success');
+        $extension = strtolower(get_file_extension($filename));
+        if (!in_array($extension, ['png', 'jpg', 'jpeg'])) {
+            Session::Messages($langUploadedFileNotAllowed . ' ' . q($filename), 'alert-danger');
+            redirect_to_home_page('modules/admin/certbadge.php');
+        }
+        $new_icon = ($badge_id? "$badge_id-": '') . bin2hex(random_bytes(8)) . '.' . $extension;
+    }
+    $name = canonicalize_whitespace($_POST['name'] ?? '');
+    if (!$name) {
+        Session::Messages($langEmptyNodeName, 'alert-warning');
+        redirect_to_home_page('modules/admin/certbadge.php');
+    }
+    if ($badge_id) {
+        $old_icon = Database::get()->querySingle('SELECT filename FROM badge_icon WHERE id = ?d', $_POST['badge_id'])->filename;
+    }
+    if (move_uploaded_file($_FILES['icon']['tmp_name'], $webDir . BADGE_TEMPLATE_PATH . $new_icon)) {
+        if ($old_icon) {
+            unlink($webDir . BADGE_TEMPLATE_PATH . $old_icon); // delete old icon if needed
         }
     }
+    if ($badge_id) {
+        Database::get()->querySingle("UPDATE badge_icon SET
+            name = ?s,
+            description = ?s,
+            filename = ?s
+            WHERE id = ?d", $_POST['name'], $_POST['description'], $new_icon ?? $old_icon, $badge_id);
+    } else {
+        Database::get()->querySingle("INSERT INTO badge_icon SET
+            name = ?s,
+            description = ?s,
+            filename = ?s", $_POST['name'], $_POST['description'], $new_icon);
+    }
+    Session::Messages($langDownloadEnd, 'alert-success');
+    redirect_to_home_page('modules/admin/certbadge.php');
 }
 
 // display forms
@@ -200,7 +211,7 @@ if (isset($_GET['action'])) {
                                     <div class='col-sm-10'>
                                         <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
                                         <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
-                                    </div>                                
+                                    </div>
                             </div>
                             <div class='form-group'>
                             <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
@@ -228,11 +239,13 @@ if (isset($_GET['action'])) {
             $badge_description = $badge_data->description;
             $badge_hidden_id = "<input type='hidden' name='badge_id' value='$badge_id'>";
         }
- 
-        $tool_content .= "<div class='row'>
-                        <div class='col-md-12'>
-                        <div class='form-wrapper'>
-                        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
+
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-md-12'>
+                    <div class='form-wrapper'>
+                        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>" .
+                        generate_csrf_token_form_field();
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";
                             $tool_content .= "<div class='form-group'>
@@ -281,7 +294,7 @@ if (isset($_GET['action'])) {
                         <tr class='list-header'><th class='text-center' colspan='5'>$langAvailableCertTemplates</th></tr>
                         <tr class='list-header'>
                             <th>$langTitle</th>
-                            <th>$langDescription</th>                            
+                            <th>$langDescription</th>
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
                 foreach ($sql1 as $cert_data) {
@@ -304,9 +317,9 @@ if (isset($_GET['action'])) {
                 }
     $tool_content .= "</table>";
     $tool_content .= "</div></div></div>";
-    
+
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
-    
+
     $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                         <table class='table-default'>
                         <tr class='list-header'><th class='text-center' colspan='5'>$langAvailableBadges</th></tr>
@@ -322,7 +335,7 @@ if (isset($_GET['action'])) {
                                       <td>" . ellipsize_html($badge_data->description, 100) . "</td>
                                       <td class='text-center'><img src='$icon_link' width='50' height='50'></td>";
                     $tool_content .= "<td class='text-center option-btn-cell'>".
-                            action_button(array(                                
+                            action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
                                     'url' => "$_SERVER[SCRIPT_NAME]?action=edit_badge&amp;bid=$badge_data->id"

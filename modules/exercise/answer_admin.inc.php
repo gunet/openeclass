@@ -526,14 +526,7 @@ if (isset($_GET['modifyAnswers'])) {
                  $tool_content .= "</textarea></td></tr>";
                  // if there is an error message
                  if (!empty($msgErr)) {
-                     $tool_content .= "
-                       <tr>
-                         <td>
-                           <table border='0' cellpadding='3' align='center' width='400' bgcolor='#FFCC00'>
-                             <tr><td>$msgErr</td></tr>
-                           </table>
-                         </td>
-                       </tr>";
+                     $tool_content .= "<div class='alert alert-danger text-center'>$msgErr</div>";
                  }
                  $tool_content .= "</table>";
              } else {

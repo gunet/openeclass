@@ -48,10 +48,11 @@ $sql = Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname,
                     $data[] =  [ $item->surname, $item->givenname, $item->email, $item->am, $item->username, $item->reg_date, $ug ];
             }, $course_id);
 
-$sheet->mergeCells("A1:F1");
+$sheet->mergeCells("A1:G1");
 $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
-for ($i = 1; $i <= 6; $i++) {
-    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+for ($i = 1; $i <= 7; $i++) {
+    $cells = [$i, 3];
+    $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
 }
 // create spreadsheet
 $sheet->fromArray($data, NULL);

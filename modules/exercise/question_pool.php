@@ -396,10 +396,12 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     foreach ($result as $row) {
         $question_temp = new Question();
         $question_temp->read($row->id);
+        $questionWeight = $question_temp->selectWeighting();
         $question_title = q_math($question_temp->selectTitle());
         $question_difficulty_legend = $question_temp->selectDifficultyIcon($question_temp->selectDifficulty());
         $question_category_legend = $question_temp->selectCategoryName($question_temp->selectCategory());
-        $question_type_legend = $question_temp->selectTypeLegend($question_temp->selectType());
+        $question_type = $question_temp->selectType();
+        $question_type_legend = $question_temp->selectTypeLegend($question_type);
         $exercise_ids = $question_temp->selectExerciseList();
         $exercises_used_in = '';
         foreach ($exercise_ids as $ex_id) {
@@ -411,12 +413,26 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             $class = count($exercise_ids) > 0 ? 'previewQuestion warnLink': 'previewQuestion';
             $nbr = $question_temp->selectNbrExercises();
             $editUrl = "{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;modifyAnswers={$row->id}";
+            // check if question has weight
+            if (!$questionWeight) {
+                $question_excl_legend = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
+                    data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionWeight' data-original-title='' title=''></span>";
+            } else {
+                $question_excl_legend = '';
+            }
+            // check if question has answers
+            if ($question_type != FREE_TEXT and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
+                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' 
+                        data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoQuestionAnswers' data-original-title='' title=''></span>";
+            } else {
+                $question_excl_legend_2 = '';
+            }
             $tool_content .= "
                 <td>
                   <div class='pull-right small not_visible'> id: {$row->id}</div>
                   <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
-                  <br>
-                  <small>$question_type_legend $question_difficulty_legend $question_category_legend $exercises_used_in</small>
+                  $question_excl_legend<br>
+                  <small>$question_type_legend $question_difficulty_legend $question_category_legend $question_excl_legend_2 $exercises_used_in</small>
                 </td>";
             if ($question_temp->hasAnswered()) {
                 $warning_message = $langWarnAboutAnsweredQuestion;

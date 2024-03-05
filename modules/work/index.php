@@ -6078,36 +6078,33 @@ function download_assignments($id) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
         $filepath = "$webDir/courses/temp/$filename";
-        $temp_online_text_path = $workPath . "/t";
-        chdir($workPath);
-        create_zip_index("$secret/index.html", $id);
+        $temp_online_text_path = "$webDir/courses/temp/{$course_code}_work_$id";
+        $zip = new ZipArchive();
+        $zip->open($filepath, ZipArchive::CREATE);
         if ($sub_type == 1) { // free text assignment
-            $zip = new ZipArchive();
-            $zip->open($filepath, ZipArchive::CREATE);
-            mkdir($temp_online_text_path);
+            chdir($workPath);
+            create_zip_index("$secret/index.html", $id);
+            if (!is_dir($temp_online_text_path)) {
+                mkdir($temp_online_text_path);
+            }
             chdir($temp_online_text_path);
             $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);
             foreach ($sql as $data) {
                 $onlinetext = new \Mpdf\Mpdf([
                     'mode' => 'utf-8',
-                    'format' => 'A4-L',
+                    'format' => 'A4',
                     'tempDir' => _MPDF_TEMP_PATH,
-                    'margin_left' => 0,
-                    'margin_right' => 0,
-                    'margin_top' => 0,
-                    'margin_bottom' => 0,
-                    'margin_header' => 0,
-                    'margin_footer' => 0,
                 ]);
                 $onlinetext->WriteHTML($data->submission_text);
-                $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
+                $pdfname = strtr(greek_to_latin(uid_to_name($data->uid)), '\\/:', '___') . ".pdf";
                 $onlinetext->Output($pdfname, 'F');
+                unset($onlinetext);
+            }
+            foreach (glob('*.pdf') as $pdfname) {
                 $zip->addFile($pdfname);
             }
-            $zip->addFile($workPath . "/" . $secret . "/index.html", "index.html");
+            $zip->addFile("$workPath/$secret/index.html", "index.html");
         } else { // 'normal' assignment
-            $zip = new ZipArchive();
-            $zip->open($filepath, ZipArchive::CREATE);
             foreach (glob("$secret/*") as $file) {
                 if (is_dir($file)) {
                     foreach (glob("$file/*") as $subfile) {

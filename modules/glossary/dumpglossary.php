@@ -48,7 +48,8 @@ $sql = Database::get()->queryFunc("SELECT term, definition, url FROM glossary
 $sheet->mergeCells("A1:C1");
 $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
 for ($i = 1; $i <= 3; $i++) {
-    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    $cells = [$i, 3];
+    $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
 }
 // create spreadsheet
 $sheet->fromArray($data, NULL);
