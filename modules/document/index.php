@@ -127,6 +127,7 @@ if ($is_editor && isset($_POST['bulk_submit'])) {
         if ($_POST['bulk_action'] == 'move') {
             $moveTo = $_POST['source_path'];
             $filepaths = explode(',', $_POST['filepaths']);
+            $existingFilesArr = array();
             foreach ($filepaths as $source) {
                 $sourceXml = $source . '.xml';
                 // check if source and destination are the same
@@ -141,19 +142,22 @@ if ($is_editor && isset($_POST['bulk_submit'])) {
                         "^$curDirPath/[^/]+$", $filename);
                     if ($fileExists) {
                         $curDirPath = my_dirname($source);
-                        Session::Messages($langFileExists, 'alert-danger');
-                        redirect_to_current_dir();
-                    }
-                    if (empty($extra_path)) {
-                        if (move($basedir . $source, $basedir . $moveTo)) {
-                            if (hasMetaData($source, $basedir, $group_sql)) {
-                                move($basedir . $sourceXml, $basedir . $moveTo);
+                        array_push($existingFilesArr, $filename);
+                        $existingFiles = implode(', ', $existingFilesArr);
+                        Session::Messages($langFilesExists.' '.$existingFiles, 'alert-danger');
+                    } else {
+                        if (empty($extra_path)) {
+                            if (move($basedir . $source, $basedir . $moveTo)) {
+                                if (hasMetaData($source, $basedir, $group_sql)) {
+                                    move($basedir . $sourceXml, $basedir . $moveTo);
+                                }
+                                update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
                             }
+                        } else {
                             update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
                         }
-                    } else {
-                        update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
                     }
+
                 } else {
                     $action_message = "<div class='alert alert-danger'>$langImpossible</div><br>";
                     // return to step 1
