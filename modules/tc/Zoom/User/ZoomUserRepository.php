@@ -6,6 +6,7 @@ use Database;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use modules\tc\Zoom\Api\Repository;
+use Session;
 
 require_once 'include/lib/pwgen.inc.php';
 
@@ -38,6 +39,8 @@ class ZoomUserRepository
 
     public function createZoomUser($eclassUser)
     {
+        global $langZoomUserCreateError;
+
         $accessToken = $this->zoomRepository->getAccessToken();
         $password = choose_password_strength();
         $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
@@ -71,9 +74,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            echo '<pre>';
-            print_r($e->getMessage());
-            exit;
+            Session::Messages($langZoomUserCreateError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
         $responseDataJson = $res->getBody()->getContents();
@@ -81,13 +83,16 @@ class ZoomUserRepository
 
         $tc_user = $this->saveInDatabase($eclassUser->id, $responseData);
         if (!$tc_user) {
-            die('here');
+            Session::Messages($langZoomUserCreateError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
         return $responseData;
     }
 
     public function listAllZoomUsers()
     {
+        global $langZoomListUsersError;
+
         $accessToken = $this->zoomRepository->getAccessToken();
 
         $headers = [
@@ -102,9 +107,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            echo '<pre>';
-            print_r($e->getMessage());
-            exit;
+            Session::Messages($langZoomListUsersError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
         $responseDataJson = $res->getBody()->getContents();
@@ -113,6 +117,8 @@ class ZoomUserRepository
 
     public function userExists(string $email) : bool
     {
+        global $langZoomUserExistsError;
+
         $accessToken = $this->zoomRepository->getAccessToken();
 
         $headers = [
@@ -127,9 +133,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            echo '<pre>';
-            print_r($e->getMessage());
-            exit;
+            Session::Messages($langZoomUserExistsError . $email);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
         $responseDataJson = $res->getBody()->getContents();
@@ -143,6 +148,8 @@ class ZoomUserRepository
 
     public function changeUserType(string $id, string $email, int $type)
     {
+        global $langZoomUserTypeError;
+
         $accessToken = $this->zoomRepository->getAccessToken();
 
         $headers = [
@@ -170,9 +177,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            echo '<pre>';
-            print_r($e->getMessage());
-            exit;
+            Session::Messages($langZoomUserTypeError);
+            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
         $responseDataJson = $res->getBody()->getContents();

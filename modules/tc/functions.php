@@ -100,8 +100,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langInsertUserInfo, $langSurnameName, $langProfEmail, $langSelect,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
-        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText,
-        $langGoToWebexLink, $urlServer, $urlAppend;
+        $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
+        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend;
+
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -268,16 +269,36 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
-            if ($hostname != 'zoom') { // zoom url supplied by end user
-                $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
-                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToZoomLinkText</a></div>";
-            }
-            $tool_content .= "<div class='form-group'>
+            $client = new Client();
+            $db = Database::get();
+            $zoomApiRepo = new Repository($client);
+
+            if ($zoomApiRepo->isEnabled()) {
+                $zoomUserRepo = new ZoomUserRepository($client, $zoomApiRepo);
+                $user = $db->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
+
+                if (empty($user->email)) {
+                    Session::Messages($langZoomUserNotFound);
+                    redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
+                }
+
+                if (!$zoomUserRepo->userExists($user->email)) {
+                    Session::Messages($langZoomUserNotRegistered . "<b>" . $user->email . "</b>");
+                    redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
+                }
+            } else {
+                if ($hostname != 'zoom') { // zoom url supplied by end user
+                    $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
+                    $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToZoomLinkText</a></div>";
+                }
+                $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-12 control-label-notes'>$langLink:</label>
                     <div class='col-12'>
                         <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
+
                     </div>
                 </div>";
+            }
         }
 
         if ($tc_type == 'webex') { // webex
@@ -817,6 +838,54 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             
         //]]></script>";
 }
+
+function show_zoom_registration() {
+    global $tool_content, $course_code, $urlServer, $langRegistration;
+
+    $registrationUrl = $urlServer . 'modules/tc/index.php?course=' . $course_code . '&register_zoom_user=1';
+
+    $tool_content .= "  <div class='row'>
+                            <div class='col-xs-12'>
+                                <div class='panel panel-default'>
+                                    <div class='panel-body'>
+                                        <div class='inner-heading'>
+                                            <div class='row'>
+                                                <div class='col-sm-7'>
+                                                    <strong>Εγγραφή Χρήστη στην Υπηρεσία UoA Zoom</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='res-table-wrapper'>
+                                            <div class='row res-table-row'>
+                                                <div class='col-sm-12'>
+                                                    <div style='margin-top: 5px;'>
+                                                        <span>Resister new or existing zoom user under the uoa zoom account.</span>
+                                                        <div class='row'>
+                                                            <a href='$registrationUrl' class='btn btn-success' style='margin: 20px'>$langRegistration</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+}
+
+function register_zoom_user()
+{
+    global $uid, $course_code, $langZoomSuccessRegister;
+
+    $client = new Client();
+    $zoomUser = new ZoomUser(new ZoomUserRepository($client, new Repository($client)));
+    $eclassUser = Database::get()->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
+    $zoomUser->create($eclassUser);
+    Session::flash('message', $langZoomSuccessRegister);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
+}
+
 
 /**
  * @brief insert scheduled session data into database
