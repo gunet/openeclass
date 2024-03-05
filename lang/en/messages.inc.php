@@ -6184,3 +6184,12 @@ Possibility of cancellation by clicking on the date slot only if it has not been
 Otherwise, the cancellation is made from the page of my reservations.</div>";
 $langPinkBookingUser = "<div class='TextBold' style='color:#ffc0cb;'>The reservation by a user is displayed in PINK.</br>Possibility to cancel a reservation only from the --My reservations-- page.</div>";
 $langMoveOnLoginPage = "Head to the login screen via the <span style='font-weight:700;'> <<Login>> </span> option at the top of the page.";
+
+$langImportant = "Permanent placement on the top of the platform";
+$langNotImportant = "Removal from the top of the platform";
+$langExistImportantAnnounce = "There is already a listed announcement at the top of the platform. </br> The action was not completed.";
+$langAboutImportantAnnouncement = "Settings for permanently placed announcement at the top of the page";
+$langbgContainerImportantAnnouncement = "Background color";
+$langclContainerImportantAnnouncement = "Text color";
+$langclLinkImportantAnnouncement = "Link color";
+$langclHoveredLinkImportantAnnouncement = "Hovered link color";

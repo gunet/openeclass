@@ -32,13 +32,13 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor', 
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
-                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
-                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText'),
-                'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
+                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement'),
+                'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent', 
@@ -47,7 +47,7 @@ $defaults = array(
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
-                "rgba(79, 104, 147, 1)" => array('clTabs'),
+                "rgba(79, 104, 147, 1)" => array('clTabs', 'clContainerImportantAnnouncement'),
                 "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda', 'clColorHoveredBodyAgenda', 'BgBorderTextEditor'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover', 'BorderLeftToRightColumnCourseBgColor'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
@@ -69,6 +69,7 @@ $defaults = array(
                 "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
+                "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -2045,6 +2046,27 @@ $tool_content .= "
 
             <div role='tabpanel' class='tab-pane fade' id='navMoreOptions'>
                 <div class='form-wrapper form-edit rounded'>
+
+                    <hr>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutImportantAnnouncement</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgContainerImportantAnnouncement' class='control-label-notes mb-2 me-2'>$langbgContainerImportantAnnouncement:</label>
+                        <input name='bgContainerImportantAnnouncement' type='text' class='form-control colorpicker' id='bgContainerImportantAnnouncement' value='$theme_options_styles[bgContainerImportantAnnouncement]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clContainerImportantAnnouncement' class='control-label-notes mb-2 me-2'>$langclContainerImportantAnnouncement:</label>
+                        <input name='clContainerImportantAnnouncement' type='text' class='form-control colorpicker' id='clContainerImportantAnnouncement' value='$theme_options_styles[clContainerImportantAnnouncement]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkImportantAnnouncement' class='control-label-notes mb-2 me-2'>$langclLinkImportantAnnouncement:</label>
+                        <input name='clLinkImportantAnnouncement' type='text' class='form-control colorpicker' id='clLinkImportantAnnouncement' value='$theme_options_styles[clLinkImportantAnnouncement]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredLinkImportantAnnouncement' class='control-label-notes mb-2 me-2'>$langclHoveredLinkImportantAnnouncement:</label>
+                        <input name='clHoveredLinkImportantAnnouncement' type='text' class='form-control colorpicker' id='clHoveredLinkImportantAnnouncement' value='$theme_options_styles[clHoveredLinkImportantAnnouncement]'>
+                    </div>
+
+                    <hr>
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutFaqImageUpload</h3>
                     <div class='form-group mt-4'>

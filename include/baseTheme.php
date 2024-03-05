@@ -62,7 +62,7 @@ function view($view_file, $view_data = array()) {
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
             $require_editor, $langHomePage,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg, 
-            $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled;
+            $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body;
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -264,6 +264,19 @@ function view($view_file, $view_data = array()) {
                 $authCase = 1;
                 $authNameEnabled = $a->auth_name;
             }
+        }
+    }
+
+    //Get important admin announcement
+    $pinned_announce_id = 0;
+    $pinned_announce_title = '';
+    $pinned_announce_body = '';
+    $important_announce = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE important = ?d AND visible = ?d",1,1);
+    if(count($important_announce) > 0){
+        foreach($important_announce as $an){
+            $pinned_announce_id = $an->id;
+            $pinned_announce_title = $an->title;
+            $pinned_announce_body = $an->body;
         }
     }
 
@@ -4660,129 +4673,6 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////// LINKS COLOR OF PLATFORM ///////////////////////////////
@@ -5429,6 +5319,66 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND COLOR OF CONTAINER IMPORTANT ANNCOUNCEMENT ////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgContainerImportantAnnouncement'])){
+            $styles_str .= "
+                .notification-top-bar{
+                    background: $theme_options_styles[bgContainerImportantAnnouncement];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////// TEXT COLOR OF CONTAINER IMPORTANT ANNCOUNCEMENT ///////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clContainerImportantAnnouncement'])){
+            $styles_str .= "
+                .notification-top-bar{
+                    color: $theme_options_styles[clContainerImportantAnnouncement];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////// LINK COLOR OF CONTAINER IMPORTANT ANNCOUNCEMENT ///////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clLinkImportantAnnouncement'])){
+            $styles_str .= "
+                .notification-top-bar a{
+                    color: $theme_options_styles[clLinkImportantAnnouncement];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////// HOVERED LINK COLOR OF CONTAINER IMPORTANT ANNCOUNCEMENT ///////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clHoveredLinkImportantAnnouncement'])){
+            $styles_str .= "
+                .notification-top-bar a:hover{
+                    color: $theme_options_styles[clHoveredLinkImportantAnnouncement];
+                }
+            
+            ";
+        }
+
 
         
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
@@ -5487,7 +5437,8 @@ function view($view_file, $view_data = array()) {
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 
-            'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled');
+            'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id', 
+            'pinned_announce_title', 'pinned_announce_body');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();

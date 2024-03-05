@@ -110,7 +110,24 @@
 </head>
 
 <body>
-    <div class="ContentEclass d-flex flex-column min-vh-100">
+  
+    <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0) fixed-announcement @endif">
+
+        <!-- important announcement -->
+        @if($pinned_announce_id > 0 && !empty($pinned_announce_title) && !empty($pinned_announce_body))
+            <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
+                <div class='{{ $container }} padding-default'>
+                    <div class='d-flex justify-content-start align-items-start gap-2'>
+                        <i class='fa-solid fa-circle-info fa-lg d-block'></i>
+                        <span class='d-inline-block text-truncate TextSemiBold' style="max-width: auto;">
+                            @php echo strip_tags($pinned_announce_body) @endphp
+                        </span>
+                        <a class='link-color TextBold text-decoration-underline' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{{ trans('langQuestionView') }}</a>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
         <!-- Header -->
         @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
 

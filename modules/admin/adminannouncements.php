@@ -31,7 +31,26 @@ $toolName = $langAdminAn;
 if (isset($_GET['vis'])) {
     $id = $_GET['id'];
     $vis = $_GET['vis'] ? 0 : 1;
-    Database::get()->query("UPDATE admin_announcement SET visible = ?b WHERE id = ?d", $vis, $id);
+    Database::get()->query("UPDATE admin_announcement SET visible = ?d WHERE id = ?d", $vis, $id);
+    redirect_to_home_page('modules/admin/adminannouncements.php');
+} elseif(isset($_GET['imp'])){
+    if($_GET['imp'] == 0){
+        $check = database::get()->queryArray("SELECT * FROM admin_announcement WHERE important = ?d",1);
+        if(count($check) == 0){
+            $id = $_GET['id'];
+            Database::get()->query("UPDATE admin_announcement SET important = ?d WHERE id = ?d", 1, $id);
+            Session::flash('message',$langFaqEditSuccess);
+            Session::flash('alert-class', 'alert-success');
+        }else{
+            Session::flash('message',$langExistImportantAnnounce);
+            Session::flash('alert-class', 'alert-danger');
+        }
+    }else{
+        $id = $_GET['id'];
+        Database::get()->query("UPDATE admin_announcement SET important = ?d WHERE id = ?d", 0, $id);
+        Session::flash('message',$langFaqEditSuccess);
+        Session::flash('alert-class', 'alert-success');
+    }
     redirect_to_home_page('modules/admin/adminannouncements.php');
 } elseif (isset($_GET['delete'])) {
     // delete announcement command

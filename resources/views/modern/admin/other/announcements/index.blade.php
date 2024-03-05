@@ -65,7 +65,10 @@
                                 ? " class='not_visible'" : "" !!}>
                                 <td>
                                     <div class='table_td'>
-                                        <div class='table_td_header clearfix'>
+                                        <div class='table_td_header clearfix d-flex gap-2'>
+                                            @if($announcement->important)
+                                                <span class='fa-solid fa-thumbtack link-color' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langImportant')}}"></span>
+                                            @endif
                                             <a href='adminannouncements.php?ann_id={{ $announcement->id }}'>{{ $announcement->title }}</a>
                                         </div>
                                         <div class='table_td_body' data-id='{{ $announcement->id }}'>
@@ -121,6 +124,11 @@
                                             'icon' => 'fa-arrow-down',
                                             'level' => 'primary',
                                             'disabled' => $announcement->order == 1
+                                        ],
+                                        [
+                                            'title' => $announcement->important ? trans('langNotImportant') : trans('langImportant'),
+                                            'url' => "$_SERVER[SCRIPT_NAME]?id=$announcement->id&amp;imp=$announcement->important",
+                                            'icon' => $announcement->important ? 'fa-solid fa-thumbtack link-color' : 'fa-solid fa-thumbtack'
                                         ],
                                         [
                                             'title' => trans('langDelete'),

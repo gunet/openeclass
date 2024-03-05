@@ -2930,6 +2930,9 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `homepagePriorities` ADD `visible` INT(11) NOT NULL DEFAULT 1");
     }
 
+    if (!DBHelper::fieldExists('admin_announcement', 'important')) {
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD `important` INT(11) NOT NULL DEFAULT 0");
+    }
 
 }
 

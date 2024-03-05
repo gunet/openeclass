@@ -156,6 +156,7 @@ $db->query("CREATE TABLE `admin_announcement` (
     `end` DATETIME DEFAULT NULL,
     `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
+    `important` INT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4)) $tbl_options");
 
 $db->query("CREATE TABLE `agenda` (

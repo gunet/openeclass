@@ -6632,3 +6632,12 @@ $langSuccessBookingUser = "<div class='TextBold' style='color:#1E7E0E;'>Με Π�
                             Σε διαφορετική περίπτωση , η ακύρωση γίνεται από την σελίδα των κρατήσεων μου.</div>";
 $langPinkBookingUser = "<div class='TextBold' style='color:#ffc0cb;'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση από κάποιον χρήστη.</br>Δυνατότητα ακύρωσης κράτησης μόνο από την σελίδα --Οι κρατήσεις μου-- .</div>";
 $langMoveOnLoginPage = "Κατευθυνθείτε στην οθόνη συνδέσης μέσω της επιλογής <span style='font-weight:700;'> <<Σύνδεση>> </span> στο πάνω μέρος της σελίδας.";
+
+$langImportant = "Μόνιμη τοποθέτηση στην κορυφή της πλατφόρμας";
+$langNotImportant = "Απομάκρυνση από την κορυφή της πλατφόρμας";
+$langExistImportantAnnounce = "Υπάρχει ήδη μια καταχωρημένη ανακοίνωση στην κορυφή της πλατφόρμας. </br> Η ενέργεια δεν ολοκληρώθηκε.";
+$langAboutImportantAnnouncement = "Ρυθμίσεις μόνιμης τοποθετημένης ανακοίνωσης στην κορυφή της σελίδας";
+$langbgContainerImportantAnnouncement = "Χρώμα φόντου";
+$langclContainerImportantAnnouncement = "Χρώμα κειμένου";
+$langclLinkImportantAnnouncement = "Χρώμα συνδέσμου";
+$langclHoveredLinkImportantAnnouncement = "Χρώμα hovered συνδέσμου";
