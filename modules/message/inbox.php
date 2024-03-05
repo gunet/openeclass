@@ -46,9 +46,13 @@ if (isset($_GET['mid'])) {
 
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
-
+    if ($msg->course_id != 0) {
+        $course_id = $msg->course_id;
+        $course_code = course_id_to_code($course_id);
+    } else {
+        $course_id = 0;
+    }
     if (!$msg->error) {
-
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
@@ -305,14 +309,14 @@ if (isset($_GET['mid'])) {
                     </div>
                 </div>
             </fieldset>";
+            if ($course_id != 0) {
+                $out .= "<div class='text-end mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+            }
 
-            $out .= "
-                <div class='text-end mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
-               </form></div></div>";
+            $out .= "</form></div></div>";
             if ($course_id == 0) {
                 $out .= "</div>";
             }
-
             // forward form
             if($course_id == 0){
                 $out .= "<div class='row'>
