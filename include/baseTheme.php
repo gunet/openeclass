@@ -5342,7 +5342,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clContainerImportantAnnouncement'])){
             $styles_str .= "
-                .notification-top-bar{
+                .notification-top-bar *{
                     color: $theme_options_styles[clContainerImportantAnnouncement];
                 }
             
