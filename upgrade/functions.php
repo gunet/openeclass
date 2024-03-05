@@ -2926,6 +2926,10 @@ function upgrade_to_4_0($tbl_options): void {
                                 FOREIGN KEY (booking_id) REFERENCES date_booking(id) ON DELETE CASCADE) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('homepagePriorities', 'visible')) {
+        Database::get()->query("ALTER TABLE `homepagePriorities` ADD `visible` INT(11) NOT NULL DEFAULT 1");
+    }
+
 
 }
 

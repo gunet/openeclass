@@ -72,17 +72,17 @@
                             @if($authCase)
                                 @if(!empty($authNameEnabled))
                                     @if($authNameEnabled == 'cas')
-                                        <a class='header-login-text' href="{{ $urlAppend }}modules/auth/cas.php">
+                                        <a class='header-login-text' href="{{ $urlServer }}modules/auth/cas.php">
                                             {{ trans('langUserLogin') }}
                                         </a>
                                     @else
-                                        <a class='header-login-text' href="{{ $urlAppend }}secure/index.php">
+                                        <a class='header-login-text' href="{{ $urlServer }}secure/">
                                             {{ trans('langUserLogin') }}
                                         </a>
                                     @endif
                                 @endif
                             @else
-                                <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
+                                <a class='header-login-text' href="{{ $urlServer }}main/login_form.php">
                                     {{ trans('langUserLogin') }}
                                 </a>
                             @endif
@@ -90,11 +90,11 @@
                              @if(!empty($authNameEnabled))
                                 <div class='split-left h-40px ps-0 pe-3'></div>
                                 @if($authNameEnabled == 'cas')
-                                    <a class='header-login-text' href="{{ $urlAppend }}modules/auth/cas.php">
+                                    <a class='header-login-text' href="{{ $urlServer }}modules/auth/cas.php">
                                         {{ trans('langUserLogin') }}
                                     </a>
                                 @else
-                                    <a class='header-login-text' href="{{ $urlAppend }}secure/index.php">
+                                    <a class='header-login-text' href="{{ $urlServer }}secure/">
                                         {{ trans('langUserLogin') }}
                                     </a>
                                 @endif

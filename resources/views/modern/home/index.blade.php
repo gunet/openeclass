@@ -277,91 +277,44 @@
 
            
             @if(!get_config('show_only_loginScreen'))
-                <div class="col-12 order-{{ $announcements_priority }} homepage-annnouncements-container @if(get_config('dont_display_login_form')) drop-shadow @endif">
-                    <div class='{{ $container }} padding-default'>
-                        <div class='row row-cols-1 g-4'>
-                            <div class='col'>
-                                <div class='card card-transparent bg-transparent border-0'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
-                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                            <h3>{{ trans('langAnnouncements') }}</h3>
-                                            <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
-                                        </div>
-                                        <div class='d-flex justify-content-end align-items-center'>
-                                            <a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
-                                        </div>
-                                    </div>
-                                    <div class='card-body px-0 py-0'>
-                                        @php $counterAn = 0; @endphp
-                                        @if(count($announcements) > 0)
-                                            <ul class='list-group list-group-flush'>
-                                                @foreach ($announcements as $announcement)
-                                                    @if($counterAn < 3)
-                                                        <li class='list-group-item element'>
-                                                            <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                                                {{$announcement->title}}
-                                                            </a>
-                                                            <div class='TextRegular msmall-text Neutral-900-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
-                                                        </li>
-                                                    @endif
-                                                    @php $counterAn++; @endphp
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            <ul class='list-group list-group-flush'>
-                                                <li class='list-group-item element'>
-                                                    <div class='TextRegular msmall-text'>{{ trans('langNoInfoAvailable') }}</div>
-                                                </li>
-                                            </ul>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-
-            @if(!get_config('show_only_loginScreen'))
-                @if($popular_courses)
-                    <div class='col-12 order-{{ $popular_courses_priority }} homepage-popoular-courses-container'>
+                @if(!get_config('dont_display_announcements'))
+                    <div class="col-12 order-{{ $announcements_priority }} homepage-annnouncements-container @if(get_config('dont_display_login_form')) drop-shadow @endif">
                         <div class='{{ $container }} padding-default'>
-                            <div class="row row-cols-1 g-4">
+                            <div class='row row-cols-1 g-4'>
                                 <div class='col'>
                                     <div class='card card-transparent bg-transparent border-0'>
-                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
-                                            <div class='d-flex justify-content-start align-items-center'>
-                                                <h3>
-                                                    {{trans('langPopularCourse')}}
-                                                </h3>
+                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
+                                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                <h3>{{ trans('langAnnouncements') }}</h3>
+                                                <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
+                                            </div>
+                                            <div class='d-flex justify-content-end align-items-center'>
+                                                <a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
                                             </div>
                                         </div>
                                         <div class='card-body px-0 py-0'>
-                                            <div class='row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-lg-5 g-4'>
-                                                @foreach ($popular_courses as $pop_course)
-                                                    <div class="col mb-lg-0 mb-4">
-                                                        <div class='card border-card h-100'>
-                                                            <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
-                                                                @if($pop_course->course_image)
-                                                                    <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='This is the images of popular course'/>
-                                                                @else
-                                                                    <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg' alt='This is the images of popular course'/>
-                                                                @endif
-                                                            </a>
-                                                            <div class='card-body'>
-                                                                <div class="col-12 text-center mt-2 line-height-default">
-                                                                    <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
-                                                                        {{$pop_course->title}} ({{$pop_course->public_code}})
-
-                                                                    </a>
-                                                                    <p class='TextRegular msmall-text Neutral-900-cl mt-1'>{{$pop_course->prof_names}}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                            @php $counterAn = 0; @endphp
+                                            @if(count($announcements) > 0)
+                                                <ul class='list-group list-group-flush'>
+                                                    @foreach ($announcements as $announcement)
+                                                        @if($counterAn < 3)
+                                                            <li class='list-group-item element'>
+                                                                <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                                    {{$announcement->title}}
+                                                                </a>
+                                                                <div class='TextRegular msmall-text Neutral-900-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
+                                                            </li>
+                                                        @endif
+                                                        @php $counterAn++; @endphp
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <ul class='list-group list-group-flush'>
+                                                    <li class='list-group-item element'>
+                                                        <div class='TextRegular msmall-text'>{{ trans('langNoInfoAvailable') }}</div>
+                                                    </li>
+                                                </ul>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -373,29 +326,82 @@
 
 
             @if(!get_config('show_only_loginScreen'))
-                @if($texts)
-                    <div class='col-12 order-{{ $texts_priority }} homepage-texts-container'>
-                        <div class='{{ $container }} padding-default'>
-                            <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-4">
-                                @foreach($texts as $text)
+                @if(!get_config('dont_display_popular_courses'))
+                    @if($popular_courses)
+                        <div class='col-12 order-{{ $popular_courses_priority }} homepage-popoular-courses-container'>
+                            <div class='{{ $container }} padding-default'>
+                                <div class="row row-cols-1 g-4">
                                     <div class='col'>
                                         <div class='card card-transparent bg-transparent border-0'>
-                                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                                 <div class='d-flex justify-content-start align-items-center'>
                                                     <h3>
-                                                        {!! $text->title !!}
+                                                        {{trans('langPopularCourse')}}
                                                     </h3>
                                                 </div>
                                             </div>
                                             <div class='card-body px-0 py-0'>
-                                                <div class='TextRegular msmall-text mt-3'>{!! $text->body !!}</div>
+                                                <div class='row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-lg-5 g-4'>
+                                                    @foreach ($popular_courses as $pop_course)
+                                                        <div class="col mb-lg-0 mb-4">
+                                                            <div class='card border-card h-100'>
+                                                                <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                    @if($pop_course->course_image)
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='This is the images of popular course'/>
+                                                                    @else
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg' alt='This is the images of popular course'/>
+                                                                    @endif
+                                                                </a>
+                                                                <div class='card-body'>
+                                                                    <div class="col-12 text-center mt-2 line-height-default">
+                                                                        <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                            {{$pop_course->title}} ({{$pop_course->public_code}})
+
+                                                                        </a>
+                                                                        <p class='TextRegular msmall-text Neutral-900-cl mt-1'>{{$pop_course->prof_names}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
+                @endif
+            @endif
+
+
+            @if(!get_config('show_only_loginScreen'))
+                @if(!get_config('dont_display_texts'))
+                    @if($texts)
+                        <div class='col-12 order-{{ $texts_priority }} homepage-texts-container'>
+                            <div class='{{ $container }} padding-default'>
+                                <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-4">
+                                    @foreach($texts as $text)
+                                        <div class='col'>
+                                            <div class='card card-transparent bg-transparent border-0'>
+                                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                                    <div class='d-flex justify-content-start align-items-center'>
+                                                        <h3>
+                                                            {!! $text->title !!}
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div class='card-body px-0 py-0'>
+                                                    <div class='TextRegular msmall-text mt-3'>{!! $text->body !!}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             @endif
 
@@ -434,54 +440,56 @@
             @endif
 
             @if(!get_config('show_only_loginScreen'))
-                <div class='col-12 order-{{ $statistics_priority }} homepage-statistics-container'>
-                    <div class='{{ $container }} padding-default'>
-                        <div class="row row-cols-1 g-4">
-                            <div class='col'>
-                                <div class='card card-transparent bg-transparent border-0'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <h3>{{ trans('langViewStatics') }}</h3>
+                @if(!get_config('dont_display_statistics'))
+                    <div class='col-12 order-{{ $statistics_priority }} homepage-statistics-container'>
+                        <div class='{{ $container }} padding-default'>
+                            <div class="row row-cols-1 g-4">
+                                <div class='col'>
+                                    <div class='card card-transparent bg-transparent border-0'>
+                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                            <div class='d-flex justify-content-start align-items-center'>
+                                                <h3>{{ trans('langViewStatics') }}</h3>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class='card-body px-0 py-3'>
-                                        <div class='col-12'>
-                                            <div class='row row-cols-1 row-cols-md-3 g-lg-5 g-3'>
-                                                <div class='col mb-lg-0 mb-4'>
-                                                    <div class='card statistics-card drop-shadow'>
-                                                        <div class='card-body d-flex justify-content-center align-items-center'>
-                                                            <div>
-                                                                <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-book-open fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                    <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('total_courses') }}</div>
+                                        <div class='card-body px-0 py-3'>
+                                            <div class='col-12'>
+                                                <div class='row row-cols-1 row-cols-md-3 g-lg-5 g-3'>
+                                                    <div class='col mb-lg-0 mb-4'>
+                                                        <div class='card statistics-card drop-shadow'>
+                                                            <div class='card-body d-flex justify-content-center align-items-center'>
+                                                                <div>
+                                                                    <div class='d-flex justify-content-center'>
+                                                                        <i class="fa-solid fa-book-open fa-xl mt-4 pt-1" role="presentation"></i>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('total_courses') }}</div>
+                                                                    </div>
+                                                                    <p class='form-label text-center'>{{ trans('langCourses') }}</p>
                                                                 </div>
-                                                                <p class='form-label text-center'>{{ trans('langCourses') }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class='col mb-lg-0 mb-4'>
-                                                    <div class='card statistics-card drop-shadow'>
-                                                        <div class='card-body d-flex justify-content-center align-items-center'>
-                                                            <div>
-                                                                <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-globe fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                    <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('visits_per_week')}}K+</div>
+                                                    <div class='col mb-lg-0 mb-4'>
+                                                        <div class='card statistics-card drop-shadow'>
+                                                            <div class='card-body d-flex justify-content-center align-items-center'>
+                                                                <div>
+                                                                    <div class='d-flex justify-content-center'>
+                                                                        <i class="fa-solid fa-globe fa-xl mt-4 pt-1" role="presentation"></i>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('visits_per_week')}}K+</div>
+                                                                    </div>
+                                                                    <p class='form-label text-center'>{{trans('langUserLogins')}}/</br>{{trans('langWeek')}}</p>
                                                                 </div>
-                                                                <p class='form-label text-center'>{{trans('langUserLogins')}}/</br>{{trans('langWeek')}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class='col mb-lg-0 mb-4'>
-                                                    <div class='card statistics-card drop-shadow'>
-                                                        <div class='card-body d-flex justify-content-center align-items-center'>
-                                                            <div>
-                                                                <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-user fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                    <div class='TextBold largest-text mb-0 ms-2'>{{ getOnlineUsers() }}</div>
+                                                    <div class='col mb-lg-0 mb-4'>
+                                                        <div class='card statistics-card drop-shadow'>
+                                                            <div class='card-body d-flex justify-content-center align-items-center'>
+                                                                <div>
+                                                                    <div class='d-flex justify-content-center'>
+                                                                        <i class="fa-solid fa-user fa-xl mt-4 pt-1" role="presentation"></i>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ getOnlineUsers() }}</div>
+                                                                    </div>
+                                                                    <p class='form-label text-center'>{{trans('langOnlineUsers')}}</p>
                                                                 </div>
-                                                                <p class='form-label text-center'>{{trans('langOnlineUsers')}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -493,24 +501,26 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @endif
 
 
 
             @if(!get_config('show_only_loginScreen'))
-                @if(get_config('opencourses_enable'))
-                    <div class='col-12 order-{{ $open_courses_priority }} homepage-opencourses-container'>
-                        <div class='{{ $container }} padding-default'>
-                            <div class='row row-cols-1 g-4'>
-                                <div class='col'>
-                                    @if ($openCoursesExtraHTML)
-                                        {!! $openCoursesExtraHTML !!}
-                                    @endif
+                @if(!get_config('dont_display_open_courses'))
+                    @if(get_config('opencourses_enable'))
+                        <div class='col-12 order-{{ $open_courses_priority }} homepage-opencourses-container'>
+                            <div class='{{ $container }} padding-default'>
+                                <div class='row row-cols-1 g-4'>
+                                    <div class='col'>
+                                        @if ($openCoursesExtraHTML)
+                                            {!! $openCoursesExtraHTML !!}
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 @endif
             @endif
 

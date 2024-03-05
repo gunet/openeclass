@@ -925,15 +925,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `homepagePriorities` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `title` text NULL,
     `order` int(11) NOT NULL,
+    `visible` int(11) NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("INSERT INTO `homepagePriorities` (`title`, `order`) VALUES 
-                                            ('announcements', 0),
-                                            ('popular_courses', 1),
-                                            ('texts', 2),
-                                            ('testimonials', 3),
-                                            ('statistics', 4),
-                                            ('open_courses', 5)");
+$db->query("INSERT INTO `homepagePriorities` (`title`, `order`, `visible`) VALUES 
+                                            ('announcements', 0, 1),
+                                            ('popular_courses', 1, 1),
+                                            ('texts', 2, 1),
+                                            ('testimonials', 3, 1),
+                                            ('statistics', 4, 1),
+                                            ('open_courses', 5, 1)");
 
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
@@ -1561,6 +1562,11 @@ $default_config = array(
     'default_language', $lang,
     'dont_display_login_form', 0,
     'dont_display_testimonials', 0,
+    'dont_display_announcements', 0,
+    'dont_display_popular_courses', 0,
+    'dont_display_texts', 0,
+    'dont_display_statistics', 0,
+    'dont_display_open_courses', 0,
     'course_invitation', 0,
     'total_courses', 0,
     'visits_per_week', 0,

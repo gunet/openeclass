@@ -37,17 +37,34 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 if(isset($_POST['submit'])){
     set_config('total_courses',$_POST['total_courses']);
     set_config('visits_per_week',$_POST['visits_per_week']);
-
     set_config('homepage_title',$_POST['homepage_title']);
     set_config('homepage_name',$_POST['homepage_name']);
-
     set_config('homepage_intro', purify($_POST['homepage_intro']));
-
     set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
     set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
     set_config('hide_login_link', $_POST['hide_login_link'] ?? '');
-    set_config('dont_display_testimonials', $_POST['dont_display_testimonials'] ?? '');
 
+    Session::flash('message',"$langRegDone");
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/admin/manage_home.php");
+}
+
+if(isset($_GET['edit_priority'])){
+    $updated = Database::get()->query("UPDATE `homepagePriorities` SET visible = ?d WHERE id = ?d",$_GET['val'],$_GET['edit']);
+    $visible = ($_GET['val']==1 ? 0 : 1);
+    if($_GET['titleEdit'] == 'announcements'){
+        set_config('dont_display_announcements', $visible);
+    }elseif($_GET['titleEdit'] == 'popular_courses'){
+        set_config('dont_display_popular_courses', $visible);
+    }elseif($_GET['titleEdit'] == 'texts'){
+        set_config('dont_display_texts', $visible);
+    }elseif($_GET['titleEdit'] == 'testimonials'){
+        set_config('dont_display_testimonials', $visible);
+    }elseif($_GET['titleEdit'] == 'statistics'){
+        set_config('dont_display_statistics', $visible);
+    }else{
+        set_config('dont_display_open_courses', $visible);
+    }
 
     Session::flash('message',"$langRegDone");
     Session::flash('alert-class', 'alert-success');

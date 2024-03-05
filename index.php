@@ -168,8 +168,8 @@ if (!$upgrade_begin and $uid) {
                     'nameAuth' => $l->auth_name,
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
-                    'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<a class='btn submitAdminBtnDefault d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a><br>");
+                    'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
+                    'html' => "<a class='btn submitAdminBtnDefault d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a>");
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
@@ -193,7 +193,7 @@ if (!$upgrade_begin and $uid) {
                     'nameAuth' => $l->auth_name,
                     'showTitle' => false,
                     'class' => 'login-option',
-                    'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
+                    'title' => empty($l->auth_title)? "$langLogInWith Credentials": q(getSerializedMessage($l->auth_title)),
                     'html' => " <form action='$urlServer' method='post'>
                                     <div class='form-group text-start'>
                                         <label for='uname' class='form-label'>$langUsername</label>

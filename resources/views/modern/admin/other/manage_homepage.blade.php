@@ -95,24 +95,6 @@
                                     </div>
                                 </div>
 
-                                {{--<div class='form-group mt-4'>
-                                    <div class='col-sm-12 checkbox'>
-                                        <label class='label-container'>
-                                            <input id='showOnlyLoginScreen' type='checkbox' name='show_only_loginScreen' {!! get_config('show_only_loginScreen') ? 'checked' : '' !!}>
-                                            <span class='checkmark'></span>
-                                            {{ trans('langShowOnlyLoginScreen') }}
-                                        </label>
-                                        
-                                    </div>
-                                </div>--}}
-
-
-
-
-
-
-
-
 
                                 <div class='form-group mt-4'>
                                     <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
@@ -169,24 +151,6 @@
                                 </div>
 
                                 
-                                <div class='form-group mt-4'>
-                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_testimonials')}}: </label>
-                                    <div class='col-sm-12'>
-                                        <div class='checkbox'>
-                                            <label class='label-container'>
-                                                <input id='dont_display_testimonials' type='checkbox' name='dont_display_testimonials' {!! get_config('dont_display_testimonials') ? 'checked' : '' !!}>
-                                                <span class='checkmark'></span>
-                                                {{trans('lang_dont_display_login_testimonials')}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-                               
-                                
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
                                         <button type="submit" class="btn submitAdminBtn" name="submit">{{ trans('langSave') }}</button>
@@ -208,26 +172,43 @@
                         <div class='col-12 mt-5'>
                             <div id='orderTexts'>
                                 @foreach($priorities as $p)
+                                    @php $urlEdit = ''; @endphp
                                     <div class='card panelCard px-lg-4 py-lg-3 p-3 mb-4' data-id='{{ $p->id }}'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center p-0 gap-3 flex-wrap'>
                                             <h3 class='mb-0'>
                                                 @if($p->title == 'announcements')
                                                     {{ trans('langAnnouncements')}}
+                                                    @php $urlEdit = $urlServer . 'modules/admin/adminannouncements.php'; @endphp
                                                 @elseif($p->title == 'popular_courses')
                                                     {{ trans('langPopularCourse')}}
+                                                    @php $urlEdit = $urlServer . 'modules/admin/listcours.php'; @endphp
                                                 @elseif($p->title == 'texts')
                                                     {{ trans('langHomepageTexts')}}
+                                                    @php $urlEdit = $urlServer . 'modules/admin/homepageTexts_create.php'; @endphp
                                                 @elseif($p->title == 'testimonials')
                                                     {{ trans('langSaidForUs')}}
+                                                    @php $urlEdit = $urlServer . 'modules/admin/homepageTexts_create.php'; @endphp
                                                  @elseif($p->title == 'statistics')
                                                     {{ trans('langViewStatics')}}
+                                                    @php $urlEdit = $urlServer . 'modules/admin/manage_home.php'; @endphp
                                                 @else
                                                     {{ trans('langOpenCourses')}}
+                                                    @php $urlEdit = $urlServer . 'modules/admin/eclassconf.php'; @endphp
                                                 @endif
                                             </h3>
                                                 
-                                            <div>
-                                                <a href='javascript:void(0);' aria-label="{{ trans('langReorder') }}"><span class='fa fa-arrows pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
+                                            @php ($p->visible==1 ? $vis=0 : $vis=1); @endphp
+
+                                            <div class='d-flex gap-3'>
+                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?edit_priority=1&amp;edit={{ $p->id }}&amp;val={{ $vis }}&amp;titleEdit={{ $p->title }}" aria-label="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif">
+                                                    <span class='fa-solid @if($vis==1) fa-eye-slash @else fa-eye @endif fa-lg' data-bs-toggle='tooltip' data-bs-placement='top' title="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif"></span>
+                                                </a>
+                                                <a href='javascript:void(0);' aria-label="{{ trans('langReorder') }}">
+                                                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langReorder') }}"></span>
+                                                </a>
+                                                <a href='{{ $urlEdit }}' aria-label="{{ trans('langEditChange') }}">
+                                                    <span class='fa-solid fa-edit fa-lg' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langEditChange') }}"></span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -267,13 +248,6 @@
             }
         });
 
-        $('#dont_display_testimonials').on('click',function(){
-            if($('#dont_display_testimonials').is(":checked")){
-                document.getElementById('dont_display_testimonials').value = 1;
-            }else{
-                document.getElementById('dont_display_testimonials').value = 0;
-            }
-        });
     });
 </script>
 
