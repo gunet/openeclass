@@ -153,7 +153,7 @@ if ($count_prof_requests > 0) {
 // Find last course created
 $myrow = Database::get()->querySingle("SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0, 1");
 if ($myrow) {
-    $last_course_info = "<b>" . q($myrow->title) . "</b> " . q($myrow->code) . ", " . q($myrow->prof_names) . ")";
+    $last_course_info = "<strong>" . q($myrow->title) . "</strong> " . q($myrow->code) . ", (" . q($myrow->prof_names) . ")";
 } else {
     $last_course_info = $langNoCourses;
 }

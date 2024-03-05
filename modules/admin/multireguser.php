@@ -94,14 +94,25 @@ if (isset($_POST['submit']) and isset($_FILES['userfile']) ) {
             continue;
         } else {
             $info = $user_data = [];
+            if ($row->isEmpty()) {
+                continue;
+            }
             $cellIterator = $row->getCellIterator();
+            // ignore empty cells
+            $cellIterator->setIterateOnlyExistingCells(TRUE);
             foreach ($cellIterator as $cell) {
                 $user_data[] = trim($cell->getValue());
             }
+
             if (count($user_data) > count($fields)) { // we have course codes
                 $userl = array_splice($user_data, count($fields));
             }
-            $info = array_combine($fields, $user_data);
+            try {
+                $info = array_combine($fields, $user_data);
+            }
+            catch (ValueError) {  // ignore rows with empty cells (e.g. user details are missing)
+                continue;
+            }
 
             if (isset($info['email'])) {
                 if (!valid_email($info['email'])) {
