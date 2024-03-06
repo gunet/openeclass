@@ -127,7 +127,7 @@ if (isset($language)) {
 }
 
 // check if we are guest user
-if (!$upgrade_begin and $uid) {
+if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     if (check_guest()) {
         // if the user is a guest send him straight to the corresponding lesson
         $guest = Database::get()->querySingle("SELECT code FROM course_user, course
@@ -140,8 +140,15 @@ if (!$upgrade_begin and $uid) {
             exit;
         }
     }
-    // if user is not guest redirect him to portfolio
-    header("Location: {$urlServer}main/portfolio.php");
+
+    // if user is logged in redirect him to homepage
+    if(isset($_GET['show_home'])){
+        header("Location: {$urlServer}?redirect_home=true");
+    }else{
+        // if user is not guest redirect him to portfolio
+        header("Location: {$urlServer}main/portfolio.php");
+    }
+    
 
 } else {
     // check authentication methods
@@ -259,6 +266,7 @@ if (!$upgrade_begin and $uid) {
 
     $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
                                             WHERE `visible` = 1
+                                                    AND `important` = 0
                                                     AND lang=?s
                                                     AND (`begin` <= NOW() or `begin` IS null)
                                                     AND (NOW() <= `end` or `end` IS null)

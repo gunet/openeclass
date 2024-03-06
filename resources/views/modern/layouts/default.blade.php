@@ -108,7 +108,7 @@
     @stack('head_scripts')
 
 </head>
-
+@php //print_r('THE PAGE NAME:'.$pageName); @endphp
 <body>
   
     <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0) fixed-announcement @endif">

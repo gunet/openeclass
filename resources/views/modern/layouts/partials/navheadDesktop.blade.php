@@ -12,7 +12,7 @@
                     <ul class="container-items nav">
                         @if(!get_config('hide_login_link'))
                             <li class="nav-item">
-                                <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}">
+                                <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true">
                                     {{ trans('langHome') }}
                                 </a>
                             </li>
@@ -21,6 +21,13 @@
                             <li class="nav-item">
                                 <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
                                     {{ trans('langRegistration') }}
+                                </a>
+                            </li>
+                        @endif
+                        @if (isset($_SESSION['uid']))
+                            <li class="nav-item">
+                                <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php">
+                                    {{ trans('langPortfolio') }}
                                 </a>
                             </li>
                         @endif
@@ -413,12 +420,12 @@
 
                     @if(!get_config('hide_login_link'))
                         <p class='py-2 px-0'>
-                            <a id='homeId' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}" aria-label='Homepage'>
+                            <a id='homeId' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}?show_home=true" aria-label='Homepage'>
                                 <i class="fa-solid fa-home"></i>{{ trans('langHome') }}
                             </a>
                         </p>
                     @endif
-                    @if (!isset($_SESSION['uid']))
+                    @if(!isset($_SESSION['uid']))
                         @if(get_config('registration_link')!='hide')
                             <p class='py-2 px-0'>
                                 <a id='registrationId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label='Registration'>
@@ -427,8 +434,15 @@
                             </p>
                         @endif
                     @endif
+                    @if (isset($_SESSION['uid']))
+                        <p class='py-2 px-0'>
+                            <a id='portfolioId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}main/portfolio.php" aria-label='Registration'>
+                                <i class="fa-solid fa-pencil"></i>{{ trans('langPortfolio') }}
+                            </a>
+                        </p>
+                    @endif
 
-                    @if (!get_config('dont_display_courses_menu'))
+                    @if(!get_config('dont_display_courses_menu'))
                         <p class='py-2 px-0'>
                             <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label='List of courses'>
                                 <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
@@ -465,6 +479,9 @@
 
     localStorage.setItem("menu-item", "homepage");
 
+    if(current_url.includes('/?redirect_home')){
+        localStorage.setItem("menu-item", "homepage");
+    }
     if(current_url.includes('/modules/auth/registration.php')
        || current_url.includes('/modules/auth/formuser.php')
        || current_url.includes('/modules/auth/newuser.php')
@@ -476,7 +493,7 @@
         localStorage.setItem("menu-item", "lessons");
     }
     if(current_url.includes('/main/portfolio.php')){
-        localStorage.setItem("menu-item", "homepage");
+        localStorage.setItem("menu-item", "portfolio");
     }
     if(current_url.includes('/info/faq.php')){
         localStorage.setItem("menu-item", "faq");
@@ -488,7 +505,8 @@
        && !current_url.includes('/modules/auth/opencourses.php')
        && !current_url.includes('/modules/auth/listfaculte.php')
        && !current_url.includes('/main/portfolio.php')
-       && !current_url.includes('/info/faq.php')){
+       && !current_url.includes('/info/faq.php')
+       && !current_url.includes('/?redirect_home')){
             localStorage.setItem("menu-item", "none");
     }
 
@@ -500,6 +518,9 @@
     if(localStorage.getItem("menu-item") == "register"){
         $('#link-register').addClass('active');
     }
+    if(localStorage.getItem("menu-item") == "portfolio"){
+        $('#link-portfolio').addClass('active');
+    }
     if(localStorage.getItem("menu-item") == "lessons"){
         $('#link-lessons').addClass('active');
     }
@@ -507,7 +528,7 @@
         $('#link-faq').addClass('active');
     }
 
-    if($('#link-register').hasClass('active') || $('#link-lessons').hasClass('active') || $('#link-faq').hasClass('active')){
+    if($('#link-register').hasClass('active') || $('#link-portfolio').hasClass('active') || $('#link-lessons').hasClass('active') || $('#link-faq').hasClass('active')){
         $('#link-home').removeClass('active2');
     }
 
@@ -537,3 +558,5 @@
         });
     });
 </script>
+
+
