@@ -1,5 +1,5 @@
 
-<div class='col-12 mt-3'>
+<div class='col-12 mb-3'>
     @if (isset($clock_type) && $clock_type == 0 || !isset($clock_type))
         <ul class="clock clock-sidebar p-0 m-auto">	
                 <li class="sec"></li>

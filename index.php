@@ -259,7 +259,6 @@ if (!$upgrade_begin and $uid) {
 
     $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
                                             WHERE `visible` = 1
-                                                    AND `important` = 0
                                                     AND lang=?s
                                                     AND (`begin` <= NOW() or `begin` IS null)
                                                     AND (NOW() <= `end` or `end` IS null)

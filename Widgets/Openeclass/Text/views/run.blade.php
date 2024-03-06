@@ -1,4 +1,4 @@
-<div class='col-12 mt-3'>
+<div class='col-12 mb-3'>
   {!! isset(${'text_'.$language}) ? ${'text_'.$language} : '' !!}
 </div>
 
