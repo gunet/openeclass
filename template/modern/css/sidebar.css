@@ -63,6 +63,9 @@
     min-height: calc(100vh - 80px - 80px);
     flex: 1;
   }
+  .fixed-announcement .col_maincontent_active{
+    min-height: calc(100vh - 80px - 80px - 60px);
+  }
   .container-fluid .course-wrapper .col_maincontent_active{
     padding: 24px 24px 24px 32px;
   }

@@ -38,7 +38,7 @@ iframe{
     padding-top: 80px;
   }
   .fixed-announcement .main-section{
-    padding-top: 160px;
+    padding-top: 140px;
   }
 }
 /* whole height - header - footer + header */
@@ -49,7 +49,7 @@ iframe{
     min-height: calc(100vh - 56px - 134px + 56px);
   }
   .fixed-announcement .main-section{
-    padding-top: 136px;
+    padding-top: 116px;
   }
 }
 
@@ -86,11 +86,19 @@ iframe{
     background-color: #ffffff;
     min-height: calc(100vh - 56px - 134px + 56px - 592px);
   }
+  .fixed-announcement .portfolio-courses-container{
+    min-height: calc(100vh - 56px - 134px + 56px - 592px - 60px);
+  }
 
   .main-container,
   .module-container,
   .onlyLoginContainer{
     min-height: calc(100vh - 56px - 134px);
+  }
+  .fixed-announcement .main-container,
+  .fixed-announcement .module-container,
+  .fixed-announcement .onlyLoginContainer{
+    min-height: calc(100vh - 56px - 134px - 60px);
   }
   .onlyLoginContainer{
     display: flex;
@@ -142,6 +150,9 @@ iframe{
     background-color: #ffffff;
     min-height: calc(100vh - 80px - 80px - 160px);
   }
+  .fixed-announcement .portfolio-courses-container{
+    min-height: calc(100vh - 80px - 80px - 160px - 64px);
+  }
   .container.portfolio-courses-container{
     padding: 24px 8px 24px 8px;
   }
@@ -154,6 +165,11 @@ iframe{
   .module-container,
   .onlyLoginContainer{
     min-height: calc(100vh - 80px - 80px);
+  }
+  .fixed-announcement .main-container,
+  .fixed-announcement .module-container,
+  .fixed-announcement .onlyLoginContainer{
+    min-height: calc(100vh - 80px - 80px - 60px);
   }
   .onlyLoginContainer{
     display: flex;
@@ -720,7 +736,7 @@ b a {
   }
 
   .fixed-announcement .navbar-eclass{
-    top: 80px;
+    top: 60px;
   }
 
   #bgr-cheat-header.fixed {
@@ -732,7 +748,7 @@ b a {
   }
 
   .fixed-announcement .navbar-eclass.fixed{
-    top: 80px !important;
+    top: 60px !important;
   }
 
   #bgr-cheat-header.fixed .header-container,
@@ -4816,7 +4832,7 @@ body .delThemeBtn{
   }
 
   .fixed-announcement .navbar-eclass {
-    top: 80px;
+    top: 60px;
   }
 
   .eclass-nav-icon{
@@ -5015,7 +5031,7 @@ body .delThemeBtn{
   position: fixed;
   top: 0;
   left: 0;
-  height: 80px;
+  height: 60px;
   width: 100%;
   background: #E8F2E7;
   color: #4F6893;
