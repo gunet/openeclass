@@ -46,8 +46,13 @@ if (isset($_GET['mid'])) {
 
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
+    if ($msg->course_id != 0) {
+        $course_id = $msg->course_id;
+        $course_code = course_id_to_code($course_id);
+    } else {
+        $course_id = 0;
+    }
     if (!$msg->error) {
-
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
@@ -92,41 +97,41 @@ if (isset($_GET['mid'])) {
                                 </div>
                             </div>";
         if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "       <div class='row  margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong>$langCourse:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
-                                </div>
-                            </div>";
+            $out .= "<div class='row  margin-bottom-thin'>
+                        <div class='col-sm-2'>
+                            <strong>$langCourse:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                            <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                        </div>
+                    </div>";
         }
         $out .= "
-                            <div class='row  margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong>$langDate:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    ". format_locale_date($msg->timestamp, 'short') ."
-                                </div>
+                        <div class='row  margin-bottom-thin'>
+                            <div class='col-sm-2'>
+                                <strong>$langDate:</strong>
                             </div>
-                            <div class='row  margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong>$langSender:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    ".display_user($msg->author_id, false, false, "outtabs")."
-                                </div>
-                            </div>
-                            <div class='row  margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong>$langRecipients:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    $recipients
-                                </div>
+                            <div class='col-sm-10'>
+                                ". format_locale_date($msg->timestamp, 'short') ."
                             </div>
                         </div>
+                        <div class='row  margin-bottom-thin'>
+                            <div class='col-sm-2'>
+                                <strong>$langSender:</strong>
+                            </div>
+                            <div class='col-sm-10'>
+                                ".display_user($msg->author_id, false, false, "outtabs")."
+                            </div>
+                        </div>
+                        <div class='row  margin-bottom-thin'>
+                            <div class='col-sm-2'>
+                                <strong>$langRecipients:</strong>
+                            </div>
+                            <div class='col-sm-10'>
+                                $recipients
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     <div class='panel panel-default'>
                         <div class='panel-heading'>$langMessage</div>
@@ -204,18 +209,18 @@ if (isset($_GET['mid'])) {
                     </div>
                 </div>";
 
-        if ($course_id != 0) {
-            enableCheckFileSize();
-            $out .= "<div class='form-group'>
-                        <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
-                        <div class='col-sm-10'>" .
-                            fileSizeHidenInput() . "
-                            <input type='file' name='file' size='35'>
-                        </div>
-                    </div>";
-        }
+            if ($course_id != 0) {
+                enableCheckFileSize();
+                $out .= "<div class='form-group'>
+                            <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
+                            <div class='col-sm-10'>" .
+                                fileSizeHidenInput() . "
+                                <input type='file' name='file' size='35'>
+                            </div>
+                        </div>";
+            }
 
-        $out .= "
+            $out .= "
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                             <div class='checkbox'>
@@ -245,9 +250,10 @@ if (isset($_GET['mid'])) {
                 </div>
             </fieldset>";
 
-            $out .= "
-                <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
-               </form></div>";
+            if ($course_id != 0) {
+                $out .= "<div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+            }
+           $out .= "</form></div>";
 
             // forward form
             $out .= "<div class='form-wrapper' id='forwardBox' style='display:none;'>";

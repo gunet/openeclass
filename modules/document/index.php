@@ -124,6 +124,49 @@ if ($is_editor && isset($_POST['bulk_submit'])) {
             }
         }
 
+        if ($_POST['bulk_action'] == 'move') {
+            $moveTo = $_POST['source_path'];
+            $filepaths = explode(',', $_POST['filepaths']);
+            $existingFilesArr = array();
+            foreach ($filepaths as $source) {
+                $sourceXml = $source . '.xml';
+                // check if source and destination are the same
+                if ($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
+                    $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path = ?s", $source);
+                    $filename = $r->filename;
+                    $extra_path = $r->extra_path;
+                    // Check if target filename already exists
+                    $curDirPath = $moveTo;
+                    $fileExists = Database::get()->querySingle("SELECT id FROM document
+                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                        "^$curDirPath/[^/]+$", $filename);
+                    if ($fileExists) {
+                        $curDirPath = my_dirname($source);
+                        array_push($existingFilesArr, $filename);
+                        $existingFiles = implode(', ', $existingFilesArr);
+                        Session::Messages($langFilesExists.' '.$existingFiles, 'alert-danger');
+                    } else {
+                        if (empty($extra_path)) {
+                            if (move($basedir . $source, $basedir . $moveTo)) {
+                                if (hasMetaData($source, $basedir, $group_sql)) {
+                                    move($basedir . $sourceXml, $basedir . $moveTo);
+                                }
+                                update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
+                            }
+                        } else {
+                            update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
+                        }
+                    }
+
+                } else {
+                    $action_message = "<div class='alert alert-danger'>$langImpossible</div><br>";
+                    // return to step 1
+                    $move = $source;
+                    unset($moveTo);
+                }
+            }
+        }
+
     }
 
 }
@@ -1528,7 +1571,7 @@ if ($can_upload or $user_upload) {
                   'icon' => 'fa-pie-chart'),
             array('title' => $langBulkProcessing,
                 'url' => '',
-                'icon' => 'fa-folder',
+                'icon' => 'fa-edit',
                 'class' => 'bulk-processing',
                 'show' => $is_editor),
             array('title' => $langBack,
@@ -1599,11 +1642,13 @@ if ($doc_count == 0) {
                                 <div class='panel'>
                                     <div class='panel-body'>
                                         <strong>
-                                            <i class='fa fa-folder'></i>
+                                            <i class='fa fa-edit'></i>
                                             $langBulkProcessing
                                         </strong>
-                                        <form method='post' action='' style='display: flex;gap: 5px;margin: 10px 0 0'>
+                                        <form method='post' action='' style='display: flex;gap: 5px;margin: 10px 0'>
                                             <select class='form-control' name='bulk_action' class='px-3' style='max-width:250px;'>
+                                                <option value='' disabled selected hidden>$langActions</option>
+                                                <option value='move'>$langMove</option>
                                                 <option value='delete'>$langDelete</option>
                                                 <option value='visible'>$langNewBBBSessionStatus: $langVisible</option>
                                                 <option value='invisible'>$langNewBBBSessionStatus: $langInvisible</option>
@@ -1611,7 +1656,14 @@ if ($doc_count == 0) {
                                             <input type='submit' class='btn btn-default' name='bulk_submit' value='$langSubmit'>
                                             <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
                                             <input type='hidden' id='filepaths' name='filepaths' value=''>
+                                            <input type='hidden' id='source_path' name='source_path' value=''>
                                         </form>
+                                        <div class='panel-move hide'>";
+
+        $tool_content .= directory_selection("", 'moveTo', $curDirPath, "");
+
+        $tool_content .= "
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1728,7 +1780,7 @@ if ($doc_count == 0) {
             }
 
             $tool_content .= "<tr $style>";
-            $tool_content .= "<td class='text-center checkbox_td hide'><input type='checkbox' filepath='".$cmdDirName."' cbid='".$entry['id']."' value='".$entry['id']."'></td>";
+            $tool_content .= "<td class='text-center checkbox_td hide'><input type='checkbox' isDir='".$is_dir."' filepath='".$cmdDirName."' cbid='".$entry['id']."' value='".$entry['id']."'></td>";
 
             // open jm in mindmap module
             if ($entry['format'] == "jm"){
@@ -1830,6 +1882,54 @@ if ($doc_count == 0) {
         let checkboxStates = [];
         
         $(document).ready(function() {
+            
+            $('select[name=\"bulk_action\"]').change(function(){
+                var selectedOption = $(this).val();
+                if(selectedOption === 'move') {
+                    $(\".panel-move form .form-group:eq(1)\").remove();
+                    $('.panel-move').removeClass('hide');
+                    $('.checkbox_td input[type=\"checkbox\"]').each(function() {
+                        if ($(this).attr('isdir') === '1') {
+                            $(this).prop('checked', false);
+                            $(this).prop('disabled', true);
+                            
+                            let cbid = $(this).attr('cbid');
+                            let filepath = $(this).attr('filepath');
+                            checkboxStates[cbid] = this.checked;
+            
+                            let selectedCbidValues = $('#selectedcbids').val().split(',');
+                            let filepaths = $('#filepaths').val().split(',');
+                            
+                            let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+                            let filepathIndex = filepaths.indexOf(filepath);
+                            
+                            if (this.checked && cbidIndex === -1) {
+                                selectedCbidValues.push(cbid);
+                                filepaths.push(filepath);
+                                
+                            } else if (!this.checked && cbidIndex !== -1) {
+                                selectedCbidValues.splice(cbidIndex, 1);
+                                filepaths.splice(filepathIndex, 1);
+                            }
+                            $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+                            $('#filepaths').val(filepaths.filter(Boolean).join(','));
+                            
+                        }
+                    });
+                } else {
+                    $('.panel-move').addClass('hide');
+                    $('.checkbox_td input[type=\"checkbox\"]').each(function() {
+                        if ($(this).attr('isdir') === '1') {
+                            $(this).prop('disabled', false);
+                        }
+                    });
+                }
+            });
+            
+            $('#source_path').val($('select[name=\"moveTo\"] option:first').val());
+            $('select[name=\"moveTo\"]').change(function(){
+                $('#source_path').val($(this).val());
+            });
             
             $('.table-default').on('change', 'input[type=checkbox]', function() {
                 let cbid = $(this).attr('cbid');
