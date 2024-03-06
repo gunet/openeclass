@@ -525,7 +525,7 @@ if (isset($_GET['modifyAnswers'])) {
                  $str_weighting = isset($weighting)? implode(',', $weighting): '';
                  $tool_content .= "<input type='hidden' name='str_weighting' value='$str_weighting'>
                    <fieldset>
-                     <table class='table'>
+                     <table class='table table-default'>
                        <tr>
                          <td>$langTypeTextBelow, $langAnd $legend :<br/><br/>
                            <textarea class='form-control' name='reponse' cols='70' rows='6'>";
@@ -547,12 +547,12 @@ if (isset($_GET['modifyAnswers'])) {
                  // if there is an error message
                  if (!empty($msgErr)) {
                      $tool_content .= "
-                                 <table style='border-style: none;' cellpadding='3' align='center' width='400'>
+                                 <table class='table-default' cellpadding='3' align='center' width='400'>
                                  <tr><td class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></td></tr>
                                  </table>";
                  } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                      $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
-                                     <table class='table'>";
+                                     <table class='table table-default'>";
                      foreach ($blanks as $i => $blank) {
                          $blank = reindex_array_keys_from_one($blank);
                          if (!empty($correct_answer)) {
@@ -561,18 +561,18 @@ if (isset($_GET['modifyAnswers'])) {
                              $default_selection = '';
                          }
                          $tool_content .= "<tr>
-                                            <td style='border-style: none;' class='text-end'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
-                                            <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                            <td class='text-end'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
+                                            <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                          </tr>";
                      }
                      $tool_content .= "</table>";
                  } else {
                      $tool_content .= "<tr><td>$langWeightingForEachBlank</td></tr>
-                                     <table class='table'>";
+                                     <table class='table table-default'>";
                      foreach ($blanks as $i => $blank) {
                          $tool_content .= "<tr>
-                                            <td style='border-style: none;' class='text-end'><strong>[" . q($blank) . "] :</strong></td>" . "
-                                            <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
+                                            <td class='text-end'><strong>[" . q($blank) . "] :</strong></td>" . "
+                                            <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                          </tr>";
                      }
                      $tool_content .= "</table>";
@@ -590,7 +590,7 @@ if (isset($_GET['modifyAnswers'])) {
              <input type='hidden' name='nbrOptions' value='$nbrOptions'>
              <input type='hidden' name='nbrMatches' value='$nbrMatches'>
              <fieldset>
-             <table class='table'>";
+             <table class='table table-default'>";
          $optionsList = array();
          // create an array with the option letters
          for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {
@@ -699,7 +699,7 @@ if (isset($_GET['modifyAnswers'])) {
          $tool_content .= "
              <input type='hidden' name='reponse[1]' value='$langCorrect'>
              <input type='hidden' name='reponse[2]' value='$langFalse'>
-             <table class='table'>
+             <table class='table table-default'>
              <tr>
                <td colspan='2'><b>$langAnswer</b></td>
                <td><b>$langComment</b></td>

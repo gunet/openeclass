@@ -422,7 +422,8 @@ a:hover,button:hover{
 
 .Primary-500-cl,
 .link-color,
-.link-color:hover{
+.link-color:hover,
+.link-color:focus{
   color:#0073E6;
 }
 
@@ -462,7 +463,10 @@ a:hover,button:hover{
   background-color: #C44601;
 }
 
-.Accent-200-cl{
+.Accent-200-cl,
+.link-delete,
+.link-delete:hover,
+.link-delete:focus{
   color: #C44601;
 }
 

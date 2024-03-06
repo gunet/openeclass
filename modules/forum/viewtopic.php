@@ -665,9 +665,9 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                         "&amp;topic=$topic&amp;forum=$forum'>" .
                             "<span class='fa fa-edit pe-1' title='$langModify' data-bs-toggle='tooltip' " .
                                 "data-bs-original-title='$langModify' data-bs-placement='bottom'></span></a>&nbsp;" .
-                    "<a class='delete-btn' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
+                    "<a class='delete-btn link-delete' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
-                            "<span class='fa-solid fa-xmark text-danger' title='$langDelete' data-bs-toggle='tooltip' " .
+                            "<span class='fa-solid fa-xmark' title='$langDelete' data-bs-toggle='tooltip' " .
                             "data-bs-original-title='$langDelete' data-bs-placement='bottom'></span></a>
                 </span>";
     }

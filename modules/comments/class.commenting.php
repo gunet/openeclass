@@ -136,8 +136,8 @@ Class Commenting {
                         
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
-                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<i class="fa-solid fa-xmark text-danger" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
+                        $post_actions .= '<a class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<i class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
 
                         $post_actions .='</div>';
                     } else {

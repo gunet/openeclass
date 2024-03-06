@@ -63,7 +63,7 @@ $defaults = array(
                 "rgba(161, 219, 184, 1)" => array('bgAlertSuccess'),
                 "rgba(12, 98, 46, 1)" => array('clAlertSuccess'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
-                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor'),
+                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
                 "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor'),
@@ -1514,6 +1514,10 @@ $tool_content .= "
                         <label for='linkHoverColor' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
                         <input name='linkHoverColor' type='text' class='form-control colorpicker' id='linkHoverColor' value='$theme_options_styles[linkHoverColor]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='linkDeleteColor' class='control-label-notes mb-2 me-2'>$langDeleteLinkColor:</label>
+                        <input name='linkDeleteColor' type='text' class='form-control colorpicker' id='linkDeleteColor' value='$theme_options_styles[linkDeleteColor]'>
+                    </div>
                 </div>
             </div>
 
@@ -1749,6 +1753,10 @@ $tool_content .= "
                         <label for='clHoveredMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langclHoveredMenuPopoverOption:</label>
                         <input name='clHoveredMenuPopoverOption' type='text' class='form-control colorpicker' id='clHoveredMenuPopoverOption' value='$theme_options_styles[clHoveredMenuPopoverOption]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clDeleteMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langclDeleteMenuPopoverOption:</label>
+                        <input name='clDeleteMenuPopoverOption' type='text' class='form-control colorpicker' id='clDeleteMenuPopoverOption' value='$theme_options_styles[clDeleteMenuPopoverOption]'>
+                    </div>
                 </div>
             </div>
 
@@ -1869,6 +1877,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clTextModal' class='control-label-notes mb-2 me-2'>$langclTextModal:</label>
                         <input name='clTextModal' type='text' class='form-control colorpicker' id='clTextModal' value='$theme_options_styles[clTextModal]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clDeleteIconModal' class='control-label-notes mb-2 me-2'>$langclDeleteIconModal:</label>
+                        <input name='clDeleteIconModal' type='text' class='form-control colorpicker' id='clDeleteIconModal' value='$theme_options_styles[clDeleteIconModal]'>
                     </div>
                 </div>
             </div>
@@ -2037,6 +2049,16 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clListMenuUsername' class='control-label-notes mb-2 me-2'>$langclListMenuUsername:</label>
                         <input name='clListMenuUsername' type='text' class='form-control colorpicker' id='clListMenuUsername' value='$theme_options_styles[clListMenuUsername]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clListMenuLogout' class='control-label-notes mb-2 me-2'>$langclListMenuLogout:</label>
+                        <input name='clListMenuLogout' type='text' class='form-control colorpicker' id='clListMenuLogout' value='$theme_options_styles[clListMenuLogout]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clListMenuDeletion' class='control-label-notes mb-2 me-2'>$langclListMenuDeletion:</label>
+                        <input name='clListMenuDeletion' type='text' class='form-control colorpicker' id='clListMenuDeletion' value='$theme_options_styles[clListMenuDeletion]'>
                     </div>
                 </div>
             </div>

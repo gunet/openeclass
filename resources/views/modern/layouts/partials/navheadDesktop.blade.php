@@ -246,7 +246,7 @@
                                                 <li>
                                                     <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:40px;'>
                                                         <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                                        <button class='list-group-item d-flex justify-content-start align-items-center gap-2 py-0 w-100 h-100 text-end rounded-0' type='submit' name='submit'>
+                                                        <button class='list-group-item d-flex justify-content-start align-items-center gap-2 py-0 w-100 h-100 text-end rounded-0 logout-list-item' type='submit' name='submit'>
                                                             <i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl "></i>
                                                             <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                                         </button>
@@ -375,7 +375,7 @@
                             <li>
                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:49px;'>
                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                    <button type='submit' class='list-group-item d-flex justify-content-start align-items-center py-3 w-100 text-end gap-2' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl"></i>
+                                    <button type='submit' class='list-group-item d-flex justify-content-start align-items-center py-3 w-100 text-end gap-2 logout-list-item' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl"></i>
                                     <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                     </button>
                                 </form>

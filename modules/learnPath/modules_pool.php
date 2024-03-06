@@ -247,7 +247,7 @@ foreach ($result as $list) {
       <b class='ps-1'>" . q($list->name) . "</b>";
 
     if ($list->comment) {
-        $tool_content .= "<br /><small style='color: #a19b99;'><b>$langComments</b>: " . $list->comment . "</small>";
+        $tool_content .= "<br /><small><b>$langComments</b>: " . $list->comment . "</small>";
     }
 
     $tool_content .= "</td><td class='option-btn-cell text-end'>";

@@ -231,8 +231,8 @@ if ($userdata) {
         $tool_content .= "
                         
                             <div class='col-sm-12'>
-                                <div class='panel panel-default'>
-                                    <div class='text-center text-muted panel-body'>".$langNoInfoAvailable."</div>
+                                <div class='card panelCard h-100'>
+                                    <div class='card-body text-center'>".$langNoInfoAvailable."</div>
                                 </div>";
     } else {
         $tool_content .= "
@@ -242,7 +242,7 @@ if ($userdata) {
 
 
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
-        $social_share = "<div class='float-end mt-4 shadow-sm p-3 rounded bg-default rounded-pill'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
+        $social_share = "<div class='float-end mt-4'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }

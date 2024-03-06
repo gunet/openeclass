@@ -228,7 +228,7 @@
                                                         
                                                         <h3>
                                                             {!! $text->title !!}
-                                                            @if($text->type == 2) <span class='Accent-200-cl'>(Testimonial)</span> @endif
+                                                            @if($text->type == 2) <span>(Testimonial)</span> @endif
                                                         </h3>
                                                         
                                                         <div class='d-flex gap-2'>
@@ -236,7 +236,7 @@
                                                                 <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
                                                             </a>
                                                             <a href='javascript:void(0);' aria-label='{{ trans('langReorder') }}'><span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
-                                                            <a class='forDelete' href='javascript:void(0);' data-id='{{ $text->id }}' data-order='{{ $text->order }}' aria-label='{{ trans('langDelete') }}'><span class='fa-solid fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
+                                                            <a class='forDelete link-delete' href='javascript:void(0);' data-id='{{ $text->id }}' data-order='{{ $text->order }}' aria-label='{{ trans('langDelete') }}'><span class='fa-solid fa-xmark' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
                                                         </div>
                                                     
                                                     

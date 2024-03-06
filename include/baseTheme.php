@@ -1166,6 +1166,10 @@ function view($view_file, $view_data = array()) {
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .pagination-glossary .page-item .page-link{
+                    background-color:  $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -1230,6 +1234,10 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
+                .pagination-glossary .page-item .page-link{
+                    color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
             ";
         }
 
@@ -1276,6 +1284,10 @@ function view($view_file, $view_data = array()) {
                 .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button{
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .pagination-glossary .page-item .page-link{
                     border-color: $theme_options_styles[whiteButtonBorderTextColor];
                 }
 
@@ -1358,6 +1370,10 @@ function view($view_file, $view_data = array()) {
                 .showCoursesPics:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+
+                .pagination-glossary .page-item:hover .page-link{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
             ";
         }
 
@@ -1415,6 +1431,10 @@ function view($view_file, $view_data = array()) {
                 .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after{
+                    border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .pagination-glossary .page-item:hover .page-link{
                     border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
                 }
 
@@ -1479,6 +1499,10 @@ function view($view_file, $view_data = array()) {
                 .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .pagination-glossary .page-item:hover .page-link{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
             ";
@@ -1566,6 +1590,11 @@ function view($view_file, $view_data = array()) {
                 .showCoursesBars.active,
                 .showCoursesPics.active{
                     background-color: $theme_options_styles[buttonBgColor];
+                }
+
+                .pagination-glossary .page-item.active .page-link{
+                    background-color: $theme_options_styles[buttonBgColor];
+                    border-color: $theme_options_styles[buttonBgColor];
                 }
                   
 
@@ -1697,6 +1726,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
+                .pagination-glossary .page-item.active:hover .page-link{
+                    background-color: $theme_options_styles[buttonBgColor];
+                    border-color: $theme_options_styles[buttonBgColor];
+                }
+
             ";
         }
 
@@ -1814,6 +1848,10 @@ function view($view_file, $view_data = array()) {
                 }
                 
                 .personal-calendar-header .btn-group .btn.active{
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .pagination-glossary .page-item.active .page-link{
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
             ";
@@ -2279,6 +2317,43 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu-user .username-paragraph{
                     color:$theme_options_styles[clListMenuUsername];
                 } 
+ 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////// LOGOUT COLOR CONTEXTUAL MENU //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clListMenuLogout'])) {
+            $styles_str .= "
+                .contextual-menu-user .logout-list-item *{
+                    color:$theme_options_styles[clListMenuLogout];
+                } 
+ 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// DELETE OPTION COLOR CONTEXTUAL MENU ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clListMenuDeletion'])) {
+            $styles_str .= "
+                .contextual-menu .list-group-item:has(.fa-xmark),
+                .contextual-menu .list-group-item:has(.fa-trash),
+                .contextual-menu .list-group-item:has(.fa-eraser),
+                .contextual-menu .list-group-item:has(.fa-times),
+                .contextual-menu .list-group-item:has(.fa-xmark) .fa::before,
+                .contextual-menu .list-group-item:has(.fa-trash) .fa::before,
+                .contextual-menu .list-group-item:has(.fa-eraser) .fa::before,
+                .contextual-menu .list-group-item:has(.fa-times) .fa::before{
+                    color: $theme_options_styles[clListMenuDeletion] !important;
+                }
  
             ";
         }
@@ -3202,6 +3277,20 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// ICON COLOR TO MODAL DELETION COMPONENT ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clDeleteIconModal'])){
+            $styles_str .= "
+                .icon-modal-default .fa-trash-can.Accent-200-cl::before{
+                    color: $theme_options_styles[clDeleteIconModal];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         //////////////////// BACKGROUND COLOR TO AGENDA COMPONONENT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -3297,6 +3386,10 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker.dropdown-menu,
                 .datepicker.dropdown-menu{
                     background: $theme_options_styles[bgAgenda] !important;
+                }
+
+                #cal-week-box{
+                    background-color: $theme_options_styles[bgAgenda] !important;
                 }
 
             ";
@@ -3654,6 +3747,10 @@ function view($view_file, $view_data = array()) {
                     border-bottom: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
 
+                #cal-week-box{
+                    border: 1px solid $theme_options_styles[BgBorderColorAgenda] !important;
+                }
+
             ";
         }
 
@@ -3998,7 +4095,7 @@ function view($view_file, $view_data = array()) {
                     background-color: transparent;
                 }
 
-                user-details-exec{
+                .user-details-exec{
                     background-color: $theme_options_styles[BgTables];
                 }
 
@@ -4152,6 +4249,28 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .menu-popover .list-group-item:hover{ 
                     color: $theme_options_styles[clHoveredMenuPopoverOption];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// TEXT COLOR TO MENU-POPOVER DELETE OPTION //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clDeleteMenuPopoverOption'])){
+            $styles_str .= "
+                .menu-popover .list-group-item:has(.fa-xmark),
+                .menu-popover .list-group-item:has(.fa-trash),
+                .menu-popover .list-group-item:has(.fa-eraser),
+                .menu-popover .list-group-item:has(.fa-times),
+                .menu-popover .list-group-item:has(.fa-xmark) .fa::before,
+                .menu-popover .list-group-item:has(.fa-trash) .fa::before,
+                .menu-popover .list-group-item:has(.fa-eraser) .fa::before,
+                .menu-popover .list-group-item:has(.fa-times) .fa::before,
+                .menu-popover .list-group-item.warning-delete{
+                    color: $theme_options_styles[clDeleteMenuPopoverOption] !important;
                 }
             ";
         }
@@ -4889,10 +5008,27 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColor];
                 }
 
-                .link-color:hover{
+                .link-color:hover,
+                .link-color:focus{
                     color: $theme_options_styles[linkHoverColor];
                 }
 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////// DELETE PLATFORM LINK COLOR ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkDeleteColor'])){
+            $styles_str .= "
+                .link-delete,
+                .link-delete:hover,
+                .link-delete:focus{
+                    color: $theme_options_styles[linkDeleteColor];
+                }
             ";
         }
 

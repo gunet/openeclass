@@ -155,7 +155,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $popular_course_message = $langRemovePopular;
             $popular_course_action = "pop=0";
         }
-        $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><strong>" . q($logs->title) . "</strong>
+        $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'>" . q($logs->title) . "
                         </a> (" . q($logs->code) . ") " . $popular_icon . "<br><i>" . q($logs->prof_names) .
                         "<br><span class='help-block'>$langCreatedIn: " . format_locale_date(strtotime($logs->created), null, false). "</span>";
 
