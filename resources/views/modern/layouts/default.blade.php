@@ -117,12 +117,12 @@
         @if($pinned_announce_id > 0 && !empty($pinned_announce_title) && !empty($pinned_announce_body))
             <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
                 <div class='{{ $container }} padding-default'>
-                    <div class='d-flex justify-content-start align-items-start gap-2'>
-                        <i class='fa-solid fa-circle-info fa-lg d-block'></i>
-                        <span class='d-inline-block text-truncate TextSemiBold' style="max-width: auto;">
-                            @php echo strip_tags($pinned_announce_body) @endphp
+                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                        <i class='fa-regular fa-bell fa-xl d-block'></i>
+                        <span class='d-inline-block text-truncate TextBold' style="max-width: auto;">
+                            @php echo strip_tags($pinned_announce_title) @endphp
                         </span>
-                        <a class='link-color TextBold text-decoration-underline' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{{ trans('langQuestionView') }}</a>
+                        <a class='link-color TextBold msmall-text text-decoration-underline ps-1' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>
                     </div>
                 </div>
             </div>

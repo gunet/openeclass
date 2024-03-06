@@ -6193,3 +6193,4 @@ $langbgContainerImportantAnnouncement = "Background color";
 $langclContainerImportantAnnouncement = "Text color";
 $langclLinkImportantAnnouncement = "Link color";
 $langclHoveredLinkImportantAnnouncement = "Hovered link color";
+$langDisplayAnnouncement = "See the announcement...";

@@ -6641,3 +6641,4 @@ $langbgContainerImportantAnnouncement = "Χρώμα φόντου";
 $langclContainerImportantAnnouncement = "Χρώμα κειμένου";
 $langclLinkImportantAnnouncement = "Χρώμα συνδέσμου";
 $langclHoveredLinkImportantAnnouncement = "Χρώμα hovered συνδέσμου";
+$langDisplayAnnouncement = "Δείτε την ανακοίνωση...";
