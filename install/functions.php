@@ -23,7 +23,7 @@
  * @brief Functions for the installation wizard
  */
 
-require_once '../template/template.inc.php';
+require_once 'template/template.inc.php';
 
 /**
  * draws installation screens
@@ -35,15 +35,15 @@ require_once '../template/template.inc.php';
  * @param type $toolContent
  */
 function draw($toolContent, $options=null, $head_content ='') {
-	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
+    global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
     if (!$options) {
         $options = array();
     }
 
-	$t = new Template();
-	$t->set_file('fh', 'template/default/theme.html');
-	$t->set_block('fh', 'mainBlock', 'main');
+    $t = new Template();
+    $t->set_file('fh', 'template/default/theme.html');
+    $t->set_block('fh', 'mainBlock', 'main');
 
     $t->set_var('SITE_NAME', 'Open eClass');
     $t->set_block('mainBlock', 'sideBarBlock', 'delete');
@@ -127,12 +127,12 @@ function installerMenu() {
         $langBasicCfgSetting, $langLastCheck, $langInstallEnd,
         $langEmailSettings;
 
-	$sideMenuGroup = array();
+    $sideMenuGroup = array();
 
-	$sideMenuSubGroup = array();
-	$sideMenuText 	= array();
-	$sideMenuLink 	= array();
-	$sideMenuImg	= array();
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
     $stepTitles = array($langRequirements, $langLicense, $langDBSetting,
         $langBasicCfgSetting, $langEmailSettings, $langLastCheck,
@@ -171,11 +171,15 @@ function installerMenu() {
  * @param type $dirname
  */
 function mkdir_try($dirname) {
-    global $errorContent, $configErrorExists, $langWarningInstall3;
+    global $errorContent, $configErrorExists, $langWarningInstall3, $autoinstall;
 
     if (!is_dir($dirname)) {
         if (!make_dir($dirname)) {
-            $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $dirname);
+            if ($autoinstall) {
+                echo sprintf($langWarningInstall3, $dirname), "\n";
+            } else {
+                $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $dirname);
+            }
             $configErrorExists = true;
         }
     }
@@ -189,10 +193,14 @@ function mkdir_try($dirname) {
  * @param type $filename
  */
 function touch_try($filename) {
-    global $errorContent, $configErrorExists, $langWarningInstall3;
+    global $errorContent, $configErrorExists, $langWarningInstall3, $autoinstall;
 
     if (!@touch($filename)) {
-        $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $filename);
+        if ($autoinstall) {
+            echo sprintf($langWarningInstall3, $dirname), "\n";
+        } else {
+            $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $filename);
+        }
         $configErrorExists = true;
     }
 }

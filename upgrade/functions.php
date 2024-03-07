@@ -3547,9 +3547,9 @@ function update_upload_whitelists() {
 
     // add default whitelists to current whitelists, remove duplicates
     $student_upload_whitelist = array_unique(array_merge($default_student_upload_whitelist,
-        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
+        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist', '')))));
     $teacher_upload_whitelist = array_unique(array_merge($default_teacher_upload_whitelist,
-        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
+        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist', '')))));
 
     // restrict web files to teachers, remove from student whitelist
     $student_upload_whitelist = array_diff($student_upload_whitelist, ['svg', 'html', 'htm', 'js', 'css']);
