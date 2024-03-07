@@ -270,10 +270,10 @@
                                     </h3>
                                 </div>
                                 <div class='card-body'>
-                                    <table class='table-default'>
+                                    <table class='table table-responsive'>
                                         <tbody>
                                         @if ($q_in_home)
-                                            </tr><tr><th scope='row'><label class='col-12 control-label'>{{ trans('langActInHome') }}</label></th>
+                                            <tr><th scope='row' colspan="2"><label class='col-12 control-label-notes'>{{ trans('langActInHome') }}</label></th>
                                             @foreach ($q_in_home as $in_home)
                                                 @php
                                                     $act_title = q($activities[$in_home->activity_id]['title']);
@@ -282,8 +282,8 @@
                                                     $act_indirect = $in_home->ID;
                                                 @endphp
 
-                                                <td><span class='col-sm-12 {{$class_vis}} '>{!! $act_title !!}</span></td>
-                                                <td class='text-center'>
+                                                <tr><td><span class='col-10 {{$class_vis}} '>{!! $act_title !!}</span></td>
+                                                <td class='col-2'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
                                                             'url' => $base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
@@ -401,8 +401,7 @@
 
                                                         ),'',true)
                                                     !!}
-                                                </td>
-                                                <td class='text-center'>
+                                                    <span class='col-sm-6'>
                                                     {!!
                                                         action_button(array(
                                                             array('title' => $vis == 1 ? trans('langViewHide') : trans('langViewShow'),
@@ -414,14 +413,12 @@
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langUnitActivityDeleteConfirm'))))
                                                     !!}
-                                                </td>
-                                            </tr><tr><td></td>
+                                                </span></td></tr>
                                             @endforeach
                                         @endif
 
                                         @if($q_in_class)
-                                            <tr><th scope='row'><label class='col-12 control-label'>{{ trans('langActInClass') }}</label></th>
-
+                                            <tr><th scope='row' colspan='2'><label class='col-12 control-label-notes'>{{ trans('langActInClass') }}</label></th>
 
                                             @foreach($q_in_class as $in_class)
 
@@ -432,9 +429,9 @@
                                                     $act_indirect = $in_class->activity_id;
                                                 @endphp
 
-                                                <td><span class='col-sm-12  {!! $class_vis !!} '>{!! $act_title !!}</span></td>
+                                                <tr><td><span class='col-10  {!! $class_vis !!} control-label'>{!! $act_title !!}</span></td>
                                                 @if($is_editor)
-                                                    <td class='text-center'>
+                                                    <td class='col-6'>
                                                     {!! action_button(array(
                                                             array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                                 'url' => $base_url . 'exercise&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
@@ -551,14 +548,13 @@
                                                                 'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
-                                                               'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
+                                                               'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_class->activity_id,
                                                                'icon' => 'fa fa-tablet',
                                                                'level' => 'secondary',
-                                                               'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_home->activity_id))
+                                                               'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_class->activity_id))
 
                                                         ),'',true) !!}
-                                                    </td>
-                                                    <td class='text-center'>
+                                                    <span class='col-sm-6'>
 
                                                     {!!
                                                         action_button(array(
@@ -574,13 +570,12 @@
                                                     !!}
 
                                                 @endif
-                                                </td></tr><tr><td></td>
+                                                </span></td></tr>
                                             @endforeach
                                         @endif
 
-
                                         @if($q_after_class)
-                                            <tr><th scope='row'><label class='col-md-auto control-label'>{{ trans('langActAfterClass') }}</label></th>
+                                            <tr><th scope='row' colspan='2'><label class='col-md-auto control-label'>{{ trans('langActAfterClass') }}</label></th>
 
                                             @foreach($q_after_class as $after_class)
 
@@ -592,8 +587,8 @@
                                                 @endphp
 
 
-                                                <td><span class='col-sm-12 {!! $class_vis !!} '>{!! $act_title !!}</span></td>
-                                                <td class='text-center'> {!! action_button(array(
+                                                <tr><td class='col-10 {!! $class_vis !!} control-label'>{!! $act_title !!}</td>
+                                                <td class='col-6'> {!! action_button(array(
                                                     array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                         'url' => $base_url . 'exercise&fc_type=2&act_name='. $act_title,
                                                         'icon' => 'fa fa-square-pen',
@@ -709,13 +704,14 @@
                                                         'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id)),
 
                                                     array('title' => trans('langAdd') . ' ' . trans('langOfH5p'),
-                                                           'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
+                                                           'url' => $base_url . 'h5p&fc_type=0&act_name=' . $act_title . '&act_id=' . $after_class->activity_id,
                                                            'icon' => 'fa fa-tablet',
                                                            'level' => 'secondary',
-                                                           'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $in_home->activity_id))
+                                                           'show' => !is_module_disable_FC(MODULE_ID_H5P, $course_code, $id, $after_class->activity_id))
 
-                                                ),'',true) !!}</td><td class='text-center'>
+                                                ),'',true) !!}
 
+                                                <span class='col-sm-6'>
 
                                                 {!! action_button(array(
                                                     array('title' => $vis == 1? trans('langViewHide') : trans('langViewShow'),
@@ -728,9 +724,8 @@
                                                         'class' => 'delete',
                                                         'confirm' => trans('langUnitActivityDeleteConfirm')))) !!}
 
-                                                </td></tr><tr><td></td>
+                                                </span></td></tr>
                                             @endforeach
-                                            </tr>
                                         @endif
 
                                         </tbody>

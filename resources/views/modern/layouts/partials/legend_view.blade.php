@@ -26,7 +26,7 @@
                     <div class='col-12 mb-2'>
                         <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                             <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                            {!! course_access_icon($course_info->visible) !!}
+                            {!! course_access_icon(course_status($course_id)) !!}
                             @if($courseLicense > 0)
                                 {!! copyright_info($course_id) !!}
                             @endif
@@ -85,7 +85,7 @@
                         @endif
                     @endif
                     @if($toolName)
-                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none' 
+                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none'
                             data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
                             <i class="fa-solid fa-circle-info"></i>
                         </a>
