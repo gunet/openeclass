@@ -23,18 +23,35 @@ header('Content-Type: text/html; charset=UTF-8');
 /*
  * @brief Installation wizard of eclass.
  */
-require_once '../vendor/autoload.php';
-require_once '../include/main_lib.php';
-require_once '../include/lib/pwgen.inc.php';
-require_once '../include/mailconfig.php';
-require_once '../modules/db/database.php';
-require_once '../upgrade/functions.php';
-require_once 'functions.php';
 
-chdir('..');
-$webDir = getcwd();
+$command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
+$webDir = get_base_path();
+chdir($webDir);
+
+require_once 'vendor/autoload.php';
+require_once 'include/main_lib.php';
+require_once 'include/lib/pwgen.inc.php';
+require_once 'include/mailconfig.php';
+require_once 'modules/db/database.php';
+require_once 'upgrade/functions.php';
+require_once 'install/functions.php';
 
 require_once 'modules/h5p/classes/H5PHubUpdater.php';
+
+$autoinstall = false;
+if ($command_line and getenv('BASE_URL') and getenv('MYSQL_LOCATION')) {
+    // Setup global variables for automated installation
+    $autoinstall = true;
+    $urlForm = getenv('BASE_URL');
+    $host = parse_url($urlForm, PHP_URL_HOST);
+    $_SESSION['lang'] = 'en';
+    $_POST['welcomeScreen'] = true;
+    $_POST['email_transport'] = 'mail';
+    $_POST['email_announce'] = '';
+    $_POST['email_bounces'] = '';
+    ini_set('display_errors', '1');
+    create_directories();
+}
 
 $tool_content = '';
 if (!isset($siteName)) {
@@ -88,15 +105,18 @@ if ($extra_messages) {
 }
 
 if (file_exists('config/config.php')) {
-    // title = $langWelcomeWizard
-    $tool_content .= "
-        <div class='panel panel-info'>
-          <div class='panel-heading'>$langWarnConfig3!</div>
-          <div class='panel-body'>
-              $langWarnConfig1. $langWarnConfig2.
-          </div>
-        </div>";
-    draw($tool_content, array('no-menu' => true));
+    if ($autoinstall) {
+        die("$langWarnConfig1. $langWarnConfig2\n");
+    } else {
+        $tool_content .= "
+            <div class='panel panel-info'>
+              <div class='panel-heading'>$langWarnConfig3!</div>
+              <div class='panel-body'>
+                  $langWarnConfig1. $langWarnConfig2.
+              </div>
+            </div>";
+        draw($tool_content, array('no-menu' => true));
+    }
 }
 
 // Input fields that have already been included in the form, either as hidden or as normal inputs
@@ -104,32 +124,27 @@ $input_fields = array();
 $phpSysInfoURL = '../admin/sysinfo/';
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
-    if (isset($_ENV['MYSQL_LOCATION'])) { // needed for docker image
-        $dbHostForm = $_ENV['MYSQL_LOCATION'];
-    } else {
-        $dbHostForm = 'localhost';
-    }
-    $dbUsernameForm = 'root';
-    if (isset($_ENV['MYSQL_ROOT_PASSWORD'])) {  // needed for docker image
-        $dbPassForm = $_ENV['MYSQL_ROOT_PASSWORD'];
-    } else {
-        $dbPassForm = '';
-    }
-    $dbNameForm = 'eclass';
+    // Get DB credentians from environment for Docker image or automated installation
+    $dbHostForm = getenv_default('MYSQL_LOCATION', 'localhost');
+    $dbUsernameForm = getenv_default('MYSQL_ROOT_USER', 'root');
+    $dbPassForm = getenv_default('MYSQL_ROOT_PASSWORD', '');
+    $dbNameForm = getenv_default('MYSQL_DB', 'eclass');
     $dbMyAdmin = $emailForm = '';
-    $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
-            $_SERVER['SERVER_NAME'] .
-            str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
+    if (!isset($urlForm)) {
+        $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
+                $_SERVER['SERVER_NAME'] .
+                str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
+    }
     if (isset($_SERVER['SERVER_ADMIN'])) { // only for apache
         $emailForm = $_SERVER['SERVER_ADMIN'];
     }
     $nameForm = $langDefaultAdminName;
-    $loginForm = 'admin';
-    $passForm = genPass();
+    $loginForm = getenv_default('ADMIN_USERNAME', 'admin');
+    $passForm = getenv_default('ADMIN_PASSWORD', genPass());
     $campusForm = 'Open eClass';
     $helpdeskForm = '+30 2xx xxxx xxx';
     $institutionForm = $langDefaultInstitutionName;
-    $institutionUrlForm = 'http://www.gunet.gr/';
+    $institutionUrlForm = 'https://www.gunet.gr/';
     $helpdeskmail = $faxForm = $postaddressForm = '';
 
     $eclass_stud_reg = 2;
@@ -238,6 +253,25 @@ if (isset($_POST['install4'])) {
       unset($_POST['install4']);
       $_POST['install3'] = true;
     }
+} elseif ($autoinstall) {
+    Debug::setLevel(Debug::ALWAYS);
+    try {
+        Database::core();
+        if (!check_engine()) {
+            die("Error: $langInnoDBMissing\n");
+        }
+        $GLOBALS['mysqlMainDb'] = $dbNameForm;
+        try {
+            Database::get();
+            echo 'Note: ', sprintf($langDatabaseExists, '"' . $dbNameForm . '"'), "\n";
+        } catch (Exception $e) {
+            // no problem, database doesn't exist
+        }
+    } catch (Exception $e) {
+        die("Error: $langErrorConnectDatabase\n" .
+            $e->getMessage() . "\n$langCheckDatabaseSettings\n");
+    }
+    $_POST['install7'] = true; // Move to final installation steps
 }
 
 // step 2 license
@@ -562,13 +596,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         chdir('..');
 
         // message
-        $tool_content .= "
-        <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langInstallSuccess</span></div>
+        if ($autoinstall) {
+            die("Success: Open eClass installation complete\n" .
+                "Base URL: $urlForm\n" .
+                "Admin username: $loginForm\n" .
+                "Admin password: $passForm\n");
+        } else {
+            $tool_content .= "
+                <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langInstallSuccess</span></div>
+                <br>
+                <div>$langProtect</div>
+                <br /><br />
+                <form action='../'><input class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' type='submit' value='$langEnterFirstTime' /></form>";
+        }
 
-        <br />
-        <div>$langProtect</div>
-        <br /><br />
-        <form action='../'><input class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' type='submit' value='$langEnterFirstTime' /></form>";
     }
     $_SESSION['langswitch'] = $lang;
     draw($tool_content);
@@ -581,35 +622,10 @@ elseif (isset($_POST['install1'])) {
     $_SESSION['step'] = 1;
     $configErrorExists = false;
 
-    // create config, courses directories etc.
-    mkdir_try('config');
-    touch_try('config/index.php');
-    mkdir_try('courses');
-    touch_try('courses/index.php');
-    mkdir_try('courses/temp');
-    touch_try('courses/temp/index.php');
-    mkdir_try('courses/temp/pdf');
-    mkdir_try('courses/userimg');
-    touch_try('courses/userimg/index.php');
-    mkdir_try('courses/commondocs');
-    touch_try('courses/commondocs/index.php');
-    mkdir_try('video');
-    touch_try('video/index.php');
-    mkdir_try('courses/user_progress_data');
-    mkdir_try('courses/user_progress_data/cert_templates');
-    touch_try('courses/user_progress_data/cert_templates/index.php');
-    mkdir_try('courses/user_progress_data/badge_templates');
-    touch_try('courses/user_progress_data/badge_templates/index.php');
-    mkdir_try('courses/eportfolio');
-    touch_try('courses/eportfolio/index.php');
-    mkdir_try('courses/eportfolio/userbios');
-    touch_try('courses/eportfolio/userbios/index.php');
-    mkdir_try('courses/eportfolio/work_submissions');
-    touch_try('courses/eportfolio/work_submissions/index.php');
-    mkdir_try('courses/eportfolio/mydocs');
-    touch_try('courses/eportfolio/mydocs/index.php');
-    // mkdir_try('storage');
-    // mkdir_try('storage/views');
+
+    create_directories();
+
+
     if ($configErrorExists) {
       $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . implode('', $errorContent) . "</span></div>" .
       "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</span></div>";
@@ -665,7 +681,7 @@ elseif (isset($_POST['install1'])) {
     <div class='col-12 d-flex justify-content-center mt-5'><input type='submit' class='btn w-100' name='install2' value='$langNextStep &raquo;' /></div>" .
             hidden_vars($all_vars) . "</form>\n";
     draw($tool_content);
-} else {
+} elseif (!$autoinstall) {
     $langLanguages = array(
         'el' => 'Ελληνικά (el)',
         'en' => 'English (en)');
@@ -705,4 +721,52 @@ elseif (isset($_POST['install1'])) {
       </div>
     </div>";
     draw($tool_content, array('no-menu' => true));
+}
+
+function get_base_path() {
+    $path = dirname(dirname(__FILE__));
+    if (DIRECTORY_SEPARATOR !== '/') {
+        return(str_replace(DIRECTORY_SEPARATOR, '/', $path));
+    } else {
+        return $path;
+    }
+}
+
+// Create config, courses directories etc.
+function create_directories() {
+    mkdir_try('config');
+    touch_try('config/index.php');
+    mkdir_try('courses');
+    touch_try('courses/index.php');
+    mkdir_try('courses/temp');
+    touch_try('courses/temp/index.php');
+    mkdir_try('courses/temp/pdf');
+    mkdir_try('courses/userimg');
+    touch_try('courses/userimg/index.php');
+    mkdir_try('courses/commondocs');
+    touch_try('courses/commondocs/index.php');
+    mkdir_try('video');
+    touch_try('video/index.php');
+    mkdir_try('courses/user_progress_data');
+    mkdir_try('courses/user_progress_data/cert_templates');
+    touch_try('courses/user_progress_data/cert_templates/index.php');
+    mkdir_try('courses/user_progress_data/badge_templates');
+    touch_try('courses/user_progress_data/badge_templates/index.php');
+    mkdir_try('courses/eportfolio');
+    touch_try('courses/eportfolio/index.php');
+    mkdir_try('courses/eportfolio/userbios');
+    touch_try('courses/eportfolio/userbios/index.php');
+    mkdir_try('courses/eportfolio/work_submissions');
+    touch_try('courses/eportfolio/work_submissions/index.php');
+    mkdir_try('courses/eportfolio/mydocs');
+    touch_try('courses/eportfolio/mydocs/index.php');
+}
+
+function getenv_default($name, $default) {
+    $value = getenv($name);
+    if ($value === false) {
+        return $default;
+    } else {
+        return $value;
+    }
 }

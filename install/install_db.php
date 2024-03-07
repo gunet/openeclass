@@ -76,29 +76,29 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_activities` (
     PRIMARY KEY  (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS`course_units_activities` (
-	`id` INT NOT NULL AUTO_INCREMENT ,
-	`course_code` VARCHAR(20) NOT NULL ,
-	`activity_id` VARCHAR(5) NOT NULL ,
-	`unit_id` INT NOT NULL ,
-	`tool_ids` TEXT NOT NULL ,
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `course_code` VARCHAR(20) NOT NULL,
+    `activity_id` VARCHAR(5) NOT NULL,
+    `unit_id` INT NOT NULL,
+    `tool_ids` TEXT NOT NULL,
     `activity_type` INT NOT NULL,
     `visible` INT NOT NULL,
-	PRIMARY KEY (`id`)) $tbl_options");
+    PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_class_info` (
-    `id` INT NOT NULL AUTO_INCREMENT ,
-    `student_number` VARCHAR(50) NOT NULL ,
-    `lessons_number` INT NOT NULL ,
-    `lesson_hours` INT NOT NULL ,
-    `home_hours` INT NOT NULL ,
-    `total_hours` INT NOT NULL ,
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `student_number` VARCHAR(50) NOT NULL,
+    `lessons_number` INT NOT NULL,
+    `lesson_hours` INT NOT NULL,
+    `home_hours` INT NOT NULL,
+    `total_hours` INT NOT NULL,
     `course_code` VARCHAR(20) NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_learning_objectives` (
-    `id` INT NOT NULL AUTO_INCREMENT ,
-    `course_code` VARCHAR(20) NOT NULL ,
-    `title` TEXT NOT NULL ,
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `course_code` VARCHAR(20) NOT NULL,
+    `title` TEXT NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 // end of flipped classroom
 
@@ -637,10 +637,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `forum_category` (
 $db->query("CREATE TABLE IF NOT EXISTS `forum_notify` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT(11) DEFAULT 0 NOT NULL,
-    `cat_id` INT(11) DEFAULT 0 NOT NULL ,
+    `cat_id` INT(11) DEFAULT 0 NOT NULL,
     `forum_id` INT(11) DEFAULT 0 NOT NULL,
-    `topic_id` INT(11) DEFAULT 0 NOT NULL ,
-    `notify_sent` BOOL DEFAULT 0 NOT NULL ,
+    `topic_id` INT(11) DEFAULT 0 NOT NULL,
+    `notify_sent` BOOL DEFAULT 0 NOT NULL,
     `course_id` INT(11) DEFAULT 0 NOT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_post` (
@@ -1489,9 +1489,11 @@ $admin_uid = $db->query("INSERT INTO `user`
             DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)",
     $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1,
     NULL, 'Administrator')->lastInsertID;
-$db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
-    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
-    $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
+if (isset($_SERVER['REMOTE_ADDR'])) {
+    $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
+        VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
+        $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
+}
 
 $db->query("INSERT INTO admin (user_id, privilege) VALUES (?d, ?d)", $admin_uid, 0);
 
@@ -1518,8 +1520,8 @@ $db->query("CREATE TABLE `user_request` (
 $db->query("CREATE TABLE `auth` (
     `auth_id` int(2) NOT NULL auto_increment,
     `auth_name` varchar(20) NOT NULL default '',
-    `auth_settings` text ,
-    `auth_instructions` text ,
+    `auth_settings` text,
+    `auth_instructions` text,
     `auth_title` text,
     `auth_default` tinyint(1) NOT NULL default 0,
     PRIMARY KEY (`auth_id`))
@@ -1678,8 +1680,8 @@ $db->query("CREATE TABLE `course_units` (
     UNIQUE KEY `course_units_order` (`course_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `unit_resources` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-    `unit_id` INT(11) NOT NULL ,
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `unit_id` INT(11) NOT NULL,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `comments` MEDIUMTEXT,
     `res_id` INT(11) NOT NULL,
@@ -2399,17 +2401,21 @@ $db->query("CREATE TABLE h5p_content_dependency (
     dependency_type VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)) $tbl_options");
 
-$db->query("CREATE TABLE api_token (
-    `id` smallint NOT NULL AUTO_INCREMENT,
-    `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-    `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-    `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-    `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
-    `enabled` tinyint NOT NULL,
-    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)) $tbl_options");
+// tables for CCE API
+$db->query("CREATE TABLE `api_grade_analytics` (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    user_uuid VARCHAR(40) NOT NULL,
+    course_uuid VARCHAR(40) NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
+
+$db->query("CREATE TABLE `api_course_completion` (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    user_id INT(10) NOT NULL,
+    course_id INT(10) NOT NULL,
+    is_locked BOOL NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL,
+    PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE api_token (
     `id` smallint NOT NULL AUTO_INCREMENT,
