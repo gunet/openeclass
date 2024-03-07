@@ -4,6 +4,9 @@ $require_help = TRUE;
 $helpTopic = 'portfolio';
 $helpSubTopic = 'create_course';
 
+if (isset($_GET['edit_act'])) {
+    $require_current_course = true;
+}
 require_once '../../include/baseTheme.php';
 
 if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we are not teachers or department managers
@@ -61,7 +64,6 @@ function checkedBoxes() {
 </script>
 hContent;
 
-
 if (isset($_GET['edit_act'])) {
     $unit_id = $_GET['edit_act'];
     $course_code = $_GET['course'];
@@ -74,9 +76,9 @@ if (empty($prof_names)) {
 
 $ids_list = array();
 
-if(!isset($_POST['final_submit'])){
+if (!isset($_POST['final_submit'])) {
 
-    if(!isset($_GET['edit_act'])){ //show activities selection when creation
+    if (!isset($_GET['edit_act'])) { //show activities selection when creation
 
         $toolName = $langCourseCreate;
 
@@ -349,8 +351,6 @@ if(!isset($_POST['final_submit'])){
             $mtitles_in_class[$item_in_class->activity_ID]=$mtitle;
 
         }
-
-
 
         $tool_content .= "<div class='form-wrapper'><fieldset>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
@@ -857,7 +857,7 @@ if(!isset($_POST['final_submit'])){
                 'visible' => $_SESSION['formvisible']
             ));
 
-    }else{      //complete actions if it is edit course activities
+    } else {      //complete actions if it is edit course activities
         $validationFailed = false;
         if ($validationFailed) {
             redirect_to_home_page('modules/create_course/course_units_activities.php?course='.$course_code.'&edit_act='.$unit_id);
@@ -983,6 +983,12 @@ if(!isset($_POST['final_submit'])){
             )
         ));
     }
-
 }
-draw($tool_content, 1, null, $head_content);
+
+if (isset($_GET['edit_act'])) {
+    draw($tool_content, 2, null, $head_content);
+} else {
+    draw($tool_content, 1, null, $head_content);
+}
+
+
