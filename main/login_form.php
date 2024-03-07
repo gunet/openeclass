@@ -32,7 +32,7 @@ foreach ($q as $l) {
         $authLink[] = array(false, "
 
               <div class='col-12 d-flex justify-content-center align-items-center'>
-                <a class='btn submitAdminBtnDefault d-inline-flex' href='$authUrl'>
+                <a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='$authUrl'>
                   ".(!empty($authTitle) ? $authTitle : $langEnter)."
                 </a>
               </div>
@@ -45,7 +45,7 @@ foreach ($q as $l) {
             $providerClass = 'microsoft';
             $providerFont = 'windows';
         }
-        $hybridProviderHtml = "<a class='btn btn-block btn-social btn-$providerClass btn-sm m-2' href='{$urlServer}index.php?provider=" .
+        $hybridProviderHtml = "<a class='btn submitAdminBtnDefault btn-$providerClass social-btn m-2 d-inline-flex gap-1' href='{$urlServer}index.php?provider=" .
             $l->auth_name . "'><span class='fa-brands fa-$providerFont'></span>" . ucfirst($l->auth_name) . "</a>";
         if (is_null($hybridLinkId)) {
             $authLink[] = array(false, $hybridProviderHtml, $langViaSocialNetwork);
@@ -125,7 +125,7 @@ $tool_content .= "
                                   $j = 0;
                 $tool_content .= "<div class='w-100 h-100'>
                                       <div class='col-12 container-pages d-flex align-items-center h-100'>";
-                                          
+                                         
                                           foreach($authLink as $authInfo){
                                               if($i==0){
                                                 $Page = 'slide-page';
@@ -203,7 +203,7 @@ $tool_content .= "
                                                             </div>";
                                                         }
 
-                                                        if(count($authLink) == 3){
+                                                        if(count($authLink) >= 3){
                                         $tool_content .= "<div class='d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap'>";
                                                                 
                                                                     if($i==0){
@@ -241,10 +241,57 @@ $tool_content .= "
                                                                         </button>";
                                                                         
                                                                     }
+
+
+                                                                    if(count($authLink) > 3){
+                                                      $tool_content .= "<div class='col-12'>
+                                                                          <div id='oreven' class='ms-auto me-auto mb-2'>$langOrYet</div>
+                                                                        </div>";  
+
+                                                                          
+                                                        $tool_content .= "
+                                                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                          <button type='button' class='btn submitAdminBtn border-0 text-decoration-underline bg-transparent' data-bs-toggle='modal' data-bs-target='#LoginFormAnotherOption-$i'>
+                                                                              ".(!empty($authLink[count($authLink)-1][2]) ? $authLink[count($authLink)-1][2] : $langLogin)."
+                                                                          </button>";
+
+                                                                          
+                                                        $tool_content .= "<div class='modal fade' id='LoginFormAnotherOption-$i' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='LoginFormAnotherOptionLabel-$i' aria-hidden='true'>
+                                                                            <div class='modal-dialog'>
+                                                                              <div class='modal-content'>
+                                                                                <div class='modal-header'>
+                                                                                  <h5 class='modal-title' id='LoginFormAnotherOptionLabel-$i'>".(!empty($authLink[count($authLink)-1][2]) ? $authLink[count($authLink)-1][2] : $langLogin)."</h5>
+                                                                                  <button type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                                                                                    <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                                                  </button>
+                                                                                </div>
+                                                                                <div class='modal-body d-flex justify-content-center align-items-center'>
+                                                                                  <div>
+                                                                                    ".$authLink[count($authLink)-1][1]."
+                                                                                  </div>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>";
+                                                                        
+                                                                    } 
                                                                     
                                                                 
                                           $tool_content .= "</div>";
                                                       }
+
+
+
+
+
+                                                      
+                                                      
+
+
+
+
+
                                     $tool_content .= "</div>
                                                     </div>
                                               </div>";

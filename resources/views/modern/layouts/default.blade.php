@@ -108,7 +108,7 @@
     @stack('head_scripts')
 
 </head>
-@php //print_r('THE PAGE NAME:'.$pageName); @endphp
+
 <body>
   
     <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0) fixed-announcement @endif">
@@ -120,7 +120,7 @@
                     <div class='d-flex justify-content-center align-items-center gap-2'>
                         <i class='fa-regular fa-bell fa-xl d-block'></i>
                         <span class='d-inline-block text-truncate TextBold' style="max-width: auto;">
-                            @php echo strip_tags($pinned_announce_title) @endphp
+                            @php echo strip_tags($pinned_announce_title); @endphp
                         </span>
                         <a class='link-color TextBold msmall-text text-decoration-underline ps-1' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>
                     </div>

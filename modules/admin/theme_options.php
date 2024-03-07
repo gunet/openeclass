@@ -805,10 +805,11 @@ if (isset($_POST['optionsSave'])) {
         ),false);
     if (isset($preview_theme)) {
         $tool_content .= "
-                <div class='alert alert-warning d-flex justify-content-between align-items-center'>
+                <div class='alert alert-warning d-flex justify-content-between align-items-center flex-wrap gap-2'>
 
-                        <div>
-                        <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPreviewState &nbsp;".$themes_arr[$preview_theme].".</span>
+                        <div class='d-flex gap-2'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>$langPreviewState &nbsp;".$themes_arr[$preview_theme].".</span>
                         </div>
                         <div class='d-lg-flex'>
                             <a href='#' class='theme_enable TextBold'>$langActivate</a>

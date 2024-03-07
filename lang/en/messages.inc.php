@@ -1388,6 +1388,7 @@ $langShortDesc = "$siteName short description";
 $langManS = "$langStudent Manual";
 $langManT = "$langTeacher Manual";
 $langOr = "or";
+$langOrYet = "or even";
 $langNote = "Note";
 $langAcrobat = "In order to read PDF files, you can use %sAcrobat Reader%s or %sother free software available here%s.";
 $langHere = "here";

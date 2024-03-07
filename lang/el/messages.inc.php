@@ -3091,6 +3091,7 @@ $langShortDesc = "Σύντομη Περιγραφή $siteName";
 $langManS = "Εγχειρίδιο $langOfStudent";
 $langManT = "Εγχειρίδιο $langOfTeacher";
 $langOr = "ή";
+$langOrYet = "ή ακόμη";
 $langor =  "η";
 $langNote = "Σημείωση";
 $langAcrobat = "Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το %sπρόγραμμα Acrobat Reader%s ή άλλα %sελεύθερα διαθέσιμα προγράμματα που θα βρείτε εδώ%s.";

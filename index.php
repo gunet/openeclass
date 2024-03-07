@@ -176,7 +176,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<a class='btn submitAdminBtnDefault d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a>");
+                    'html' => "<a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a>");
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
@@ -226,14 +226,19 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
         if (count($hybridProviders)) {
             $authLinks[$hybridLinkId]['html'] = '<div class="col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap">';
             $beginHybridHTML = true;
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
             foreach ($hybridProviders as $provider) {
                 if ($beginHybridHTML) {
                     $beginHybridHTML = false;
                 } else {
                     $authLinks[$hybridLinkId]['html'] .= '<br>';
                 }
+                $provider_link = $provider;
+                if($provider_link == 'live'){
+                    $provider_link = 'microsoft';
+                }
                 $authLinks[$hybridLinkId]['html'] .=
-                    "<a class='btn submitAdminBtnDefault' href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
+                    "<a class='btn submitAdminBtnDefault btn-$provider_link social-btn m-2 d-inline-flex' href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
             }
             $authLinks[$hybridLinkId]['html'] .= '</div>';
         }

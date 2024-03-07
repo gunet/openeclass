@@ -171,7 +171,7 @@
                                                                                     </div>
                                                                                 @endif
 
-                                                                                @if(count($authLinks) == 3)
+                                                                                @if(count($authLinks) >= 3)
                                                                                     <div class="d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap">
                                                                                         
                                                                                             @if($i==0)
@@ -227,8 +227,50 @@
                                                                                                 </button>
                                                                                                 
                                                                                             @endif
+
                                                                                             
-                                                                                        
+                                                                                            @if(count($authLinks) > 3)
+                                                                                                <div class='col-12'>
+                                                                                                    <div id='oreven' class='ms-auto me-auto mb-2'>{{ trans('langOrYet') }}</div>
+                                                                                                </div>
+
+                                                                                                <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                                                    <button type='button' class='btn submitAdminBtn border-0 text-decoration-underline bg-transparent' data-bs-toggle='modal' data-bs-target='#LoginAnotherOption-{{ $i }}'>
+                                                                                                        @if(!empty($authLinks[count($authLinks)-1]['title']))
+                                                                                                            {!! $authLinks[count($authLinks)-1]['title'] !!}
+                                                                                                        @else
+                                                                                                            {{ trans('langLogin') }}
+                                                                                                        @endif
+                                                                                                    </button>
+
+                                                                                                            
+                                                                                                    <div class='modal fade' id='LoginAnotherOption-{{ $i }}' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='LoginAnotherOptionLabel-{{ $i }}' aria-hidden='true'>
+                                                                                                        <div class='modal-dialog'>
+                                                                                                            <div class='modal-content'>
+                                                                                                                <div class='modal-header'>
+                                                                                                                    <h5 class='modal-title' id='LoginAnotherOptionLabel-{{ $i }}'>
+                                                                                                                        @if(!empty($authLinks[count($authLinks)-1]['title']))
+                                                                                                                            {!! $authLinks[count($authLinks)-1]['title'] !!}
+                                                                                                                        @else
+                                                                                                                            {{ trans('langLogin') }}
+                                                                                                                        @endif
+                                                                                                                    </h5>
+                                                                                                                    <button type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
+                                                                                                                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                                <div class='modal-body d-flex justify-content-center align-items-center'>
+                                                                                                                    <div>
+                                                                                                                        {!! $authLinks[count($authLinks)-1]['html'] !!}
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                                            
+
                                                                                     </div>
                                                                                 @endif
                                                                             
