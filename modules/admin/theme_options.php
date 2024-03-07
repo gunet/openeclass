@@ -25,23 +25,23 @@ require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','buttonTextColor',
-                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 
+                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter',
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
-                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
-                                                    'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 
-                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor', 
+                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
+                                                    'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
-                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
+                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage'),
-                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
-                                                'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
+                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader',
+                                                'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
-                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 
-                                                    'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent', 
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu',
+                                                    'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
@@ -564,7 +564,7 @@ if (isset($_POST['optionsSave'])) {
     $activate_class = isset($preview_theme) ? '' : ' hidden';
     $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class me-2 mb-2' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
-    $preview_btn = "<a href='#' class='btn submitAdminBtn submitAdminBtnClassic $preview_class me-2 mb-2' id='theme_preview'>$langSee</a>";
+    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class me-2 mb-2' id='theme_preview'>$langSee</a>";
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline mt-0' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
@@ -1256,26 +1256,28 @@ $tool_content .= "
                         <div class='col-sm-12'>
                         $login_image_fieldL
                         </div>
-                    </div>
+                    </div>";
 
+                    if (isset($theme_options_styles['FormLoginPlacement'])) {
+                        $tool_content .= "<div class='form-group mt-4'>
+                            <div class='form-inline col-sm-9 col-sm-offset-3'>
+                                <div class='radio'>
+                                    <label>
+                                    <input type='radio' name='FormLoginPlacement' value='center-position' " . (($theme_options_styles['FormLoginPlacement'] == 'center-position') ? 'checked' : '') . ">
+                                    $langFormLoginPlacementCenter
+                                    </label>
+                                </div>
+                                <div class='radio'>
+                                    <label>
+                                    <input type='radio' name='FormLoginPlacement' value='right-position' " . (($theme_options_styles['FormLoginPlacement'] == 'right-position') ? 'checked' : '') . ">
+                                    $langFormLoginPlacementLeft &nbsp;
+                                    </label>
+                                </div>
+                            </div>
+                        </div>";
+                    }
 
-                    <div class='form-group mt-4'>
-                        <div class='form-inline col-sm-9 col-sm-offset-3'>
-                            <div class='radio'>
-                                <label>
-                                <input type='radio' name='FormLoginPlacement' value='center-position' ".(($theme_options_styles['FormLoginPlacement'] == 'center-position')? 'checked' : '').">
-                                $langFormLoginPlacementCenter
-                                </label>
-                            </div>
-                            <div class='radio'>
-                                <label>
-                                <input type='radio' name='FormLoginPlacement' value='right-position' ".(($theme_options_styles['FormLoginPlacement'] == 'right-position')? 'checked' : '').">
-                                $langFormLoginPlacementLeft &nbsp;
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
+                    $tool_content .= "<div class='form-group mt-4'>
                         <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
                         <div class='col-sm-12'>
                             <div class='checkbox'>
@@ -1650,7 +1652,7 @@ $tool_content .= "
 
             <div role='tabpanel' class='tab-pane fade' id='navTextEditor'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langTextEditor</h3>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langInputTextEditor</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgTextEditor' class='control-label-notes mb-2 me-2'>$langBgTextEditor:</label>
                         <input name='BgTextEditor' type='text' class='form-control colorpicker' id='BgTextEditor' value='$theme_options_styles[BgTextEditor]'>
