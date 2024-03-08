@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
@@ -30,11 +30,10 @@ require_once 'genericparam.php';
 class GenericRequiredParam extends GenericParam {
 
     public function validateParam() {
-        global $langEmptyParameter;
-        
+
         $value = $this->value();
         if (is_null($value) || trim($value) === '')
-            return "$langEmptyParameter " . $this->display();
+            return "$GLOBALS[langEmptyParameter]: " . $this->display();
         return null;
     }
 

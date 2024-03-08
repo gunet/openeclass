@@ -5377,6 +5377,12 @@ $langZoomUserNotRegistered = 'Δεν βρέθηκε εγγεγραμμένος �
 $langZoomUserNotFound = 'Δημιουργήθηκε πρόβλημα κατά την εύρεση του χρήστη.';
 $langZoomSuccessRegister = 'Επιτυχής δημιουργία λογαριασμού. Παρακαλώ ακολουθήστε τον σύνδεσμο στο email σας.';
 $langShowZoomApiUsers = 'Εμφάνιση Χρηστών Zoom';
+$langZoomConnect = "Επιλογή τρόπου σύνδεσης με την υπηρεσία Zoom";
+$langZoomConnectViaApi = "Με χρήση του Zoom API";
+$langZoomConnectNoApi = "Χωρίς τη χρήση του Zoom API";
+$langNoApiCredentials = "Δεν έχει ρυθμιστεί η πιστοποίηση μέσω API";
+$langEmptyParameter = "Κενή παράμετρος";
+$langNoEmptySeats = "Δεν υπάρχουν διαθέσιμες θέσεις".
 
 
 /* * ***********************************************************
