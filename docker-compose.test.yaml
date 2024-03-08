@@ -1,0 +1,24 @@
+services:
+  eclass:
+    depends_on:
+      sso:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+  ldap:
+    image: gunet/simple-ldap
+    environment:
+      - TZ=Europe/Athens
+    restart: unless-stopped
+  sso:
+    image: gunet/simple-cas:tomcat
+    ports:
+      - "8443:8443"
+    depends_on:
+      ldap:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Athens
+      - LDAP_URL=ldap://ldap:1389
+      - CAS_SERVER_NAME=${CAS_SERVER_NAME:-https://localhost:8443}
