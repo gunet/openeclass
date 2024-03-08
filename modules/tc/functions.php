@@ -23,8 +23,8 @@
 
 require_once 'bbb-api.php';
 
-require_once('modules/tc/Zoom/Service.php');
-require_once('modules/tc/Zoom/Repository.php');
+require_once('modules/tc/Zoom/Api/Service.php');
+require_once('modules/tc/Zoom/Api/Repository.php');
 
 
 

@@ -1259,24 +1259,24 @@ $tool_content .= "
                         </div>
                     </div>";
 
-                    if (isset($theme_options_styles['FormLoginPlacement'])) {
-                        $tool_content .= "<div class='form-group mt-4'>
-                            <div class='form-inline col-sm-9 col-sm-offset-3'>
-                                <div class='radio'>
-                                    <label>
-                                    <input type='radio' name='FormLoginPlacement' value='center-position' " . (($theme_options_styles['FormLoginPlacement'] == 'center-position') ? 'checked' : '') . ">
-                                    $langFormLoginPlacementCenter
-                                    </label>
-                                </div>
-                                <div class='radio'>
-                                    <label>
-                                    <input type='radio' name='FormLoginPlacement' value='right-position' " . (($theme_options_styles['FormLoginPlacement'] == 'right-position') ? 'checked' : '') . ">
-                                    $langFormLoginPlacementLeft &nbsp;
-                                    </label>
-                                </div>
+                    
+                    $tool_content .= "<div class='form-group mt-4'>
+                        <div class='form-inline col-sm-9 col-sm-offset-3'>
+                            <div class='radio'>
+                                <label>
+                                <input type='radio' name='FormLoginPlacement' value='center-position' " . ((isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement'] == 'center-position') ? 'checked' : '') . ">
+                                $langFormLoginPlacementCenter
+                                </label>
                             </div>
-                        </div>";
-                    }
+                            <div class='radio'>
+                                <label>
+                                <input type='radio' name='FormLoginPlacement' value='right-position' " . ((isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement'] == 'right-position') ? 'checked' : '') . ">
+                                $langFormLoginPlacementLeft &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                    </div>";
+                    
 
                     $tool_content .= "<div class='form-group mt-4'>
                         <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
