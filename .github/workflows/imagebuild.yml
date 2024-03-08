@@ -1,0 +1,26 @@
+name: eclass-build
+run-name: Build Open e-Class Docker images
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build-images:
+    strategy:
+      matrix:
+        image-tag: [latest]
+    uses: ./.github/workflows/imagebuild_worker.yml
+    with:
+      image-tag: ${{ matrix.image-tag }}
+    secrets: inherit
+  build-images-ghcr:
+    strategy:
+      matrix:
+        image-tag: [latest]
+    uses: ./.github/workflows/imagebuild_worker-ghcr.yml
+    with:
+      image-tag: ${{ matrix.image-tag }}
+    secrets: inherit

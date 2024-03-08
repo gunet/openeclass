@@ -1,0 +1,25 @@
+name: eclass-build-tagged
+run-name: Build tagged Open e-Class Docker images
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+    build-images:
+      strategy:
+        matrix:
+          image-tag: [latest]
+      uses: ./.github/workflows/imagebuild_worker.yml
+      with:
+        image-tag: ${{ github.ref_name }}
+      secrets: inherit
+    build-images-ghcr:
+      strategy:
+        matrix:
+          image-tag: [latest]
+      uses: ./.github/workflows/imagebuild_worker-ghcr.yml
+      with:
+        image-tag: ${{ github.ref_name }}
+      secrets: inherit
