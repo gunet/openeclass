@@ -197,7 +197,7 @@ function touch_try($filename) {
 
     if (!@touch($filename)) {
         if ($autoinstall) {
-            echo sprintf($langWarningInstall3, $dirname), "\n";
+            echo sprintf($langWarningInstall3, $filename), "\n";
         } else {
             $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $filename);
         }
