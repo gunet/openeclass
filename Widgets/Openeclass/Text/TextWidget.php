@@ -62,13 +62,14 @@ class TextWidget extends Widget implements WidgetInterface {
 
         return widget_view("run", $this->view_data);
     }
-    public function getOptionsForm($widget_widget_area_id)
+    public function getOptionsForm($widget_widget_area_id, $data = array())
     {
         global $native_language_names_init;
         $this->initialize_widget_data($widget_widget_area_id);
 
         $this->view_data['active_ui_languages'] = explode(' ', get_config('active_ui_languages'));
         $this->view_data['native_language_names_init'] = $native_language_names_init;
+        $this->view_data['final_data_widget'] = $data;
 
         return widget_view("options", $this->view_data);
     }

@@ -116,14 +116,15 @@
                                 @endforeach
                                 </div>
                                 @else
-                                <div class='Warning-200-cl margin-bottom-fat'>
-                                    {{ trans('langNoInstalledWidgets') }}
+                                <div class="alert alert-warning">
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>{{ trans('langNoInstalledWidgets') }}</span>
                                 </div>
                                 @endif
                             </div>
                             <div class="col-md-8 col-12 mt-md-0 mt-4">
-                                @include('admin.widgets.common.courseHomeMain')
-                                @include('admin.widgets.common.courseHomeSide')
+                                @include('admin.widgets.common.courseHomeMain',['final_data_courseHomePageMain_widget' => $final_data_courseHomePageMain_widget])
+                                @include('admin.widgets.common.courseHomeSide',['final_data_courseHomeSide_widget' => $final_data_courseHomeSide_widget])
                             </div>
 
 

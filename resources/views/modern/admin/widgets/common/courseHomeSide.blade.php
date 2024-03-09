@@ -5,6 +5,7 @@
         </h3>
     </div>
     <div class="panel-body" id="course_home_widget_sidebar" data-widget-area-id="6">
+        @php $countWidgets = 0; @endphp
         @foreach ($course_home_sidebar_widgets as $key => $course_home_sidebar_widget)
             <div class="panel panel-success widget mb-3" data-widget-id="{{ $course_home_sidebar_widget->id }}" data-widget-widget-area-id="{{ $key }}">
                 <div class="panel-heading">
@@ -15,9 +16,9 @@
                 </div>
                 <div id="widget_desc_{{ $key }}" class="panel-collapse collapse in collapsed">
                     <div class="panel-body">
-                        {!! $course_home_sidebar_widget->getOptionsForm($key) !!}
+                        {!! $course_home_sidebar_widget->getOptionsForm($key,$final_data_courseHomeSide_widget[$countWidgets]) !!}
                     </div>
-                    <div class="panel-footer clearfix d-flex justify-content-center align-items-center">
+                    <div class="panel-footer clearfix d-flex justify-content-start align-items-center gap-2 flex-wrap">
                         <a href="#" class="remove btn deleteAdminBtn">
                            {{ trans('langDelete') }}
                         </a>
@@ -29,6 +30,7 @@
                     </div>
                 </div>
             </div>
+            @php $countWidgets++; @endphp
         @endforeach
     </div>
 </div>

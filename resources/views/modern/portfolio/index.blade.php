@@ -789,7 +789,7 @@
 
                                         @if($portfolio_page_main_widgets)
                                             <div class='col-12 mt-4'>
-                                                {!! $portfolio_page_main_widgets !!}
+                                                {!! html_entity_decode($portfolio_page_main_widgets) !!}
                                             </div>
                                         @endif
 
@@ -838,12 +838,10 @@
                                 @if($portfolio_page_sidebar_widgets)
                                     <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-
-                                                <h3>{{ trans('langMyWidgets') }}</h3>
-
+                                            <h3>{{ trans('langMyWidgets') }}</h3>
                                         </div>
                                         <div class='card-body px-0'>
-                                            {!! $portfolio_page_sidebar_widgets !!}
+                                            {!! html_entity_decode($portfolio_page_sidebar_widgets) !!}
                                         </div>
                                     </div>
                                 @endif

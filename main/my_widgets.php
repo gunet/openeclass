@@ -75,7 +75,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $options = $_POST['options'];
         $option_data = array();
         foreach ($options as $option) {
-            $option_data[$option['name']] = $option['value'];
+            $option_data[$option['name']] = purify($option['value']);
         }
         \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);     
     }
@@ -292,7 +292,13 @@ $head_content .=
                     item.removeClass('panel-success').addClass('panel-default');
                     item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_widget_area_id = $(this).closest('.panel').data('widget-widget-area-id');
+                    
+                    tinyMCE.triggerSave();
+                    jQuery('.mceEditor').trigger('change');
+ 
                     var options = $(this).closest('.panel-body').find('form#optionsForm'+widget_widget_area_id).serializeArray();
+
+                    
                     $.ajax({
                       type: 'POST',
                       url: '',
@@ -334,6 +340,11 @@ $view_data['myWidgets'] = 1;
 
 $view_data['menuTypeID'] = 1;
 $pageName = $langMyWidgets;
+
+// Initialization tinymce regarding widget area id
+$view_data['final_data_portfolioSide_widget'] = tinymce_widget(PORTFOLIO_PAGE_SIDEBAR);
+$view_data['final_data_portfolioPageMain_widget'] = tinymce_widget(PORTFOLIO_PAGE_MAIN);
+
 
 $view_data['action_bar'] = action_bar(array(
     array('title' => $langBack,

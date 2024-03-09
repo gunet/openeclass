@@ -512,7 +512,7 @@
                         @endif
 
                         @if($course_home_main_area_widgets)
-                            {!! $course_home_main_area_widgets !!}
+                            {!! html_entity_decode($course_home_main_area_widgets) !!}
                         @endif
 
 
@@ -641,7 +641,7 @@
                                     <h3>{{ trans('langWidgets') }}</h3>
                                 </div>
                                 <div class='card-body card-body-default px-0 py-0'>
-                                    {!! $course_home_sidebar_widgets !!}
+                                    {!! html_entity_decode($course_home_sidebar_widgets) !!}
                                 </div>
                             </div>
                         @endif

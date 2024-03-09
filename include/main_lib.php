@@ -4804,3 +4804,87 @@ function get_FAQ_image() {
 
     return $form_image;
 }
+
+
+/**
+ * @brief Tinymce inside widget
+ */
+function tinymce_widget($type){
+    global $uid,$course_id;
+
+    $data_widget = array();
+    $tmp_data_widget = array();
+    $final_data_widget = array();
+    $active_lang_codes = explode(' ', get_config('active_ui_languages'));
+    $view_data['final_data_portfolioSide_widget'] = array();
+
+    if($type == 1){
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                    WHERE widget_area_id = ?d
+                                                    ORDER BY position ASC", HOME_PAGE_MAIN);
+    }elseif($type == 2){
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                    WHERE widget_area_id = ?d
+                                                    ORDER BY position ASC", HOME_PAGE_SIDEBAR);
+        
+    }elseif($type == 3){
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                    WHERE user_id = ?d 
+                                                    AND widget_area_id = ?d
+                                                    ORDER BY position ASC",$uid, PORTFOLIO_PAGE_MAIN);
+    }elseif($type == 4){
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                    WHERE user_id = ?d 
+                                                    AND widget_area_id = ?d
+                                                    ORDER BY position ASC",$uid, PORTFOLIO_PAGE_SIDEBAR);
+    }elseif($type == 5){
+        if(isset($course_id) and $course_id){
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                        WHERE widget_area_id = ?d 
+                                                        AND (course_id = ?d OR (course_id IS NULL AND position >= ?d))
+                                                        ORDER BY position ASC", COURSE_HOME_PAGE_MAIN, $course_id,0);
+        }else{
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                            WHERE widget_area_id = ?d AND course_id IS NULL
+                                                            AND user_id IS NULL AND position >= ?d
+                                                            ORDER BY position ASC",COURSE_HOME_PAGE_MAIN, 0);
+        }
+    }elseif($type == 6){
+        if(isset($course_id) and $course_id){
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                        WHERE widget_area_id = ?d 
+                                                        AND (course_id = ?d OR (course_id IS NULL AND position >= ?d))
+                                                        ORDER BY position ASC",COURSE_HOME_PAGE_SIDEBAR, $course_id,0);
+        }else{
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+                                                        WHERE widget_area_id = ?d AND course_id IS NULL
+                                                        AND user_id IS NULL AND position >= ?d
+                                                        ORDER BY position ASC",COURSE_HOME_PAGE_SIDEBAR, 0);
+        }
+        
+    }
+
+    if(count($getWidget) > 0){
+        foreach ($getWidget as $key => $option) {
+            $data_widget[] = unserialize($option->options);
+        }
+    }
+    if(count($data_widget) > 0){
+        foreach($data_widget as $widget){
+            if($widget){
+                foreach(array_keys($widget) as $key){
+                    $tmp_data_widget[$key] = rich_text_editor($key,3,40,$widget[$key]);
+                }
+            }else{
+                foreach($active_lang_codes as $c){
+                    $empty_Key = 'text_'.$c;
+                    $tmp_data_widget[$empty_Key] = rich_text_editor($empty_Key,3,40,'');
+                }
+            }
+
+            $final_data_widget[] = $tmp_data_widget;
+        }
+    }
+
+    return $final_data_widget;
+}

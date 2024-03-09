@@ -76,7 +76,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $options = $_POST['options'];
         $option_data = array();
         foreach ($options as $option) {
-            $option_data[$option['name']] = $option['value'];
+            $option_data[$option['name']] = purify($option['value']);
         }
         \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);
     }
@@ -296,6 +296,10 @@ $head_content .=
                     item.removeClass('panel-success').addClass('panel-default');
                     item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_widget_area_id = $(this).closest('.panel').data('widget-widget-area-id');
+
+                    tinyMCE.triggerSave();
+                    jQuery('.mceEditor').trigger('change');
+
                     var options = $(this).closest('.panel-body').find('form#optionsForm'+widget_widget_area_id).serializeArray();
                     $.ajax({
                       type: 'POST',
@@ -339,6 +343,14 @@ $course_home_main_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
 $view_data['course_home_main_area_widgets'] = $course_home_main_area->getWidgets();
 $course_home_sidebar_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 $view_data['course_home_sidebar_widgets'] = $course_home_sidebar_area->getWidgets();
+
+// Initialization tinymce regarding widget widget area id
+$view_data['final_data_homepageSide_widget'] = tinymce_widget(HOME_PAGE_SIDEBAR);
+$view_data['final_data_homepagePageMain_widget'] = tinymce_widget(HOME_PAGE_MAIN);
+$view_data['final_data_portfolioSide_widget'] = tinymce_widget(PORTFOLIO_PAGE_SIDEBAR);
+$view_data['final_data_portfolioPageMain_widget'] = tinymce_widget(PORTFOLIO_PAGE_MAIN);
+$view_data['final_data_courseHomeSide_widget'] = tinymce_widget(COURSE_HOME_PAGE_SIDEBAR);
+$view_data['final_data_courseHomePageMain_widget'] = tinymce_widget(COURSE_HOME_PAGE_MAIN);
 
 $view_data = recursiveWidgetIterator('Widgets', $view_data);
 

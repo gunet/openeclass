@@ -93,15 +93,16 @@
                             @endforeach
                             </div>
                             @else
-                            <div class='Warning-200-cl margin-bottom-fat'>
-                                {{ trans('langNoInstalledWidgets') }}
+                            <div class="alert alert-warning">
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoInstalledWidgets') }}</span>
                             </div>
                             @endif
                         </div>
                         <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
 
-                                @include('admin.widgets.common.portfolioMain')
-                                @include('admin.widgets.common.portfolioSide')
+                                @include('admin.widgets.common.portfolioMain',['final_data_portfolioPageMain_widget' => $final_data_portfolioPageMain_widget])
+                                @include('admin.widgets.common.portfolioSide',['final_data_portfolioSide_widget' => $final_data_portfolioSide_widget])
                         </div>
                    
                

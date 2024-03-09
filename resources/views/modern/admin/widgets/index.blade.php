@@ -94,8 +94,9 @@
                             @endforeach
                             </div>
                             @else
-                            <div class='Warning-200-cl margin-bottom-fat'>
-                                {{ trans('langNoInstalledWidgets') }}
+                            <div class="alert alert-warning">
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoInstalledWidgets') }}</span>
                             </div>
                             @endif
 
@@ -131,8 +132,9 @@
                                 @endforeach
                             </div>
                             @else
-                            <div class='Warning-200-cl margin-bottom-fat'>
-                                {{ trans('langNoAvailableWidgets') }}
+                            <div class="alert alert-warning">
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoInstalledWidgets') }}</span>
                             </div>
                             @endif
                         </div>
@@ -148,21 +150,21 @@
                             <!-- Tab panes -->
                                 <div class="tab-content mt-2">
                                     <div role="tabpanel" class="tab-pane active" id="home">
-                                        @include('admin.widgets.common.homePageMain')
-                                        @include('admin.widgets.common.homePageSide')
+                                        @include('admin.widgets.common.homePageMain',['final_data_homepagePageMain_widget' => $final_data_homepagePageMain_widget])
+                                        @include('admin.widgets.common.homePageSide',['final_data_homepageSide_widget' => $final_data_homepageSide_widget])
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="portfolio">
-                                        @include('admin.widgets.common.portfolioMain')
-                                        @include('admin.widgets.common.portfolioSide')
+                                        @include('admin.widgets.common.portfolioMain',['final_data_portfolioPageMain_widget' => $final_data_portfolioPageMain_widget])
+                                        @include('admin.widgets.common.portfolioSide',['final_data_portfolioSide_widget' => $final_data_portfolioSide_widget])
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="course_home">
-                                        @include('admin.widgets.common.courseHomeMain')
-                                        @include('admin.widgets.common.courseHomeSide')
+                                        @include('admin.widgets.common.courseHomeMain',['final_data_courseHomePageMain_widget' => $final_data_courseHomePageMain_widget])
+                                        @include('admin.widgets.common.courseHomeSide',['final_data_courseHomeSide_widget' => $final_data_courseHomeSide_widget])
                                     </div>
                                 </div>
                         </div>
 
-
+    
 
         </div>
 
