@@ -4829,12 +4829,12 @@ function tinymce_widget($type){
         
     }elseif($type == 3){
         $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
-                                                    WHERE user_id = ?d 
+                                                    WHERE (user_id = ?d OR user_id IS NULL) 
                                                     AND widget_area_id = ?d
                                                     ORDER BY position ASC",$uid, PORTFOLIO_PAGE_MAIN);
     }elseif($type == 4){
         $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
-                                                    WHERE user_id = ?d 
+                                                    WHERE (user_id = ?d OR user_id IS NULL) 
                                                     AND widget_area_id = ?d
                                                     ORDER BY position ASC",$uid, PORTFOLIO_PAGE_SIDEBAR);
     }elseif($type == 5){
