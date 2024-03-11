@@ -1,0 +1,25 @@
+name: readme-sync
+run-name: Sync README file between GitHub and Docker Hub
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+    paths:
+      - 'docker/README.md'
+
+jobs:
+  readme-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Sync to Docker Hub
+        uses: meeDamian/sync-readme@v1.0.6
+        with:
+          user: ${{ secrets.DOCKER_HUB_USERNAME }}
+          pass: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          slug: gunet/cert-req
+          readme: README.md
+          description: true
