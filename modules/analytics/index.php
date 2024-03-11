@@ -102,22 +102,19 @@ if (isset($_POST['insert_analytics'])) {
 }  else if (isset($_REQUEST['delete_analytics'])) {
     $analytics_id = $_REQUEST['analytics_id'];
     delete_analytics($analytics_id);
-    //Session::Messages($langAnalyticsDeleteSuccess, "alert-success");
-    Session::flash('message',$langAnalyticsDeleteSuccess);
+    Session::flash('message', $langAnalyticsDeleteSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/analytics/index.php?course=$course_code");
 } else if  (isset($_REQUEST['activate'])) {
     if ($_REQUEST['activate'] == 0) { // Deactivate analytics
         $analytics_id = $_REQUEST['analytics_id'];
         switch_activation($analytics_id, 0);
-        //Session::Messages($langAnalyticsDeactivated, "alert-success");
-        Session::flash('message',$langAnalyticsDeactivated);
+        Session::flash('message', $langAnalyticsDeactivated);
         Session::flash('alert-class', 'alert-success');
     } else if ($_REQUEST['activate'] == 1) { // Activate analytics
         $analytics_id = $_REQUEST['analytics_id'];
         switch_activation($analytics_id, 1);
-        //Session::Messages($langAnalyticsActivated, "alert-success");
-        Session::flash('message',$langAnalyticsActivated);
+        Session::flash('message', $langAnalyticsActivated);
         Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("modules/analytics/index.php?course=$course_code");
@@ -126,7 +123,6 @@ if (isset($_POST['insert_analytics'])) {
     $analytics_id = $_REQUEST['analytics_id'];
     $analytics_element_id = $_REQUEST['analytics_element_id'];
     delete_analytics_element($analytics_id, $analytics_element_id);
-    //Session::Messages($langAnalyticsElementDeleteSuccess, "alert-success");
     Session::flash('message',$langAnalyticsElementDeleteSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements");
@@ -166,9 +162,7 @@ if (isset($_POST['insert_analytics'])) {
 
     if($v->validate()) {
         update_analytics_element($_POST['analytics_id'], $_POST['analytics_element_id'], $_POST['resource'], $_POST['module_id'], $_POST['min_value'], $_POST['max_value'], $_POST['lower_threshold'], $_POST['upper_threshold'], $_POST['weight']);
-
-        //Session::Messages($langAnalyticsElementUpdateSuccess, 'alert-success');
-        Session::flash('message',$langAnalyticsElementUpdateSuccess);
+        Session::flash('message', $langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
     } else {
@@ -309,7 +303,7 @@ if (isset($_POST['insert_analytics'])) {
                         'url' => '?course='.$course_code.'&amp;analytics_id='.$analytics_id.'&amp;mode=perUser&amp;period='.$period.'&amp;orderby='.$orderby.'&amp;reverse='.$reverse_op.'&amp;download=true',
                         'icon' => 'fa-envelope',
                         'level' => 'primary-label')
-                    
+
                 )
             );
             display_analytics_peruser($analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next, $orderby, $reverse, $period, $download);
@@ -325,7 +319,7 @@ if (isset($_POST['insert_analytics'])) {
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
                     'icon' => 'fa-users',
                     'level' => 'primary-label')
-                
+
             )
         );
         display_analytics_information($analytics_id);
