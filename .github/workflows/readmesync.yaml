@@ -20,6 +20,6 @@ jobs:
         with:
           user: ${{ secrets.DOCKER_HUB_USERNAME }}
           pass: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-          slug: gunet/cert-req
-          readme: README.md
+          slug: gunet/openeclass
+          readme: docker/README.md
           description: true
