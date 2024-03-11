@@ -56,6 +56,137 @@ $helpTopic = 'documents';
 
 doc_init();
 
+
+
+if ($is_editor) {
+
+    if (isset($_POST['bulk_submit'])) {
+
+        if ($_POST['selectedcbids']) {
+
+            $cbids = explode(',', $_POST['selectedcbids']);
+
+
+            if ($_POST['bulk_action'] == 'delete') {
+
+                $filepaths = explode(',', $_POST['filepaths']);
+                foreach (array_combine($cbids, $filepaths) as $row_id => $filePath) {
+
+                    $curDirPath = my_dirname($filePath);
+                    // Check if file actually exists
+                    $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename, lock_user_id FROM document
+                                        WHERE $group_sql AND path = ?s", $filePath);
+                    $delete_ok = true;
+                    if ($r) {
+                        if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
+                            Session::Messages($langResourceBelongsToCert, "alert-warning");
+                        } else {
+                            // remove from index if relevant (except non-main sysbsystems and metadata)
+                            Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
+                                                AND format <> '.meta' AND path LIKE ?s",
+                                function ($r2) {
+                                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
+                                    if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
+                                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                                    }
+                                },
+                                $filePath . '%');
+
+                            if (empty($r->extra_path)) {
+                                if ($delete_ok = my_delete($basedir . $filePath) && $delete_ok) {
+                                    if (hasMetaData($filePath, $basedir, $group_sql)) {
+                                        $delete_ok = my_delete($basedir . $filePath . ".xml") && $delete_ok;
+                                    }
+                                    update_db_info('document', 'delete', $filePath, $r->filename);
+                                }
+                            } else {
+                                update_db_info('document', 'delete', $filePath, $r->filename);
+                            }
+                            if(isset($_GET['ebook_id'])){
+                                Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
+                            }
+                            if ($delete_ok) {
+                                Session::Messages($langDocDeleted, 'alert-success');
+                            } else {
+                                Session::Messages($langGeneralError, 'alert-danger');
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            if ($_POST['bulk_action'] == 'visible') {
+                foreach ($cbids as $row_id) {
+                    Database::get()->query("UPDATE document SET visible = ?d WHERE id = ?d", 1, $row_id);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+                }
+            }
+            if ($_POST['bulk_action'] == 'invisible') {
+                foreach ($cbids as $row_id) {
+                    Database::get()->query("UPDATE document SET visible = ?d WHERE id = ?d", 0, $row_id);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $row_id);
+                }
+            }
+
+            if ($_POST['bulk_action'] == 'move') {
+//                if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+                $moveTo = $_POST['source_path'];
+                $moveTo = getDirectReference($moveTo);
+                $filepaths = explode(',', $_POST['filepaths']);
+                $existingFilesArr = array();
+                foreach ($filepaths as $source) {
+
+                    $sourceXml = $source . '.xml';
+                    // check if source and destination are the same
+                    if ($source != $moveTo) {
+                        $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path = ?s", $source);
+                        $filename = $r->filename;
+                        $extra_path = $r->extra_path;
+                        // Check if target filename already exists
+                        $curDirPath = $moveTo;
+                        $fileExists = Database::get()->querySingle("SELECT id FROM document
+                        WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                            "^$curDirPath/[^/]+$", $filename);
+                        if ($fileExists) {
+                            $curDirPath = my_dirname($source);
+                            array_push($existingFilesArr, $filename);
+                            $existingFiles = implode(', ', $existingFilesArr);
+                            Session::flash('message',$langFileExists.' '.$existingFiles);
+                            Session::flash('alert-class', 'alert-danger');
+                        } else {
+                            if (empty($extra_path)) {
+                                if (move($basedir . $source, $basedir . $moveTo)) {
+                                    if (hasMetaData($source, $basedir, $group_sql)) {
+                                        move($basedir . $sourceXml, $basedir . $moveTo);
+                                    }
+                                    update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
+                                }
+                            } else {
+                                update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
+                            }
+//                            Session::flash('message',$langDirMv);
+//                            Session::flash('alert-class', 'alert-success');
+                            $curDirPath = $moveTo;
+                        }
+
+                    } else {
+                        Session::flash('message',$langImpossible);
+                        Session::flash('alert-class', 'alert-danger');
+                        // return to step 1
+                        $_GET['move'] = $source;
+                    }
+                }
+            }
+
+
+        }
+
+    }
+
+}
+
+
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     /* save video recorded data */
     if (isset($_FILES['video-blob'])) {
@@ -201,6 +332,14 @@ if (isset($_GET['showQuota'])) {
 }
 
 $dialogBox = $metaDataBox = '';
+
+$dialogBoxBulk = 'move';
+
+$dialogData = array(
+    'movePath' => '',
+    'filename' => '',
+    'file' => '',
+    'directories' => directory_selection('', 'moveTo', '', ''));
 
 // ---------------------------
 // Mindmap save button
@@ -1217,6 +1356,7 @@ $result = Database::get()->queryArray("SELECT id, path, filename,
     "$curDirPath/%", "$curDirPath/%/%");
 $dirs = $files = [];
 foreach ($result as $row) {
+    $id = $row->id;
     $is_dir = $row->format == '.dir';
     if ($real_path = common_doc_path($row->extra_path, true)) {
         // common docs
@@ -1255,6 +1395,7 @@ foreach ($result as $row) {
     }
 
     $info = array(
+        'id' => $id,
         'is_dir' => $is_dir,
         'size' => $size,
         'title' => $row->title,
@@ -1383,7 +1524,7 @@ foreach ($result as $row) {
 // ----------------------------------------------
 
 $data = compact('menuTypeID', 'can_upload', 'is_in_tinymce', 'base_url',
-    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox','metaDataBox');
+    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox', 'dialogBoxBulk','metaDataBox');
 $data['fileInfo'] = array_merge($dirs, $files);
 
 if (isset($dialogData)) {
@@ -1428,6 +1569,9 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
             'url' => "{$base_url}createDir=$curDirPath",
             'icon' => 'fa-folder',
             'level' => 'primary'),
+        array('title' => $langBulkProcessing,
+            'class' => 'bulk-processing',
+            'icon' => 'fa-hat-wizard'),
         array('title' => $langUploadRecAudio,
             'url' => "rec_audio.php?course=$course_code",
             'icon' => 'fa-microphone',

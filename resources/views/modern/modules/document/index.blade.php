@@ -4,6 +4,116 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
+<style>
+    .panel-move .form-content-modules, .panel-move .col-12.d-flex.justify-content-end.align-items-center.gap-2.mt-4 {
+        display: none!important;
+    }
+</style>
+
+<script type='text/javascript'>
+
+    $(document).ready(function(){
+
+        let checkboxStates = [];
+
+        $('li.bulk-processing a').on('click', function(event) {
+            event.preventDefault();
+            $('.bulk-processing-box').toggleClass('d-none');
+            $('.checkbox_th').toggleClass('d-none');
+            $('.checkbox_td').toggleClass('d-none');
+            if ($(this).find('span.fa.fa-check').length) {
+                $(this).find('span.fa.fa-check').remove();
+            } else {
+                $(this).append('<span class=\'fa fa-check text-success\' style=\'margin-left: 5px;\'></span>');
+            }
+        });
+
+        $('#source_path').val($('select[name=\"moveTo\"] option:first').val());
+        $('select[name=\"moveTo\"]').change(function(){
+            $('#source_path').val($(this).val());
+        });
+
+        $('.table-default').on('change', 'input[type=checkbox]', function() {
+            let cbid = $(this).attr('cbid');
+            let filepath = $(this).attr('filepath');
+            checkboxStates[cbid] = this.checked;
+
+            let selectedCbidValues = $('#selectedcbids').val().split(',');
+            let filepaths = $('#filepaths').val().split(',');
+
+            let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+            let filepathIndex = filepaths.indexOf(filepath);
+
+            if (this.checked && cbidIndex === -1) {
+                selectedCbidValues.push(cbid);
+                filepaths.push(filepath);
+
+            } else if (!this.checked && cbidIndex !== -1) {
+                selectedCbidValues.splice(cbidIndex, 1);
+                filepaths.splice(filepathIndex, 1);
+            }
+            $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+            $('#filepaths').val(filepaths.filter(Boolean).join(','));
+
+        });
+
+
+        $('select[name=\"bulk_action\"]').change(function(){
+            var selectedOption = $(this).val();
+            if(selectedOption === 'move') {
+                $('.panel-move form .form-group:eq(1)').remove();
+                $('.panel-move').removeClass('d-none');
+                $('.checkbox_td input[type="checkbox"]').each(function() {
+                    if ($(this).attr('isdir') === '1') {
+                        $(this).prop('checked', false);
+                        $(this).prop('disabled', true);
+
+                        let cbid = $(this).attr('cbid');
+                        let filepath = $(this).attr('filepath');
+                        checkboxStates[cbid] = this.checked;
+
+                        let selectedCbidValues = $('#selectedcbids').val().split(',');
+                        let filepaths = $('#filepaths').val().split(',');
+
+                        let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+                        let filepathIndex = filepaths.indexOf(filepath);
+
+                        if (this.checked && cbidIndex === -1) {
+                            selectedCbidValues.push(cbid);
+                            filepaths.push(filepath);
+
+                        } else if (!this.checked && cbidIndex !== -1) {
+                            selectedCbidValues.splice(cbidIndex, 1);
+                            filepaths.splice(filepathIndex, 1);
+                        }
+                        $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+                        $('#filepaths').val(filepaths.filter(Boolean).join(','));
+
+                    }
+                });
+            } else {
+                $('.panel-move').addClass('d-none');
+                $('.checkbox_td input[type="checkbox"]').each(function() {
+                    if ($(this).attr('isdir') === '1') {
+                        $(this).prop('disabled', false);
+                    }
+                });
+            }
+        });
+
+
+        $('#bulk_actions').submit(function(e) {
+            var selectedOption = $('select[name="bulk_action"]').val();
+            if (selectedOption === null) {
+                e.preventDefault(); // Prevent the default form submission
+            }
+        });
+
+
+    })
+
+</script>
+
 <div class="col-12 main-section">
 <div class='{{ $container }} @if($course_code) module-container py-lg-0 @else main-container @endif'>
         <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
@@ -114,7 +224,35 @@
                                             @endif
                                         </div>
                                     </div>
-                                
+
+                                    <div class="bulk-processing-box d-none" style="margin-top: 20px;">
+                                        <div class='col-md-12'>
+                                            <div class='panel'>
+                                                <div class=''>
+                                                    <strong>
+                                                        <i class='fa fa-edit'></i>
+                                                        {{ trans('langBulkProcessing') }}
+                                                    </strong>
+                                                    <form id='bulk_actions' method='post' action='' style='display: flex;gap: 5px;margin: 10px 0'>
+                                                        <select class='form-control' name='bulk_action' class='px-3' style='max-width:250px;'>
+                                                            <option value='av_actions' disabled selected hidden>{{ trans('langActions') }}</option>
+                                                            <option value='move'>{{ trans('langMove') }}</option>
+                                                            <option value='delete'>{{ trans('langDelete') }}</option>
+                                                            <option value='visible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
+                                                            <option value='invisible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
+                                                        </select>
+                                                        <input type='submit' class='btn btn-default' name='bulk_submit' value='{{ trans('langSubmit') }}'>
+                                                        <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
+                                                        <input type='hidden' id='filepaths' name='filepaths' value=''>
+                                                        <input type='hidden' id='source_path' name='source_path' value=''>
+                                                    </form>
+                                                    <div class='panel-move d-none'>
+                                                        @include("modules.document.$dialogBoxBulk", ['menuTypeID' => $menuTypeID])
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             
                         </div>
 
@@ -125,6 +263,7 @@
 
                                     <thead>
                                         <tr class="list-header">
+                                            <th style='width:5%;' class='checkbox_th d-none'></th>
                                             <th style='width:50%;'>{!! headlink(trans('langName'), 'name') !!}</th>
                                             
                                             <th style='width:15%;'>{{ trans('langSize') }}</th>
@@ -142,7 +281,7 @@
 
                                         @if($file->visible == 1 or $can_upload)
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
-
+                                                <td class='text-center checkbox_td d-none'><input type='checkbox' isDir='{{$file->is_dir}}' filepath='{{$file->path}}' cbid='{{$file->id}}' value='{{$file->id}}'></td>
                                                 <td style='width:50%;'>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>
