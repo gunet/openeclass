@@ -103,7 +103,7 @@ function register_user_presences($attendance_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langAmShort, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
+           $langAmShort, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel;
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
@@ -135,7 +135,7 @@ function register_user_presences($attendance_id, $actID) {
                     triggerAttendanceGame($course_id, $userID, $attendance_id, AttendanceEvent::UPDATE);
                 }
             }
-            Session::Messages($langAttendanceEdit, 'alert-success');
+            Session::Messages($langQuotaSuccess, 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($actID));
         }
     }
