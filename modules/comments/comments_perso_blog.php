@@ -32,11 +32,11 @@ if (get_config('personal_blog_commenting')) {
         if (isset($_SESSION['uid'])  && $session->status) {
             $comment = new Comment();
             if ($comment->create($_POST['commentText'], $uid, $_POST['rtype'], intval($_POST['rid']))) {
-                $post_actions = '<div class="float-end">';
-                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $post_actions .= '<span class="fa-solid fa-xmark Accent-200-cl float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions = '<div class="d-flex gap-3">';
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $post_actions .= '<span class="fa fa-edit pe-2 float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                $post_actions .= '<span class="fa-solid fa-xmark Accent-200-cl" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                 $post_actions .='</div>';
                 $response[0] = 'OK';
                 $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsSaveSuccess."</span></div>";
@@ -46,14 +46,14 @@ if (get_config('personal_blog_commenting')) {
                     <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <a class='media-left' href='#'>
-                                    ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
-                                </a>
+                                <div class='d-flex justify-content-start  align-items-center gap-2 flex-wrap'>
+                                    <div>". profile_image($comment->getAuthor(), IMAGESIZE_SMALL, 'rounded-circle') ."</div>
+                                    <small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
+                                </div>
                                 ".$post_actions."
                             </div>
                             <div class='card-body'>
-                                <span class='badge Primary-200-bg form-label vsmall-text'>".format_locale_date(strtotime($comment->getTime())).'</span>'.
-                                "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
+                                <p class='TextBold'>".format_locale_date(strtotime($comment->getTime()))."</p>
                                 <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                             </div>
                         </div>

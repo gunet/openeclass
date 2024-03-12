@@ -426,7 +426,7 @@ Class Rating {
             $out .= "</div>";
             
         } elseif ($this->widget == 'thumbs_up') {
-            $out = "<div class=\"rating d-inline-flex align-items-top\">";
+            $out = "<div class=\"rating d-flex justify-content-start align-items-start gap-2 flex-wrap\">";
             
             $onclick_up = "";
             
@@ -445,8 +445,8 @@ Class Rating {
             }
             
             $out .= "<img alt=\"Rating image\" id=\"rate_".$this->rid."_img\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>";
-            $out .= "<span class=\"me-2 mt-1\" id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
-            $out .= "<span class=\"smaller mt-1\" id=\"rate_msg_".$this->rid."\">";
+            $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
+            $out .= "<span class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
             
             if ($has_rated) {
                 $out .= $langUserHasRated;

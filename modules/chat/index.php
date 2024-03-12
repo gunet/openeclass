@@ -409,7 +409,7 @@ if ($display == TRUE) {
             } else {
                 $tool_content .= $conf->conf_title;
             }
-            $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>" . $conf_details;
+            $tool_content .= "<div>$conf->conf_description</div>" . $conf_details;
             $tool_content .= "</td>";
             $tool_content .= "<td>$enabled_conference</td>";
             $tool_content .= "<td>".format_locale_date(strtotime($conf->start), 'short')."</td>";

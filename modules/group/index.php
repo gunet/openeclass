@@ -515,8 +515,8 @@ if ($is_editor) {
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
-                <tr class='list-header'><th class='text-start list-header'>$langGroupTeam</th>
-                <th class=' option-btn-cell text-end'>" . icon('fa-gears') . "</th>
+                <tr class='list-header'><th class='text-start list-header py-2 px-2'>$langGroupTeam</th>
+                <th class=' option-btn-cell text-end py-2 px-2'>" . icon('fa-gears') . "</th>
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 <td></td></tr></table></div></div></div>";

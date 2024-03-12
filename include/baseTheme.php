@@ -4145,7 +4145,8 @@ function view($view_file, $view_data = array()) {
                 tbody tr.header-pollAnswers,
                 .border-bottom-table-head,
                 thead tr.list-header td,
-                tbody tr.list-header td {
+                tbody tr.list-header td,
+                tbody tr.list-header th {
                     border-bottom: solid 2px $theme_options_styles[BgBorderBottomHeadTables] !important;
                 }
                 table.dataTable thead th, 

@@ -234,14 +234,14 @@
                                                         {{ trans('langBulkProcessing') }}
                                                     </strong>
                                                     <form id='bulk_actions' method='post' action='' style='display: flex;gap: 5px;margin: 10px 0'>
-                                                        <select class='form-control' name='bulk_action' class='px-3' style='max-width:250px;'>
+                                                        <select class='form-select mt-0' name='bulk_action' class='px-3' style='max-width:250px;'>
                                                             <option value='av_actions' disabled selected hidden>{{ trans('langActions') }}</option>
                                                             <option value='move'>{{ trans('langMove') }}</option>
                                                             <option value='delete'>{{ trans('langDelete') }}</option>
                                                             <option value='visible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
                                                             <option value='invisible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
                                                         </select>
-                                                        <input type='submit' class='btn btn-default' name='bulk_submit' value='{{ trans('langSubmit') }}'>
+                                                        <input type='submit' class='px-3' name='bulk_submit' value='{{ trans('langSubmit') }}'>
                                                         <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
                                                         <input type='hidden' id='filepaths' name='filepaths' value=''>
                                                         <input type='hidden' id='source_path' name='source_path' value=''>
@@ -281,7 +281,14 @@
 
                                         @if($file->visible == 1 or $can_upload)
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
-                                                <td class='text-center checkbox_td d-none'><input type='checkbox' isDir='{{$file->is_dir}}' filepath='{{$file->path}}' cbid='{{$file->id}}' value='{{$file->id}}'></td>
+                                                <td class='text-center checkbox_td d-none'>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container'>
+                                                            <input type='checkbox' isDir='{{$file->is_dir}}' filepath='{{$file->path}}' cbid='{{$file->id}}' value='{{$file->id}}'>
+                                                            <span class='checkmark'></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
                                                 <td style='width:50%;'>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>

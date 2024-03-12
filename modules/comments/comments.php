@@ -53,11 +53,11 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
         if (Commenting::permCreate($is_editor, $uid, $course_id)) {
             $comment = new Comment();
             if ($comment->create($_POST['commentText'], $uid, $_POST['rtype'], intval($_POST['rid']))) {
-                $post_actions = '<div>';
-                $post_actions .= '<a class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $post_actions .= '<span class="fa-solid fa-xmark float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions = '<div class="d-flex gap-3">';
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $post_actions .= '<span class="fa fa-edit pe-3 float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<a class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                $post_actions .= '<span class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                 $post_actions .='</div>';
 
                 $response[0] = 'OK';
@@ -70,14 +70,14 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <div>
                                     <a href='#'>
-                                        ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
+                                        ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'rounded-circle') ."
+                                        <small>" .display_user($comment->getAuthor(), false, false). "</small>
                                     </a>
-                                    <small>" .display_user($comment->getAuthor(), false, false). "</small>
                                 </div>
                                 ".$post_actions."
                             </div>
                             <div class='card-body'>
-                                <p>".format_locale_date(strtotime($comment->getTime())).'</p>'.
+                                <p class='TextBold'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
                                 "<p id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</p>
                             </div>
                         </div>

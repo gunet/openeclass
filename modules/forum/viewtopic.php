@@ -652,19 +652,19 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($count > 1) { // for all posts except first
         $content .= "<div id='$myrow->id' class='post-message card panelCard px-lg-4 py-lg-3 col-sm-offset-$offset mt-3'>";
-        $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'><div class='panel-title w-100'>$langMsgRe " . q($topic_subject);
+        $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'><div class='panel-title d-flex justify-content-between align-items-center w-100'>$langMsgRe " . q($topic_subject);
     } else {
         $content .= "<div id='$myrow->id' class='parent-post-message card panelCard px-lg-4 py-lg-3 mt-3'>";
-        $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'><div class='panel-title w-100'>". q($topic_subject);
+        $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'><div class='panel-title d-flex justify-content-between align-items-center w-100'>". q($topic_subject);
     }
 
     if ($is_editor) {
         $content .= "
-                <span class='d-flex gap-2 float-end'>
+                <span class='d-flex gap-2'>
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum'>" .
                             "<span class='fa fa-edit pe-1' title='$langModify' data-bs-toggle='tooltip' " .
-                                "data-bs-original-title='$langModify' data-bs-placement='bottom'></span></a>&nbsp;" .
+                                "data-bs-original-title='$langModify' data-bs-placement='bottom'></span></a>" .
                     "<a class='delete-btn link-delete' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
                             "<span class='fa-solid fa-xmark' title='$langDelete' data-bs-toggle='tooltip' " .
@@ -689,37 +689,39 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
             $content .= "<div class='card-body'>";
         }
         $content .= "        
-            <div class='row'>
-                <div class='col-sm-1 col-2'>" .
-                    profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'rounded-circle margin-bottom-thin') . "
-                </div>
-                <div class='col-sm-11 col-10'>
-                    <div class='forum-post-header'>
-                        <small class='help-block'><strong>$langSent:</strong> " .
-                            format_locale_date(strtotime($myrow->post_time), 'short') .
-                            " $langFrom2 " . display_user($myrow->poster_id, false, false) .
-                            " ({$user_stats[$myrow->poster_id]})
-                        </small><small>$achor_to_parent_post</small>";
+            
+                <div class='col-12 d-flex justify-content-start align-items-start gap-2 flex-wrap'>
+                    <div>" .
+                        profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'rounded-circle margin-bottom-thin') . "
+                    </div>
+                    <div>
+                        <div class='forum-post-header'>
+                            <small class='help-block'><strong>$langSent:</strong> " .
+                                format_locale_date(strtotime($myrow->post_time), 'short') .
+                                " $langFrom2 " . display_user($myrow->poster_id, false, false) .
+                                " ({$user_stats[$myrow->poster_id]})
+                            </small><small>$achor_to_parent_post</small>";
 
-    if (!empty($dyntools)) {
-        $content .= "<span style='margin-left: 20px;' class='float-end'>";
-        if (isset($report_modal)) {
-            $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . $report_modal . "</span>";
-            unset($report_modal);
-        } else {
-            $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . "</span>";
+        if (!empty($dyntools)) {
+            $content .= "<span style='margin-left: 20px;' class='float-end'>";
+            if (isset($report_modal)) {
+                $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . $report_modal . "</span>";
+                unset($report_modal);
+            } else {
+                $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . "</span>";
+            }
+            $content .= "</span>";
         }
-        $content .= "</span>";
-    }
 
-    $content .= "
+        $content .= "
+                        </div>
                     </div>
                 </div>
                 <div class='col-12 mt-3'>
                     <div class='text-justify'>$message</div>
                     $fileinfo
                 </div>
-            </div>
+            
         </div>";
     if ($rate_str or $parent_post_link or $reply_button) {
         $content .= "
