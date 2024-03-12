@@ -28,7 +28,7 @@ if(isset($_GET['view'])) {
 
         
         $result_events = Database::get()->queryArray("SELECT id,lesson_id,user_id,group_id,start,end FROM tutor_availability_group
-                                                        WHERE start BETWEEN (?s) AND (?s)
+                                                        WHERE start BETWEEN (?t) AND (?t)
                                                         AND end > NOW()
                                                         AND lesson_id = ?d
                                                         AND group_id = ?d

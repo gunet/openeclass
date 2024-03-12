@@ -23,7 +23,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         $eventArr = array();
 
         $result_events = Database::get()->queryArray("SELECT id,user_id,start,end FROM date_availability_user
-                                                        WHERE start BETWEEN (?s) AND (?s)
+                                                        WHERE start BETWEEN (?t) AND (?t)
                                                         AND user_id = ?d",$start,$end,$tutor_id);
 
         if($result_events){
@@ -78,8 +78,8 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                     $add = Database::get()->query("INSERT INTO date_booking SET
                                         teacher_id = ?d,
                                         title = ?s,
-                                        start = ?s,
-                                        end = ?s",$_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
+                                        start = ?t,
+                                        end = ?t",$_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
                 
 
                     

@@ -30,7 +30,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         $eventArr = array();
 
         $result_events = Database::get()->queryArray("SELECT id,user_id,group_id,start,end FROM tutor_availability_group
-                                                        WHERE start BETWEEN (?s) AND (?s)
+                                                        WHERE start BETWEEN (?t) AND (?t)
                                                         AND user_id = ?d
                                                         AND group_id = ?d",$start,$end,$tutor_id,$group_id);
 
@@ -87,8 +87,8 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                                     group_id = ?d,
                                     tutor_id = ?d,
                                     title = ?s,
-                                    start = ?s,
-                                    end = ?s",$_POST["course_Id"], $_POST['group_Id'], $_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
+                                    start = ?t,
+                                    end = ?t",$_POST["course_Id"], $_POST['group_Id'], $_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
             
 
                 

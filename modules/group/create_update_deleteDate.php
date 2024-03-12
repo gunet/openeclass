@@ -31,7 +31,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         
         $result_events = Database::get()->queryArray("SELECT id,lesson_id,user_id,group_id,start,end FROM tutor_availability_group
-                                                        WHERE start BETWEEN (?s) AND (?s)
+                                                        WHERE start BETWEEN (?t) AND (?t)
                                                         AND group_id IN (SELECT group_id FROM group_members 
                                                                             WHERE user_id = ?d AND is_tutor = ?d)",$start,$end,$tutor_id,1);
 
@@ -67,8 +67,8 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         $add = Database::get()->query("INSERT INTO tutor_availability_group SET
                             lesson_id = ?d,
                             user_id = ?d,
-                            start = ?s,
-                            end = ?s,
+                            start = ?t,
+                            end = ?t,
                             group_id = ?d",$_POST["idCourse"], $_POST['user'], date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])),$_POST['group_id']);
             
             if($add){
@@ -104,7 +104,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         if($checkExistSimpleUser == 0 and (($old_tutor == $uid && $is_editor_course) or $is_course_admin)){
             if($_POST['user_id'] == $uid or $is_editor_course or $is_course_admin){
-                $update = Database::get()->query("UPDATE tutor_availability_group SET start = ?s, end = ?s
+                $update = Database::get()->query("UPDATE tutor_availability_group SET start = ?t, end = ?t
                                                 WHERE id = ?d
                                                 AND lesson_id = ?d 
                                                 AND user_id = ?d

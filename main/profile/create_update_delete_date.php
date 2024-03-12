@@ -24,7 +24,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         
         $result_events = Database::get()->queryArray("SELECT id,user_id,start,end FROM date_availability_user
-                                                        WHERE start BETWEEN (?s) AND (?s)
+                                                        WHERE start BETWEEN (?t) AND (?t)
                                                         AND user_id = ?d",$start,$end,$tutor_id);
 
     
@@ -56,8 +56,8 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         $add = Database::get()->query("INSERT INTO date_availability_user SET
                             user_id = ?d,
-                            start = ?s,
-                            end = ?s", $_POST['user'], date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
+                            start = ?t,
+                            end = ?t", $_POST['user'], date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
             
             if($add){
                 echo 1;
@@ -86,7 +86,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         if($checkExistSimpleUser == 0 and (($old_tutor == $uid) or $is_admin)){
             if($_POST['user_id'] == $uid or $is_admin){
-                $update = Database::get()->query("UPDATE date_availability_user SET start = ?s, end = ?s
+                $update = Database::get()->query("UPDATE date_availability_user SET start = ?t, end = ?t
                                                 WHERE id = ?d
                                                 AND user_id = ?d",date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s', strtotime($_POST["end"])), $_POST["id"], $_POST["user_id"]);
                 
@@ -203,33 +203,7 @@ function nameTutor($userId,$start,$end){
     return $name;
 }
 
-//function dontShowTutorIfIsNotTutorOfGroup($lessonId,$userId,$tutor_id,$group,$group_id){
-    // global $course_id;
-    // $html = "";
 
-    // // in current group then
-    // if($course_id == $lessonId && $group_id == $group){
-    //     if($tutor_id == $userId){// afora ton current upeuthino gia prasino xrwma
-    //         $html .= 'd-block';
-    //     }else{//afora allon upeuthino sthn idia omada gia portokali xrwma
-    //         $html .= 'd-block';
-    //     }
-    // }elseif($course_id == $lessonId && $group_id != $group){
-    //     if($tutor_id == $userId){// afora ton current upeuthino gia allh omada sto idio mathima ara me galazio xrwma
-    //         $html .= 'd-block';
-    //     }else{
-    //         $html .= 'd-none';
-    //     }
-    // }elseif($course_id != $lessonId){
-    //     if($tutor_id == $userId){// afora to kokkino xrwma gia ton current upeuthino
-    //         $html .= 'd-block';
-    //     }else{
-    //         $html .= 'd-none';
-    //     }
-    // }
-
-    // return $html;
-//}
 
 
 
