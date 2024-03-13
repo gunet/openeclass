@@ -502,7 +502,7 @@ function get_ldap_attributes($search_result, $flatten = false) {
  * ************************************************************** */
 
 function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = null, $cas_context = null, $cas_cachain = null) {
-    global $langConnectWith, $langNotSSL;
+    global $langConnectWith, $langNotSSL, $urlServer;
 
     // SESSION does not exist if user has not been authenticated
     $ret = array();
@@ -537,9 +537,12 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
 
         // Uncomment to enable debugging
         // phpCAS::setDebug();
+
         // Initialize phpCAS - keep session in application
         $ret['message'] = "$langConnectWith $cas_url";
-        phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, FALSE);
+        $url_info = parse_url($urlServer);
+        $service_base_url = "$url_info[scheme]://$url_info[host]";
+        phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, $service_base_url, FALSE);
 
         // Set the CA certificate that is the issuer of the cert on the CAS server
         if (isset($cas_cachain) && !empty($cas_cachain) && is_readable($cas_cachain))
