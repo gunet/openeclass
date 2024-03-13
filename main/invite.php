@@ -117,8 +117,8 @@ if (isset($_POST['no_cas'])) {
     }
 }
 if (isset($_POST['submit'])) {
-    if ($cas['auth_default'] == 1) { 
-        phpCAS::forceAuthentication(); 
+    if ($cas['auth_default'] == 1) {
+        phpCAS::forceAuthentication();
     }
     if ($uid) {
         $user_id = $uid;
@@ -293,10 +293,6 @@ if ($uid) {
                     </div>
                 </div>
             </div>";
-    } else {
-        $main_accept_form = $eclass_login_form;
-        $alt_accept_form = '';
-    }
 }
 
 $tool_content .= "
