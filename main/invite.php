@@ -76,8 +76,10 @@ if ($course->visible == COURSE_INACTIVE) {
 $auth = 7; // CAS
 $cas = get_auth_settings($auth);
 
-if($cas['auth_default'] == 1){
-    phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], false);
+if ($cas['auth_default'] == 1) {
+    $url_info = parse_url($urlServer);
+    $service_base_url = "$url_info[scheme]://$url_info[host]";
+    phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, false);
     phpCAS::setNoCasServerValidation();
 }
 
@@ -115,14 +117,14 @@ if (isset($_POST['no_cas'])) {
     }
 }
 if (isset($_POST['submit'])) {
-    if($cas['auth_default'] == 1){ 
+    if ($cas['auth_default'] == 1) { 
         phpCAS::forceAuthentication(); 
     }
     if ($uid) {
         $user_id = $uid;
     }
 }
-if($cas['auth_default'] == 1){
+if ($cas['auth_default'] == 1) {
     if (!$uid and phpCAS::checkAuthentication()) {
         $_SESSION['cas_attributes'] = phpCAS::getAttributes();
         $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
@@ -210,13 +212,18 @@ $head_content .= <<<hContent
   hContent;
 
 if ($uid) {
-    $message = 'Επιλέξτε το παρακάτω κουμπί για να εγγραφείτε και να μεταβείτε στο μάθημα.';
-    $label = 'Εγγραφή';
+    $message = $langInvitationClickToAccept;
+    $label = $langRegister;
     $eclass_login = $eclass_form = '';
 } else {
-    $message = 'Εφόσον διαθέτετε λογαριασμό στο κεντρικό σύστημα πιστοποίησης του ΕΚΠΑ, παρακαλούμε
-        συνδεθείτε με τον ιδρυματικό σας λογαριασμό επιλέγοντας το παρακάτω κουμπί.';
-    $label = 'Σύνδεση και εγγραφή (λογαριασμός ΕΚΠΑ)';
+    $cas_auth = Database::get()->querySingle("SELECT * FROM auth WHERE auth_name = 'cas'");
+    if ($cas_auth and $cas_auth->auth_default) {
+        $cas = true;
+        $eclass_login_help = $langInviteEclassLoginAlt;
+    } else {
+        $cas = false;
+        $eclass_login_help = $langCourseInvitationReceived . ' ' . $langInviteEclassLoginCreate;
+    }
     $givenname = q($q->givenname);
     $surname = q($q->surname);
     $eclass_login = "
@@ -227,9 +234,7 @@ if ($uid) {
                         <div class='form-group'>
                             <div class='col-12'>
                                 <p class='form-control-static'>
-                                    Εναλλακτικά, <strong>εφόσον δε διαθέτετε ιδρυματικό λογαριασμό στο ΕΚΠΑ</strong>, παρακαλούμε εισαγάγετε
-                                    παρακάτω τα στοιχεία που χρειάζονται για να δημιουργήσετε λογαριασμό επισκέπτη
-                                    στην πλατφόρμα.
+                                    $eclass_login_help
                                 <p>
                             </div>
                         </div>
@@ -237,7 +242,7 @@ if ($uid) {
                             <label class='col-sm-12 control-label-notes'>$langUsername:</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
-                                <span class='help-text'>(ταυτίζεται με τη διεύθυνση e-mail σας)</span>
+                                <span class='help-text'>($langSameAsYourEmail)</span>
                             </div>
                         </div>
                         <div class='form-group pw-group mt-4'>
@@ -273,7 +278,25 @@ if ($uid) {
                     </fieldset>
                 </div>
             </div>
-        </div>";
+            <div class='form-group'>
+                <div class='col-sm-12 text-center'>
+                    <button type='submit' name='submit' class='btn btn-primary'>$langLoginAndRegister</button>
+                </div>
+            </div>";
+        $alt_accept_form = "
+            <div class='row'>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <fieldset>
+                            $eclass_login_form
+                        </fieldset>
+                    </div>
+                </div>
+            </div>";
+    } else {
+        $main_accept_form = $eclass_login_form;
+        $alt_accept_form = '';
+    }
 }
 
 $tool_content .= "

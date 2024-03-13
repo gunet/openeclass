@@ -47,7 +47,9 @@ if (isset($_POST['token'])) {
         if (defined('CAS')) {
             $cas = get_auth_settings(7);
             if (isset($cas['cas_ssout']) and intval($cas['cas_ssout']) === 1) {
-                phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], FALSE);
+                $url_info = parse_url($urlServer);
+                $service_base_url = "$url_info[scheme]://$url_info[host]";
+                phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, FALSE);
                 phpCAS::logoutWithRedirectService($urlServer);
             }
         }
