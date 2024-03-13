@@ -156,10 +156,17 @@
                                                 <div class='input-group'>
                                                     <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                                     <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $exp_date->format("d-m-Y H:i") }}'>
-
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class='form-group mt-4'>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}:</label>
+                                            <div class='col-sm-12'>
+                                                {!! lang_select_options('user_language', "class='form-control'", $info->lang)  !!}
+                                            </div>
+                                        </div>
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langLastLogin') }}</label>
                                             <div class='col-sm-10'><p class='form-control-static'>{{ $last_login_date }}&nbsp;&mdash;&nbsp; <small><a href='user_last_logins.php?u={{ $u }}'>{{ trans('langUserLastLogins') }}</a></small></p></div>

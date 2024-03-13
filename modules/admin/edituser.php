@@ -71,8 +71,9 @@ if ($u) {
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
+
     $data['info'] = $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
-                              phone, registered_at, expires_at, status, am,
+                              phone, registered_at, expires_at, status, am, lang,
                               verified_mail, whitelist, disable_course_registration
                          FROM user WHERE id = ?s", $u);
     if (!$info) {
@@ -185,6 +186,7 @@ if ($u) {
         } else {
             $last_login_date = '-';
         }
+
         $data['last_login_date'] = $last_login_date;
         $data['checked'] = (!$info->disable_course_registration) ? 'checked' : '';
         // Show HybridAuth provider data
@@ -207,6 +209,7 @@ if ($u) {
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
         $am = isset($_POST['am']) ? $_POST['am'] : '';
+        $user_language = isset($_POST['user_language']) ? $_POST['user_language']: '';
         $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
@@ -296,11 +299,12 @@ if ($u) {
                                 status = ?d,
                                 phone = ?s,
                                 expires_at = ?t,
+                                lang = ?s,
                                 am = ?s,
                                 verified_mail = ?d,
                                 whitelist = ?s,
                                 disable_course_registration = ?d
-                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $u);
+                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $user_language, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $u);
             //update custom profile fields
             $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
             if ($qry->affectedRows > 0 || $cpf_updated === true) {
