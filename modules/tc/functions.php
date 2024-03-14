@@ -138,7 +138,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $textarea = rich_text_editor('desc', 4, 20, $row->description);
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
-        $data_external_users = trim($row->external_users);
+        if (!is_null($row->external_users)) {
+            $data_external_users = trim($row->external_users);
+        } else {
+            $data_external_users = $row->external_users;
+        }
         if ($data_external_users) {
             $init_external_users = 'data: ' . json_encode(array_map(function ($item) {
                     $item = trim($item);
@@ -175,7 +179,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_name = 'update_tc_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
+        $meeting_id_input = $row->meeting_id;
     } else { // new TC meeting
+        $meeting_id_input = '';
         $status = 1;
         $unlock_interval = '10';
         $r_group = array();
@@ -191,6 +197,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         } else {
             $value_session_users = $c;
         }
+        $data_external_users = '';
         $submit_name = 'new_tc_session';
         $submit_id = '';
         $google_meet_link = $zoom_link = $webex_link = $microsoft_teams_link = '';
@@ -912,8 +919,8 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
         $langDescription, $course_code, $course_id, $urlServer;
 
-    $zoomRepo = new \modules\tc\Zoom\Repository();
-    $zoomService = new \modules\tc\Zoom\Service($zoomRepo);
+    $zoomRepo = new \modules\tc\Zoom\Api\Repository();
+    $zoomService = new \modules\tc\Zoom\Api\Service($zoomRepo);
     $zoomService->call();
 
     // Groups of participants per session
