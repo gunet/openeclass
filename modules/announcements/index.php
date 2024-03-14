@@ -233,7 +233,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 }
 
 load_js('tools.js');
-//check if Datables code is needed
+//check if Data Tables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
     load_js('datatables');
     $head_content .= "<script type='text/javascript'>
@@ -310,16 +310,16 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     restoreCheckboxStates();
                     checkCheckboxes();
                     $('.table_td_body').each(function() {
-                $(this).trunk8({
-                    lines: '3',
-                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?course={$course_code}&an_id='+ $(this).data('id')+'\">$langMore</div>'
-                })
-            });
+                        $(this).trunk8({
+                            lines: '3',
+                            fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?course={$course_code}&an_id='+ $(this).data('id')+'\">$langMore</div>'
+                        })
+                    });
                     $('#ann_table{$course_id}_filter label input').attr({
                           class : 'form-control input-sm',
                           placeholder : '$langSearch...'
-                        });
-},
+                    });
+                },
                 'sPaginationType': 'full_numbers',
                 'bSort': false,
                 'oLanguage': {
@@ -539,11 +539,16 @@ if ($is_editor) {
             }
 
             if (isset($_POST['id']) and !isset($_POST['copy_ann'])) { // modify existing announcement
+                if (is_null($start_display)) {
+                    $date_announcement = date("Y-m-d H:i:s");
+                } else {
+                    $date_announcement = $start_display;
+                }
                 $id = intval($_POST['id']);
                 Database::get()->query("UPDATE announcement
                     SET content = ?s,
                         title = ?s,
-                        `date` = " . DBHelper::timeAfter() . ",
+                        `date` = '$date_announcement',
                         start_display = ?t,
                         stop_display = ?t,
                         visible = ?d
@@ -556,9 +561,15 @@ if ($is_editor) {
                     $moduleTag->syncTags($_POST['tags']);
                 }
             } else { // add new announcement
+                if (is_null($start_display)) {
+                    $date_announcement = date("Y-m-d H:i:s");
+                } else {
+                    $date_announcement = $start_display;
+                }
+
                 $id = Database::get()->query("INSERT INTO announcement
                     SET content = ?s,
-                        title = ?s, `date` = " . DBHelper::timeAfter() . ",
+                        title = ?s, `date` = '$date_announcement',
                         course_id = ?d, `order` = 0,
                         start_display = ?t,
                         stop_display = ?t,
@@ -634,7 +645,7 @@ if ($is_editor) {
                             $invalid++;
                         } elseif (get_user_email_notification($user->id, $course_id)) {
                             // email notifications are enabled so add to recipients
-                            array_push($recipients, $user->email);
+                            $recipients[] = $user->email;
                         } else {
                             // email notifications are disabled for this user
                             $disabled++;
@@ -893,7 +904,9 @@ if (isset($_GET['an_id'])) {
 
     $moduleTag = new ModuleElement($row->id);
     $tags_list = $moduleTag->showTags();
-    if ($tags_list) $tool_content .= "<hr><div>$langTags: $tags_list</div>";
+    if ($tags_list) {
+        $tool_content .= "<hr><div>$langTags: $tags_list</div>";
+    }
     $tool_content .= "
                     </div>
                 </div></div></div>";
