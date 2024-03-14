@@ -1068,7 +1068,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
             $zoomRepo = new Repository($guzzleClient);
             $zoomUserRepo = new ZoomUserRepository($guzzleClient, $zoomRepo);
             $zoomUser = new ZoomUser($zoomUserRepo);
-            $zoomUser->get($eclassUser->email);
+            $zoomUser->get($eclassUser->id);
 
             if (empty($zoomUser->id)) {
                 Session::Messages("Δεν βρέθηκε ο χρήστης στον λογαριασμό UoA Zoom. Παρακαλώ επικοινωνείστε με τον διαχειριστή του συστήματος.");
