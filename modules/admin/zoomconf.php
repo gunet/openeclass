@@ -110,17 +110,14 @@ if (isset($_POST['submit'])) {
                                             VALUES('zoom', ?s, ?s, ?s, ?s, 'api', true)
                                         ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s, webapp = 'api', enable_recordings = true",
                 $app::ZOOMURL, $app::ZOOMURL, $enabled, $all_courses, $enabled, $all_courses);
+
+            $zoomUserRepo->syncZoomUsersTable();
         } else {
             Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
                                             VALUES('zoom', ?s, ?s, ?s, ?s)
                                         ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
                 $app::ZOOMURL, $app::ZOOMURL, $enabled, $all_courses, $enabled, $all_courses);
         }
-
-        Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
-                                            VALUES('zoom', ?s, ?s, ?s, ?s)
-                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
-            $app::ZOOMURL, $app::ZOOMURL, $enabled, $all_courses, $enabled, $all_courses);
 
         $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'zoom'")->id;
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $tc_id);

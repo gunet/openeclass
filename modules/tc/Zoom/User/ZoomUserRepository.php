@@ -37,6 +37,30 @@ class ZoomUserRepository
         return Database::get()->querySingle("SELECT * FROM `zoom_user` WHERE `user_id` = " . $id);
     }
 
+    public function syncZoomUsersTable() : void
+    {
+        global $langZoomUserCreateError;
+
+        $zoomUsers = $this->listAllZoomUsers();
+
+        foreach ($zoomUsers->users as $zoomUser) {
+            $eclassUser = Database::get()
+                ->querySingle("SELECT id FROM user WHERE email = '".$zoomUser->email."'");
+
+            if (
+                $eclassUser
+                && !empty($eclassUser->id)
+            ) {
+                $tc_user = $this->saveInDatabase($eclassUser->id, $zoomUser);
+
+                if (!$tc_user) {
+                    Session::Messages($langZoomUserCreateError);
+                    redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+                }
+            }
+        }
+    }
+
     public function createZoomUser($eclassUser)
     {
         global $langZoomUserCreateError;
