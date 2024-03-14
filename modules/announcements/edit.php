@@ -109,4 +109,3 @@ $data['enddate_error'] = $data['enddate_error'] ? " has-error" : "";
 $data['submitUrl'] = $urlAppend . 'modules/announcements/submit.php?course=' . $course_code;
 
 view('modules.announcements.create_edit', $data);
-
