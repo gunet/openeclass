@@ -276,6 +276,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
+
             $client = new Client();
             $db = Database::get();
             $zoomApiRepo = new Repository($client);
@@ -915,9 +916,10 @@ function register_zoom_user()
  */
 function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $options, $update, $session_id = '')
 {
-    global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
-        $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
-        $langDescription, $course_code, $course_id, $urlServer;
+
+    global $langBBBScheduledSession, $langBBBScheduleSessionInfo, $langZoomErrorUserNotFound,
+           $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langTheU, $langNotFound,
+           $langDescription, $course_code, $course_id, $urlServer, $uid, $is_admin;
 
     $zoomRepo = new \modules\tc\Zoom\Api\Repository();
     $zoomService = new \modules\tc\Zoom\Api\Service($zoomRepo);
@@ -1053,9 +1055,30 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '', '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'zoom') {
-            $data = parse_url($options);
-            $meeting_id = $data['path'];
-            $mod_pw = preg_replace('/pwd=/','', $data['query']);
+
+            if (!$is_admin && (empty(uid_to_email($uid)) || empty(uid_to_name($uid)))) {
+                Session::flash('message', "$langTheU $langNotFound");
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page();
+            }
+
+            $guzzleClient = new Client();
+            $zoomRepo = new Repository($guzzleClient);
+            $zoomUserRepo = new ZoomUserRepository($guzzleClient, $zoomRepo);
+            $zoomUser = new ZoomUser($zoomUserRepo);
+            $zoomUser->get($uid);
+
+            if (empty($zoomUser->id)) {
+                Session::flash('message', $langZoomErrorUserNotFound);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+            }
+
+            $zoomMeeting = new Service($zoomRepo, $zoomUser);
+            $meeting = $zoomMeeting->create($title , $desc, $start_session, $record);
+            $options = serialize($meeting->start_url);
+
+
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1490,7 +1513,7 @@ function disable_tc_session($id)
     global $langBBBUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE tc_session set active='0' WHERE id=?d",$id);
-   // Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+
     Session::flash('message',$langBBBUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
@@ -1506,7 +1529,7 @@ function enable_tc_session($id)
     global $langBBBUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE tc_session SET active='1' WHERE id=?d",$id);
-   // Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+
     Session::flash('message',$langBBBUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
