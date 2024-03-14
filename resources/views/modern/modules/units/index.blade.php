@@ -261,16 +261,16 @@
                             <div class='card panelCard px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                     <h3>
-                                        <div class='d-inline-flex align-items-top gap-3 flex-wrap'>
+                                        <div class='d-flex justify-content-start align-item-center gap-2 flex-wrap'>
                                             {{ trans('langActivities')}}
                                             <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                                <span class="fa fa-pencil ms-2 mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                                <span class="fa-solid fa-pencil fa-lg d-block pt-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
                                             </a>
                                         </div>
                                     </h3>
                                 </div>
                                 <div class='card-body'>
-                                    <table class='table table-responsive'>
+                                    <table class='table table-default'>
                                         <tbody>
                                         @if ($q_in_home)
                                             <tr><th scope='row' colspan="2"><label class='col-12 control-label-notes'>{{ trans('langActInHome') }}</label></th>
@@ -283,7 +283,7 @@
                                                 @endphp
 
                                                 <tr><td><span class='col-10 {{$class_vis}} '>{!! $act_title !!}</span></td>
-                                                <td class='col-2'>
+                                                <td class='col-2 text-end'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
                                                             'url' => $base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
@@ -401,7 +401,7 @@
 
                                                         ),'',true)
                                                     !!}
-                                                    <span class='col-sm-6'>
+                                                    <span class='col-sm-6 text-end'>
                                                     {!!
                                                         action_button(array(
                                                             array('title' => $vis == 1 ? trans('langViewHide') : trans('langViewShow'),
@@ -431,7 +431,7 @@
 
                                                 <tr><td><span class='col-10  {!! $class_vis !!} control-label'>{!! $act_title !!}</span></td>
                                                 @if($is_editor)
-                                                    <td class='col-6'>
+                                                    <td class='col-6 text-end'>
                                                     {!! action_button(array(
                                                             array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                                 'url' => $base_url . 'exercise&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
@@ -588,7 +588,7 @@
 
 
                                                 <tr><td class='col-10 {!! $class_vis !!} control-label'>{!! $act_title !!}</td>
-                                                <td class='col-6'> {!! action_button(array(
+                                                <td class='col-6 text-end'> {!! action_button(array(
                                                     array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                         'url' => $base_url . 'exercise&fc_type=2&act_name='. $act_title,
                                                         'icon' => 'fa fa-square-pen',
@@ -711,7 +711,7 @@
 
                                                 ),'',true) !!}
 
-                                                <span class='col-sm-6'>
+                                                <span class='col-sm-6 text-end'>
 
                                                 {!! action_button(array(
                                                     array('title' => $vis == 1? trans('langViewHide') : trans('langViewShow'),

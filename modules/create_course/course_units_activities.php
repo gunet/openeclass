@@ -362,14 +362,9 @@ if (!isset($_POST['final_submit'])) {
 
         $tool_content .= "<div class='form-wrapper'><fieldset>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                <div class='card border-0 mb-3'>
-                    <div class='card-header border-0 px-0'>
-                        <h3'>
-                            $langActSelect
-                        </h3>
-                    </div>
-                </div>
-
+                 
+                <h4>$langActSelect</h4>
+                        
                 <fieldset>
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
@@ -474,7 +469,7 @@ if (!isset($_POST['final_submit'])) {
                     </table>
                 </div>
                 <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>
                         <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn me-2'>$langCancel</a>
                         <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                     </div>

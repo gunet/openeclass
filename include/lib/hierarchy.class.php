@@ -1144,7 +1144,7 @@ jContent;
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";
-                    $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>$description</div>" : '';
+                    $ret .= (!empty($description)) ? "<div class='table_td_body'>$description</div>" : '';
                     $ret .= "</li>";
                 }
             }

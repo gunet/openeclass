@@ -232,59 +232,61 @@
 
                             @if (count($sql) > 0)
                                 <div class='col-12 mt-3'>
-                                    <div class='shadow-sm p-3 rounded'>
-                                        <h3>{{ trans('langStudentParticipation') }}</h3>
-                                        <div class='table-responsive'>
-                                            <table class='table-default'>
-                                                <thead><tr class='list-header'>
-                                                    <th>{{ trans('langCode') }}</th>
-                                                    <th>{{ trans('langLessonName') }}</th>
-                                                    <th>{{ trans('langCourseRegistrationDate') }}</th>
-                                                    <th>{{ trans('langProperty') }}</th>
-                                                    <th>{{ trans('langActions') }}</th>
-                                                </tr></thead>
-                                                @foreach ($sql as $logs)
-                                                    @if ($logs->visible == COURSE_INACTIVE)
-                                                        <tr class='not_visible'>
-                                                    @else
-                                                        <tr>
-                                                    @endif
-                                                            <td>
-                                                                <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
-                                                            </td>
-                                                            <td>{{ $logs->title }}</td>
-                                                            <td>
-                                                                @if (!$logs->reg_date)
-                                                                    {{ trans('langUnknownDate') }}
-                                                                @else
-                                                                    {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }}
-                                                                @endif
-                                                            </td>
-                                                            @if ($logs->status == USER_TEACHER)
+                                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                        <div class="card-header border-0 d-flex justify-content-start">
+                                            <h3>{{ trans('langStudentParticipation') }}</h3>
+                                        </div>
+                                        <div class='card-body'>
+                                            <div class='table-responsive mt-0'>
+                                                <table class='table-default'>
+                                                    <thead><tr class='list-header'>
+                                                        <th>{{ trans('langCode') }}</th>
+                                                        <th>{{ trans('langLessonName') }}</th>
+                                                        <th>{{ trans('langCourseRegistrationDate') }}</th>
+                                                        <th>{{ trans('langProperty') }}</th>
+                                                        <th></th>
+                                                    </tr></thead>
+                                                    @foreach ($sql as $logs)
+                                                        @if ($logs->visible == COURSE_INACTIVE)
+                                                            <tr class='not_visible'>
+                                                        @else
+                                                            <tr>
+                                                        @endif
                                                                 <td>
-                                                                    {{ trans('langTeacher') }}
+                                                                    <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
                                                                 </td>
-                                                                <td>---</td>
-                                                            @else
+                                                                <td>{{ $logs->title }}</td>
                                                                 <td>
-                                                                    @if ($logs->status == USER_STUDENT)
-                                                                        {{ trans('langStudent') }}
+                                                                    @if (!$logs->reg_date)
+                                                                        {{ trans('langUnknownDate') }}
                                                                     @else
-                                                                        {{ trans('langVisitor') }}
+                                                                        {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }}
                                                                     @endif
                                                                 </td>
-                                                                <td>
-                                                                    {!! icon('fa-xmark text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
-                                                                </td>
-                                                            @endif
-                                                        </tr>
-                                                @endforeach
-                                            </table>
+                                                                @if ($logs->status == USER_TEACHER)
+                                                                    <td>
+                                                                        {{ trans('langTeacher') }}
+                                                                    </td>
+                                                                    <td>---</td>
+                                                                @else
+                                                                    <td>
+                                                                        @if ($logs->status == USER_STUDENT)
+                                                                            {{ trans('langStudent') }}
+                                                                        @else
+                                                                            {{ trans('langVisitor') }}
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class='text-end'>
+                                                                        {!! icon('fa-xmark text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
+                                                                    </td>
+                                                                @endif
+                                                            </tr>
+                                                    @endforeach
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            @else
-                            <div class='col-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
                             @endif
 
 

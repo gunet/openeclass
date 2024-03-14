@@ -144,6 +144,7 @@ function render_profile_fields_form($context, $valitron = false) {
 
                 $val = '';
                 $placeholder = '';
+                $helpBlock = '';
 
                 switch ($f->datatype) {
                     case CPF_TEXTBOX:
@@ -153,11 +154,14 @@ function render_profile_fields_form($context, $valitron = false) {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
                         if ($f->required == 0) {
-                            $placeholder = 'placeholder="'.$langOptional.'"';
+                            //$placeholder = 'placeholder="'.$langOptional.'"';
+                            $helpBlock = '<em>'.$langOptional.'</em>';
                         } else {
-                            $placeholder = 'placeholder="'.$langCompulsory.'"';
+                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
+                            $helpBlock = '<em>'.$langCompulsory.'</em>';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
+                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
@@ -179,12 +183,15 @@ function render_profile_fields_form($context, $valitron = false) {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
                         if ($f->required == 0) {
-                            $placeholder = 'placeholder="'.$langOptional.'"';
+                            //$placeholder = 'placeholder="'.$langOptional.'"';
+                            $helpBlock = '<em>'.$langOptional.'</em>';
                         } else {
-                            $placeholder = 'placeholder="'.$langCompulsory.'"';
+                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
+                            $helpBlock = '<em>'.$langCompulsory.'</em>';
                         }
                         load_js('bootstrap-datepicker');
-                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
+                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -212,11 +219,14 @@ function render_profile_fields_form($context, $valitron = false) {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
                         if ($f->required == 0) {
-                            $placeholder = 'placeholder="'.$langOptional.'"';
+                            //$placeholder = 'placeholder="'.$langOptional.'"';
+                            $helpBlock = '<em>'.$langOptional.'</em>';
                         } else {
-                            $placeholder = 'placeholder="'.$langCompulsory.'"';
+                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
+                            $helpBlock = '<em>'.$langCompulsory.'</em>';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
+                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                 }
                 if (!empty($f->description)) {
