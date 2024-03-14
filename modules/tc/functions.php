@@ -280,6 +280,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
+
             $client = new Client();
             $db = Database::get();
             $zoomApiRepo = new Repository($client);
@@ -915,8 +916,8 @@ function register_zoom_user()
 function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $mailinglist, $record, $sessionUsers, $options, $update, $session_id = '')
 {
 
-    global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
-        $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
+    global $langBBBScheduledSession, $langBBBScheduleSessionInfo, $langZoomErrorUserNotFound,
+        $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langTheU, $langNotFound,
         $langDescription, $course_code, $course_id, $urlServer, $uid, $is_admin;
 
     // Groups of participants per session
@@ -1049,29 +1050,19 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '', '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'zoom') {
-            $eclassUser = Database::get()->querySingle("SELECT * FROM user WHERE id = ".$uid);
-
-            if (
-                !$is_admin
-                && (
-                    empty($eclassUser->email)
-                    || empty($eclassUser->givenname)
-                    || empty($eclassUser->surname)
-                    || empty($eclassUser->id)
-                )
-            ) {
-                Session::Messages("TC user not found. Please contact Administrator.");
-                redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+            if (!$is_admin && (empty(uid_to_email($uid)) || empty(uid_to_name($uid)))) {
+                Session::Messages("$langTheU $langNotFound", 'alert-danger');
+                redirect_to_home_page();
             }
 
             $guzzleClient = new Client();
             $zoomRepo = new Repository($guzzleClient);
             $zoomUserRepo = new ZoomUserRepository($guzzleClient, $zoomRepo);
             $zoomUser = new ZoomUser($zoomUserRepo);
-            $zoomUser->get($eclassUser->id);
+            $zoomUser->get($uid);
 
             if (empty($zoomUser->id)) {
-                Session::Messages("Δεν βρέθηκε ο χρήστης στον λογαριασμό UoA Zoom. Παρακαλώ επικοινωνείστε με τον διαχειριστή του συστήματος.");
+                Session::Messages("$langZoomErrorUserNotFound");
                 redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
             }
 
