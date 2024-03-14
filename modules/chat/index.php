@@ -200,7 +200,7 @@ if ($is_editor) {
                     $colmooc_activity_id = colmooc_create_activity($conf_id, $title);
                     if ($colmooc_activity_id) {
                         Database::get()->querySingle("UPDATE conference SET chat_activity_id = ?d WHERE conf_id = ?d", $colmooc_activity_id, $conf_id);
-                        Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                        Session::Messages($langQuotaSuccess . ". " . $langColMoocAgentNeeded, "alert-success");
                         $skipFlash = true;
                     } else {
                         Database::get()->querySingle("UPDATE conference SET chat_activity = false WHERE conf_id = ?d", $conf_id);
@@ -218,7 +218,7 @@ if ($is_editor) {
                 $colmooc_activity_id = colmooc_create_activity($newChatId, $title);
                 if ($colmooc_activity_id) {
                     Database::get()->querySingle("UPDATE conference SET chat_activity_id = ?d WHERE conf_id = ?d", $colmooc_activity_id, $newChatId);
-                    Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                    Session::Messages($langQuotaSuccess . ". " . $langColMoocAgentNeeded, "alert-success");
                     $skipFlash = true;
                 } else {
                     Database::get()->querySingle("UPDATE conference SET chat_activity = false WHERE conf_id = ?d", $newChatId);
@@ -227,7 +227,7 @@ if ($is_editor) {
         }
         // Display result message
         if (!$skipFlash) {
-            Session::Messages($langAttendanceEdit, "alert-success");
+            Session::Messages($langQuotaSuccess, "alert-success");
         }
         redirect_to_home_page("modules/chat/index.php");
 } elseif (isset($_GET['edit_conference'])) {

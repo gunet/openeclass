@@ -1130,36 +1130,103 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
 
+
+        // Course Units
+        if (!$weekly_view) {
+            $unit_map = restore_table($restoreThis, 'course_units',
+                array('set' =>
+                    array('course_id' => $new_course_id),
+                    'return_mapping' => 'id',
+                ), $url_prefix_map, $backupData, $restoreHelper);
+            restore_table($restoreThis, 'unit_resources', array('delete' => array('id'),
+                'map' => array('unit_id' => $unit_map),
+                'map_function' => 'unit_map_function',
+                'map_function_data' => array($document_map,
+                    $link_category_map,
+                    $link_map,
+                    $ebook_map,
+                    $ebook_section_map,
+                    $ebook_subsection_map,
+                    $video_map,
+                    $videolink_map,
+                    $videocat_map,
+                    $lp_learnPath_map,
+                    $wiki_map,
+                    $assignments_map,
+                    $exercise_map,
+                    $forum_map,
+                    $forum_topic_map,
+                    $poll_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+
+            restore_table($restoreThis, 'unit_prerequisite',
+                array('set' => array('course_id' => $new_course_id),
+                    'map' => array('unit_id' => $unit_map,
+                        'prerequisite_unit' => $unit_map),
+                    'delete' => array('id'),
+                ), $url_prefix_map, $backupData, $restoreHelper);
+        }
+
         // Certificate
         $certificate_map = restore_table($restoreThis, 'certificate', array(
             'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'
         ), $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'certificate_criterion', array(
+        $certificate_criterion_map = restore_table($restoreThis, 'certificate_criterion', array(
             'map' => array('certificate' => $certificate_map),
             'map_function' => 'certificate_criterion_map_function',
             'map_function_data' => array($document_map, $video_map, $videolink_map,
                                          $blog_map, $forum_map, $forum_topic_map,
                                          $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
-            'delete' => array('id')
+            'delete' => array('id'),
+            'return_mapping' => 'id',
             ), $url_prefix_map, $backupData, $restoreHelper);
 
+        restore_table($restoreThis, 'user_certificate_criterion', array(
+            'map' => array(
+                'certificate_criterion' => $certificate_criterion_map,
+                'user' => $userid_map
+            ),
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Badge
+        if (!isset($unit_map)) {
+            $unit_map = 0;
+        }
         $badge_map = restore_table($restoreThis, 'badge', array(
             'set' => array('course_id' => $new_course_id),
+            'map' => array('unit_id' => $unit_map),
             'return_mapping' => 'id'
         ), $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'badge_criterion', array(
+
+        $badge_criterion_map = restore_table($restoreThis, 'badge_criterion', array(
             'map' => array('badge' => $badge_map),
             'map_function' => 'badge_criterion_map_function',
             'map_function_data' => array($document_map, $video_map, $videolink_map,
                                          $blog_map, $forum_map, $forum_topic_map,
                                          $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
-            'delete' => array('id')
+            'delete' => array('id'),
+            'return_mapping' => 'id'
             ), $url_prefix_map, $backupData, $restoreHelper);
+
+        restore_table($restoreThis, 'user_badge', array(
+            'map' => array(
+                'badge' => $badge_map,
+                'user' => $userid_map
+            ),
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
+
+        restore_table($restoreThis, 'user_badge_criterion', array(
+            'map' => array(
+                'badge_criterion' => $badge_criterion_map,
+                'user' => $userid_map
+            ),
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Notes
         restore_table($restoreThis, 'note', array(
@@ -1187,31 +1254,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $h5p_content_newdir = $courseDir . "/h5p/content/" . $h5p_content_newid;
                 move_dir($h5p_content_olddir, $h5p_content_newdir);
             }
-        }
-
-        // Units
-        if (!$weekly_view) {
-            $unit_map = restore_table($restoreThis, 'course_units', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
-            restore_table($restoreThis, 'unit_resources', array('delete' => array('id'),
-                'map' => array('unit_id' => $unit_map),
-                'map_function' => 'unit_map_function',
-                'map_function_data' => array($document_map,
-                    $link_category_map,
-                    $link_map,
-                    $ebook_map,
-                    $ebook_section_map,
-                    $ebook_subsection_map,
-                    $video_map,
-                    $videolink_map,
-                    $videocat_map,
-                    $lp_learnPath_map,
-                    $wiki_map,
-                    $assignments_map,
-                    $exercise_map,
-                    $forum_map,
-                    $forum_topic_map,
-                    $poll_map)
-                ), $url_prefix_map, $backupData, $restoreHelper);
         }
 
         // Weekly - deprecated as of 3.7, but need to move to units

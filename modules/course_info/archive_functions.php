@@ -34,8 +34,8 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'course' => "id = $course_id",
         'user' => "id IN (SELECT user_id FROM course_user
                                           WHERE course_id = $course_id)",
-        'course_user' => "course_id = $course_id",
-        'course_settings' => "course_id = $course_id",
+        'course_user' => $sql_course,
+        'course_settings' => $sql_course,
         'course_department' => "course = $course_id",
         'course_module' => $sql_course,
         'hierarchy' => "id IN (SELECT department FROM course_department
@@ -59,6 +59,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'course_units' => $sql_course,
         'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                     WHERE course_id = $course_id)",
+        'unit_prerequisite' => $sql_course,
         'forum' => $sql_course,
         'forum_category' => $sql_course,
         'forum_topic' => "forum_id IN (SELECT id FROM forum
@@ -147,9 +148,13 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'activity_content' => $sql_course,
         'certificate' => $sql_course,
         'certificate_criterion' => "certificate IN (SELECT id FROM certificate WHERE course_id = $course_id)",
+        'user_certificate' => "certificate IN (SELECT id FROM certificate WHERE course_id = $course_id)",
+        'user_certificate_criterion' => "certificate_criterion IN (SELECT id FROM certificate_criterion WHERE certificate IN (SELECT id FROM certificate WHERE course_id = $course_id))",
         'certificate_template' => 'true',
         'badge' => $sql_course,
         'badge_criterion' => "badge IN (SELECT id FROM badge WHERE course_id = $course_id)",
+        'user_badge' => "badge IN (SELECT id FROM badge WHERE course_id = $course_id)",
+        'user_badge_criterion' => "badge_criterion IN (SELECT id FROM badge_criterion WHERE badge IN (SELECT id FROM badge WHERE course_id = $course_id))",
         'badge_icon' => 'true',
         'category' => 'true',
         'category_value' => 'true',

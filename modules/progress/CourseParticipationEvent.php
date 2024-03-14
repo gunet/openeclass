@@ -34,7 +34,7 @@ class CourseParticipationEvent extends BasicEvent {
         $this->on(self::LOGGEDIN, function ($data) {
 
             // fetch usage duration per course from DB and use it as threshold
-            $result = Database::get()->queryArray("SELECT SUM(duration) AS duration, course.id
+            $result = Database::get()->queryArray("SELECT SUM(ABS(duration)) AS duration, course.id
                                         FROM course
                                             LEFT JOIN course_user ON course.id = course_user.course_id
                                             LEFT JOIN actions_daily
@@ -67,7 +67,7 @@ class CourseParticipationEvent extends BasicEvent {
             }
 
             // fetch usage duration for specific course/user from DB and use it as threshold
-            $result = Database::get()->querySingle("SELECT SUM(duration) AS duration 
+            $result = Database::get()->querySingle("SELECT SUM(ABS(duration)) AS duration 
                  FROM actions_daily 
                  WHERE user_id = ?d 
                  AND course_id = ?d", $data->uid, $data->courseId);

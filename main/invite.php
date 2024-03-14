@@ -68,7 +68,9 @@ if ($course->visible == COURSE_INACTIVE) {
 
 $auth = 7; // CAS
 $cas = get_auth_settings($auth);
-phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], false);
+$url_info = parse_url($urlServer);
+$service_base_url = "$url_info[scheme]://$url_info[host]";
+phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, false);
 phpCAS::setNoCasServerValidation();
 
 $user_id = null;

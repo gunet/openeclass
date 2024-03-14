@@ -155,7 +155,7 @@ if (isset($_POST['insert_analytics'])) {
     if($v->validate()) {
         update_analytics_element($_POST['analytics_id'], $_POST['analytics_element_id'], $_POST['resource'], $_POST['module_id'], $_POST['min_value'], $_POST['max_value'], $_POST['lower_threshold'], $_POST['upper_threshold'], $_POST['weight']);
 
-        Session::Messages($langAnalyticsElementUpdateSuccess, 'alert-success');
+        Session::Messages($langQuotaSuccess, 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());

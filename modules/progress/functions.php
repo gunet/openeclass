@@ -2752,7 +2752,7 @@ function display_users_progress($element, $element_id) {
             }
 	    $user_am = q($user_data->am);
 	    $user_percentage = $user_data->total_criteria?
-		    (round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '&'): '';
+		    (round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '%'): '';
             $tool_content .= "<tr>
                     <td>". $cnt++ . "</td>
 		    <td>" . display_user($user_data->user) .
