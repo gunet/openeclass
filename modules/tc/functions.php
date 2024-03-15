@@ -23,8 +23,8 @@
 
 require_once 'bbb-api.php';
 
-require_once('modules/tc/Zoom/Api/Service.php');
-require_once('modules/tc/Zoom/Api/Repository.php');
+require_once 'modules/tc/Zoom/Api/Service.php';
+require_once 'modules/tc/Zoom/Api/Repository.php';
 
 
 
@@ -921,9 +921,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
            $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langTheU, $langNotFound,
            $langDescription, $course_code, $course_id, $urlServer, $uid, $is_admin;
 
-    $zoomRepo = new \modules\tc\Zoom\Api\Repository();
-    $zoomService = new \modules\tc\Zoom\Api\Service($zoomRepo);
-    $zoomService->call();
+    // $zoomRepo = new \modules\tc\Zoom\Api\Repository();
+    // $zoomService = new \modules\tc\Zoom\Api\Service($zoomRepo);
+    // $zoomService->call();
 
     // Groups of participants per session
     $r_group = '';
@@ -1172,7 +1172,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $emailTo = $row->email;
                 $user_id = $row->user_id;
                 // we check if email notification are enabled for each user
-                if (get_user_email_notification($user_id)) {
+                if (get_user_email_notification($user_id) && filter_var($emailTo, FILTER_VALIDATE_EMAIL)) {
                     //and add user to recipients
                     $recipients[] = $emailTo;
                 }
@@ -1212,8 +1212,8 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
     // Notify external users for new tc session
     if ($notifyExternalUsers == "1") {
-        if (isset($mailinglist)) {
-            $recipients = explode(',', $mailinglist);
+        if (isset($external_users)) {
+            $recipients = explode(',', $external_users);
             $emailsubject = $langBBBScheduledSession;
             $emailheader = "
                     <div id='mail-header'>
@@ -1223,7 +1223,14 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                     </div>
                 ";
             foreach ($recipients as $row) {
-                $bbblink = $urlServer . "modules/tc/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($row);
+                $pattern_r = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
+                preg_match_all($pattern_r, $row, $matches);
+                if($matches[0][0]){
+                    $sender = $matches[0][0];
+                }else{
+                    $sender = '';
+                }
+                $bbblink = $urlServer . "modules/tc/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($sender);
 
                 $emailmain = "
                 <div id='mail-body'>
@@ -1237,7 +1244,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
+                if(filter_var($sender, FILTER_VALIDATE_EMAIL)){
+                    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $sender, $emailsubject, $emailbody, $emailcontent);
+                }
             }
         }
     }
