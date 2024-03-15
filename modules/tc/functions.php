@@ -20,12 +20,16 @@
  * ========================================================================
  */
 
-
+ use GuzzleHttp\Client;
+ use modules\tc\Zoom\Api\Service;
+ use modules\tc\Zoom\Api\Repository;
+ use modules\tc\Zoom\User\ZoomUser;
+ use modules\tc\Zoom\User\ZoomUserRepository;
 require_once 'bbb-api.php';
-
 require_once 'modules/tc/Zoom/Api/Service.php';
 require_once 'modules/tc/Zoom/Api/Repository.php';
-
+require_once 'modules/tc/Zoom/User/ZoomUser.php';
+require_once 'modules/tc/Zoom/User/ZoomUserRepository.php';
 
 
 /**
@@ -265,11 +269,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'microsoftteams') { // Microsoft Teams
             $tool_content .= "<div class='alert alert-info'>$langGoToMicrosoftTeamsLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://teams.live.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToMicrosoftTeamsLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://teams.live.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToMicrosoftTeamsLinkText</a></div>";
 
-            $tool_content .= "<div class='form-group'>
-                            <label for='title' class='col-sm-2 control-label'>$langLink:</label>
-                            <div class='col-sm-10'>
+            $tool_content .= "<div class='form-group mt-4'>
+                            <label for='title' class='col-sm-12 control-label-notes'>$langLink:</label>
+                            <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50' $disabled>
                             </div>
                         </div>";
@@ -315,7 +319,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToWebexLinkText</a></div>";
             }
             $tool_content .= "<div class='form-group'>
-                <label for='title' class='col-sm-2 control-label-notes'>$langLink:</label>
+                <label for='title' class='col-sm-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
                     <input class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50' $disabled>
                 </div>
@@ -487,7 +491,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         </div>
     
         <div class='form-group mt-4'>
-            <label for='user-list' class='col-sm-12 control-label'-notes>$langBBBExternalUsers:</label>
+            <label for='user-list' class='col-sm-12 control-label-notes'>$langBBBExternalUsers:</label>
             <div class='col-sm-12'>
                 <table id='user-list' class='table'>
                     <thead>
@@ -798,11 +802,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                                 
                                 let newRow = $('<tr data-id=\"'+newId+'\">');
                                 
-                                let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + newId + '\" checked>');
+                                let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<div class=\"checkbox\"><label class=\"label-container\"><input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + newId + '\" checked><span class=\"checkmark\"></span></label></div>');
                                 let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">' + userEmail + '</strong>');
                                 let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">' + userName + '</strong>');
                                 let copyCell = $('<td class=\"col-sm-4\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$course_code\"></i>');
-                                let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+userEmail+'\" class=\"fa fa-times\"></i></span>');
+                                let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+userEmail+'\" class=\"fa fa-times Accent-200-cl\"></i></span>');
                                 
                                 newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
                                 $('#user-list tbody').append(newRow);
@@ -830,11 +834,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     if (isValidJson(usrData)) {
                         usrDataArray.forEach((element, index) => {
                             let newRow = $('<tr data-id=\"'+index+'\">');
-                            let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + index + '\">');
+                            let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<div class=\"checkbox\"><label class=\"label-container\"><input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + index + '\"><span class=\"checkmark\"></span></label></div>');
                             let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">'+element[0]+'</strong>');
                             let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">'+element[1]+'</strong>');
                             let copyCell = $('<td class=\"col-sm-1\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$urlServer\"></i>'); 
-                            let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+element[0]+'\" class=\"fa fa-times\"></i></span>');
+                            let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+element[0]+'\" class=\"fa fa-times Accent-200-cl\"></i></span>');
                     
                             newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
                             $('#user-list').append(newRow);

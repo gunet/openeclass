@@ -153,24 +153,24 @@ if (isset($_POST['submit'])) {
 
     $boolean_field = "";
     $tool_content .= "
-        <div class='row extapp'><div class='col-xs-12'>
-          <div class='form-wrapper'>
+        <div class='row extapp'><div class='col-lg-6 col-12'>
+          <div class='form-wrapper form-edit border-0 px-0'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
     foreach ($app->getParams() as $param) {
         if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
             $checked = $param->value() == 1 ? "checked" : "";
-            $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-            $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+            $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+            $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
             $boolean_field .= "</div></div></div>";
         } else if ($param->name() == ZoomApp::ACCOUNT_ID or $param->name() == ZoomApp::CLIENT_ID or $param->name() == ZoomApp::CLIENT_SECRET) {
-            $tool_content .= "<div class='form-group'>";
-            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
+            $tool_content .= "<div class='form-group mt-4'>";
+            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
             $type = 'text';
             if ($param->name() === ZoomApp::CLIENT_SECRET) {
                 $type = 'password';
             }
-            $tool_content .= "<div class='col-sm-10'><input class='form-control' type='" . $type . "' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+            $tool_content .= "<div class='col-sm-12'><input class='form-control' type='" . $type . "' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
             $tool_content .= "</div>";
         } else if ($param->name() == ZoomApp::ENABLEDCOURSES) {
             $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -184,10 +184,10 @@ if (isset($_POST['submit'])) {
             } else {
                 $selected = "selected";
             }
-            $tool_content .= "<div class='form-group' id='courses-list'>";
-            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>$langUseOfService&nbsp;&nbsp;";
-            $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfServiceInfo'></span></label>";
-            $tool_content .= "<div class='col-sm-10'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
+            $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
+            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
+            $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
+            $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='tc_courses[]' multiple>";
             $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
             foreach ($courses_list as $c) {
                 $selected = in_array($c->id, $selections) ? "selected" : "";
@@ -200,16 +200,19 @@ if (isset($_POST['submit'])) {
 
     $tool_content .= $boolean_field;
     $tool_content .= "
-                <div class='form-group'>
-                  <div class='col-sm-offset-2 col-sm-10'>
-                    <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
-                    <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
-                    <a href='zoomconf.php' class='btn btn-default'>$langCancel</a>
+                <div class='form-group mt-4'>
+                  <div class='d-flex justify-content-end gap-2 flex-wrap'>
+                    <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
+                    <button class='btn deleteAdminBtn' type='submit' name='submit' value='clear'>$langClearSettings</button>
+                    <a href='zoomconf.php' class='btn cancelAdminBtn'>$langCancel</a>
                   </div>
                 </div>" .
             generate_csrf_token_form_field() . "
             </form>
           </div>
+        </div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
       </div>";
 
@@ -226,15 +229,15 @@ if (isset($_POST['submit'])) {
     $boolean_field = "";
 
     $tool_content .= "
-    <div class='row extapp'><div class='col-xs-12'>
-      <div class='form-wrapper'>
+    <div class='row extapp'><div class='col-lg-6 col-12'>
+      <div class='form-wrapper form-edit border-0 px-0'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
         foreach ($app->getParams() as $param) {
             if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
                 $checked = $param->value() == 1 ? "checked" : "";
-                $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+                $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+                $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
                 $boolean_field .= "</div></div></div>";
             } else if ($param->name() == ZoomApp::ZOOMURL) {
                 $extra = '';
@@ -247,15 +250,15 @@ if (isset($_POST['submit'])) {
                         $extra = '';
                     }
                 }
-                $tool_content .= "<div class='form-group'>";
-                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "&nbsp;&nbsp;";
-                $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langZoomUrl'></span></label>";
-                $tool_content .= "<div class='col-sm-10'><input class='form-control' id='default_zoom_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . ZoomApp::ZOOMDEFAULTURL . " ' $extra></div>";
+                $tool_content .= "<div class='form-group mt-4'>";
+                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
+                $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langZoomUrl'></span></label>";
+                $tool_content .= "<div class='col-sm-12'><input class='form-control' id='default_zoom_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . ZoomApp::ZOOMDEFAULTURL . " ' $extra></div>";
                 $tool_content .= "</div>";
             } else if ($param->name() == ZoomApp::ZOOMCUSTOMURL) {
                 $checked = $param->value() == 1 ? "checked" : "";
-                $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $tool_content .= "<label><input type='checkbox' id='custom_zoom_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+                $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+                $tool_content .= "<label class='label-container'><input type='checkbox' id='custom_zoom_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
                 $tool_content .= "</div></div></div>";
             } elseif ($param->name() == ZoomApp::ENABLEDCOURSES) {
                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -269,10 +272,10 @@ if (isset($_POST['submit'])) {
                 } else {
                     $selected = "selected";
                 }
-                $tool_content .= "<div class='form-group' id='courses-list'>";
-                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>$langUseOfService&nbsp;&nbsp;";
-                $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfServiceInfo'></span></label>";
-                $tool_content .= "<div class='col-sm-9'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
+                $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
+                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
+                $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
+                $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='tc_courses[]' multiple>";
                 $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
                 foreach ($courses_list as $c) {
                     $selected = in_array($c->id, $selections) ? "selected" : "";
@@ -285,16 +288,19 @@ if (isset($_POST['submit'])) {
 
     $tool_content .= $boolean_field;
     $tool_content .= "
-                <div class='form-group'>
-                  <div class='col-sm-offset-2 col-sm-10'>
-                    <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
-                    <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
-                    <a href='zoomconf.php' class='btn btn-default'>$langCancel</a>
+                <div class='form-group mt-4'>
+                  <div class='d-flex justify-content-end gap-2 flex-wrap'>
+                    <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
+                    <button class='btn deleteAdminBtn' type='submit' name='submit' value='clear'>$langClearSettings</button>
+                    <a href='zoomconf.php' class='btn cancelAdminBtn'>$langCancel</a>
                   </div>
                 </div>" .
             generate_csrf_token_form_field() . "
             </form>
           </div>
+        </div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
         </div>
       </div>";
 
@@ -380,24 +386,21 @@ if (isset($_POST['submit'])) {
             'level' => 'primary-label')));
 
     $tool_content .= "  <div class='row'>
-                            <div class='col-xs-12'>
-                                <div class='panel panel-default'>
-                                    <div class='panel-body'>
-                                        <div class='inner-heading'>
-                                            <div class='row'>
-                                                <div class='col-sm-12 text-center'>
-                                                    <strong>$langZoomConnect</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class='col-sm-12'>
-                                            <div class='row text-center'>
-                                                <a href='".$urlServer."modules/admin/zoomconf.php?zoom_type_api=1' class='btn btn-success' style='margin: 20px'>$langZoomConnectViaApi</a>
-                                                <a href='".$urlServer."modules/admin/zoomconf.php?zoom_type_custom=1' class='btn btn-info' style='margin: 20px'>$langZoomConnectNoApi</a>
-                                            </div>                                                    
+                            <div class='col-lg-6 col-12'>
+                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                        <h3>$langZoomConnect</h3>
+                                    </div>
+                                    <div class='card-body'>
+                                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'><a href='".$urlServer."modules/admin/zoomconf.php?zoom_type_api=1' class='btn submitAdminBtn d-inline-flex'>$langZoomConnectViaApi</a></div>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'><a href='".$urlServer."modules/admin/zoomconf.php?zoom_type_custom=1' class='btn submitAdminBtnDefault d-inline-flex'>$langZoomConnectNoApi</a></div>                                                
                                         </div>                                                                                    
                                     </div>
                                 </div>
+                            </div>
+                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                             </div>
                         </div>";
 
