@@ -215,8 +215,6 @@ if ($is_editor) {
             $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;
             $log_details = array('id' => $attendance_id, 'title' => $newTitle, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_INSERT, $log_details);
-
-            //Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
             Session::flash('message',$langChangeAttendanceCreateSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code");
@@ -230,7 +228,7 @@ if ($is_editor) {
         delete_attendance_user($_GET['at'], $_GET['ruid']);
         $log_details = array('id' => $_GET['at'], 'title' => get_attendance_title($_GET['at']), 'action' => 'delete user', 'user_name' => uid_to_name($_GET['ruid']));
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".urlencode($_GET['at'])."&attendanceBook=1");
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=" . urlencode($_GET['at']) ."&attendanceBook=1");
     }
 
     //reset attendance users
@@ -242,7 +240,7 @@ if ($is_editor) {
                 $already_inserted_users = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
                 $already_inserted_ids = [];
                 foreach ($already_inserted_users as $already_inserted_user) {
-                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                    $already_inserted_ids[] = $already_inserted_user->uid;
                 }
                 $added_users = array();
                 foreach ($ug as $u) {
@@ -284,7 +282,7 @@ if ($is_editor) {
                 $already_inserted_users = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d
                     AND uid IN $sql_placeholders", $attendance_id, $active_attendance_users);
                 foreach ($already_inserted_users as $already_inserted_user) {
-                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                    $already_inserted_ids[] = $already_inserted_user->uid;
                 }
                 $added_users = array();
                 foreach ($active_attendance_users as $u) {
@@ -310,7 +308,7 @@ if ($is_editor) {
                     . "AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
 
             foreach ($gu as $u) {
-                delete_attendance_user($attendance_id, $u);
+                delete_attendance_user($attendance_id, $u->uid);
             }
             $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'delete users not in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($gu),'users' => $gu);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
