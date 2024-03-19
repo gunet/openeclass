@@ -388,13 +388,10 @@ elseif(isset($_GET['choice']))
             } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
-                if (
-                    $is_editor
-//                    || $is_admin
-                ) {
+                if ($is_editor) {
                     header("Location: " . unserialize($sess->options));
                 } else {
-                    header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '/?pwd=' . $sess->mod_pw);
+                    header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '?pwd=' . $sess->mod_pw);
                 }
             } elseif ($serv->type == 'webex') { // webex
                 header("Location: " . $sess->meeting_id);
