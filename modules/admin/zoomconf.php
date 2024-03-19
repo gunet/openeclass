@@ -109,12 +109,15 @@ if (isset($_POST['submit'])) {
             Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses, webapp, enable_recordings) 
                                             VALUES('zoom', ?s, ?s, ?s, ?s, 'api', true)
                                         ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s, webapp = 'api', enable_recordings = true",
-                $app::ZOOMURL, $app::ZOOMURL, $enabled, $all_courses, $enabled, $all_courses);
+
+                $app::ZOOMDEFAULTURL, $app::ZOOMDEFAULTURL, $enabled, $all_courses, $enabled, $all_courses);
+            $zoomUserRepo->syncZoomUsersTable();
+
         } else {
             Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
                                             VALUES('zoom', ?s, ?s, ?s, ?s)
                                         ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
-                $app::ZOOMURL, $app::ZOOMURL, $enabled, $all_courses, $enabled, $all_courses);
+                $app::ZOOMDEFAULTURL, $app::ZOOMDEFAULTURL, $enabled, $all_courses, $enabled, $all_courses);
         }
 
         Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
