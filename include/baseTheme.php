@@ -5494,7 +5494,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clLinkImportantAnnouncement'])){
             $styles_str .= "
-                .notification-top-bar a{
+                .notification-top-bar a,
+                .hide-notification-bar .fa-xmark{
                     color: $theme_options_styles[clLinkImportantAnnouncement];
                 }
             
@@ -5509,7 +5510,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clHoveredLinkImportantAnnouncement'])){
             $styles_str .= "
-                .notification-top-bar a:hover{
+                .notification-top-bar a:hover,
+                .hide-notification-bar:hover .fa-xmark{
                     color: $theme_options_styles[clHoveredLinkImportantAnnouncement];
                 }
             

@@ -6212,3 +6212,4 @@ $langclContainerImportantAnnouncement = "Text color";
 $langclLinkImportantAnnouncement = "Link color";
 $langclHoveredLinkImportantAnnouncement = "Hovered link color";
 $langDisplayAnnouncement = "See the announcement...";
+$langDontDisplayAgain = "Do not appear again";

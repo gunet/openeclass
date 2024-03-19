@@ -5073,6 +5073,7 @@ body .delThemeBtn{
   width: 100%;
   background: #E8F2E7;
   color: #4F6893;
+  transition: all 2s;
 }
 body.mce-fullscreen .notification-top-bar{
   z-index:0;
@@ -5086,4 +5087,14 @@ body.mce-fullscreen .notification-top-bar{
 }
 .notification-top-bar a:hover{
   opacity: 0.7;
+}
+
+.hide-notification-bar{
+  background-color: transparent;
+  padding: 0px;
+}
+.hide-notification-bar .fa-xmark,
+.hide-notification-bar:hover .fa-xmark,
+.hide-notification-bar:focus .fa-xmark{
+  color: #C44601;
 }

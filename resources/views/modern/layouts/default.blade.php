@@ -102,6 +102,7 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/custom.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?<?php echo time(); ?>"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/notification_bar.js?<?php echo time(); ?>"></script>
 
     {!! $head_content !!}
 
@@ -111,21 +112,26 @@
 
 <body>
   
-    <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0) fixed-announcement @endif">
+    <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0 && !isset($_COOKIE['CookieNotification'])) fixed-announcement @endif">
 
         <!-- important announcement -->
         @if($pinned_announce_id > 0 && !empty($pinned_announce_title) && !empty($pinned_announce_body))
-            <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
-                <div class='{{ $container }} padding-default'>
-                    <div class='d-flex justify-content-center align-items-center gap-2'>
-                        <i class='fa-regular fa-bell fa-xl d-block'></i>
-                        <span class='d-inline-block text-truncate TextBold' style="max-width: auto;">
-                            @php echo strip_tags($pinned_announce_title); @endphp
-                        </span>
-                        <a class='link-color TextBold msmall-text text-decoration-underline ps-1' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>
+            @if(!isset($_COOKIE['CookieNotification']))
+                <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
+                    <div class='{{ $container }} padding-default'>
+                        <div class='d-flex justify-content-center align-items-center gap-2'>
+                            <button class='btn hide-notification-bar' id='closeNotificationBar' data-bs-toggle='tooltip' data-bs-placement='bottom' title="{{ trans('langDontDisplayAgain') }}">
+                                <span class='fa-solid fa-xmark Accent-200-cl fa-md h-auto w-auto me-1'></span>
+                            </button>
+                            <i class='fa-regular fa-bell fa-xl d-block'></i>
+                            <span class='d-inline-block text-truncate TextBold' style="max-width: auto;">
+                                @php echo strip_tags($pinned_announce_title); @endphp
+                            </span>
+                            <a class='link-color TextBold msmall-text text-decoration-underline ps-1' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         @endif
         
         <!-- Header -->
