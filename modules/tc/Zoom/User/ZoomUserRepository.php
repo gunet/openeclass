@@ -43,19 +43,24 @@ class ZoomUserRepository
 
         $zoomUsers = $this->listAllZoomUsers();
 
-        foreach ($zoomUsers->users as $zoomUser) {
-            $eclassUser = Database::get()
-                ->querySingle("SELECT id FROM user WHERE email = '".$zoomUser->email."'");
+        if (
+            !empty($zoomUsers)
+            && !empty($zoomUsers->users)
+        ) {
+            foreach ($zoomUsers->users as $zoomUser) {
+                $eclassUser = Database::get()
+                    ->querySingle("SELECT id FROM user WHERE email = '".$zoomUser->email."'");
 
-            if (
-                $eclassUser
-                && !empty($eclassUser->id)
-            ) {
-                $tc_user = $this->saveInDatabase($eclassUser->id, $zoomUser);
+                if (
+                    $eclassUser
+                    && !empty($eclassUser->id)
+                ) {
+                    $tc_user = $this->saveInDatabase($eclassUser->id, $zoomUser);
 
-                if (!$tc_user) {
-                    Session::Messages($langZoomUserCreateError);
-                    redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+                    if (!$tc_user) {
+                        Session::Messages($langZoomUserCreateError);
+                        redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+                    }
                 }
             }
         }
