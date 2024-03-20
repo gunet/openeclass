@@ -324,18 +324,17 @@ if (isset($_GET['action'])) {
                         <table class='table-default'>
                         <thead>
                             <tr>
-                                <th>$langAvailableCertTemplates</th>
-                                <th>$langTitle</th>
-                                <th>$langDescription</th>
-                                <th></th>
+                                <th style='width:30%;'>$langTitle</th>
+                                <th style='width:60%;'>$langDescription</th>
+                                <th style='width:10%;'></th>
                             </tr>
                         </thead>";
 
                 foreach ($sql1 as $cert_data) {
                     //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
-                    $tool_content .= "<tr><td>$cert_data->name</td>
-                                      <td>" . ellipsize_html($cert_data->description, 100) . "</td>";
-                    $tool_content .= "<td class='text-end option-btn-cell'>".
+                    $tool_content .= "<tr><td style='width:30%;'>$cert_data->name</td>
+                                      <td style='width:60%;'>" . ellipsize_html($cert_data->description, 100) . "</td>";
+                    $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
@@ -358,18 +357,18 @@ if (isset($_GET['action'])) {
                         <table class='table-default'>
                         <thead>
                         <tr>
-                            <th>$langTitle</th>
-                            <th>$langDescription</th>
-                            <th>$langIcon</th>
-                            <th></th>
+                            <th style='width:30%;'>$langTitle</th>
+                            <th style='width:60%;'>$langDescription</th>
+                            <th style='width:10%;'>$langIcon</th>
+                            <th style='width:10%;'></th>
                         </tr>
                         </thead>";
                 foreach ($sql2 as $badge_data) {
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";
-                    $tool_content .= "<tr><td>$badge_data->name</td>
-                                      <td>" . ellipsize_html($badge_data->description, 100) . "</td>
-                                      <td><img src='$icon_link' width='50' height='50'></td>";
-                    $tool_content .= "<td class='text-end option-btn-cell'>".
+                    $tool_content .= "<tr><td style='width:30%;'>$badge_data->name</td>
+                                      <td style='width:50%;'>" . ellipsize_html($badge_data->description, 100) . "</td>
+                                      <td style='width:10%;' ><img src='$icon_link' width='50' height='50'></td>";
+                    $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',

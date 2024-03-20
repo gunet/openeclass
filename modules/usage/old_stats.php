@@ -261,7 +261,9 @@ foreach ($result as $row) {
     if ($u_module_id == $mid) {
         $extra = 'selected';
     }
-    $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
+    if(array_key_exists($mid,$modules)){
+        $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
+    }
 }
 
 $tool_content .= '<div class="d-lg-flex gap-4 mt-4">

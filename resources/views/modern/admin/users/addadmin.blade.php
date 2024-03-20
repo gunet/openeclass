@@ -178,7 +178,7 @@
                                 @if ($admin->user_id != 1)
                                     {!! action_button([
                                             [   'title' => trans('langEditPrivilege'),
-                                                'url' => "{$urlAppend}modules/admin/addadmin.php?edit=$indirect". getIndirectReference($admin->user_id),
+                                                'url' => "{$urlAppend}modules/admin/addadmin.php?edit=". getIndirectReference($admin->user_id),
                                                 'icon' => 'fa-edit'
                                             ],
                                             [   'title' => trans('langEditUser'),

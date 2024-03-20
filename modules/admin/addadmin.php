@@ -105,6 +105,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
     load_js('jstree3');
     $navigation[] = ['url' => 'index.php', 'name' => $langAdmins];
 
+    $adminDeps = [];
     if (isset($_GET['edit'])) {
         $user_id = getDirectReference($_GET['edit']);
         $user = Database::get()->querySingle('SELECT * FROM user WHERE id = ?d', $user_id);
@@ -133,7 +134,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
             'manageuser' => '',
             'managedepartment' => '',
         ];
-        $adminDeps = [];
+        //$adminDeps = [];
     }
 
     $data['usernameValue'] = $usernameValue;
