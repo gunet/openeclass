@@ -116,22 +116,24 @@ $headers[] = $langTotalScore;
 $out[] = $headers;
 
 // get exercise attempts (except `canceled` attempts)
-$q = Database::get()->queryArray("(SELECT uid, eurid, surname, givenname, am
+$q = Database::get()->queryArray("(SELECT uid, eurid, surname, givenname, am, total_score, total_weighting
                                             FROM exercise_user_record
                                             JOIN user ON uid = id
                                             WHERE eid = ?d
                                             AND attempt_status != " . ATTEMPT_CANCELED . "
                                             )
                                         UNION
-                                            (SELECT 0 as uid, eurid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am
+                                            (SELECT 0 as uid, eurid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am, total_score, total_weighting
                                                 FROM `exercise_user_record` WHERE eid = ?d
                                                 AND attempt_status != " . ATTEMPT_CANCELED . "
                                                 AND uid = 0)
                                             ORDER BY surname, givenname"
                                         , $exerciseId, $exerciseId);
 
+$total_score = [];
 foreach ($q as $d) { // for each attempt
     $eurid = $d->eurid; // exercise user record id
+    $total_score[$eurid] = user_total_score($d); // Canonicalized user final score
     $qids_answered = []; // answered questions;
     // get user questions
     $s = Database::get()->queryArray("SELECT DISTINCT question_id, uid
@@ -182,7 +184,7 @@ foreach ($q as $d) { // for each attempt
                 $output[] = user_question_score($question, $eurid); // question score
             }
         }
-        $output[] = user_total_score($eurid); // user total score
+        $output[] = $total_score[$eurid];
         $out[] = $output;
         $output = array();
     }
@@ -328,15 +330,11 @@ function user_question_score($qid, $eurid) {
 
 
 /**
- * @brief user question total score
- * @param $eurid
+ * @brief User attempt canonicalized final score
+ * @param $user_record
  */
-function user_total_score($eurid) {
-
+function user_total_score($user_record) {
     global $objExercise;
 
-    $total_score = $objExercise->calculate_total_score($eurid);
-    $total_weight = $objExercise->selectTotalWeighting();
-
-    return $objExercise->canonicalize_exercise_score($total_score, $total_weight);
+    return $objExercise->canonicalize_exercise_score($user_record->total_score, $user_record->total_weighting);
 }
