@@ -39,7 +39,7 @@ if ($user_id) {
 
 if (!isset($argv[1]) or !in_array($argv[1], ['reindex', 'continue'])) {
     echo "Welcome to the reindexing CLI tool.\n\n",
-        "$usage php idxreindexcli.php [reindex|continue]\n\n",
+        "$usage php $argv[0] [reindex|continue]\n\n",
         "Required argument:\n",
         "reindex: Delete current index and re-index all courses\n",
         "continue: Resume an interrupted indexing run\n\n";
