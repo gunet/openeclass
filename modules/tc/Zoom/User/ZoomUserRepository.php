@@ -37,6 +37,37 @@ class ZoomUserRepository
         return Database::get()->querySingle("SELECT * FROM `zoom_user` WHERE `user_id` = " . $id);
     }
 
+
+    public function syncZoomUsersTable() : void
+    {
+        global $langZoomUserCreateError;
+
+        $zoomUsers = $this->listAllZoomUsers();
+
+        if (
+            !empty($zoomUsers)
+            && !empty($zoomUsers->users)
+        ) {
+            foreach ($zoomUsers->users as $zoomUser) {
+                $eclassUser = Database::get()
+                    ->querySingle("SELECT id FROM user WHERE email = '".$zoomUser->email."'");
+
+                if (
+                    $eclassUser
+                    && !empty($eclassUser->id)
+                ) {
+                    $tc_user = $this->saveInDatabase($eclassUser->id, $zoomUser);
+
+                    if (!$tc_user) {
+                        Session::flash('message', $langZoomUserCreateError);
+                        Session::flash('alert-class', 'alert-danger');
+                        redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
+                    }
+                }
+            }
+        }
+    }
+
     public function createZoomUser($eclassUser)
     {
         global $langZoomUserCreateError;
@@ -74,7 +105,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            Session::Messages($langZoomUserCreateError);
+            Session::flash('message', $langZoomUserCreateError);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
@@ -83,7 +115,8 @@ class ZoomUserRepository
 
         $tc_user = $this->saveInDatabase($eclassUser->id, $responseData);
         if (!$tc_user) {
-            Session::Messages($langZoomUserCreateError);
+            Session::flash('message', $langZoomUserCreateError);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
         return $responseData;
@@ -107,7 +140,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            Session::Messages($langZoomListUsersError);
+            Session::flash('message', $langZoomListUsersError);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
@@ -133,7 +167,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            Session::Messages($langZoomUserExistsError . $email);
+            Session::flash('message', $langZoomUserExistsError . $email);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
@@ -177,7 +212,8 @@ class ZoomUserRepository
                 ]
             );
         } catch (ClientException $e) {
-            Session::Messages($langZoomUserTypeError);
+            Session::flash('message', $langZoomUserTypeError);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
