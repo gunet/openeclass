@@ -1577,6 +1577,7 @@ $langCommercialUse = "Εμπορική χρήση";
 $langAllowModification = "Επιτρέψτε διασκευή";
 
 
+
 // Groups
 $langCreateCourseGroups = "Ομάδες χρηστών";
 $langCatagoryMain = "Αρχή";
@@ -5371,7 +5372,7 @@ $langZoomAccessTokenError = 'Σφάλμα κατά την δημιουργία z
 $langZoomUserCreateError = 'Σφάλμα κατά την δημιουργία χρήστη Zoom.';
 $langZoomListUsersError = 'Σφάλμα κατά την εμφάνιση των χρηστών του zoom λογαριασμού.';
 $langZoomUserExistsError = 'Προέκυψε σφάλμα κατά την αναζήτηση του χρήστη με email: ';
-$langZoomUserTypeError = 'Σφάλμα κατά την αλλαγή τύπου χρήστη.';
+$langZoomUserTypeError = "Σφάλμα κατά την αλλαγή άδειας χρήσης. Ο λογαριασμός του χρήστη πρέπει να είναι 'με πληρωμή'.";
 $langZoomUserNotRegistered = 'Δεν βρέθηκε εγγεγραμμένος χρήστης στην υπηρεσία UoA Zoom με διεύθυνση email: ';
 $langZoomUserNotFound = 'Δημιουργήθηκε πρόβλημα κατά την εύρεση του χρήστη.';
 $langZoomSuccessRegister = 'Επιτυχής δημιουργία λογαριασμού. Παρακαλώ ακολουθήστε τον σύνδεσμο στο email σας.';
@@ -5381,7 +5382,10 @@ $langZoomConnectViaApi = "Με χρήση του Zoom API";
 $langZoomConnectNoApi = "Χωρίς τη χρήση του Zoom API";
 $langNoApiCredentials = "Δεν έχει ρυθμιστεί η πιστοποίηση μέσω API";
 $langEmptyParameter = "Κενή παράμετρος";
-$langNoEmptySeats = "Δεν υπάρχουν διαθέσιμες θέσεις".
+$langNoEmptySeats = "Δεν υπάρχουν διαθέσιμες θέσεις";
+$langZoomErrorUserNotFound = "Δεν βρέθηκε ο χρήστης στο λογαριασμό του Zoom";
+$langFree = "Ελεύθερη";
+$langPaid = "Με πληρωμή";
 
 
 /* * ***********************************************************
