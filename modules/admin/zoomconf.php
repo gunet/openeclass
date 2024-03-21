@@ -348,10 +348,10 @@ if (isset($_POST['submit'])) {
     foreach ($apiUsers->users as $user_data) {
         if ($user_data->type == 2) {
             $changeType = 1;
-            $typeString = 'PAID';
+            $typeString = $langPaid;
         } else {
             $changeType = 2;
-            $typeString = 'FREE';
+            $typeString = $langFree;
         }
 
         $tool_content .= "<tr>
@@ -359,7 +359,7 @@ if (isset($_POST['submit'])) {
                     <td>$user_data->first_name</td>
                     <td>$user_data->email</td>
                     <td>$typeString</td>
-                    <td><a href='".$_SERVER['SCRIPT_NAME']."?change_zoom_user_type=1&id=".$user_data->id."&email=".$user_data->email."&type=".$changeType."' class='btn btn-primary'>Change Type</a></td>
+                    <td><a href='".$_SERVER['SCRIPT_NAME']."?change_zoom_user_type=1&id=".$user_data->id."&email=".$user_data->email."&type=".$changeType."' class='btn btn-primary'>$langModify</a></td>
                     </tr>";
     }
     $tool_content .= "</tbody></table>";
@@ -368,14 +368,8 @@ if (isset($_POST['submit'])) {
 } elseif (isset($_GET['change_zoom_user_type'])) {
     $res = $zoomUserRepo->changeUserType($_GET['id'], $_GET['email'], $_GET['type']);
     if (!empty($res->fail_details)) {
-        if (
-            !empty($res->fail_details[0]->reason)
-            && $res->fail_details[0]->reason == 'Not enough seats'
-        ) {
+        if (!empty($res->fail_details[0]->reason) && $res->fail_details[0]->reason == 'Not enough seats') {
             Session::Messages("$langNoEmptySeats");
-            redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
-        } else {
-            Session::Messages("Something went wrong while changing user type.");
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
     }
