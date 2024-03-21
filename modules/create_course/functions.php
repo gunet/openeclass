@@ -139,7 +139,7 @@ function create_modules($cid) {
 function default_modules() {
     // Modules enabled by default in new courses
     $default_module_defaults = array(MODULE_ID_AGENDA, MODULE_ID_LINKS,
-        MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION,
+        MODULE_ID_DOCS, MODULE_ID_ANNOUNCE,
         MODULE_ID_MESSAGE);
 
     if ($def = get_config('default_modules')) {

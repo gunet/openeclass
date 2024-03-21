@@ -19,11 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/**
- * @file old_stats.php
- * @brief Show old statistics for the course, taken from table "action_summary" of the course's database.
- */
 $require_current_course = true;
 $require_course_reviewer = true;
 $require_help = true;
@@ -96,8 +91,38 @@ function refresh_oldstats_course_plot(startdate, enddate, course, module){
                     duration: '$langDuration'
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: '%m-%Y', values:xTicks, rotate:60}, label: '$langMonth', min: xMinVal}, y:{label:'$langVisits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label: '$langHours', min: 0, padding:{top:0, bottom:0}}},
-            bar:{width:{ratio:0.3}},
+            axis:{ x: 
+                {
+                    type:'timeseries', 
+                    tick:{
+                        format: '%m-%Y', 
+                        values:xTicks, rotate:60
+                    }, 
+                    label: '$langMonth', 
+                    min: xMinVal
+                }, 
+                y:{
+                    label:'$langVisits', 
+                    min: 0, 
+                    padding:{
+                        top:0, bottom:0
+                    }
+                }, 
+                y2: {
+                    show: true, 
+                    label: '$langHours', 
+                    min: 0, 
+                    padding:{
+                        top:0, 
+                        bottom:0
+                    }
+                }
+            },
+            bar:{
+                width:{
+                    ratio:0.3
+                }
+            },
             bindto: '#old_stats'
         };
         c3.generate(options);
