@@ -1256,6 +1256,22 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
         }
 
+        // actions
+        restore_table($restoreThis, 'actions_daily',
+            array('set' => array('course_id' => $new_course_id),
+                  'map' => array('user_id' => $userid_map),
+                  'delete' => array('id')
+            ),
+            $url_prefix_map, $backupData, $restoreHelper);
+
+        //log
+        restore_table($restoreThis, 'log',
+            array('set' => array('course_id' => $new_course_id),
+                  'map' => array('user_id' => $userid_map),
+                  'delete' => array('id')
+            ),
+            $url_prefix_map, $backupData, $restoreHelper);
+
         // Weekly - deprecated as of 3.7, but need to move to units
         if ($weekly_view) {
             $weekly_map = restore_table($restoreThis, 'course_weekly_view', array(

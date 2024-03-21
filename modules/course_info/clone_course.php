@@ -47,7 +47,7 @@ if (isset($_POST['create_restored_course'])) {
     $restoreThis = $webDir . '/courses/tmpUnzipping/' .
         $uid . '/' . safe_filename();
     make_dir($restoreThis);
-    archiveTables($course_id, $course_code, $restoreThis);
+    archiveTables($course_id, $restoreThis);
     recurse_copy($webDir . '/courses/' . $course_code,
         $restoreThis . '/html');
 

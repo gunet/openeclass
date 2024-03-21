@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,10 +24,10 @@
  * Archive serialized course tables
  *
  * @param int $course_id
- * @param string $course_code
  * @param string $archivedir  Target directory
  */
-function archiveTables($course_id, $course_code, $archivedir) {
+function archiveTables($course_id, $archivedir): void
+{
     // backup subsystems from main db
     $sql_course = "course_id = $course_id";
     $archive_conditions = array(
@@ -160,7 +160,9 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'category_value' => 'true',
         'course_category' => $sql_course,
         'h5p_content' => $sql_course,
-        'h5p_content_dependency' => "content_id IN (SELECT id FROM h5p_content WHERE course_id = $course_id)"
+        'h5p_content_dependency' => "content_id IN (SELECT id FROM h5p_content WHERE course_id = $course_id)",
+        'actions_daily' => $sql_course,
+        'log' => $sql_course
         );
 
     foreach ($archive_conditions as $table => $condition) {
@@ -183,7 +185,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
  * @param string $course_code
  */
 function doArchive($course_id, $course_code) {
-    global $webDir, $tool_content, $langGeneralError;
+    global $webDir, $langGeneralError;
 
     // Remove previous back-ups older than 10 minutes
     touch("$webDir/courses/archive/index.html");
@@ -198,7 +200,7 @@ function doArchive($course_id, $course_code) {
     $archivedir = $basedir . '/' . $backup_date;
     file_exists($archivedir) or make_dir($archivedir);
 
-    archiveTables($course_id, $course_code, $archivedir);
+    archiveTables($course_id, $archivedir);
 
     $zipfile = "$webDir/courses/archive/$_SESSION[csrf_token]/$course_code-$backup_date_short.zip";
     if (file_exists($zipfile)) {
