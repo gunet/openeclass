@@ -474,7 +474,7 @@ if ($is_editor) {
                                                                 <label for='enddate' class='col-12 control-label-notes text-capitalize mb-1'>$langUntil</label>
                                                                     <div class='col-12 ps-0 pe-0 ms-2'>
                                                                         <div class='input-group'>
-                                                                            <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                            <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                                                             <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
 
                                                                         </div>
@@ -862,7 +862,7 @@ if ($is_editor) {
                                             <label for='enddate' class='col-12 control-label-notes text-capitalize'>$langUntil</label>
                                                 <div class='col-12'>
                                                     <div class='input-group'>
-                                                        <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                                         <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
 
                                                     </div>

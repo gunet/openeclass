@@ -68,7 +68,7 @@ foreach ($q as $l) {
                   <label for='password_id' class='form-label mt-4'>$langPassword&nbsp;(password)</label>
                   <div class='input-group flex-nowrap'>
                     <input id='password_id' class='login-input border-end-0 w-100 mt-0' placeholder='&#xf084' type='password' name='pass' autocomplete='on'>
-                    <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-transparent input-border-color'>
+                    <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color'>
                         <i class='fa-solid fa-eye fa-md'></i>
                     </span>
                   </div>

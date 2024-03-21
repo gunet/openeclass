@@ -404,7 +404,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langStart</label>
                 
                 <div class='input-group'>
-                        <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                         <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                         <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
                       
@@ -416,7 +416,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd</label>
                 
                 <div class='input-group'>
-                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                     <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
                     <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
                     

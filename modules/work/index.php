@@ -2167,7 +2167,7 @@ function new_assignment() {
                 </div>
             </div>
 
-            <div class='col-12 form-group hidden mt-4 mb-4 bg-default p-3' id='lti_label' style='box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
+            <div class='col-12 form-group hidden mt-4 mb-4 p-3' id='lti_label' style='box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
                 <h4>$langLTIOptions</h4>
                 <div class='form-group hidden mt-4'>
                     <label for='title' class='col-sm-12 control-label-notes'>$langTiiApp</label>

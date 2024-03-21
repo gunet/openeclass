@@ -203,7 +203,7 @@
 
                     @if (count($fileInfo) or $curDirName)
 
-                        <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif @if(isset($course_code) and $course_code) bg-transparent @else bg-default @endif'>
+                        <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
                             
                                 
                                     <div class='d-flex justify-content-between gap-5'>
@@ -241,7 +241,7 @@
                                                             <option value='visible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
                                                             <option value='invisible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
                                                         </select>
-                                                        <input type='submit' class='px-3' name='bulk_submit' value='{{ trans('langSubmit') }}'>
+                                                        <input type='submit' class='btn-submit px-3' name='bulk_submit' value='{{ trans('langSubmit') }}'>
                                                         <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
                                                         <input type='hidden' id='filepaths' name='filepaths' value=''>
                                                         <input type='hidden' id='source_path' name='source_path' value=''>

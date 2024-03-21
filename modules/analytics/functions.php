@@ -884,7 +884,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         <label class='col-sm-12 control-label-notes'>$langStart</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='start_date' id='start_date' type='text' value='$start_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
@@ -894,7 +894,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         <label class='col-sm-12 control-label-notes'>$langFinish</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='end_date' id='end_date' type='text' value='$end_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>

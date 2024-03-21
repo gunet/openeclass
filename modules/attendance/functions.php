@@ -1193,7 +1193,7 @@ function user_attendance_settings($attendance_id) {
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
 
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                     <input class='form-control mt-0 border-start-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
 
                                     
@@ -1206,7 +1206,7 @@ function user_attendance_settings($attendance_id) {
                             <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill</label>
 
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                     <input class='form-control mt-0 border-start-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
 
                                     

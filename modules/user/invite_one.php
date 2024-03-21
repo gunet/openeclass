@@ -178,7 +178,7 @@ $tool_content .= "
             <label class='col-sm-12 control-label-notes'>$langExpirationDate:</label>
             <div class='col-sm-12'>
               <div class='input-group'>
-                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                 <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='expires_at' type='text' $value_date_expires>
               </div>
             </div>

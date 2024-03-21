@@ -486,7 +486,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <label for='enddate' class='col-12 control-label-notes'>$langUntil</label>
                                                             <div class='col-12'>
                                                                 <div class='input-group'>
-                                                                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
                                                                     <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                                                                     
                                                                 </div>
@@ -888,7 +888,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     $tool_content .= "<div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                                                                             <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil</label>
                                                                             <div class='input-group'>
-                                                                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                                                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
                                                                                 <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                                                                                 
                                                                             </div>

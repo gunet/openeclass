@@ -369,7 +369,7 @@ if (!isset($_POST['final_submit'])) {
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
                         <thead><tr class='list-header'>
-                        <td class='bg-default px-0'></td>
+                        <td class='px-0'></td>
                         <th class='px-0' scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
             $i=1;
 

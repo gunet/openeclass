@@ -134,8 +134,8 @@ $(function() {
                                         <div class='col-12 mt-3'>
                                             <div class='input-group'>
                                                 <input class='form-control mt-0 border-end-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
-                                                <div class='input-group-text h-40px bg-default input-border-color'>
-                                                    <span class="fa-solid fa-calendar" aria-hidden="true"></span>
+                                                <div class='input-group-text h-40px bg-input-default input-border-color'>
+                                                    <span class="fa-regular fa-calendar" aria-hidden="true"></span>
                                                 </div>
                                             </div>
                                         </div>

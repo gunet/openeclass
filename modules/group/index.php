@@ -688,7 +688,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link bg-default' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -740,7 +740,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link bg-default' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -977,7 +977,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link bg-default' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -1029,7 +1029,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link bg-default' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>

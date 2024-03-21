@@ -522,7 +522,8 @@ a:hover,button:hover{
   background-color: #D3D3D3;
 }
 
-.bg-default{
+.bg-default,
+.bg-input-default{
   background-color: #ffffff;
 }
 
@@ -1800,7 +1801,8 @@ label:has(input[type="checkbox"]:disabled){
 .deleteAdminBtn,
 .warningAdminBtn,
 .helpAdminBtn,
-.secodandary-submit{
+.secodandary-submit,
+.btn-submit{
   transition: 0.3s ease;
 }
 

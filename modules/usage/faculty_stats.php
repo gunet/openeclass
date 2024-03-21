@@ -252,7 +252,7 @@ if (isset($_GET['stats_submit'])) {
         <label class='col-12 control-label-notes' for='user_date_start'>$langStartDate</label>
         <div class='col-12'>
             <div class='input-group'> 
-                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                 <input class='form-control mt-0 border-start-0' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
             </div>
         </div>
@@ -261,7 +261,7 @@ if (isset($_GET['stats_submit'])) {
             <label class='col-12 control-label-notes' for='user_date_end'>$langEndDate</label>
             <div class='col-12'>
                 <div class='input-group'> 
-                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                     <input class='form-control mt-0 border-start-0' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
                    
                 </div>

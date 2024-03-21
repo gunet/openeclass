@@ -2639,7 +2639,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgInput] !important;
                 }
 
-                .input-group-text.bg-default{
+                .input-group-text.bg-input-default{
                     background-color: $theme_options_styles[BgInput];
                 }
 
