@@ -76,7 +76,7 @@ function api_method($access) {
 
         $restoreThis = $webDir . '/courses/tmpUnzipping/api_' . time() . '/' . safe_filename();
         make_dir($restoreThis);
-        archiveTables($course_id, $course_code, $restoreThis);
+        archiveTables($course_id, $restoreThis);
         recurse_copy($webDir . '/courses/' . $course_code,
             $restoreThis . '/html');
 
