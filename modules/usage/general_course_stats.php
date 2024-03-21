@@ -16,7 +16,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langU
 
 $tool_content .= action_bar(array(
         array('title' => $langOldStats,
-            'url' => "old_stats.php",
+            'url' => "old_stats.php?course=$course_code",
             'icon' => 'fa-bar-chart',
             'level' => 'primary',
             'button-class' => 'btn-success')
