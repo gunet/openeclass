@@ -380,7 +380,7 @@ $tool_content .= action_bar(array(
 
 
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
-$tool_content .= "<div class='card-body'>";
+//$tool_content .= "<div class='card-body'>";
 
 if ($cmd == "updateName") {
     $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
@@ -395,7 +395,7 @@ if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</div></div></div>";
+$tool_content .= "</div></div>";
 
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {

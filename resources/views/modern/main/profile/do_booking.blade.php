@@ -160,7 +160,6 @@
                                 <div class='modal-header'>
                                     <div class='modal-title' id='infoEventsLabel'>{{ trans('langInfoColourEvent') }}</div>
                                     <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                        <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
                                     </button>
                                 </div>
                                 <div class='modal-body'>

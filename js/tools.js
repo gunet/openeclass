@@ -663,14 +663,14 @@ function initialize_filemodal(lang) {
     var buttons = {};
     buttons.download = {
       label: '<i class="fa fa-download"></i> ' + lang.download,
-      className: 'submitAdminBtn',
+      className: 'submitAdminBtn gap-1',
       callback: function (d) {
         window.location = downloadURL;
       }
     };
     buttons.print = {
       label: '<i class="fa fa-print"></i> ' + lang.print,
-      className: 'submitAdminBtn',
+      className: 'submitAdminBtn gap-1',
       callback: function (d) {
         var iframe = document.getElementById('fileFrame');
         iframe.contentWindow.print();
@@ -679,7 +679,7 @@ function initialize_filemodal(lang) {
     if (screenfull.enabled) {
       buttons.fullscreen = {
         label: '<i class="fa fa-arrows-alt"></i> ' + lang.fullScreen,
-        className: 'submitAdminBtn',
+        className: 'submitAdminBtn gap-1',
         callback: function() {
           screenfull.request(document.getElementById('fileFrame'));
           return false;
@@ -688,7 +688,7 @@ function initialize_filemodal(lang) {
     }
     buttons.newtab = {
       label: '<i class="fa fa-plus"></i> ' + lang.newTab,
-      className: 'submitAdminBtn',
+      className: 'submitAdminBtn gap-1',
       callback: function() {
         window.open(fileURL);
         return false;

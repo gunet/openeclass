@@ -620,8 +620,8 @@ jContent;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header"> 
-                    <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
-                    <button type="button" class="close treeModalClose"> <span class="fa-solid fa-xmark fa-lg Accent-200-cl" aria-hidden="true"></span><span class="sr-only">' . $langCancel . '</span></button>
+                    <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
+                    <button type="button" class="close treeModalClose" aria-label="close"></button>
                    
                 </div>
                 <div class="modal-body">
@@ -700,8 +700,8 @@ jContent;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                     <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
-                    <button type="button" class="close treeModalClose"> <span class="fa-solid fa-xmark fa-lg Accent-200-cl" aria-hidden="true"></span><span class="sr-only">' . $langCancel . '</span></button>
+                     <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
+                    <button type="button" class="close treeModalClose" aria-label="close"></button>
                    
                 </div>
                 <div class="modal-body">

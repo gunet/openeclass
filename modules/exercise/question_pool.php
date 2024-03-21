@@ -88,7 +88,8 @@ $head_content .= "
                             backdrop: true,
                             buttons: {
                                 edit: {
-                                    label: '<span class=\"fa fa-edit\"></span> " . js_escape($langEditChange) . "',
+                                    label: '" . js_escape($langEditChange) . "',
+                                    className: 'submitAdminBtn',
                                     callback: function () {
                                         if (nbr > 1) {
                                             $('#modalWarning').modal('show');
@@ -99,7 +100,7 @@ $head_content .= "
                                 },
                                 success: {
                                     label: '" . js_escape($langClose) . "',
-                                    className: 'btn-default',
+                                    className: 'cancelAdminBtn',
                                 },
                             }
                         });
@@ -476,8 +477,9 @@ $tool_content .= "
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
-        <h4 class='modal-title'>$langNote</h4>
+        <div class='modal-title'>$langNote</div>
+        <button type='button' class='close' data-bs-dismiss='modal'></button>
+        
       </div>
       <div class='modal-body'>
         $langUsedInSeveralExercises

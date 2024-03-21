@@ -19,7 +19,7 @@
             };
 
             $(document).ready(function() {
-                dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{!! trans("langCancel") !!}</span></button><h4 class="modal-title" id="modal-label">{!! trans('langCourseMetadata') !!}</h4></div><div class="modal-body">body</div></div></div></div>');
+                dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><div class="modal-title" id="modal-label">{!! trans('langCourseMetadata') !!}</div><button type="button" class="close" data-bs-dismiss="modal"></button></div><div class="modal-body">body</div></div></div></div>');
             });
         </script>
     @endpush
@@ -131,7 +131,7 @@
 
                                                             <!-- Modal content -->
                                                             <div class="modal-content modal-content-opencourses px-lg-5 py-lg-5">
-                                                                <div class='col-12 d-flex justify-content-between align-items-start'>
+                                                                <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
                                                                     <div>
                                                                         <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                                                             <h2 class='mb-0'>{{$mycourse->i}}</h2>
@@ -143,7 +143,7 @@
                                                                         <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
                                                                     </div>
                                                                     <div>
-                                                                        <button type='button' class="close border-0 bg-transparent mt-1" aria-label="Close"><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
+                                                                        <button type='button' class="close" aria-label="Close"></button>
                                                                     </div>
                                                                 </div>
 

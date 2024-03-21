@@ -3961,6 +3961,7 @@ $langBgModal = "Modal background color";
 $langclBorderModal = "Border modal color";
 $langclTextModal = "Text color in modals";
 $langclDeleteIconModal = "Delete icon color";
+$langclXmarkModal = "Close modal icon";
 $langNavBody = "Body";
 $langNavSettingsAgenda = "Agenda";
 $langAgendaSettings = "Calendar settings";

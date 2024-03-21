@@ -2,9 +2,9 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><span
-                        aria-hidden='true'>&times;</span></button>
-                <h4 class='modal-title' id='consentModalLabel'>{{ trans('langUserConsent') }}</h4>
+                <div class='modal-title' id='consentModalLabel'>{{ trans('langUserConsent') }}</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                
             </div>
             <div class='modal-body' style='margin-left:20px; margin-right:20px;'>
                 {!! get_config('privacy_policy_text_' . $session->language) !!}

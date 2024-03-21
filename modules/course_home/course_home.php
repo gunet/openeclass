@@ -268,7 +268,7 @@ if (count($res) > 0) {
                                     <div class='modal-content'>
                                         <div class='modal-header'>
                                         <div class='modal-title' id='myModalLabel_$key'>" . q($row->title) . "</div>
-                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
                                       
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".

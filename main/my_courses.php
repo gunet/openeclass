@@ -107,29 +107,29 @@ if(isset($_GET['term'])){
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
                                     if($course->visible == 1){
                                         $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse'>
-                                            <i class='fa-solid fa-square-pen title-default settings-icons'></i>
+                                            <i class='fa-solid fa-square-pen title-default fa-lg'></i>
                                         </button>";
                                     }
                                     if($course->visible == 2){
                                         $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langOpenCourse'>
-                                            <i class='fa-solid fa-lock-open title-default settings-icons'></i>
+                                            <i class='fa-solid fa-lock-open title-default fa-lg'></i>
                                         </button>";
                                     }
                                     if($course->visible == 0){
                                         $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langClosedCourse'>
-                                            <i class='fa-solid fa-lock title-default settings-icons'></i>
+                                            <i class='fa-solid fa-lock title-default fa-lg'></i>
                                         </button>";
                                     }
                                     if($course->visible == 3){
                                         $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langInactiveCourse'>
-                                            <i class='fa-solid fa-triangle-exclamation title-default settings-icons'></i>
+                                            <i class='fa-solid fa-triangle-exclamation title-default fa-lg'></i>
                                         </button>";
                                     }
                                     $invisibleCourse = '';
                                     if($course->visible == 3){
                                       $invisibleCourse = 'InvisibleCourse';
                                     }
-                                    $html .= "<a class='$invisibleCourse TextBold mt-1' href='{$urlServer}courses/{$course->code}/index.php'>".q($course->title)."</a>
+                                    $html .= "<a class='$invisibleCourse TextBold mt-2' href='{$urlServer}courses/{$course->code}/index.php'>".q($course->title)."</a>
                                 </div>
                             </div>
 

@@ -130,9 +130,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<div class='col-12 mt-4'>
                             <div class='row row-cols-1'>
                                
-                                    <div class='col-12'>
-                                        <div class='card border-card h-100 Borders border-0'>
-                                            <div class='card-body p-0'>";
+                                    <div class='col-12'>";
                                 if (count($roots) > 1) {
                                     $tool_content .= $tree->buildRootsSelectForm($fc);
                                 }
@@ -151,10 +149,6 @@ if (isset($_POST['submit'])) {
                                         $tool_content .= "</ul>
                                                     </div>
                                                 </form>
-
-
-                                            </div>
-                                        </div>
                                     </div>
                                 
                             </div>";

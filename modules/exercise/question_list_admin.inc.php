@@ -371,7 +371,8 @@ $head_content .= "
                     backdrop: true,
                     buttons: {
                         edit: {
-                            label: '<span class=\"fa fa-edit\"></span> $langEditChange',
+                            label: '$langEditChange',
+                            className: 'submitAdminBtn',
                             callback: function () {
                                 if (nbr > 1) {
                                     $('#modalWarning').modal('show');
@@ -382,7 +383,7 @@ $head_content .= "
                         },
                         success: {
                             label: '$langClose',
-                            className: 'btn-default',
+                            className: 'cancelAdminBtn',
                         },
                     }
                });

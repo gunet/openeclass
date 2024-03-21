@@ -3,9 +3,7 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <div class='modal-title' id='assigneesModalLabel'>{{ trans("m['WorkAssignTo']") }}...</div>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
-                    <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
-                </button>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'></button>
                 
             </div>
             <form method='post' action='{{ $targetUrl }}'>
@@ -34,9 +32,7 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <div class='modal-title' id='watchersModalLabel'>{{ trans("langWatchers") }}...</div>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
-                    <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
-                </button>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'></button>
                 
             </div>
             <form method='post' action='{{ $targetUrl }}'>

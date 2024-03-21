@@ -152,7 +152,7 @@ $tool_content .= "
                     <strong>$langViewShow:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    <select id='user_filter'>
+                    <select id='user_filter' class='form-select'>
                         <option value='' selected>$langAllUsers</option>
                         <option value='yes'>$langOnlySubmissions</options>
                         <option value='no'>$langOnlyNonSubmissions</options>

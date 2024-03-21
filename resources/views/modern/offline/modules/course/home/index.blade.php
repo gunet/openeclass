@@ -113,7 +113,7 @@
                                         <h3>
                                             {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
                                         </h3>
-                                        <a class='text-start add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
+                                        <a class='text-start add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langHelp') }}'>
                                             <span class='fa fa-question-circle'></span>
                                         </a>
                                     </div>
@@ -172,9 +172,7 @@
                                 <div class='modal-content'>
                                     <div class='modal-header'>
                                         <div class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</div>
-                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                            <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
-                                        </button>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
                                         
                                     </div>
                                     <div class='modal-body'>

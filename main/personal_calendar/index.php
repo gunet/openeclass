@@ -399,9 +399,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     <!-- Modal content-->
                                         <div class='modal-content'>
                                             <div class='modal-header border-0'>
-                                                <h2 class='mb-0'>$langAddEvent</h2> 
-                                                <button aria-label='Close' type='button' class='border-0 bg-transparent' data-bs-dismiss='modal'>
-                                                    <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                <div class='modal-title'>$langAddEvent</div> 
+                                                <button aria-label='Close' type='button' class='close' data-bs-dismiss='modal'>
                                                 </button>
                                             </div>
                                             <div class='modal-body'>
@@ -811,9 +810,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         <!-- Modal content-->
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
-                                                    <h2 class='mb-0'>$langAddEvent</h2> 
-                                                    <button aria-label='Close' type='button' class='border-0 bg-transparent' data-bs-dismiss='modal'>
-                                                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                    <div class='modal-title'>$langAddEvent</div> 
+                                                    <button aria-label='Close' type='button' class='close' data-bs-dismiss='modal'>
                                                     </button>
                                                 </div>
                                                 <div class='modal-body'>
@@ -1180,9 +1178,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
-                        <h2 class='mb-0'>$langiCalFeed</h2> 
-                        <button type='button' class='border-0' data-bs-dismiss='modal'>
-                            <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                        <div class='modal-title'>$langiCalFeed</div> 
+                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='close'>
                         </button>
                     </div>
                     <div class='modal-body'>

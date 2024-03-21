@@ -2421,9 +2421,12 @@ body .form-action-button-popover{
 }
 .bootbox.show .modal-header{
   border: 0;
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 }
-.bootbox.show .modal-header .modal-title, .modal.show .modal-header .modal-title{
+.bootbox.show .modal-header .modal-title, 
+.modal.show .modal-header .modal-title{
   font-weight: 700;
   font-style: normal;
   font-size: 22px;
@@ -2431,29 +2434,18 @@ body .form-action-button-popover{
   letter-spacing: 0px;
   color: #2B3944;
 }
-.bootbox.show .modal-header .bootbox-close-button, .modal.show .modal-header .close{
-  float: right;
-}
-.bootbox.show .modal-header h4, .modal.show .modal-header .modal-title{
-  float: left;
-}
-.bootbox.show .bootbox-close-button{
+.bootbox.show .bootbox-close-button,
+.modal.show .close,
+.modal-display .close{
   border:0px;
-  background-color: #ffffff;
-  margin-top: 5px !important;
+  margin-top: 5px;
   width: 16px;
   height: 16px;
-  font-size: 32px;
-  color: #C44601;
+  opacity: 1;
+  padding: 0px;
+  background: transparent url(../images/xmark-red.svg) center / 1em auto no-repeat;
 }
-.modal.show .close{
-  border:0px;
-  background-color: #ffffff;
-  margin-top: 0px;
-  width: 16px;
-  height: 16px;
-  margin-top: 3px;
-}
+
 .modal.show .close span{
   color: #C44601;
 }
@@ -4878,6 +4870,7 @@ body .delThemeBtn{
   width:100%;
 }
 .modal-dialog .modal-title-default{
+  margin-top: 5px;
   margin-left: auto;
   margin-right: auto;
 }

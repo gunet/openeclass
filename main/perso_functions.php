@@ -108,7 +108,7 @@ function getUserCourseInfo($uid): string
                             <div id='PortfolioModal{$data->code}' class='modal'>
 
                                 <div class='modal-content modal-content-opencourses px-lg-5 py-lg-5'>
-                                    <div class='col-12 d-flex justify-content-between align-items-start'>
+                                    <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
                                         <div>
                                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                                 <h2 class='mb-0'>". q($data->title) . "</h2>
@@ -118,7 +118,7 @@ function getUserCourseInfo($uid): string
                                             <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                         </div>
                                         <div>
-                                            <button aria-label='Close' type='button' class='close border-0 bg-transparent mt-1'><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
+                                            <button aria-label='Close' type='button' class='close'></button>
                                         </div>
 
                                     </div>

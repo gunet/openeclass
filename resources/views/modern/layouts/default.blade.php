@@ -63,7 +63,8 @@
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
     <!-- Bootbox -->
-    <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script>
+    <!-- <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script> -->
+    <script src="{{ $urlAppend }}js/bootbox/bootboxV6.min.js"></script>
     <!-- SlimScroll -->
     <script src="{{ $urlAppend }}js/jquery.slimscroll.min.js"></script>
     <!-- BlockUI -->

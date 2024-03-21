@@ -149,9 +149,7 @@ $tool_content .= "
                                                                           <div class='modal-content'>
                                                                               <div class='modal-header'>
                                                                                   <div class='modal-title' id='authInstructionLabel'>$langInstructionsAuth</div>
-                                                                                  <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                                                                      <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
-                                                                                  </button>
+                                                                                  <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
                                                                               </div>
                                                                               <div class='modal-body'>
                                                                                   <div class='col-12'>
@@ -260,10 +258,8 @@ $tool_content .= "
                                                                             <div class='modal-dialog'>
                                                                               <div class='modal-content'>
                                                                                 <div class='modal-header'>
-                                                                                  <h5 class='modal-title' id='LoginFormAnotherOptionLabel-$i'>".(!empty($authLink[count($authLink)-1][2]) ? $authLink[count($authLink)-1][2] : $langLogin)."</h5>
-                                                                                  <button type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                                                                                    <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                                                                                  </button>
+                                                                                  <div class='modal-title' id='LoginFormAnotherOptionLabel-$i'>".(!empty($authLink[count($authLink)-1][2]) ? $authLink[count($authLink)-1][2] : $langLogin)."</div>
+                                                                                  <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
                                                                                 </div>
                                                                                 <div class='modal-body d-flex justify-content-center align-items-center'>
                                                                                   <div>
@@ -306,10 +302,8 @@ $tool_content .= "
                                                       <div class='modal-dialog modal-dialog-centered'>
                                                           <div class='modal-content border-0 p-0'>
                                                               <div class='modal-header d-flex justify-content-between align-items-center'>
-                                                                  <h5 class='modal-title'>$langError</h5>
-                                                                  <button aria-label='Close' type='button' class='close close-error border-0 bg-transparent' data-bs-dismiss='modal'>
-                                                                    <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                                                                  </button>
+                                                                  <div class='modal-title'>$langError</div>
+                                                                  <button aria-label='Close' type='button' class='close' data-bs-dismiss='modal'></button>
               
                                                               </div>
                                                               <div class='modal-body'>

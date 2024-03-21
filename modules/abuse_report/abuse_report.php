@@ -84,8 +84,8 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                  <div class="modal-dialog">
                      <div class="modal-content">
                          <div class="modal-header">
-                            <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
-                            <button type="button" class="close" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');" aria-label="'.$langClose.'"><i class="fa-solid fa-xmark fa-lg Accent-200-cl"></i></button>
+                            <div class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</div>
+                            <button type="button" class="close" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');" aria-label="'.$langClose.'"></button>
                              
                          </div>
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
@@ -142,8 +142,8 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
                  <div class="modal-dialog">
                      <div class="modal-content">
                          <div class="modal-header">
-                            <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
-                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="'.$langClose.'"><i class="fa-solid fa-xmark fa-lg Accent-200-cl"></i></button>
+                            <div class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</div>
+                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                              
                          </div>
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">

@@ -50,7 +50,8 @@
                         message: data,
                         buttons: {
                             ok: {
-                                label: "{{ js_escape(trans('langClose')) }}"
+                                label: "{{ js_escape(trans('langClose')) }}",
+                                className: "submitAdminBtnDefault"
                             }
                         }
                     });
@@ -186,8 +187,6 @@
                             "<div class='modal-header'>" +
                                 "<div class='modal-title' id='modal-label'>{{ js_escape((trans('langCourseMetadata'))) }}</div>" +
                                     "<button type='button' class='close' data-bs-dismiss='modal'>" +
-                                        "<span class='fa-solid fa-xmark' aria-hidden='true'></span>" +
-                                        "<span class='sr-only'>{{ js_escape((trans('langCancel'))) }}</span>" +
                                     "</button>" +
                                 "</div>" +
                                 "<div class='modal-body'>body</div>" +
@@ -662,7 +661,6 @@
             <div class='modal-header'>
                 <div class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</div>
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                    <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
                 </button>
 
             </div>

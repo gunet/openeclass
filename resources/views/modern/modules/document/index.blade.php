@@ -438,14 +438,14 @@
         var bts = {
             download: {
                 label: '<i class="fa fa-download"></i> {{ trans('langDownload') }}',
-                className: 'submitAdminBtn',
+                className: 'submitAdminBtn gap-1',
                 callback: function (d) {
                     window.location = downloadURL;
                 }
             },
             print: {
                 label: '<i class="fa fa-print"></i> {{ trans('langPrint') }}',
-                className: 'submitAdminBtn',
+                className: 'submitAdminBtn gap-1',
                 callback: function (d) {
                     var iframe = document.getElementById('fileFrame');
                     iframe.contentWindow.print();
@@ -455,7 +455,7 @@
         if (screenfull.enabled) {
             bts.fullscreen = {
                 label: '<i class="fa fa-arrows-alt"></i> {{ trans('langFullScreen') }}',
-                className: 'submitAdminBtn',
+                className: 'submitAdminBtn gap-1',
                 callback: function() {
                     screenfull.request(document.getElementById('fileFrame'));
                     return false;
@@ -464,7 +464,7 @@
         }
         bts.newtab = {
             label: '<i class="fa fa-plus"></i> {{ trans('langNewTab') }}',
-            className: 'submitAdminBtn',
+            className: 'submitAdminBtn gap-1',
             callback: function() {
                 window.open(fileURL);
                 return false;

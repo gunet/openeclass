@@ -138,10 +138,10 @@ function commentBox($type, $mode) {
                       WHERE " . $where_cond;
             $oldComment = Database::get()->querySingle($sql)->$col_name;
 
-            $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            $output .= "<div class='card-body'><form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <textarea class='form-control' name='insertCommentBox' rows='3'>$oldComment</textarea><br>
                 <input type='hidden' name='cmd' value='update$col_name' />
-                <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form>";
+                <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form></div>";
         }
     }
 
@@ -164,7 +164,7 @@ function commentBox($type, $mode) {
             return $output;
         }
 
-        $output .= "<div class='panel-body'>";
+        $output .= "<div class='card-body'>";
         if (empty($currentComment)) {
             // if no comment and user is admin : display link to add a comment
             if ($is_editor) {
@@ -175,7 +175,7 @@ function commentBox($type, $mode) {
             if ($is_editor) {
                 $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
                 $output .= "&nbsp;&nbsp;&nbsp";
-                $output .= icon('fa-xmark', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
+                $output .= icon('fa-xmark link-delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
             }
         }
         $output .= "</div>";
@@ -240,6 +240,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
                     FROM `" . $tbl_name . "`
                     WHERE " . $where_cond . " AND `course_id` = ?d", $course_id)->name;
 
+            $output .= '<div class="card-body">';
             $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 
             if ($formlabel != FALSE) {
@@ -250,6 +251,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
                         . '<input type="hidden" name="cmd" value="updateName" />'
                         . '</form>';
             }
+            $output .= '</div>';
         }
     }
 
@@ -259,7 +261,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
         $result = Database::get()->querySingle($sql, $course_id);
 
         $currentName = ($result && !empty($result->name)) ? $result->name : false;
-        $output .= "<div class='card-header'><h3>" . q($currentName);
+        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h3>" . q($currentName);
         if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;'.icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName');
         }

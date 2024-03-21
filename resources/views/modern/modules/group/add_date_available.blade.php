@@ -76,7 +76,6 @@
                                     <div class='modal-header'>
                                         <div class='modal-title' id='infoEventsLabel'>{{ trans('langInfoColourEvent') }}</div>
                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                            <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
                                         </button>
                                     </div>
                                     <div class='modal-body'>
@@ -110,9 +109,8 @@
                             <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">{{ trans('langAdd') }}</h5>
-                                        <button type="button" class="bg-transparent border-0" data-bs-dismiss="modal" aria-label="Close">
-                                            <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                        <div class="modal-title">{{ trans('langAdd') }}</div>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -147,8 +145,8 @@
                             <div class="modal-content">
                             <div class="modal-header">
                                 
-                                <h5 class="modal-title">{{ trans('langDeleteRentezvous') }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="modal-title">{{ trans('langDeleteRentezvous') }}</div>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
 

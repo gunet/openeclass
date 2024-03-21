@@ -63,7 +63,7 @@ $defaults = array(
                 "rgba(161, 219, 184, 1)" => array('bgAlertSuccess'),
                 "rgba(12, 98, 46, 1)" => array('clAlertSuccess'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
-                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal'),
+                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
                 "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor'),
@@ -1885,6 +1885,10 @@ $tool_content .= "
                         <label for='clDeleteIconModal' class='control-label-notes mb-2 me-2'>$langclDeleteIconModal:</label>
                         <input name='clDeleteIconModal' type='text' class='form-control colorpicker' id='clDeleteIconModal' value='$theme_options_styles[clDeleteIconModal]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clXmarkModal' class='control-label-notes mb-2 me-2'>$langclXmarkModal:</label>
+                        <input name='clXmarkModal' type='text' class='form-control colorpicker' id='clXmarkModal' value='$theme_options_styles[clXmarkModal]'>
+                    </div>
                 </div>
             </div>
 
@@ -2185,10 +2189,8 @@ $tool_content .= "
     <div class='modal-dialog modal-lg'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='JumbotronImagesModalLabel'>$langLoginImg (jumbotron)</h5>
-                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                </button>
+                <div class='modal-title' id='JumbotronImagesModalLabel'>$langLoginImg (jumbotron)</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";
@@ -2225,10 +2227,8 @@ $tool_content .= "
     <div class='modal-dialog modal-lg'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='LoginImagesModalLabel'>$langLoginImg</h5>
-                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                </button>
+                <div class='modal-title' id='LoginImagesModalLabel'>$langLoginImg</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";
@@ -2264,10 +2264,8 @@ $tool_content .= "
     <div class='modal-dialog modal-lg'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='FormImagesModalLabel'>$langFormImg</h5>
-                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                </button>
+                <div class='modal-title' id='FormImagesModalLabel'>$langFormImg</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";
@@ -2304,10 +2302,8 @@ $tool_content .= "
     <div class='modal-dialog modal-lg'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='RegistrationImagesModalLabel'>$langFormRegistrationImg</h5>
-                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                </button>
+                <div class='modal-title' id='RegistrationImagesModalLabel'>$langFormRegistrationImg</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";
@@ -2342,10 +2338,8 @@ $tool_content .= "
     <div class='modal-dialog modal-lg'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='FaqImagesModalLabel'>$langfaqImg</h5>
-                <button type='button' class='border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
-                </button>
+                <div class='modal-title' id='FaqImagesModalLabel'>$langfaqImg</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-4'>";

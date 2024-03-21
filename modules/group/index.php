@@ -752,8 +752,8 @@ if ($is_editor) {
                                     <div class='modal-dialog' role='document'>
                                         <div class='modal-content'>
                                         <div class='modal-header'>
-                                            <h4 class='modal-title' id='myModalLabel'>$langCommentsUser</h4>
-                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
+                                            <div class='modal-title' id='myModalLabel'>$langCommentsUser</div>
+                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
                                             
                                         </div>
                                         <div class='modal-body'>

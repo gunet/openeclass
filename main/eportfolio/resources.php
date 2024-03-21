@@ -454,11 +454,11 @@ if ($userdata) {
                             '.$work_li.'
                             '.$mydocs_li.'
                           </ul></div>';
-        $tool_content .= '<div class="col-12"><div class="tab-content">';
+        $tool_content .= '<div class="col-12"><div class="tab-content pb-4">';
 
         //show blog_posts
         if ($blog_posts) {
-            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
+            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" >';
             //usort($blog_posts, "cmp");
             $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
 

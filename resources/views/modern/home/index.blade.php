@@ -10,9 +10,8 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content shadow-sm border-0 p-0">
                         <div class="modal-header d-flex justify-content-between align-items-center">
-                            <h4 class="modal-title">{{ trans('langError') }}</h4>
+                            <div class="modal-title">{{ trans('langError') }}</div>
                             <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
-                                <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -121,7 +120,6 @@
                                                                                                     <div class='modal-header'>
                                                                                                         <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
                                                                                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                                                                                            <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class='modal-body'>
@@ -248,15 +246,14 @@
                                                                                                         <div class='modal-dialog'>
                                                                                                             <div class='modal-content'>
                                                                                                                 <div class='modal-header'>
-                                                                                                                    <h5 class='modal-title' id='LoginAnotherOptionLabel-{{ $i }}'>
+                                                                                                                    <div class='modal-title' id='LoginAnotherOptionLabel-{{ $i }}'>
                                                                                                                         @if(!empty($authLinks[count($authLinks)-1]['title']))
                                                                                                                             {!! $authLinks[count($authLinks)-1]['title'] !!}
                                                                                                                         @else
                                                                                                                             {{ trans('langLogin') }}
                                                                                                                         @endif
-                                                                                                                    </h5>
-                                                                                                                    <button type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal' aria-label='Close'>
-                                                                                                                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                                                                                    </div>
+                                                                                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
                                                                                                                     </button>
                                                                                                                 </div>
                                                                                                                 <div class='modal-body d-flex justify-content-center align-items-center'>

@@ -202,14 +202,14 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 
 // comment
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
-$tool_content .= "<div class='card-body'>";
+//$tool_content .= "<div class='card-body'>";
 $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
 
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</div></div></div>";
+$tool_content .= "</div></div>";
 
 
 // --------------------------- module table header --------------------------

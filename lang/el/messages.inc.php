@@ -5996,6 +5996,7 @@ $langBgModal = "Χρώμα φόντου modal";
 $langclBorderModal = "Χρώμα border modal";
 $langclTextModal = "Χρώμα κειμένων στα modals";
 $langclDeleteIconModal = "Χρώμα εικονιδίου διαγραφής";
+$langclXmarkModal = "Χρώμα εικονιδίου (κλείσιμο modal)";
 $langNavBody = "Body";
 $langNavSettingsAgenda = "Agenda";
 $langAgendaSettings = "Ρυθμίσεις στα ημερολόγια";

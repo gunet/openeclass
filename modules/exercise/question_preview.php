@@ -57,7 +57,7 @@ $tool_content .= "<div class='table-responsive'>
         <tr class='active'>
           <td colspan='$colspan'>
             <strong><u>$langQuestion</u>:</strong>
-            <a target='_blank' href='$editUrl' aria-label='(opens in a new tab)'><span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span></a>
+            <a target='_blank' href='$editUrl' aria-label='(opens in a new tab)' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'><i class='fa fa-edit'></i></a>
           </td>
         </tr>
       </thead>

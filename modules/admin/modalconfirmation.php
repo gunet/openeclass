@@ -27,7 +27,7 @@ function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
     <div class='modal-dialog'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h4 class='modal-title' id='$labelId'>$title</h4>
+                <div class='modal-title' id='$labelId'>$title</div>
             </div>
             <div class='modal-body'><p>$body</p></div>
             <div class='modal-footer'>

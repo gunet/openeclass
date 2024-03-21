@@ -243,7 +243,8 @@ function view($view_file, $view_data = array()) {
                         message: data,
                         buttons: {
                             ok: {
-                                label: '". js_escape($GLOBALS['langClose']). "'
+                                label: '". js_escape($GLOBALS['langClose']). "',
+                                className: 'submitAdminBtnDefault'
                             }
                         }
                     });
@@ -3285,6 +3286,25 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .icon-modal-default .fa-trash-can.Accent-200-cl::before{
                     color: $theme_options_styles[clDeleteIconModal];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// ICON COLOR TO CLOSED MODAL COMPONENT /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clXmarkModal'])){
+            $SVGmodalClose = "svg xmlns='http://www.w3.org/2000/svg' height='20' width='15' viewBox='0 0 384 512' fill='%23000'%3e%3cpath fill='$theme_options_styles[clXmarkModal]' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3e%3c/svg";
+            $SVGmodalClose2 = 'transparent url("data:image/svg+xml,%3C' . $SVGmodalClose .'%3E") center / 1em auto no-repeat';
+
+            $styles_str .= "
+                .bootbox.show .bootbox-close-button,
+                .modal.show .close,
+                .modal-display .close{
+                    background: $SVGmodalClose2;
                 }
             ";
         }
