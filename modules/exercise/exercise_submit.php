@@ -686,9 +686,9 @@ if ($questionList) {
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             // display question numbering buttons
-            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3'>";
-            $tool_content .= "<div class='card-body p-0' style='border-radius:4px;'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 flex-wrap gap-2' style='border-radius:4px;'>";
+            $tool_content .= "<div class='card panelCard card-transparent p-0 border-0'>";
+            $tool_content .= "<div class='card-body p-0 border-0'>";
+            $tool_content .= "<div class='d-flex justify-content-center p-0 flex-wrap gap-2 border-0'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {

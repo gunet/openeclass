@@ -26,7 +26,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','buttonTextColor',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter',
-                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
+                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
@@ -40,7 +40,7 @@ $defaults = array(
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
-                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu',
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
@@ -1566,7 +1566,7 @@ $tool_content .= "
 
             <div role='tabpanel' class='tab-pane fade' id='navPanels'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgPanels</h3>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langConcerngingPanels</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgPanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
                         <input name='BgPanels' type='text' class='form-control colorpicker' id='BgPanels' value='$theme_options_styles[BgPanels]'>
@@ -1574,6 +1574,33 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clBorderPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
                         <input name='clBorderPanels' type='text' class='form-control colorpicker' id='clBorderPanels' value='$theme_options_styles[clBorderPanels]'>
+                    </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langConcerngingCommentsPanels</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgCommentsPanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
+                        <input name='BgCommentsPanels' type='text' class='form-control colorpicker' id='BgCommentsPanels' value='$theme_options_styles[BgCommentsPanels]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderBgCommentsPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
+                        <input name='clBorderBgCommentsPanels' type='text' class='form-control colorpicker' id='clBorderBgCommentsPanels' value='$theme_options_styles[clBorderBgCommentsPanels]'>
+                    </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langConcerngingQuestionnairePanels</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgQuestionnairePanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
+                        <input name='BgQuestionnairePanels' type='text' class='form-control colorpicker' id='BgQuestionnairePanels' value='$theme_options_styles[BgQuestionnairePanels]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderQuestionnairePanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
+                        <input name='clBorderQuestionnairePanels' type='text' class='form-control colorpicker' id='clBorderQuestionnairePanels' value='$theme_options_styles[clBorderQuestionnairePanels]'>
+                    </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langConcerngingExercisePanels</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgExercisesPanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
+                        <input name='BgExercisesPanels' type='text' class='form-control colorpicker' id='BgExercisesPanels' value='$theme_options_styles[BgExercisesPanels]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderExercisesPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
+                        <input name='clBorderExercisesPanels' type='text' class='form-control colorpicker' id='clBorderExercisesPanels' value='$theme_options_styles[clBorderExercisesPanels]'>
                     </div>
                 </div>
             </div>

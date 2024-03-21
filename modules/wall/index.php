@@ -390,7 +390,7 @@ if (isset($_GET['showPost'])) { //show comments case
                     <form id="wall_form" method="post" action="" enctype="multipart/form-data">
                         <fieldset>
                             <div class="form-group">
-                                <label for="message_input">'.$langMessage.'</label>
+                                <label for="message_input" class="control-label-notes">'.$langMessage.'</label>
                                 <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>
                             </div>
                             <div class="panel panel-default mt-3 border-0">

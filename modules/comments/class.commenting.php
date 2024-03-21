@@ -81,7 +81,7 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            $comments_title = "<i class='fa-regular fa-comment-dots Primary-500-cl'></i>
+            $comments_title = "<i class='fa-regular fa-comment-dots'></i>
                                 &nbsp;|&nbsp;
                                 <a class='course_commenting vsmall-text text-decoration-underline' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'>
                                     $langComments
@@ -115,11 +115,11 @@ Class Commenting {
             foreach ($comments as $comment) {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
-                        $post_actions = '<div class="d-flex flex-wrap gap-2">';
+                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa fa-edit pe-2 pb-2" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
-                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa-solid fa-xmark Accent-200-cl pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
+                        $post_actions .= '<a class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<i class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
                         $post_actions .='</div>';
                     } else {
                         $post_actions = '';
@@ -151,7 +151,7 @@ Class Commenting {
                 }
                 $out .= "<div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card panelCard panelCard-comments px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                     <div>
                                         <a class='media-left p-0' href='#'>
@@ -175,11 +175,11 @@ Class Commenting {
         if (is_null($courseCode)) { //for the case of personal blog posts comments
             if (isset($_SESSION['uid'])) {
                 $out .= '<div class="col-12"><div class="form-wrapper form-edit Borders px-0 pb-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
-                $out .= '<div class="d-flex gap-2">';
+                $out .= '<div class="d-flex gap-3">';
                 $out .= profile_image($_SESSION['uid'], IMAGESIZE_SMALL,'img-circle rounded-circle');
-                $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
+                $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea>';
                 $out .= '</div>';
-                $out .= '<input style="margin-left:40px;" class="btn submitAdminBtn mt-3" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
+                $out .= '<input style="margin-left:46px;" class="btn submitAdminBtn mt-3" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
                 $out .= '</form></div></div>';
             }
         } else {

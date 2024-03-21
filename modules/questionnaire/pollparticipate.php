@@ -255,7 +255,7 @@ function printPollForm() {
                 $tool_content .= "
                
                 <div class='$columnPanel'>
-                    <div class='card panelCard px-lg-4 py-lg-3 h-100 poll-panel'>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langQuestion $i</h3>
                         </div>
