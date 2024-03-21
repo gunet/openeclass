@@ -36,7 +36,6 @@ if (isset($_POST['submit'])) {
         Database::get()->query('INSERT INTO module_disable (module_id) VALUES ' . $optArray,
             array_keys($_POST['moduleDisable']));
     }
-    //Session::Messages($langWikiEditionSucceed, 'alert-success');
     Session::flash('message',$langWikiEditionSucceed);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/modules.php');
@@ -58,7 +57,7 @@ if (isset($_POST['submit'])) {
 
                         ], false);
 
-    $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
+    $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE);
     foreach ($alwaysEnabledModules as $alwaysEnabledModule) {
         unset($modules[$alwaysEnabledModule]);
     }
