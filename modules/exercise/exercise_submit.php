@@ -695,7 +695,7 @@ if ($questionList) {
                     $class = 'submitAdminBtn';
                     $title = q($langHasAnswered);
                 } else {
-                    $class = 'submitAdminBtn submitAdminBtnClassic';
+                    $class = 'submitAdminBtnClassic';
                     $title = q($langPendingAnswered);
                 }
                 if ($questionNumber == $k) { // we are in the current question
@@ -751,10 +751,10 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     $prevLabel = '&lt; ' . $langPrevious;
     $nextLabel = $langNext . ' &gt';
     if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
-        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnClassic blockUI navbutton' style='float: left;' type='submit' name='prev' value='$prevLabel'>";
+        $tool_content .= "<input class='btn submitAdminBtn blockUI navbutton' style='float: left;' type='submit' name='prev' value='$prevLabel'>";
     }
     if ($questionId != end($questionList)) { // `next` button
-        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnClassic blockUI navbutton' style='float: right;' type='submit' value='$nextLabel'>";
+        $tool_content .= "<input class='btn submitAdminBtn blockUI navbutton' style='float: right;' type='submit' value='$nextLabel'>";
     } else {
         $isFinalQuestion = 'true';
     }
