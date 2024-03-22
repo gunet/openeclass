@@ -3977,6 +3977,10 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
+                .active-calendar-day{
+                    background-color:$theme_options_styles[bgColorActiveDateTime] !important;
+                }
+
             ";
         }
 
@@ -4034,6 +4038,10 @@ function view($view_file, $view_data = array()) {
                 .datepicker table tr td span.focused.disabled:hover:active, 
                 .datepicker table tr td span.focused {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
+                }
+
+                .active-calendar-day{
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;;
                 }
 
             ";

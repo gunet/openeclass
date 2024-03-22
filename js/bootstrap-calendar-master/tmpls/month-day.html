@@ -1,7 +1,7 @@
 <div class="cal-month-day <%= cls %> d-flex justify-content-center align-items-center">
 	<div class="number-day-cal m-0" data-cal-date="<%= data_day %>" data-cal-view="day" data-bs-toggle="tooltip" title="<%= tooltip %>">
 		<% if (cls == 'cal-day-inmonth cal-day-today'){ %>
-			<span class="badge Primary-500-bg rounded-pill d-flex justify-content-center align-items-center" style="height: 32px; width: 32px; font-size: 14px;"><%= day %></span>
+			<span class="badge active-calendar-day rounded-pill d-flex justify-content-center align-items-center" style="height: 32px; width: 32px; font-size: 14px;"><%= day %></span>
 		<% }else{ %>
 			<%= day %>
 		<% } %>

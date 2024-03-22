@@ -677,3 +677,7 @@
  .datepicker-decades .table-condensed thead tr th.prev::before,
  .datepicker-centuries .table-condensed thead tr th.prev::before{ content: '\f177'; font-size: 15px; font-weight: 700; color:black;}
  
+.active-calendar-day{
+  background-color: #005ad9;
+  color: #ffffff;
+}
