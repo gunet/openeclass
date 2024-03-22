@@ -200,14 +200,17 @@
                                             @php ($p->visible==1 ? $vis=0 : $vis=1); @endphp
 
                                             <div class='d-flex gap-3'>
-                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?edit_priority=1&amp;edit={{ $p->id }}&amp;val={{ $vis }}&amp;titleEdit={{ $p->title }}" aria-label="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif">
-                                                    <span class='fa-solid @if($vis==1) fa-eye-slash @else fa-eye @endif fa-lg' data-bs-toggle='tooltip' data-bs-placement='top' title="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif"></span>
+                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif" 
+                                                    href="{{ $_SERVER['SCRIPT_NAME'] }}?edit_priority=1&amp;edit={{ $p->id }}&amp;val={{ $vis }}&amp;titleEdit={{ $p->title }}" aria-label="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif">
+                                                    <span class='fa-solid @if($vis==1) fa-eye-slash @else fa-eye @endif fa-lg'></span>
                                                 </a>
-                                                <a href='javascript:void(0);' aria-label="{{ trans('langReorder') }}">
-                                                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langReorder') }}"></span>
+                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langReorder') }}" 
+                                                    href='javascript:void(0);' aria-label="{{ trans('langReorder') }}">
+                                                    <span class='fa fa-arrows'></span>
                                                 </a>
-                                                <a href='{{ $urlEdit }}' aria-label="{{ trans('langEditChange') }}">
-                                                    <span class='fa-solid fa-edit fa-lg' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langEditChange') }}"></span>
+                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langEditChange') }}" 
+                                                    href='{{ $urlEdit }}' aria-label="{{ trans('langEditChange') }}">
+                                                    <span class='fa-solid fa-edit fa-lg'></span>
                                                 </a>
                                             </div>
                                         </div>

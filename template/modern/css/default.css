@@ -2445,6 +2445,16 @@ body .form-action-button-popover{
   padding: 0px;
   background: transparent url(../images/xmark-red.svg) center / 1em auto no-repeat;
 }
+.bootbox.show .bootbox-close-button:hover,
+.modal.show .close:hover,
+.modal-display .close:hover,
+.bootbox.show .bootbox-close-button:focus,
+.modal.show .close:focus,
+.modal-display .close:focus{
+  outline: 0;
+  box-shadow: none;
+  cursor:  url(../images/pointer.png), auto;
+}
 
 .modal.show .close span{
   color: #C44601;

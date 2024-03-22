@@ -163,7 +163,8 @@
                     <div class='col-sm-12'>
                         <div class='checkbox'>
                             <label class='label-container'>
-                                <input name='customEmailBody' id='customEmailBody' type='checkbox'>{{ trans('langYes') }}
+                                <input name='customEmailBody' id='customEmailBody' type='checkbox'>
+                                <span class='checkmark'></span>{{ trans('langYes') }}
                             </label>
                         </div>
                     </div>
@@ -177,17 +178,18 @@
                         </div>
                     </div>
 
-                    <label for='email_body' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmail') }}:</label>
-                    <div class='col-sm-12'>
-                        {!! $rich_text_editor !!}
+                    <div class='form-group mt-4'>
+                        <label for='email_body' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmail') }}:</label>
+                        <div class='col-sm-12'>
+                            {!! $rich_text_editor !!}
+                        </div>
                     </div>
                     <input type='hidden' class='emailNewBodyInput' name='emailNewBodyInput' value=0>
                 </div>
 
                 <div class='form-group mt-4 customMailHelp hidden'>
-                    <label for='email_body' class='col-sm-12 control-label-notes mb-1'></label>
                     <div class='col-sm-12'>
-                        <div class='alert alert-info'>{{ trans('langCustomMailHelp') }}</div>
+                        <div class='alert alert-info'>{!! trans('langCustomMailHelp') !!}</div>
                     </div>
                 </div>
 

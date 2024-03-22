@@ -231,7 +231,7 @@
                                                             @if($text->type == 2) <span>(Testimonial)</span> @endif
                                                         </h3>
                                                         
-                                                        <div class='d-flex gap-2'>
+                                                        <div class='d-flex gap-3'>
                                                             <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}' aria-label="{{trans('langEdit')}}">
                                                                 <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
                                                             </a>
