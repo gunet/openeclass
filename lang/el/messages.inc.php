@@ -5886,6 +5886,7 @@ $langBgColorWrapperHeader= "Χρώμα φόντου στον container του He
 $langBgColorWrapperFooter= "Χρώμα φόντου στον container του Footer";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
 $langShadowHeader = "Shadow στο κάτω μέρος της επικεφαλίδας";
+$langTransparentBasicWrappers = "Επιλογή χρώματος transparent στο κύριο περιεχόμενο:";
 $langNavContainer = "Containers";
 $langNavSettingsHeader = "Header";
 $langNavSettingsFooter = "Footer";

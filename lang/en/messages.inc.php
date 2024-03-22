@@ -3849,6 +3849,7 @@ $langFooterUploadImage = "Upload image to Footer";
 
 
 $langShadowHeader = "Shadow at the bottom of the header";
+$langTransparentBasicWrappers = "Background transparent to the main content:";
 $langNavContainer = "Containers";
 $langNavSettingsHeader = "Header";
 $langNavSettingsFooter = "Footer";

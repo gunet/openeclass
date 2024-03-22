@@ -1018,6 +1018,18 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langTransparentBasicWrappers</h3>
+                    <div class='form-group mt-2'>
+                        <div class='col-sm-12'>
+                            <div class='checkbox'>
+                                <label class='label-container'>
+                                <input type='checkbox' name='bgTransparentBasicWrappers' value='1' ".((isset($theme_options_styles['bgTransparentBasicWrappers']))? 'checked' : '').">
+                                <span class='checkmark'></span>
+                                $langDeactivate
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
