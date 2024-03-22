@@ -3998,9 +3998,9 @@ function get_theme_options() {
                     color: $theme_options_styles[linkColor];
                 }
 
+
                 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active,
-                .personal-calendar-header .btn-group .btn.active{
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
                     background:$theme_options_styles[linkColor] !important;
                 }
 
@@ -4030,15 +4030,6 @@ function get_theme_options() {
                     color: $theme_options_styles[linkColor] !important;
                 }
                 
-                .btn.showCoursesBars,
-                .btn.showCoursesPics{
-                    color: $theme_options_styles[linkColor];
-                }
-
-
-
-
-
                 .dataTables_paginate.paging_simple_numbers span .paginate_button, 
                 .dataTables_paginate.paging_full_numbers span .paginate_button{
                     color: $theme_options_styles[linkColor] !important;
@@ -4178,6 +4169,10 @@ function get_theme_options() {
                 .carousel-next-btn:hover{
                     color: $theme_options_styles[linkColor];
                 }
+
+                .link-color{
+                    color: $theme_options_styles[linkColor];
+                }
             
             ";
         }
@@ -4206,11 +4201,97 @@ function get_theme_options() {
                     color: $theme_options_styles[linkHoverColor];
                 }
 
-                .btn.showCoursesBars:hover,
-                .btn.showCoursesPics:hover{
+                .link-color:hover,
+                .link-color:focus{
                     color: $theme_options_styles[linkHoverColor];
                 }
 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////// DELETE PLATFORM LINK COLOR ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkDeleteColor'])){
+            $styles_str .= "
+                .link-delete,
+                .link-delete:hover,
+                .link-delete:focus{
+                    color: $theme_options_styles[linkDeleteColor];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// LINKS INSIDE ALERT COMPONENT  ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clLinkAlertInfo'])){
+            $styles_str .= "
+                .alert-info a{
+                    color: $theme_options_styles[clLinkAlertInfo];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertInfo'])){
+            $styles_str .= "
+                .alert-info a:hover,
+                .alert-info a:focus{
+                    color: $theme_options_styles[clLinkHoveredAlertInfo];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clLinkAlertWarning'])){
+            $styles_str .= "
+                .alert-warning a{
+                    color: $theme_options_styles[clLinkAlertWarning];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertWarning'])){
+            $styles_str .= "
+                .alert-warning a:hover,
+                .alert-warning a:focus{
+                    color: $theme_options_styles[clLinkHoveredAlertWarning];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clLinkAlertSuccess'])){
+            $styles_str .= "
+                .alert-success a{
+                    color: $theme_options_styles[clLinkAlertSuccess];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertSuccess'])){
+            $styles_str .= "
+                .alert-success a:hover,
+                .alert-success a:focus{
+                        color: $theme_options_styles[clLinkHoveredAlertSuccess];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clLinkAlertDanger'])){
+            $styles_str .= "
+                .alert-danger a{
+                    color: $theme_options_styles[clLinkAlertDanger];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertDanger'])){
+            $styles_str .= "
+                .alert-danger a:hover,
+                .alert-danger a:focus{
+                        color: $theme_options_styles[clLinkHoveredAlertDanger];
+                }
             ";
         }
 

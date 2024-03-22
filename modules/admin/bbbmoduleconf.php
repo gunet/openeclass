@@ -390,6 +390,7 @@ if (isset($_GET['delete_server'])) {
     }
 
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' ORDER BY weight");
+    $bbb_cnt = '';
     if (count($q)>0) {
         $t_connected_users = $t_listeners = $t_mics = $t_cameras = 0;
         $t_active_rooms = 0;
@@ -398,7 +399,6 @@ if (isset($_GET['delete_server'])) {
 
         // get load and metrics of enabled servers
         $servers = get_bbb_servers_load_by_id();
-        $bbb_cnt = '';
         foreach ($q as $srv) {
             $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
             $courses_note = $connected_users = $active_rooms = $server_load = $mics = $cameras = '';

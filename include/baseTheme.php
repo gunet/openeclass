@@ -5055,6 +5055,77 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// LINKS INSIDE ALERT COMPONENT  ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clLinkAlertInfo'])){
+            $styles_str .= "
+                .alert-info a{
+                    color: $theme_options_styles[clLinkAlertInfo];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertInfo'])){
+            $styles_str .= "
+                .alert-info a:hover,
+                .alert-info a:focus{
+                    color: $theme_options_styles[clLinkHoveredAlertInfo];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clLinkAlertWarning'])){
+            $styles_str .= "
+                .alert-warning a{
+                    color: $theme_options_styles[clLinkAlertWarning];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertWarning'])){
+            $styles_str .= "
+                .alert-warning a:hover,
+                .alert-warning a:focus{
+                    color: $theme_options_styles[clLinkHoveredAlertWarning];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clLinkAlertSuccess'])){
+            $styles_str .= "
+                .alert-success a{
+                    color: $theme_options_styles[clLinkAlertSuccess];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertSuccess'])){
+            $styles_str .= "
+                .alert-success a:hover,
+                .alert-success a:focus{
+                        color: $theme_options_styles[clLinkHoveredAlertSuccess];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clLinkAlertDanger'])){
+            $styles_str .= "
+                .alert-danger a{
+                    color: $theme_options_styles[clLinkAlertDanger];
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['clLinkHoveredAlertDanger'])){
+            $styles_str .= "
+                .alert-danger a:hover,
+                .alert-danger a:focus{
+                        color: $theme_options_styles[clLinkHoveredAlertDanger];
+                }
+            ";
+        }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////// SETTINGS TO THE LEFT MENU OF COURSE /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////

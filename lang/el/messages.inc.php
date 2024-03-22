@@ -6679,3 +6679,4 @@ $langclLinkImportantAnnouncement = "Χρώμα συνδέσμου";
 $langclHoveredLinkImportantAnnouncement = "Χρώμα hovered συνδέσμου";
 $langDisplayAnnouncement = "Δείτε την ανακοίνωση...";
 $langDontDisplayAgain = "Να μην εμφανιστεί ξανά";
+$langNotRegistered = "Μη εγγεγραμένοι";

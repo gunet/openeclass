@@ -3903,6 +3903,9 @@ body .delThemeBtn{
 .course-wrapper-courseHome .panelCard .card-header .actionCont{
   margin-bottom: 0px !important;
 }
+.course-wrapper-courseHome .carousel-indicators {
+  z-index: 0;
+}
 .course-units{ 
   padding:25px; 
 }

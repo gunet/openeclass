@@ -99,7 +99,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'level' => 'primary',
               'url' => '#',
               'icon' => 'fa-times',
-              'btn_class' => 'delete_btn btn-default deleteAdminBtn' ],
+              'btn_class' => 'delete_btn deleteAdminBtn' ],
             [ 'title' => $langSendReminder,
               'url' => "invite_one.php?course=$course_code&amp;id=$id_indirect",
               'icon' => 'fa-check-square-o',

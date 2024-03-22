@@ -646,7 +646,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
             return '';
         }
         $status = 'del';
-        $image = 'fa-xmark';
+        $image = 'fa-xmark link-delete';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         if ($can_upload) {
@@ -751,7 +751,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
             return '';
         } else {
             $status = 'del';
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $link = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -823,6 +823,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     global $is_editor, $course_id, $tool_content, $urlServer, $course_code, $id, $langResourceBelongsToUnitPrereq;
 
     $res_prereq_icon = '';
+    $status = '';
     $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
     if ($row) {
         $row->title = $title;
@@ -850,7 +851,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
             return;
         }
         $videolink = $title;
-        $imagelink = "fa-xmark";
+        $imagelink = "fa-xmark link-delete";
         $visibility = 'del';
     }
 
@@ -973,7 +974,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1059,7 +1060,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
             return '';
         } else {
             $status = 'del';
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1163,7 +1164,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
             if (!$is_editor) {
                 return '';
             } else {
-                $imagelink = icon('fa-xmark');
+                $imagelink = icon('fa-xmark link-delete');
                 $forumlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
             }
         } else {
@@ -1216,7 +1217,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1272,7 +1273,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1322,7 +1323,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
         }
     } else {
@@ -1427,7 +1428,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1544,7 +1545,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             return '';
         } else {
             $status = 'del';
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1589,7 +1590,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $chatlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1634,7 +1635,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1674,7 +1675,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1729,7 +1730,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-xmark');
+            $imagelink = icon('fa-xmark link-delete');
             $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
         }
     } else {

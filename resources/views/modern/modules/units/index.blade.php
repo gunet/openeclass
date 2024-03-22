@@ -261,10 +261,11 @@
                             <div class='card panelCard px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                     <h3>
-                                        <div class='d-flex justify-content-start align-item-center gap-2 flex-wrap'>
+                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                             {{ trans('langActivities')}}
-                                            <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                                <span class="fa-solid fa-pencil fa-lg d-block pt-3" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                            <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}" 
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}">
+                                                <i class="fa-solid fa-pencil fa-lg"></i>
                                             </a>
                                         </div>
                                     </h3>

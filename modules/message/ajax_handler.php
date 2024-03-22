@@ -133,10 +133,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     foreach ($msgs as $msg) {
         if ($msg->is_read == 1) {
+            $typeText = "TextRegular";
             $bold_start = "";
             $bold_end = "";
             $envelove_icon = "fa-envelope-open";
         } else {
+            $typeText = "TextBold";
             $bold_start = "<strong>";
             $bold_end = "</strong>";
             $envelove_icon = "fa-envelope";
@@ -150,7 +152,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if (($msg->filename != '') and ($msg->filesize != 0)) {
             $ahref = "message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=".$msg->id;
             $filename = "&nbsp;&nbsp;&#124;&nbsp;&nbsp;" .
-                "<a class='outtabs' href='$ahref' target='_blank' aria-label='(opens in a new tab)' title='$langDownload' data-toggle='tooltip' data-placement='top'>" .
+                "<a class='outtabs' href='$ahref' target='_blank' aria-label='(opens in a new tab)' title='$langDownload' data-bs-toggle='tooltip' data-bs-placement='top'>" .
                 "<span class='fa fa-paperclip'></span></a>" .
                 "<span class='smaller'>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</span><br />";
         } else {
@@ -160,9 +162,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $i = 0;
 
         if ($mbox_type == 'inbox') {
-            $td[$i++] = "<i class='fa $envelove_icon' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$bold_end.$filename;
+            $td[$i++] = "<i class='fa $envelove_icon' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;$bold_start<a class='$typeText' href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$bold_end.$filename;
         } else {
-            $td[$i++] = "<i class='fa fa-envelope-open' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
+            $td[$i++] = "<i class='fa fa-envelope-open' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;<a class='TextRegular' href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
         }
 
         if ($course_id == 0) {

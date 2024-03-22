@@ -37,13 +37,14 @@ $defaults = array(
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
-                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement'),
+                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
+                                                'clLinkAlertInfo','clLinkAlertWarning','clLinkAlertSuccess','clLinkAlertDanger'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
-                "rgba(35,82,124,1)" => array('linkHoverColor'),
+                "rgba(35,82,124,1)" => array('linkHoverColor','clLinkHoveredAlertInfo','clLinkHoveredAlertWarning','clLinkHoveredAlertSuccess','clLinkHoveredAlertDanger'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
@@ -1184,6 +1185,14 @@ $tool_content .= "
                         <label for='clAlertInfo' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clAlertInfo' type='text' class='form-control colorpicker' id='clAlertInfo' value='$theme_options_styles[clAlertInfo]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkAlertInfo' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+                        <input name='clLinkAlertInfo' type='text' class='form-control colorpicker' id='clLinkAlertInfo' value='$theme_options_styles[clLinkAlertInfo]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkHoveredAlertInfo' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+                        <input name='clLinkHoveredAlertInfo' type='text' class='form-control colorpicker' id='clLinkHoveredAlertInfo' value='$theme_options_styles[clLinkHoveredAlertInfo]'>
+                    </div>
 
                     <hr>
 
@@ -1195,6 +1204,14 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clAlertWarning' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clAlertWarning' type='text' class='form-control colorpicker' id='clAlertWarning' value='$theme_options_styles[clAlertWarning]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkAlertWarning' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+                        <input name='clLinkAlertWarning' type='text' class='form-control colorpicker' id='clLinkAlertWarning' value='$theme_options_styles[clLinkAlertWarning]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkHoveredAlertWarning' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+                        <input name='clLinkHoveredAlertWarning' type='text' class='form-control colorpicker' id='clLinkHoveredAlertWarning' value='$theme_options_styles[clLinkHoveredAlertWarning]'>
                     </div>
 
                     <hr>
@@ -1208,6 +1225,14 @@ $tool_content .= "
                         <label for='clAlertSuccess' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clAlertSuccess' type='text' class='form-control colorpicker' id='clAlertSuccess' value='$theme_options_styles[clAlertSuccess]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkAlertSuccess' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+                        <input name='clLinkAlertSuccess' type='text' class='form-control colorpicker' id='clLinkAlertSuccess' value='$theme_options_styles[clLinkAlertSuccess]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkHoveredAlertSuccess' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+                        <input name='clLinkHoveredAlertSuccess' type='text' class='form-control colorpicker' id='clLinkHoveredAlertSuccess' value='$theme_options_styles[clLinkHoveredAlertSuccess]'>
+                    </div>
 
                     <hr>
 
@@ -1219,6 +1244,14 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clAlertDanger' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clAlertDanger' type='text' class='form-control colorpicker' id='clAlertDanger' value='$theme_options_styles[clAlertDanger]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkAlertDanger' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+                        <input name='clLinkAlertDanger' type='text' class='form-control colorpicker' id='clLinkAlertDanger' value='$theme_options_styles[clLinkAlertDanger]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLinkHoveredAlertDanger' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+                        <input name='clLinkHoveredAlertDanger' type='text' class='form-control colorpicker' id='clLinkHoveredAlertDanger' value='$theme_options_styles[clLinkHoveredAlertDanger]'>
                     </div>
                 </div>
             </div>
