@@ -4695,6 +4695,7 @@ function get_theme_options() {
         if(!empty($theme_options_styles['AboutChatContainer'])){
             $styles_str .= "
                 .bodyChat{
+                    background: none;
                     background-color: $theme_options_styles[AboutChatContainer];
                 }
             

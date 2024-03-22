@@ -4067,7 +4067,7 @@ function view($view_file, $view_data = array()) {
         ////////////////////// BACKGROUND COLOR OF COURSE LEFT MENU /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-
+        // Left menu has always a background color apart from transparent color
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
             $aboutLeftForm = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
@@ -4083,6 +4083,12 @@ function view($view_file, $view_data = array()) {
 
                 .ContentLeftNav, #collapseTools{
                     background: $theme_options_styles[leftNavBgColor];
+                }
+
+                @media(max-width:991px){
+                    .ContentLeftNav, #collapseTools{
+                        background: $rgba_no_alpha;
+                    }
                 }
 
             ";
@@ -5577,6 +5583,7 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['AboutChatContainer'])){
             $styles_str .= "
                 .bodyChat{
+                    background: none;
                     background-color: $theme_options_styles[AboutChatContainer];
                 }
             
