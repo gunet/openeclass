@@ -388,16 +388,7 @@ elseif(isset($_GET['choice']))
             } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
-                $course_user = Database::get()->querySingle("SELECT * FROM course_user 
-                                                                WHERE user_id = " . $uid . " 
-                                                                AND course_id = " . $course_id);
-                if (
-                    $course_user
-                    && ($course_user->editor
-                    || $course_user->tutor
-                    || $course_user->course_reviewer
-                    || $course_user->reviewer)
-                ) {
+                if ($is_editor) {
                     header("Location: " . unserialize($sess->options));
                 } else {
                     header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '?pwd=' . $sess->mod_pw);
