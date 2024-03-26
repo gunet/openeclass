@@ -308,6 +308,8 @@ $langAll = "όλοι";
 $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 $langAsInactive = "ως μη ενεργοί";
 $langChanges = "αλλαγές";
+$langUserDeactivated = 'Ο λογαριασμός του χρήστη "%s" απενεργοποιήθηκε!';
+$langUserActivated = 'Ο λογαριασμός του χρήστη "%s" ενεργοποιήθηκε!';
 
 // courses list
 $langOpenCourse = "Ανοικτό $langsCourse";
@@ -347,14 +349,14 @@ $langListNotRegisteredUsers = "Λίστα Μη Εγγεγραμμένων Χρη
 $langListRegisteredStudents = "Λίστα Εγγεγραμμένων " . $langOfStudents;
 $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων " . $langOfTeachers;
 $langErrChoose = "Παρουσιάστηκε σφάλμα στην επιλογή $langsOfCourse!";
-// delcours
+// delete course
 $langCourseDel = "Διαγραφή $langsOfCourse";
 $langCourseDelSuccess = "Το $langsCourse διαγράφηκε με επιτυχία!";
 $langCourseDelConfirm = "Επιβεβαίωση Διαγραφής $langOfCourse";
 $langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε το $langsCourse";
 $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του $langsOfCourse θα διαγράψει επίσης τους εγγεγραμμένους " . $langsOfStudentss . " από το $langsCourse, την αντιστοιχία του $langsOfCourse στη $langsFaculty, καθώς και όλο το υλικό του $langsOfCourse.";
 
-// editcours
+// edit course
 $langCourseInformationText = "Επεξεργασία περιγραφής $langsOfCourse";
 $langCourseEdit = "Επεξεργασία $langOfCourse";
 $langCourseInfo = "Ρυθμίσεις";
@@ -1863,7 +1865,7 @@ $langAnswers = "Απαντήσεις";
 $langComment = "Σχόλιο";
 $langMaj = "Ενημέρωση";
 $langEvalSet = "Ρυθμίσεις βαθμολογίας";
-$langExercice = "Ασκηση";
+$langExercice = "Άσκηση";
 $langActive = "ενεργό";
 $langInactive = "μη ενεργό";
 $langNewEx = "Νέα Άσκηση";

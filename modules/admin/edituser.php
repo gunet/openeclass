@@ -369,8 +369,8 @@ if ($u) {
                     <tr>
                     <th class='text-left'>$langCode</th>
                     <th class='text-left'>$langLessonName</th>
-                    <th>$langCourseRegistrationDate</th>
-                    <th>$langProperty</th>
+                    <th class='text-center'>$langRegistrationDate</th>
+                    <th class='text-center'>$langProperty</th>
                     <th>$langActions</th>
                     </tr>";
             foreach ($sql as $logs) {
@@ -378,7 +378,7 @@ if ($u) {
                     $tool_content .= "<tr class='not_visible'>";
                 }
                 $tool_content .= "<td><a href='{$urlServer}courses/$logs->code/'>" . q($logs->code) . "</a></td>
-                        <td>" . q($logs->title) . "</td><td align='center'>";
+                        <td>" . q($logs->title) . "</td><td class='text-center'>";
                 if (!$logs->reg_date) {
                     $tool_content .= $langUnknownDate;
                 } else {
@@ -386,17 +386,17 @@ if ($u) {
                 }
                 $tool_content .= "</td><td class='text-center'>";
                 if ($logs->status == USER_TEACHER) {
-                    $tool_content .= $langTeacher;
-                    $tool_content .= "</td><td align='center'>---</td></tr>\n";
+                    $tool_content .= $langAdministrator;
+                    $tool_content .= "</td><td class='text-center'>---</td></tr>";
                 } else {
                     if ($logs->status == USER_STUDENT) {
                         if ($logs->editor == 1) {
-                            $tool_content .= $langEditor;
+                            $tool_content .= $langTeacher;
                         } else {
                             $tool_content .= $langStudent;
                         }
                     } else {
-                        $tool_content .= $langVisitor;
+                        $tool_content .= $langGuestName;
                     }
                     $tool_content .= "</td><td class='text-center'>" .
                             icon('fa-ban', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>";
@@ -409,17 +409,17 @@ if ($u) {
     } else { // if the form was submitted then update user
 
         // get the variables from the form and initialize them
-        $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
-        $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
+        $fname = $_POST['fname'] ?? '';
+        $lname = $_POST['lname'] ?? '';
         // trim white spaces in the end and in the beginning of the word
-        $username = isset($_POST['username']) ?$_POST['username'] : '';
+        $username = $_POST['username'] ?? '';
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
-        $am = isset($_POST['am']) ? $_POST['am'] : '';
-        $user_language = isset($_POST['user_language']) ? $_POST['user_language']: '';
-        $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
-        $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
-        $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
+        $phone = $_POST['phone'] ?? '';
+        $am = $_POST['am'] ?? '';
+        $user_language = $_POST['user_language'] ?? '';
+        $departments = $_POST['department'] ?? 'NULL';
+        $newstatus = $_POST['newstatus'] ?? 'NULL';
+        $registered_at = $_POST['registered_at'] ?? '';
         if (isset($_POST['user_date_expires_at'])) {
             if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
                 Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
