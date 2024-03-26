@@ -227,7 +227,6 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
                                                                       'term' => $term));
         if ($q and $q->affectedRows) {
-            //Session::Messages($langGlossaryDeleted, 'alert-success');
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
         }

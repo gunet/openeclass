@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
+        <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
                 <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -16,25 +16,25 @@
 
                         <div class="row">
 
-                                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                                @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-                                    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
-                                        <div class="offcanvas-header">
-                                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                        </div>
-                                        <div class="offcanvas-body">
-                                            @include('layouts.partials.sidebar',['is_editor' => $is_editor])
-                                        </div>
+                                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
+                                    <div class="offcanvas-header">
+                                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                     </div>
+                                    <div class="offcanvas-body">
+                                        @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                                    </div>
+                                </div>
 
-                                    @include('layouts.partials.legend_view')
+                                @include('layouts.partials.legend_view')
 
 
-                                    @if($is_editor)
-                                        {!! isset($action_bar) ?  $action_bar : '' !!}
-                                    @endif
+                                @if($is_editor)
+                                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                                @endif
 
-                                    @if(Session::has('message'))
+                                @if(Session::has('message'))
                                     <div class='col-12 all-alerts'>
                                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                             @php
@@ -63,29 +63,32 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     </div>
-                                    @endif
+                                @endif
 
-                                    @if ($is_editor == 1 && $expand_glossary && $total_glossary_terms > $max_glossary_terms)
-                                    <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{!! trans('langGlossaryOverLimit',["<b>$max_glossary_terms</b>"]) !!}</span></div></div>
-                                    @endif
-
-                                    @if ($glossary_index && count($prefixes) > 1)
-                                        <div class="col-12 mb-3">
-                                            <nav aria-label="...">
-                                                <ul class="pagination p-0 pagination-glossary" id="myPag">
-                                                    @foreach ($prefixes as $key => $letter)
-                                                        <li class="page-item {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
-                                                                (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " active" : "" !!}">
-                                                            <a class="page-link" tabindex="-1" aria-disabled="true" href="{!! $base_url."&amp;prefix=" . urlencode($letter)  !!}">{{ $letter }}</a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </nav>
+                                @if ($is_editor == 1 && $expand_glossary && $total_glossary_terms > $max_glossary_terms)
+                                    <div class='col-12'>
+                                        <div class='alert alert-warning'>
+                                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{!! trans('langGlossaryOverLimit',["<b>$max_glossary_terms</b>"]) !!}</span>
                                         </div>
-                                    @endif
+                                    </div>
+                                @endif
 
+                                @if ($glossary_index && count($prefixes) > 1)
+                                    <div class="col-12 mb-3">
+                                        <nav aria-label="...">
+                                            <ul class="pagination p-0 pagination-glossary" id="myPag">
+                                                @foreach ($prefixes as $key => $letter)
+                                                    <li class="page-item {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
+                                                            (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " active" : "" !!}">
+                                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="{!! $base_url."&amp;prefix=" . urlencode($letter)  !!}">{{ $letter }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                @endif
 
-                                    @if ($glossary_terms)
+                                @if ($glossary_terms)
                                     <div class='col-12'>
                                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
                                             @foreach($glossary_terms as $glossary_term)
@@ -94,11 +97,9 @@
                                                     <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                                         <div class="card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
 
-
-                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&amp;id=" . $glossary_term->id }}'>
+                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&id=" . $glossary_term->id }}'>
                                                                     {{ $glossary_term->term }}
                                                                 </a>
-
 
                                                             @if($is_editor)
                                                                 <div>
@@ -175,16 +176,13 @@
 
                                             @endforeach
                                         </div>
-
-
                                     </div>
-                                    @else
-                                        <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoGlossary') }}</span></div></div>
-                                    @endif
+                                @else
+                                    <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoGlossary') }}</span></div></div>
+                                @endif
                         </div>
                 </div>
             </div>
-
-    </div>
+        </div>
     </div>
 @endsection
