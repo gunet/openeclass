@@ -358,6 +358,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         } else {
             $iuid = getIndirectReference($myrow->id);
             $changetip = q("$langChangeUserAs $myrow->username");
+
+            $user_password = Database::get()->querySingle("SELECT password FROM user WHERE id = ?d", $myrow->id)->password;
+
+            $show = true;
+            if (in_array($user_password, $auth_ids)) {
+                if (get_config('block_duration_alt_account')) {
+                    $show = false;
+                }
+            } else if (get_config('block_duration_account')) {
+                $show = false;
+            }
             $profileUrl = $urlAppend .
                 "main/profile/display_profile.php?id=$myrow->id&amp;token=" .
                 token_generate($myrow->id, true);
@@ -390,6 +401,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'url' => "../usage/index.php?t=u&u=$myrow->id"
                 ),
                 array(
+                    'title' => ($inactive_user)? "$langActivate" : "$langDeactivate",
+                    'icon' => ($inactive_user)? "fa-plus-circle" : "fa-minus-circle",
+                    'url' => ($inactive_user)? "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=activate" : "$_SERVER[SCRIPT_NAME]?&u=$myrow->id&amp;action=deactivate",
+                    'show' => $show
+                ),
+                array(
                     'title' => $langDelete,
                     'icon' => 'fa-times',
                     'url' => "deluser.php?u=$myrow->id"
@@ -408,6 +425,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
+}
+
+// activate - deactivate user
+if (isset($_GET['action']) and isset($_GET['u'])) {
+    switch ($_GET['action']) {
+        case 'deactivate':
+                Database::get()->query("UPDATE user SET expires_at = " .DBHelper::timeAfter() . " WHERE id = ?d" , $_GET['u']);
+                Session::Messages(sprintf($langUserDeactivated, uid_to_name($_GET['u'])), 'alert-info');
+            break;
+        case 'activate':
+                $expires_at = new DateTime(date('Y-m-d H:i', strtotime("now") + get_config('account_duration')));
+                Database::get()->query("UPDATE user SET expires_at = ?t WHERE id = ?d" , $expires_at->format("Y-m-d H:i"), $_GET['u']);
+                Session::Messages(sprintf($langUserActivated, uid_to_name($_GET['u'])), 'alert-info');
+            break;
+        default: break;
+    }
 }
 
 load_js('tools.js');
