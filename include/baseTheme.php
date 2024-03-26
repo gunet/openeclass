@@ -5325,6 +5325,96 @@ function view($view_file, $view_data = array()) {
                     }
                 }
             ";
+
+            // $rgba_array = preg_split('/rgba?\(\s*|\s*,\s*|\s*\)/', $theme_options_styles['RightColumnCourseBgColor'], -1, PREG_SPLIT_NO_EMPTY);
+            // if(count($rgba_array) > 0 && $rgba_array[count($rgba_array)-1] == 0){
+            //     $styles_str .= "
+            //     .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
+            //         animation: cssAnimationMenuHeader 0s ease-in 0s forwards;
+            //         -webkit-animation-fill-mode: forwards;
+            //         animation-fill-mode: forwards;
+            //       }
+            //       @keyframes cssAnimationMenuHeader {
+            //         to {
+            //             pointer-events: none;
+            //         }
+            //       }
+            //       @-webkit-keyframes cssAnimationMenuHeader {
+            //           to {
+            //             pointer-events: none;
+            //           }
+            //       }
+            //       .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
+            //         animation: cssAnimationMenuHeaderTitle 0s ease-in 0s forwards;
+            //         -webkit-animation-fill-mode: forwards;
+            //         animation-fill-mode: forwards;
+            //       }
+            //       @keyframes cssAnimationMenuHeaderTitle {
+            //         to {
+            //             opacity: 0;
+            //         }
+            //       }
+            //       @-webkit-keyframes cssAnimationMenuHeaderTitle {
+            //           to {
+            //             opacity: 0;
+            //           }
+            //       }
+            //       .course-wrapper:has(.active-nav) #sidebar-accordion .menu-items{
+            //         animation: cssAnimationMenuItems 0s ease-in 0s forwards;
+            //         -webkit-animation-fill-mode: forwards;
+            //         animation-fill-mode: forwards;
+            //       }
+            //       @keyframes cssAnimationMenuItems {
+            //         to {
+            //             width:0;
+            //             height:0;
+            //             overflow:hidden;
+            //         }
+            //       }
+            //       @-webkit-keyframes cssAnimationMenuItems {
+            //           to {
+            //               width:0;
+            //               height:0;
+            //               visibility:hidden;
+            //           }
+            //       }
+            //       .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool{
+            //         animation: cssModule 0s ease-in 0s forwards;
+            //         -webkit-animation-fill-mode: forwards;
+            //         animation-fill-mode: forwards;
+            //       }
+            //       @keyframes cssModule {
+            //         to {
+            //             width:45px;
+            //             height:32px;
+            //             margin-left: 0px;
+            //         }
+            //       }
+            //       @-webkit-keyframes cssModule {
+            //           to {
+            //               width:45px;
+            //               height:32px;
+            //               margin-left: 0px;
+            //           }
+            //       }
+            //       .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
+            //         animation: cssModule_i 0s ease-in 0s forwards;
+            //         -webkit-animation-fill-mode: forwards;
+            //         animation-fill-mode: forwards;
+            //       }
+            //       @keyframes cssModule_i {
+            //         to {
+            //             margin-left: 18px;
+            //         }
+            //       }
+            //       @-webkit-keyframes cssModule_i {
+            //           to {
+            //               margin-left: 18px;
+            //           }
+            //       }
+
+            //     ";
+            // }
         }
 
         /////////////////////////////////////////////////////////////////////////////////////

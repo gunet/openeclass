@@ -770,11 +770,11 @@ if ($is_editor) {
     // Begin student view
     // ************************************
     if (($multi_reg == 0) and !$user_visible_groups) {
-        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='Neutral-900-cl text-start'>$langSingleGroupRegInfo</p></li></ul></div>";
+        $tool_content .= "<div class='col-12 mb-3'><h4>$langSingleGroupRegInfo</h4></div>";
     } else if ($multi_reg == 1) {
-        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='Neutral-900-cl text-start'>$langMultipleGroupRegInfo</p></li></ul></div>";
+        $tool_content .= "<div class='col-12 mb-3'><h4>$langMultipleGroupRegInfo</h4></div>";
     } else if (($multi_reg == 2)) {
-        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='Neutral-900-cl text-start'>$langCategoryGroupRegInfo</p></li></ul></div>";
+        $tool_content .= "<div class='col-12 mb-3'><h4>$langCategoryGroupRegInfo</h4></div>";
     }
 
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);

@@ -244,7 +244,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -304,30 +304,28 @@
                     @endif
 
                     <div class='col-12'>
-                        <div class='table-responsive'>
-                            <table id='users_table_{{ $course_code }}' class='table-default'>
-                                <thead>
-                                    <tr class="list-header">
-                                        <th style='width:40%;'>{{ trans('langSurnameName') }}</th>
-                                        <th style='width:20%;'>{{ trans('langRole') }}</th>
-                                        <th style='width:20%;'>{{ trans('langGroup') }}</th>
-                                        <th style='width:10%;'>{{ trans('langRegistrationDate') }}</th>
-                                        <th class='text-end' style='width:10%;'>{!! icon('fa-cogs') !!}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                        <table id='users_table_{{ $course_code }}' class='table-default'>
+                            <thead>
+                                <tr class="list-header">
+                                    <th style='width:40%;'>{{ trans('langSurnameName') }}</th>
+                                    <th style='width:20%;'>{{ trans('langRole') }}</th>
+                                    <th style='width:20%;'>{{ trans('langGroup') }}</th>
+                                    <th style='width:10%;'>{{ trans('langRegistrationDate') }}</th>
+                                    <th class='text-end' style='width:10%;'>{!! icon('fa-cogs') !!}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th style='width:40%;'></th>
+                                    <th style='width:20%;'></th>
+                                    <th style='width:20%;'></th>
+                                    <th style='width:10%;'></th>
+                                    <th class='text-end' style='width:10%;'></th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
 
                 </div>
@@ -335,7 +333,7 @@
 
         </div>
 
-</div>
+    </div>
 </div>
 
 

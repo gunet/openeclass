@@ -47,6 +47,12 @@
   z-index: 0;
 }
 
+.module-tool i,
+.module-tool i::before{
+  min-width: 16px !important;
+  height: 16px !important;
+}
+
 /* --------------------------------------- Basic classes ------------------------------- */
 
 .col_maincontent_active{ 
@@ -103,12 +109,12 @@
     padding-right: 10px;
   }
 }
-@media(min-width:992px){
+/* @media(min-width:992px){
   .course-wrapper:not(:has(.active-cont)) .ContentLeftNav{
     padding-left: 5px;
     padding-right: 5px;
   }
-}
+} */
 
 .navbar_breadcrumb{ 
   margin-left:60px; 
@@ -142,7 +148,7 @@
   }
 
   .course-wrapper:has(.active-nav) #sidebar-accordion{
-    min-width:182px;
+    min-width:192px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -202,16 +208,16 @@
   }
   @keyframes cssModule {
     to {
-        width:36px;
+        width:45px;
         height:32px;
-        margin-left: 3px;
+        margin-left: 0px;
     }
   }
   @-webkit-keyframes cssModule {
       to {
-          width:36px;
+          width:45px;
           height:32px;
-          margin-left: 3px;
+          margin-left: 0px;
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
@@ -221,16 +227,16 @@
   }
   @keyframes cssModule_i {
     to {
-        margin-left: 8px;
+        margin-left: 19px;
     }
   }
   @-webkit-keyframes cssModule_i {
       to {
-          margin-left: 8px;
+          margin-left: 19px;
       }
   }
   .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
-    min-width:182px;
+    min-width:192px;
     margin: auto;
     display: block;
   }
@@ -285,7 +291,7 @@
     transition: all 0.5s ease-in-out;
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion{
-    min-width:182px;
+    min-width:192px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -345,16 +351,16 @@
   }
   @keyframes cssModule {
     to {
-        width:36px;
+        width:45px;
         height:32px;
-        margin-left: 3px;
+        margin-left: 0px;
     }
   }
   @-webkit-keyframes cssModule {
       to {
-          width:36px;
+          width:45px;
           height:32px;
-          margin-left: 3px;
+          margin-left: 0px;
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
@@ -364,16 +370,16 @@
   }
   @keyframes cssModule_i {
     to {
-        margin-left: 8px;
+        margin-left: 19px;
     }
   }
   @-webkit-keyframes cssModule_i {
       to {
-          margin-left: 8px;
+          margin-left: 19px;
       }
   }
   .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
-    min-width:182px;
+    min-width:192px;
     margin: auto;
     display: block;
   }
@@ -431,7 +437,7 @@
   }
 
   .course-wrapper:has(.active-nav) #sidebar-accordion{
-    min-width:188px;
+    min-width:198px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -491,16 +497,16 @@
   }
   @keyframes cssModule {
     to {
-        width:36px;
+        width:45px;
         height:32px;
-        margin-left: 3px;
+        margin-left: 0px;
     }
   }
   @-webkit-keyframes cssModule {
       to {
-          width:36px;
+          width:45px;
           height:32px;
-          margin-left: 3px;
+          margin-left: 0px;
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
@@ -510,16 +516,16 @@
   }
   @keyframes cssModule_i {
     to {
-        margin-left: 8px;
+        margin-left: 19px;
     }
   }
   @-webkit-keyframes cssModule_i {
       to {
-          margin-left: 8px;
+          margin-left: 19px;
       }
   }
   .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
-    min-width:188px;
+    min-width:198px;
     margin: auto;
     display: block;
   }
@@ -578,7 +584,7 @@
   }
 
   .course-wrapper:has(.active-nav) #sidebar-accordion{
-    min-width:238px;
+    min-width:248px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -638,16 +644,16 @@
   }
   @keyframes cssModule {
     to {
-        width:36px;
+        width:45px;
         height:32px;
-        margin-left: 3px;
+        margin-left: 0px;
     }
   }
   @-webkit-keyframes cssModule {
       to {
-          width:36px;
+          width:45px;
           height:32px;
-          margin-left: 3px;
+          margin-left: 0px;
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
@@ -657,16 +663,16 @@
   }
   @keyframes cssModule_i {
     to {
-        margin-left: 8px;
+        margin-left: 19px;
     }
   }
   @-webkit-keyframes cssModule_i {
       to {
-          margin-left: 8px;
+          margin-left: 19px;
       }
   }
   .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
-    min-width:238px;
+    min-width:248px;
     margin: auto;
     display: block;
   }

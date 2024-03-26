@@ -79,7 +79,7 @@
                                                                         @php $image_tutor = profile_image($tutor->user_id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
                                                                         {!! $image_tutor !!}
                                                                         <h4 class='mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</h4>
-                                                                        <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
+                                                                        <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p></br>
                                                                         @if(count($nextAvDate) > 0)
                                                                             @foreach($nextAvDate as $d)
                                                                                 @foreach(array_keys($d) as $key)
@@ -93,11 +93,11 @@
 
                                                                         <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $tutor->user_id }}">
                                                                             {{ trans('langAvailableTutorBookings')}}
-                                                                        </a>
+                                                                        </a></br>
 
                                                                         <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $tutor->user_id }}">
                                                                             {{ trans('langAvailableHistoryBookings')}}
-                                                                        </a>
+                                                                        </a></br>
                                                                         
                                                                         <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $tutor->user_id }}">
                                                                             {{ trans('langAddAvailability')}}
@@ -130,7 +130,7 @@
                                                                 @php $image_tutor = profile_image($uid, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
                                                                 {!! $image_tutor !!}
                                                                 <h4 class='mt-2'>{{ $tutor_name }}&nbsp;{{ $surname_name }}</h4>
-                                                                <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p>
+                                                                <p class="badge Success-200-bg text-white vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p></br>
                                                                 @if(count($nextAvDate) > 0)
                                                                     @foreach($nextAvDate as $d)
                                                                         @foreach(array_keys($d) as $key)
@@ -144,11 +144,11 @@
                                                                 
                                                                 <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;bookings_of_tutor={{ $uid }}">
                                                                     {{ trans('langMyAvailableBookings')}}
-                                                                </a>
+                                                                </a></br>
 
                                                                 <a class='btn submitAdminBtn d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;history_booking={{ $uid }}">
                                                                     {{ trans('langAvailableHistoryBookings')}}
-                                                                </a>
+                                                                </a></br>
 
                                                                 <a class='btn submitAdminBtnDefault d-inline-flex mt-3' href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;group_id={{ $group_id }}&amp;add_for_tutor={{ $uid }}">
                                                                     {{ trans('langAddAvailability')}}

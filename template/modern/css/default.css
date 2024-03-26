@@ -197,9 +197,16 @@ img {
   width:100%;
 }
   
-.btn:focus, .btn:active, #menu-btn:focus, #menu-btn:active{ 
+.btn:focus, 
+.btn:active, 
+#menu-btn:focus, 
+#menu-btn:active{ 
   outline: none !important;
   box-shadow: none; 
+}
+#menu-btn:focus, 
+#menu-btn:hover{
+  cursor:  url(../images/pointer.png), auto;
 }
   
 .opacity-help { 

@@ -3,7 +3,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////
-    /////// set Min-Height of sidebar tools course to be same with colMainContent ////
+    // set Min-Height of left menu in order to has the same witdh of colMainContent //
     //////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////
@@ -34,47 +34,6 @@ $(document).ready(function(){
                 $(this).removeClass("float-menu-in");
             }});
     }
-    
-
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////// toggle_button for swifting sidebar to left side /////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-
-    // var menu_btn = document.querySelector("#menu-btn");
-    // var sidebar = document.querySelector(".col_sidebar_active");
-    // var container = document.querySelector(".col_maincontent_active");
-   
-    // var clickerMenuBtn = 0;
-    // if(localStorage.getItem("MenuBtnStorage")){
-    //     clickerMenuBtn = localStorage.getItem("MenuBtnStorage");
-    // }
-    
-    // if(menu_btn!=null){
-    //     menu_btn.addEventListener("click",()=>{
-    //         clickerMenuBtn++;
-    //         localStorage.setItem("MenuBtnStorage",clickerMenuBtn);
-    //         sidebar.classList.toggle("active-nav");
-    //         container.classList.toggle("active-cont");
-    //     });
-    // }else{
-    //     localStorage.setItem("MenuBtnStorage",0);
-    // }
-
-    // if(localStorage.getItem("MenuBtnStorage") %2 > 0){
-    //     sidebar.classList.toggle("active-nav");
-    //     container.classList.toggle("active-cont");
-    // }else{
-    //     if(sidebar!=null && container!=null){
-    //         sidebar.classList.remove("active-nav");
-    //         container.classList.remove("active-cont");
-    //     }
-    //     localStorage.removeItem("MenuBtnStorage");
-    // }
-
 
     onLoad();
 
@@ -86,8 +45,12 @@ function onLoad() {
     var sidebar = document.querySelector(".col_sidebar_active");
     var container = document.querySelector(".col_maincontent_active");
     if(window.localStorage.getItem("active-nav") && window.localStorage.getItem("active-nav") == "true"){
-        sidebar.classList.add("active-nav");
-        container.classList.add("active-cont");
+        if(sidebar != null){
+            sidebar.classList.add("active-nav");
+        }
+        if(container != null){
+            container.classList.add("active-cont");
+        }
     }
 }
   
