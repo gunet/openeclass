@@ -192,7 +192,7 @@ if ($u) {
         // Show HybridAuth provider data
         $data['ext_uid'] = Database::get()->queryArray('SELECT * FROM user_ext_uid WHERE user_id = ?d', $u);
 
-        $data['sql'] = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
+        $data['sql'] = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status, b.editor
                             FROM course AS a
                             LEFT JOIN course_user AS b ON a.id = b.course_id
                             WHERE b.user_id = ?s ORDER BY b.status", $u);
@@ -202,17 +202,17 @@ if ($u) {
     } else { // if the form was submitted then update user
 
         // get the variables from the form and initialize them
-        $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
-        $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
+        $fname = $_POST['fname'] ?? '';
+        $lname = $_POST['lname'] ?? '';
         // trim white spaces in the end and in the beginning of the word
-        $username = isset($_POST['username']) ?$_POST['username'] : '';
+        $username = $_POST['username'] ?? '';
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
-        $am = isset($_POST['am']) ? $_POST['am'] : '';
-        $user_language = isset($_POST['user_language']) ? $_POST['user_language']: '';
-        $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
-        $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
-        $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
+        $phone = $_POST['phone'] ?? '';
+        $am = $_POST['am'] ?? '';
+        $user_language = $_POST['user_language'] ?? '';
+        $departments = $_POST['department'] ?? 'NULL';
+        $newstatus = $_POST['newstatus'] ?? 'NULL';
+        $registered_at = $_POST['registered_at'] ?? '';
         if (isset($_POST['user_date_expires_at'])) {
             if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
                 Session::flash('message',$langUserExpiresFieldEmpty);

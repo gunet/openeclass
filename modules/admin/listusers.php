@@ -432,12 +432,14 @@ if (isset($_GET['action']) and isset($_GET['u'])) {
     switch ($_GET['action']) {
         case 'deactivate':
                 Database::get()->query("UPDATE user SET expires_at = " .DBHelper::timeAfter() . " WHERE id = ?d" , $_GET['u']);
-                Session::Messages(sprintf($langUserDeactivated, uid_to_name($_GET['u'])), 'alert-info');
+                Session::flash('message', sprintf($langUserDeactivated, uid_to_name($_GET['u'])));
+                Session::flash('alert-class', 'alert-info');
             break;
         case 'activate':
                 $expires_at = new DateTime(date('Y-m-d H:i', strtotime("now") + get_config('account_duration')));
                 Database::get()->query("UPDATE user SET expires_at = ?t WHERE id = ?d" , $expires_at->format("Y-m-d H:i"), $_GET['u']);
-                Session::Messages(sprintf($langUserActivated, uid_to_name($_GET['u'])), 'alert-info');
+                Session::flash('message', sprintf($langUserActivated, uid_to_name($_GET['u'])));
+                Session::flash('alert-class', 'alert-info');
             break;
         default: break;
     }
