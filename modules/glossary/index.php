@@ -169,6 +169,7 @@ if ($is_editor) {
             } else {
                 $url = '';
             }
+            $term = trim($_POST['term']);
             if (isset($_POST['id'])) {
                 $id = intval(getDirectReference($_POST['id']));
                 $q = Database::get()->query("UPDATE glossary
@@ -179,7 +180,7 @@ if ($is_editor) {
                                                       category_id = ?d,
                                                       datestamp = NOW()
                                                   WHERE id = ?d AND course_id = ?d"
-                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $id, $course_id);
+                        , $term, $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $id, $course_id);
                 $log_action = LOG_MODIFY;
                 $success_message = $langGlossaryUpdated;
             } else {
@@ -192,13 +193,13 @@ if ($is_editor) {
                                                       datestamp = NOW(),
                                                       course_id = ?d,
                                                       `order` = ?d"
-                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $course_id, findorder($course_id));
+                        , $term, $_POST['definition'], $url, purify($_POST['notes']), $_POST['category_id'], $course_id, findorder($course_id));
                 $log_action = LOG_INSERT;
                 $success_message = $langGlossaryAdded;
             }
             $id = $q->lastInsertID;
             Log::record($course_id, MODULE_ID_GLOSSARY, $log_action, array('id' => $id,
-                'term' => $_POST['term'],
+                'term' => $term,
                 'definition' => $_POST['definition'],
                 'url' => $url,
                 'notes' => purify($_POST['notes'])));
