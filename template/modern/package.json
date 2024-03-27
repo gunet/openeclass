@@ -15,7 +15,7 @@
   "author": "@hatuhay",
   "license": "MIT",
   "dependencies": {
-    "bootstrap-sass": "^3.4.1"
+    "bootstrap-sass": "^3.4.3"
   },
   "devDependencies": {
     "browser-sync": "^3.0.2",
