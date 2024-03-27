@@ -703,11 +703,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
-        $t->set_var('HTML_FOOTER', $html_footer);
+        $t->set_var('HTML_FOOTER', $html_footer, true);
     }
 
     if (get_config('ext_userway_enabled') and $html_footer = get_config('ext_userway_code')) {
-        $t->set_var('HTML_FOOTER', $html_footer);
+        $t->set_var('HTML_FOOTER', $html_footer, true);
     }
 
     if (file_exists('node_modules/mathjax/es5/tex-chtml.js')) {
