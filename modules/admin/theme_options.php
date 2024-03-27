@@ -1348,7 +1348,7 @@ $tool_content .= "
                         </div>
                     </div>
                     <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHomepageContainer</h3>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAnnouncements</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
                         <input name='BgColorAnnouncementHomepage' type='text' class='form-control colorpicker' id='BgColorAnnouncementHomepage' value='$theme_options_styles[BgColorAnnouncementHomepage]'>
@@ -1356,6 +1356,16 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='TextColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='TextColorAnnouncementHomepage' type='text' class='form-control colorpicker' id='TextColorAnnouncementHomepage' value='$theme_options_styles[TextColorAnnouncementHomepage]'>
+                    </div>
+                    <label class='control-label-notes mt-4'>$langAddPaddingListGroup:</label>
+                    <div class='col-sm-12'>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input type='checkbox' name='AddPaddingAnnouncementsListGroup' value='1' ".((isset($theme_options_styles['AddPaddingAnnouncementsListGroup']))? 'checked' : '').">
+                                <span class='checkmark'></span>
+                                $langActivate
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
