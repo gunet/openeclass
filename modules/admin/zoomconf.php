@@ -107,16 +107,16 @@ if (isset($_POST['submit'])) {
         }
         if (isset($_POST['clientId']) && isset($_POST['clientSecret']) && isset($_POST['accountId'])) {
             Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses, webapp, enable_recordings) 
-                                            VALUES('zoom', ?s, ?s, ?s, ?s, 'api', true)
-                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s, webapp = 'api', enable_recordings = true",
-                $app::ZOOMDEFAULTURL, $app::ZOOMDEFAULTURL, $enabled, $all_courses, $enabled, $all_courses);
+                                            VALUES('zoom', ?s, ?s, ?s, ?s, ?s, true)
+                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s, webapp = ?s, enable_recordings = true",
+                $app::ZOOMDEFAULTURL, $app::ZOOMDEFAULTURL, $enabled, $all_courses, $app::API, $enabled, $all_courses, $app::API);
 
             $zoomUserRepo->syncZoomUsersTable();
         } else {
-            Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
-                                            VALUES('zoom', ?s, ?s, ?s, ?s)
-                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
-                $app::ZOOMDEFAULTURL, $app::ZOOMDEFAULTURL, $enabled, $all_courses, $enabled, $all_courses);
+            Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses, webapp, enable_recordings) 
+                                            VALUES('zoom', ?s, ?s, ?s, ?s, ?s, true)
+                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s, webapp = ?s, enable_recordings = true",
+                $app::ZOOMDEFAULTURL, $app::ZOOMDEFAULTURL, $enabled, $all_courses, $app::CUSTOM, $enabled, $all_courses, $app::CUSTOM);
         }
 
         $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'zoom'")->id;
