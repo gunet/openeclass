@@ -161,6 +161,10 @@ function do_user_merge($source, $target) {
                                  WHERE user_id IN ($source_id, $target_id)
                                  GROUP BY course_id");
     if ($q) {
+        fix_table('user_badge_criterion', 'user', $source_id, $target_id);
+        fix_table('user_badge', 'user', $source_id, $target_id);
+        fix_table('user_certificate_criterion', 'user', $source_id, $target_id);
+        fix_table('user_certificate', 'user', $source_id, $target_id);
         Database::get()->query("DELETE FROM user WHERE id = ?d", $source_id);
         Database::get()->query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
         Database::get()->query("INSERT INTO course_user SELECT * FROM `$tmp_table`");
@@ -208,7 +212,8 @@ function do_user_merge($source, $target) {
  * @param type $source
  * @param type $target
  */
-function fix_table($table, $field, $source, $target) {
+function fix_table($table, $field, $source, $target): void
+{
     Database::get()->query("UPDATE IGNORE `$table`
                          SET `$field` = $target
                          WHERE `$field` = $source");
