@@ -8,8 +8,10 @@ class ZoomApp extends ExtApp
     const CLIENT_ID = "clientId";
     const CLIENT_SECRET = "clientSecret";
     const ACCOUNT_ID = "accountId";
-    const ZOOMDEFAULTURL = "https://zoom.us/";
+    const ZOOMDEFAULTURL = "https://zoom.us";
     const ZOOMCUSTOMURL = 'custom_zoom_url';
+    const API = 'api';
+    const CUSTOM = 'custom';
 
     public function __construct()
     {

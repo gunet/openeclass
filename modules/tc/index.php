@@ -381,10 +381,23 @@ elseif(isset($_GET['choice']))
             } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
-                if ($is_editor) {
-                    header("Location: " . unserialize($sess->options));
+                $course_user = Database::get()->querySingle("SELECT * FROM course_user 
+                                                                WHERE user_id = " . $uid . " 
+                                                                AND course_id = " . $course_id);
+                if (
+                    !empty($serv->webapp)
+                    && $serv->webapp == 'api'
+                ) {
+                    if (
+                        $course_user
+                        && $course_user->editor
+                    ) {
+                        header("Location: " . unserialize($sess->options));
+                    } else {
+                        header("Location: " . rtrim($serv->hostname, '/') . '/j/'. $sess->meeting_id . '?pwd=' . $sess->mod_pw);
+                    }
                 } else {
-                    header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '?pwd=' . $sess->mod_pw);
+                    header("Location: " . rtrim($serv->hostname, '/') . $sess->meeting_id  . '/?pwd=' . $sess->mod_pw);
                 }
             } elseif ($serv->type == 'webex') { // webex
                 header("Location: " . $sess->meeting_id);
@@ -466,6 +479,9 @@ elseif(isset($_GET['choice']))
         $options = $_POST['microsoft_teams_link'];
     } elseif ($tc_type == 'zoom') {
         $options = "";
+        if (!empty($_POST['zoom_link'])) {
+            $options = $_POST['zoom_link'];
+        }
     } elseif ($tc_type == 'webex') {
         $options = "$_POST[webex_link]";
     }

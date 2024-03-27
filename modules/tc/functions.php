@@ -307,7 +307,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     <label for='title' class='col-12 control-label-notes'>$langLink:</label>
                     <div class='col-12'>
                         <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
-
                     </div>
                 </div>";
             }
@@ -1066,11 +1065,15 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 redirect_to_home_page();
             }
 
+            // init zoom repository
             $guzzleClient = new Client();
             $zoomRepo = new Repository($guzzleClient);
-            $zoomUserRepo = new ZoomUserRepository($guzzleClient, $zoomRepo);
-            $zoomUser = new ZoomUser($zoomUserRepo);
-            $zoomUser->get($uid);
+
+            // check if zoom api is enabled
+            if ($zoomRepo->isEnabled()) {
+                $zoomUserRepo = new ZoomUserRepository($guzzleClient, $zoomRepo);
+                $zoomUser = new ZoomUser($zoomUserRepo);
+                $zoomUser->get($uid);
 
             if (empty($zoomUser->id)) {
                 Session::flash('message', $langZoomErrorUserNotFound);
@@ -1081,7 +1084,6 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
             $zoomMeeting = new Service($zoomRepo, $zoomUser);
             $meeting = $zoomMeeting->create($title , $desc, $start_session, $record);
             $options = serialize($meeting->start_url);
-
 
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
@@ -1097,12 +1099,39 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             unlock_interval = ?s,
                                                             external_users = ?s,
                                                             participants = ?s,
-                                                            record = 'false',
+                                                            record = ?s,
+                                                            sessionUsers = ?s,
+                                                            options = ?s",
+                    $course_id, $title, $desc, $start_session, $BBBEndDate,
+                    $status, $server_id,
+                    $meeting->id, $meeting->encrypted_password, '' ,
+                    $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+            } else {
+                $data = parse_url($options);
+                $meeting_id = $data['path'];
+                $mod_pw = preg_replace('/pwd=/','', $data['query']);
+                $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+                                                            title = ?s,
+                                                            description = ?s,
+                                                            start_date = ?t,
+                                                            end_date = ?t,
+                                                            public = 1,
+                                                            active = ?s,
+                                                            running_at = ?d,
+                                                            meeting_id = ?s,
+                                                            mod_pw = ?s,
+                                                            att_pw = ?s,
+                                                            unlock_interval = ?s,
+                                                            external_users = ?s,
+                                                            participants = ?s,
+                                                            record = ?s,
                                                             sessionUsers = ?s",
-                $course_id, $title, $desc, $start_session, $BBBEndDate,
-                $status, $server_id,
-                $meeting_id, $mod_pw, '' ,
-                $minutes_before, $external_users, $r_group, $sessionUsers);
+                    $course_id, $title, $desc, $start_session, $BBBEndDate,
+                    $status, $server_id,
+                    $meeting_id, $mod_pw, '' ,
+                    $minutes_before, $external_users, $r_group, $record, $sessionUsers);
+            }
+
         } elseif ($tc_type == 'webex') {
             $meeting_id = $options;
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
