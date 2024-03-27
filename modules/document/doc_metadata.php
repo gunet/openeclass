@@ -157,7 +157,7 @@ function metaBuildCheckMap($values, $group) {
 
 function metaFormRow($title, $cell, $help) {
     return "<tr>
-	    <th rowspan='2'>$title:</th>
+	    <th rowspan='2' class='px-2'>$title:</th>
 	    <td>$cell</td>
 	  </tr><tr><td>$help</td></tr>";
 }

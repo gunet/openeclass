@@ -1186,6 +1186,11 @@ b a {
     -moz-appearance: none;
     appearance: none;
 }
+.alert-success a{
+  color: #0073E6;
+  text-decoration: underline;
+  font-weight: 700;
+}
 
 
 
@@ -1223,6 +1228,7 @@ b a {
 .alert-info a{
   color: #0073E6;
   text-decoration: underline;
+  font-weight: 700;
 }
 
 
@@ -1260,6 +1266,7 @@ b a {
 .alert-warning a{
   color: #0073E6;
   text-decoration: underline;
+  font-weight: 700;
 }
 
 
@@ -1294,6 +1301,11 @@ b a {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+.alert-danger a{
+  color: #0073E6;
+  text-decoration: underline;
+  font-weight: 700;
 }
 
 /**********************************************************************************************************************/

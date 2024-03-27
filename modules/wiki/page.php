@@ -709,13 +709,15 @@ switch ($action) {
                                             })
                                     </script>\n";
 
-                    $tool_content .= "  <div class='col-sm-12'><div>
-                                            $langWikiLockTimeRemaining
-                                            <span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span>
+                    $tool_content .= "  <div class='col-sm-12'>
+                                            <div class='control-label-notes'>
+                                                $langWikiLockTimeRemaining
+                                                <span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span>
+                                            </div>
+                                            <div class='progress'>
+                                                <div class='progress-bar progress-bar-striped active' id='progress'></div>
+                                            </div>
                                         </div>
-                                        <div class='progress'>
-                                            <div class='progress-bar progress-bar-striped active' id='progress'></div>
-                                        </div></div>
                                         <noscript>
                                             <div>
                                                 <img src='lib/nojslock.php?uid=$uid&amp;page_title=".urlencode($wiki_title)."&amp;wiki_id=$wikiId'>

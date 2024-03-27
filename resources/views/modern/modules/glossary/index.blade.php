@@ -76,11 +76,11 @@
                                 @if ($glossary_index && count($prefixes) > 1)
                                     <div class="col-12 mb-3">
                                         <nav aria-label="...">
-                                            <ul class="pagination p-0 pagination-glossary" id="myPag">
+                                            <ul class="pagination p-0 pagination-glossary gap-2 flex-wrap" id="myPag">
                                                 @foreach ($prefixes as $key => $letter)
                                                     <li class="page-item {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
                                                             (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " active" : "" !!}">
-                                                        <a class="page-link" tabindex="-1" aria-disabled="true" href="{!! $base_url."&amp;prefix=" . urlencode($letter)  !!}">{{ $letter }}</a>
+                                                        <a class="page-link rounded-2" tabindex="-1" aria-disabled="true" href="{!! $base_url."&amp;prefix=" . urlencode($letter)  !!}">{{ $letter }}</a>
                                                     </li>
                                                 @endforeach
                                             </ul>

@@ -133,6 +133,9 @@ if (isset($_GET['export'])) {
         if (isset($styles['loginImgL'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImgL]");
         }
+        if(isset($styles['RightColumnCourseBgImage'])){
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[RightColumnCourseBgImage]");
+        }
 
         $zipFile = new ZipArchive();
         $zipFile->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -791,6 +794,15 @@ if (isset($_POST['optionsSave'])) {
        ";
     }
 
+    if (isset($theme_options_styles['RightColumnCourseBgImage'])) {
+        $RightColumnCourseBgImage = "
+            <img src='$urlThemeData/$theme_options_styles[RightColumnCourseBgImage]' style='max-height:100px;max-width:150px;' alt='Image upload for course content'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=RightColumnCourseBgImage'>$langDelete</a>
+            <input type='hidden' name='RightColumnCourseBgImage' value='$theme_options_styles[RightColumnCourseBgImage]' id='RightColumnCourseBgImage'>
+        ";
+    } else {
+       $RightColumnCourseBgImage = "<input type='file' name='RightColumnCourseBgImage' id='RightColumnCourseBgImage'>";
+    }
+
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -1374,6 +1386,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='RightColumnCourseBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
                         <input name='RightColumnCourseBgColor' type='text' class='form-control colorpicker' id='RightColumnCourseBgColor' value='$theme_options_styles[RightColumnCourseBgColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='RightColumnCourseBgImage' class='control-label-notes me-2 mb-2'>$langBgImg:</label>
+                        $RightColumnCourseBgImage
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BorderLeftToRightColumnCourseBgColor' class='control-label-notes me-2 mb-2'>$langBgBorderLeftColor:</label>
@@ -2470,7 +2486,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -2486,7 +2502,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];
