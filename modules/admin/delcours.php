@@ -28,19 +28,19 @@
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 if (isset($_GET['c'])) {
    $data['course_id'] = $course_id = intval($_GET['c']);
 } else {
     $data['course_id'] = $course_id = 0;
 }
 
+require_once 'include/log.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/course_info/archive_functions.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -114,6 +114,3 @@ if (showSecondFactorChallenge() != "") {
 }
 
 view ('admin.courses.delcours', $data);
-
-
-

@@ -48,31 +48,29 @@
                     </div>
                     @endif
 
-                    <div class='col-12'>
-                        <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>
-                            {{ trans('langCourseDelConfirm2') }}
-                            <em>{{ course_id_to_title($course_id) }}</em>
-                            <br><br>
-                            <i>{{ trans('langNoticeDel') }}</i>
-                            <br></span>
+                    <div class='col-lg-6 col-12'>
+                        <div class='alert alert-danger'>
+                            <i class='fa-solid fa-circle-xmark fa-lg'></i>
+                            <span>
+                                {{ trans('langCourseDelConfirm2') }}
+                                <em>{{ course_id_to_title($course_id) }}</em>
+                                <br><br>
+                                <i>{{ trans('langNoticeDel') }}</i>
+                                <br>
+                            </span>
+                        </div>
+                        <div class='col-12 d-flex justify-content-end align-items-center flex-wrap gap-2'>
+                            <a class='btn cancelAdminBtn' href='listcours.php'>
+                                {{ trans('langCancel') }}
+                            </a>
+                            <a class='btn deleteAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course_id }}&amp;delete=yes&amp;{{ generate_csrf_token_link_parameter() }}' {!! $asktotp !!}>
+                                {{ trans('langDelete') }}
+                            </a>
                         </div>
                     </div>
-
-                    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-3'>
-                        
-                           
-                                <a class='btn deleteAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course_id }}&amp;delete=yes&amp;{{ generate_csrf_token_link_parameter() }}' {!! $asktotp !!}>
-                                    {{ trans('langYes') }}
-                                </a>
-                           
-                         
-                                <a class='btn cancelAdminBtn' href='listcours.php'>
-                                    {{ trans('langNo') }}
-                                </a>
-                           
-                        
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                        <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
                     </div>
-
                 
         </div>
     </div>
