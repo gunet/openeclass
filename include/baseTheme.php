@@ -431,13 +431,10 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['loginImg'])){
                 $styles_str .= "
                     .jumbotron.jumbotron-login{
-                        background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
+                        background: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
                         border:0px; 
-                        background-position: no-repeat center center fixed; 
-                        -webkit-background-size: cover; 
-                        -moz-background-size: cover; 
-                        -o-background-size: cover; 
-                        background-size: cover;
+                        background-size: 100% 100%;
+                        background-attachment: fixed;
                     }
                 ";
 
