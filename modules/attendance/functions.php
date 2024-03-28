@@ -471,7 +471,7 @@ function attendance_display_available_tc($attendance_id) {
 
     if ($checkForTcNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
-                            <table class='table-default'";
+                            <table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
         $tool_content .= "<th></th>";
         $tool_content .= "</tr></thead>";

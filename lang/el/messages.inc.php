@@ -5933,7 +5933,7 @@ $langLists = "List Group";
 $langBgColorList = "Χρώμα φόντου λίστας";
 $langclBorderBottomLists = "Χρώμα border στο κάτω μέρος της λίστας";
 $langclLists = "Χρώμα συνδέσμου λίστας";
-$langclHoveredLists = "Hovered συνδέσμου λίστας";
+$langclHoveredLists = "Χρώμα Hovered συνδέσμου λίστας";
 $langContextualMenu = "Contextual Menu";
 $langContextualMenuInfo = "Αφορά το μενού επιλογών χρήστη και μαθήματος";
 $langBgColorListMenu = "Χρώμα φόντου συνδέσμων επιλογών μενού";
@@ -5947,6 +5947,7 @@ $langclListMenu = "Χρώμα συνδέσμου επιλογής μενού";
 $langbgHoveredListMenu = "Χρώμα Hovered φόντου συνδέσμου επιλογής μενού" ;
 $langBgColorMenuCont = "Χρώμα φόντου μενού";
 $langAddPaddingListGroup = "Προσθήκη padding στη λίστα συνδέσμων";
+$langAddPadding = "Προσθήκη padding";
 $langButtonColorWhiteCongiguration = "Χρώμα φόντου κουμπιού";
 $langButtonsColorDel = "Κουμπί Delete-button";
 $langbgDeleteButtonColor = "Χρώμα φόντου";
@@ -6061,6 +6062,8 @@ $langSettingsAlertDanger = "Ρυθμίσεις Alert-Danger";
 $langSettingsTooltip = "Ρυθμίσεις Tooltip";
 $langbgColorTooltip = "Χρώμα φόντου";
 $langTextColorTooltip = "Χρώμα κειμένου";
+$langBgColorListItem = "Χρώμα φόντου λίστας";
+$langBgBorderColorListItem = "Χρώμα border στο κάτω μέρος της λίστας";
 
 /* * ***********************************************************
  * Validation

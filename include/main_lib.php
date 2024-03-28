@@ -3993,33 +3993,37 @@ function setOpenCoursesExtraHTML() {
                 <div class='card card-transparent border-0 bg-transparent h-100'>
                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                         <div class='d-flex justify-content-start align-items-center'>
-                            <h3>$langOpenCourses</h3>
+                            <h3 class='mb-4'>$langOpenCourses</h3>
                         </div>
                     </div>
-                    <div class='card-body'>
-                        <div class='row row-cols-1 row-cols-md-2 g-4'>
+                    <div class='card-body p-0'>
+                        <div class='card panelCard px-lg-4 py-lg-3 h-100 '>
+                            <div class='card-body'>
+                                <div class='row row-cols-1 row-cols-md-2 g-4'>
 
-                            <div class='col d-flex justify-content-center align-items-center'>
-                                <img style='width:650px;' class='openCoursesImg' src='$themeimg/openCoursesImg.png' alt='".q($langListOpenCourses)."'>
-                            </div>
-
-                            <div class='col d-flex justify-content-center align-items-center'>
-                                <div>
-                                    <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                        <a class='d-flex gap-1 align-items-center' target='_blank' href='$openFacultiesUrl' aria-label='Open courses(opens in a new tab)'>
-                                            <i class='fa-solid fa-book-open fa-xl'></i>
-                                            <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
-                                            <span class='text-uppercase TextBold Primary-500-cl fs-5'>
-                                                " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
-                                            </span>
-                                        </a>
+                                    <div class='col d-flex justify-content-center align-items-center'>
+                                        <img style='width:650px;' class='openCoursesImg' src='$themeimg/openCoursesImg.png' alt='".q($langListOpenCourses)."'>
                                     </div>
 
-                                    <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                        <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank' aria-label='Open courses(opens in a new tab)'>
-                                            $langNationalOpenCourses
-                                            <span class='fa-solid fa-chevron-right ms-2'></span>
-                                        </a>
+                                    <div class='col d-flex justify-content-center align-items-center'>
+                                        <div>
+                                            <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
+                                                <a class='d-flex gap-1 align-items-center' target='_blank' href='$openFacultiesUrl' aria-label='Open courses(opens in a new tab)'>
+                                                    <i class='fa-solid fa-book-open fa-xl'></i>
+                                                    <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
+                                                    <span class='text-uppercase TextBold Primary-500-cl fs-5'>
+                                                        " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
+                                                    </span>
+                                                </a>
+                                            </div>
+
+                                            <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
+                                                <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank' aria-label='Open courses(opens in a new tab)'>
+                                                    $langNationalOpenCourses
+                                                    <span class='fa-solid fa-chevron-right ms-2'></span>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
