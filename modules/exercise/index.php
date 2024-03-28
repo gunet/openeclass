@@ -373,9 +373,9 @@ if (!$nbrExercises) {
             }
 
             if ($row->assign_to_specific == 1) {
-                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block link-color'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
             } else if ($row->assign_to_specific == 2) {
-                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block link-color'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
             } else {
                 $assign_to_users_message = '';
             }

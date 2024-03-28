@@ -133,14 +133,14 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label for='emailfromcourses' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmailFromCourses') }}</label>
-                            <div class='col-sm-12 d-inline-flex'>
+                            <label for='emailfromcourses' class='col-sm-12 control-label-notes mb-2'>{{ trans('langEmailFromCourses') }}</label>
+                            <div class='col-sm-12'>
                                 <div class='radio'>
                                     <label>
                                         <input type='radio' name='subscribe' value='yes' {{ $selectedyes }}> {{ trans('langYes') }}
                                     </label>
                                 </div>
-                                <div class='radio ms-4'>
+                                <div class='radio'>
                                     <label>
                                         <input type='radio' name='subscribe' value='no' {{ $selectedno }}> {{ trans('langNo') }}
                                     </label>
@@ -150,29 +150,38 @@
 
                         <div class='form-group mt-4'>
                             <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langViewShow') }}</label>
-                            <div class='col-sm-12 d-inline-flex'>
+                            <div class='help-block mb-2'>(*){{ trans('langShowSettingsInfo') }}</div>
+                            <div class='col-sm-12'>
                                 <div class='checkbox'>
-                                    <label>
-                                        <input type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}> {{ trans('langEmail') }}
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}> 
+                                        <span class='checkmark'></span>
+                                        {{ trans('langEmail') }}
                                     </label>
                                 </div>
-                                <div class='checkbox ms-3'>
-                                    <label>
-                                        <input type='checkbox' name='am_public' value='1' {!! $am_public_selected !!}> {{ trans('langAm') }}
+                                <div class='checkbox'>
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='am_public' value='1' {!! $am_public_selected !!}> 
+                                        <span class='checkmark'></span>
+                                        {{ trans('langAm') }}
+                                    </label class='label-container'>
+                                </div>
+                                <div class='checkbox'>
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}> 
+                                        <span class='checkmark'></span>
+                                        {{ trans('langPhone') }}
                                     </label>
                                 </div>
-                                <div class='checkbox ms-3'>
-                                    <label>
-                                        <input type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}> {{ trans('langPhone') }}
-                                    </label>
-                                </div>
-                                <div class='checkbox ms-3'>
-                                    <label>
-                                        <input type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}> {{ trans('langProfileImage') }}
+                                <div class='checkbox'>
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}> 
+                                        <span class='checkmark'></span>
+                                        {{ trans('langProfileImage') }}
                                     </label>
                                 </div>
                             </div>
-                            <div class='help-block m-2'>{{ trans('langShowSettingsInfo') }}</div>
+                            
                         </div>
 
                         @if (get_config('email_verification_required'))
