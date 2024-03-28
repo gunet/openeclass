@@ -418,6 +418,7 @@ if (count($exercise_question_ids) > 0) {
                 $grade = 0;
                 switch ($answerType) {
 
+                    case TRUE_FALSE:
                     case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
@@ -597,12 +598,6 @@ if (count($exercise_question_ids) > 0) {
                         }
                         break;
 
-                    case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
-                        if ($studentChoice) {
-                            $questionScore += $answerWeighting;
-                            $grade = $answerWeighting;
-                        }
-                        break;
                 } // end switch()
 
                 if ($regrade and !in_array($answerType, [FILL_IN_BLANKS_TOLERANT, FILL_IN_BLANKS, FILL_IN_FROM_PREDEFINED_ANSWERS, MATCHING])) {
@@ -764,11 +759,17 @@ $oldWeighting = round($exercise_user_record->total_weighting, 2);
 
 if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting)) {
     if ($checking) {
-        echo json_encode(['result' => 'regrade', 'eurid' => $eurid,
-            'title' => "$user->surname $user->givenname (" .
-                       $exercise_user_record->record_start_date . ')',
-            'url' => $urlAppend . "modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid"],
-            JSON_UNESCAPED_UNICODE);
+        if ($user) {
+            echo json_encode(['result' => 'regrade', 'eurid' => $eurid,
+                'title' => "$user->surname $user->givenname (" . $exercise_user_record->record_start_date . ')',
+                'url' => $urlAppend . "modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid"],
+                JSON_UNESCAPED_UNICODE);
+        } else {
+            echo json_encode(['result' => 'regrade', 'eurid' => $eurid,
+                'title' => "$langNoGroupStudents (" . $exercise_user_record->record_start_date . ')',
+                'url' => $urlAppend . "modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid"],
+                JSON_UNESCAPED_UNICODE);
+        }
         exit;
     } else {
         // Session::Messages($langScoreDiffers .
