@@ -63,16 +63,9 @@
                                         {!! $profile_img !!}
                                     </div>
                                     <h3 class='text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h3>
-                                    <p class='text-center'>
-                                        @if(($userdata->status == USER_TEACHER))
-                                            {{ trans('langMetaTeacher') }}
-                                        @elseif(($userdata->status == USER_STUDENT))
-                                            {{ trans('langCStudent') }}
-                                        @else
-                                            {{ trans('langAdministrator')}}
-                                        @endif
-                                    </p>
-
+                                    <div class='text-center title-default-line-height m-3'>
+                                        {!! mailto($userdata->username) !!}
+                                    </div>
                                     @if(get_config('eportfolio_enable'))
                                         <p class='text-center mt-2'>
                                             <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate("eportfolio" . $id) }}'>
@@ -100,8 +93,31 @@
                                 <h3>{{ trans('langPersInfo') }}</h3>
                             </div>
                             <div class="card-body">
-
                                 <ul class='list-group list-group-flush'>
+                                    @if ($is_admin)
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                                <div class='col-lg-4 col-12'>
+                                                    <div class='title-default'>{{ trans('langUserPermissions') }}</div>
+                                                </div>
+                                                <div class='col-lg-8 col-12 title-default-line-height'>
+                                                    {{ trans('langAdministrator') }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @elseif ($userdata->status == USER_TEACHER)
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                                <div class='col-lg-4 col-12'>
+                                                    <div class='title-default'>{{ trans('langUserPermissions') }}</div>
+                                                </div>
+                                                <div class='col-lg-8 col-12 title-default-line-height'>
+                                                    {{ trans('langWithCourseCreationRights') }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                   @endif
+
                                     @if (!empty($userdata->email) and allow_access($userdata->email_public))
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-lg-2 g-1'>
@@ -115,7 +131,6 @@
                                         </li>
                                     @endif
 
-
                                     @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-lg-2 g-1'>
@@ -128,18 +143,6 @@
                                             </div>
                                         </li>
                                     @endif
-
-                                    <li class='list-group-item element'>
-                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                            <div class='col-lg-4 col-12'>
-                                                <div class='title-default'>{{ trans('langStatus') }}</div>
-                                            </div>
-                                            <div class='col-lg-8 col-12 title-default-line-height'>
-                                                {{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}
-                                            </div>
-                                        </div>
-                                    </li>
-
 
                                     @if (!empty($userdata->am) and allow_access($userdata->am_public))
                                         <li class='list-group-item element'>
@@ -156,7 +159,7 @@
 
 
                                     @if($id == $uid && !empty($extAuthList))
-                                        
+
                                             @foreach ($extAuthList as $item)
                                                 <li class='list-group-item element'>
                                                     <div class='row row-cols-1 row-cols-lg-2 g-1'>
@@ -170,7 +173,7 @@
                                                     </div>
                                                 </li>
                                             @endforeach
-                                        
+
                                     @endif
 
 
@@ -189,8 +192,6 @@
                                             </div>
                                         </div>
                                     </li>
-                               
-
 
                                     <li class='list-group-item element'>
                                         <div class='row row-cols-1 row-cols-lg-2 g-1'>
@@ -201,8 +202,8 @@
                                                 {{ format_locale_date(strtotime($userdata->registered_at)) }}
                                             </div>
                                         </div>
-                                    </li> 
-                                    
+                                    </li>
+
                                 </ul>
 
                                 <div class='panel-group group-section mt-4' id='accordion' role='tablist' aria-multiselectable='true'>
