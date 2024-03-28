@@ -225,31 +225,36 @@
                                         </div>
                                     </div>
 
-                                    <div class="bulk-processing-box d-none" style="margin-top: 20px;">
-                                        <div class='col-md-12'>
-                                            <div class='panel'>
-                                                <div class=''>
-                                                    <strong>
-                                                        <i class='fa fa-edit'></i>
-                                                        {{ trans('langBulkProcessing') }}
-                                                    </strong>
-                                                    <form id='bulk_actions' method='post' action='' style='display: flex;gap: 5px;margin: 10px 0'>
-                                                        <select class='form-select mt-0' name='bulk_action' class='px-3' style='max-width:250px;'>
-                                                            <option value='av_actions' disabled selected hidden>{{ trans('langActions') }}</option>
-                                                            <option value='move'>{{ trans('langMove') }}</option>
-                                                            <option value='delete'>{{ trans('langDelete') }}</option>
-                                                            <option value='visible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
-                                                            <option value='invisible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
-                                                        </select>
-                                                        <input type='submit' class='btn-submit px-3' name='bulk_submit' value='{{ trans('langSubmit') }}'>
-                                                        <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
-                                                        <input type='hidden' id='filepaths' name='filepaths' value=''>
-                                                        <input type='hidden' id='source_path' name='source_path' value=''>
-                                                    </form>
-                                                    <div class='panel-move d-none'>
-                                                        @include("modules.document.$dialogBoxBulk", ['menuTypeID' => $menuTypeID])
+                                    <div class="bulk-processing-box d-none my-4">
+                                        <div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4'>
+                                            <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
+                                                <div class='form-wrapper form-edit'>
+                                                    <div class='panel'>
+                                                        <form id='bulk_actions' class='form-horizontal' method='post' action=''>
+                                                            <label for='bulk-actions' class='control-label-notes mb-2'>{{ trans('langBulkProcessing') }}</label>
+                                                            <select class='form-select' name='bulk_action' id='bulk-actions'>
+                                                                <option value='av_actions' disabled selected hidden>{{ trans('langActions') }}</option>
+                                                                <option value='move'>{{ trans('langMove') }}</option>
+                                                                <option value='delete'>{{ trans('langDelete') }}</option>
+                                                                <option value='visible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
+                                                                <option value='invisible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
+                                                            </select>
+                                                            <div class='d-flex justify-content-end align-items-center'>
+                                                                <input type='submit' class='btn btn-submit submitAdminBtn mt-4' name='bulk_submit' value='{{ trans('langSubmit') }}'>
+                                                                <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
+                                                                <input type='hidden' id='filepaths' name='filepaths' value=''>
+                                                                <input type='hidden' id='source_path' name='source_path' value=''>
+                                                            </div>
+                                                        </form>
+                                                        <div class='panel-move d-none'>
+                                                            @include("modules.document.$dialogBoxBulk", ['menuTypeID' => $menuTypeID])
+                                                        </div>
                                                     </div>
+                                                    
                                                 </div>
+                                            </div>
+                                            <div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>
+                                                <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
                                             </div>
                                         </div>
                                     </div>

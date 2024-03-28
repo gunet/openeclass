@@ -436,20 +436,28 @@
                     <div class='col-12'>
 
                         @if ($is_editor)
-                            <div class="bulk-processing-box d-none">
-                                <h5 class="d-flex justify-content-start align-items-center gap-2">
-                                    <i class='fa-solid fa-hat-wizard'></i>
-                                    {{ trans('langBulkProcessing') }}
-                                </h5>
-                                <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}" class="d-flex gap-2">
-                                    <select class='form-select mt-0' name="bulk_action" class="px-3" style='max-width:250px;'>
-                                        <option value="delete">{{ trans('langDelete') }}</option>
-                                        <option value="visible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
-                                        <option value="invisible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
-                                    </select>
-                                    <input type="submit" class="px-3" name="bulk_submit" value="{{ trans('langSubmit') }}">
-                                    <input type="hidden" id="selectedcbids" name="selectedcbids" value="">
-                                </form>
+                            <div class="bulk-processing-box d-none my-4">
+                                <div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4'>
+                                    <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
+                                        <div class='form-wrapper form-edit'>
+                                            <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}">
+                                                <label for='bulk-actions-announce' class='control-label-notes mb-2'>{{ trans('langBulkProcessing') }}</label>
+                                                <select class='form-select' name="bulk_action" id='bulk-actions-announce'>
+                                                    <option value="delete">{{ trans('langDelete') }}</option>
+                                                    <option value="visible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
+                                                    <option value="invisible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
+                                                </select>
+                                                <div class='d-flex justify-content-end align-items-center'>
+                                                    <input type="submit" class="btn submitAdminBtn mt-4" name="bulk_submit" value="{{ trans('langSubmit') }}">
+                                                    <input type="hidden" id="selectedcbids" name="selectedcbids" value="">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>
+                                        <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
+                                    </div>
+                                </div>
                             </div>
                         @endif
 

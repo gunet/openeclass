@@ -48,13 +48,13 @@ $tool_content .= "
         </div>";
 
 
-  $tool_content .= "<div class='panel panel-default login-page rounded-2 m-auto' style='max-width:400px;'>
-      <div class='panel-heading rounded-0'>
+  $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 login-page m-auto' style='max-width:400px;'>
+      <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
         <h3>$langUpgDetails</h3>
       </div>
-      <div class='panel-body login-page-option rounded-0'>
+      <div class='card-body login-page-option rounded-0'>
 
-        <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
+        <form role='form' action='upgrade.php' method='post'>
 
           <div class='form-group mt-3'>
             <div class='col-12 ms-auto me-auto'>

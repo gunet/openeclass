@@ -65,17 +65,21 @@
                             {!! $backButton !!}
                             <div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4'>
                                 <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
-                                    <div class='col-12 d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                        <button class='btn submitAdminBtnDefault' id='button-start-recording'>{{ trans('langStart') }}</button>
-                                        <button class='btn deleteAdminBtn' id='button-stop-recording' disabled>{{ trans('langStopRecording') }}</button>
-                                        <button class='btn submitAdminBtn' id='button-release-microphone' disabled>{{ trans('langReleaseMic') }}</button>
-                                        <button class='btn submitAdminBtnDefault' id='button-download-recording' disabled>{{ trans('langSaveInDoc') }}</button>
-                                    </div>
-                                    <div class='col-12 d-flex justify-content-start align-items-center mt-2'>
-                                        <span class='help-block'>{{ trans('langMaxRecAudioTime') }}</span>
-                                    </div>
-                                    <div class='col-12 d-flex justify-content-start align-item-center mt-4'>
-                                        <audio controls autoplay playsinline></audio>
+                                    <div class='col-12'>
+                                        <div class='form-wrapper form-edit'>
+                                            <div class='col-12 d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                <button class='btn submitAdminBtnDefault' id='button-start-recording'>{{ trans('langStart') }}</button>
+                                                <button class='btn deleteAdminBtn' id='button-stop-recording' disabled>{{ trans('langStopRecording') }}</button>
+                                                <button class='btn submitAdminBtn' id='button-release-microphone' disabled>{{ trans('langReleaseMic') }}</button>
+                                                <button class='btn submitAdminBtnDefault' id='button-download-recording' disabled>{{ trans('langSaveInDoc') }}</button>
+                                            </div>
+                                            <div class='col-12 d-flex justify-content-start align-items-center mt-2'>
+                                                <span class='help-block'>{{ trans('langMaxRecAudioTime') }}</span>
+                                            </div>
+                                            <div class='col-12 d-flex justify-content-start align-item-center mt-4'>
+                                                <audio controls autoplay playsinline></audio>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>

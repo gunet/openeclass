@@ -73,8 +73,8 @@
                                         <h3>{{ trans('langNewPass1') }} </h3>
                                     </div>
                                     <div class='card-body'>
-                                        <div class='form-wrapper form-edit p-0'>
-                                            <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
+                                        
+                                            <form role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                                 <input type='hidden' name='u' value='{{ $userUID }}'>
                                                 <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
                                                 <div class="form-group">
@@ -95,7 +95,7 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -113,8 +113,8 @@
                                 <h3>{{ trans('langUserData') }} </h3>
                             </div>
                             <div class='card-body'>
-                                <div class='form-wrapper form-edit p-0'>
-                                    <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
+                                
+                                    <form role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='form-group'>
                                             <div class='col-12'>
                                                 <label for='userName' class='form-label'>{{ trans('lang_username') }}</label>
@@ -138,7 +138,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

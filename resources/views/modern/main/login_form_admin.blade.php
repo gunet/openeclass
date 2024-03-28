@@ -11,8 +11,8 @@
                             <h3>{{ trans('langUpgDetails') }} </h3>
                         </div>
                         <div class='card-body'>
-                            <div class='form-wrapper form-edit p-0'>
-                                <form class='form-horizontal' role='form' action='{{ $urlServer }}' method='post'>
+                            
+                                <form role='form' action='{{ $urlServer }}' method='post'>
                                     <input type='hidden' name='admin_login' value='true'>
                                     <div class='form-group'>
                                         <div class='col-12'>
@@ -32,7 +32,7 @@
                                         </div>
                                     </div>
                                 </form>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
