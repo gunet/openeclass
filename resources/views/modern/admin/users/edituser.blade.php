@@ -278,7 +278,7 @@
                                                         @endif
                                                     </td>
                                                     <td class='text-end'>
-                                                        {!! icon('fa-xmark text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
+                                                        {!! icon('fa-xmark link-delete', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
                                                     </td>
                                                 @endif
                                             </tr>

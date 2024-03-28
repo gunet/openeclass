@@ -546,7 +546,7 @@ if (!get_config('restrict_owndep')) {
 if ($data['icon']) {
     $data['message_pic'] = $langReplacePicture;
     $data['picture'] = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-    $data['delete'] = '&nbsp;' . icon('fa-xmark', $langDelete, '#', 'id="delete"') . '&nbsp;';
+    $data['delete'] = '&nbsp;' . icon('fa-xmark link-delete', $langDelete, '#', 'id="delete"') . '&nbsp;';
 } else {
     $data['picture'] = $data['delete'] = '';
     $data['message_pic'] = $langAddPicture;

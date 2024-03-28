@@ -144,21 +144,21 @@ $disabledALevel = (!$looksA && !$checkedALevel) ? "disabled='disabled'" : '';
 $disabledAPlusLevel = (!$looksAPlus && !$checkedAPlusLevel) ? "disabled='disabled'" : '';
 
 // images
-$openAccessImg = ($hasOpenAccess) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$openAccessImg = ($hasOpenAccess) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $openAccessImgBadge = ($hasOpenAccess) ? 'valid' : 'not-valid';
-$mandatoryMetadataImg = ($hasMandatoryMetadata) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$mandatoryMetadataImg = ($hasMandatoryMetadata) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $mandatoryMetadataImgBadge = ($hasMandatoryMetadata) ? 'valid' : 'not-valid';
-$licenseImg = ($hasLicense) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$licenseImg = ($hasLicense) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $licenseImgBadge = ($hasLicense) ? 'valid' : 'not-valid';
-$teacherConfirmImg = ($hasTeacherConfirm) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$teacherConfirmImg = ($hasTeacherConfirm) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $teacherConfirmImgBadge = ($hasTeacherConfirm) ? 'valid' : 'not-valid';
-$docsImg = ($numDocs > 0) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$docsImg = ($numDocs > 0) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $docsImgBadge = ($numDocs > 0) ? 'valid' : 'not-valid';
-$unitsImg = ($numUnits > 0) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$unitsImg = ($numUnits > 0) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $unitsImgBadge = ($numUnits > 0) ? 'valid' : 'not-valid';
-$mediaImg = ($numMedia > 0) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$mediaImg = ($numMedia > 0) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $mediaImgBadge = ($numMedia > 0) ? 'valid' : 'not-valid';
-$teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'fa-check text-secondary' : 'fa-xmark text-danger';
+$teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'fa-check text-success' : 'fa-xmark text-danger';
 $teacherConfirmVideoImgBadge = ($hasTeacherConfirmVideo) ? 'valid' : 'not-valid';
 
 // parse last submission date

@@ -159,7 +159,7 @@ function render_eportfolio_fields_form() {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-23px;'>
-    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-transparent flex-column align-items-stretch p-3 sticky-top Borders border-card' style='z-index:0;'>
+    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-transparent flex-column align-items-stretch p-3 sticky-top Borders border-card admin-nav' style='z-index:0;'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
