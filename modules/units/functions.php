@@ -1207,12 +1207,30 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_name) {
 
-    global $course_id, $course_code, $is_editor, $urlServer, $id, $langWasDeleted, $langResourceBelongsToUnitPrereq;
+    global $course_id, $course_code, $is_editor, $urlServer, $id, $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq, $m;
 
     $res_prereq_icon = '';
     $class_vis = ($visibility == 0 ) ? ' class="not_visible"' : ' ';
     $title = q($title);
-    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
+    if ($is_editor) {
+        $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
+    } else {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }
+        $query = "SELECT * FROM poll WHERE course_id = ?d AND pid = ?d";
+        $query .= " AND
+                    (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d 
+                        UNION 
+                       SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                    )";
+        $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
+    }
+
     if (!$poll) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1221,7 +1239,13 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        $assign_to_users_message = '';
         if ($is_editor) {
+            if ($poll->assign_to_specific == 1) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+            } else if ($poll->assign_to_specific == 2) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            }
             if (resource_belongs_to_unit_completion($_GET['id'], $poll_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
@@ -1240,12 +1264,11 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-start'>$act_name</td>
-          <td>$polllink $res_prereq_icon $comment_box</td>" .
+          <td>$polllink $res_prereq_icon $comment_box $assign_to_users_message</td>" .
             actions('poll', $resource_id, $visibility) . '
         </tr>';
-
-
 }
+
 /**
  * @brief display resource wiki
  * @param type $title
