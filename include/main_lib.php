@@ -2144,7 +2144,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -2269,7 +2269,7 @@ tinymce.init({
         '{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css',
         '{$urlAppend}template/modern/css/default.css',
     ],
-    content_style: 'body { margin: 8px; background: none !important; color: #6c757d;  }',
+    content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
@@ -4888,4 +4888,22 @@ function tinymce_widget($type){
     }
 
     return $final_data_widget;
+}
+
+
+/**
+ * @brief Getting the current text color for the tinymce regarding the active theme
+ */
+function get_tinymce_color_text() {
+    global $urlAppend, $tinymce_color_text;
+
+    $theme_id = get_config('theme_options_id');
+    if ($theme_id > 0) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+        $theme_options_styles = unserialize($theme_options->styles);
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+        if (isset($theme_options_styles['ClTextEditor'])) {
+            $tinymce_color_text = "$theme_options_styles[ClTextEditor]";
+        }
+    }
 }

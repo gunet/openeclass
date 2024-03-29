@@ -702,6 +702,9 @@ set_glossary_cache();
 
 $tool_content = $head_content = '';
 
+$tinymce_color_text = '#687DA3';
+get_tinymce_color_text();
+
 function fix_directory_separator($path) {
     if (DIRECTORY_SEPARATOR !== '/') {
         return(str_replace(DIRECTORY_SEPARATOR, '/', $path));
