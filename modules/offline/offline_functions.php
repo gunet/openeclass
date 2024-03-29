@@ -4910,6 +4910,8 @@ function get_theme_options() {
 
         $data['styles'] = $styles_str;
 
-        return $data;
+        
     }
+    
+    return $data;
 }

@@ -60,11 +60,13 @@
             <div class='table-responsive'>
                 <table class='table-default category-links'>
                     @if ($aantalcategories > 0)
-                        <tr class='list-header'><th>{{ trans('langCategorisedLinks') }} </th></tr>
+                        <thead><tr class='list-header'><th>{{ trans('langCategorisedLinks') }} </th></tr></thead>
                     @else
-                        <tr class='list-header'>
-                            <th>{{ trans('langCategorisedLinks') }} </th>
-                        </tr>
+                        <thead>
+                            <tr class='list-header'>
+                                <th>{{ trans('langCategorisedLinks') }} </th>
+                            </tr>
+                        </thead>
                         <tr>
                             <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkCategories') }} - </td>
                         <tr>
