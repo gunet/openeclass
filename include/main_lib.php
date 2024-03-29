@@ -3626,7 +3626,6 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $page_title = "";
 
     $temporary_button_class = "";
-    $modal_class = "";
 
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
         $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
@@ -3644,11 +3643,10 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        $class = isset($option['class']) ? " ".$option['class'] : '';
         $wrapped_class = isset($option['class']) ? " class='$option[class]'" : '';
-        $url = isset($option['url']) ? $option['url'] : "#";
+        $url = $option['url'] ?? "#";
         $title = q($option['title']);
-        $level = isset($option['level'])? $option['level']: 'secondary';
+        $level = $option['level'] ?? 'secondary';
         if (isset($option['confirm'])) {
             $title_conf = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
             $accept_conf = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
@@ -3667,16 +3665,15 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $text_class = '';
         }
-        if(isset($option['modal-class'])){
+        if (isset($option['modal-class'])){
             $modal_class = $option['modal-class'];
-        }else{
+        } else {
             $modal_class = '';
         }
         if (!isset($option['button-class'])) {
             $button_class = 'submitAdminBtn '.$modal_class.'';
         } else {
             $oldButton = '';
-
             if(strpos($option['button-class'],'btn-success') !== false){
                 $oldButton = 'btn-success';
             }else if(strpos($option['button-class'], 'btn-secondary') !== false){
@@ -3751,7 +3748,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
         if (count($options) > 1) {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
                 " $link_attrs>" .
                 "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
         } else {
@@ -4830,7 +4827,7 @@ function tinymce_widget($type){
         $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
                                                     WHERE widget_area_id = ?d
                                                     ORDER BY position ASC", HOME_PAGE_SIDEBAR);
-        
+
     }elseif($type == 3){
         $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
                                                     WHERE (user_id = ?d OR user_id IS NULL) 
@@ -4865,7 +4862,7 @@ function tinymce_widget($type){
                                                         AND user_id IS NULL AND position >= ?d
                                                         ORDER BY position ASC",COURSE_HOME_PAGE_SIDEBAR, 0);
         }
-        
+
     }
 
     if(count($getWidget) > 0){

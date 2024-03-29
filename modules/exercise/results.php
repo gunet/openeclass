@@ -97,9 +97,8 @@ $showScore = $displayScore == 1
         [
             'title' => $langCheckGrades,
             'icon' => 'fa-bar-chart',
-            'class' => 'check-grades',
-            'modal-class' => 'check-grades',
             'level' => 'primary-label',
+            'modal-class' => 'check-grades',
             'button-class' => 'btn-success',
             'show' => $is_editor
         ],
@@ -351,93 +350,95 @@ if ($is_editor) {
     $tool_content .= "
     <script type='text/javascript'>
         $(function () {
-          $('.check-grades').click(function (e) {
-            var links = $('td a[href*=exercise_result]'),
-                count = links.length,
-                i = 0,
-                itemsToRegrade = [];
-            e.preventDefault();
-            var dialog = bootbox.dialog({
-              title: '" . js_escape($langCheckGradesConsistent) . "',
-              message: '<div class=\"progress\">' +
-                  '<div class=\"progress-bar progress-bar-striped active\" ' +
-                  'role=\"progressbar\" style=\"min-width: 4em; width: 0%;\">' +
-                  '0 / ' + count + '</div>'
-              });
-            var urls = $('td a[href*=exercise_result]').map(function (i, el) {
-                return el.href + '&check=true';
-            }).get();
-            var regradeDialog;
-            var regradeCallback = function (item) {
-                if (item) {
-                    $.post(item.url, { regrade: true },
-                        function (data) {
+              $('.check-grades').click(function (e) {
+                var links = $('td a[href*=exercise_result]'),
+                    count = links.length,
+                    i = 0,
+                    itemsToRegrade = [];
+                e.preventDefault();
+                var dialog = bootbox.dialog({
+                  title: '" . js_escape($langCheckGradesConsistent) . "',
+                  message: '<div class=\"progress\">' +
+                      '<div class=\"progress-bar progress-bar-striped active\" ' +
+                      'role=\"progressbar\" style=\"min-width: 4em; width: 0%;\">' +
+                      '0 / ' + count + '</div>'
+                  });
+                var urls = $('td a[href*=exercise_result]').map(function (i, el) {
+                    return el.href + '&check=true';
+                }).get();
+                var regradeDialog;
+                var regradeCallback = function (item) {
+                    if (item) {
+                        $.post(item.url, { regrade: true },
+                            function (data) {
+                                i++;
+                                regradeDialog.find('.progress-bar')
+                                    .css({width: (i / count * 100) + '%'})
+                                    .text(i + ' / ' + count);
+                                regradeCallback(itemsToRegrade.shift());
+                            });
+                        } else {
+                            window.location.replace('" . str_replace("'", "\\'", $_SERVER['REQUEST_URI']) . "');
+                        }
+                };
+                var gradeCallback = function (url) {
+                    if (url) {
+                        $.get(url, function (data) {
+                            if (data['result'] != 'ok') {
+                                itemsToRegrade.push(data);
+                            }
                             i++;
-                            regradeDialog.find('.progress-bar')
+                            dialog.find('.progress-bar')
                                 .css({width: (i / count * 100) + '%'})
                                 .text(i + ' / ' + count);
-                            regradeCallback(itemsToRegrade.shift());
+                            gradeCallback(urls.shift());
                         });
                     } else {
-                        window.location.replace('" . str_replace("'", "\\'", $_SERVER['REQUEST_URI']) . "');
-                    }
-            };
-            var gradeCallback = function (url) {
-                if (url) {
-                    $.get(url, function (data) {
-                        if (data['result'] != 'ok') {
-                            itemsToRegrade.push(data);
-                        }
-                        i++;
-                        dialog.find('.progress-bar')
-                            .css({width: (i / count * 100) + '%'})
-                            .text(i + ' / ' + count);
-                        gradeCallback(urls.shift());
-                    });
-                } else {
-                    dialog.modal('hide');
-                    if (itemsToRegrade.length === 0) {
-                        bootbox.alert({
-                            title: '" . js_escape($langCheckGradesConsistent) . "',
-                            message: '<p>" . js_escape($langCheckFinished . ' ' . $langRegradeNotNeeded) . "</p>',
-                            backdrop: true
-                        });
-                    } else {
-                        bootbox.confirm({
-                            title: '" . js_escape($langCheckGradesConsistent) . "',
-                            message: '<p>" . js_escape($langCheckFinished . ' ' . $langRegradeAttemptsList) . "</p><ul>' +
-                                itemsToRegrade.map(function (item) {
-                                    return '<li><a href=\"' + item.url + '\" target=\"_blank\">' + item.title + '</a></li>';
-                                }).join('') + '</ul>',
-                            buttons: {
-                                cancel: {
-                                    label: '" . js_escape($langCancel) . "'
+                        dialog.modal('hide');
+                        if (itemsToRegrade.length === 0) {
+                            bootbox.alert({
+                                title: '" . js_escape($langCheckGradesConsistent) . "',
+                                message: '<p>" . js_escape($langCheckFinished . ' ' . $langRegradeNotNeeded) . "</p>',
+                                backdrop: true
+                            });
+                        } else {
+                            bootbox.confirm({
+                                title: '" . js_escape($langCheckGradesConsistent) . "',
+                                message: '<p>" . js_escape($langCheckFinished . ' ' . $langRegradeAttemptsList) . "</p><ul>' +
+                                    itemsToRegrade.map(function (item) {
+                                        return '<li><a href=\"' + item.url + '\" target=\"_blank\">' + item.title + '</a></li>';
+                                    }).join('') + '</ul>',
+                                buttons: {
+                                    cancel: {
+                                        label: '" . js_escape($langCancel) . "',
+                                        className: 'cancelAdminBtn position-center'
+                                    },
+                                    confirm: {
+                                        label: '" . js_escape($langRegradeAll) . "',
+                                        className: 'submitAdminBtn position-center'
+                                    }
                                 },
-                                confirm: {
-                                    label: '" . js_escape($langRegradeAll) . "'
+                                callback: function (result) {
+                                    if (result) {
+                                        i = 0;
+                                        count = itemsToRegrade.length;
+                                        dialog.modal('hide');
+                                        regradeDialog = bootbox.dialog({
+                                          title: '" . js_escape($langRegradeAll) . "',
+                                          message: '<div class=\"progress\">' +
+                                              '<div class=\"progress-bar progress-bar-striped active\" ' +
+                                              'role=\"progressbar\" style=\"min-width: 4em; width: 0%;\">' +
+                                              '0 / ' + count + '</div>'
+                                          });
+                                        regradeCallback(itemsToRegrade.shift());
+                                    }
                                 }
-                            },
-                            callback: function (result) {
-                                if (result) {
-                                    i = 0;
-                                    count = itemsToRegrade.length;
-                                    dialog.modal('hide');
-                                    regradeDialog = bootbox.dialog({
-                                      title: '" . js_escape($langRegradeAll) . "',
-                                      message: '<div class=\"progress\">' +
-                                          '<div class=\"progress-bar progress-bar-striped active\" ' +
-                                          'role=\"progressbar\" style=\"min-width: 4em; width: 0%;\">' +
-                                          '0 / ' + count + '</div>'
-                                      });
-                                    regradeCallback(itemsToRegrade.shift());
-                                }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            };
-            gradeCallback(urls.shift());
-          });
+                };
+                gradeCallback(urls.shift());
+              });
         });
     </script>";
 }
