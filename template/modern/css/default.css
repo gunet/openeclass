@@ -5121,8 +5121,8 @@ body.mce-fullscreen .notification-top-bar{
   background-color: transparent;
   padding: 0px;
 }
-.hide-notification-bar .fa-xmark,
+/* .hide-notification-bar .fa-xmark,
 .hide-notification-bar:hover .fa-xmark,
 .hide-notification-bar:focus .fa-xmark{
   color: #C44601;
-}
+} */

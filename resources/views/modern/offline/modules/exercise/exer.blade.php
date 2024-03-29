@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <div class="col_maincontent_active">
+            <div class="col_maincontent_active col_maincontent_active_module_content">
 
                 <div class="row">
 
@@ -65,7 +65,7 @@
                                             @continue
                                         @endif
 
-                                        <table class="table-default">
+                                        <table class="table-default mb-4">
                                             <tr>
                                                 <th valign="top" colspan="2">{{ trans('langQuestion') }}&nbsp;{{ $questionCount }}</th>
                                             </tr>

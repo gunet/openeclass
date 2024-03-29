@@ -374,7 +374,7 @@ function view($view_file, $view_data = array()) {
                 $background_type .= "background-size: 100% 100%;background-attachment: fixed;";
             }
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
-            $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
+            $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "#ffffff";
             $styles_str .= "
                                 body{
                                     background: $bg_color$bg_image;$background_type
@@ -4088,7 +4088,7 @@ function view($view_file, $view_data = array()) {
         ////////////////////// BACKGROUND COLOR OF COURSE LEFT MENU /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        // Left menu has always a background color apart from transparent color
+
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
             $aboutLeftForm = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
@@ -4106,9 +4106,22 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[leftNavBgColor];
                 }
 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND COLOR OF COURSE LEFT MENU IN SMALL SCREEN /////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['leftNavBgColorSmallScreen'])) {
+
+            $styles_str .= " 
+
                 @media(max-width:991px){
                     .ContentLeftNav, #collapseTools{
-                        background: $rgba_no_alpha;
+                        background: $theme_options_styles[leftNavBgColorSmallScreen];
                     }
                 }
 
@@ -5824,7 +5837,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clContainerImportantAnnouncement'])){
             $styles_str .= "
-                .notification-top-bar *{
+                .notification-top-bar .title-announcement,
+                .notification-top-bar i.fa-bell{
                     color: $theme_options_styles[clContainerImportantAnnouncement];
                 }
             
@@ -5839,8 +5853,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clLinkImportantAnnouncement'])){
             $styles_str .= "
-                .notification-top-bar a,
-                .hide-notification-bar .fa-xmark{
+                .notification-top-bar a{
                     color: $theme_options_styles[clLinkImportantAnnouncement];
                 }
             
@@ -5855,8 +5868,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clHoveredLinkImportantAnnouncement'])){
             $styles_str .= "
-                .notification-top-bar a:hover,
-                .hide-notification-bar:hover .fa-xmark{
+                .notification-top-bar a:hover{
                     color: $theme_options_styles[clHoveredLinkImportantAnnouncement];
                 }
             

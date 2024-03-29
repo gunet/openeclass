@@ -123,7 +123,7 @@
                                                 <?php $count_index = 0;?>
                                                 @foreach ($course_units as $key => $course_unit)
                                                     <?php $count_index++; ?>
-                                                    <div class='col-12'>
+                                                    <div class='col-12 mb-4'>
                                                         <div class='panel clearfix'>
                                                             <div class='col-12'>
                                                                 <div class='item-content'>

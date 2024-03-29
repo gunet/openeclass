@@ -688,6 +688,8 @@ function get_theme_options() {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
         $urlThemeData = 'theme_data/' . $theme_id;
+        $urlThemeDataForModules = '../theme_data/' .$theme_id;
+        $urlThemeDataForModulesContent = '../../theme_data/' .$theme_id;
 
         $styles_str = '';
         $styles_str .= "
@@ -715,6 +717,10 @@ function get_theme_options() {
                     padding-top: 0px;
                 }
             }
+
+            .list-header{
+                padding: 10px 10px 10px 10px;
+            }
         
         ";
 
@@ -733,16 +739,41 @@ function get_theme_options() {
                 $background_type .= "background-size: 100% 100%;background-attachment: fixed;";
             }
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
-            $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
+            $bg_image_module = isset($theme_options_styles['bgImage']) ? " url('$urlThemeDataForModules/$theme_options_styles[bgImage]')" : "";
+            $bg_image_module_content = isset($theme_options_styles['bgImage']) ? " url('$urlThemeDataForModulesContent/$theme_options_styles[bgImage]')" : "";
+            $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "#ffffff";
             $styles_str .= "
                                 body{
                                     background: $bg_color$bg_image;$background_type
+                                }
+                                body:has(.col_maincontent_active_module){
+                                    background: $bg_color$bg_image_module;$background_type
+                                }
+                                body:has(.col_maincontent_active_module_content){
+                                    background: $bg_color$bg_image_module_content;$background_type
                                 }
                                 .main-container,
                                 .module-container{
                                     background-color: $bg_color;
                                 }
                             ";
+        }
+
+        $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////// BACKGROUND TRANSPARENT TO THE BASIC WRAPPERS  ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['bgTransparentBasicWrappers'])){
+            $styles_str .= "
+                .main-container,
+                .module-container{
+                    background-color: transparent;
+                }
+            ";
         }
 
 
@@ -851,6 +882,11 @@ function get_theme_options() {
                     background: $theme_options_styles[BgColorWrapperHeader];
                 }
 
+                .navbar-learningPath,
+                .header-container-learningPath{
+                    background: $theme_options_styles[BgColorWrapperHeader];
+                }
+
             ";
         }
 
@@ -907,6 +943,10 @@ function get_theme_options() {
 
                 .header-mobile-link{
                     color:$theme_options_styles[linkColorHeader];
+                }
+
+                .split-left{
+                    border-left: solid 1px $theme_options_styles[linkColorHeader];
                 }
 
             ";
@@ -3489,6 +3529,25 @@ function get_theme_options() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND COLOR OF COURSE LEFT MENU IN SMALL SCREEN /////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['leftNavBgColorSmallScreen'])) {
+
+            $styles_str .= " 
+
+                @media(max-width:991px){
+                    .ContentLeftNav, #collapseTools{
+                        background: $theme_options_styles[leftNavBgColorSmallScreen];
+                    }
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ////////////////////// BACKGROUND COLOR TO TABLE COMPONENT //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -4490,10 +4549,30 @@ function get_theme_options() {
                     background-size: 100% 100%;
                     background-attachment: fixed;
                 }
+                .col_maincontent_active_module {
+                    background: url('$urlThemeDataForModules/$theme_options_styles[RightColumnCourseBgImage]');
+                    background-size: 100% 100%;
+                    background-attachment: fixed;
+                }
+                .col_maincontent_active_module_content {
+                    background: url('$urlThemeDataForModulesContent/$theme_options_styles[RightColumnCourseBgImage]');
+                    background-size: 100% 100%;
+                    background-attachment: fixed;
+                }
 
                 @media(max-width:991px){
                     .module-container:has(.course-wrapper){
                         background: url('$urlThemeData/$theme_options_styles[RightColumnCourseBgImage]');
+                        background-size: 100% 100%;
+                        background-attachment: fixed;
+                    }
+                    .module-container:has(.col_maincontent_active_module){
+                        background: url('$urlThemeDataForModules/$theme_options_styles[RightColumnCourseBgImage]');
+                        background-size: 100% 100%;
+                        background-attachment: fixed;
+                    }
+                    .module-container:has(.col_maincontent_active_module_content){
+                        background: url('$urlThemeDataForModulesContent/$theme_options_styles[RightColumnCourseBgImage]');
                         background-size: 100% 100%;
                         background-attachment: fixed;
                     }

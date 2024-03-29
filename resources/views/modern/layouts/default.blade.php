@@ -122,10 +122,10 @@
                     <div class='{{ $container }} padding-default'>
                         <div class='d-flex justify-content-center align-items-center gap-2'>
                             <button class='btn hide-notification-bar' id='closeNotificationBar' data-bs-toggle='tooltip' data-bs-placement='bottom' title="{{ trans('langDontDisplayAgain') }}">
-                                <span class='fa-solid fa-xmark Accent-200-cl fa-md h-auto w-auto me-1'></span>
+                                <span class='fa-solid fa-xmark link-delete fa-md h-auto w-auto me-1'></span>
                             </button>
                             <i class='fa-regular fa-bell fa-xl d-block'></i>
-                            <span class='d-inline-block text-truncate TextBold' style="max-width: auto;">
+                            <span class='d-inline-block text-truncate TextBold title-announcement' style="max-width: auto;">
                                 @php echo strip_tags($pinned_announce_title); @endphp
                             </span>
                             <a class='link-color TextBold msmall-text text-decoration-underline ps-1' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>

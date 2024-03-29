@@ -11,7 +11,7 @@
                 </div>
             </div>
 
-            <div class="col_maincontent_active">
+            <div class="col_maincontent_active col_maincontent_active_module">
 
                 <div class="row">
 
@@ -36,11 +36,15 @@
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
                                         <table class='table-default nocategory-links'>
-                                            <tr class='list-header'>
-                                                <th>{{ trans('langVideoDirectory') }}</th>
-                                                <th>{{ trans('langDate') }}</th>
-                                            </tr>
+                                            <thead>
+                                                <tr class='list-header'>
+                                                    <th>{{ trans('langVideoDirectory') }}</th>
+                                                    <th>{{ trans('langDate') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                             @include('modules.video.common.videoList')
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -52,18 +56,21 @@
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
                                         <table class='table-default category-links'>
-                                            <tr class='list-header'>
-                                                <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
-                                                    {!! icon('fa-folder-open', $GLOBALS['langViewShow']) !!}
-                                                </th>
-                                                <th>{{ trans('langDate') }}</th>
-                                            </tr>
+                                            <thead>
+                                                <tr class='list-header'>
+                                                    <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
+                                                        {!! icon('fa-folder-open', $GLOBALS['langViewShow']) !!}
+                                                    </th>
+                                                    <th>{{ trans('langDate') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                         @foreach ($categories as $myrow)
                                             <?php
                                                 $description = standard_text_escape($myrow->description);
                                                 $folder_icon = icon('fa-folder-open', $GLOBALS['langViewShow']);
                                             ?>
-                                            <tr class='link-subcategory-title'><th class='category-link' colspan='2'>{!! $folder_icon !!}&nbsp;{{ $myrow->name }}
+                                            <tr class='link-subcategory-title'><th class='category-link px-2' colspan='2'>{!! $folder_icon !!}&nbsp;{{ $myrow->name }}
                                             @if (!empty($description))
                                                 <br><span class='link-description'>{{ $description }}</span>
                                             @endif
@@ -74,6 +81,7 @@
                                             ?>
                                             @include('modules.video.common.videoList', ['items' => $currentcatresults])
                                         @endforeach
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

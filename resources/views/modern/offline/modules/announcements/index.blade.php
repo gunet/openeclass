@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="col_maincontent_active">
+            <div class="col_maincontent_active col_maincontent_active_module">
 
                 <div class="row">
 

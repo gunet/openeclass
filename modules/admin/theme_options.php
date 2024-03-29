@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','buttonTextColor',
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter',
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
@@ -1431,8 +1431,13 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgColorConfig $langHelpCourseUI</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
-                    <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
+                        <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
+                        <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='leftNavBgColorSmallScreen' class='control-label-notes me-2 mb-2'>$langBgColor <small>$langLogoSmall</small>:</label>
+                        <input name='leftNavBgColorSmallScreen' type='text' class='form-control colorpicker' id='leftNavBgColorSmallScreen' value='$theme_options_styles[leftNavBgColorSmallScreen]'>
                     </div>
 
                     <hr>
