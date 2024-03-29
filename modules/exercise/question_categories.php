@@ -39,14 +39,14 @@ if (isset($_POST['submitCat'])) {
             $q_cat_id = $_GET['modifyCat'];
             Database::get()->query("UPDATE exercise_question_cats SET question_cat_name = ?s "
                     . "WHERE question_cat_id = ?d", $q_cat_name, $q_cat_id);
-            Session::flash('message',$langEditCatSuccess); 
+            Session::flash('message',$langEditCatSuccess);
             Session::flash('alert-class', 'alert-success');
         } else {
             $PollActive = 1;
             $q_cat_id = Database::get()->query("INSERT INTO exercise_question_cats
                         (question_cat_name, course_id)
                         VALUES (?s, ?d)", $q_cat_name, $course_id)->lastInsertID;
-            Session::flash('message',$langNewCatSuccess); 
+            Session::flash('message',$langNewCatSuccess);
             Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
@@ -104,7 +104,7 @@ if (isset($_POST['submitCat'])) {
                         
                         
                     </div>
-                </div>                
+                </div>
             </form>
         </div></div><div class='d-none d-lg-block'>
         <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
@@ -114,7 +114,7 @@ if (isset($_POST['submitCat'])) {
     $q_cat_id = $_GET['deleteCat'];
     if (Database::get()->query("DELETE FROM exercise_question_cats WHERE question_cat_id = ?d AND course_id = ?d", $q_cat_id, $course_id)->affectedRows > 0) {
         Database::get()->query("UPDATE exercise_question SET category = ?d WHERE category = ?d AND course_id = ?d", 0, $q_cat_id, $course_id);
-        Session::flash('message',$langDelCatSuccess); 
+        Session::flash('message',$langDelCatSuccess);
         Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
@@ -137,10 +137,9 @@ if (isset($_POST['submitCat'])) {
             'url' => "question_categories.php?course=$course_code&newCat=yes",
             'button-class' => 'btn-success'
         )
-       
     ));
 
-    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
     if (count($q_cats) > 0) {
         $tool_content .= "
             <div class='table-responsive'>
@@ -150,6 +149,7 @@ if (isset($_POST['submitCat'])) {
                             <th>$langTitle</th>
                             <th></th>
                         </tr> 
+
                     ";
         foreach ($q_cats as $q_cat) {
             $action_button = action_button(array(
@@ -168,11 +168,11 @@ if (isset($_POST['submitCat'])) {
             ));
             $tool_content .= "
                         <tr>
-                            <td>$q_cat->question_cat_name</td>
+                            <td>" .q($q_cat->question_cat_name) . "</td>
                             <td class='option-btn-cell text-end'>$action_button</td>
                         </tr>";
         }
-        $tool_content .= "                
+        $tool_content .= "
                     </tbody>
                 </table>
             </div>";
