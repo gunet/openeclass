@@ -51,12 +51,12 @@ if (isset($_POST['submitCat'])) {
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         if(isset($_GET['modifyCat'])) {
-            $cat_id = intval($_GET['modifyCat']); 
+            $cat_id = intval($_GET['modifyCat']);
             redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code&modifyCat=$cat_id");
-        } else {        
+        } else {
             redirect_to_home_page("modules/exercise/question_categories.php??course=$course_code&newCat=yes");
-        }        
-    }    
+        }
+    }
 } elseif (isset($_GET['modifyCat']) || isset($_GET['newCat'])) {
     $pageName = isset($_GET['newCat']) ? $langNewCat : $langEditCat;
     $navigation = array(
@@ -92,12 +92,12 @@ if (isset($_POST['submitCat'])) {
                         <input class='btn btn-primary' name='submitCat' type='submit' value='$langSubmit'>
                         <a href='question_categories.php?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div>
-                </div>                
+                </div>
             </form>
         </div>";
 } elseif (isset($_GET['deleteCat'])) {
     $q_cat_id = $_GET['deleteCat'];
-    if (Database::get()->query("DELETE FROM exercise_question_cats WHERE question_cat_id = ?d AND course_id = ?d", $q_cat_id, $course_id)->affectedRows > 0) { 
+    if (Database::get()->query("DELETE FROM exercise_question_cats WHERE question_cat_id = ?d AND course_id = ?d", $q_cat_id, $course_id)->affectedRows > 0) {
         Database::get()->query("UPDATE exercise_question SET category = ?d WHERE category = ?d AND course_id = ?d", 0, $q_cat_id, $course_id);
         Session::Messages($langDelCatSuccess, 'alert-success');
     }
@@ -106,7 +106,7 @@ if (isset($_POST['submitCat'])) {
     $toolName = $langExercices;
     $pageName = $langQuestionCats;
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
-    
+
     $tool_content .= action_bar(array(
         array(
             'title' => $langNewCat,
@@ -120,10 +120,10 @@ if (isset($_POST['submitCat'])) {
             'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code"
-        ),          
+        ),
     ));
 
-    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
+    $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
     if (count($q_cats) > 0) {
         $tool_content .= "
             <div class='table-responsive'>
@@ -132,7 +132,7 @@ if (isset($_POST['submitCat'])) {
                         <tr>
                             <th>$langTitle</th>
                             <th class='text-center'>".icon('fa-gears')."</th>
-                        </tr> 
+                        </tr>
                     ";
         foreach ($q_cats as $q_cat) {
             $action_button = action_button(array(
@@ -140,7 +140,7 @@ if (isset($_POST['submitCat'])) {
                     'title' => $langEditChange,
                     'url' => "question_categories.php?course=$course_code&modifyCat=$q_cat->question_cat_id",
                     'icon' => 'fa-edit'
-                ),            
+                ),
                 array(
                     'title' => $langDelete,
                     'url' => "question_categories.php?course=$course_code&deleteCat=$q_cat->question_cat_id",
@@ -151,11 +151,11 @@ if (isset($_POST['submitCat'])) {
             ));
             $tool_content .= "
                         <tr>
-                            <td>$q_cat->question_cat_name</td>
+                            <td>" . q($q_cat->question_cat_name) . "</td>
                             <td class='option-btn-cell'>$action_button</td>
                         </tr>";
         }
-        $tool_content .= "                
+        $tool_content .= "
                     </tbody>
                 </table>
             </div>";
