@@ -9,10 +9,12 @@
                 <div class='col-sm-12'>
                     <div class='table-responsive'>
                         <table class='table-default nocategory-links'>
-                            <tr class='list-header'>
-                                <th>{{ trans('langVideoDirectory') }}</th>
-                                <th class='text-center' style='width:134px'>{{ trans('langDate') }}</th>
-                            </tr>
+                            <thead>
+                                <tr class='list-header'>
+                                    <th>{{ trans('langVideoDirectory') }}</th>
+                                    <th class='text-center' style='width:134px'>{{ trans('langDate') }}</th>
+                                </tr>
+                            </thead>
                             @include('modules.video.common.videoList')
                         </table>
                     </div>
@@ -25,12 +27,14 @@
                 <div class='col-sm-12'>
                     <div class='table-responsive'>
                         <table class='table-default category-links'>
-                            <tr class='list-header'>
-                                <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
-                                    {!! icon('fa-folder-open', $GLOBALS['langViewShow']) !!}
-                                </th>
-                                <th style='width:100px;'>{{ trans('langDate') }}</th>
-                            </tr>
+                            <thead>
+                                <tr class='list-header'>
+                                    <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
+                                        {!! icon('fa-folder-open', $GLOBALS['langViewShow']) !!}
+                                    </th>
+                                    <th style='width:100px;'>{{ trans('langDate') }}</th>
+                                </tr>
+                            </thead>
                         @foreach ($categories as $myrow)
                             <?php
                                 $description = standard_text_escape($myrow->description);

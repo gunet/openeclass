@@ -4412,7 +4412,8 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
 
         if(!empty($theme_options_styles['ClTextEditor'])){
-            $togglePNG = $urlServer . "js/tinymce/skins/light/img/toggle.png";
+            $SVGtools = "svg xmlns='http://www.w3.org/2000/svg' height='20' width='15' viewBox='0 0 384 512' fill='%23000'%3e%3cpath fill='$theme_options_styles[ClTextEditor]' d='M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z'/%3e%3c/svg";
+            $SVGtools2 = 'transparent url("data:image/svg+xml,%3C' . $SVGtools .'%3E") center / 1em auto no-repeat';
             $styles_str .= "
 
                 .mce-toolbar .mce-btn i {
@@ -4435,10 +4436,11 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .mce-toolbar .mce-btn i.mce-i-none{
-                    background-image: url('$togglePNG') !important;
+                    background: $SVGtools2 !important;
                 }
                 
             ";
+
         }
 
         /////////////////////////////////////////////////////////////////////////////////////

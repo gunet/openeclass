@@ -32,14 +32,18 @@
                             <div class='table-responsive'>
                                 <table class='table-default nocategory-links'>
                                     @if ($numberofzerocategory !== 0)
-                                        <tr class='list-header'>
-                                            <th class='text-start'>{{ trans('langNoCategory') }}</th>
-                                        </tr>
+                                        <thead>
+                                            <tr class='list-header'>
+                                                <th class='text-start'>{{ trans('langNoCategory') }}</th>
+                                            </tr>
+                                        </thead>
                                         @include('modules.link.common.linkList', ['category' => $result_zero_category])
                                     @else
-                                        <tr class='list-header'>
-                                            <th class='text-start list-header'> {{ trans('langNoCategory') }}</th>
-                                        </tr>
+                                        <thead>
+                                            <tr class='list-header'>
+                                                <th class='text-start list-header'> {{ trans('langNoCategory') }}</th>
+                                            </tr>
+                                        </thead>
                                         <tr>
                                             <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                         </tr>
@@ -55,14 +59,18 @@
                                 <div class='table-responsive'>
                                     <table class='table-default nocategory-links'>
                                         @if ($numberofsocialcategory !== 0)
-                                            <tr class='list-header'>
-                                                <th class='text-start'>{{ trans('langSocialCategory') }}</th>
-                                            </tr>
+                                            <thead>
+                                                <tr class='list-header'>
+                                                    <th class='text-start'>{{ trans('langSocialCategory') }}</th>
+                                                </tr>
+                                            </thead>
                                             @include('modules.link.common.linkList', ['category' => $result_social_category])
                                         @else
-                                            <tr class='list-header'>
-                                                <th class='text-start list-header'>{{ trans('langSocialCategory') }}</th>
-                                            </tr>
+                                            <thead>
+                                                <tr class='list-header'>
+                                                    <th class='text-start list-header'>{{ trans('langSocialCategory') }}</th>
+                                                </tr>
+                                            </thead>
                                             <tr>
                                                 <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                             </tr>
@@ -80,7 +88,7 @@
                                     @if ($aantalcategories > 0)
                                         <tr class='list-header'><th>{{ trans('langCategorisedLinks') }} </th></tr>
                                     @else
-                                        <tr>
+                                        <tr class='list-header'>
                                             <th>{{ trans('langCategorisedLinks') }} </th>
                                         </tr>
                                         <tr>
