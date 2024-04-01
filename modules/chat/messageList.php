@@ -44,10 +44,10 @@ $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatAr
 $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-define('MESSAGE_LINE_NB', 300);
+const MESSAGE_LINE_NB = 300;
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-define('MAX_LINE_IN_FILE', 300);
+const MAX_LINE_IN_FILE = 300;
 
 if ($GLOBALS['language'] == 'el') {
     $timeNow = date("d-m-Y / H:i", time());
@@ -155,7 +155,7 @@ if (isset($_GET['store']) && $is_editor) {
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/default/CSS/bootstrap-custom.css">
 
-    <style type="text/css">
+    <style>
         span { color: #727266; font-size: 11px; }
         div { font-size: 12px; }
         body { font-family: Verdana, Arial, Helvetica, sans-serif; }
@@ -191,7 +191,7 @@ if (isset($_GET['store']) && $is_editor) {
                                     $str_1[0]
                                 </div>
                             </div>
-                      </div>\n";
+                      </div>";
             } else {
                 $user_id = intval(trim($str_1[1]));
                 $str_2 = explode(' - ', $str_1[0], 2);
@@ -205,34 +205,31 @@ if (isset($_GET['store']) && $is_editor) {
                 }
                 $token = token_generate($user_id, true);
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-xs-12'>
-                                <div class='media'>
-                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
-                                        ". profile_image($user_id, IMAGESIZE_SMALL) ."
-                                    </a>
-                                    <div class='media-body bubble'>
-                                        <div class='label label-success media-heading'>$datetime</div>
-                                        <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>
-                                        <div class='margin-top-thin'>
-                                            " . $usertext . "
-                                        </div>
-                                    </div>
+                        <div class='col-xs-12'>
+                            <div class='media'>
+                                <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
+                                    ". profile_image($user_id, IMAGESIZE_SMALL) ."
+                                </a>
+                                <div class='media-body bubble'>
+                                    <div class='label label-success media-heading'>$datetime</div>
+                                    <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>
+                                    <div class='margin-top-thin'>" . q($usertext) . "</div>
                                 </div>
                             </div>
-                      </div>\n";
+                        </div>
+                  </div>";
             }
         } else { //prior to version 3.0 generated conferences
-                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-xs-12'>
-                                <div class='alert alert-default'>
-                                    $str_1[0]
-                                </div>
+            echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
+                        <div class='col-xs-12'>
+                            <div class='alert alert-default'>
+                                $str_1[0]
                             </div>
-                      </div>\n";
+                        </div>
+                  </div>";
         }
     }
-    echo "</body></html>\n";
-
+    echo "</body></html>";
 
     /*
      * For performance reason, buffer the content
