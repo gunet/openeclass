@@ -86,7 +86,7 @@ class Log {
      * @param type $script_page script_page
      * @return void
      */
-    public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now, $script_page) {
+    public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
 
         global $tool_content, $modules, $langToolManagement,
             $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langConfig,

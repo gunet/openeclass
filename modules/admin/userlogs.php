@@ -127,9 +127,9 @@ $log = new Log();
 
 // display logs
 if ($logtype == -2) { // all platform actions
-    $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end);
 } else { // course actions
-    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end);
 }
 
 
