@@ -94,13 +94,16 @@ class Log {
             $langModifyInfo, $langAbuseReport, $langIpAddress;
 
         $q1 = $q2 = $q3 = $q4 = '';
+        $q1_terms = $q2_terms = $q3_terms = $q4_terms = [];
 
         if ($user_id != -1) {
-            $q1 = "AND user_id = $user_id"; // display specific user
+            $q1 = "AND user_id = ?d"; // display specific user
+            $q1_terms = $user_id;
         }
 
         if ($logtype > 0) {
-            $q3 = "AND action_type = $logtype"; // specific course logging
+            $q3 = "AND action_type = ?d"; // specific course logging
+            $q3_terms = $logtype;
             if ($logtype > 3) { // specific system logging
                 $module_id = $course_id = 0;
             }
@@ -110,23 +113,26 @@ class Log {
         }
 
         if ($module_id > 0) {
-            $q2 = "AND module_id = $module_id"; // display specific module
+            $q2 = "AND module_id = ?d"; // display specific module
+            $q2_terms = $module_id;
         } elseif ($module_id == -1) { // display all course module logging
             $q2 = "AND module_id > 0"; // but exclude system logging
         }
 
         if ($course_id > 0) {
-            $q4 = "AND course_id = $course_id"; // display specific course
+            $q4 = "AND course_id = ?d"; // display specific course
+            $q4_terms = $course_id;
         } elseif ($course_id == -1) { // display all course logging
             $q4 = "AND course_id > 0"; // but exclude system logging
         }
         // count logs
-        $num_of_logs = Database::get()->querySingle("SELECT COUNT(*) AS count FROM log WHERE ts BETWEEN '$date_from' AND '$date_now' $q1 $q2 $q3 $q4")->count;
+        $num_of_logs = Database::get()->querySingle("SELECT COUNT(*) AS count FROM log WHERE ts BETWEEN ?t AND ?t $q1 $q2 $q3 $q4", $date_from, $date_now, $q1_terms, $q2_terms, $q3_terms, $q4_terms)->count;
         // fetch logs
         $sql = Database::get()->queryArray("SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
-                                WHERE ts BETWEEN '$date_from' AND '$date_now'
+                                WHERE ts BETWEEN ?t AND ?t
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC");
+                                ORDER BY ts DESC", $date_from, $date_now, $q1_terms, $q2_terms, $q3_terms, $q4_terms);
+
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
                 $tool_content .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
@@ -217,11 +223,11 @@ class Log {
         // move records in table `log_archive`
         $sql = Database::get()->query("INSERT INTO log_archive (user_id, course_id, module_id, details, action_type, ts, ip)
                                 SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
-                                WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
+                                WHERE DATE_SUB(CURDATE(),INTERVAL $date MONTH) > ts");
 
         // delete previous records from `log`
         if ($sql) {
-            Database::get()->query("DELETE FROM log WHERE date_sub(CURDATE(),interval $date month) > ts");
+            Database::get()->query("DELETE FROM log WHERE date_sub(CURDATE(),INTERVAL $date MONTH) > ts");
         }
     }
 
@@ -232,7 +238,7 @@ class Log {
     public static function purge() {
 
         $date = get_config('log_purge_interval');
-        $sql = Database::get()->query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
+        $sql = Database::get()->query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),INTERVAL $date MONTH) > ts");
 
     }
 
