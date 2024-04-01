@@ -24,7 +24,9 @@
  * @author Yannis Exidaridis <jexi@noc.uoa.gr>
  * @brief form for displaying logs
  */
+
 if (isset($_GET['from_admin'])) {
+    $require_admin = TRUE;
     $course_id = $_GET['c'];
 } elseif (isset($_REQUEST['from_other'])) {
     $require_admin = TRUE;
