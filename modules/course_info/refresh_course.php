@@ -38,7 +38,7 @@ if (isset($_REQUEST['from_user'])) { // checks if we are coming from /modules/us
     $from_user = true;
 }
 
-$url = "modules/course_info/refresh_course.php?course=$course_code";
+$url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
 
 if (!$from_user) {
     $toolName = $langCourseInfo;

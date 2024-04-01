@@ -4,12 +4,6 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
-<style>
-    .panel-move .form-content-modules, .panel-move .col-12.d-flex.justify-content-end.align-items-center.gap-2.mt-4 {
-        display: none!important;
-    }
-</style>
-
 <script type='text/javascript'>
 
     $(document).ready(function(){
@@ -18,6 +12,7 @@
 
         $('li.bulk-processing a').on('click', function(event) {
             event.preventDefault();
+            $('.dialog_box').toggleClass('d-none');
             $('.bulk-processing-box').toggleClass('d-none');
             $('.checkbox_th').toggleClass('d-none');
             $('.checkbox_td').toggleClass('d-none');
@@ -231,6 +226,7 @@
                                                 <div class='form-wrapper form-edit'>
                                                     <div class='panel'>
                                                         <form id='bulk_actions' class='form-horizontal' method='post' action=''>
+
                                                             <label for='bulk-actions' class='control-label-notes mb-2'>{{ trans('langBulkProcessing') }}</label>
                                                             <select class='form-select' name='bulk_action' id='bulk-actions'>
                                                                 <option value='av_actions' disabled selected hidden>{{ trans('langActions') }}</option>
@@ -239,16 +235,37 @@
                                                                 <option value='visible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
                                                                 <option value='invisible'>{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
                                                             </select>
+
+                                                            <div class='panel-move d-none'>
+                                                                {!! $group_hidden_input !!}
+                                                                <div class='form-group mt-4'>
+                                                                    <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
+                                                                    <div class='col-12'>
+                                                                        <select name='moveTo' class='form-select'>
+                                                                            @if ($curDirPath and $curDirPath != '/')
+                                                                                <option value=''>{{ trans('langParentDir') }}</option>
+                                                                            @endif
+                                                                            @foreach ($directories as $dir)
+                                                                                <option{{ $dir->disabled? ' disabled': '' }} value='{{ getIndirectReference($dir->path) }}'>{!!
+                                                                                    str_repeat('&nbsp;&nbsp;&nbsp;', $dir->depth) !!}{{ $dir->filename }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                {!! generate_csrf_token_form_field() !!}
+                                                            </div>
+
+
                                                             <div class='d-flex justify-content-end align-items-center'>
                                                                 <input type='submit' class='btn btn-submit submitAdminBtn mt-4' name='bulk_submit' value='{{ trans('langSubmit') }}'>
                                                                 <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
                                                                 <input type='hidden' id='filepaths' name='filepaths' value=''>
                                                                 <input type='hidden' id='source_path' name='source_path' value=''>
                                                             </div>
+
+                                                            
+
                                                         </form>
-                                                        <div class='panel-move d-none'>
-                                                            @include("modules.document.$dialogBoxBulk", ['menuTypeID' => $menuTypeID])
-                                                        </div>
                                                     </div>
                                                     
                                                 </div>

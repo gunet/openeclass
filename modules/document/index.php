@@ -79,7 +79,9 @@ if ($is_editor) {
                     $delete_ok = true;
                     if ($r) {
                         if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-                            Session::Messages($langResourceBelongsToCert, "alert-warning");
+                            //Session::Messages($langResourceBelongsToCert, "alert-warning");
+                            Session::flash('message', $langResourceBelongsToCert);
+                            Session::flash('alert-class', 'alert-warning');
                         } else {
                             // remove from index if relevant (except non-main sysbsystems and metadata)
                             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
@@ -87,7 +89,9 @@ if ($is_editor) {
                                 function ($r2) {
                                     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
-                                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                                        //Session::Messages($langResourceBelongsToCert, "alert-warning");
+                                        Session::flash('message', $langResourceBelongsToCert);
+                                        Session::flash('alert-class', 'alert-warning');
                                     }
                                 },
                                 $filePath . '%');
@@ -106,9 +110,13 @@ if ($is_editor) {
                                 Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
                             }
                             if ($delete_ok) {
-                                Session::Messages($langDocDeleted, 'alert-success');
+                                //Session::Messages($langDocDeleted, 'alert-success');
+                                Session::flash('message', $langDocDeleted);
+                                Session::flash('alert-class', 'alert-success');
                             } else {
-                                Session::Messages($langGeneralError, 'alert-danger');
+                                //Session::Messages($langGeneralError, 'alert-danger');
+                                Session::flash('message', $langGeneralError);
+                                Session::flash('alert-class', 'alert-danger');
                             }
                         }
                     }
@@ -130,7 +138,7 @@ if ($is_editor) {
             }
 
             if ($_POST['bulk_action'] == 'move') {
-//                if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+                if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                 $moveTo = $_POST['source_path'];
                 $moveTo = getDirectReference($moveTo);
                 $filepaths = explode(',', $_POST['filepaths']);
@@ -165,8 +173,8 @@ if ($is_editor) {
                             } else {
                                 update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
                             }
-//                            Session::flash('message',$langDirMv);
-//                            Session::flash('alert-class', 'alert-success');
+                            Session::flash('message',$langDirMv);
+                            Session::flash('alert-class', 'alert-success');
                             $curDirPath = $moveTo;
                         }
 
@@ -181,6 +189,8 @@ if ($is_editor) {
 
 
         }
+
+        redirect_to_home_page('modules/document/index.php?course=' . $course_code);
 
     }
 
@@ -332,8 +342,6 @@ if (isset($_GET['showQuota'])) {
 }
 
 $dialogBox = $metaDataBox = '';
-
-$dialogBoxBulk = 'move';
 
 $dialogData = array(
     'movePath' => '',
@@ -1524,7 +1532,7 @@ foreach ($result as $row) {
 // ----------------------------------------------
 
 $data = compact('menuTypeID', 'can_upload', 'is_in_tinymce', 'base_url',
-    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox', 'dialogBoxBulk','metaDataBox');
+    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox','metaDataBox');
 $data['fileInfo'] = array_merge($dirs, $files);
 
 if (isset($dialogData)) {
