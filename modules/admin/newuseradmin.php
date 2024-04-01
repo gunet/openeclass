@@ -178,7 +178,7 @@ if (isset($_POST['submit'])) {
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
 
-        Session::flash('message', "$langTheU '$givenname_form $surname_form' $langAddedU");
+        Session::flash('message', "$langTheU \"" . q($givenname_form) . " " . q($surname_form) . "\" $langWithSuccess");
         Session::flash('alert-class', 'alert-success');
 
         if ($rid) {
