@@ -314,7 +314,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     foreach ($sql as $myrow) {
         $inactive_user = is_inactive_user($myrow->id);
-        $email_icon = $myrow->email;
+        $email_icon = q($myrow->email);
         if ($mail_ver_required) {
             switch ($myrow->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
@@ -414,9 +414,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             ));
         }
         $data['aaData'][] = array(
-            '0' => sanitize_utf8($myrow->surname),
-            '1' => sanitize_utf8($myrow->givenname),
-            '2' => sanitize_utf8($myrow->username),
+            '0' => sanitize_utf8(q($myrow->surname)),
+            '1' => sanitize_utf8(q($myrow->givenname)),
+            '2' => sanitize_utf8(q($myrow->username)),
             '3' => $email_icon,
             '4' => icon($icon, $tip),
             '5' => $icon_content,

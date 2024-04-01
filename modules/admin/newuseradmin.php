@@ -178,7 +178,7 @@ if (isset($_POST['submit'])) {
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
 
-        Session::Messages(array($langWithSuccess, "$langTheU \"$givenname_form $surname_form\" $langAddedU"), 'alert-success');
+        Session::Messages("$langTheU \"" . q($givenname_form) . " " . q($surname_form) . "\" $langWithSuccess", 'alert-success');
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
             redirect_to_home_page('modules/admin/listreq.php' .
