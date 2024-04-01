@@ -518,7 +518,7 @@ foreach ($result as $list) { // while ... learning path list
         }
         $tool_content .= "
                     </div>
-                <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
+                <div style='padding: 15px; 8px; 10px;'>" . q($list->lp_comment) . "</div>
             </td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
