@@ -83,7 +83,7 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=failurelogin";
             $log = new Log();
-            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['SCRIPT_NAME']);
+            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end);
             $data['extra_info'] = $tool_content;
             break;
         case 'unregusers':
@@ -92,7 +92,7 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=unregusers";
             $log = new Log();
-            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME']);
+            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end);
             $data['extra_info'] = $tool_content;
             break;
         case 'musers':

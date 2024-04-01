@@ -126,11 +126,12 @@ $data['action_bar'] = action_bar(array(
 $log = new Log();
 
 // display logs
+
 if (isset($_GET['submit'])) {  // display course modules logging
     if ($logtype == -2) { // all platform actions
-        $data['users_login_data'] = $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+        $data['users_login_data'] = $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end);
     } else {
-        $data['users_login_data'] = $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+        $data['users_login_data'] = $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end);
     }
 }
 
