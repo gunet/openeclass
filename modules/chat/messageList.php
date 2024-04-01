@@ -44,10 +44,10 @@ $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatAr
 $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-define('MESSAGE_LINE_NB', 300);
+const MESSAGE_LINE_NB = 300;
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-define('MAX_LINE_IN_FILE', 300);
+const MAX_LINE_IN_FILE = 300;
 
 if ($GLOBALS['language'] == 'el') {
     $timeNow = date("d-m-Y / H:i", time());
@@ -162,6 +162,7 @@ if (isset($_GET['store']) && $is_editor) {
     <?php if(get_config('theme_options_id') > 0){ $theme_id = get_config('theme_options_id'); ?>
         <link rel="stylesheet" href="<?php echo $urlServer;?>courses/theme_data/<?php echo $theme_id; ?>/style_str.css?<?php echo time(); ?>">
     <?php } ?>
+
 </head>
 <body class=' bodyChat p-3'>
 <?php
@@ -198,7 +199,7 @@ if (isset($_GET['store']) && $is_editor) {
                                     </span>
                                 </div>
                             </div>
-                        </div>\n";
+                      </div>";
             } else {
                 $user_id = intval(trim($str_1[1]));
                 $str_2 = explode(' - ', $str_1[0], 2);
@@ -232,16 +233,15 @@ if (isset($_GET['store']) && $is_editor) {
                                         <p>". display_user($user_id, false, false) ."</p>
                                         
                                     </div>
+
                                 </div>
                                 <div class='card-body px-0 pt-3 pb-0'>
-                                    <p>
-                                        " . $usertext . "
-                                    </p>
+                                    <p>" . q($usertext) . "</p>
                                 </div>
                             </div>
                         </div>
-                    
-                </div>\n";
+                  </div>";
+
             }
         } else { //prior to version 3.0 generated conferences
                 echo "  <div class='row m-auto g-3'>
@@ -250,11 +250,10 @@ if (isset($_GET['store']) && $is_editor) {
                                     $str_1[0]
                                 </div>
                             </div>
-                        </div>\n";
+                        </div>";
         }
     }
-    echo "</body></html>\n";
-
+    echo "</body></html>";
 
     /*
      * For performance reason, buffer the content
