@@ -932,6 +932,13 @@
                                                                 {{ trans('langIndividualGroupBookings') }}
                                                             </label>
                                                         </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input id='enable_quick_note' type='checkbox' name='enable_quick_note' value='1' {{ $cbox_enable_quick_note }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langEnableQuickNote') }}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <hr><br>

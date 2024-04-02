@@ -82,7 +82,7 @@
                                 <table class="table-default">
                                     <tbody>
                                         <tr class="list-header">
-                                            <th class='ps-3'>{{ trans('langTitle') }}</th>
+                                            <th>{{ trans('langTitle') }}</th>
                                             <th>{{ trans('langDescription') }}</th>
                                             <th>{{ trans('langcreator') }}</th>
                                             <th>{{ trans('langpublisher') }}</th>
@@ -90,7 +90,7 @@
                                             <th>{{ trans('langSelect') }}</th>
                                         </tr>
                                         <tr>
-                                            <th class='p-3' colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
+                                            <th colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
                                         </tr>
                                         @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0)
                                             @foreach ($jsonPublicObj->resources as $resource)
@@ -123,7 +123,7 @@
                                             <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
                                         @endif
                                         <tr class="list-header">
-                                            <th class='ps-3' colspan="6">{{ trans('langOpenDelosPrivateVideos') }}</th>
+                                            <th colspan="6">{{ trans('langOpenDelosPrivateVideos') }}</th>
                                         </tr>
                                         @if (!$checkAuth)
                                             <?php
@@ -166,11 +166,11 @@
                                             @endif
                                         @endif
                                         <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langOpenDelosPrivateNote') }}</span></div></td></tr>
-                                        <tr>
+                                        <tr class="list-header">
                                             <th colspan="4">
                                                 <div class='form-group'>
-                                                    <label for='Category' class='col-sm-2 control-label'>{{ trans('langCategory') }}:</label>
-                                                    <div class='col-sm-10'>
+                                                    <label for='Category' class='col-sm-12 control-label-notes'>{{ trans('langCategory') }}:</label>
+                                                    <div class='col-sm-12'>
                                                         <select class='form-select' name='selectcategory'>
                                                             <option value='0'>--</option>
                                                             @foreach ($resultcategories as $category)

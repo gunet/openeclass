@@ -5126,8 +5126,32 @@ body.mce-fullscreen .notification-top-bar{
   background-color: transparent;
   padding: 0px;
 }
-/* .hide-notification-bar .fa-xmark,
-.hide-notification-bar:hover .fa-xmark,
-.hide-notification-bar:focus .fa-xmark{
-  color: #C44601;
-} */
+
+
+
+/**********************************************************************************************************************/
+/************************************************* QUICK NOTE *********************************************************/
+/**********************************************************************************************************************/
+
+.btn-quick-note{
+  z-index: 1000;
+  position: fixed;
+  transform: none;
+  top: 100px;
+  bottom: auto;
+  left: auto;
+  right: 0;
+  -ms-flex-pack: end;
+  justify-content: end;
+  transform: translate(-20%);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+}
+
+.btn-quick-note .fa-solid::before{
+  padding-top: 4px;
+  font-size: 20px;
+  width: auto;
+  height: 30px;
+}
