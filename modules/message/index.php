@@ -103,18 +103,12 @@ if (!isset($_GET['showQuota'])) {
         } else {
             $pageName = $langNewPersoMessage;
         }
-        $tool_content .= action_bar(array(
-                            array('title' => $langBack,
-                                  'url' => "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : ""),
-                                  'icon' => 'fa-reply',
-                                  'level' => 'primary')
-                        ));
     } else {
         if ($course_id != 0) {
             $tool_content .= action_bar(array(
                                 array('title'   => $langNewCourseMessage,
                                       'url'     => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
-                                      'icon'    => 'fa-pencil',
+                                      'icon'    => 'fa-file-pen',
                                       'level'   => 'primary-label',
                                       'button-class' => 'btn-success'),
                                 array('title'   => $langQuotaBar,
@@ -130,12 +124,12 @@ if (!isset($_GET['showQuota'])) {
             $tool_content .= action_bar(array(
                                 array('title'   => $langNewCourseMessage,
                                       'url'     => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
-                                      'icon'    => 'fa-square-pen',
+                                      'icon'    => 'fa-file-pen',
                                       'level'   => 'primary-label',
                                       'button-class' => 'btn-success'),
                                 array('title'   => $langNewPersoMessage,
                                       'url' => "$_SERVER[SCRIPT_NAME]?upload=1",
-                                      'icon' => 'fa-square-pen',
+                                      'icon' => 'fa-user-pen',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-success',
                                       'show' => $personal_msgs_allowed),

@@ -65,7 +65,7 @@ if (isset($_GET['mid'])) {
                   'temporary-button-class' => '',
                   'level' => 'primary'),
             array('title' => $langReply,
-                  'icon' => 'fa-edit',
+                  'icon' => 'fa-reply-all',
                   'button-class' => 'btn-reply btn-secondary',
                   'temporary-button-class' => 'btn-reply',
                   'level' => 'primary-label'),
@@ -286,8 +286,6 @@ if (isset($_GET['mid'])) {
 
                 <div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>
-
-
                             ".
                             form_buttons(array(
                                 array(
@@ -298,14 +296,12 @@ if (isset($_GET['mid'])) {
                                 ),
                                 array(
                                     'class' => 'cancelAdminBtn ms-1',
-                                    'href' => "javascript:void(0)",
+                                    'url' => "#",
+                                    'text' => $langCancel,
                                     'id'   => "cancelReply"
                                 )
                             ))
                             ."
-
-
-
                     </div>
                 </div>
             </fieldset>";
@@ -416,8 +412,6 @@ if (isset($_GET['mid'])) {
 
                     <div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-end align-items-center'>
-
-
                                  ".
                                  form_buttons(array(
                                      array(
@@ -428,14 +422,11 @@ if (isset($_GET['mid'])) {
                                      ),
                                      array(
                                         'class' => 'cancelAdminBtn ms-1',
-                                        'href' => "javascript:void(0)",
+                                        'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : ""),
                                         'id'   => "cancelReply"
                                     )
                                  ))
                                  ."
-
-
-
                         </div>
                     </div>
                 </fieldset>";
