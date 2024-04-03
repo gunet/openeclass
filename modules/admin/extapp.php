@@ -20,8 +20,6 @@
  * ========================================================================
  */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'extconfig/externals.php';
@@ -32,7 +30,7 @@ load_js('tools.js');
 load_js('validation.js');
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
-$data['appName'] = $appName = isset($_GET['edit'])? $_GET['edit']: null;
+$data['appName'] = $appName = $_GET['edit'] ?? null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
     $appName = $_POST['appName'];
@@ -64,18 +62,15 @@ if ($appName) {
                 $param->setValue('');
                 $param->persistValue();
             }
-            //Session::Messages($langFileUpdatedSuccess, 'alert-info');
             Session::flash('message',$langFileUpdatedSuccess);
             Session::flash('alert-class', 'alert-info');
         } else {
             $result = $app->storeParams();
         }
         if ($result) {
-            //Session::Messages($result, 'alert-danger');
             Session::flash('message',$result);
             Session::flash('alert-class', 'alert-danger');
         } else {
-            //Session::Messages($langFileUpdatedSuccess, 'alert-success');
             Session::flash('message',$langFileUpdatedSuccess);
             Session::flash('alert-class', 'alert-success');
         }

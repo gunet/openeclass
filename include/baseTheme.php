@@ -61,7 +61,7 @@ function view($view_file, $view_data = array()) {
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
             $require_editor, $langHomePage,
-            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg, 
+            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body;
 
     if (!isset($course_id) or !$course_id) {
@@ -230,7 +230,7 @@ function view($view_file, $view_data = array()) {
     }
 
     // if $require_help is true (set by each tool) display the help link
-    if ($require_help == true) {
+    if ($require_help) {
         $head_content .= "
         <script>
         $(function() {
@@ -290,7 +290,7 @@ function view($view_file, $view_data = array()) {
 
     $container = 'container';
     $forms_image = 'form-image-modules';
-    $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+    $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
 
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $logo_img_small = $themeimg.'/eclass-new-logo.svg';
@@ -474,8 +474,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[loginTextBgColor];
                 }
             ";
-            // If jumbotron-intro-text has rgba which contains zero at the end (a) then change padding(left-right) to zero 
-            preg_match_all('!\d+!', $theme_options_styles['loginTextBgColor'], $matches); 
+            // If jumbotron-intro-text has rgba which contains zero at the end (a) then change padding(left-right) to zero
+            preg_match_all('!\d+!', $theme_options_styles['loginTextBgColor'], $matches);
             if(count($matches) > 0){
                 $counterRgb = 0;
                 foreach($matches as $match){
@@ -491,7 +491,7 @@ function view($view_file, $view_data = array()) {
                     }
                 }
             }
-             
+
         }
 
 
@@ -842,7 +842,7 @@ function view($view_file, $view_data = array()) {
         }else{
             $styles_str .= " 
                 #bgr-cheat-header{ box-shadow: 1px 2px 6px rgba(43,57,68,0.04); }
-            "; 
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -1109,7 +1109,7 @@ function view($view_file, $view_data = array()) {
                     padding-left: 0px;
                     padding-right: 0px;
                 }
-            "; 
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -1645,7 +1645,7 @@ function view($view_file, $view_data = array()) {
                 }
             ";
 
-            
+
         }
 
 
@@ -2313,7 +2313,7 @@ function view($view_file, $view_data = array()) {
  
             ";
         }
-  
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////// USERNAME COLOR CONTEXTUAL MENU /////////////////////////
@@ -2473,7 +2473,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////////// BACKGROUND COLOR TO CHECKBOX COMPONENT ///////////////////////
@@ -3213,7 +3213,7 @@ function view($view_file, $view_data = array()) {
         ////////////////////////// LABEL COLOR IN FORM COMPONENT /////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clLabelForms'])){
             $styles_str .= "
                 form label,
@@ -3227,14 +3227,14 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
-        
-            
+
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////// BACKGROUND COLOR TO MODAL COMPONONENT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgModal'])){
             $styles_str .= "
                 .bootbox.show .bootbox-close-button{
@@ -3263,7 +3263,7 @@ function view($view_file, $view_data = array()) {
         /////////////////////// BORDER COLOR TO MODAL COMPONONENT ///////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clBorderModal'])){
             $styles_str .= "
                 .modal-content {
@@ -3280,7 +3280,7 @@ function view($view_file, $view_data = array()) {
         ///////////////////////// TEXT COLOR TO MODAL COMPONONENT ///////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clTextModal'])){
             $styles_str .= "
                 .bootbox.show .modal-header .modal-title, 
@@ -3317,7 +3317,7 @@ function view($view_file, $view_data = array()) {
         ////////////////////// ICON COLOR TO MODAL DELETION COMPONENT ///////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clDeleteIconModal'])){
             $styles_str .= "
                 .icon-modal-default .fa-trash-can.Accent-200-cl::before{
@@ -3331,7 +3331,7 @@ function view($view_file, $view_data = array()) {
         ////////////////////// ICON COLOR TO CLOSED MODAL COMPONENT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clXmarkModal'])){
             $SVGmodalClose = "svg xmlns='http://www.w3.org/2000/svg' height='20' width='15' viewBox='0 0 384 512' fill='%23000'%3e%3cpath fill='$theme_options_styles[clXmarkModal]' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3e%3c/svg";
             $SVGmodalClose2 = 'transparent url("data:image/svg+xml,%3C' . $SVGmodalClose .'%3E") center / 1em auto no-repeat';
@@ -3350,7 +3350,7 @@ function view($view_file, $view_data = array()) {
         //////////////////// BACKGROUND COLOR TO AGENDA COMPONONENT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['bgAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar,
@@ -3456,7 +3456,7 @@ function view($view_file, $view_data = array()) {
         /////////////////// BACKGROUND COLOR TO OF AGENDA'S HEADER //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgColorHeaderAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar .panel-heading, 
@@ -3569,7 +3569,7 @@ function view($view_file, $view_data = array()) {
         //////////////////////// TEXT COLOR OF AGENDA'S HEADER //////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clColorHeaderAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar .panel-heading, #cal-header {
@@ -3653,7 +3653,7 @@ function view($view_file, $view_data = array()) {
         ///////////////////////// TEXT COLOR OF AGENDA'S BODY ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clColorBodyAgenda'])){
             $styles_str .= "
             
@@ -3719,7 +3719,7 @@ function view($view_file, $view_data = array()) {
         /////////////////////// BORDER COLOR TO AGENDA COMPONENT ////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgBorderColorAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar,
@@ -3815,7 +3815,7 @@ function view($view_file, $view_data = array()) {
         ///////////////////// BORDER COLOR SLOTS TO AGENDA EVENTS ///////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgBorderColorAgendaEvent'])){
             $styles_str .= "
                 .calendarAddDaysCl .fc-body table tbody tr td.fc-axis,
@@ -3836,7 +3836,7 @@ function view($view_file, $view_data = array()) {
         ////////////////// BACKGROUND HOVERED COLOR TO AGENDA COMPONENT /////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['bgColorHoveredBodyAgenda'])){
             $styles_str .= "
                 .datetimepicker-years .table-condensed thead tr th:hover,
@@ -3911,7 +3911,7 @@ function view($view_file, $view_data = array()) {
         ///////////////////// TEXT HOVERED COLOR TO AGENDA COMPONENT ////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clColorHoveredBodyAgenda'])){
             $styles_str .= "
                 .datetimepicker-years .table-condensed thead tr th:hover,
@@ -3965,7 +3965,7 @@ function view($view_file, $view_data = array()) {
         //////////////////// BACKGROUND COLOR TO ACTIVE DATETIME SLOT ///////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['bgColorActiveDateTime'])){
             $styles_str .= "
                 .datetimepicker table tr td span.active:active, 
@@ -4025,7 +4025,7 @@ function view($view_file, $view_data = array()) {
         //////////////////////// TEXT COLOR TO ACTIVE DATETIME SLOT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['TextColorActiveDateTime'])){
             $styles_str .= "
                 .datetimepicker table tr td span.active:active, 
@@ -4630,7 +4630,7 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) && 
+        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) &&
                             !empty($theme_options_styles['BgColorProgressBarAndText'])){
 
             $styles_str .= "
@@ -5878,7 +5878,7 @@ function view($view_file, $view_data = array()) {
         }
 
 
-        
+
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
         if (isset($styles_str) && $styles_str){
             $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
@@ -5934,8 +5934,8 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 
-            'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id', 
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName',
+            'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
             'pinned_announce_title', 'pinned_announce_body');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
