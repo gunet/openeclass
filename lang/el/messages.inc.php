@@ -6081,6 +6081,7 @@ $langMyCoursesSide = "Τα $langsCourses μου";
 $langMyMessagesSide = 'Τα μηνύματα μου';
 $langNewMyMessagesSide = 'Νέα Μηνύματα';
 $langQuickNotesSide = 'Γρήγορη σημείωση';
+$langNotesNotifications = "Ειδοποιήσεις - Σημειώσεις";
 $langNumOpenCoursesBanner = "ανοικτά<br>$langsCourses";
 $langNumOpenCourseBanner = "ανοικτό<br>$langsCourse";
 $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";

@@ -4907,3 +4907,36 @@ function get_tinymce_color_text() {
         }
     }
 }
+
+
+
+/**
+ * @brief get user courses
+ * @param $uid
+ * @return array|DBResult|null
+ */
+function getUidCourses($uid)
+{
+    global $uid;
+    
+    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+                             course.code code,
+                             course.public_code,
+                             course.title title,
+                             course.prof_names professor,
+                             course.course_license course_license,
+                             course.lang,
+                             course.visible visible,
+                             course.description description,
+                             course.course_image course_image,
+                             course.popular_course popular_course,
+                             course_user.status status,
+                             course_user.favorite favorite
+                        FROM course JOIN course_user
+                            ON course.id = course_user.course_id
+                            AND course_user.user_id = ?d
+                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+
+    return $myCourses;
+}

@@ -63,6 +63,7 @@ $(document).ready(function(){
     validator_rubric();
     topFunction();
     nextAuthedicationMethod();
+    lesson_notifications();
 
 
     //fix modal appearance
@@ -332,4 +333,27 @@ function nextAuthedicationMethod(){
         });
     }
 
+}
+
+function lesson_notifications(){
+    $('.btn-quick-note').on('click',function(){
+        var courseIDs = [];
+        $(".lesson-notifications").each(function () {
+            courseIDs.push($(this).data('id'));
+        });
+        $.ajax({
+            type: "GET",
+            url: notificationsCourses.getNotifications,
+            dataType: "json",
+            data: {courseIDs: courseIDs},
+            success: function (data) {
+                $(".lesson-notifications").each(function () {
+                    var id = $(this).data('id');
+                    if (data.notifications_courses[id]) {
+                        $(this).html(data.notifications_courses[id]['notification_content']);
+                    }
+                });
+            }
+        });
+    })
 }

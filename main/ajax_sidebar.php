@@ -66,6 +66,54 @@ function getSidebarNotifications() {
     return $notifications_html;
 }
 
+function getCoursesNotifications() {
+    global $modules, $icons_map, $urlAppend;
+
+    $notifications_arr = array();
+    $notification_content = array();
+    if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
+        foreach ($_GET['courseIDs'] as $id) {
+            $sideBarCourseNotify = '';
+            $notifications = get_course_notifications($id);
+            $course_code = course_id_to_code($id);
+            $course_title = course_id_to_title($id);
+
+            foreach ($notifications as $n) {
+                $modules_array = (isset($modules[$n->module_id]))? $modules : '';
+                if (isset($modules_array[$n->module_id]) &&
+                    (!is_module_visible($n->module_id, $id))) {
+                        continue;
+                }
+     
+                if (isset($modules_array[$n->module_id]) &&
+                    isset($modules_array[$n->module_id]['image']) &&
+                    isset($icons_map['icon_map'][$n->module_id])) {
+                    $sideBarCourseNotifyIcon = $icons_map['icon_map'][$n->module_id];
+                    $sideBarCourseNotifyCount = $n->notcount;
+                    $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
+                    $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
+                                                    '/index.php?course=' . $course_code;
+
+                    $notification_content['notification_content'] = "
+                        <p class='mb-2 TextBold'>$course_title</p>
+                        <a type='button' class='btn btn-primary position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
+                            <i class='$sideBarCourseNotifyIcon pe-2'></i>$sideBarCourseNotifyTitle
+                            <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+                                $sideBarCourseNotifyCount
+                                <span class='visually-hidden'></span>
+                            </span>
+                        </a>
+                    
+                    ";
+                }
+            }
+            $notifications_arr[$id] = $notification_content;
+        }
+    }
+
+    return $notifications_arr;
+}
+
 function getSidebarMessages() {
     global $uid, $urlServer, $langFrom, $dateFormatLong, $langDropboxNoMessage, $langMailSubject, $langCourse;
 
@@ -125,7 +173,8 @@ function is_module_visible($mid, $cid) {
 
 $json_obj = array(
     'messages' => getSidebarMessages(),
-    'notifications' => getSidebarNotifications(),
+    //'notifications' => getSidebarNotifications(),
+    'notifications_courses' => getCoursesNotifications(),
     'langNotificationsExist' => $langNotificationsExist,
 );
 echo json_encode($json_obj, JSON_UNESCAPED_UNICODE);

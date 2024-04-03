@@ -4027,6 +4027,7 @@ $langBorderTextColor = "Border color";
 $langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Short note';
+$langNotesNotifications = "Notifications - Short note";
 $langUsageTerms = 'Terms of Use';
 $langCompactProfile = "Profile (brief)";
 $langCreateDuplicateIn = "Create duplicate in...";

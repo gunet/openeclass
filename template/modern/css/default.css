@@ -5148,7 +5148,9 @@ body.mce-fullscreen .notification-top-bar{
   width: 44px;
   height: 44px;
 }
-
+body:has(.fixed-announcement) .btn-quick-note{
+  top: 160px;
+}
 .btn-quick-note .fa-solid::before{
   padding-top: 4px;
   font-size: 20px;

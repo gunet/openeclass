@@ -485,6 +485,29 @@ $modules = array(
 
 );
 
+$icons_map = array(
+    'icon_map' => array(
+        MODULE_ID_ANNOUNCE => 'fa-regular fa-bell',
+        MODULE_ID_AGENDA => 'fa-regular fa-calendar',
+        MODULE_ID_DOCS => 'fa-regular fa-folder',
+        MODULE_ID_LINKS => 'fa-solid fa-link',
+        MODULE_ID_FORUM => 'fa-regular fa-comment',
+        MODULE_ID_ASSIGN => 'fa-solid fa-upload',
+        MODULE_ID_EXERCISE => 'fa-solid fa-file-pen',
+        MODULE_ID_QUESTIONNAIRE => 'fa-solid fa-question',
+        MODULE_ID_EBOOK => 'fa-solid fa-book-atlas',
+        MODULE_ID_VIDEO => 'fa-solid fa-film',
+        MODULE_ID_GROUPS => 'fa-solid fa-user-group',
+        MODULE_ID_LP => 'fa-solid fa-timeline',
+        MODULE_ID_TC => 'fa-solid fa-users-rectangle',
+        MODULE_ID_GLOSSARY => 'fa-solid fa-list-ul',
+        MODULE_ID_WIKI => 'fa-solid fa-w',
+        MODULE_ID_BLOG => 'fa-solid fa-globe',
+        MODULE_ID_ATTENDANCE => 'fa-solid fa-clipboard-user',
+        MODULE_ID_GRADEBOOK => 'fa-solid fa-a',
+    ),
+);
+
 // ----------------------------------------
 // Course activities array
 // user activities
