@@ -111,6 +111,7 @@ class Repository
             !empty($this->getClientId())
             && !empty($this->getClientSecret())
             && !empty($this->getAccountId())
+            && $this->getZoomWebAppType() == 'api'
         );
     }
 
@@ -174,6 +175,19 @@ class Repository
     private function getClientSecret()
     {
         return get_config('ext_zoom_clientSecret');
+    }
+
+    private function getZoomWebAppType()
+    {
+        $q = Database::get()->querySingle("SELECT webapp FROM tc_servers WHERE type = 'zoom'");
+
+        if (
+            !$q
+            || empty($q->webapp)
+        ) {
+            return null;
+        }
+        return $q->webapp;
     }
 
     private function getAccessTokenCreation()
