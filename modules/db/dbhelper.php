@@ -47,7 +47,7 @@ abstract class DBHelper {
     }
 
     /**
-     * 
+     *
      * @param int $secondsOffset Offset by current time in seconds
      * @return timestamp The timestamp in SQL wrapper
      */
@@ -188,9 +188,15 @@ class _DBHelper_MYSQL extends DBHelper {
 
     protected function tableExistsImpl($table, $db) {
         global $mysqlMainDb;
-        if ($db == null)
+        if ($db == null) {
             $db = $mysqlMainDb;
-        return count(Database::get()->queryArray('SHOW TABLES FROM `' . $db . '` LIKE \'' . $table . '\'')) == 1;
+        }
+        $result = Database::get()->queryArray('SHOW TABLES FROM `' . $db . '` LIKE \'' . $table . '\'');
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected function fieldExistsImpl($table, $field, $db) {
