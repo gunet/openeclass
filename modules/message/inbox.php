@@ -193,249 +193,318 @@ if (isset($_GET['mid'])) {
 
                         </div>";
 
+
+
+
+
+
+
+
+                        
         /*****Reply Form****/
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
         } else {
-            if($course_id == 0){
-                $out .= "<div class='row mt-4'>
-
+            if(!isset($_GET['course'])){
+            $out .= "<div class='row mt-4'>
                         <div class='col-lg-6 col-12'>";
             }else{
-                $out .= "<div class='col-12 mt-4'>";
-            }
-            $out .= "<div class='form-wrapper form-edit rounded' id='replyBox' style='display:none;'>";
-            if ($course_id == 0) {
-                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-                if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
-                    $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
-                }
-            } else {
-                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-            }
-            $out .= generate_csrf_token_form_field() . "
-
-                <fieldset>
-                <h4 class='TextBold text-center'>$langReply</h4>
-                    <div class='form-group mt-4'>
-                        <label for='senderName' class='col-sm-6 control-label-notes'>$langSender</label>
-                        <div class='col-sm-12'>
-                            <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
-                        </div>
-                    </div>";
-
             $out .= "
-
-            <div class='form-group mt-4'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
-            <div class='col-sm-12'>
-                <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
-
-            // mail sender
-            $out .= "<option value='$msg->author_id' selected>". q(uid_to_name($msg->author_id)) . "</option>";
-
-            addRecipientOptions();
-
-            $out .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
-            </div>
-        </div>";
-        $out .= "
-
-        <div class='form-group mt-4'>
-                    <label for='message_title' class='col-sm-6 control-label-notes'>$langSubject</label>
-                    <div class='col-sm-12'>
-                        <input name='message_title' type='text' class='form-control' id='message_title' value='" .
-                            q($langMsgRe . ' ' . $msg->subject) . "'>
-                    </div>
-                </div>
-
-                <div class='form-group mt-4'>
-                    <label for='body' class='col-sm-6 control-label-notes'>$langMessage</label>
-                    <div class='col-sm-12'>
-                        ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
-                    </div>
-                </div>";
-
-        if ($course_id != 0) {
-            enableCheckFileSize();
-            $out .= "
-
-            <div class='form-group mt-4'>
-                        <label for='body' class='col-sm-6 control-label-notes'>$langFileName</label>
-                        <div class='col-sm-12'>" .
-                            fileSizeHidenInput() . "
-                            <input type='file' name='file' size='35'>
-                        </div>
-                    </div>";
-        }
-
-        $out .= "
-
-                <div class='form-group mt-4'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                            <div class='checkbox'>
-                                <label class='label-container'>
-                                    <input type='checkbox' name='mailing' value='1' checked>
-                                    <span class='checkmark'></span>
-                                    " . q($langMailToUsers) . "
-                                </label>
-                            </div>
-
-                    </div>
-                </div>
-
-                <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-end align-items-center'>
-                            ".
-                            form_buttons(array(
-                                array(
-                                    'class' => 'submitAdminBtn',
-                                    'text'  => $langSend,
-                                    'name'  => 'submit',
-                                    'value' => $langAddModify
-                                ),
-                                array(
-                                    'class' => 'cancelAdminBtn ms-1',
-                                    'url' => "#",
-                                    'text' => $langCancel,
-                                    'id'   => "cancelReply"
-                                )
-                            ))
-                            ."
-                    </div>
-                </div>
-            </fieldset>";
-            if ($course_id != 0) {
-                $out .= "<div class='text-end mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+                <div class='d-lg-flex gap-4 mt-4'>
+                    <div class='flex-grow-1'>
+                        <div class='col-12 mt-4'>";
             }
 
-            $out .= "</form></div></div>";
-            if ($course_id == 0) {
-                $out .= "</div>";
-            }
-            // forward form
-            if($course_id == 0){
-                $out .= "<div class='row'>
+                    $out .= "<div class='form-wrapper form-edit rounded' id='replyBox' style='display:none;'>";
+                    if ($course_id == 0) {
+                        $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                        if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
+                            $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
+                        }
+                    } else {
+                        $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                    }
+                        $out .= generate_csrf_token_form_field() . "
 
-                        <div class='col-lg-6 col-12'>";
-            }else{
-                $out .= "<div class='col-12 mt-4'>";
-            }
-            $out .= "<div class='form-wrapper form-edit rounded' id='forwardBox' style='display:none;'>";
-            if ($course_id == 0) {
-                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-                if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui
-                    $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
-                }
-            } else {
-                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
-            }
-            $out .= generate_csrf_token_form_field() . "
+                                    <fieldset>
+                                            <h3 class='TextBold text-center'>$langReply</h3>
 
-                <fieldset>
-                <h4 class='TextBold text-center'>$langForward</h4>
-                    <div class='form-group mt-4'>
-                        <label for='senderName' class='col-sm-6 control-label-notes'>$langSender</label>
-                        <div class='col-sm-12'>
-                            <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
-                        </div>
+                                            <div class='form-group mt-4'>
+                                                <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
+                                                <div class='col-sm-12'>
+                                                    <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
+                                                </div>
+                                            </div>";
+
+                                    $out .= "
+
+                                            <div class='form-group mt-4'>
+                                                <label for='title' class='col-sm-12 control-label-notes'>$langSendTo</label>
+                                                <div class='col-sm-12'>
+                                                    <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
+
+                                                // mail sender
+                                                $out .= "<option value='$msg->author_id' selected>". q(uid_to_name($msg->author_id)) . "</option>";
+
+                                                addRecipientOptions();
+
+                                                $out .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                                                </div>
+                                            </div>";
+
+                                    $out .= "
+
+                                            <div class='form-group mt-4'>
+                                                <label for='message_title' class='col-sm-12 control-label-notes'>$langSubject</label>
+                                                <div class='col-sm-12'>
+                                                    <input name='message_title' type='text' class='form-control' id='message_title' value='" .
+                                                        q($langMsgRe . ' ' . $msg->subject) . "'>
+                                                </div>
+                                            </div>
+
+                                            <div class='form-group mt-4'>
+                                                <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
+                                                <div class='col-sm-12'>
+                                                    ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
+                                                </div>
+                                            </div>";
+
+                                        if ($course_id != 0) {
+                                            enableCheckFileSize();
+                                            $out .= "
+
+                                            <div class='form-group mt-4'>
+                                                <label for='body' class='col-sm-12 control-label-notes'>$langFileName</label>
+                                                <div class='col-sm-12'>" .
+                                                    fileSizeHidenInput() . "
+                                                    <input type='file' name='file' size='35'>
+                                                </div>
+                                            </div>";
+                                        }
+
+                                        $out .= "
+
+                                            <div class='form-group mt-4'>
+                                                <div class='col-sm-10 col-sm-offset-2'>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='mailing' value='1' checked>
+                                                                <span class='checkmark'></span>
+                                                                " . q($langMailToUsers) . "
+                                                            </label>
+                                                        </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class='form-group mt-5'>
+                                                <div class='col-12 d-flex justify-content-end align-items-center'>
+                                                        ".
+                                                        form_buttons(array(
+                                                            array(
+                                                                'class' => 'submitAdminBtn',
+                                                                'text'  => $langSend,
+                                                                'name'  => 'submit',
+                                                                'value' => $langAddModify
+                                                            ),
+                                                            array(
+                                                                'class' => 'cancelAdminBtn ms-1',
+                                                                'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : ""),
+                                                                'id'   => "cancelReply"
+                                                            )
+                                                        ))
+                                                        ."
+                                                </div>
+                                            </div>
+                                    </fieldset>";
+
+                                    if ($course_id != 0) {
+                                        $out .= "<div class='text-end mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+                                    }
+
+                        $out .= "</form>
+                            </div> <!-- end-form-wrapper --> ";
+
+            if(isset($_GET['course'])){
+                $out .= "</div> <!-- end col-12 -->
+                    </div> <!-- end flex-grow -->
+                    <div class='form-content-modules d-none message-reply'>
+                        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                     </div>
+                </div>"; // end d-lg-flex
+            }
 
-                <div class='form-group mt-4'>
-                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
-                <div class='col-sm-12'>
-                    <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
-
-            addRecipientOptions();
-
-            $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
-                </div>
-            </div>
-
-            <div class='form-group mt-4'>
-                <label for='message_title' class='col-sm-6 control-label-notes'>$langSubject</label>
-                <div class='col-sm-12'>
-                    <input name='message_title' type='text' class='form-control' id='message_title' value='" .
-                        q($langMsgFw . ' ' . $msg->subject) . "'>
-                </div>
-            </div>
-
-            <div class='form-group mt-4'>
-                <label for='body' class='col-sm-6 control-label-notes'>$langMessage</label>
-                <div class='col-sm-12'>
-                    ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
-                </div>
-            </div>";
-
-            if ($msg->filename and $msg->filesize != 0) {
+            if (!isset($_GET['course'])) {
                 $out .= "
-
-                    <div class='form-group attachment-section mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langAttachedFile</label>
-                        <div class='col-sm-8'>
-                            <p class='form-control-static'>
-                                <input type='hidden' name='keepAttachment' value='{$msg->id}'>
-                                <a href='message_download.php?course=" .
-                                course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank' aria-label='(opens in a new tab)'>" .
-                                q($msg->real_filename) . "</a>&nbsp;<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
-                                format_file_size($msg->filesize) . ")
-                            </p>
-                        </div>
-                        <div class='col-sm-2'>
-                            <button class='float-end btn cancelAdminBtn attachment-delete-button'><span class='fa-solid fa-xmark space-after-icon'></span>$langLessElements</button>
-                        </div>
-                    </div>";
-            } elseif ($course_id != 0) {
-                enableCheckFileSize();
-
-                $out .= "<div class='form-group mt-4'>
-                            <label for='body' class='col-sm-6 control-label-notes'>$langFileName</label>
-                            <div class='col-sm-12'>" .
-                                fileSizeHidenInput() . "
-                                <input type='file' name='file' size='35'>
-                            </div>
-                        </div>";
+                    </div> <!-- end col-lg-6 col-12 -->
+                    <div class='col-lg-6 col-12 d-none message-reply'>
+                        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                    </div>
+                ";
+        $out .= "</div>"; // end row
             }
-            $out .= "
 
-                    <div class='form-group mt-4'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                                <div class='checkbox'>
-                                    <label class='label-container'>
-                                        <input type='checkbox' name='mailing' value='1' checked>
-                                        <span class='checkmark'></span>
-                                        " . q($langMailToUsers) . "
-                                    </label>
-                                </div>
-                        </div>
-                    </div>
 
-                    <div class='form-group mt-5'>
-                        <div class='col-12 d-flex justify-content-end align-items-center'>
-                                 ".
-                                 form_buttons(array(
-                                     array(
-                                         'class' => 'submitAdminBtn',
-                                         'text'  => $langSend,
-                                         'name'  => 'submit',
-                                         'value' => $langAddModify
-                                     ),
-                                     array(
-                                        'class' => 'cancelAdminBtn ms-1',
-                                        'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : ""),
-                                        'id'   => "cancelReply"
-                                    )
-                                 ))
-                                 ."
-                        </div>
-                    </div>
-                </fieldset>";
 
-            $out .= "<div class='text-center TextBold mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
-               </form></div></div>";
+
+
+
+
+
+
+
+
+
+
+
+            // forward form
+            if(!isset($_GET['course'])){
+                $out .= "<div class='row'>
+                            <div class='col-lg-6 col-12'>";
+            }else{
+            $out .= "<div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
+                            <div class='col-12 mt-4'>";
+            }
+
+                        $out .= "<div class='form-wrapper form-edit rounded' id='forwardBox' style='display:none;'>";
             if ($course_id == 0) {
-                $out .= "</div>";
+                            $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                            if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui
+                                $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
+                            }
+            } else {
+                            $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
+                                        $out .= generate_csrf_token_form_field() . "
+
+                                            <fieldset>
+                                                <h3 class='TextBold text-center'>$langForward</h3>
+
+                                                <div class='form-group mt-4'>
+                                                    <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
+                                                    <div class='col-sm-12'>
+                                                        <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <label for='title' class='col-sm-12 control-label-notes'>$langSendTo</label>
+                                                    <div class='col-sm-12'>
+                                                        <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
+
+                                                addRecipientOptions();
+
+                                                $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <label for='message_title' class='col-sm-12 control-label-notes'>$langSubject</label>
+                                                    <div class='col-sm-12'>
+                                                        <input name='message_title' type='text' class='form-control' id='message_title' value='" .
+                                                            q($langMsgFw . ' ' . $msg->subject) . "'>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
+                                                    <div class='col-sm-12'>
+                                                        ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
+                                                    </div>
+                                                </div>";
+
+                                        if ($msg->filename and $msg->filesize != 0) {
+                                            $out .= "
+
+                                                <div class='form-group attachment-section mt-4'>
+                                                    <label class='col-sm-12 control-label-notes'>$langAttachedFile</label>
+                                                    <div class='col-sm-8'>
+                                                        <p class='form-control-static'>
+                                                            <input type='hidden' name='keepAttachment' value='{$msg->id}'>
+                                                            <a href='message_download.php?course=" .
+                                                            course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank' aria-label='(opens in a new tab)'>" .
+                                                            q($msg->real_filename) . "</a>&nbsp;<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
+                                                            format_file_size($msg->filesize) . ")
+                                                        </p>
+                                                    </div>
+                                                    <div class='col-sm-2'>
+                                                        <button class='float-end btn cancelAdminBtn attachment-delete-button'><span class='fa-solid fa-xmark space-after-icon'></span>$langLessElements</button>
+                                                    </div>
+                                                </div>";
+                                        } elseif ($course_id != 0) {
+                                            enableCheckFileSize();
+
+                                        $out .= "<div class='form-group mt-4'>
+                                                    <label for='body' class='col-sm-12 control-label-notes'>$langFileName</label>
+                                                    <div class='col-sm-12'>" .
+                                                        fileSizeHidenInput() . "
+                                                        <input type='file' name='file' size='35'>
+                                                    </div>
+                                                </div>";
+                                        }
+                                        $out .= "
+
+                                                <div class='form-group mt-4'>
+                                                    <div class='col-sm-10 col-sm-offset-2'>
+                                                            <div class='checkbox'>
+                                                                <label class='label-container'>
+                                                                    <input type='checkbox' name='mailing' value='1' checked>
+                                                                    <span class='checkmark'></span>
+                                                                    " . q($langMailToUsers) . "
+                                                                </label>
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-5'>
+                                                    <div class='col-12 d-flex justify-content-end align-items-center'>
+                                                            ".
+                                                            form_buttons(array(
+                                                                array(
+                                                                    'class' => 'submitAdminBtn',
+                                                                    'text'  => $langSend,
+                                                                    'name'  => 'submit',
+                                                                    'value' => $langAddModify
+                                                                ),
+                                                                array(
+                                                                    'class' => 'cancelAdminBtn ms-1',
+                                                                    'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : ""),
+                                                                    'id'   => "cancelReply"
+                                                                )
+                                                            ))
+                                                            ."
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>";
+
+                                        $out .= "<div class='text-center TextBold mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+
+                                        </form>
+                                    </div> <!-- end form-wrapper --> ";
+                if(isset($_GET['course'])){
+                    $out .= "</div> <!--  end col-12 -->
+                        </div> <!--  end flex-grow -->
+                        <div class='form-content-modules d-none message-forward'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                        </div>
+                    </div>"; // end d-lg-flex
+                }
+                             
+
+                if (!isset($_GET['course'])) {
+                    $out .= "
+                        </div> <!-- end col-lg-6 col-12 -->
+                        <div class='col-lg-6 col-12 d-none message-forward'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                        </div>
+                    </div>
+                    ";
+                }
+
+
+
 
             // ************* End of forward form ******************
 
@@ -446,6 +515,8 @@ if (isset($_GET['mid'])) {
                         $('#dropboxTabs .nav.nav-tabs').hide();
                         $('.btn-reply').on('click', function(e) {
                             e.preventDefault();
+                            $('.message-reply').addClass('d-lg-block');
+                            $('.message-forward').removeClass('d-lg-block');
                             $('#forwardBox').hide();
                             $('#replyBox').show();
                             $('html, body').animate({
@@ -460,6 +531,8 @@ if (isset($_GET['mid'])) {
                         });
                         $('.btn-forward').on('click', function(e) {
                             e.preventDefault();
+                            $('.message-reply').removeClass('d-lg-block');
+                            $('.message-forward').addClass('d-lg-block');
                             $('#replyBox').hide();
                             $('#forwardBox').show();
                             $('html, body').animate({

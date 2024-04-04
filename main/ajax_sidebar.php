@@ -103,7 +103,7 @@ function getCoursesNotifications() {
                                                     '/index.php?course=' . $course_code;
 
                     $notification_content['notification_content'] .= "
-                            <a type='button' class='btn btn-primary position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
+                            <a type='button' class='btn btn-primary text-decoration-none position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
                                 <i class='$sideBarCourseNotifyIcon pe-1'></i>$sideBarCourseNotifyTitle
                                 <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
                                     $sideBarCourseNotifyCount
