@@ -1284,19 +1284,6 @@ function edit_assignment($id) {
 
 /**
  * @brief submit assignment
- * @global type $course_id
- * @global type $uid
- * @global type $langOnBehalfOfGroupComment
- * @global array $works_url
- * @global type $langOnBehalfOfUserComment
- * @global type $workPath
- * @global type $langUploadSuccess
- * @global type $langUploadError
- * @global type $course_code
- * @global type $langAutoJudgeInvalidFileType
- * @global type $langAutoJudgeScenariosPassed
- * @global type $is_editor
- * @global type $langExerciseNotPermit
  * @param type $id
  * @param type $on_behalf_of
  */
@@ -1304,11 +1291,11 @@ function submit_work($id, $on_behalf_of = null) {
     global $course_id, $uid, $langOnBehalfOfGroupComment,
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
-           $langAutoJudgeInvalidFileType, $langExerciseNotPermit,
-           $langAutoJudgeScenariosPassed, $is_editor, $autojudge, $langEmptyFaculte;
+           $langAutoJudgeInvalidFileType, $langExerciseNotPermit, $langNoFileUploaded,
+           $langAutoJudgeScenariosPassed, $autojudge, $langEmptyFaculte;
 
 
-    $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
+    $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type, submission_date,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                             auto_judge, auto_judge_scenarios, lang, max_grade, notification, max_submissions
                             FROM assignment
@@ -1317,7 +1304,7 @@ function submit_work($id, $on_behalf_of = null) {
 
     $notification = $row->notification;
     $auto_judge = $row->auto_judge;
-    $auto_judge_scenarios = ($auto_judge == true) ? unserialize($row->auto_judge_scenarios) : null;
+    $auto_judge_scenarios = $auto_judge ? unserialize($row->auto_judge_scenarios) : null;
     $lang = $row->lang;
     $max_grade = $row->max_grade;
 
@@ -1333,9 +1320,13 @@ function submit_work($id, $on_behalf_of = null) {
         if ($GLOBALS['status'] == USER_GUEST) { // user is guest
             $submit_ok = FALSE;
         } else { // user NOT guest
-            if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
-                // user is registered to this lesson
-                if (($row->time < 0 && (int) $row->deadline && !$row->late_submission) and !$on_behalf_of) {
+            if (isset($_SESSION['courses'][$_SESSION['dbname']])) { // user is registered to this lesson
+                $WorkStart = new DateTime($row->submission_date);
+                $current_date = new DateTime('NOW');
+                $interval = $WorkStart->diff($current_date);
+                if ($WorkStart > $current_date) {
+                    $submit_ok = FALSE; // before assignment
+                } else if (($row->time < 0 && intval($row->deadline) && !$row->late_submission) and !$on_behalf_of) {
                     $submit_ok = FALSE; // after assignment deadline
                 } else {
                     $submit_ok = TRUE; // before deadline
@@ -1376,7 +1367,7 @@ function submit_work($id, $on_behalf_of = null) {
             } else {
                 $student_name = trim(uid_to_name($user_id));
                 $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
-                $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
+                $am = uid_to_am($user_id);
                 if (!empty($am)) {
                     $local_name .= ' ' . $am;
                 }
@@ -1399,7 +1390,6 @@ function submit_work($id, $on_behalf_of = null) {
                     foreach ($_FILES['userfile']['name'] as $i => $name) {
                         $status = $_FILES['userfile']['error'][$i];
                         if (!in_array($status, [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])) {
-                           // Session::Messages($langUploadError, 'alert-danger');
                             Session::flash('message',$langUploadError);
                             Session::flash('alert-class', 'alert-danger');
                             redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
@@ -1410,7 +1400,6 @@ function submit_work($id, $on_behalf_of = null) {
                     }
                     $fileCount = count($_FILES['userfile']['name']);
                     if ($totalFiles > $maxFiles) {
-                        //Session::Messages($GLOBALS['langWorkFilesCountExceeded'], 'alert-danger');
                         Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
                         Session::flash('alert-class', 'alert-danger');
                         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
@@ -1444,6 +1433,16 @@ function submit_work($id, $on_behalf_of = null) {
                     list($filename, $file_name) = $fileInfo[0];
                 } else {
                     // Single file
+                    if ($_FILES['userfile']['error'] == UPLOAD_ERR_NO_FILE) {
+                        Session::flash('message', $langNoFileUploaded);
+                        Session::flash('alert-class', 'alert-warning');
+                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    }
+                    if ($_FILES['userfile']['error'] == UPLOAD_ERR_CANT_WRITE) {
+                        Session::flash('message', $langUploadError);
+                        Session::flash('alert-class', 'alert-danger');
+                        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                    }
                     $file_name = $_FILES['userfile']['name'];
                     validateUploadedFile($file_name, 2);
                     $ext = get_file_extension($file_name);
@@ -1452,8 +1451,7 @@ function submit_work($id, $on_behalf_of = null) {
                     $files_to_keep = [$filename];
                 }
                 if (!$file_moved) {
-                    //Session::Messages($langUploadError, 'alert-danger');
-                    Session::flash('message',$langUploadError);
+                    Session::flash('message', $langUploadError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                 }
@@ -4019,7 +4017,7 @@ function show_student_assignment($id) {
     if ($row) {
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
             Session::Messages($langWrongPassword, 'alert-warning');
-            if ($unit) {
+            if (isset($unit)) {
                 redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
             } else {
                 redirect_to_home_page("modules/work/index.php?course=" . $course_code);
@@ -4302,7 +4300,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
     $langNotice3, $langNotice3Multiple, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $urlServer, $urlAppend;
+    $langGradebookGrade, $langComments, $urlServer;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -4483,7 +4481,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         $group_select_form
                         $submission_form
                         <div class='form-group mt-4'>
-                            <label for='stud_comments' class='col-sm-6 control-label-notes'>$m[comments]:</label>
+                            <label for='stud_comments' class='col-sm-6 control-label-notes'>$langComments:</label>
                             <div class='col-sm-12'>
                               <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                             </div>
