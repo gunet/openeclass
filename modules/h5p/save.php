@@ -20,12 +20,19 @@
  */
 
 $require_current_course = true;
+$require_editor = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PFactory.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 uploadContent();
 header("location: index.php");
 
+/**
+ * @brief upload h5p content
+ * @return bool
+ */
 function uploadContent(): bool {
     global $course_id, $course_code, $webDir;
 
@@ -34,7 +41,7 @@ function uploadContent(): bool {
         H5PCore::deleteFileTree($upload_dir);
     }
     mkdir($upload_dir, 0755, true);
-
+    validateUploadedFile($_FILES['userFile']['name']);
     $target_file = $upload_dir . "/" . my_basename($_FILES["userFile"]["name"]);
     move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
 
