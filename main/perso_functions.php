@@ -38,7 +38,7 @@ function getUserCourseInfo($uid): string
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
-           $langThisCourseDescriptionIsEmpty, $langSyllabus;
+           $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -87,9 +87,13 @@ function getUserCourseInfo($uid): string
             $lesson_content .= "
                 <tr class='$visclass row-course'>
 			        <td class='border-top-0 border-start-0 border-end-0'>
-                        <div>
+                        <div class='d-flex gap-3 flex-wrap'>
                             <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                                 &nbsp;(" . q($data->public_code) . ")
+                            </a>
+                            <a id='btnNotification_{$data->course_id}' class='btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
+                                            role='button' aria-expanded='false' aria-controls='notification{$data->course_id}'>
+                                <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                             </a>
                         </div>
 			            <div>
@@ -97,7 +101,8 @@ function getUserCourseInfo($uid): string
                         </div>
                     </td>";
 
-            $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
+            $lesson_content .= "
+                    <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                         <div class='col-12 portfolio-tools'>
                             <div class='d-inline-flex'>";
 
@@ -187,6 +192,12 @@ function getUserCourseInfo($uid): string
             $lesson_content .= "</div>
                         </div>
                     </td>
+                </tr>
+                <tr class='collapse' id='notification{$data->course_id}'>
+                    <td>
+                        <div class='lesson-notifications' data-id='{$data->course_id}'></div>
+                    </td>
+                    <td></td>
                 </tr>";
         }
         $lesson_content .= "</tbody></table>";

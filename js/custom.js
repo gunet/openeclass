@@ -336,7 +336,8 @@ function nextAuthedicationMethod(){
 }
 
 function lesson_notifications(){
-    $('.btn-quick-note').on('click',function(){
+    let current_url = document.URL;
+    if(current_url.includes('/main/portfolio.php')){
         var courseIDs = [];
         $(".lesson-notifications").each(function () {
             courseIDs.push($(this).data('id'));
@@ -351,9 +352,14 @@ function lesson_notifications(){
                     var id = $(this).data('id');
                     if (data.notifications_courses[id]) {
                         $(this).html(data.notifications_courses[id]['notification_content']);
+                        var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
+                        if (noexistNotification.length > 0) {
+                            $('#btnNotification_'+id).addClass('not_active');
+                            $('#btnNotificationCards_'+id).addClass('not_active');
+                        }
                     }
                 });
             }
         });
-    })
+    }
 }

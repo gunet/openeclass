@@ -479,7 +479,7 @@ if (isset($_GET['mid'])) {
 
                                             </fieldset>";
 
-                                        $out .= "<div class='text-center TextBold mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                                        $out .= "<div class='text-end mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
 
                                         </form>
                                     </div> <!-- end form-wrapper --> ";

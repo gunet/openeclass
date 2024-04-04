@@ -163,7 +163,7 @@
         <!-- Quick note -->
         <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote">
             <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip' 
-                    data-bs-placement='bottom' data-bs-title="{{ trans('langNotesNotifications') }}"></span>
+                    data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
         </a>
 
         <div class="modal fade" id="quickNote" tabindex="-1" aria-labelledby="quickNotelLabel" aria-hidden="true">
@@ -172,71 +172,30 @@
                     <div class="modal-header">
                         <div class='modal-title'>
                             <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                            <h3 class='modal-title-default text-center mb-0'>{{ trans('langNotesNotifications') }}</h3>
+                            <h3 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h3>
                         </div>
                     </div>
                     <div class="modal-body">
-
-                        <div class='panel-group group-section' id='accordionNotifications' role='tablist' aria-multiselectable='true'>
-                            <ul class="list-group list-group-flush mt-4">
- 
-                                    <li class="list-group-item px-0 mb-4 bg-transparent">
-                                        <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#NotificationCourses' aria-expanded='false' aria-controls='#NotificationCourses'>
-                                            <span class='fa-solid fa-chevron-down'></span>
-                                            {{ trans('langMyCourses') }}
-                                            
-                                        </a>
-                                        <div id='NotificationCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionNotifications'>
-                                            <div class='panel-body bg-transparent Neutral-900-cl px-4 '>
-                                                @php $userCourses = getUidCourses($_SESSION['uid']); @endphp
-                                                @if(count($userCourses) > 0)
-                                                    @foreach($userCourses as $data)
-                                                        <div class='lesson-notifications' data-id='{{ $data->course_id }}'></div>
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li> 
-
-
-                                    <li class="list-group-item px-0 mb-4 bg-transparent">
-                                        <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#NotesInit' aria-expanded='false' aria-controls='#NotesInit'>
-                                            <span class='fa-solid fa-chevron-down'></span>
-                                            {{ trans('langQuickNotesSide') }}
-                                        </a>
-                                        <div id='NotesInit' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionNotifications'>
-                                            <div class='panel-body bg-transparent Neutral-900-cl px-4'>
-                                                <div class='form-wrapper form-edit'>
-                                                    <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
-                                                        <div class="mb-3">
-                                                            <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp<span class='text-danger'>(*)</span></label>
-                                                            <input type="text" class="form-control" name='newTitle' id="title-note">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
-                                                            <textarea class="form-control" id="content-note" name='newContent'></textarea>
-                                                        </div>
-                                                        <div class="mb-5">
-                                                            <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
-                                                        </div>
-                                                        {!! generate_csrf_token_form_field() !!}
-                                                        <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                                            <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
-                                                            <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li> 
-                                
-                            </ul>
+                        <div class='form-wrapper form-edit'>
+                            <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
+                                <div class="mb-3">
+                                    <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp<span class='text-danger'>(*)</span></label>
+                                    <input type="text" class="form-control" name='newTitle' id="title-note">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
+                                    <textarea class="form-control" id="content-note" name='newContent'></textarea>
+                                </div>
+                                <div class="mb-5">
+                                    <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
+                                </div>
+                                {!! generate_csrf_token_form_field() !!}
+                                <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                    <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
+                                    <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
+                                </div>
+                            </form>
                         </div>
-
-
-
-
-
                     </div>
                 </div>
             </div>

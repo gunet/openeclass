@@ -8,7 +8,7 @@
             $('#consentModal').modal('show');
             jQuery('#portfolio_lessons').DataTable({
                 "bLengthChange": false,
-                "iDisplayLength": 8,
+                "iDisplayLength": 16,
                 "bSort": false,
                 "fnDrawCallback": function (oSettings) {
                     $('#portfolio_lessons_filter label input').attr({
@@ -690,19 +690,49 @@
                                                                 <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
                                                             </div>
 
-                                                            <div class='card-footer border-0'>
-                                                                <a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
+                                                            <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
+                                                                <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none' 
+                                                                    data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' >
+                                                                    <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
+                                                                </a>
+
+                                                                <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                                     <i class='fa-solid fa-display'></i>
                                                                 </a>
-                                                            {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
+
+                                                                {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
+
                                                                 @if ($course->status == USER_STUDENT)
                                                                     @if (get_config('disable_student_unregister_cours') == 0)
-                                                                        {!! icon('fa-minus-circle ms-3', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
+                                                                        {!! icon('fa-minus-circle', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
 
                                                                     @endif
                                                                 @elseif ($course->status == USER_TEACHER)
-                                                                    {!! icon('fa-wrench ms-3', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
+                                                                    {!! icon('fa-wrench', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
                                                                 @endif
+
+
+                                                                <div class="modal fade" id="notificationCard{{ $course->course_id }}" tabindex="-1" aria-labelledby="notificationCardLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <div class='modal-title'>
+                                                                                    <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                                                                    <h3 class='modal-title-default text-center mb-0'>{{ trans('langNotesNotifications') }}</h3>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p class='text-center mb-3'>
+                                                                                    <a class='TextBold' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">
+                                                                                        {{ $course->title }}
+                                                                                    </a>
+                                                                                </p>
+                                                                                <div class='lesson-notifications' data-id='{{ $course->course_id }}'></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
 
                                                         </div>

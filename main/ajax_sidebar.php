@@ -79,13 +79,11 @@ function getCoursesNotifications() {
             $notifications = get_course_notifications($id);
             $course_code = course_id_to_code($id);
             $course_title = course_id_to_title($id);
-            $courseUrl = $urlServer . 'courses/' . $course_code . '/';
 
             $notification_content['notification_content'] = "
-                <div class='panel panelCard p-3 mb-3'>
-                    <div class='card-body p-0'>
-                        <a class='TextBold' href='$courseUrl'>$course_title</a>
-                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap mt-3'>";
+                <div class='panel panelCard mb-3 border-0'>
+                    <div class='card-body'>
+                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>";
             foreach ($notifications as $n) {
                 $modules_array = (isset($modules[$n->module_id]))? $modules : '';
                 if (isset($modules_array[$n->module_id]) &&
@@ -103,9 +101,9 @@ function getCoursesNotifications() {
                                                     '/index.php?course=' . $course_code;
 
                     $notification_content['notification_content'] .= "
-                            <a type='button' class='btn btn-primary text-decoration-none position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
+                            <a type='button' class='btn btn-primary btn-sm text-decoration-none position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
                                 <i class='$sideBarCourseNotifyIcon pe-1'></i>$sideBarCourseNotifyTitle
-                                <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+                                <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white'>
                                     $sideBarCourseNotifyCount
                                     <span class='visually-hidden'></span>
                                 </span>
@@ -117,7 +115,7 @@ function getCoursesNotifications() {
                 }
             }
             if($existNotification ==  0){
-                $notification_content['notification_content'] .= "<p>$langNoExistNotifications</p>";
+                $notification_content['notification_content'] .= "<p class='no_exist_notification_{$id}'>$langNoExistNotifications</p>";
             }
             $notification_content['notification_content'] .= "
                         </div>

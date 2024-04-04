@@ -5157,3 +5157,20 @@ body:has(.fixed-announcement) .btn-quick-note{
   width: auto;
   height: 30px;
 }
+
+/**********************************************************************************************************************/
+/***************************************** NOTIFICATION COURSE BUTTON *************************************************/
+/**********************************************************************************************************************/
+.btn-notification-course,
+.btn-notification-course-card{
+  padding: 0px;
+  width: 19px;
+  height: 19px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-notification-course.not_active,
+.btn-notification-course-card.not_active{
+  display: none;
+}
