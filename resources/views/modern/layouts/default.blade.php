@@ -187,7 +187,7 @@
                                             
                                         </a>
                                         <div id='NotificationCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionNotifications'>
-                                            <div class='panel-body bg-transparent Neutral-900-cl px-4 d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                            <div class='panel-body bg-transparent Neutral-900-cl px-4 '>
                                                 @php $userCourses = getUidCourses($_SESSION['uid']); @endphp
                                                 @if(count($userCourses) > 0)
                                                     @foreach($userCourses as $data)

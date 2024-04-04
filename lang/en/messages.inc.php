@@ -6224,3 +6224,4 @@ $langclHoveredLinkImportantAnnouncement = "Hovered link color";
 $langDisplayAnnouncement = "See the announcement...";
 $langDontDisplayAgain = "Do not appear again";
 $langEnableQuickNote = "Enable quick note for all users";
+$langNoExistNotifications = "There aren't available notifications for the current course.";

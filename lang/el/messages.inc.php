@@ -6690,3 +6690,4 @@ $langDisplayAnnouncement = "Δείτε την ανακοίνωση...";
 $langDontDisplayAgain = "Να μην εμφανιστεί ξανά";
 $langNotRegistered = "Μη εγγεγραμένοι";
 $langEnableQuickNote = "Ενεργοποίησηση γρήγορης σημείωσης για τους χρήστες";
+$langNoExistNotifications = "Δεν υπάρχουν διαθέσιμες ειδοποιήσεις για το συγκεκριμένο μάθημα.";

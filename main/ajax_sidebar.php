@@ -67,17 +67,25 @@ function getSidebarNotifications() {
 }
 
 function getCoursesNotifications() {
-    global $modules, $icons_map, $urlAppend;
+    global $modules, $icons_map, $urlAppend, $urlServer, $langNoExistNotifications;
 
     $notifications_arr = array();
     $notification_content = array();
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
+
         foreach ($_GET['courseIDs'] as $id) {
             $sideBarCourseNotify = '';
+            $existNotification = 0;
             $notifications = get_course_notifications($id);
             $course_code = course_id_to_code($id);
             $course_title = course_id_to_title($id);
+            $courseUrl = $urlServer . 'courses/' . $course_code . '/';
 
+            $notification_content['notification_content'] = "
+                <div class='panel panelCard p-3 mb-3'>
+                    <div class='card-body p-0'>
+                        <a class='TextBold' href='$courseUrl'>$course_title</a>
+                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap mt-3'>";
             foreach ($notifications as $n) {
                 $modules_array = (isset($modules[$n->module_id]))? $modules : '';
                 if (isset($modules_array[$n->module_id]) &&
@@ -94,19 +102,28 @@ function getCoursesNotifications() {
                     $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
                                                     '/index.php?course=' . $course_code;
 
-                    $notification_content['notification_content'] = "
-                        <p class='mb-2 TextBold'>$course_title</p>
-                        <a type='button' class='btn btn-primary position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
-                            <i class='$sideBarCourseNotifyIcon pe-2'></i>$sideBarCourseNotifyTitle
-                            <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
-                                $sideBarCourseNotifyCount
-                                <span class='visually-hidden'></span>
-                            </span>
-                        </a>
-                    
+                    $notification_content['notification_content'] .= "
+                            <a type='button' class='btn btn-primary position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
+                                <i class='$sideBarCourseNotifyIcon pe-1'></i>$sideBarCourseNotifyTitle
+                                <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+                                    $sideBarCourseNotifyCount
+                                    <span class='visually-hidden'></span>
+                                </span>
+                            </a>
                     ";
+
+                    $existNotification++;
+
                 }
             }
+            if($existNotification ==  0){
+                $notification_content['notification_content'] .= "<p>$langNoExistNotifications</p>";
+            }
+            $notification_content['notification_content'] .= "
+                        </div>
+                    </div>
+                </div>";
+
             $notifications_arr[$id] = $notification_content;
         }
     }
