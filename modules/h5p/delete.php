@@ -21,12 +21,25 @@
 
 $require_login = true;
 $require_current_course = true;
+$require_editor = true;
+
 require_once '../../include/baseTheme.php';
 
-deleteContent($_GET['id']);
-Session::Messages($langH5pDeleteSuccess, 'alert-success');
-redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
+$content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
+if ($content) {
+    deleteContent(intval($_GET['id']));
+    Session::Messages($langH5pDeleteSuccess, 'alert-success');
+    redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
+} else {
+    redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
+}
+
+/**
+ * @brief delete h5p content
+ * @param $contentId
+ * @return bool
+ */
 function deleteContent($contentId): bool {
     global $course_id, $course_code, $webDir;
 
