@@ -936,6 +936,18 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
     }
 
     if (isset($update) and $update) { // update existing BBB session
+        if ($tc_type == 'zoom') {
+            $q = Database::get()->querySingle("SELECT options FROM tc_session 
+                                                        WHERE id = " . $session_id);
+
+            if (
+                $q
+                && !empty($q->options)
+            ) {
+                $options = $q->options;
+            }
+        }
+
         Database::get()->querySingle("UPDATE tc_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
                                         participants=?s, record=?s, sessionUsers=?d, options=?s WHERE id=?d",
