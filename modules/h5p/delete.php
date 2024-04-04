@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
 if ($content) {
-    deleteContent(intval($_GET['id']));
+    deleteContent($content->id);
     Session::Messages($langH5pDeleteSuccess, 'alert-success');
     redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
 } else {
@@ -49,11 +49,14 @@ function deleteContent($contentId): bool {
     $contentDirMod = $webDir . "/courses/h5p/content/" . $contentId;
 
     foreach (scandir($filesDir) as $didx => $dir) {
-        if (!in_array($dir,array(".", "..")) && is_dir($filesDir . "/" . $dir)) {
-            foreach (scandir($filesDir . "/" . $dir) as $fidx => $file) {
-                if (!in_array($file,array(".", "..")) && is_file($filesDir . "/" . $dir . "/" . $file)) {
-                    if (file_exists($editorTmpDir . $dir . "/" . $file)) {
-                        unlink($editorTmpDir . $dir . "/" . $file);
+        $dirPath = $filesDir . '/' . $dir;
+        if (!in_array($dir, ['.', '..']) && is_dir($dirPath)) {
+            foreach (scandir($dirPath) as $fidx => $file) {
+                $filePath = $dirPath . '/' . $file;
+                if (!in_array($file, ['.', '..']) && is_file($filePath)) {
+                    $editorTmpPath = $editorTmpDir . $dir . '/' . $file;
+                    if (file_exists($editorTmpPath)) {
+                        unlink($editorTmpPath);
                     }
                 }
             }
