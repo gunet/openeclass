@@ -3520,7 +3520,7 @@ function forbidden($path = '') {
     header("HTTP/1.0 403 Forbidden");
     echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
     '<title>403 Forbidden</title></head><body>',
-    '<h1>Forbidden</h1><p>You don\'t have permission to acces the requested path "',
+    '<h1>Forbidden</h1><p>You don\'t have permission to access the requested path "',
     htmlspecialchars($path),
     '".</p></body></html>';
     exit;
