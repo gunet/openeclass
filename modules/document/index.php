@@ -1385,7 +1385,7 @@ if (!isset($curDirPath)) {
 $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
 try {
-    if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
+    if (strpos($curDirPath, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
         Session::Messages($langInvalidDir, 'alert-danger');
         draw($tool_content, $menuTypeID);
         exit;
@@ -1878,11 +1878,11 @@ if ($doc_count == 0) {
     load_js('screenfull/screenfull.min.js');
     $head_content .= "<script>
     $(function(){
-        
+
         let checkboxStates = [];
-        
+
         $(document).ready(function() {
-            
+
             $('select[name=\"bulk_action\"]').change(function(){
                 var selectedOption = $(this).val();
                 if(selectedOption === 'move') {
@@ -1892,28 +1892,28 @@ if ($doc_count == 0) {
                         if ($(this).attr('isdir') === '1') {
                             $(this).prop('checked', false);
                             $(this).prop('disabled', true);
-                            
+
                             let cbid = $(this).attr('cbid');
                             let filepath = $(this).attr('filepath');
                             checkboxStates[cbid] = this.checked;
-            
+
                             let selectedCbidValues = $('#selectedcbids').val().split(',');
                             let filepaths = $('#filepaths').val().split(',');
-                            
+
                             let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
                             let filepathIndex = filepaths.indexOf(filepath);
-                            
+
                             if (this.checked && cbidIndex === -1) {
                                 selectedCbidValues.push(cbid);
                                 filepaths.push(filepath);
-                                
+
                             } else if (!this.checked && cbidIndex !== -1) {
                                 selectedCbidValues.splice(cbidIndex, 1);
                                 filepaths.splice(filepathIndex, 1);
                             }
                             $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
                             $('#filepaths').val(filepaths.filter(Boolean).join(','));
-                            
+
                         }
                     });
                 } else {
@@ -1925,12 +1925,12 @@ if ($doc_count == 0) {
                     });
                 }
             });
-            
+
             $('#source_path').val($('select[name=\"moveTo\"] option:first').val());
             $('select[name=\"moveTo\"]').change(function(){
                 $('#source_path').val($(this).val());
             });
-            
+
             $('.table-default').on('change', 'input[type=checkbox]', function() {
                 let cbid = $(this).attr('cbid');
                 let filepath = $(this).attr('filepath');
@@ -1938,23 +1938,23 @@ if ($doc_count == 0) {
 
                 let selectedCbidValues = $('#selectedcbids').val().split(',');
                 let filepaths = $('#filepaths').val().split(',');
-                
+
                 let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
                 let filepathIndex = filepaths.indexOf(filepath);
-                
+
                 if (this.checked && cbidIndex === -1) {
                     selectedCbidValues.push(cbid);
                     filepaths.push(filepath);
-                    
+
                 } else if (!this.checked && cbidIndex !== -1) {
                     selectedCbidValues.splice(cbidIndex, 1);
                     filepaths.splice(filepathIndex, 1);
                 }
                 $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
                 $('#filepaths').val(filepaths.filter(Boolean).join(','));
-                
+
             });
-            
+
             $('li.bulk-processing a').on('click', function(event) {
                 event.preventDefault();
                 $('.bulk-processing-box').toggleClass('hide');
@@ -1966,10 +1966,10 @@ if ($doc_count == 0) {
                     $(this).append('<span class=\'fa fa-check text-success\' style=\'margin-left: 5px;\'></span>');
                 }
             });
-            
+
         });
-        
-        
+
+
         $('.fileModal').click(function (e)
         {
             e.preventDefault();
