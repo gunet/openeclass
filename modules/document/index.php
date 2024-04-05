@@ -1292,9 +1292,9 @@ if (!isset($curDirPath)) {
 $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
 try {
-    if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
+    if (strpos($curDirPath, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
         Session::flash('message',$langInvalidDir);
-    Session::flash('alert-class', 'alert-danger');
+        Session::flash('alert-class', 'alert-danger');
         view('layouts.default', $data);
         exit;
     }
