@@ -89,7 +89,7 @@
                             <div class='{{ $container }} padding-default'>
                                 <div class='row row-cols-1 row-cols-lg-2 g-4'>
                                     <div class="col @if($PositionFormLogin or get_config('show_only_loginScreen')) ms-auto me-auto @endif">
-                                    
+
                                         @if($auth_enabled_method == 1)
                                             @if(count($authLinks) > 0)
                                                 <div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
@@ -97,7 +97,7 @@
                                                         @php $i = 0; @endphp
                                                         <div class='w-100 h-100'>
                                                             <div class='col-12 container-pages d-flex align-items-center h-100'>
-                                                            
+
                                                                 @foreach($authLinks as $auth => $key)
                                                                     <div class="col-12 page @if($i == 0) slide-page @elseif($i == 1) next-page-1 @else next-page-2 @endif h-100">
                                                                         <div class="row h-100">
@@ -136,18 +136,18 @@
                                                                                     @endif
                                                                                 </div>
                                                                             </div>
-                                                                    
+
                                                                             <div class='col-12 align-self-center'>
                                                                                 <div class='text-center'>{!! $key['html'] !!}</div>
                                                                             </div>
-                                                                        
-                                                                    
-                                                                            
+
+
+
                                                                             <div class='col-12 align-self-end'>
                                                                                 @if(count($authLinks) > 1)
-                                                                                    <div id="or" class='ms-auto me-auto mb-2'>{{ trans('langOr')}}</div>  
-                                                                                @endif  
-                                                                                @if(count($authLinks) == 2) 
+                                                                                    <div id="or" class='ms-auto me-auto mb-2'>{{ trans('langOr')}}</div>
+                                                                                @endif
+                                                                                @if(count($authLinks) == 2)
                                                                                     <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
                                                                                         <button class="btn submitAdminBtn @if($i==0) firstNext @else prev-{{ $i }} @endif next">
                                                                                             @if($i==0)
@@ -163,7 +163,7 @@
                                                                                                 @else
                                                                                                     {{ trans('langLogin') }}
                                                                                                 @endif
-                                                                                                
+
                                                                                             @endif
                                                                                         </button>
                                                                                     </div>
@@ -171,7 +171,7 @@
 
                                                                                 @if(count($authLinks) >= 3)
                                                                                     <div class="d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap">
-                                                                                        
+
                                                                                             @if($i==0)
                                                                                                 <button class="btn submitAdminBtn firstNext next">
                                                                                                     @if(!empty($authLinks[$i+1]['title']))
@@ -187,7 +187,7 @@
                                                                                                         {{ trans('langLogin') }}
                                                                                                     @endif
                                                                                                 </button>
-                                                                                                
+
                                                                                             @endif
 
                                                                                             @if($i==1)
@@ -205,7 +205,7 @@
                                                                                                         {{ trans('langLogin') }}
                                                                                                     @endif
                                                                                                 </button>
-                                                                                                
+
                                                                                             @endif
 
                                                                                             @if($i==2)
@@ -223,10 +223,10 @@
                                                                                                         {{ trans('langLogin') }}
                                                                                                     @endif
                                                                                                 </button>
-                                                                                                
+
                                                                                             @endif
 
-                                                                                            
+
                                                                                             @if(count($authLinks) > 3)
                                                                                                 <div class='col-12'>
                                                                                                     <div id='oreven' class='ms-auto me-auto mb-2'>{{ trans('langOrYet') }}</div>
@@ -241,7 +241,7 @@
                                                                                                         @endif
                                                                                                     </button>
 
-                                                                                                            
+
                                                                                                     <div class='modal fade' id='LoginAnotherOption-{{ $i }}' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='LoginAnotherOptionLabel-{{ $i }}' aria-hidden='true'>
                                                                                                         <div class='modal-dialog'>
                                                                                                             <div class='modal-content'>
@@ -266,13 +266,13 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             @endif
-                                                                                                            
+
 
                                                                                     </div>
                                                                                 @endif
-                                                                            
+
                                                                             </div>
-                                                                        
+
                                                                         </div>
                                                                     </div>
                                                                     @php $i++; @endphp
@@ -298,7 +298,7 @@
                                         @endif
 
                                     </div>
-                                    
+
                                     @if(!get_config('show_only_loginScreen'))
                                         <div class='col d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
                                             <div class='card h-100 border-0 p-0'>
@@ -316,7 +316,7 @@
             @endif
 
 
-           
+
             @if(!get_config('show_only_loginScreen'))
                 @if(!get_config('dont_display_announcements'))
                     <div class="col-12 order-{{ $announcements_priority }} homepage-annnouncements-container @if(get_config('dont_display_login_form')) drop-shadow @endif">
@@ -329,9 +329,11 @@
                                                 <h3>{{ trans('langAnnouncements') }}</h3>
                                                 <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
                                             </div>
-                                            <div class='d-flex justify-content-end align-items-center'>
-                                                <a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
-                                            </div>
+                                            @if(count($announcements) > 0)
+                                                <div class='d-flex justify-content-end align-items-center'>
+                                                    <a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class='card-body px-0 py-0'>
                                             @php $counterAn = 0; @endphp
@@ -352,7 +354,7 @@
                                             @else
                                                 <ul class='list-group list-group-flush'>
                                                     <li class='list-group-item element'>
-                                                        <div class='TextRegular msmall-text'>{{ trans('langNoInfoAvailable') }}</div>
+                                                        <div class='TextRegular msmall-text'>{{ trans('langNoAnnouncementsExist') }}</div>
                                                     </li>
                                                 </ul>
                                             @endif
@@ -582,8 +584,8 @@
                     </div>
                 </div>
             @endif
-        
-        
+
+
         </div>
 
 </div>

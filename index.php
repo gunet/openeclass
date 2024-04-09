@@ -148,7 +148,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
         // if user is not guest redirect him to portfolio
         header("Location: {$urlServer}main/portfolio.php");
     }
-    
+
 
 } else {
     // check authentication methods
@@ -200,7 +200,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'nameAuth' => $l->auth_name,
                     'showTitle' => false,
                     'class' => 'login-option',
-                    'title' => empty($l->auth_title)? "$langLogInWith Credentials": q(getSerializedMessage($l->auth_title)),
+                    'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => " <form action='$urlServer' method='post'>
                                     <div class='form-group text-start'>
                                         <label for='uname' class='form-label'>$langUsername</label>
