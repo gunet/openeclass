@@ -513,8 +513,8 @@
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
                 <div class='row row-cols-1 g-4'>
-                    <div class="col portfolio-content d-flex justify-content-between align-items-center flex-wrap gap-3">
-                        <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
+                    <div class="col portfolio-content d-flex justify-content-between align-items-start flex-wrap gap-5">
+                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 <div>
@@ -528,17 +528,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-md-start align-items-center gap-3 flex-wrap'>
-                            <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 py-1'>
-                                <i class='fa-solid fa-book-open fa-xs'></i>
-                                {{ $student_courses_count }}
-                                <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
-                                <i class='fa-solid fa-book-reader fa-xs'></i>
-                                {{ $teacher_courses_count }}
-                                <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
-                            </h2>
+                        <div class='flex-fill d-flex justify-content-center align-items-center'>
+                            <div>
+                                <h2 class='d-flex justify-content-start align-items-center gap-2'>
+                                    <i class='fa-solid fa-book-open fa-xs'></i>
+                                    {{ $student_courses_count }}
+                                    <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
+                                </h2>
+                                <h2 class='d-flex justify-content-start align-items-center gap-2'>
+                                    <i class='fa-solid fa-book-reader fa-xs'></i>
+                                    {{ $teacher_courses_count }}
+                                    <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
+                                </h2>
+                            </div>
+                        </div>
+                        <div class='d-flex align-items-center gap-3 flex-wrap'>
                             <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
+                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
                             </p>
                         </div>
                     </div>
