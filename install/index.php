@@ -357,7 +357,18 @@ elseif (isset($_POST['install4'])) {
            form_entry('helpdeskmail', text_input('helpdeskmail', 40), "$langHelpDeskEmail (**)") .
            form_entry('institutionForm', text_input('institutionForm', 40), $langInstituteShortName) .
            form_entry('institutionUrlForm', text_input('institutionUrlForm', 40), $langInstituteName) .
-           form_entry('postaddressForm', textarea_input('postaddressForm', 3, 40), $langInstitutePostAddress) . "
+           form_entry('postaddressForm', textarea_input('postaddressForm', 3, 40), $langInstitutePostAddress) .
+           form_entry('eclass_stud_reg',
+                      selection_input(array('2' => $langUserRegistration,
+                                            '1' => $langReqRegUser,
+                                            '0' => $langDisableEclassStudReg),
+                                          'eclass_stud_reg'),
+                      "$langUserAccount") .
+           form_entry('eclass_prof_reg',
+                          selection_input(array('1' => $langReqRegProf,
+                                                '0' => $langDisableEclassProfReg),
+                                              'eclass_prof_reg'),
+                          "$langProfAccount $langViaeClass") . "           
            <div class='form-group mt-5'>
             <div class='col-12'>
               <div class='row'>
@@ -420,6 +431,20 @@ elseif (isset($_POST['install6'])) {
     $langStep = sprintf($langStep1, 6, 7);
     $_SESSION['step'] = 6;
 
+    switch ($eclass_stud_reg) {
+        case '0': $disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
+                    break;
+        case '1': $disable_eclass_stud_reg_info = $langDisableEclassStudRegViaReq;
+                    break;
+        case '2': $disable_eclass_stud_reg_info = $langDisableEclassStudRegNo;
+                    break;
+    }
+    if (!$eclass_prof_reg) {
+        $disable_eclass_prof_reg_info = $langDisableEclassProfRegYes;
+    } else {
+        $disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
+    }
+
     $head_content = "
     <script type='text/javascript'>
         $(function() {
@@ -456,6 +481,8 @@ elseif (isset($_POST['install6'])) {
            display_entry(q($helpdeskmail), $langHelpDeskEmail) .
            display_entry(q($institutionForm), $langInstituteShortName) .
            display_entry(q($institutionUrlForm), $langInstituteName) .
+           display_entry(q($disable_eclass_stud_reg_info), $langDisableEclassStudRegType) .
+           display_entry(q($disable_eclass_prof_reg_info), $langDisableEclassProfRegType) .
            display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) . "
            <div class='form-group mt-5'>
              <div class='col-12'>

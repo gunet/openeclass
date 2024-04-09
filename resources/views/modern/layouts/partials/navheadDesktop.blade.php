@@ -38,12 +38,13 @@
                                 </a>
                             </li>
                         @endif
-
-                        <li class="nav-item">
-                            <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
-                                {{ trans('langFaq') }}
-                            </a>
-                        </li>
+                        @if (faq_exist())
+                            <li class="nav-item">
+                                <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
+                                    {{ trans('langFaq') }}
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 @endif
             </div>
@@ -449,29 +450,22 @@
                             </a>
                         </p>
                     @endif
-                    
-                    <p class='py-2 px-0'>
-                        <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label='Frequent questions'>
-                            <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
-                        </a>
-                    </p>
-                    
-                
+
+                    @if (faq_exist())
+                        <p class='py-2 px-0'>
+                            <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label='Frequent questions'>
+                                <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
+                            </a>
+                        </p>
+                    @endif
+
             </div>
 
         </div>
     </div>
 
-
-
-
-
 </div>
 </nav>
-
-
-
-
 
 
 <script>

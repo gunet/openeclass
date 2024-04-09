@@ -3252,6 +3252,7 @@ function getOnlineUsers() {
  * @return boolean
  */
 function faq_exist() {
+
     if (!DBHelper::tableExists('faq')) {
         return false;
     }
@@ -4918,7 +4919,7 @@ function get_tinymce_color_text() {
 function getUidCourses($uid)
 {
     global $uid;
-    
+
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                              course.code code,
                              course.public_code,
