@@ -520,14 +520,7 @@
                                 <div>
                                     <h4 class='mb-0 portofolio-text-intro'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
                                     <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
-                                        @if($session->status == USER_TEACHER)
-                                            {{ trans('langMetaTeacher') }}
-                                        @else
-                                            {{ trans('langStudent') }}
-                                        @endif
-                                    </p>
-                                    <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                        {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
+                                        {!! $_SESSION['uname'] !!}
                                     </p>
                                     <a class='btn myProfileBtn mt-1' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                         {{ trans('langMyProfile') }}
@@ -535,34 +528,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
-                            <div class='card user-info-card h-100 px-3 py-0'>
-                                <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                    <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 py-1'>
-                                        <i class='fa-solid fa-book-open fa-xs'></i>
-                                        {{ $student_courses_count }}
-                                        <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
-                                    </h2>
-                                    
-                                </div>
-                            </div>
-                            <div class='card user-info-card h-100 px-3 py-0'>
-                                <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                    <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 py-1'>
-                                        <i class='fa-solid fa-book-reader fa-xs'></i>
-                                        {{ $teacher_courses_count }}
-                                        <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
-                                    </h2>
-                                    
-                                </div>
-                            </div>
+                        <div class='d-flex justify-content-md-start align-items-center gap-3 flex-wrap'>
+                            <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 py-1'>
+                                <i class='fa-solid fa-book-open fa-xs'></i>
+                                {{ $student_courses_count }}
+                                <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
+                                <i class='fa-solid fa-book-reader fa-xs'></i>
+                                {{ $teacher_courses_count }}
+                                <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
+                            </h2>
+                            <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
+                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
 <div class='col-12 main-section-courses'>
     <div class='row m-auto'>
@@ -691,7 +674,7 @@
                                                             </div>
 
                                                             <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
-                                                                <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none' 
+                                                                <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none'
                                                                     data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' >
                                                                     <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
                                                                 </a>
