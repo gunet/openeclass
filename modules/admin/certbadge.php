@@ -22,6 +22,7 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 $toolName = $langCertBadgeAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -77,9 +78,19 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
     if (isset($_POST['cert_id'])) {
         if ($_FILES['filename']['size'] > 0) { // replace file if needed
             $filename = $_FILES['filename']['name'];
+            validateUploadedFile($filename, 3);
             if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+                $files_in_zip = array();
                 $archive = new ZipArchive;
-                if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename") == TRUE) {
+                if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+                    // check for file type in zip contents
+                    for ($i = 0; $i < $archive->numFiles; $i++) {
+                        $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
+                        $files_in_zip[$i] = $stat['name'];
+                        if (!empty(my_basename($files_in_zip[$i]))) {
+                            validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                        }
+                    }
                     if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
                         $archive->close();
                         $old_file = Database::get()->querySingle("SELECT filename FROM certificate_template WHERE id = ?d", $_POST['cert_id'])->filename;
@@ -106,9 +117,19 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
         }
     } else {
         $filename = $_FILES['filename']['name'];
+        validateUploadedFile($filename, 3);
         if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+            $files_in_zip = array();
             $archive = new ZipArchive;
-            if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename") == TRUE) {
+            if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+                // check for file type in zip contents
+                for ($i = 0; $i < $archive->numFiles; $i++) {
+                    $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
+                    $files_in_zip[$i] = $stat['name'];
+                    if (!empty(my_basename($files_in_zip[$i]))) {
+                        validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                    }
+                }
                 if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
                     $archive->close();
                     Database::get()->querySingle("INSERT INTO certificate_template SET
@@ -124,9 +145,11 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
         }
     }
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
-    if (!isset($_POST['token']) or !validate_csrf_token($_POST['token'])) { forbidden(); }
+    if (!isset($_POST['token']) or !validate_csrf_token($_POST['token'])) {
+        forbidden();
+    }
     $new_icon = $old_icon = $filename = null;
-    $badge_id = isset($_POST['badge_id'])? $_POST['badge_id']: null;
+    $badge_id = $_POST['badge_id'] ?? null;
     if ($_FILES['icon']['size'] > 0) {
         $filename = $_FILES['icon']['name'];
         $extension = strtolower(get_file_extension($filename));
