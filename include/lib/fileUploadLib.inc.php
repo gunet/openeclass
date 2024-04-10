@@ -530,10 +530,10 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
  * @return boolean           - Whether the whitelist allows the specific filename extension or not.
  */
 function isWhitelistAllowed($filename) {
-    global $is_editor, $uid;
+    global $is_editor, $uid, $is_admin;
 
     $wh = get_config('student_upload_whitelist');
-    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';
+    $wh2 = ($is_editor or $is_admin) ? get_config('teacher_upload_whitelist') : '';
     $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';
 
     $wh3 = fetchUserWhitelist($uid);
