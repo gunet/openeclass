@@ -87,6 +87,12 @@ class Hierarchy {
      * @param int    $visible        - Visibility flag for the new node
      */
     public function updateNode($id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible) {
+
+        $cache1 = new FileCache('nodes',300);
+        $cache1->clear();
+        $cache2 = new FileCache('coursedeps',300);
+        $cache2->clear();
+
         if ($this->useProcedures()) {
             Database::get()->query("CALL update_node(?d, ?s, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?d)", $id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible);
         } else {
@@ -107,6 +113,12 @@ class Hierarchy {
      * @param int $id - The id of the node to delete
      */
     public function deleteNode($id) {
+
+        $cache1 = new FileCache('nodes', 300);
+        $cache1->clear();
+        $cache2 = new FileCache('coursedeps', 300);
+        $cache2->clear();
+
         if ($this->useProcedures()) {
             Database::get()->query("CALL delete_node(?d)", $id);
         } else {
@@ -364,11 +376,16 @@ class Hierarchy {
         if (count($nodesoverride) > 0) {
             $nodes = $nodesoverride;
         } else {
-            $nodes = array();
-            // get all nodes
-            Database::get()->queryFunc("select * from hierarchy order by lft", function($row) use (&$nodes) {
-                $nodes[] = $row;
-            });
+            $cache = new FileCache('nodes', 300);
+            $nodes = $cache->get();
+            if ($nodes === false) {
+                $nodes = [];
+                // get all nodes
+                Database::get()->queryFunc("select * from hierarchy order by lft", function($row) use (&$nodes) {
+                    $nodes[] = $row;
+                });
+                $cache->store($nodes);
+            }
         }
 
         foreach($nodes as $node) {
@@ -444,7 +461,7 @@ $(document).ready(function() {
 
     $( "#nodCnt" ).on('click', "a[href='#nodCnt']", function (e) {
         e.preventDefault();
-        $(this).find('span').tooltip('dispose').closest('p').remove();
+        $(this).find('span').tooltip('destroy').closest('p').remove();
         $('#dialog-set-key').val(null);
         $('#dialog-set-value').val(null);
     });
@@ -559,7 +576,7 @@ jContent;
      * @return string  $html - The returned HTML code
      */
     private function buildHtmlNodePicker($options) {
-        global $themeimg, $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
 
         $params = (array_key_exists('params', $options)) ? $options['params'] : '';
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
@@ -613,7 +630,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . $defs[0] . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . $defs[0] . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -639,7 +656,7 @@ jContent;
 
 
     private function buildHtmlNodePickerIndirect($options) {
-        global $themeimg, $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
 
         $params = (array_key_exists('params', $options)) ? $options['params'] : '';
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
@@ -693,7 +710,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . getIndirectReference($defs[0]) . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . getIndirectReference($defs[0]) . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -882,7 +899,6 @@ jContent;
 
             $ret .= ($c == 0) ? '' : '» ';
             $ret .= (empty($href)) ? self::unserializeLangField($parent->name) . ' ' : "<a href='" . $href . $parent->id . "'>" . self::unserializeLangField($parent->name) . "</a> ";
-           
             $c++;
         }
 
@@ -893,12 +909,12 @@ jContent;
     }
 
     /**
-     * @brief Get a node's path (only the last component)
+     * @brief Get the last component of a node's path
      * @param $id
      * @return string
      */
     public function getPath($id) {
-        $ret = "";
+        $ret = '';
 
         if ($id === null || intval($id) <= 0) {
             return $ret;
@@ -1106,12 +1122,18 @@ jContent;
             /*Database::get()->queryFunc("select department, count(id) as count from course_department group by department", function($row) use (&$coursedeps) {
                 $coursedeps[intval($row->department)] = $row->count;
             });*/
-
-            Database::get()->queryFunc("SELECT COUNT(course_department.id) AS count,department FROM course_department
-                                            JOIN course ON course_department.course = course.id
-                                        WHERE course.visible != " . COURSE_INACTIVE . " GROUP BY department", function($row) use (&$coursedeps) {
-                $coursedeps[intval($row->department)] = $row->count;
-            });
+            $cache = new FileCache('coursedeps',300);
+            $coursedeps = $cache->get();
+            if ($coursedeps === false) {
+                $coursedeps = array();
+                Database::get()->queryFunc("SELECT COUNT(course_department.id) AS count,department FROM course_department
+                    JOIN course ON course_department.course = course.id
+                    WHERE course.visible != " . COURSE_INACTIVE . " GROUP BY department",
+                    function($row) use (&$coursedeps) {
+                        $coursedeps[intval($row->department)] = $row->count;
+                    });
+                $cache->store($coursedeps);
+            }
             foreach ($nodesWK as $key => $node) {
                 $id = intval($key);
                 $code = $node->code;
