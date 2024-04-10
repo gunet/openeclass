@@ -81,9 +81,9 @@ function getCoursesNotifications() {
             $course_title = course_id_to_title($id);
 
             $notification_content['notification_content'] = "
-                <div class='panel panelCard mb-3 border-0'>
-                    <div class='card-body'>
-                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>";
+                <div class='panel panelCard border-0'>
+                    <div class='card-body p-lg-2 p-3'>
+                        <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>";
             foreach ($notifications as $n) {
                 $modules_array = (isset($modules[$n->module_id]))? $modules : '';
                 if (isset($modules_array[$n->module_id]) &&
@@ -101,8 +101,9 @@ function getCoursesNotifications() {
                                                     '/index.php?course=' . $course_code;
 
                     $notification_content['notification_content'] .= "
-                            <a type='button' class='btn btn-primary btn-sm text-decoration-none position-relative mb-2 d-inline-flex' href='$sideBarCourseNotifyURL'>
-                                <i class='$sideBarCourseNotifyIcon pe-1'></i>$sideBarCourseNotifyTitle
+                            <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative' href='$sideBarCourseNotifyURL'
+                                data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$sideBarCourseNotifyTitle'>
+                                <i class='$sideBarCourseNotifyIcon fa-md'></i>
                                 <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white'>
                                     $sideBarCourseNotifyCount
                                     <span class='visually-hidden'></span>

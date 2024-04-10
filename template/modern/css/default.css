@@ -3552,6 +3552,17 @@ body .delThemeBtn{
   color: #ffffff; 
 }
 
+.btn-portfolio-notifications{
+  margin-top: 5px;
+  height: auto ;
+  width: auto ;
+  border-radius: 50% ;
+}
+.btn-portfolio-notifications:hover{
+  opacity: 0.7;
+  cursor:  url(../images/pointer.png), auto;
+}
+
 
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE ***********************************************************/

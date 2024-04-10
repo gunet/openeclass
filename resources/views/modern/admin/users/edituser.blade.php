@@ -122,13 +122,13 @@
                                     <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langUserPermissions') }}</label>
                                     <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                         <label>
-                                            <input type='radio' name='newstatus' value='" . USER_STUDENT . "' {!! ($info->status == USER_STUDENT) ? 'checked' : '';  !!} >
+                                            <input type='radio' name='newstatus' value='{!! USER_STUDENT !!}' {!! ($info->status == USER_STUDENT) ? 'checked' : '';  !!} >
                                             {{ trans('langWithNoCourseCreationRights') }}
                                         </label>
                                     </div>
                                     <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                         <label>
-                                            <input type='radio' name='newstatus' value='" . USER_TEACHER . "'{!! ($info->status == USER_TEACHER) ? 'checked' : ''; !!} >
+                                            <input type='radio' name='newstatus' value='{!! USER_TEACHER !!}'{!! ($info->status == USER_TEACHER) ? 'checked' : ''; !!} >
                                             {{ trans('langWithCourseCreationRights') }}
                                         </label>
                                     </div>
