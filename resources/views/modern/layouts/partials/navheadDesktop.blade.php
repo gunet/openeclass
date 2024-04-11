@@ -54,9 +54,9 @@
                         <div class='h-40px pe-2'>
                             <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' role='search'>
                                 <div>
-                                    <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
+                                    <a id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
                                         <i class="fa-solid fa-magnifying-glass"></i>
-                                    </button>
+                                    </a>
                                 </div>
                                 <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
                             </form>
