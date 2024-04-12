@@ -531,7 +531,7 @@ if (!$nbrExercises) {
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span style='color:red;'>$langHasExpiredS</span>)";
             }
             if (has_user_participate_in_exercise($row->id)) {
-                $tool_content .= "&nbsp; <span class='fa fa-square-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+                $tool_content .= "&nbsp; <span class='fa-regular fa-square-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
             }
 
             $tool_content .= $row->description . "</td>";

@@ -206,7 +206,6 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
             if (isset($_POST['password']) && $password === $_POST['password']) {
                 $_SESSION['password'][$exerciseId][$attempt_value] = 1;
             } else {
-               // Session::Messages($langWrongPassword);
                 Session::flash('message',$langWrongPassword);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page($back_url);
@@ -221,7 +220,6 @@ $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
-        //Session::Messages($langIPHasNoAccess);
         Session::flash('message',$langIPHasNoAccess);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page($back_url);
@@ -241,7 +239,6 @@ if (isset($_POST['buttonCancel'])) {
         'legend' => $langCancel,
         'eurid' => $eurid ]);
     unset_exercise_var($exerciseId);
-    //Session::Messages($langAttemptWasCanceled);
     Session::flash('message',$langAttemptWasCanceled);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page($back_url);
@@ -320,13 +317,11 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
                 'legend' => $langSubmit,
                 'eurid' => $eurid ]);
             unset_exercise_var($exerciseId);
-           // Session::Messages($langExerciseExpiredTime);
             Session::flash('message',$langExerciseExpiredTime);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page($back_url);
         } else {
             unset_exercise_var($exerciseId);
-            //Session::Messages($langExerciseExpired);
             Session::flash('message',$langExerciseExpired);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page($back_url);
@@ -400,7 +395,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     // Check if allowed number of attempts exceeded and if so redirect
     if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
-       // Session::Messages($langExerciseMaxAttemptsReached);
         Session::flash('message',$langExerciseMaxAttemptsReached);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page($back_url);
@@ -417,12 +411,12 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" .
                 ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) .
                 ' ' . $langExerciseAttemptContinue . "</span></div>
-            <div class='text-center'>
                 <form action='$form_next_link' method='post'>
-                    <input class='btn submitAdminBtn' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                    <a href='$form_cancel_link' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                </form>
-            </div>";
+                    <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap' style='margin-top:70px;'>
+                            <input class='btn successAdminBtn' style='float: right;' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
+                            <a href='$form_cancel_link' class='btn cancelAdminBtn'>$langCancel</a>             
+                    </div>
+                </form>";
             unset_exercise_var($exerciseId);
             draw($tool_content, 2, null, $head_content);
             exit;
@@ -442,7 +436,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             'legend' => $langStart,
             'eurid' => $eurid ]);
         if ($exerciseType == ONE_WAY_TYPE) {
-           // Session::Messages($langWarnOneWayExercise, 'alert-warning');
             Session::flash('message',$langWarnOneWayExercise);
             Session::flash('alert-class', 'alert-warning');
         }
@@ -796,7 +789,6 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) {
 $attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record
         WHERE eurid = ?d AND attempt_status = ?d', $eurid, ATTEMPT_ACTIVE);
 if (!$attempt && !$is_editor) {
-   // Session::Messages($langExerciseAttemptGone, 'alert-danger');
     Session::flash('message',$langExerciseAttemptGone);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page($back_url);

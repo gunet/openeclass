@@ -458,9 +458,9 @@ function display_exercise($exercise_id) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                             $tool_content .= "<tr><td style='width: 70px;'><div align='start'>";
                             if ($answerCorrect) {
-                                $icon_choice = "fa-square-check";
+                                $icon_choice = "fa-regular fa-square-check";
                             } else {
-                                $icon_choice = "fa-square";
+                                $icon_choice = "fa-regular fa-square";
                             }
                             $tool_content .= icon($icon_choice) . "</div>";
                             $tool_content .= "</td><td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>

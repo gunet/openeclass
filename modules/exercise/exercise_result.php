@@ -253,7 +253,7 @@ if (!isset($_GET['pdf'])) {
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ]
-            
+
         ]);
     }
 }
@@ -271,7 +271,7 @@ $tool_content .= "</div>";
 $tool_content .= "<div class='card-body'>";
 
 $message_range = '';
-$canonicalized_message_range = "<strong><span>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong>";
+$canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
 if ($exerciseRange > 0) { // exercise grade range (if any)
     $canonicalized_message_range = "<strong><span>$canonical_score</span> / $exerciseRange</strong>";
     $message_range = "<small> (<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>)</small>";
@@ -350,13 +350,13 @@ if (count($exercise_question_ids) > 0) {
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
 
-        
+
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "
             <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise table-exercise-secondary mb-4'>
             <thead><tr class='active'>
               <td class='w-75'>
-                <strong><u>$langQuestion</u>: $i</strong>";
+                <strong class='fs-6'><u>$langQuestion</u>: $i</strong>";
 
         if ($answerType == FREE_TEXT) {
             $choice = purify($choice);
@@ -376,13 +376,13 @@ if (count($exercise_question_ids) > 0) {
                      $qw_legend1 = "$question_weight";
                      $qw_legend2 = "";
                  }
-                 $tool_content .= " <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong></span>$qw_legend2)</small>";
+                 $tool_content .= " <span class='fw-light m-1'><small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2)</small></span>";
              }
         }
-        $tool_content .= "<small>($questionType)</small>"; // question type
+        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType)</small></span>"; // question type
         $tool_content .= "</td></tr></thead>";
 
-        $tool_content .= "<tr><td>";
+        $tool_content .= "<tr><td colspan='2'>";
         $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
             $tool_content .= "<div style='padding: 20px;' class='text-center'>
@@ -393,7 +393,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "</td></tr>";
 
         if (!is_null($choice)) {
-            $tool_content .= "<tr class='active'><th><u>$langAnswer</u></th></tr>";
+            $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
         }
 
         $questionScore = 0;
@@ -609,10 +609,10 @@ if (count($exercise_question_ids) > 0) {
 
                 if ($answerType != MATCHING || $answerCorrect) {
                     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                        $tool_content .= "<tr><td width='100'>";
+                        $tool_content .= "<tr><td><div class='d-flex align-items-center'>";
                         $answer_icon  = '';
                         if ($studentChoice) {
-                            $student_choice_icon = "fa fa-fw fa-square-check";
+                            $student_choice_icon = "fa-regular fa-square-check";
                             $pdf_student_choice_icon = "<label class='label-container'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                             $style = '';
                             if ($answerCorrect) {
@@ -621,36 +621,36 @@ if (count($exercise_question_ids) > 0) {
                                 $answer_icon = "fa-solid fa-xmark text-danger";
                             }
                         } else {
-                            $student_choice_icon = "fa fa-fw fa-square";
+                            $student_choice_icon = "fa-regular fa-square";
                             $pdf_student_choice_icon = "<label class='label-container'><input type='checkbox'><span class='checkmark'></span></label>";
                             $style = "visibility: hidden;";
                         }
                         if (isset($_GET['pdf'])) {
                             $tool_content .= "<span>$pdf_student_choice_icon</span>";
                         } else {
-                            $tool_content .= "<span class='$student_choice_icon'></span>&nbsp;&nbsp;";
-                            $tool_content .= "<span style='$style' class='$answer_icon'></span>";
+                            $tool_content .= "<div class='d-flex align-items-center m-1 me-2'><span class='$student_choice_icon p-3'></span>";
+                            $tool_content .= "<span style='$style' class='$answer_icon'></span></div>";
                         }
 
-                        $tool_content .= "</td>";
-                        $tool_content .= "<td>" . standard_text_escape($answer);
+                        $tool_content .= standard_text_escape($answer);
                         if ($answerCorrect) {
                             $tool_content .= "&nbsp;<span class='text-success'><small>($langCorrectS)</small></span>";
                         } else {
                             $tool_content .= "&nbsp;<span class='text-danger'><small>($langIncorrectS)</small></span>";
                         }
+                        $tool_content .= "</div>";
                         if ($studentChoice or $answerCorrect) {
-                            $tool_content .= "<small><span class='help-block'>" . standard_text_escape(nl2br(make_clickable($answerComment))) ."</span></small>";
+                            $tool_content .= "<div class='d-flex align-items-center'><small><span class='help-block'>" . standard_text_escape(nl2br(make_clickable($answerComment))) ."</span></small></div>";
                         }
-                        $tool_content .= "</td>";
-                        $tool_content .= "</tr>";
+                        $tool_content .= "</div>";
+                        $tool_content .= "</td></tr>";
                     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answer)) . "</td></tr>";
                     } elseif ($answerType == MATCHING) {
-                        $tool_content .= "<tr><td>" . q($answer) . "</td>";
-                        $tool_content .= "<td>" . $choice[$answerId];
+                        $tool_content .= "<tr><td><div class='d-flex align-items-center'><div class='d-flex align-items-end m-1 me-2 col-6'>" . q($answer) . "</div>";
+                        $tool_content .= "<div class='d-flex align-items-center col-6 m-1 me-2'>" . $choice[$answerId];
                         $tool_content .= " / <span class='text-success'><strong>" . q($matching[$answerCorrect]). "</strong></span>&nbsp;&nbsp;$icon";
-                        $tool_content .= "</td></tr>";
+                        $tool_content .= "</div></div></td></tr>";
                     }
                 }
             } // end for()
@@ -659,7 +659,7 @@ if (count($exercise_question_ids) > 0) {
             $tool_content .= "<tr><td>" . purify($choice) . "</td></tr>";
         }
 
-        if (!is_null($questionFeedback)) {
+        if ($questionFeedback !== '') {
             $tool_content .= "<tr><td>";
             $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";

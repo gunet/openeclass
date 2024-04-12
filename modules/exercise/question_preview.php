@@ -118,9 +118,9 @@ if ($answerType != FREE_TEXT) {
         if ($answerType != MATCHING || $answerCorrect) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                 if ($answerCorrect) {
-                    $icon_choice = icon("fa-square-check");
+                    $icon_choice = icon("fa-regular fa-square-check");
                 } else {
-                    $icon_choice = icon("fa-square");
+                    $icon_choice = icon("fa-regular fa-square");
                 }
                 $tool_content .= "
                   <tr>

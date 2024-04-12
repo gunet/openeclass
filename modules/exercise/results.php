@@ -208,7 +208,7 @@ foreach ($result as $row) {
                 <tr class='list-header'>
                   <th>" . $langStart . "</th>
                   <th>" . $langExerciseDuration . "</th>
-                  <th>" . $langTotalScore . "</th>
+                  <th>" . $langScore . "</th>
                   <th>" . $langCurrentStatus. "</th>
                   ". ($is_editor ? "<th>" . icon('fa-gears'). "</th>" : "") ."
                 </tr></thead>";
