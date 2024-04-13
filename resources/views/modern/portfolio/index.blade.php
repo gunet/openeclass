@@ -530,12 +530,12 @@
                         </div>
                         <div class='flex-fill d-flex justify-content-center align-items-center'>
                             <div>
-                                <h2 class='d-flex justify-content-start align-items-center gap-2'>
+                                <h2 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
                                     <i class='fa-solid fa-book-open fa-xs'></i>
                                     {{ $student_courses_count }}
                                     <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
                                 </h2>
-                                <h2 class='d-flex justify-content-start align-items-center gap-2'>
+                                <h2 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
                                     <i class='fa-solid fa-book-reader fa-xs'></i>
                                     {{ $teacher_courses_count }}
                                     <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>

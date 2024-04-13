@@ -357,6 +357,11 @@ function view($view_file, $view_data = array()) {
                 .portofolio-text-intro{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
                   }
+
+                  h2.portfolio-texts,
+                  .portfolio-texts *{
+                    color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
+                  }
             ";
         }
 

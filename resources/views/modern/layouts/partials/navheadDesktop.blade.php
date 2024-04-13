@@ -536,7 +536,7 @@
         $('.inputSearch').on('focus',function(){
             $('.container-items').addClass('d-none');
         });
-        $('#btn-search').on('focus',function(){
+        $('#btn-search').on('click',function(){
             setTimeout(function () {
                 $('.container-items').removeClass('d-none');
             }, 500);
