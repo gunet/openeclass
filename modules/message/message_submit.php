@@ -168,7 +168,6 @@ if (isset($_POST['submit'])) {
                 }
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             } else {
-                //Session::Messages($errormsg, 'alert-danger');
                 Session::flash('message',$errormsg);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
@@ -299,13 +298,13 @@ if (isset($_POST['submit'])) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
             }
         }
-        Session::Messages($langdocAdd, 'alert-success');
+        Session::flash('message', $langdocAdd);
+        Session::flash('alert-class', 'alert-success');
         if ($invalid > 0) { // info about invalid emails (if exist)
             Session::flash('message', "$langInvalidMail: $invalid");
             Session::flash('alert-class', 'alert-warning');
         }
     } else { //end if(!$error)
-        //Session::Messages($errormsg, 'alert-danger');
         Session::flash('message',$errormsg);
         Session::flash('alert-class', 'alert-danger');
     }
