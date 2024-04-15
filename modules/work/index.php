@@ -5704,10 +5704,10 @@ function show_student_assignments() {
                             "&amp;action=add&amp;type=work_submission&amp;rid=" . $sub->id,
                             'icon' => 'fa-star'
                     ];
-                    $tool_content .= "<i class='fa fa-square-check'></i><br>";
+                    $tool_content .= "<i class='fa-solid fa-check'></i><br>";
                 }
             } else {
-                $tool_content .= "<i class='fa fa-square'></i><br>";
+                $tool_content .= "<i class='fa-regular fa-hourglass-half'></i><br>";
             }
             $tool_content .= "</td><td class='text-center'>";
             foreach ($submission as $sub) {

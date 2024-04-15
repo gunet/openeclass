@@ -517,10 +517,10 @@ if (!$nbrExercises) {
                 }
                 if ($incomplete_attempt) {
                     $tool_content .= "<td><a class='ex_settings active_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$incomplete_attempt->eurid'>" . q($row->title) . "</a>"
-                            . "&nbsp;&nbsp;(<font color='#a9a9a9'>$langAttemptActive</font>)";
+                            . "&nbsp;&nbsp;(<span style='color:darkgrey'>$langAttemptActive</span>)";
                 } elseif ($paused_exercises) {
                     $tool_content .= "<td><a class='ex_settings paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
-                            . "&nbsp;&nbsp;(<font color='#a9a9a9'>$langAttemptPausedS</font>)";
+                            . "&nbsp;&nbsp;(<span style='color:darkgrey'>$langAttemptPausedS</span>)";
                 } else {
                     $tool_content .= "<td><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon$exclamation_icon";
                 }
@@ -531,7 +531,7 @@ if (!$nbrExercises) {
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span style='color:red;'>$langHasExpiredS</span>)";
             }
             if (has_user_participate_in_exercise($row->id)) {
-                $tool_content .= "&nbsp; <span class='fa-regular fa-square-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+                $tool_content .= "&nbsp; <span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
             }
 
             $tool_content .= $row->description . "</td>";
