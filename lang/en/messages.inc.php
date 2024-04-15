@@ -3997,6 +3997,7 @@ $langBgBorderTextEditor = "Border color";
 $langClTextEditor = "Tool color";
 $langNavSettingsScrollBar = "ScrollBar";
 $langSettingsScrollBar = "ScrollBar settings";
+$langNavSettingsBadges = "Badge";
 $BgScrollBar = "Background color";
 $langBgColorScrollBar = "Bar background color";
 $langBgHoveredColorScrollBar = "Color hovered background bar";

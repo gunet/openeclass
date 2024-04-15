@@ -30,11 +30,13 @@ $defaults = array(
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
-                                                    'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms', 'BgColorAnnouncementHomepageLink'),
+                                                    'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms', 
+                                                    'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
-                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage'),
+                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 
+                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
@@ -64,10 +66,12 @@ $defaults = array(
                 "rgba(161, 219, 184, 1)" => array('bgAlertSuccess'),
                 "rgba(12, 98, 46, 1)" => array('clAlertSuccess'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
-                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal'),
+                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
-                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor'),
+                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess'),
+                "rgba(245, 118, 0, 1)" => array('BgBadgeWarning'),
+                "rgba(37, 70, 240, 1)" => array('BgBadgePrimary'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
@@ -924,6 +928,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navMenuPopover' aria-controls='navMenuPopover' role='tab' data-bs-toggle='tab'>$langMPopover</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAgenda' aria-controls='navsettingsAgenda' role='tab' data-bs-toggle='tab'>$langNavSettingsAgenda</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsScrollBar' aria-controls='navsettingsScrollBar' role='tab' data-bs-toggle='tab'>$langNavSettingsScrollBar</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsBadge' aria-controls='navsettingsBadge' role='tab' data-bs-toggle='tab'>$langNavSettingsBadges</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsProgressBar' aria-controls='navsettingsProgressBar' role='tab' data-bs-toggle='tab'>$langNavSettingsProgressBar</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsTooltip' aria-controls='navsettingsTooltip' role='tab' data-bs-toggle='tab'>$langNavSettingsTooltip</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAlerts' aria-controls='navsettingsAlerts' role='tab' data-bs-toggle='tab'>$langNavSettingsAlert</a></li>
@@ -1150,6 +1155,68 @@ $tool_content .= "
             </div>
 
 
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsBadge'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline'>Badge Success</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBadgeSuccess' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='BgBadgeSuccess' type='text' class='form-control colorpicker' id='BgBadgeSuccess' value='$theme_options_styles[BgBadgeSuccess]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBadgeSuccess' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clBadgeSuccess' type='text' class='form-control colorpicker' id='clBadgeSuccess' value='$theme_options_styles[clBadgeSuccess]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline'>Badge Warning</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBadgeWarning' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='BgBadgeWarning' type='text' class='form-control colorpicker' id='BgBadgeWarning' value='$theme_options_styles[BgBadgeWarning]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBadgeWarning' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clBadgeWarning' type='text' class='form-control colorpicker' id='clBadgeWarning' value='$theme_options_styles[clBadgeWarning]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline'>Badge Neutral</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBadgeNeutral' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='BgBadgeNeutral' type='text' class='form-control colorpicker' id='BgBadgeNeutral' value='$theme_options_styles[BgBadgeNeutral]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBadgeNeutral' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clBadgeNeutral' type='text' class='form-control colorpicker' id='clBadgeNeutral' value='$theme_options_styles[clBadgeNeutral]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline'>Badge Primary</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBadgePrimary' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='BgBadgePrimary' type='text' class='form-control colorpicker' id='BgBadgePrimary' value='$theme_options_styles[BgBadgePrimary]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBadgePrimary' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clBadgePrimary' type='text' class='form-control colorpicker' id='clBadgePrimary' value='$theme_options_styles[clBadgePrimary]'>
+                    </div>
+
+                    <hr>
+
+                    <h3 class='theme_options_legend text-decoration-underline'>Badge Danger</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBadgeAccent' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='BgBadgeAccent' type='text' class='form-control colorpicker' id='BgBadgeAccent' value='$theme_options_styles[BgBadgeAccent]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBadgeAccent' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                        <input name='clBadgeAccent' type='text' class='form-control colorpicker' id='clBadgeAccent' value='$theme_options_styles[clBadgeAccent]'>
+                    </div>
+                    
+                </div>
+            </div>
 
 
             <div role='tabpanel' class='tab-pane fade' id='navsettingsScrollBar'>

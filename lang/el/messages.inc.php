@@ -6039,6 +6039,7 @@ $langBgBorderTextEditor = "Χρώμα border";
 $langClTextEditor = "Χρώμα εργαλείων";
 $langNavSettingsScrollBar = "ScrollBar";
 $langSettingsScrollBar = "Ρυθμίσεις ScrollBar";
+$langNavSettingsBadges = "Badge";
 $BgScrollBar = "Χρώμα φόντου";
 $langBgColorScrollBar = "Χρώμα φόντου μπάρας";
 $langBgHoveredColorScrollBar = "Χρώμα hovered φόντου μπάρας";
