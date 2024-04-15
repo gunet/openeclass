@@ -101,7 +101,6 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
         'description' => ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+')));
 
     // navigate
-  //  Session::Messages($langGlossaryUpdated, "alert-success");
     Session::flash('message',$langGlossaryUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
@@ -109,9 +108,11 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 
 // handle submitted data
 if (isset($_POST['add_submit'])) { // add
+    print_a($_POST);
+
+
     $uploaded = false;
-    // $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i");
-    $date = date_create($_POST['videodate']);
+    $date = date_create($_POST['date']);
     $videodate = date_format($date, "Y-m-d H:i");
     if (isset($_POST['URL'])) { // add videolink
         $url = $_POST['URL'];
@@ -139,19 +140,22 @@ if (isset($_POST['add_submit'])) { // add
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $file_name = $cloudfile->name();
         } else if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) { // upload local file
-            $file_name = $_FILES['userFile']['name'];
             if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
                 Session::flash('message',$langNoSpace);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("modules/video/index.php?course=" . $course_code);
             } else {
+                $file_name = $_FILES['userFile']['name'];
                 $tmpfile = $_FILES['userFile']['tmp_name'];
             }
+        } else {
+            Session::flash('message', $langNoFileUploaded);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
 
         if (!isWhitelistAllowed($file_name)) {
-           // Session::Messages($langUploadedFileNotAllowed, "alert-danger");
-            Session::flash('message',$langUploadedFileNotAllowed);
+            Session::flash('message', $langUploadedFileNotAllowed . " <strong>" . q($file_name) . "</strong>");
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
@@ -167,14 +171,13 @@ if (isset($_POST['add_submit'])) { // add
                 : copy("$tmpfile", "$updir/$safe_filename");
 
         if (!$iscopy) {
-          //  Session::Messages($langFileNot, "alert-danger");
             Session::flash('message',$langFileNot);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
 
         $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled() == true ){
+        if($connector->isEnabled()) {
             $output=$connector->check("$updir/$safe_filename");
             if($output->status==$output::STATUS_INFECTED){
                 AntivirusApp::block($output->output);

@@ -82,7 +82,6 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
         $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
         exit;
-        // view('modules.video.showQuota', $data);
     }
 
     // visibility commands
@@ -92,8 +91,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
             $action_message = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langViMod</span></div>";
         } else {
-         //   Session::Messages($langResourceBelongsToCert, "alert-warning");
-            Session::flash('message',$langResourceBelongsToCert); 
+            Session::flash('message',$langResourceBelongsToCert);
             Session::flash('alert-class', 'alert-warning');
         }
     }
@@ -115,8 +113,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
                 if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $a->id)) {
                     delete_video($a->id, 'video', $course_id, $course_code, $webDir);
                 }   else {
-                  //  Session::Messages($langResourceBelongsToCert, "alert-warning");
-                    Session::flash('message',$langResourceBelongsToCert); 
+                    Session::flash('message',$langResourceBelongsToCert);
                     Session::flash('alert-class', 'alert-warning');
                     $error = TRUE;
                 }
@@ -131,8 +128,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
                 delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
             } else {
-               // Session::Messages($langResourceBelongsToCert, "alert-warning");
-                Session::flash('message',$langResourceBelongsToCert); 
+                Session::flash('message',$langResourceBelongsToCert);
                 Session::flash('alert-class', 'alert-warning');
             }
         }

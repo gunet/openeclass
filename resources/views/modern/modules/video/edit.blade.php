@@ -83,7 +83,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -95,7 +95,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -105,7 +105,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -119,12 +119,7 @@
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
 
-                                <form class='form-horizontal'
-                                    role='form'
-                                    method='POST'
-                                    action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}'
-                                    enctype='{{ $form_enctype }}'
-                                    onsubmit="return checkrequired(this, 'title');">
+                                <form class='form-horizontal' role='form' method='POST' action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}' enctype='{{ $form_enctype }}' onsubmit="return checkrequired(this, 'title');">
                                     <fieldset>
 
                                         <div class='form-group'>
@@ -159,7 +154,6 @@
                                         </div>
 
 
-
                                         <div class='form-group mt-4'>
                                             <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
@@ -172,8 +166,6 @@
                                         </div>
 
 
-
-
                                         <div class='form-group mt-4'>
                                             <label for='Desc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                             <div class='col-sm-12'>
@@ -183,8 +175,8 @@
 
 
 
-                                        
-                                            
+
+
                                                 <div class='form-group mt-4'>
                                                     <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}</label>
                                                     <div class='col-sm-12'>
@@ -195,9 +187,9 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            
 
-                                            
+
+
                                                 <div class='form-group mt-4'>
                                                     <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}</label>
                                                     <div class='col-sm-12'>
@@ -208,20 +200,17 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            
-                                        
 
 
-                                        
                                             @if (isset($form_input))
-                                            
+
                                                 <div class="form-group mt-4 @if(isset($_GET['table_edit'])) d-none @endif">
                                                     <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}</label>
                                                     <div class='col-sm-12'><input id='videodate' class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
                                                 </div>
-                                            
+
                                             @endif
-                                            
+
                                                 <div class='form-group mt-4'>
                                                     <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
                                                     <div class='col-sm-12'>
@@ -243,9 +232,6 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                           
-                                        
-
 
 
 
