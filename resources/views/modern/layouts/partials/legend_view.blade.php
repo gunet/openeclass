@@ -70,19 +70,11 @@
                             </form>
                     @endif
                     <!-- rss for announcements - blog -->
-                    @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
-                        @php $getToken = generate_csrf_token_link_parameter(); @endphp
-                        @if($module_id == MODULE_ID_ANNOUNCE)
-                            <a class='btn btn-default text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
-                                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
-                                <i class="fa-solid fa-rss"></i>
-                            </a>
-                        @else
-                            <a class='btn btn-default text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
-                                data-bs-toggle="tooltip" data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
-                                <i class="fa-solid fa-rss"></i>
-                            </a>
-                        @endif
+                    @if (defined('RSS'))
+                        <a class='btn btn-default text-decoration-none' href="{{RSS}}"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
+                           <span class="fa-solid fa-rss"></span>
+                        </a>
                     @endif
                     @if($toolName)
                         <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none'

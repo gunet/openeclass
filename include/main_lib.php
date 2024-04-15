@@ -3987,7 +3987,7 @@ function setOpenCoursesExtraHTML() {
         $openCoursesExtraHTML = "
 
 
- 
+
                 <div class='card card-transparent border-0 bg-transparent h-100'>
                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                         <div class='d-flex justify-content-start align-items-center'>
@@ -4154,21 +4154,18 @@ function stringEndsWith($haystack, $needle) {
  * @brief Define the RSS constant, used by the template system, to the module's RSS link
  */
 function define_rss_link() {
-    global $uid, $course_code, $course_id, $module_id, $modules;
+    global $urlAppend, $uid, $course_code, $course_id, $module_id, $modules;
 
-    $module_name = $modules[$module_id]['link'];
-    $link = 'modules/' . $module_name . '/rss.php?c=' . $course_code;
     $course_status = course_status($course_id);
-
-    if ($course_status == COURSE_INACTIVE) {
-        return;
-    } elseif ($course_status != COURSE_OPEN or
-              $_SESSION['courses'][$course_code]) {
-        $link .= '&amp;uid=' . $uid .  '&amp;token=' .
-            token_generate($module_name . $uid . $course_code);
+    if ($course_status != COURSE_INACTIVE) { // No RSS feed for inactive courses
+        $module_name = $modules[$module_id]['link'];
+        $link = 'modules/' . $module_name . '/rss.php?c=' . $course_code;
+        if ($course_status != COURSE_OPEN or $_SESSION['courses'][$course_code]) {
+            $link .= '&uid=' . $uid .  '&token=' .
+                token_generate($module_name . $uid . $course_code);
+        }
+        define('RSS', $urlAppend . $link);
     }
-
-    define('RSS', $link);
 }
 
 /**
@@ -4821,44 +4818,44 @@ function tinymce_widget($type){
     $view_data['final_data_portfolioSide_widget'] = array();
 
     if($type == 1){
-        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
                                                     WHERE widget_area_id = ?d
                                                     ORDER BY position ASC", HOME_PAGE_MAIN);
     }elseif($type == 2){
-        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
                                                     WHERE widget_area_id = ?d
                                                     ORDER BY position ASC", HOME_PAGE_SIDEBAR);
 
     }elseif($type == 3){
-        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
-                                                    WHERE (user_id = ?d OR user_id IS NULL) 
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
+                                                    WHERE (user_id = ?d OR user_id IS NULL)
                                                     AND widget_area_id = ?d
                                                     ORDER BY position ASC",$uid, PORTFOLIO_PAGE_MAIN);
     }elseif($type == 4){
-        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
-                                                    WHERE (user_id = ?d OR user_id IS NULL) 
+        $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
+                                                    WHERE (user_id = ?d OR user_id IS NULL)
                                                     AND widget_area_id = ?d
                                                     ORDER BY position ASC",$uid, PORTFOLIO_PAGE_SIDEBAR);
     }elseif($type == 5){
         if(isset($course_id) and $course_id){
-            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
-                                                        WHERE widget_area_id = ?d 
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
+                                                        WHERE widget_area_id = ?d
                                                         AND (course_id = ?d OR (course_id IS NULL AND position >= ?d))
                                                         ORDER BY position ASC", COURSE_HOME_PAGE_MAIN, $course_id,0);
         }else{
-            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
                                                             WHERE widget_area_id = ?d AND course_id IS NULL
                                                             AND user_id IS NULL AND position >= ?d
                                                             ORDER BY position ASC",COURSE_HOME_PAGE_MAIN, 0);
         }
     }elseif($type == 6){
         if(isset($course_id) and $course_id){
-            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
-                                                        WHERE widget_area_id = ?d 
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
+                                                        WHERE widget_area_id = ?d
                                                         AND (course_id = ?d OR (course_id IS NULL AND position >= ?d))
                                                         ORDER BY position ASC",COURSE_HOME_PAGE_SIDEBAR, $course_id,0);
         }else{
-            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area 
+            $getWidget = database::get()->queryArray("SELECT options FROM widget_widget_area
                                                         WHERE widget_area_id = ?d AND course_id IS NULL
                                                         AND user_id IS NULL AND position >= ?d
                                                         ORDER BY position ASC",COURSE_HOME_PAGE_SIDEBAR, 0);
