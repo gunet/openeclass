@@ -218,7 +218,7 @@ function showgroupsofcategory($catid) {
         } else {
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
-                $tool_content .= "&nbsp;&nbsp;<span class='badge bg-info p-1 mt-2'>$langMyGroup</span>";
+                $tool_content .= "&nbsp;&nbsp;<span class='badge Primary-600-bg p-1 mt-2'>$langMyGroup</span>";
             } else {
                 $tool_content .= q($group_name);
             }

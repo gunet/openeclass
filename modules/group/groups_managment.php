@@ -397,7 +397,7 @@ $tool_content .= "<div class='col-12'>
                                                                                             $membersAvailable = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                                                                                             WHERE group_id = ?d
                                                                                                                                             AND is_tutor = 0", $gr->id)->count;
-                                                                        $tool_content .= "  <div class='help-block mt-1'>$langGroupMembers:&nbsp;<span class='badge bg-info'>$membersAvailable</span></div>
+                                                                        $tool_content .= "  <div class='help-block mt-1'>$langGroupMembers:&nbsp;<span class='badge Primary-600-bg'>$membersAvailable</span></div>
                                                                                         </div>";
 
 

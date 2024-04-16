@@ -659,9 +659,9 @@ if ($is_editor) {
                                         $tool_content .= "</div>
                                                             <div class='card-footer d-flex justify-content-end align-items-center border-0 pb-3'>";
                                                             if ($max_members > 0) {
-                                                                $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
+                                                                $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                                                             } else {
-                                                                $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count</span>";
+                                                                $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count</span>";
                                                             }
                                         $tool_content .= "</div>
                                                     </div>
@@ -950,9 +950,9 @@ if ($is_editor) {
                                                                 }
                                                                 $tool_content .= ($control? $control: '&mdash;');
                                                                 if ($max_members == 0) {
-                                                                    $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp; -- </span>";
+                                                                    $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp; -- </span>";
                                                                 } else {
-                                                                    $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
+                                                                    $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                                                                 }
                                         $tool_content .= "</div>
                                                     </div>
