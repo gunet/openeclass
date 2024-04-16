@@ -339,7 +339,6 @@ if ($is_editor) {
             $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add users in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($added_users),'users' => $added_users);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         }
-        //Session::Messages($langGradebookEdit,"alert-success");
         Session::flash('message',$langGradebookEdit);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendance_id=' . $attendance_id . '&attendanceBook=1');
@@ -527,7 +526,6 @@ if ($is_editor) {
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
                 $log_details = array('id' => $id, 'title' => get_attendance_title($id), 'action' => 'modify activity', 'activity_title' => $actTitle, 'activity_date' => $actDate, 'visible' => $visible);
                 Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-                //Session::Messages("$langGradebookEdit", "alert-success");
                 Session::flash('message',$langGradebookEdit);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
@@ -538,7 +536,6 @@ if ($is_editor) {
                                                     $attendance_id, $actTitle, $actDate, $actDesc);
                 $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add activity', 'activity_title' => $actTitle, 'activity_date' => $actDate);
                 Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-                //Session::Messages("$langGradebookSucInsert","alert-success");
                 Session::flash('message',$langGradebookSucInsert);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
