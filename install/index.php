@@ -667,8 +667,7 @@ elseif (isset($_POST['install1'])) {
 
     $tool_content .= "
     <div class='row'>
-      <div class='col-sm-12 text-center'>
-        <img class='rounded-circle shadow-lg' src='welcome.png' alt=''>
+      <div class='col-sm-12 text-center'>        
         <h4 class='Primary-500-cl mt-3'>$langWelcomeWizard</h4>
         <div class='col-12 col-md-6 m-auto d-block mt-3'>
           <div class='panel panel-default rounded-0'>
