@@ -5903,7 +5903,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBadgeSuccess'])){
             $styles_str .= "
-                .badge.Success-200-bg *{
+                .badge.Success-200-bg *,
+                .badge.Success-200-bg{
                     color: $theme_options_styles[clBadgeSuccess];
                 }
             ";
@@ -5931,7 +5932,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBadgeWarning'])){
             $styles_str .= "
-                .badge.Warning-200-bg *{
+                .badge.Warning-200-bg *,
+                .badge.Warning-200-bg{
                     color: $theme_options_styles[clBadgeWarning];
                 }
             ";
@@ -5959,7 +5961,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBadgeNeutral'])){
             $styles_str .= "
-                .badge.Neutral-900-bg *{
+                .badge.Neutral-900-bg *,
+                .badge.Neutral-900-bg{
                     color: $theme_options_styles[clBadgeNeutral];
                 }
             ";
@@ -5987,7 +5990,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBadgePrimary'])){
             $styles_str .= "
-                .badge.Primary-600-bg *{
+                .badge.Primary-600-bg *,
+                .badge.Primary-600-bg{
                     color: $theme_options_styles[clBadgePrimary];
                 }
             ";
@@ -6015,7 +6019,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBadgeAccent'])){
             $styles_str .= "
-                .badge.Accent-200-bg *{
+                .badge.Accent-200-bg *,
+                .badge.Accent-200-bg{
                     color: $theme_options_styles[clBadgeAccent];
                 }
             ";
