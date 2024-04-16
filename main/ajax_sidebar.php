@@ -104,7 +104,7 @@ function getCoursesNotifications() {
                             <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative' href='$sideBarCourseNotifyURL'
                                 data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$sideBarCourseNotifyTitle'>
                                 <i class='$sideBarCourseNotifyIcon fa-md'></i>
-                                <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white'>
+                                <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill Accent-200-bg'>
                                     $sideBarCourseNotifyCount
                                     <span class='visually-hidden'></span>
                                 </span>

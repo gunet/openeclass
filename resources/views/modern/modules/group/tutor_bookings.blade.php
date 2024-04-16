@@ -83,9 +83,9 @@
                                                     <td>{{ format_locale_date(strtotime($b->end), 'short') }}</td>
                                                     <td>
                                                         @if($b->accepted == 1)
-                                                            <span class='badge Success-200-bg text-white'>{{ trans('langYes')}}</span>
+                                                            <span class='badge Success-200-bg'>{{ trans('langYes')}}</span>
                                                         @else
-                                                            <span class='badge Accent-200-bg text-white'>{{ trans('langNo')}}</span>
+                                                            <span class='badge Accent-200-bg'>{{ trans('langNo')}}</span>
                                                         @endif
                                                     </td>
                                                     <td class='text-end'>

@@ -892,11 +892,11 @@ if ($is_editor) {
                                                                 if ($is_member or $is_tutor) {
                                                                 $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                                                                                     "</a> 
-                                                                                    <span class='badge bg-success TextBold text-white text-capitalize'>$langMyGroup</span>";
+                                                                                    <span class='badge Success-200-bg TextBold text-capitalize'>$langMyGroup</span>";
                                                                 } else {
                                                                     $full_group_message = '';
                                                                     if ($max_members > 0 and $max_members == $member_count) {
-                                                                        $full_group_message = " <span class='badge bg-warning TextBold text-white text-capitalize'>$langGroupFull</span>";
+                                                                        $full_group_message = " <span class='badge Warning-200-bg TextBold text-capitalize'>$langGroupFull</span>";
                                                                     }
                                                                         $tool_content .= "<h3 class='mb-0'>".q($group_name)."</h3>" . "$full_group_message";
                                                                 }

@@ -143,9 +143,9 @@
                                     <td @if($is_user_teacher) style='width:20%;' @else style='width:15%;' @endif>{{ format_locale_date(strtotime($b->end), 'short') }}</td>
                                     <td @if($is_user_teacher) style='width:20%;' @else style='width:15%;' @endif>
                                         @if($b->accepted == 1)
-                                            <span class='badge Success-200-bg text-white'>{{ trans('langYes')}}</span>
+                                            <span class='badge Success-200-bg'>{{ trans('langYes')}}</span>
                                         @else
-                                            <span class='badge Accent-200-bg text-white'>{{ trans('langNo')}}</span>
+                                            <span class='badge Accent-200-bg'>{{ trans('langNo')}}</span>
                                         @endif
                                     </td>
                                     @if($is_user_teacher)
@@ -203,9 +203,9 @@
                                         <td style='width:20%;'>{{ format_locale_date(strtotime($b->end), 'short') }}</td>
                                         <td style='width:15%;'>
                                             @if($b->accepted == 1)
-                                                <span class='badge Success-200-bg text-white'>{{ trans('langYes')}}</span>
+                                                <span class='badge Success-200-bg'>{{ trans('langYes')}}</span>
                                             @else
-                                                <span class='badge Accent-200-bg text-white'>{{ trans('langNo')}}</span>
+                                                <span class='badge Accent-200-bg'>{{ trans('langNo')}}</span>
                                             @endif
                                         </td>
                                         <td class='text-end' style='width:5%;'>
