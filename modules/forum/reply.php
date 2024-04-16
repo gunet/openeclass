@@ -110,9 +110,12 @@ if (isset($_POST['submit'])) {
     $poster_ip = Log::get_client_ip();
     $parent_post = $_POST['parent_post'];
     if (trim($message) == '') {
-        $tool_content .= "
-        <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyMsg</span></div></div>
-                <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
+        $tool_content .= "<div class='col-sm-12'>
+                <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyMsg</span></div>
+            </div>
+            <div class='col-12 d-flex justify-content-center align-items center'>
+                <a href='newtopic.php?course=$course_code&amp;forum=$forum_id' class='btn submitAdminBtn'>$langBack</a>
+            </div>";
         draw($tool_content, 2, null, $head_content);
         exit();
     }
@@ -171,8 +174,7 @@ if (isset($_POST['submit'])) {
     if ($total_posts > POSTS_PER_PAGE) {
         $page .= "&start=" . (POSTS_PER_PAGE * intval(($total_posts - 1) / POSTS_PER_PAGE));
     }
-    //Session::Messages($langStored, 'alert-success');
-    Session::flash('message',$langStored); 
+    Session::flash('message',$langStored);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($page);
 } else {
@@ -186,14 +188,6 @@ if (isset($_POST['submit'])) {
         $cancel_url = $back_url = "viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
         $form_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id";
     }
-    // Topic review
-    $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "$back_url",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
-                ));
-
     if (isset($_GET['parent_post'])) {
         $parent_post_text = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $parent_post)->post_text;
         $tool_content .= "<blockquote><h5>$parent_post_text</h5></blockquote>";
@@ -218,22 +212,16 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-end align-items-center'>
-                   
-                       
-                            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                       
-                       
-                            <a class='btn cancelAdminBtn ms-1' href='$cancel_url'>$langCancel</a>
-                       
-                   
-                    
+                <div class='col-12 d-flex justify-content-end align-items-center'>                       
+                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>                     
+                    <a class='btn cancelAdminBtn ms-1' href='$cancel_url'>$langCancel</a>                    
                 </div>
             </div>
 	</form>
-    </div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
-</div>
+    </div></div>
+    <div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    </div>
 </div>";
 }
 draw($tool_content, 2, null, $head_content);

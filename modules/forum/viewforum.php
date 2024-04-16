@@ -81,16 +81,11 @@ if ($can_post) {
     }
     $tool_content .=
             action_bar(array(
-                array('title' => $langBack,
-                    'url' => "javascript:history.go(-1)",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary'),
                 array('title' => $langNewTopic,
                     'url' => $newtopicUrl,
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')
-
                 ));
 }
 
@@ -236,7 +231,6 @@ if (($is_editor) and isset($_GET['topicdel'])) {
                             WHERE id = ?d
                                 AND course_id = ?d", $num_topics, $last_post, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
-    //Session::Messages($langTopicDeleted, 'alert-success');
     Session::flash('message',$langTopicDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");

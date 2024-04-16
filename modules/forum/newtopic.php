@@ -81,18 +81,6 @@ if (!does_exists($forum_id, "forum")) {
     exit;
 }
 
-if (!isset($_POST['submit'])) {
-    $dynbar = array(
-        array('title' => $langBack,
-            'url' => $forumUrl,
-            'icon' => 'fa-reply',
-            'level' => 'primary'
-             )
-    );
-
-    $tool_content .= action_bar($dynbar);
-}
-
 if (isset($_POST['submit'])) {
     $subject = trim($_POST['subject']);
     $message = trim($_POST['message']);
@@ -160,7 +148,6 @@ if (isset($_POST['submit'])) {
 
     notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
-    //Session::Messages($langTopicStored, 'alert-success');
     Session::flash('message',$langTopicStored);
     Session::flash('alert-class', 'alert-success');
     $redirectUrl = $unit?
@@ -199,22 +186,17 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class='form-group mt-5'>
-              <div class='col-12 d-flex justify-content-end align-items-center'>
-               
-                    
-                        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                    
-                  
-                        <a class='btn cancelAdminBtn ms-1' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>
-                    
-                
+              <div class='col-12 d-flex justify-content-end align-items-center'>                                   
+                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>                                    
+                    <a class='btn cancelAdminBtn ms-1' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>                                    
               </div>
             </div>
 	</fieldset>
 	</form>
-    </div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
-</div>
+    </div></div>
+    <div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    </div>
 </div>";
 }
 draw($tool_content, 2, null, $head_content);

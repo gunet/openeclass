@@ -36,13 +36,7 @@ $head_content .= "
             $(document).ready(function() {
                 $('#filedelete').click(function(e) {
                     var link = $(this).attr('href');                    
-                    e.preventDefault();
-
-                    // bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
-                    //     if (result) {
-                    //         document.location.href = link;                            
-                    //     }
-                    // });
+                    e.preventDefault();                   
 
                     bootbox.confirm({ 
                         closeButton: false,
@@ -65,8 +59,6 @@ $head_content .= "
                         }
                     });
 
-
-
                 });
             });
         </script>";
@@ -87,8 +79,7 @@ if (isset($_GET['delete'])) {
     $fp = Database::get()->querySingle("SELECT topic_filepath FROM forum_post WHERE id = ?d", $id);
     unlink("$webDir/courses/$course_code/forum/$fp->topic_filepath");
     Database::get()->query("UPDATE forum_post SET topic_filepath = '', topic_filename = '' WHERE id = ?d", $id);
-    //Session::Messages($langForumAttachmentDeleted, 'alert-success');
-    Session::flash('message',$langForumAttachmentDeleted); 
+    Session::flash('message',$langForumAttachmentDeleted);
     Session::flash('alert-class', 'alert-success');
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id");
 }
@@ -139,12 +130,6 @@ if (isset($_POST['submit'])) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
     $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($myrow->name));
     $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => q($myrow->title));
-
-    $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')));
 
     $myrow = Database::get()->querySingle("SELECT p.id, p.post_text, p.post_time, p.topic_filepath, p.topic_filename, t.title
                         FROM forum_post p, forum_topic t
