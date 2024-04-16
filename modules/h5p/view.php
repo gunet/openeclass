@@ -25,13 +25,18 @@ require_once '../../include/baseTheme.php';
 
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;
 $res_type = isset($_GET['res_type']);
+$content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
-if (showContent($_GET['id'])) {
-    if (isset($unit)) {
-        redirect($urlServer . 'modules/units/view.php?course=' . $course_code . '&res_type=h5p_show&unit=' . $unit . '&id=' . intval($_GET['id']));;
-    } else {
-        redirect($urlAppend . 'modules/h5p/show.php?course=' . $course_code . '&id=' . intval($_GET['id']));
+if ($content) {
+    if (showContent($_GET['id'])) {
+        if (isset($unit)) {
+            redirect($urlServer . 'modules/units/view.php?course=' . $course_code . '&res_type=h5p_show&unit=' . $unit . '&id=' . intval($_GET['id']));;
+        } else {
+            redirect($urlAppend . 'modules/h5p/show.php?course=' . $course_code . '&id=' . intval($_GET['id']));
+        }
     }
+} else {
+    redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
 }
 
 /**
@@ -47,25 +52,6 @@ function showContent($contentId): bool {
     if (file_exists($workspace_dir)) {
         return true;
     } else {
-        $h5p = scandir($content_dir, 1);
-        $sentence_we_need = '.h5p';
-        foreach ($h5p as $h) {
-            if (strpos($h, $sentence_we_need)) {
-                $h5p = $h;
-            }
-        }
-        mkdir($workspace_dir, 0775, true);
-        $content = $content_dir . "/" . $h5p;
-
-        $zip = new ZipArchive;
-        $res = $zip->open($content);
-        if ($res) {
-            $zip->extractTo($workspace_dir);
-            if ($zip->close()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        return false;
     }
 }
