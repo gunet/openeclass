@@ -47,21 +47,18 @@ if ($q) { // additional security
     $conference_agent = $q->agent_created;
     $agent_id = $q->agent_id;
 } else {
-    //Session::Messages($langForbidden, "alert-danger");
-    Session::flash('message',$langForbidden); 
+    Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
 
     redirect_to_home_page();
 }
 if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
-    //Session::Messages($langForbidden, "alert-danger");
-    Session::flash('message',$langForbidden); 
+    Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page();
 }
 if (!is_valid_activity_user($conference_activity, $conference_agent)) {
-    //Session::Messages($langForbidden, "alert-danger");
-    Session::flash('message',$langForbidden); 
+    Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page();
 }
@@ -70,12 +67,6 @@ if (!is_valid_activity_user($conference_activity, $conference_agent)) {
   $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
 
   $nick = uid_to_name($uid);
-
-// How many lines to show on screen
-  define('MESSAGE_LINE_NB', 40);
-// How many lines to keep in temporary archive
-// (the rest are in the current chat file)
-  define('MAX_LINE_IN_FILE', 80);
 
   if ($GLOBALS['language'] == 'el') {
       $timeNow = date("d-m-Y / H:i", time());
@@ -132,7 +123,7 @@ if (!$conference_activity) {
         ),
         array('title' => $langSave,
             'url' => $save_link,
-            'icon' => 'fa-plus-circle',
+            'icon' => 'fa-solid fa-download',
             'level' => 'primary-label',
             'button-class' => 'btn-success',
             'link-attrs' => "target='messageList'",
@@ -251,7 +242,7 @@ if (!$conference_activity) {
             'level' => 'primary-label',
             'button-class' => 'btn-default studentLearningAnalytics',
             'show' => !$is_editor && $laSessionId && $laSessionToken)
-        
+
     ));
 
     if ($is_editor && isset($_GET['create_agent']) && $agent_id) {
