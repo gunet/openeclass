@@ -20,7 +20,12 @@
                     </div>
                     <div class='col-12 d-inline-flex'>
                         <!-- toolName -->
-                        <h3>{{ $toolName }}</h3>
+                        <h3>
+                            {{ $toolName }}
+                            @if ($pageName and ($pageName != $toolName))
+                                - {{ $pageName }}
+                            @endif
+                        </h3>
                     </div>
                 @else
                     <div class='col-12 mb-2'>
@@ -36,6 +41,7 @@
                         </div>
                     </div>
                 @endif
+
             </div>
 
             <div class='d-flex flex-column'>

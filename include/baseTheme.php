@@ -76,7 +76,7 @@ function view($view_file, $view_data = array()) {
     $is_in_tinymce = false;
 
     // Setting $menuTypeID and Getting Side Menu
-    $menuTypeID = isset($view_data['menuTypeID']) ? $view_data['menuTypeID'] : 2;
+    $menuTypeID = $view_data['menuTypeID'] ?? 2;
     $toolArr = $is_mobile ? array() : getSideMenu($menuTypeID);
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
@@ -145,12 +145,12 @@ function view($view_file, $view_data = array()) {
             }
             $item['bread_text'] = $landingPageName;
             $item['bread_href'] = $landingUrl;
-            array_push($breadcrumbs, $item);
+            $breadcrumbs[] = $item;
             unset($item);
         } elseif ($homepageSet == 'toolbox') {
             $item['bread_text'] = get_config('toolbox_name', $langHomePage);
             $item['bread_href'] = $urlAppend . 'main/toolbox.php';
-            array_push($breadcrumbs, $item);
+            $breadcrumbs[] = $item;
             unset($item);
         }
 
@@ -177,10 +177,8 @@ function view($view_file, $view_data = array()) {
                     $item['bread_href'] = $urlAppend;
                 }
             }
-            // if (!isset($hideStart)) {
-                array_push($breadcrumbs, $item);
-                unset($item);
-            //}
+            $breadcrumbs[] = $item;
+            unset($item);
         }
 
         // Breadcrumb course home entry
@@ -190,7 +188,7 @@ function view($view_file, $view_data = array()) {
                 $item['bread_href'] = $urlAppend . 'courses/' . $course_code . '/';
             }
             $pageTitle .= " | " . ellipsize($currentCourseName, 32);
-            array_push($breadcrumbs, $item);
+            $breadcrumbs[] = $item;
             unset($item);
         }
         foreach ($navigation as $step) {
@@ -198,13 +196,13 @@ function view($view_file, $view_data = array()) {
             if (isset($step['url'])) {
                 $item['bread_href'] = $step['url'];
             }
-            array_push($breadcrumbs, $item);
+            $breadcrumbs[] = $item;
             unset($item);
         }
         if ($pageName) {
             $item['bread_text'] = $pageName;
             $pageTitle .= " | " . $pageName;
-            array_push($breadcrumbs, $item);
+            $breadcrumbs[] = $item;
         }
     }
 
@@ -5882,7 +5880,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////// BACKGROUND COLOR TO THE SUCCESS BADGE //////////////////////////
