@@ -65,55 +65,66 @@ if (isset($_POST['validate'])) {
 }
 
 $tool_content .= "
-    <div class='alert alert-info text-center'>$langAikenFormatNote</div>
-    <div class='alert alert-info'>$langAikenFormatExplain</div> 
+    <div class='alert alert-info'>
+        <i class='fa-solid fa-circle-info fa-lg'></i>
+        <span>$langAikenFormatNote<span>
+    </div>
+    <div class='alert alert-info'>
+        <i class='fa-solid fa-circle-info fa-lg'></i>
+        <span>$langAikenFormatExplain</span>
+    </div> 
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
-            <h4>$langExercises</h4>
-            <div class='form-wrapper form-edit rounded'>
-                <div class='row form-group mt-4'>
-                    <form class='form-horizontal' name='myform' method='post' role='form' action=''>
-                        <div class='row form-group'>
-                            <div class='col-12'>
-                                <textarea name='quiz' rows='45'style='width:100%;height:calc(100vh - 194px);font-family: monospace;' placeholder='$langAikenFormatExample'>$quiz</textarea>
-                            </div>
+            <h3>$langExercises</h3>
+            <div class='form-wrapper form-edit rounded mt-0'>
+                <form class='form-horizontal' name='myform' method='post' role='form' action=''>
+                    <div class='form-group'>
+                        <div class='col-12'>
+                            <textarea name='quiz' rows='45' style='width:100%; height:calc(100vh - 300px);' placeholder='$langAikenFormatExample'>$quiz</textarea>
                         </div>
-                        <div class='row form-group mt-4'>
-                            <div class='col-12'>                            
-                                <label class='col-12 control-label-notes mb-1'>$langGradebookGrade:</label>
-                                    <input type='number' style='width:70px' step='0.01' name='weight' value='$weight' />
-                                <span class='help-block'>($langAikenWithNoGrades)</span>
-                            </div>
+                    </div>
+                    <div class='form-group mt-4'>
+                        <div class='col-12'>                            
+                            <label class='col-12 control-label-notes mb-1'>$langGradebookGrade:</label>
+                            <input class='form-control' type='number' style='width:70px' step='0.01' name='weight' value='$weight' />
+                            <span class='help-block'>($langAikenWithNoGrades)</span>
                         </div>
-                        <div class='row form-group mt-4'>
-                            <div class='col-12'>
-                                <input class='submitAdminBtn' type='submit' name='validate' value='$langCheck'>
-                            </div>
+                    </div>
+                    <div class='form-group mt-4'>
+                        <div class='col-12'>
+                            <input class='submitAdminBtn' type='submit' name='validate' value='$langCheck'>
                         </div>
-                    </form>
-                </div>        
+                    </div>
+                </form>
             </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='". get_form_image() . "' alt='form-image'>
         </div>
     </div>
     <div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'>
-            <h4>$langCheckResults</h4>
-            <div class='form-wrapper form-edit rounded'>
-                <div class='form-group'>
-                    <form class='form-horizontal' role='form' name='myform' method='post' action=''>
-                        <div class='row form-group mt-4'>
-                            <div style='height:calc(100vh - 155px); overflow-y: scroll;'>
-                                 $html
+        <div class='card panelCard px-lg-4 py-lg-3 p-3 w-100'>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                <h3>$langCheckResults</h3>
+            </div>
+            <div class='card-body'>
+                <div class='form-wrapper form-edit rounded'>
+                    <div class='form-group'>
+                        <form class='form-horizontal' role='form' name='myform' method='post' action=''>
+                            <div class='form-group'>
+                                <div>
+                                    $html
+                                </div>
+                            </div>                                    
+                            <div class='form-group mt-4'>
+                                <div class='col-12'>
+                                    <input class='submitAdminBtn' type='submit' name='aiken_import' value='$langImport'>
+                                </div>
                             </div>
-                        </div>                                    
-                        <div class='row form-group mt-4'>
-                            <div class='col-12'>
-                                <input class='submitAdminBtn' type='submit' name='aiken_import' value='$langImport'>
-                            </div>
-                        </div>
-                        <input type='hidden' name='quiz' value='" . htmlentities($quiz, ENT_QUOTES) . "'>
-                        <input type='hidden' name='weight' value='$weight'>
-                    </form>
+                            <input type='hidden' name='quiz' value='" . htmlentities($quiz, ENT_QUOTES) . "'>
+                            <input type='hidden' name='weight' value='$weight'>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
