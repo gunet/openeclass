@@ -212,7 +212,7 @@ function file_playurl($path, $filename = null, $courseCode = null) {
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .
-                "modules/ebook/play.php/$courseCode/$ebook_id/_" .
+                "modules/ebook/play.php?$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
         $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';
@@ -220,7 +220,7 @@ function file_playurl($path, $filename = null, $courseCode = null) {
             $courseCode = 'common';
 
         return htmlspecialchars($urlServer .
-                "modules/document/play.php/$courseCode$gid" .
+                "modules/document/play.php?$courseCode$gid" .
                 public_file_path($path, $filename), ENT_QUOTES);
     }
 }

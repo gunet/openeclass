@@ -46,13 +46,15 @@ if (isset($_SESSION['FILE_PHP__LP_MODE']) && $_SESSION['FILE_PHP__LP_MODE'] == t
     $is_in_lpmode = true;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//na rwtisw an epitrepetai ayto poy ekana poy metetrepsa to file.php? se file.php/ afou allaksa to fileDiplayLib.php
-$_SERVER['REQUEST_URI'] = str_replace("file.php?", "file.php/", $_SERVER['REQUEST_URI']);
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+if(!$is_in_playmode){
+    $_SERVER['REQUEST_URI'] = str_replace("file.php?", "file.php/", $_SERVER['REQUEST_URI'] ?? '');
+    $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
+}
+else{
+    $_SERVER['REQUEST_URI'] = str_replace("play.php?", "play.php/", $_SERVER['REQUEST_URI'] ?? '');
+    $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
+}
 
-
-$uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
 if (stripos($uri, '%5c') !== false) {
