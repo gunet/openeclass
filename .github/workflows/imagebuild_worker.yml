@@ -1,0 +1,41 @@
+name: build-images
+run-name: Build Docker images (worker workflow)
+
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        required: true
+        type: string
+        
+jobs:
+  build-base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print inputs
+        run: |
+          echo "image-tag: ${{ inputs.image-tag }}"
+      - name: Set timezone
+        run: sudo timedatectl set-timezone 'Europe/Athens'
+      - name: Get date
+        id: date
+        run: echo "push_date=$(date '+%H:%M@%d/%m/%Y')" >> $GITHUB_OUTPUT
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push Base image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: gunet/openeclass:${{ inputs.image-tag }}
+          labels: gr.gunet.openeclass.pushdate=${{ steps.date.outputs.push_date }}
+          cache-from: type=registry,ref=gunet/openeclass:buildcache
+          cache-to: type=registry,ref=gunet/openeclass:buildcache,mode=max

@@ -1,0 +1,6 @@
+services:
+    eclass:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: ghcr.io/gunet/openeclass
