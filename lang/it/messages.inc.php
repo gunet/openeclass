@@ -4391,6 +4391,7 @@ $langMonthlyCourseRegistration = "Registration to $langsCourse";
 $langAdminCreateFaq = "Create FAQ";
 $langAdminCreateHomeTexts = "Create texts on the homepage";
 $langAdminManageHomepage = "Homepage management";
+$langAdminManageFooter = "Footer management";
 $langFaq = "Frequently Asked Questions";
 $langFaqQuestion = "Question";
 $langFaqAnswer = "Answer";

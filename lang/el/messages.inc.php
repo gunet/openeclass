@@ -229,6 +229,7 @@ $langNoUserLastLogins = "Ο χρήστης δεν έχει συνδεθεί πο
 $langAdminCreateFaq = "Δημιουργία FAQ";
 $langAdminCreateHomeTexts = "Δημιουργία κειμένων στην αρχική σελίδα";
 $langAdminManageHomepage = "Διαχείριση αρχικής σελίδας";
+$langAdminManageFooter = "Διαχείριση footer";
 $langFaq = "Συχνές ερωτήσεις";
 $langFaqQuestion = "Ερώτηση";
 $langFaqAdd = "Προσθήκη ερώτησης";

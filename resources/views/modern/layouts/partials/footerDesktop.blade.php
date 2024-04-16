@@ -9,6 +9,12 @@
                 <img style='max-width:350px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="Available footer image">
                 <button class='footer-back-to-top' onclick="topFunction()" aria-label='Back to the top'><i class='fa-solid fa-chevron-up'></i></button>
             </div>
+            @if(get_config('footer_intro'))
+                <div class='col-12 d-flex justify-content-center align-items-center gap-3 p-3 footer-text'>
+                    {!! get_config('footer_intro') !!}
+                </div>
+                <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
+            @endif
             <div class='col-12 d-flex d-flex justify-content-center align-items-center gap-3 flex-wrap mt-3'>
                 @if (!get_config('dont_display_about_menu'))
                     <div>
@@ -63,6 +69,12 @@
             </div>
 
         @else
+            @if(get_config('footer_intro'))
+                <div class='col-lg-8 col-12 d-flex justify-content-center align-items-center p-3 footer-text m-auto'>
+                    {!! get_config('footer_intro') !!}
+                </div>
+                <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
+            @endif
             <div class='col-12 d-flex justify-content-between align-items-center'>
                 <ul class="container-items-footer nav">
                     @if (!get_config('dont_display_about_menu'))

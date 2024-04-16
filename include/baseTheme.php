@@ -867,6 +867,14 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorFooter];
                 }
 
+                .footer-text *{
+                    color: $theme_options_styles[linkColorFooter] ;
+                }
+                .border-bottom-footer-text{
+                    border-bottom: solid 1px $theme_options_styles[linkColorFooter] ;
+                    opacity: 0.3;
+                }
+
             ";
         }
 

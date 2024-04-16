@@ -1012,6 +1012,14 @@ b a {
   color:#2B3944;
 }
 
+.footer-text *{
+  color:#2B3944;
+}
+.border-bottom-footer-text{
+  border-bottom: solid 1px #2B3944 ;
+  opacity: 0.3;
+}
+
 .div_social{
   height:40px;
   width:40px;

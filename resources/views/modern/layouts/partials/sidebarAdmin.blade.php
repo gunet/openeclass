@@ -372,6 +372,11 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item element">
+                                    <a href="{{$urlAppend}}modules/admin/manage_footer.php" class='TextBold'>
+                                        {!! trans('langAdminManageFooter') !!}
+                                    </a>
+                                </li>
+                                <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/faq_create.php" class='TextBold'>
                                         {!! trans('langAdminCreateFaq') !!}
                                     </a>
