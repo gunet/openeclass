@@ -348,14 +348,34 @@ function lesson_notifications(){
             dataType: "json",
             data: {courseIDs: courseIDs},
             success: function (data) {
+                // For cards
                 $(".lesson-notifications").each(function () {
                     var id = $(this).data('id');
                     if (data.notifications_courses[id]) {
                         $(this).html(data.notifications_courses[id]['notification_content']);
                         var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
                         if (noexistNotification.length > 0) {
-                            $('#btnNotification_'+id).addClass('not_active');
-                            $('#btnNotificationCards_'+id).addClass('not_active');
+                            $('#btnNotificationCards_'+id).css('display','none');
+                        }
+                    }
+                });
+                // For datatable
+                var portFolioTable = $('#portfolio_lessons').dataTable();
+                var rowcollection = portFolioTable.$(".lesson-notifications", {"page": "all"});
+                rowcollection.each(function(index,elem){
+                    var id = $(elem).data('id');
+                    if (data.notifications_courses[id]) {
+                        $(elem).html(data.notifications_courses[id]['notification_content']);
+                        var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
+                        if (noexistNotification.length > 0) { 
+                            var Table = $('#portfolio_lessons').dataTable();
+                            var row = Table.$(".btn-notification-course", {"page": "all"});
+                            row.each(function(index,element){ 
+                                var id_btn = $(element).attr('id');
+                                if(id_btn == 'btnNotification_'+id){
+                                    $(element).css('display','none');
+                                }
+                            });
                         }
                     }
                 });
