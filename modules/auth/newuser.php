@@ -470,7 +470,6 @@ if (!isset($_POST['submit'])) {
         $provider_name = '';
         $provider_id ='';
         foreach ($registration_errors as $error) {
-            //Session::Messages("$error", 'alert-danger');
             Session::flash('message',"$error");
             Session::flash('alert-class', 'alert-danger');
         }

@@ -107,8 +107,11 @@ $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, regis
                                         FROM user
                                         WHERE id = ?d", $uid);
 
-$data['teacher_courses_count'] = $teacher_courses_count;
-$data['student_courses_count'] = $student_courses_count;
+if ($_SESSION['status'] == USER_TEACHER) {
+    $data['num_of_courses'] = CountTeacherCourses($uid);
+} else {
+    $data['num_of_courses'] = CountStudentCourses($uid);
+}
 
 $data['user_messages'] = $user_messages;
 

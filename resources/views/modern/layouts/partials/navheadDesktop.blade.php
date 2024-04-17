@@ -166,17 +166,23 @@
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_courses.php">
                                                         <i class="fa-solid fa-book-open settings-icons"></i>
-                                                        {{ trans('langMyCoursesSide') }}
+                                                        {{ trans('langMyCourses') }}
                                                     </a>
                                                 </li>
-
+                                                @if ($_SESSION['status'] == USER_STUDENT)
+                                                    <li>
+                                                        <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_requests.php">
+                                                            <i class="fa-regular fa-hand"></i>
+                                                            {{ trans('langMyRequests') }}
+                                                        </a>
+                                                    </li>
+                                                @endif
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/announcements/myannouncements.php">
                                                         <i class="fa-regular fa-bell settings-icons"></i>
                                                         {{ trans('langMyAnnouncements') }}
                                                     </a>
                                                 </li>
-
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/notes/index.php">
                                                         <i class="fa-regular fa-file-lines settings-icons"></i>

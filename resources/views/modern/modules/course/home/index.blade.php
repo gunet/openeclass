@@ -424,7 +424,7 @@
                                                 </ul>
                                             </div>
                                         @endif
-                                        
+
                                     </div>
                                 </div>
 
@@ -589,7 +589,7 @@
                                                                     @else
                                                                         <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $angle }}deg;">{{ $percentage_t }}%</div>
                                                                     @endif
-                                                                    
+
                                                                 @endif
                                                             </a>
                                                         </div>
@@ -607,7 +607,7 @@
                                                                     @else
                                                                         <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
                                                                     @endif
-                                                                    
+
                                                                 @endif
                                                             </a>
                                                         </div>

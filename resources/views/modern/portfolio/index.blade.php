@@ -8,7 +8,7 @@
             $('#consentModal').modal('show');
             jQuery('#portfolio_lessons').DataTable({
                 "bLengthChange": false,
-                "iDisplayLength": 16,
+                "iDisplayLength": 10,
                 "bSort": false,
                 "fnDrawCallback": function (oSettings) {
                     $('#portfolio_lessons_filter label input').attr({
@@ -21,7 +21,7 @@
                 "oLanguage": {
                     "sLengthMenu": "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
                     "sZeroRecords": "{{ trans('langNoResult') }}",
-                    "sInfo": " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langToralResults') }}",
+                    "sInfo": " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}",
                     "sInfoEmpty": " {{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}",
                     "sInfoFiltered": '',
                     "sInfoPostFix": '',
@@ -522,30 +522,31 @@
                                     <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {!! $_SESSION['uname'] !!}
                                     </p>
-                                    <a class='btn myProfileBtn mt-1' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                                        {{ trans('langMyProfile') }}
-                                    </a>
+                                    <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
+                                        {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class='flex-fill d-flex justify-content-center align-items-center'>
                             <div>
-                                <h2 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
-                                    <i class='fa-solid fa-book-open fa-xs'></i>
-                                    {{ $student_courses_count }}
-                                    <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
-                                </h2>
-                                <h2 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
-                                    <i class='fa-solid fa-book-reader fa-xs'></i>
-                                    {{ $teacher_courses_count }}
-                                    <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
-                                </h2>
+                                <h4 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
+                                    <div class='mb-0'>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
+                                </h4>
                             </div>
                         </div>
                         <div class='d-flex align-items-center gap-3 flex-wrap'>
-                            <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
-                            </p>
+                            <a class='btn myProfileBtn mt-1' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                                {{ trans('langMyProfile') }}
+                            </a>
+                            @if ((isset($is_admin) and $is_admin) or
+                                (isset($is_power_user) and $is_power_user) or
+                                (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                                (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                                    <a class="btn myProfileBtn mt-1" type="button" href="{{ $urlAppend }}modules/admin/index.php">
+                                        {{ trans('langAdminTool') }}
+                                    </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -563,8 +564,7 @@
                             <div class='flex-grow-1'>
                                 <div class='card card-transparent border-0 bg-transparent'>
                                     <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                        @php $totalCourses = $student_courses_count + $teacher_courses_count; @endphp
-                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp;({{ $totalCourses }})</h2>
+                                        <h2>{{ trans('langMyCoursesSide') }}</h2>
                                         <div class='d-flex mt-md-0 mt-3'>
                                             <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
                                                 <i class="fa-regular fa-pen-to-square"></i>&nbsp
@@ -817,7 +817,14 @@
                             </div>
                             <div>
 
-                                <div class='col-12 mb-4 mt-1 d-flex justify-content-xl-start justify-content-center'><h3 class='mb-0'>{{ trans('langAgenda') }}</h3></div>
+                                <div class='col-12 mb-4 mt-1 d-flex justify-content-between align-items-center'>
+                                    <h3 class='mb-0'>
+                                        {{ trans('langAgenda') }}
+                                    </h3>
+                                    <a class='Course-home-ellipsis-announcements text-decoration-underline vsmall-text' href="{{$urlAppend}}main/personal_calendar/index.php">
+                                        {{ trans('langDetails') }}
+                                    </a>
+                                </div>
                                 @include('portfolio.portfolio-calendar')
 
                                 <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>

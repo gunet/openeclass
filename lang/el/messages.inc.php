@@ -809,7 +809,6 @@ $langminutes = 'λεπτά';
 $langhour = 'ώρα';
 $langhours = 'ώρες';
 $langDateNow = "Σημερινή ημερομηνία:";
-$langCalendar = "Ημερολόγιο";
 $langDelEventConfirm = "Θέλετε σίγουρα να διαγράψετε το συγκεκριμένο γεγονός;";
 $langConfirmDeleteRecursiveEvents = "Το γεγονός ανήκει σε μια σειρά επαναλαμβανόμενων γεγονότων. Επιθυμείτε να διαγραφούν όλα;";
 $langConfirmUpdateRecursiveEvents = "Το γεγονός ανήκει σε μια σειρά επαναλαμβανόμενων γεγονότων. Επιθυμείτε να ενημερωθούν όλα;";
@@ -1865,7 +1864,7 @@ $langDropboxFreeSpaceConfirm = "Αυτή η ενέργεια θα διαγράψ
 $langDropboxFreeSpaceSuccess = "Απελευθερώθηκαν με επιτυχία %s χώρου!";
 $langDropboxNoMessage = "Δεν υπάρχουν πρόσφατα μηνύματα";
 $langDropboxMassDelete = 'Διαγραφή όλων των μηνυμάτων';
-$langAllMessages = "όλα τα μηνύματα";
+$langAllMessages = "Όλα";
 $langMesageNoSent = "To μήνυμα δεν στάλθηκε επειδή το συνημμένο υπερβαίνει το όριο του αποθηκευτικού χώρου.
         Για περισσότερες πληροφορίες, επικοινωνήστε με το διαχειριστή του συστήματος.";
 /* * ********************************************************
@@ -3559,7 +3558,7 @@ $langProfilePersInfo = 'Προσωπικά Στοιχεία';
 $langProfileAboutMe = 'Σχετικά με μένα';
 $langStatus = "Ιδιότητα";
 $langProfileMemberSince = 'Μέλος από';
-$langSumCoursesEnrolled = "$langCourses που παρακολουθώ";
+$langSumCoursesEnrolled = "$langCourses που συμμετέχω";
 $langSumCoursesSupport = "$langCourses που υποστηρίζω";
 $langProfileLastVisit = "Τελευταία επίσκεψη";
 $langProfileQuickPassword = "Αλλαγή Συνθηματικού";
@@ -4207,9 +4206,8 @@ $langEditProfile = "ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΦΙΛ";
 $langDeleteAccount ="ΔΙΑΓΡΑΦΗ ΛΟΓΑΡΙΑΣΜΟΥ";
 $langLastVisit = "Τελευταία επίσκεψη";
 $langMyCourses = "Τα μαθήματα μου";
-$langAllAnnouncements = "Δείτε όλες τις ανακοινώσεις";
+$langAllAnnouncements = "Όλες";
 $langRecentMessages = "Πρόσφατα μηνύματα";
-$langAllMessages = "Δείτε όλα τα μηνύματα...";
 $langWelcomeTo = "Καλως Ήρθατε στην ";
 
 /* * *************************************************************

@@ -34,7 +34,7 @@ require_once 'modules/message/class.msg.php';
  */
 function getUserCourseInfo($uid): string
 {
-    global $teacher_courses_count, $student_courses_count, $langCourse, $langActions,
+    global $langCourse, $langActions,
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
@@ -42,24 +42,15 @@ function getUserCourseInfo($uid): string
 
     $lesson_content = '';
     $lesson_ids = array();
-    $myCourses = getUserCourses($uid);
-
     $courses = [];
-    if ($myCourses) {
-        foreach ($myCourses as $myCourse) {
-            $courses[$myCourse->code] = $myCourse->status;
-        }
-    }
-    $_SESSION['courses'] = $courses;
-
-    //getting user's lesson info
-    $teacher_courses_count = 0;
-    $student_courses_count = 0;
+    $myCourses = getUserCourses($uid);
 
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
+            $courses[$data->code] = $data->status;
+            $_SESSION['courses'] = $courses;
             $lesson_ids[] = $data->course_id;
             $visclass = '';
 
@@ -99,6 +90,9 @@ function getUserCourseInfo($uid): string
 			            <div>
                             <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
                         </div>
+                        <div class='collapse' id='notification{$data->course_id}'>                
+                            <div class='d-flex align-items-start lesson-notifications' data-id='{$data->course_id}'></div>                                
+                        </div>
                     </td>";
 
             $lesson_content .= "
@@ -130,19 +124,19 @@ function getUserCourseInfo($uid): string
                                     <div class='course-content mt-4'>
                                         <div class='col-12 d-flex justify-content-center align-items-start'>";
             if($data->course_image == NULL) {
-                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
+                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' />";
             } else {
-                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
+                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' />";
             }
-                    $lesson_content .= "</div>
-                                        <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
+            $lesson_content .= "</div>
+                    <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
             if(empty($data->description)) {
-                            $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
             } else {
-                            $lesson_content .= "{$data->description}";
+                $lesson_content .= "{$data->description}";
             }
-                    $lesson_content .= "</div>";
-                if(count($syllabus) > 0){
+            $lesson_content .= "</div>";
+                if(count($syllabus) > 0) {
                      $lesson_content .= "<div class='col-12 mt-4'>
                                             <div class='row m-auto'>
                                                 <div class='panel px-0'>
@@ -174,8 +168,6 @@ function getUserCourseInfo($uid): string
 
                 $lesson_content .= "</div>";
 
-
-
             $lesson_content .= "</div>
                             </div>";
 
@@ -183,24 +175,18 @@ function getUserCourseInfo($uid): string
             if ($data->status == USER_STUDENT) {
                 if (get_config('disable_student_unregister_cours') == 0) {
                     $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
-                    $student_courses_count++;
                 }
             } elseif ($data->status == USER_TEACHER) {
                 $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
-                $teacher_courses_count++;
             }
             $lesson_content .= "</div>
                         </div>
                     </td>
                 </tr>
-                <tr class='collapse' id='notification{$data->course_id}'>
-                    <td>
-                        <div class='lesson-notifications' data-id='{$data->course_id}'></div>
-                    </td>
-                    <td></td>
-                </tr>";
-        }
+            ";
+    }
         $lesson_content .= "</tbody></table>";
+
     } else { // if we are not registered to courses
         $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToLessons!</span></div></div>";
         if ($session->status == USER_TEACHER) {
@@ -209,6 +195,7 @@ function getUserCourseInfo($uid): string
             $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeStudPerso</span></div></div>";
         }
     }
+
     return $lesson_content;
 }
 
@@ -432,4 +419,34 @@ function getUserCourses($uid)
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
     return $myCourses;
+}
+
+/**
+ * @brief count student courses (except inactive)
+ * @param $uid
+ * @return void
+ */
+function CountStudentCourses($uid) {
+
+    $total = Database::get()->querySingle("SELECT COUNT(*) AS total
+                FROM course JOIN course_user
+                    ON course.id = course_user.course_id
+                    AND course_user.user_id = ?d
+                    AND course.visible != " . COURSE_INACTIVE, $uid)->total;
+    return $total;
+}
+
+/**
+ * @brief count teacher courses
+ * @param $uid
+ * @return mixed
+ */
+function CountTeacherCourses($uid) {
+
+    $total = Database::get()->querySingle("SELECT COUNT(*) AS total
+                FROM course JOIN course_user
+                    ON course.id = course_user.course_id
+            AND course_user.user_id = ?d", $uid)->total;
+
+    return $total;
 }

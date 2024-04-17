@@ -13,7 +13,7 @@
             @if(Session::has('message'))
                 <div class='col-12 all-alerts'>
                     <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                        @php 
+                        @php
                             $alert_type = '';
                             if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                 $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -25,7 +25,7 @@
                                 $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                             }
                         @endphp
-                        
+
                         @if(is_array(Session::get('message')))
                             @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                             {!! $alert_type !!}<span>
@@ -35,13 +35,13 @@
                         @else
                             {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                         @endif
-                        
+
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
             @endif
-            
-            
+
+
             @if (!$user_registration or $eclass_stud_reg != 2)
                 <div class='col-12 mt-4'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
@@ -69,7 +69,7 @@
 
                     <div class='col-12 mt-4'>
                         <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
-                
+
                             <div class='col-lg-6 col-12'>
                                 <div class='form-wrapper form-edit rounded px-0 border-0'>
                                     <form class='form-horizontal' role='form' action='newuser.php' method='post' onsubmit='return validateNodePickerForm();'>
@@ -94,33 +94,12 @@
                                                 </div>
                                             </div>
 
-                                            
                                             <div class='row'>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                         <div class='col-sm-12'>
                                                             <input class='form-control' type='text' name='uname' value = '{{ $user_data_displayName }}' accept="" size='30' maxlength='100' autocomplete='off' placeholder='{{ trans('langUserNotice') }}...'>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class='col-lg-6 col-12 px-3'>
-                                                    <div class='form-group mt-4'>
-                                                        <label for='UserPass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
-                                                        <div class='col-sm-12'>
-                                                            <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='{{ trans('langUserNotice') }}...'><span id='result'></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            
-                                            <div class='row'>
-                                                <div class='col-lg-6 col-12 px-3'>
-                                                    <div class='form-group mt-4'>
-                                                        <label for='UserPass2' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }}</label>
-                                                        <div class='col-sm-12'>
-                                                            <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -134,9 +113,29 @@
                                                 </div>
                                             </div>
 
-                                            
                                             <div class='row'>
-                                                
+                                                <div class='col-lg-6 col-12 px-3'>
+                                                    <div class='form-group mt-4'>
+                                                        <label for='UserPass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
+                                                        <div class='col-sm-12'>
+                                                            <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='{{ trans('langUserNotice') }}...'><span id='result'></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class='col-lg-6 col-12 px-3'>
+                                                    <div class='form-group mt-4'>
+                                                        <label for='UserPass2' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }}</label>
+                                                        <div class='col-sm-12'>
+                                                            <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class='row'>
+
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserAm' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
@@ -145,7 +144,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPhone' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
@@ -156,9 +155,9 @@
                                                 </div>
                                             </div>
 
-                                        
+
                                             <div class='row'>
-                                                
+
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                     <label for='UserFac' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
@@ -167,7 +166,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
+
 
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
@@ -197,7 +196,7 @@
 
                                             <!-- check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form -->
                                             @if(!empty($provider_name) && !empty($provider_id))
-                                            
+
                                                 <div class='row'>
                                                     <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
@@ -212,11 +211,11 @@
                                                 </div>
                                             @endif
 
-                                            
+
                                             <div class='row'>
                                                 <div class='col-12 px-3'>
                                                     <div class='form-group mt-5'>
-                                                    
+
                                                         <input class='btn w-100 secodandary-submit' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                                     </div>
                                                 </div>
@@ -236,7 +235,7 @@
 
                 @endif
             @endif
-               
+
         </div>
     </div>
 </div>
