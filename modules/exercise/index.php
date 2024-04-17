@@ -433,10 +433,14 @@ if (!$nbrExercises) {
                     "1 $langExercisesSubmission":
                     "$countNumOfResults $langExercisesSubmissions");
                 $tool_content .= "<td>"
-                        . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
-                           <button class='d-flex justify-content-start align-items-start border-0 rounded-2 Success-200-bg text-white pe-none mt-2'>
-                                <span class='small-text'>$submissionCount</span>
-                           </button>"
+                        . "<div>
+                                <a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a>
+                            </div>
+                            <div>
+                                <span class='badge Success-200-bg mt-2'>
+                                        $submissionCount
+                                </span>
+                            </div>"
                         . "</td>";
             } else {
                 $tool_content .= "<td>  &mdash; </td>";

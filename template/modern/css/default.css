@@ -5189,3 +5189,7 @@ body:has(.fixed-announcement) .btn-quick-note{
 .btn-notification-course-card.not_active{
   display: none;
 }
+
+.translate-middle.badge{
+  color: #ffffff;
+}

@@ -108,8 +108,8 @@ function unpack_zip_show_files($zipfile) {
             $file = q($entry['file']);
             $course = q($entry['course']);
 
-            $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='" . q(getIndirectReference($path)) . "'$checked>
-                            <b>$course</b> ($file)</li>\n";
+            $retString .= "<li>$langLesFiles <div class='radio'><label><input type='radio' name='restoreThis' value='" . q(getIndirectReference($path)) . "'$checked>
+                            <b>$course</b> ($file)</label></div></li>\n";
             $checked = '';
         }
 
