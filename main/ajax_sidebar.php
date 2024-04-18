@@ -81,7 +81,7 @@ function getCoursesNotifications() {
             $course_title = course_id_to_title($id);
 
             $notification_content['notification_content'] = "
-                <div class='panel panelCard border-0'>
+                <div class='panel panelCard border-0 mt-2'>
                     <div class='card-body p-lg-2 p-3'>
                         <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>";
             foreach ($notifications as $n) {
@@ -101,7 +101,7 @@ function getCoursesNotifications() {
                                                     '/index.php?course=' . $course_code;
 
                     $notification_content['notification_content'] .= "
-                            <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative' href='$sideBarCourseNotifyURL'
+                            <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative link-color' href='$sideBarCourseNotifyURL'
                                 data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$sideBarCourseNotifyTitle'>
                                 <i class='$sideBarCourseNotifyIcon fa-md'></i>
                                 <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill Accent-200-bg'>
