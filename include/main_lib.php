@@ -3649,8 +3649,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $title = q($option['title']);
         $level = $option['level'] ?? 'secondary';
         if (isset($option['confirm'])) {
-            $title_conf = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
-            $accept_conf = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
+            $title_conf = $option['confirm_title'] ?? $langConfirmDelete;
+            $accept_conf = $option['confirm_button'] ?? $langDelete;
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='deleteAdminBtn'";
             $confirm_modal_class = ' confirmAction text-wrap';

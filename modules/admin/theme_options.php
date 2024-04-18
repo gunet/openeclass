@@ -30,12 +30,12 @@ $defaults = array(
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
-                                                    'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms', 
+                                                    'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
-                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 
+                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
                                                 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
@@ -809,17 +809,14 @@ if (isset($_POST['optionsSave'])) {
 
 
     $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "{$urlAppend}modules/admin/index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary'),
         array('title' => $langImport,
             'url' => "#",
             'icon' => 'fa-upload',
-            'class' => 'uploadTheme',
+            'modal-class' => 'uploadTheme',
+            'button-class' => 'btn-success',
             'level' => 'primary-label')
-
         ),false);
+
     if (isset($preview_theme)) {
         $tool_content .= "
                 <div class='alert alert-warning d-flex justify-content-between align-items-center flex-wrap gap-2'>
@@ -1389,7 +1386,7 @@ $tool_content .= "
                         </div>
                     </div>";
 
-                    
+
                     $tool_content .= "<div class='form-group mt-4'>
                         <div class='form-inline col-sm-9 col-sm-offset-3'>
                             <div class='radio'>
@@ -1406,7 +1403,7 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>";
-                    
+
 
                     $tool_content .= "<div class='form-group mt-4'>
                         <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
