@@ -256,6 +256,13 @@ $exerciseTimeConstraint = (int) $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
+$exercisePreventCopy = $objExercise->getOption('jsPreventCopy')? 1: 0;
+if ($exercisePreventCopy) {
+    $questionOptions = ['prevent_copy_paste'];
+} else {
+    $questionOptions = [];
+}
+
 $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
@@ -657,7 +664,7 @@ if ($questionList) {
     if ($exerciseType == SINGLE_PAGE_TYPE) {
         foreach ($questionList as $questionNumber => $questionId) {
             // show the question and its answers
-            showQuestion($questions[$questionId], $questionNumber, $exerciseResult);
+            showQuestion($questions[$questionId], $questionNumber, $exerciseResult, options: $questionOptions);
         }
     } else {
         if (isset($pausedQuestionNumber)) { // restarting paused attempt
@@ -705,7 +712,7 @@ if ($questionList) {
         }
 
         $question = $questions[$questionList[$questionNumber]];
-        showQuestion($question, $questionNumber, $exerciseResult);
+        showQuestion($question, $questionNumber, $exerciseResult, options: $questionOptions);
     }
 } else {
     $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoQuestion</span></div></div>";
