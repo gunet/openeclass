@@ -51,24 +51,29 @@
 
                 {!! $action_bar !!}
 
-                @if (count($result) > 0)
-                    <div class='table-responsive'>
-                        <table id='user_last_logins' class='table-default'><thead><tr class='list-header'>
-                            <th>{{ trans('langUserLastLogins') }} <small>({{ trans('langLastYear') }})</small></th><th>{{ trans('langAction') }}</th><th>{{ trans('langIpAddress') }}</th>
-                        </tr>
-                        <tbody>
-                        @foreach ($result as $lastVisit)
-                            <tr>
-                                <td> {{ format_locale_date(strtotime($lastVisit->when))  }} </td>
-                                <td> {{ action_text($lastVisit->action) }} </td>
-                                <td>{{ $lastVisit->ip }}</td>
+                <div class='col-12'>
+                    @if (count($result) > 0)
+                        <div class='table-responsive'>
+                            <table id='user_last_logins' class='table-default'><thead><tr class='list-header'>
+                                <th>{{ trans('langUserLastLogins') }} <small>({{ trans('langLastYear') }})</small></th><th>{{ trans('langAction') }}</th><th>{{ trans('langIpAddress') }}</th>
                             </tr>
-                        @endforeach
-                        </tbody></table>
-                    </div>
-                @else
-                    <div class = 'alert alert-info text-center'>{{ trans('langNoUserLastLogins') }}</div>
-                @endif
+                            <tbody>
+                            @foreach ($result as $lastVisit)
+                                <tr>
+                                    <td> {{ format_locale_date(strtotime($lastVisit->when))  }} </td>
+                                    <td> {{ action_text($lastVisit->action) }} </td>
+                                    <td>{{ $lastVisit->ip }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody></table>
+                        </div>
+                    @else
+                        <div class='alert alert-info'>
+                            <i class='fa-solid fa-circle-info fa-lg'></i>
+                            <span>{{ trans('langNoUserLastLogins') }}</span>
+                        </div>
+                    @endif
+                </div>
 
             </div>
         </div>
