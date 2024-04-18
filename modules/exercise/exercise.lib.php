@@ -27,7 +27,7 @@
  * @param $question_number
  * @return int
  */
-function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = array()) {
+function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], $options = []) {
 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
@@ -75,7 +75,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
 
     if ($answerType == FREE_TEXT) {
             $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
-            $tool_content .= rich_text_editor("choice[$questionId]", 14, 90, $text, options: ['prevent_copy_paste']);
+            $tool_content .= rich_text_editor("choice[$questionId]", 14, 90, $text, options: $options);
     }
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
          $tool_content .= "<input type='hidden' name='choice[$questionId]' value='0' />";
