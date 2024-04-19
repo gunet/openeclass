@@ -43,7 +43,7 @@
                             @if ($is_editor && !isset($question->user_score))
                                 <span style='float:right;'>
                                     {{ trans('langQuestionScore') }} : 
-                                    <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox ' maxlength='3' size='3' name='questionScore[{{ $question->id }}]'>
+                                    <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox form-control' maxlength='3' size='3' name='questionScore[{{ $question->id }}]'>
                                     <input type='hidden' name='questionMaxGrade' value='{{ $question->weighting }}'>
                                     <b>/{{ $question->weighting }}</b>
                                 </span>

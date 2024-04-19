@@ -675,7 +675,7 @@ if (count($exercise_question_ids) > 0) {
                     }
                     $tool_content .= "<tr><th colspan='2'>";
                     $tool_content .= "<span>
-                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='6' size='6' name='questionScore[$row->question_id]' value='$value'>
+                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox form-control' maxlength='6' size='6' name='questionScore[$row->question_id]' value='$value'>
                                    <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
                                    <strong>/$questionWeighting</strong>
                                     </span>";
