@@ -83,7 +83,7 @@
     <script>
         $(function() {
             $('.blockUI').click(function() {
-                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4>" });
+                $.blockUI({ message: "<div class='card'><h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4></div>" });
             });
         });
     </script>

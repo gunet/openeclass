@@ -602,7 +602,7 @@ if ($unit) {
 }
 
 $tool_content .= "
-  <form class='form-horizontal exercise' role='form' method='post' action='$form_action_link' autocomplete='off'>
+  <form class='form-horizontal exercise exercise-prevent-copy' role='form' method='post' action='$form_action_link' autocomplete='off'>
   <input type='hidden' name='formSent' value='1'>
   <input type='hidden' name='attempt_value' value='$attempt_value'>
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>";
@@ -817,39 +817,55 @@ if ($questionList) {
         $submitPrompt = js_escape($langExerciseFinalSubmit);
     }
     $head_content .= "<script type='text/javascript'>
-        var langHasAnswered = '". js_escape($langHasAnswered) ."';
-        $(function () {
-            exercise_init_countdown({
-                checkSinglePage: $checkSinglePage,
-                isFinalQuestion: $isFinalQuestion,
-                warning: '". js_escape($langLeaveExerciseWarning) ."',
-                unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
-                unseenQuestions: '". js_escape($langUnansweredQuestionsWarningUnseen) ."',
-                oneUnanswered: '$oneUnanswered',
-                manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
-                finalSubmit: '". js_escape($langExerciseFinalSubmit) ."',
-                finalSubmitWarn: '". js_escape($langExerciseFinalSubmitWarn) ."',
-                question: '$questionPrompt',
-                submit: '$submitPrompt',
-                goBack: '". js_escape($langGoBackToEx) ."',
-                cancelMessage: '". js_escape($langCancelExConfirmation) ."',
-                cancelAttempt: '". js_escape($langCancelAttempt) ."',
-                refreshTime: $refresh_time,
-                exerciseId: $exerciseId,
-                answeredIds: ". json_encode($answeredIds) .",
-                unansweredIds: ". json_encode($unansweredIds) .",
-                attemptsAllowed: $exerciseAllowedAttempts,
-                eurid: $eurid
-            });
-            $('.qNavButton').click(function (e) {
-                e.preventDefault();
-                var panel = $($(this).attr('href'));
-                $('.qPanel').removeClass('panelCard').addClass('panel-default');
-                panel.removeClass('panel-default').addClass('panelCard');
-                $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
-            });
+    var langHasAnswered = '". js_escape($langHasAnswered) ."';
+    $(function () {
+        exercise_init_countdown({
+            checkSinglePage: $checkSinglePage,
+            isFinalQuestion: $isFinalQuestion,
+            warning: '". js_escape($langLeaveExerciseWarning) ."',
+            unansweredQuestions: '". js_escape($langUnansweredQuestions) ."',
+            unseenQuestions: '". js_escape($langUnansweredQuestionsWarningUnseen) ."',
+            oneUnanswered: '$oneUnanswered',
+            manyUnanswered: '". js_escape($langUnansweredQuestionsWarningMany) ."',
+            finalSubmit: '". js_escape($langExerciseFinalSubmit) ."',
+            finalSubmitWarn: '". js_escape($langExerciseFinalSubmitWarn) ."',
+            question: '$questionPrompt',
+            submit: '$submitPrompt',
+            goBack: '". js_escape($langGoBackToEx) ."',
+            cancelMessage: '". js_escape($langCancelExConfirmation) ."',
+            cancelAttempt: '". js_escape($langCancelAttempt) ."',
+            refreshTime: $refresh_time,
+            exerciseId: $exerciseId,
+            answeredIds: ". json_encode($answeredIds) .",
+            unansweredIds: ". json_encode($unansweredIds) .",
+            attemptsAllowed: $exerciseAllowedAttempts,
+            eurid: $eurid
         });
-</script>";
+        $('.qNavButton').click(function (e) {
+            e.preventDefault();
+            var panel = $($(this).attr('href'));
+            $('.qPanel').removeClass('panelCard').addClass('panel-default');
+            panel.removeClass('panel-default').addClass('panelCard');
+            $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
+        });
+        if ($exercisePreventCopy) {
+            document.addEventListener('contextmenu', e => e.preventDefault(), false);
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey || e.code == 85 || e.code == 123) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            });
+            $('.exercise-prevent-copy input').on('select', function () {
+                this.selectionStart = this.selectionEnd;
+            });
+        }
+    });
+</script>" . ($exercisePreventCopy? "
+<style>
+.exercise-prevent-copy { user-select: none; }
+.exercise-prevent-copy input[type=text]::selection { background-color:transparent }
+</style>": '');
 }
 
 draw($tool_content, 2, null, $head_content);
