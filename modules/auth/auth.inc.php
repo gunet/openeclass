@@ -38,7 +38,8 @@ require_once 'include/lib/user.class.php';
 // pop3 class
 require_once 'modules/auth/methods/pop3.php';
 
-$auth_ids = array(1 => 'eclass',
+$auth_ids = [
+    1 => 'eclass',
     2 => 'pop3',
     3 => 'imap',
     4 => 'ldap',
@@ -52,19 +53,21 @@ $auth_ids = array(1 => 'eclass',
     12 => 'yahoo',
     13 => 'linkedin',
     14 => 'lti_publish',
-);
+    15 => 'oauth2',
+];
 
-$authFullName = array(
+$authFullName = [
     8 => 'Facebook',
     9 => 'Twitter',
     10 => 'Google',
     11 => 'Microsoft Live',
     12 => 'Yahoo!',
     13 => 'LinkedIn',
-);
+    15 => 'OAuth 2.0',
+];
 
-$extAuthMethods = array('cas', 'shibboleth');
-$hybridAuthMethods = array('facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin');
+$extAuthMethods = ['cas', 'shibboleth', 'oauth2'];
+$hybridAuthMethods = ['facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin'];
 
 
 /**
@@ -153,10 +156,6 @@ function count_auth_users($auth) {
  * ************************************************************** */
 function get_auth_info($auth)
 {
-    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB,
-            $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter,
-            $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn;
-
     if(!empty($auth)) {
         $title = Database::get()->querySingle('SELECT auth_title FROM auth WHERE auth_id = ?d', $auth);
         if ($title and $title->auth_title) {
@@ -164,31 +163,33 @@ function get_auth_info($auth)
         }
         switch($auth)
         {
-            case '1': $m = $langViaeClass;
+            case '1': $m = $GLOBALS['langViaeClass'];
             break;
-            case '2': $m = $langViaPop;
+            case '2': $m = $GLOBALS['langViaPop'];
             break;
-            case '3': $m = $langViaImap;
+            case '3': $m = $GLOBALS['langViaImap'];
             break;
-            case '4': $m = $langViaLdap;
+            case '4': $m = $GLOBALS['langViaLdap'];
             break;
-            case '5': $m = $langViaDB;
+            case '5': $m = $GLOBALS['langViaDB'];
             break;
-            case '6': $m = $langViaShibboleth;
+            case '6': $m = $GLOBALS['langViaShibboleth'];
             break;
-            case '7': $m = $langViaCAS;
+            case '7': $m = $GLOBALS['langViaCAS'];
             break;
-            case '8': $m = $langViaFacebook;
+            case '8': $m = $GLOBALS['langViaFacebook'];
             break;
-            case '9': $m = $langViaTwitter;
+            case '9': $m = $GLOBALS['langViaTwitter'];
             break;
-            case '10': $m = $langViaGoogle;
+            case '10': $m = $GLOBALS['langViaGoogle'];
             break;
-            case '11': $m = $langViaLive;
+            case '11': $m = $GLOBALS['langViaLive'];
             break;
-            case '12': $m = $langViaYahoo;
+            case '12': $m = $GLOBALS['langViaYahoo'];
             break;
-            case '13': $m = $langViaLinkedIn;
+            case '13': $m = $GLOBALS['langViaLinkedIn'];
+            break;
+            case '15': $m = $GLOBALS['langViaOAuth2'];
             break;
             default: $m = 0;
             break;
@@ -222,9 +223,13 @@ function get_auth_settings($auth) {
     $settings['auth_default'] = $result->auth_default;
     $settings['auth_name'] = $result->auth_name;
 
-    foreach (explode('|', $result->auth_settings) as $item) {
-        if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
-            $settings[$matches[1]] = $matches[2];
+    if ($result->auth_settings and ($decoded = @unserialize($result->auth_settings))) {
+        $settings = $settings + $decoded;
+    } else {
+        foreach (explode('|', $result->auth_settings) as $item) {
+            if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
+                $settings[$matches[1]] = $matches[2];
+            }
         }
     }
 
@@ -1262,8 +1267,8 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth or CAS
- * @param $type is 'shibboleth' or 'cas'
+ * @brief Authenticate user via Shibboleth, CAS or OAuth 2.0
+ * @param $type is 'shibboleth', 'cas' or 'oauth2'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1293,6 +1298,12 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
         $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
+    } elseif ($type == 'oauth2') {
+        $uname = $_SESSION['auth_id'] ?? '';
+        $surname = $_SESSION['auth_surname'] ?? '';
+        $givenname = $_SESSION['auth_givenname'] ?? '';
+        $email = $_SESSION['auth_email'] ?? '';
+        $am = $_SESSION['auth_studentid'] ?? '';
     }
     if ($email) {
         // Email is considered verified if it came from CAS or Shibboleth
@@ -1311,6 +1322,11 @@ function shib_cas_login($type) {
             $attributes[strtolower($name)] = $value;
         }
         unset($_SESSION['shib_attributes']);
+    } elseif (isset($_SESSION['auth_attributes'])) {
+        foreach ($_SESSION['auth_attributes'] as $name => $value) {
+            $attributes[strtolower($name)] = $value;
+        }
+        unset($_SESSION['auth_attributes']);
     }
 
     // user is authenticated, now let's see if he is registered also in db
@@ -1679,7 +1695,8 @@ function deny_access() {
 
 function unset_shib_cas_session () {
     foreach (['cas_uname', 'cas_email', 'cas_surname', 'cas_givenname', 'cas_userstudentid',
-        'shib_uname', 'shib_email', 'shib_surname', 'shib_givenname', 'shib_cn', 'shib_studentid'] as $var) {
+        'shib_uname', 'shib_email', 'shib_surname', 'shib_givenname', 'shib_cn', 'shib_studentid',
+        'auth_id', 'auth_email', 'auth_givenname', 'auth_surname', 'auth_studentid'] as $var) {
             unset($_SESSION[$var]);
     }
 }

@@ -93,11 +93,14 @@ if(isset($_SESSION['hybridauth_callback'])) {
 }
 
 if (isset($_SESSION['shib_uname'])) {
-    // authenticate via shibboleth
+    // authenticate via Shibboleth
     shib_cas_login('shibboleth');
 } elseif (isset($_SESSION['cas_uname'])) {
-    // authenticate via cas
+    // authenticate via CAS
     shib_cas_login('cas');
+} elseif (isset($_SESSION['auth_id'])) {
+    // authenticate via OAuth 2.0
+    shib_cas_login('oauth2');
 } elseif (isset($_GET['provider'])) {
     //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
     hybridauth_login();

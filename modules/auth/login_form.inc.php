@@ -45,7 +45,10 @@ function login_form($format='main') {
                 ORDER BY auth_default DESC, auth_id");
     foreach ($q as $l) {
         if (in_array($l->auth_name, $extAuthMethods)) {
-            $loginUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+            $loginUrl = $urlServer . [
+                'cas' => 'modules/auth/cas.php',
+                'oauth2' => 'modules/auth/oauth2.php',
+                'shibboleth' => 'secure/'][$l->auth_name];
             $loginTitle = empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title));
             if ($format == 'main') {
                 $authLink[] = array(

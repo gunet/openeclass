@@ -34,7 +34,6 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
 use Hybridauth\HttpClient;
@@ -70,15 +69,24 @@ if ($auth == 7) { // CAS
         $_SESSION['shib_auth_test'] = false;
         redirect_to_home_page('secure/index.php');
     }
+} elseif ($auth == 15) { // OAuth 2.0
+    if (isset($_SESSION['auth_user_info'])) {
+        Session::Messages($langConnYes, 'alert-success');
+        Session::Messages("<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
+        unset($_SESSION['auth_user_info']);
+    } else {
+        $_SESSION['oauth2_test'] = true;
+        redirect_to_home_page('modules/auth/oauth2.php');
+    }
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
     include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
     if($auth_ids[$auth] == 'linkedin'){
-    	$provider = 'LinkedIn';
+        $provider = 'LinkedIn';
     } else if($auth_ids[$auth] == 'live') {
-	$provider = 'WindowsLive';
+        $provider = 'WindowsLive';
     } else {
-    	$provider = $auth_ids[$auth];
+        $provider = $auth_ids[$auth];
     }
 
     try {
@@ -172,7 +180,7 @@ if ($auth > 1 and $auth < 6) {
                     <input class='btn btn-primary' type='submit' name='submit' value='$langConnTest'>
                     <a class='btn btn-default' href='auth.php'>$langCancel</a>
                 </div>
-            </div>        
+            </div>
         ". generate_csrf_token_form_field() ."
     </form></div>";
 }

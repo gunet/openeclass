@@ -68,10 +68,14 @@ if ($course->visible == COURSE_INACTIVE) {
 
 $auth = 7; // CAS
 $cas = get_auth_settings($auth);
-$url_info = parse_url($urlServer);
-$service_base_url = "$url_info[scheme]://$url_info[host]";
-phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, false);
-phpCAS::setNoCasServerValidation();
+if ($cas['auth_default']) {
+    $url_info = parse_url($urlServer);
+    $service_base_url = "$url_info[scheme]://$url_info[host]";
+    phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, false);
+    phpCAS::setNoCasServerValidation();
+} else {
+    $cas = null;
+}
 
 $user_id = null;
 if (isset($_POST['no_cas'])) {
@@ -112,7 +116,7 @@ if (isset($_POST['submit'])) {
         $user_id = $uid;
     }
 }
-if (!$uid and phpCAS::checkAuthentication()) {
+if (!$uid and $cas and phpCAS::checkAuthentication()) {
     $_SESSION['cas_attributes'] = phpCAS::getAttributes();
     $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
     $username = phpCAS::getUser();
@@ -202,12 +206,9 @@ if ($uid) {
     $label = $langRegister;
     $eclass_login = $eclass_form = '';
 } else {
-    $cas_auth = Database::get()->querySingle("SELECT * FROM auth WHERE auth_name = 'cas'");
-    if ($cas_auth and $cas_auth->auth_default) {
-        $cas = true;
+    if ($cas) {
         $eclass_login_help = $langInviteEclassLoginAlt;
     } else {
-        $cas = false;
         $eclass_login_help = $langCourseInvitationReceived . ' ' . $langInviteEclassLoginCreate;
     }
     $givenname = q($q->givenname);

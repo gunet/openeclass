@@ -120,10 +120,14 @@ if (isset($_GET['auth'])) {
         }
     }
     $tool_content .= "</ul></div>";
-    $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
+    $authMethods = Database::get()->queryArray("SELECT * FROM auth
+        WHERE auth_default <> 0 OR auth_id = 1 OR auth_settings <> ''
+        ORDER BY auth_default DESC, auth_id");
     $tool_content .= "<div class='table-responsive'><table class='table-default'>";
     $tool_content .= "<th>$langAllAuthTypes</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
+    $auth_disabled_ids = $auth_ids;
     foreach ($authMethods as $info) {
+        unset($auth_disabled_ids[$info->auth_id]);
         $auth_id = $info->auth_id;
         $auth_name = $info->auth_name;
         $active = $info->auth_default;
@@ -169,7 +173,19 @@ if (isset($_GET['auth'])) {
             ));
             $tool_content .= "</td><tr>";
     }
-    $tool_content .= "</table></div>";
+    unset($auth_disabled_ids[14]); // Remove LTI users auth
+    $add_options = array_map(function ($auth_id) {
+        return [
+            'title' => get_auth_info($auth_id),
+            'url' => "auth_process.php?auth=$auth_id",
+            'icon' => 'fa-plus-circle'];
+    }, array_keys($auth_disabled_ids));
+    $tool_content .= "</table></div>
+        <div class='row'>
+            <div class='col-xs-12 text-right'>
+                $langAddNewAuthMethod: " . action_button($add_options) . "
+            </div>
+        </div>";
 }
 
 draw($tool_content, 3);

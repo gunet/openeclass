@@ -39,7 +39,8 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $auth = false;
 }
 
-register_posted_variables(array('imaphost' => true, 'pop3host' => true,
+register_posted_variables([
+    'imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true, 'ldapbind_dn' => true,
     'ldapbind_pw' => true, 'ldap_login_attr' => true,
     'ldap_firstname_attr' => true, 'ldap_surname_attr' => true,
@@ -56,7 +57,11 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
     'cas_altauth_use' => true, 'auth_instructions' => true, 'auth_title' => true,
     'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
-    'test_username' => true), 'all');
+    'test_username' => true,
+    // OAuth 2.0 options
+    'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
+    'apiID' => true, 'apiSecret' => true,
+], 'all');
 
 if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
@@ -145,6 +150,19 @@ if (isset($_POST['submit'])) {
                 'secret' => $hybridauth_secret);
             $auth_instructions = $hybridauth_instructions;
             break;
+        case 15:
+            $settings = [
+                'apiBaseUrl' => $apiBaseUrl,
+                'id' => $apiID,
+                'secret' => $apiSecret,
+                'authorizePath' => $authorizePath,
+                'accessTokenPath' => $accessTokenPath,
+                'profileMethod' => $profileMethod,
+                'casusermailattr' => $casusermailattr,
+                'casuserfirstattr' => $casuserfirstattr,
+                'casuserlastattr' => $casuserlastattr,
+                'casuserstudentid' => $casuserstudentid];
+            break;
         default:
             break;
     }
@@ -155,15 +173,16 @@ if (isset($_POST['submit'])) {
     } elseif ($auth >= 8) {
         $auth_settings = serialize($settings);
     }
-    $result = Database::get()->query("UPDATE auth
-        SET auth_settings = ?s,
-            auth_instructions = ?s,
+    $result = Database::get()->query('INSERT INTO auth
+        (auth_id, auth_name, auth_settings, auth_instructions, auth_default, auth_title) VALUES
+        (?d, ?s, ?s, ?s, 1, ?s) ON DUPLICATE KEY UPDATE
+            auth_settings = VALUES(auth_settings),
+            auth_instructions = VALUES(auth_instructions),
             auth_default = GREATEST(auth_default, 1),
-            auth_title = ?s
-        WHERE auth_id = ?d",
+            auth_title = VALUES(auth_title)',
         function ($error) use (&$tool_content, $langErrActiv) {
             Session::Messages($langErrActiv, 'alert-warning');
-        }, $auth_settings, $auth_instructions, $auth_title, $auth);
+        }, $auth, $auth_ids[$auth], $auth_settings, $auth_instructions, $auth_title);
     if ($result) {
         if ($result->affectedRows == 1) {
             Session::Messages($langHasActivate, 'alert-success');
@@ -217,6 +236,8 @@ if (isset($_POST['submit'])) {
         case 6: require_once 'modules/auth/methods/shibform.php';
             break;
         case 7: require_once 'modules/auth/methods/casform.php';
+            break;
+        case 15: require_once 'modules/auth/methods/oauth2form.php';
             break;
         case 8:
         case 9:
