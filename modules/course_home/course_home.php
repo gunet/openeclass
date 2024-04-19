@@ -385,7 +385,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
 $keywords = q(trim($course_info->keywords));
 $visible = $course_info->visible;
 $professor = $course_info->prof_names;
-$public_code = $course_info->public_code;
+$public_code = q($course_info->public_code);
 $course_license = $course_info->course_license;
 
 $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
