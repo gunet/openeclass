@@ -817,20 +817,12 @@
                             </div>
                             <div>
 
-                                <div class='col-12 mb-4 mt-1 d-flex justify-content-between align-items-center'>
-                                    <h3 class='mb-0'>
-                                        {{ trans('langAgenda') }}
-                                    </h3>
-                                    <a class='Course-home-ellipsis-announcements text-decoration-underline vsmall-text' href="{{$urlAppend}}main/personal_calendar/index.php">
-                                        {{ trans('langDetails') }}
-                                    </a>
-                                </div>
                                 @include('portfolio.portfolio-calendar')
 
                                 <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                         <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
-                                        <a class='Course-home-ellipsis-announcements text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
+                                        <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
                                             {{ trans('langAllAnnouncements') }}
                                         </a>
                                     </div>
