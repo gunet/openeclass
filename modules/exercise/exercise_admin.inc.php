@@ -98,6 +98,11 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $objExercise->updateContinueTimeLimit($_POST['continueTimeLimit']);
         }
+        if (!isset($_POST['jsPreventCopy'])) {
+            $objExercise->setOption('jsPreventCopy', false);
+        } else {
+            $objExercise->setOption('jsPreventCopy', true);
+        }
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
@@ -160,7 +165,7 @@ if (isset($_POST['submitExercise'])) {
     } else {
         $exerciseIPLockOptions = '';
     }
-
+    $exercisePreventCopy = Session::has('jsPreventCopy') ? Session::get('jsPreventCopy') : $objExercise->getOption('jsPreventCopy');
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
     if ($objExercise->selectAssignToSpecific()) {
@@ -571,6 +576,19 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         </div>
                         <div id='continueTimeField' class='form-inline' style='margin-top: 15px; " .
                             ($continueTimeLimit? '': 'display: none') . "'>$continueTimeField</div>
+                    </div>
+                </div>
+
+                <div class='row form-group mt-4'>
+                    <label class='col-sm-12 control-label-notes mb-1'>$langExercisePreventCopy:</label>
+                    <div class='col-12'>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input id='jsPreventCopy' name='jsPreventCopy' type='checkbox' " . ($exercisePreventCopy? 'checked' : '') . ">
+                                <span class='checkmark'></span>
+                                $langExercisePreventCopyExplanation
+                            </label>
+                        </div>
                     </div>
                 </div>
 
