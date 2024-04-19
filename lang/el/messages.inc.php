@@ -497,6 +497,10 @@ $langcasusermailattr = "CAS SAML attribute για το e-mail";
 $langcasuserfirstattr = "CAS SAML attribute για το Όνομα";
 $langcasuserlastattr = "CAS SAML attribute για το Επώνυμο";
 $langcasuserstudentid = "CAS SAML attribute για τον Αριθμό Μητρώου";
+$langSSOMailAttr = "Ιδιότητα προφίλ για το e-mail";
+$langSSOGivenNameAttr = "Ιδιότητα προφίλγια το Όνομα";
+$langSSOSurnameAttr = "Ιδιότητα προφίλ για το Επώνυμο";
+$langSSOStudentIDAttr = "Ιδιότητα προφίλ για τον Αριθμό Μητρώου";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langChangeUser = 'Σύνδεση με λογαριασμό άλλου χρήστη';
 $langChangeUserAs = 'Σύνδεση ως';
@@ -936,6 +940,7 @@ $langBackupEnd = "Ολοκληρώθηκε το αντίγραφο ασφαλε�
 /* * *******************************************
  * auth_methods.php
  * ******************************************** */
+$langAddNewAuthMethod = 'Προσθήκη νέου τρόπου πιστοποίησης';
 $langViaeClass = "Πιστοποίηση μέσω πλατφόρμας";
 $langViaPop = "Πιστοποίηση μέσω POP3";
 $langViaImap = "Πιστοποίηση μέσω IMAP";
@@ -950,6 +955,7 @@ $langViaGoogle = "Πιστοποίηση μέσω Google";
 $langViaLive = "Πιστοποίηση μέσω Microsoft Live";
 $langViaYahoo = "Πιστοποίηση μέσω Yahoo!";
 $langViaLinkedIn = "Πιστοποίηση μέσω Linked In";
+$langViaOAuth2 = 'Πιστοποίηση μέσω OAuth 2.0';
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε έχει ενεργοποιηθεί";
 $langAlreadyActiv = "O τρόπος πιστοποίησης που επιλέξατε είναι ήδη ενεργοποιημένος";
 $langCASnochange = "Πρέπει να κλείσετε τον browser σας για να αλλάξετε τις ρυθμίσεις του CAS";

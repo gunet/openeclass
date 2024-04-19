@@ -32,7 +32,9 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-use Hybrid\Auth;
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
 
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']);
@@ -45,17 +47,14 @@ if (!isset($auth) or !isset($auth_ids[$auth])) {
 if ($auth == 7) { // CAS
     $cas_ret = cas_authenticate(7);
     if (phpCAS::checkAuthentication()) {
-        //Session::Messages($langConnYes, 'alert-success');
         Session::flash('message',$langConnYes);
         Session::flash('alert-class', 'alert-success');
         // CAS debugging
         if (!empty($cas_ret['message'])) {
-            //Session::Messages(q($cas_ret['message']));
             Session::flash('message',q($cas_ret['message']));
             Session::flash('alert-class', 'alert-success');
         }
         if (!empty($cas_ret['attrs']) && is_array($cas_ret['attrs'])) {
-            //Session::Messages("<p>$langCASRetAttr:<br>" . array2html($cas_ret['attrs']) . "</p>");
             Session::flash('message',"<p>$langCASRetAttr:<br>" . array2html($cas_ret['attrs']) . "</p>");
             Session::flash('alert-class', 'alert-success');
         }
@@ -64,29 +63,42 @@ if ($auth == 7) { // CAS
     if (isset($_SESSION['shib_auth_test']) and $_SESSION['shib_auth_test']) {
         // logged-in successfully with Shibboleth
         unset($_SESSION['shib_auth_test']);
-        //Session::Messages($langConnYes, 'alert-success');
-        Session::flash('message',$langConnYes);
-        Session::flash('alert-class', 'alert-success');
-        //Session::Messages("<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
-        Session::flash('message',"<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
+        Session::flash('message', $langConnYes);
+        Session::flash('message', "<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
         Session::flash('alert-class', 'alert-success');
         unset($_SESSION['auth_user_info']);
     } else {
         $_SESSION['shib_auth_test'] = false;
         redirect_to_home_page('secure/index.php');
     }
+} elseif ($auth == 15) { // OAuth 2.0
+    if (isset($_SESSION['auth_user_info'])) {
+        Session::flash('message', $langConnYes);
+        Session::flash('message', "<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
+        Session::flash('alert-class', 'alert-success');
+        unset($_SESSION['auth_user_info']);
+    } else {
+        $_SESSION['oauth2_test'] = true;
+        redirect_to_home_page('modules/auth/oauth2.php');
+    }
 } elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
     include_once 'modules/auth/methods/hybridauth/config.php';
     $config = get_hybridauth_config();
-    $provider = $auth_ids[$auth];
+
+    if($auth_ids[$auth] == 'linkedin'){
+        $provider = 'LinkedIn';
+    } else if($auth_ids[$auth] == 'live') {
+        $provider = 'WindowsLive';
+    } else {
+        $provider = $auth_ids[$auth];
+    }
+
     try {
         $hybridauth = new Hybrid_Auth($config);
         $adapter = $hybridauth->authenticate($provider);
         $user_data = $adapter->getUserProfile();
-        //Session::Messages($langConnYes, 'alert-success');
         Session::flash('message',$langConnYes);
         Session::flash('alert-class', 'alert-success');
-        //Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
         Session::flash('message',"<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
         Session::flash('alert-class', 'alert-success');
     } catch (Exception $e) {
@@ -124,23 +136,18 @@ if ($submit and $test_username !== '' and $data['test_password'] !== '') {
     $settings = get_auth_settings($auth);
     $is_valid = auth_user_login($auth, $test_username, $data['test_password'], $settings);
     if ($is_valid) {
-        //Session::Messages($langConnYes, 'alert-success');
         Session::flash('message',$langConnYes);
         Session::flash('alert-class', 'alert-success');
         if (isset($_SESSION['auth_user_info']['attributes'])) {
-            //Session::Messages("<p>$langCASRetAttr:<br>" .
-                //array2html($_SESSION['auth_user_info']['attributes']) . "</p>");
-                Session::flash('message',"<p>$langCASRetAttr:<br>" .
-                array2html($_SESSION['auth_user_info']['attributes']) . "</p>");
-                Session::flash('alert-class', 'alert-success');
+            Session::flash('message',"<p>$langCASRetAttr:<br>" .
+            array2html($_SESSION['auth_user_info']['attributes']) . "</p>");
+            Session::flash('alert-class', 'alert-success');
         }
     } else {
-        //Session::Messages($langConnNo, 'alert-danger');
         Session::flash('message',$langConnNo);
         Session::flash('alert-class', 'alert-danger');
         if (isset($GLOBALS['auth_errors'])) {
-            //Session::Messages($GLOBALS['auth_errors'], 'alert-info');
-            Session::flash('message',$GLOBALS['auth_errors']);
+            Session::flash('message', $GLOBALS['auth_errors']);
             Session::flash('alert-class', 'alert-info');
         }
     }
@@ -156,4 +163,3 @@ $data['action_bar'] = action_bar(array(
 
 $data['auth_ids'] = $auth_ids;
 view('admin.users.auth.auth_test', $data);
-

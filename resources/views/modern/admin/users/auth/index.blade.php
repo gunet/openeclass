@@ -48,7 +48,6 @@
                 @endif
 
 
-
                 <div class='col-12'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                         <label>{{ trans('langMethods') }}</label>
@@ -91,8 +90,7 @@
                                 <tr>
                                     <td{!! $authMethod->auth_default? '' : ' class=InvisibleAuth' !!}>
                                         {{ strtoupper($authMethod->auth_name) }}
-                                        @if ($authMethod->auth_default > 1)
-                                            &nbsp;&nbsp;
+                                        @if ($authMethod->auth_default > 1)&nbsp;&nbsp;
                                             <small>
                                                 <span class='label label-default'>{{ trans('langPrimaryAuthType') }}</span>
                                             </small>
@@ -154,6 +152,11 @@
                             @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="row m-auto">
+                        <div class='col-12 m-1 text-end'>
+                            {{ trans('langAddNewAuthMethod') }}: {!! action_button($add_options) !!}
+                        </div>
                     </div>
                 </div>
             </div>

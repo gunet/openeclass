@@ -32,26 +32,23 @@ require_once 'include/lib/course.class.php';
 require_once 'modules/auth/auth.inc.php';
 
 if (!get_config('course_invitation')) {
-    //Session::Messages($langNoLongerValid, 'alert-info');
     Session::flash('message',$langNoLongerValid);
     Session::flash('alert-class', 'alert-info');
     redirect_to_home_page();
 }
 
-$id = isset($_GET['id'])? $_GET['id']: null;
+$id = $_GET['id'] ?? null;
 
 $q = Database::get()->querySingle('SELECT *, expires_at <= NOW() AS expired
     FROM course_invitation WHERE identifier = ?s', $id);
 
 if (!$q or $q->expired) {
-    //Session::Messages($langNoLongerValid, 'alert-info');
     Session::flash('message',$langNoLongerValid);
     Session::flash('alert-class', 'alert-info');
     redirect_to_home_page();
 }
 
 if ($q->registered_at) {
-    //Session::Messages($langInvitationAlreadyUsed, 'alert-info');
     Session::flash('message',$langInvitationAlreadyUsed);
     Session::flash('alert-class', 'alert-info');
     redirect_to_home_page();
@@ -76,11 +73,13 @@ if ($course->visible == COURSE_INACTIVE) {
 $auth = 7; // CAS
 $cas = get_auth_settings($auth);
 
-if ($cas['auth_default'] == 1) {
+if ($cas['auth_default']) {
     $url_info = parse_url($urlServer);
     $service_base_url = "$url_info[scheme]://$url_info[host]";
     phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, false);
     phpCAS::setNoCasServerValidation();
+} else {
+    $cas = null;
 }
 
 $user_id = null;
@@ -124,12 +123,25 @@ if (isset($_POST['submit'])) {
         $user_id = $uid;
     }
 }
-if ($cas['auth_default'] == 1) {
-    if (!$uid and phpCAS::checkAuthentication()) {
-        $_SESSION['cas_attributes'] = phpCAS::getAttributes();
-        $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
-        $username = phpCAS::getUser();
-        $user = Database::get()->querySingle('SELECT id FROM user WHERE username = ?s', $username);
+
+if (!$uid and $cas and phpCAS::checkAuthentication()) {
+    $_SESSION['cas_attributes'] = phpCAS::getAttributes();
+    $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
+    $username = phpCAS::getUser();
+    $user = Database::get()->querySingle('SELECT id FROM user WHERE username = ?s', $username);
+    if ($user) {
+        $user_id = $user->id;
+    } else {
+        $user = Database::get()->query("INSERT IGNORE INTO user
+                    SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
+                        email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
+                        expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
+                        lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
+                        description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
+                    $attrs['surname'], $attrs['givenname'], $username, 'cas',
+                    mb_strtolower(trim($attrs['email'])), USER_STUDENT, get_config('default_language'),
+                    $attrs['studentid']);
+
         if ($user) {
             $user_id = $user->id;
         } else {
@@ -216,12 +228,9 @@ if ($uid) {
     $label = $langRegister;
     $eclass_login = $eclass_form = '';
 } else {
-    $cas_auth = Database::get()->querySingle("SELECT * FROM auth WHERE auth_name = 'cas'");
-    if ($cas_auth and $cas_auth->auth_default) {
-        $cas = true;
+    if ($cas) {
         $eclass_login_help = $langInviteEclassLoginAlt;
     } else {
-        $cas = false;
         $eclass_login_help = $langCourseInvitationReceived . ' ' . $langInviteEclassLoginCreate;
     }
     $givenname = q($q->givenname);
