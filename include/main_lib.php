@@ -2143,8 +2143,8 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @param type $extra
  * @return type
  */
-function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text;
+function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options = []) {
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -2224,6 +2224,20 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
         }
         load_js('tinymce/tinymce.min.js');
         $head_content .= css_link('tinymce/css/re-style-richTextEditor.css');
+        if (in_array('prevent_copy_paste', $options)) {
+            $copy_paste = '';
+            $paste_plugin = ' paste';
+            $paste_preprocess = '
+                paste_preprocess: (plugin, args) => {
+                    args.stopImmediatePropagation();
+                    args.stopPropagation();
+                    args.preventDefault();
+                },';
+
+        } else {
+            $copy_paste = '| pastetext cut copy paste ';
+            $paste_plugin = $paste_preprocess = '';
+        }
         $head_content .= "
 <script type='text/javascript'>
 
