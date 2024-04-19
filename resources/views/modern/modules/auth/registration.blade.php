@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
             <div class='col-12'>
-                <h1>{{ trans('langRegistration')}}</h1>
+                <h2>{{ trans('langRegistration')}}</h2>
             </div>
 
             @if(Session::has('message'))
@@ -53,19 +53,6 @@
                 <div class='col-12 mt-4'>
                     <div class='row row-cols-1 row-cols-lg-2 m-auto g-lg-5 g-4'>
                         <div class='col-lg-6 col-12 ps-0'>
-                            <ul class="nav nav-tabs" id="myRegistration">
-                                <li class="nav-item">
-                                    <button class="nav-link active" id="reg-student" data-bs-toggle="tab" data-bs-target="#regStudent" type="button" role="tab" aria-controls="regStudent" aria-selected="true" aria-current="page">
-                                        {{ trans('langOfUser') }}
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" id="reg-teacher" data-bs-toggle="tab" data-bs-target="#regTeacher" type="button" role="tab" aria-controls="regTeacher" aria-selected="true" aria-current="page">
-                                        {{ trans('langUserWithRights') }}
-                                    </button>
-                                </li>
-                            </ul>
-
                             <div class="tab-content mt-5" id="myContentRegistration">
                                 @if (!$registration_info)
                                     <div class="tab-pane fade show active" id="regStudent" role="tabpanel" aria-labelledby="reg-student">
@@ -74,13 +61,12 @@
                                                 <ul class="list-group list-group-flush">
                                                     @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
                                                         <li class="list-group-item element"><a class='TextBold' href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a></li>
-                                                    @else ($eclass_stud_reg == 1) <!-- allow student registration via request -->
+                                                    @elseif ($eclass_stud_reg == 1) <!-- allow student registration via request -->
                                                         <li class="list-group-item element"><a class='TextBold' href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a></li>
                                                     @endif
                                                     @if (count($auth) > 1 and $alt_auth_stud_reg != FALSE) <!-- allow user registration via alt auth methods -->
                                                         @foreach ($auth as $k => $v)
                                                             @if ($v != 1)  <!--  bypass the eclass auth method -->
-                                                                <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
                                                                 @if ($v < 8)
                                                                     <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                 @else
@@ -101,45 +87,6 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="tab-pane fade" id="regTeacher" role="tabpanel" aria-labelledby="reg-teacher">
-                                        @if ($eclass_prof_reg or $alt_auth_prof_reg)  <!-- allow teacher registration -->
-                                            <div class='col-12'>
-                                                <ul class="list-group list-group-flush">
-                                                    @if ($eclass_prof_reg)
-                                                        @if (empty($provider))
-                                                            <li class="list-group-item element"><a class='TextBold' href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a></li>
-                                                        @else
-                                                            <li class="list-group-item element"><a class='TextBold' href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a></li>
-                                                        @endif
-                                                    @endif
-                                                    @if (count($auth) > 1 and $alt_auth_prof_reg)
-                                                        @foreach ($auth as $k => $v)
-                                                            @if ($v != 1)   <!-- bypass the eclass auth method -->
-                                                                <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
-                                                                @if ($v < 8)
-                                                                    @if ($alt_auth_prof_reg)
-                                                                    <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                    @else
-                                                                    <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
-                                                                    @endif
-                                                                @else
-                                                                    @if ($alt_auth_prof_reg)
-                                                                        <li class="list-group-item element"><a class='TextBold' href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                    @else
-                                                                        <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                    @endif
-                                                                @endif
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </ul>
-                                            </div>
-                                        @else
-                                            <div class='col-12'>
-                                                <p class='TextRegular'>{{ trans('langTeacherCannotRegister') }}</p>
-                                            </div>
-                                        @endif
-                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -153,7 +100,6 @@
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langCannotRegister') }}</span></div>
                 </div>
             @endif
-
         </div>
     </div>
 </div>

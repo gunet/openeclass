@@ -23,8 +23,6 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $data['user_registration'] = get_config('user_registration');
-$data['eclass_prof_reg'] = get_config('eclass_prof_reg');
-$data['alt_auth_prof_reg'] = get_config('alt_auth_prof_reg');
 $data['eclass_stud_reg'] = get_config('eclass_stud_reg'); // student registration via eclass
 $data['alt_auth_stud_reg']= get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
 $data['registration_info'] = get_config('registration_info');

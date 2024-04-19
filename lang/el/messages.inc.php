@@ -4825,8 +4825,8 @@ $langUpdates = "ενημερώσεις";
   units.php
  * ********************************************************************* */
 $langAddUnit = "Προσθήκη ενότητας";
-$langShowUnitCarousel = "Εμφάνιση ενότητας σε μία γραμμή ανά στήλη";
-$langShowUnitRow = "Εμφάνιση ενότητας ανα γραμμή";
+$langShowUnitCarousel = "Εμφάνιση σε μία γραμμή";
+$langShowUnitRow = "Εμφάνιση σε λίστα";
 $langEditUnit = "Επεξεργασία ενότητας";
 $langEditUnitSection = "Επεξεργασία";
 $langUnitTitle = "Τίτλος ενότητας";

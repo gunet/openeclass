@@ -518,7 +518,7 @@
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 <div>
-                                    <h4 class='mb-0 portofolio-text-intro'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
+                                    <h3 class='mb-0 portofolio-text-intro'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h3>
                                     <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {!! $_SESSION['uname'] !!}
                                     </p>
@@ -564,7 +564,7 @@
                             <div class='flex-grow-1'>
                                 <div class='card card-transparent border-0 bg-transparent'>
                                     <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                        <h2>{{ trans('langMyCoursesSide') }}</h2>
+                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp; ({{ $num_of_courses }})</h2>
                                         <div class='d-flex mt-md-0 mt-3'>
                                             <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
                                                 <i class="fa-regular fa-pen-to-square"></i>&nbsp
