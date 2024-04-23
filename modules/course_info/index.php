@@ -620,7 +620,7 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='coursepassword' class='col-sm-2 control-label'>$langPassCode:</label>
                 <div class='col-sm-10'>
-                      <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
+                      <input class='form-control' id='coursepassword' type='text' name='password' value='$password' autocomplete='off'>
                 </div>
                 <div class='col-sm-2 text-center padding-thin'>
                     <span id='result'></span>
