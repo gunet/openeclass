@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
@@ -27,21 +27,21 @@
  * @absract
  * This class mainly contains static methods, so it could be defined simply
  * as a namespace.
- * However, it is created as a class for a possible need of instantiation of 
+ * However, it is created as a class for a possible need of instantiation of
  * note objects in the future. Another scenario could be the creation
  * of a set of abstract methods to be implemented seperatelly per module.
- *  
+ *
  */
 
 require_once 'include/log.class.php';
 
 class References {
     /** @const integer a module id for a course generally
-     */ 
+     */
     const COURSE = -1;
-    
+
     /** @staticvar array Modules of eclass grouped in general and course types. For each module different module item types may exist (e.g., for video module video and video_link) For each item type the corresponding DB table is given and the following fields of this table: the item id, the item title and the course it belongs to
-    */ 
+    */
     private static $ref_object_types = array(
         'course' => array(
             MODULE_ID_AGENDA => array('course_event' => array('objtable' => 'agenda', 'id_field' => 'id', 'title_field' => 'title', 'course_field' => 'course_id', 'relative_prefix_path' => 'modules/', 'relative_module_path' => 'agenda/', 'course_parameter' => 'course', 'item_id_parameter' => '')),
@@ -59,7 +59,7 @@ class References {
             MODULE_ID_PERSONALCALENDAR => array('personalevent' => array('objtable' => 'personal_calendar', 'id_field' => 'id', 'title_field' => 'title','relative_prefix_path' => 'main/', 'relative_module_path' => 'personal_calendar/', 'course_parameter' => '', 'item_id_parameter' => 'id' ))
         )
     );
-    
+
     /** @staticvar array Language name of the specified modules
      */
     private static $lang_vars = array(
@@ -76,22 +76,22 @@ class References {
         self::COURSE => 'langCourse',
         MODULE_ID_LP => 'langLearningPath'
     );
-    
-    
+
+
      /*************************** References **********************************************************************/
-    
+
     /**
      * Produces the set of select fields to make a reference between two eclass objects
-     * @param int $gen_type_selected COURSE|MODULE_ID_USERS|MODULE_ID_PERSONALCALENDAR : the general type of the referenced object 
+     * @param int $gen_type_selected COURSE|MODULE_ID_USERS|MODULE_ID_PERSONALCALENDAR : the general type of the referenced object
      * @param int $course_selected the course that the referenced object belongs to
-     * @param string $type_selected string with values: 'course'|'course_ebook'|'course_event'|'personalevent'|'course_assignment'|'course_document'|'course_link'|'course_exercise'|'course_learningpath'|'course_video'|'course_videolink'|'user' : the type of the referenced object 
-     * @param int $object_selected the id of the referenced object 
+     * @param string $type_selected string with values: 'course'|'course_ebook'|'course_event'|'personalevent'|'course_assignment'|'course_document'|'course_link'|'course_exercise'|'course_learningpath'|'course_video'|'course_videolink'|'user' : the type of the referenced object
+     * @param int $object_selected the id of the referenced object
      */
     public static function build_object_referennce_fields($module_selected, $course_selected, $type_selected, $object_selected)
     {
         global $langSelectFromMenu;
-        
-        /* The first field contains general modules or -1 for "course" 
+
+        /* The first field contains general modules or -1 for "course"
          * which is considered as a supermodule of course modules
          * values: general module ids or -1 for course
          */
@@ -100,10 +100,10 @@ class References {
         $objgentypes = array(0 => $langSelectFromMenu) + self::get_object_general_types();
         foreach($objgentypes as $k => $v){
              $selected = ($k == $gen_type_selected)? " selected":"";
-             $object_select_fields .= "<option value='$k' $selected>$v</option>";          
+             $object_select_fields .= "<option value='" . q($k) . "' $selected>" . q($v) . "</option>";
         }
-        
-        /*The second field displays the courses of the user 
+
+        /*The second field displays the courses of the user
          * values of the form course:1
          */
         $display = (is_null($course_selected))? "none":"block";
@@ -113,10 +113,10 @@ class References {
         $refcourses = array(0 => $langSelectFromMenu) + self::get_user_courselist();
         foreach($refcourses as $k => $v){
             $selected = ($k == $course)? " selected":"";
-            $object_select_fields .= "<option value='$k' $selected>$v</option>";          
+            $object_select_fields .= "<option value='" . q($k) . "' $selected>" . q($v) . "</option>";
         }
-        
-        /*The third field displays course modules (if course is selected)  
+
+        /*The third field displays course modules (if course is selected)
          * values: course module ids
          */
         $display = (is_null($type_selected) || is_null($course_selected))? "none":"block";
@@ -125,10 +125,10 @@ class References {
         $objtypes = array(0 => $langSelectFromMenu) + self::get_course_modules($course_selected);
         foreach($objtypes as $k => $v){
             $selected = ($k == $module_selected)? " selected":"";
-            $object_select_fields .= "<option value='$k' $selected>$v</option>";          
+            $object_select_fields .= "<option value='" . q($k) . "' $selected>" . q($v) . "</option>";
         }
-        
-        /*The fourth field lists all items of a specified module (general or course module)  
+
+        /*The fourth field lists all items of a specified module (general or course module)
          * values of the form: course_videolink:3 or user:8
          */
         $display = (is_null($object_selected) || $module_selected == -1)? "none":"block";
@@ -140,15 +140,15 @@ class References {
         }
         foreach($objids as $k => $v){
             $selected = ($k == $type_selected.":".$object_selected)? " selected":"";
-            $object_select_fields .= "<option value='$k' $selected>$v</option>";          
+            $object_select_fields .= "<option value='" . q($k) . "' $selected>" . q($v) . "</option>";
         }
         $object_select_fields .= "</select></span>";
-        
+
         return $object_select_fields;
     }
-    
+
     /**
-     * Find the module that this type of objects is produced by and return all related fields from $ref_object_types. 
+     * Find the module that this type of objects is produced by and return all related fields from $ref_object_types.
      * @param int $objtype The object type (values from $ref_object_types). It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      * @return array of object type from $ref_object_types (i.e., array('objtable' => '', 'id_field' => '', 'title_field' => '', 'course_field' => ''))
      */
@@ -162,9 +162,9 @@ class References {
         }
         return array();
     }
-    
+
     /**
-     * Find the module that this type of objects is produced by and return all related fields from $ref_object_types. 
+     * Find the module that this type of objects is produced by and return all related fields from $ref_object_types.
      * @param int $oid The object id which is formed by the object type (from $ref_object_types) and the object id (id in the corresponding db table), e.g., video_link:5
      * @return array of object info from the object's DB table.
      */
@@ -174,7 +174,7 @@ class References {
         $objcourse = NULL;
         $objmodule = NULL;
         if(stripos($oid,':') !== false){
-            list($objtype, $objid) = explode(':',$oid);    
+            list($objtype, $objid) = explode(':',$oid);
         }
         if(!is_null($objtype)){
             $objmoduleinfo = self::get_module_from_objtype($objtype);
@@ -188,7 +188,7 @@ class References {
         }
         return array('objtype' => $objtype, 'objid' => $objid, 'objcourse' => $objcourse, 'objmodule' => $objmodule);
     }
-    
+
     /**
      * Get list of current user courses (for the reference select list in the notes form)
      * @return array of course object ids and descriptions.
@@ -204,9 +204,9 @@ class References {
             return $user_courses;
         } else {
             return array();
-        }    
+        }
     }
-    
+
     /**
      * Get list of modules activated for the given course
      * @return array of course modules
@@ -217,54 +217,54 @@ class References {
             $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module cm JOIN course_user cu ON cm.course_id=cu.course_id
                                              WHERE visible = 1 AND
                                              cm.course_id = ?d AND user_id = ?d AND module_id IN (".self::get_module_list('course').")", $course, $_SESSION['uid']);
-            foreach($moduleIDs as $mod){ 
+            foreach($moduleIDs as $mod){
                 $tempname = array_keys(self::$ref_object_types['course'][$mod->module_id]);
-                $modules[$mod->module_id] = isset($GLOBALS[self::$lang_vars[$mod->module_id]])? $GLOBALS[self::$lang_vars[$mod->module_id]]: $tempname[0];    
+                $modules[$mod->module_id] = isset($GLOBALS[self::$lang_vars[$mod->module_id]])? $GLOBALS[self::$lang_vars[$mod->module_id]]: $tempname[0];
             }
         }
         return $modules;
     }
-    
+
    /**
     * Get list of modules not related with a specific course
     * @return array of modules
     */
    public static function get_general_modules(){
        $modules = array();
-       foreach(self::$ref_object_types['general'] as $mod){ 
+       foreach(self::$ref_object_types['general'] as $mod){
            $tempname = array_keys(self::$ref_object_types['general'][$mod->module_id]);
-           $modules[$mod->module_id] = isset($GLOBALS[self::$lang_vars[$mod->module_id]])? $GLOBALS[self::$lang_vars[$mod->module_id]]: $tempname[0];    
+           $modules[$mod->module_id] = isset($GLOBALS[self::$lang_vars[$mod->module_id]])? $GLOBALS[self::$lang_vars[$mod->module_id]]: $tempname[0];
        }
        return $modules;
     }
-    
+
     /**
      * Get list of object general types (for the 1st reference select list in the notes form )
      * @return array of object general types from $ref_object_types.
-     */    
+     */
     public static function get_object_general_types(){
         global $is_editor;
-        
+
         if (isset($_SESSION['uid']) AND $_SESSION['uid']) {
             $modules = array();
             foreach(self::$ref_object_types['general'] as $mid => $minfo){
                 if($mid != MODULE_ID_USERS or $is_editor) {
                     $tempname = array_keys($minfo);
-                    $modules[$mid] = isset(self::$lang_vars[$mid])? $GLOBALS[self::$lang_vars[$mid]]: $tempname[0];    
+                    $modules[$mid] = isset(self::$lang_vars[$mid])? $GLOBALS[self::$lang_vars[$mid]]: $tempname[0];
                 }
             }
             return $modules;
         }
         else{
             return array();
-        }    
+        }
     }
-    
+
     /**
      * Get list of items created for a specific module (for the 2nd reference select list in the notes form)
      * @param int $course the course that the desired items belong to
      * @param int $module the module id that the desired items are creted by
-     * @return array of modules' items as object id and object description 
+     * @return array of modules' items as object id and object description
      */
     public static function get_module_items($module, $course){
         if(is_null($course) || empty($course)){
@@ -274,12 +274,12 @@ class References {
             return self::get_course_module_items($course, $module);
         }
     }
-    
+
     /**
      * Get list of course items created for a specific module (for the 2nd reference select list in the notes form)
      * @param int $course the course that the desired items belong to
      * @param int $module the module id that the desired items are creted by
-     * @return array of modules items as object id and object description 
+     * @return array of modules items as object id and object description
      */
     public static function get_general_module_items($module){
         $items = array();
@@ -298,11 +298,11 @@ class References {
                             $items[$ni->id] = $ni->title;
                         }
                     }
-                    
+
                 }
                 else{
                     foreach(self::$ref_object_types['general'][$module] as $objtype => $objprops){
-                        $newitems = Database::get()->queryArray("SELECT CONCAT('$objtype',':',{$objprops['id_field']}) id, {$objprops['title_field']} title FROM {$objprops['objtable']}");    
+                        $newitems = Database::get()->queryArray("SELECT CONCAT('$objtype',':',{$objprops['id_field']}) id, {$objprops['title_field']} title FROM {$objprops['objtable']}");
                         foreach($newitems as $ni){
                             $items[$ni->id] = $ni->title;
                         }
@@ -312,12 +312,12 @@ class References {
         }
         return $items;
     }
-            
+
     /**
      * Get list of course items created for a specific module (for the 2nd reference select list in the notes form)
      * @param int $course the course that the desired items belong to
      * @param int $module the module id that the desired items are creted by
-     * @return array of modules items as object id and object description 
+     * @return array of modules items as object id and object description
      */
     public static function get_course_module_items($course, $module){
         if (isset($_SESSION['uid']) && $_SESSION['uid']) {
@@ -327,7 +327,7 @@ class References {
                 if(in_array($module, array_keys(self::$ref_object_types['course'])) && $is_course_tool_visible == 1){
                     $items = array();
                     foreach(self::$ref_object_types['course'][$module] as $objtype => $objprops){
-                        $newitems = Database::get()->queryArray("SELECT CONCAT('$objtype',':',{$objprops['id_field']}) id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['course_field']} = ?d", $course);    
+                        $newitems = Database::get()->queryArray("SELECT CONCAT('$objtype',':',{$objprops['id_field']}) id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['course_field']} = ?d", $course);
                         foreach($newitems as $ni){
                             $items[$ni->id] = $ni->title;
                         }
@@ -340,11 +340,11 @@ class References {
         }
         return array();
     }
-    
+
      /**
      * Get list of modules either general or defined in terms of a course
      * @param int $mgroup general or course modules group as defined in $ref_object_types
-     * @return string with comma separated module ids 
+     * @return string with comma separated module ids
      */
     public static function get_module_list($mgroup){
         if(isset(self::$ref_object_types[$mgroup])){
@@ -360,29 +360,29 @@ class References {
             return "";
         }
     }
-    
+
     /**
      * Build link to referenced object by a note
      * @param integer $module_id the module id
      * @param $item_type string with values: 'course'|'course_ebook'|'course_event'|'personalevent'|'course_assignment'|'course_document'|'course_link'|'course_exercise'|'course_learningpath'|'course_video'|'course_videolink'|'user'
      * @param integer $item_id the item id in the database
      * @param integer $course_id the course id
-     * @return array of modules items as object id and object description 
+     * @return array of modules items as object id and object description
      */
     public static function item_link($module_id, $item_type, $item_id, $course_id){
-        
+
         global $urlServer;
         $itemurl = $urlServer;
         if(is_null($item_type) || empty($item_type)){
             return false;
         }
         $objprops = self::get_module_from_objtype($item_type);
-        $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?d", $item_id);    
+        $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?d", $item_id);
         if($res){
             $itemattributes = $res[0];
             if($item_type == 'course'){
                 $itemurl .= $objprops['relative_prefix_path'].sprintf($objprops['relative_module_path'], course_id_to_code($itemattributes->id));
-            }    
+            }
             else{
                 $itemurl .= $objprops['relative_prefix_path'].$objprops['relative_module_path'].'?';
                 if(!empty($course_id)){
@@ -396,16 +396,12 @@ class References {
                 }
             }
 
-            $itemlink = '<a href="';
-            $itemlink .= $itemurl;
-            $itemlink .= '" target="_blank">';
-            $itemlink .= $itemattributes->title;
-            $itemlink .= "</a>";
+            $itemlink = "<a href='$itemurl' target='_blank'>" . q($itemattributes->title) . "</a>";
             return $itemlink;
         }
         return false;
-        
+
     }
-    
+
     /*************************** References **********************************************************************/
 }
