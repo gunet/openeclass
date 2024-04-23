@@ -169,7 +169,7 @@
                                                         {{ trans('langMyCourses') }}
                                                     </a>
                                                 </li>
-                                                @if ($_SESSION['status'] == USER_STUDENT)
+                                                @if ($_SESSION['status'] == USER_STUDENT && get_config('eclass_prof_reg'))
                                                     <li>
                                                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/auth/formuser.php">
                                                             <i class="fa-regular fa-hand"></i>
@@ -337,7 +337,7 @@
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fa-solid fa-book-open settings-icons"></i>{{trans('langMyCoursesSide')}}</a>
                             </li>
-                            @if ($_SESSION['status'] == USER_STUDENT)
+                            @if ($_SESSION['status'] == USER_STUDENT && get_config('eclass_prof_reg'))
                                 <li>
                                     <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/auth/formuser.php"><i class="fa-regular fa-hand"></i>{{ trans('langMyRequests') }}</a>
                                 </li>

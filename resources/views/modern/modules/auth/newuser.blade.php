@@ -1,4 +1,11 @@
 @extends('layouts.default')
+@push('head_styles')
+    <link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
+@endpush
+
+@push('head_scripts')
+    <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
+@endpush
 
 @section('content')
 
@@ -202,10 +209,10 @@
                                                         <div class='form-group mt-4'>
                                                             <label for='UserLang' class='col-sm-12 control-label-notes'>{{ trans('langProviderConnectWith') }}</label>
                                                             <div class='col-sm-12'><p class='form-control-static'>
-                                                                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "'>&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>{{ trans('langProviderConnectWithTooltip') }}</small></p>
+                                                                <img src='{{ $themeimg }}/{{ $provider_name }}.png' alt='{{ ($provider_name) }}'>&nbsp;{{ q(ucfirst($provider_name))  }}<br /><small>{{ trans('langProviderConnectWithTooltip') }}</small></p>
                                                             </div>
-                                                            <input type='hidden' name='provider' value= ' {{ $provider_name }}'>
-                                                            <input type='hidden' name='provider_id' value=' {{ $provider_id }}'>
+                                                            <input type='hidden' name='provider' value= '{{ $provider_name }}'>
+                                                            <input type='hidden' name='provider_id' value='{{ $provider_id }}'>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -216,7 +223,7 @@
                                                 <div class='col-12 px-3'>
                                                     <div class='form-group mt-5'>
 
-                                                        <input class='btn w-100 secodandary-submit' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                                                        <input class='btn w-100 secondary-submit' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                                     </div>
                                                 </div>
                                             </div>
