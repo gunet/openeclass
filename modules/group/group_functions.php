@@ -89,7 +89,7 @@ function initialize_group_info($group_id) {
                                      WHERE group_id = ?d", $group_id);
         foreach ($res as $d) {
             if (!empty($d->description) or $d->description != '') {
-                $user_group_description .= display_user($d->user_id, false, false)."<br>$d->description<br><br>";
+                $user_group_description .= display_user($d->user_id, false, false) . "<br>" . q($d->description) . "<br><br>";
             }
         }
     } else {
@@ -97,7 +97,7 @@ function initialize_group_info($group_id) {
             $res = Database::get()->querySingle("SELECT description FROM group_members
                                          WHERE group_id = ?d AND user_id = ?d AND is_tutor != 1", $group_id, $uid);
             if ($res) {
-                $user_group_description .= $res->description;
+                $user_group_description .= q($res->description);
             }
         }
     }
@@ -222,7 +222,7 @@ function showgroupsofcategory($catid) {
                 $tool_content .= q($group_name);
             }
         }
-        $tool_content .= "<br><p style='padding-top:10px;'>$group_description</p>";
+        $tool_content .= "<br><p style='padding-top:10px;'>" . q_math($group_description) . "</p>";
         if (!$is_editor) {
             if ($student_desc) {
                 if ($user_group_description) {
@@ -239,7 +239,7 @@ function showgroupsofcategory($catid) {
             }
         } else {
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascript:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href='javascript:void(0);' data-toggle='modal' data-content='$user_group_description' data-target = '#userFeedbacks'><span class='fa fa-comments'></span> $langCommentsUser</a></small>";
             }
         }
         $tool_content .= "</td>";
@@ -334,7 +334,7 @@ function submit_group_category() {
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
-    $terms = array($categoryname, purify($description));
+    $terms = array($categoryname, $description);
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('categoryname'))->message($langTheFieldIsRequired)->label('');
     if($v->validate()) {

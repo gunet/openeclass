@@ -523,9 +523,9 @@ if ($is_editor) {
             initialize_group_info($group->id);
             $tool_content .= "<tr class='$link_class'>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
-                    <br><p style='padding-top:10px;'>$group_description</p>";
+                    <br><p style='padding-top:10px;'>" . q_math($group_description) . "</p>";
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='$user_group_description' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
             $tool_content .= "</td><td class='center'>";
             foreach ($tutors as $t) {
@@ -639,7 +639,7 @@ if ($is_editor) {
                 }
                 $tool_content .= q($group_name) . "$full_group_message";
             }
-            $tool_content .= "<br><p style='padding-top:10px;'>$group_description</p>";
+            $tool_content .= "<br><p style='padding-top:10px;'>" . q_math($group_description) . "</p>";
             if ($student_desc) {
                 if ($user_group_description) {
                     $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
@@ -718,7 +718,7 @@ if ($is_editor) {
             }
             // if the $urlview has a 1 for this category, this means it is expanded and should be displayed as a
             // - instead of a +, the category is no longer clickable and all the links of this category are displayed
-            $description = standard_text_escape($myrow->description);
+            $description = q_math($myrow->description);
             if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
@@ -749,9 +749,9 @@ if ($is_editor) {
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
                 $tool_content .= "' class='open-category'>".icon('fa-plus-square', $langViewShow)
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";
-                $description = standard_text_escape($myrow->description);
+                $description = q_math($myrow->description);
                 if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description'>$description</span</th>";
+                    $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
                     $tool_content .= "</th>";
                 }

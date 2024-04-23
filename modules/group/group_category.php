@@ -80,10 +80,10 @@ $tool_content .= action_bar(array(
                     </form>
                 </div>";
     } elseif (isset($_GET['editcategory'])) {
-        $id = $_GET['id'];        
+        $id = $_GET['id'];
         category_form_defaults($id);
         $myrow = Database::get()->querySingle("SELECT name,description  FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
-        $form_legend = $langCategoryMod;	
+        $form_legend = $langCategoryMod;
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
         $tool_content .= "<fieldset>
