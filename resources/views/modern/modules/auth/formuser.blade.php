@@ -41,7 +41,7 @@
                     </div>
                 @endif
 
-                @if (!$eclass_stud_reg)
+                @if (!$eclass_prof_reg)
                     <div class='col-sm-12'>
                         <div class='alert alert-danger'>
                             <i class='fa-solid fa-circle-xmark fa-lg'></i><span>{{ trans('langForbidden') }}</span>

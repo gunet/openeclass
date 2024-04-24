@@ -546,7 +546,7 @@
                                 (isset($is_power_user) and $is_power_user) or
                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                 (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                    <a class="btn myProfileBtn mt-1" type="button" href="{{ $urlAppend }}modules/admin/index.php">
+                                    <a class="btn myProfileBtn mt-4" type="button" href="{{ $urlAppend }}modules/admin/index.php">
                                         {{ trans('langAdminTool') }}
                                     </a>
                             @endif
