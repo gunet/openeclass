@@ -318,19 +318,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($mail_ver_required) {
             switch ($myrow->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
-                    $icon = 'fa-clock';
+                    $icon = 'fa-regular fa-clock';
                     $tip = $langMailVerificationPendingU;
                     break;
                 case EMAIL_VERIFIED:
-                    $icon = 'fa-square-check';
+                    $icon = 'fa-solid fa-check';
                     $tip = $langMailVerificationYesU;
                     break;
                 default:
-                    $icon = 'fa-circle';
+                    $icon = 'fa-solid fa-exclamation';
                     $tip = $langMailVerificationNoU;
                     break;
             }
-            $email_icon .= ' ' . icon($icon, $tip);
+            $email_icon .= '&nbsp;&nbsp;' . icon($icon, $tip);
         }
 
 
