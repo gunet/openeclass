@@ -116,7 +116,7 @@ if (isset($_GET['mid'])) {
                                                         <div class='title-default'>$langCourse</div>
                                                     </div>
                                                     <div class='col-md-9 col-12 title-default-line-height'>
-                                                        <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                                                        <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".q(course_id_to_title($msg->course_id))."</a>
                                                     </div>
                                                 </div>
                                             </li>";
@@ -200,7 +200,7 @@ if (isset($_GET['mid'])) {
 
 
 
-                        
+
         /*****Reply Form****/
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
@@ -491,7 +491,7 @@ if (isset($_GET['mid'])) {
                         </div>
                     </div>"; // end d-lg-flex
                 }
-                             
+
 
                 if (!isset($_GET['course'])) {
                     $out .= "
