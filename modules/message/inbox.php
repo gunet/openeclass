@@ -102,7 +102,7 @@ if (isset($_GET['mid'])) {
                             <strong>$langCourse:</strong>
                         </div>
                         <div class='col-sm-10'>
-                            <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                            <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".q(course_id_to_title($msg->course_id))."</a>
                         </div>
                     </div>";
         }
@@ -188,7 +188,7 @@ if (isset($_GET['mid'])) {
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
             // mail sender
-            $out .= "<option value='$msg->author_id' selected>". uid_to_name($msg->author_id) . "</option>";
+            $out .= "<option value='$msg->author_id' selected>". q(uid_to_name($msg->author_id)) . "</option>";
 
             addRecipientOptions();
 
@@ -388,7 +388,7 @@ if (isset($_GET['mid'])) {
                             }, 500);
                             $('#select-recipients-forward').select2({
                                 placeholder: '".js_escape($langSearch)."',
-                                multiple: true,                                
+                                multiple: true,
                                 cache: true
                             });
                             return false;
@@ -440,7 +440,7 @@ if (isset($_GET['mid'])) {
                     $(document).on("click", ".delete_in_inner", function (e) {
                          e.preventDefault();
                          var id = $(this).children("a").data("id");
-                         var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";                         
+                         var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
                          bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
                          if(result) {
                              $.ajax({
@@ -452,7 +452,7 @@ if (isset($_GET['mid'])) {
                                      $("#del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
                                      $(".alert-success").delay(3000).fadeOut(1500);
                                      $("#msg_area").remove();
-                                  }});                             
+                                  }});
                              }
                         });
                       });
@@ -460,7 +460,7 @@ if (isset($_GET['mid'])) {
                     $(".delete").click(function() {
                       if (confirm("' . js_escape($langConfirmDelete) . '")) {
                         var rowContainer = $(this).parent().parent();
-                        var id = rowContainer.attr("id");                        
+                        var id = rowContainer.attr("id");
                         var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
                         $.ajax({
                           type: "POST",

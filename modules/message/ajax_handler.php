@@ -167,7 +167,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
         if ($course_id == 0) {
             if ($msg->course_id != 0) {
-                $td[$i++] = "$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>$bold_end";
+                $td[$i++] = "$bold_start<a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".q(course_id_to_title($msg->course_id))."</a>$bold_end";
             } else {
                 $td[$i++] = "";
             }
@@ -186,18 +186,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $td[$i++] = "<div><p class='recipients'>$recipients</p></div>";
         }
         $td[$i++] = format_locale_date($msg->timestamp, 'short');
-
-//            $td[$i++] = action_button(array(
-//                array(
-//                    'icon' => 'fa-times',
-//                    'url' => 'javascript:void(0);',
-//                    'level' => 'primary',
-//                    'title' => $langDelete,
-//                    'btn_class' => $mbox_type == 'inbox'? 'delete_in btn-default' : 'delete_out btn-default',
-//                    'link-attrs' => "data-id='$msg->id'"
-//                    )
-//                )
-//            );
         $btn_class = ($mbox_type == 'inbox')? 'delete_in' : 'delete_out';
         $td[$i++] = "<a href='javascript:void(0)' class='$btn_class' data-id='$msg->id'><span class='fa fa-times text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
 
