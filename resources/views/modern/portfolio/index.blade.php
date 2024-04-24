@@ -522,22 +522,25 @@
                                     <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {!! $_SESSION['uname'] !!}
                                     </p>
-                                    <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                        {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
-                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class='flex-fill d-flex justify-content-center align-items-center'>
                             <div>
-                                <h4 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
-                                    <div class='mb-0'>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
-                                </h4>
+                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
+                                    <div class='mt-3'>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
+                                </h5>
+                                <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
+                                    {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                </p>
                             </div>
                         </div>
-                        <div class='d-flex align-items-center gap-3 flex-wrap'>
-                            <a class='btn myProfileBtn mt-1' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                        <div class='d-flex align-items-center gap-3 flex-wrap '>
+                            <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                 {{ trans('langMyProfile') }}
+                            </a>
+                            <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
+                                {{ trans('langMyStats') }}
                             </a>
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or
