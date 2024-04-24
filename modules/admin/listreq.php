@@ -31,9 +31,9 @@ require_once 'hierarchy_validations.php';
 $data['tree'] = $tree = new Hierarchy();
 $user = new User();
 
-$close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_POST['close'] : '');
+$close = $_GET['close'] ?? (isset($_POST['close']) ? $_POST['close'] : '');
 $id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
-$show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
+$show = $_GET['show'] ?? (isset($_POST['show']) ? $_POST['show'] : '');
 
 // Deal with navigation
 switch ($show) {
@@ -87,11 +87,9 @@ $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
     $data['reqtype'] = $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
-    $linkreg = $langUserDetails;
     $linkget = '?type=user';
 } else {
     $data['reqtype'] = $reqtype = '';
-    $linkreg = $langProfReg;
     $linkget = '';
 }
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -114,9 +112,9 @@ if (isDepartmentAdmin()) {
 // Display Actions Toolbar
 $data['action_bar'] =
         action_bar(array(
-            array('title' => $linkreg,
+            array('title' => $langCreateAccount,
                 'url' => "newuseradmin.php$linkget",
-                'icon' => 'fa-plus-circle',
+                'icon' => 'fa-solid fa-user',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
             array('title' => $langReqHaveClosed,
@@ -243,7 +241,6 @@ if (!empty($show) and $show == 'closed') {
                         }
                         $message = $list_status == 1 ? $langTeacherRequestHasRejected : $langRequestReject;
                         $message .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
-                        //$message .= "<p><b class='pe-3'>$langComments:</b>" . q($_POST['comment']) . "</p>";
                         Session::flash('message',$message);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/admin/listreq.php');

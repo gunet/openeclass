@@ -29,11 +29,10 @@ require_once 'modules/auth/auth.inc.php';
 $tree = new Hierarchy();
 load_js('jstree3');
 
-$pageName = $langReqRegProf;
+//$pageName = $langReqRegProf;
 
-$data['eclass_prof_reg'] = get_config('eclass_prof_reg');
+$data['eclass_stud_reg'] = get_config('eclass_stud_reg');
 $data['email_errors'] = $data['email_invalid'] = $email_errors = false;
-
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);

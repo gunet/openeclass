@@ -3533,6 +3533,7 @@ $langCaptchaWrong = "Ο κωδικός ασφαλείας που έχετε ει
 $langCaptcha = "Κωδικός ασφάλειας";
 $langWrongPassword = "Λάθος κωδικός";
 $langUserAltAuth = "Το όνομα χρήστη με το οποίο προσπαθήσατε να συνδεθείτε χρησιμοποιεί διαφορετικό τρόπο πιστοποίησης. Παρακαλώ επικοινωνήστε με τους διαχειριστές της πλατφόρμας";
+$langUserRightsChanged = "Τα δικαιώματα του χρήστη αλλάξανε με επιτυχία.";
 
 // profile.php
 $langPassTwo = 'Έχετε πληκτρολογήσει δύο διαφορετικά νέα συνθηματικά';
@@ -4787,8 +4788,12 @@ $langNoPeerReviewMultipleFiles = "Η εργασία δεν μπορεί να α�
 /* * ***********************************************************
  * listerqusers.php
  * ************************************************************ */
-$langRequestStudent = "Η αίτηση του $langsOfStudent έκλεισε!";
-$langRequestReject = "Η αίτηση απορρίφθηκε";
+$langRequestStudent = "Η αίτηση έκλεισε!";
+$langRequestReject = "Η αίτηση σας απορρίφθηκε!";
+$langRequestApproved = "Η αίτηση σας εγκρίθηκε!";
+$langWithCourseCreationRightsInfo = "Έχετε δικαιώματα δημιουργίας $langsOfCourses";
+$langInPlatform = "στην πλατφόρμα";
+
 $langInformativeEmail = "Στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση";
 $langRequest = "Αίτηση";
 
