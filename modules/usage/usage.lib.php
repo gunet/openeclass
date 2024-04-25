@@ -738,7 +738,7 @@ function count_course_groups($cid){
 function course_hits($cid, $userid = 0){
     if ($userid > 0) {
         $r = Database::get()->querySingle("SELECT SUM(hits) hits FROM actions_daily
-                            WHERE course_id = ?d 
+                            WHERE course_id = ?d
                             AND user_id = ?d
                             AND module_id != " . MODULE_ID_TC, $cid, $userid);
 
@@ -804,8 +804,9 @@ function plot_placeholder($plot_id, $title = null){
     $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
         $p .= "<div class='inner-heading'><h3 id='{$plot_id}_title'>"
-            . $title
+            . q($title)
             . "</h3>"
+
             . "</div>";
     }
     $p .= "<div id='$plot_id'></div>";
@@ -826,7 +827,7 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
     if(!is_null($title)){
         $t .= "<div class='inner-heading'>"
             . "<h3 id='".$table_id."_title'>"
-            . $title
+            . q($title)
             . "</h3>"
             ."<div class='float-end' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
             . "</div>";
@@ -852,9 +853,9 @@ function user_duration_per_course($u) {
                                         FROM course
                                         LEFT JOIN course_user ON course.id = course_user.course_id
                                         LEFT JOIN actions_daily
-                                        ON actions_daily.user_id = course_user.user_id 
+                                        ON actions_daily.user_id = course_user.user_id
                                         AND actions_daily.course_id = course_user.course_id
-                                        AND actions_daily.module_id != " . MODULE_ID_TC . "                                        
+                                        AND actions_daily.module_id != " . MODULE_ID_TC . "
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
                                         GROUP BY course.id
