@@ -25,17 +25,17 @@
  */
 $require_login = true;
 
-$statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
-        '<option value="7">' . $langPerWeek . "</option>" .
-        '<option value="30" selected>' . $langPerMonth . "</option>" .
-        '<option value="365">' . $langPerYear . "</option>";
+$statsIntervalOptions = '<option value="1" >' . q($langPerDay) . "</option>" .
+        '<option value="7">' . q($langPerWeek) . "</option>" .
+        '<option value="30" selected>' . q($langPerMonth) . "</option>" .
+        '<option value="365">' . q($langPerYear) . "</option>";
 
 if($stats_type == 'course'){
     if (isset($_GET['id'])) { // get specific user
         $u = Database::get()->querySingle("SELECT u.id, CONCAT(surname,' ',givenname,' (',username,')') name FROM course_user cu
                                                                 JOIN user u ON cu.user_id=u.id
                                                             WHERE course_id=?d AND cu.user_id=?d", $course_id, $_GET['id']);
-        $statsUserOptions = '<option value="'.$u->id.'" >' . $u->name . "</option>";
+        $statsUserOptions = '<option value="'.$u->id.'" >' . q($u->name) . "</option>";
     } else { /**Get users of course**/
         $result = Database::get()->queryArray("SELECT u.id, CONCAT(surname,' ',givenname,' (',username,')') name FROM course_user cu
                                                                 JOIN user u ON cu.user_id=u.id
@@ -43,7 +43,7 @@ if($stats_type == 'course'){
                                                             ORDER BY surname, givenname", $course_id);
         $statsUserOptions = '<option value="0" >' . $langUsers . "</option>";
         foreach($result as $u){
-            $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>";
+            $statsUserOptions .= '<option value="'.$u->id.'" >' . q($u->name) . "</option>";
         }
     }
 
@@ -65,7 +65,7 @@ if($stats_type == 'course'){
        for($i=0;$i<$d->depth;$i++){
            $indentation .= "&nbsp;&nbsp;";
        }
-       $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.hierarchy::unserializeLangField($d->name) . "</option>\n";
+       $statsDepOptions .= '<option value="'.$d->id.'" >' . q($indentation.hierarchy::unserializeLangField($d->name)) . "</option>\n";
     }
 } else {
     /**Get courses of user**/
@@ -76,7 +76,7 @@ if($stats_type == 'course'){
     }
     $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
     foreach($result as $c){
-       $statsCourseOptions .= '<option value="'.$c->id.'" >' . $c->title . "</option>\n";
+       $statsCourseOptions .= '<option value="'.$c->id.'" >' . q($c->title) . "</option>\n";
     }
 }
 

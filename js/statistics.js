@@ -1,5 +1,5 @@
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -15,7 +15,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 var startdate = null;
@@ -41,12 +41,12 @@ var xTicks = null;
 var department_details = new Array();
 var tableOptions = {
     'a': {
-        1:{'pageLength': 5, sumCols:[3,4,5,6], colDefs:[], durCol:null}, 
+        1:{'pageLength': 5, sumCols:[3,4,5,6], colDefs:[], durCol:null},
         2:{'pageLength': 5, sumCols:[], colDefs:[{"visible": false, "targets": 4}, {"visible": false, "targets": 5}, {'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[5], row[4]);} }], durCol:null}
-    }, 
+    },
     'u':{
         1:{'pageLength': 5, sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;} }]}
-    }, 
+    },
     'c':{
         1:{'pageLength': 5, sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[6], row[5]);} }, {"visible": false, "targets": 5}, {"visible": false, "targets": 6}]},
         2:{'pageLength': 5, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]},
@@ -55,7 +55,7 @@ var tableOptions = {
 };
 
     //3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row, 4);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
-    
+
 charts = new Object();
 piecourse = -1;
 piemodule = -1;
@@ -63,14 +63,14 @@ logs_refresh_required = true;
 
 $(document).ready(function(){
     $("#toggle-view").children("i").attr('class', views['list'].class);
-    $("#toggle-view").children("i").attr('data-original-title', views['list'].title);   
-    
+    $("#toggle-view").children("i").attr('data-original-title', views['list'].title);
+
     $('#startdate').datepicker({
         format: 'dd-mm-yyyy',
         pickerPosition: 'bottom-left',
         language: lang,
-        autoclose: true    
-    }); 
+        autoclose: true
+    });
     $('#enddate').datepicker({
         format: 'dd-mm-yyyy',
         pickerPosition: 'bottom-left',
@@ -79,7 +79,7 @@ $(document).ready(function(){
     });
     $('#startdate').change(function(){
         sdate = $(this).datepicker("getDate");
-        startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();        
+        startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();
     });
     $('#enddate').change(function(){
         edate = $(this).datepicker("getDate");
@@ -94,7 +94,7 @@ $(document).ready(function(){
     });
    $('#plots-view').click(function(){
         if(selectedview != 'plots'){
-            $('#list-view').removeClass("active");            
+            $('#list-view').removeClass("active");
             $('#logs-view').removeClass("active");
             $(this).addClass("active");
             selectedview = 'plots';
@@ -105,20 +105,20 @@ $(document).ready(function(){
             for(var c in charts){
                 charts[c].resize();
             }
-            $('.detailscontainer').hide();            
+            $('.detailscontainer').hide();
             $('.logscontainer').hide();
         }
     });
     $('#list-view').click(function(){
         if(selectedview != 'list'){
-            $('#plots-view').removeClass("active");            
+            $('#plots-view').removeClass("active");
             $('#logs-view').removeClass("active");
             $(this).addClass("active");
             selectedview = 'list';
             $('#module').parent().hide();
             $('#interval').parent().show();
             $('#interval').prop('disabled', true);
-            $('.detailscontainer').show();            
+            $('.detailscontainer').show();
             $('.logscontainer').hide();
             $('.plotscontainer').hide();
         }
@@ -138,7 +138,7 @@ $(document).ready(function(){
             $('.plotscontainer').hide();
         }
     });
-    
+
     sdate = $('#startdate').datepicker("getDate");
     startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();
     edate = $('#enddate').datepicker("getDate");
@@ -157,7 +157,7 @@ $(document).ready(function(){
             user = $('#user option:selected').val();
             refresh_plots();
         });
-    
+
     }
     if($('#course').length){
         course = $('#course option:selected').val();
@@ -171,7 +171,7 @@ $(document).ready(function(){
             }
             else{
                 $('#coursepref_pie_title').text(langFavouriteModule);
-            
+
             }
             refresh_plots();
         });
@@ -192,9 +192,9 @@ $(document).ready(function(){
     }
     detailsTables = new Object();
     tableTools = new Object();
-    
+
     /*******************/
-    
+
     for(tableid in tableOptions[stats]){
         tableElId = stats+'details'+tableid;
         colDefs = tableOptions[stats][tableid].colDefs;
@@ -208,7 +208,7 @@ $(document).ready(function(){
                         text: langPrint},
                     {
                         extend:'copyHtml5',
-                        text: langCopy}, 
+                        text: langCopy},
                     {
                         extend: 'collection',
                         text: langExport+'...',
@@ -216,7 +216,7 @@ $(document).ready(function(){
                     }
             ],
             columnDefs: colDefs,
-            'autoWidth': true,                
+            'autoWidth': true,
             'footerCallback': footerCB(tableid, tableElId),
             'columnDefs': colDefs,
             'processing': true,
@@ -240,11 +240,11 @@ $(document).ready(function(){
         });
         detailsTables[tableElId].buttons().container().appendTo( '#'+tableElId+'_buttons');
     }
-    
-    $('.detailscontainer').hide();    
+
+    $('.detailscontainer').hide();
     $('.logscontainer').hide();
     refresh_plots();
-    $('#cdetails3 tbody').on('mouseover', 'td.action', function(){ 
+    $('#cdetails3 tbody').on('mouseover', 'td.action', function(){
         var tr = $(this).closest('tr');
         var row =  detailsTables['cdetails3'].row( tr );
         $(this).css('cursor','pointer');
@@ -265,7 +265,7 @@ $(document).ready(function(){
             $(this).find('span').addClass('fa-caret-down');
         }
     } );
-    
+
     /*$('#cdetails3 tbody').on('mouseout', 'td.action', function () {
         var tr = $(this).closest('tr');
         var row =  detailsTables['cdetails3'].row( tr );
@@ -275,11 +275,11 @@ $(document).ready(function(){
             tr.removeClass('shown');
         }
     } );*/
-    
-});//document ready   
+
+});//document ready
 
 function refresh_plots(){
-    xAxisTicksAdjust();        
+    xAxisTicksAdjust();
     if(stats === 'c'){
         logs_refresh_required = true;
         if(selectedview == 'logs'){
@@ -290,7 +290,7 @@ function refresh_plots(){
     if(stats === 'u'){
         refresh_generic_user_plot();
     }
-    if(stats === 'a'){        
+    if(stats === 'a'){
         refresh_user_login_plot();
         refresh_popular_courses_plot();
         refresh_department_user_plot(department, 0);
@@ -408,7 +408,7 @@ function refresh_course_reg_plot(){
             bindto: '#coursereg_stats'
         };
         charts.cr = refreshChart("cr", options);
-        
+
         $.getJSON('results.php',{t:'crd', s:startdate, e:enddate, c:course},function(data){
             refreshDataTable($('#cdetails2'), data);
         });
@@ -482,14 +482,14 @@ function refresh_course_pref_plot(){
             };
         }
         charts.cp = refreshChart("cp", options);
-        
+
         piecourse = (piecourse < 0)? course:piecourse;
         piemodule = (piemodule < 0)? module:piemodule;
         refresh_user_course_plot();
     });
 }
 
-function refresh_user_course_plot(){        
+function refresh_user_course_plot(){
     $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:piecourse, m:piemodule},function(data){
         if(data.chartdata.chartdata == null){
             $("#course_stats_title").text(data.charttitle);
@@ -553,7 +553,7 @@ function refresh_user_login_plot(){
            charts.ul.destroy();
         }*/
         charts.ul = refreshChart("ul", options);
-        
+
     });
 }
 
@@ -602,9 +602,9 @@ function refresh_department_user_plot(depid, leafdepartment){
             bindto: '#depuser_stats'
         };
         charts.du = refreshChart("du", options);
-        
+
         department_details = new Array();
-        
+
         for(i=0;i<data.chartdata.department.length;i++){
             department_details.push(new Array);
         }
@@ -641,7 +641,7 @@ function refresh_department_course_plot(depid, leafdepartment){
             bindto: '#depcourse_stats'
         };
         charts.dc = refreshChart("dc", options);
-        
+
         for(var column in data.chartdata){
             $.each(data.chartdata[column], function(rowid, val){
                 if(column !== 'department'){
@@ -653,7 +653,7 @@ function refresh_department_course_plot(depid, leafdepartment){
         fillTableTotalUsers();
     });
 }
-            
+
 function refresh_users_activity_table(){
     if(logs_refresh_required){
         $.getJSON('results.php',{t:'cad', s:startdate, e:enddate, u:user, c:course, m:module},function(data){
@@ -683,7 +683,7 @@ function xAxisTicksAdjust()
 {
 	var xmin = sdate;
 	var xmax = edate;
-	
+
         dayMilliseconds = 24*60*60*1000;
         diffInDays = (edate-sdate)/dayMilliseconds;
         xTicks = new Array();
@@ -703,7 +703,7 @@ function xAxisTicksAdjust()
                         xTicks.push(tickval);
                         cur = tick.getMonth();
                     }
-            }    
+            }
         }
         else if(interval == 7){
             xminMonday = new Date(xmin.getTime() - xmin.getUTCDay()*dayMilliseconds);
@@ -721,8 +721,8 @@ function xAxisTicksAdjust()
                         xTicks.push(tickval);
                     }
                     i++;
-                    
-            } 
+
+            }
         }
         else if(interval == 30){
             xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-15';
@@ -733,7 +733,7 @@ function xAxisTicksAdjust()
                     tick.setMonth(tick.getMonth() + 1);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-15';
                     xTicks.push(tickval);
-            } 
+            }
         }
         else if(interval == 365){
             xMinVal = xmin.getFullYear()+'-06-30';
@@ -744,14 +744,24 @@ function xAxisTicksAdjust()
                     tick.setFullYear(tick.getFullYear() + 1);
                     tickval = tick.getFullYear()+'-06-30';
                     xTicks.push(tickval);
-            }     
+            }
         }
+}
+
+function q(str) {
+    let div = document.createElement('div');
+    div.innerText = str;
+    return div.innerHTML;
 }
 
 function refreshDataTable(datatableel, datarows)
 {
     datatableel.DataTable().clear();
-    datatableel.DataTable().rows.add(datarows).draw();
+    datatableel.DataTable().rows.add(datarows.map(function (row) {
+       return row.map(function (str) {
+           return q(str);
+       });
+    })).draw();
 }
 
 function refreshChart(c, opt){
@@ -781,7 +791,7 @@ function footerCB(tabId,tabEl){
                     tabApi.column( c ).data().reduce( function ( a, b ) {
                         return parseInt(a) + parseInt(b);
                     }, 0 )
-                ));    
+                ));
             }
             else{
                 $( tabApi.columns( c ).footer() ).html(
@@ -793,11 +803,11 @@ function footerCB(tabId,tabEl){
         }
     }
 }
-    
-function userFriendlyDuration(seconds){    
+
+function userFriendlyDuration(seconds){
     seconds = Math.abs(seconds);
     hours = Math.floor(seconds / 3600);
-    mins = Math.floor((seconds - (hours*3600)) / 60);    
+    mins = Math.floor((seconds - (hours*3600)) / 60);
     secs = Math.floor(seconds % 60);
     fd = (hours<10)? '0'+hours:''+hours;
     fd += ':';
