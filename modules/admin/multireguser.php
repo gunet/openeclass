@@ -42,8 +42,11 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
-
-if (isset($_POST['submit']) and isset($_FILES['userfile']) ) {
+if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
+    if ($_FILES['userfile']['error'] == UPLOAD_ERR_NO_FILE) {
+        Session::Messages($langNoFileUploaded, 'alert-danger');
+        redirect_to_home_page('modules/admin/multireguser.php');
+    }
     $file = IOFactory::load($_FILES['userfile']['tmp_name']);
     $sheet = $file->getActiveSheet();
 
