@@ -67,12 +67,12 @@ if ($user_registration) {
                 foreach ($auth as $k => $v) {
                     if ($v != 1) {  // bypass the eclass auth method
                         if ($v < 8) {
-                            $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
+                            $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "'>" . q(get_auth_info($v)) . "</a>";
                         } else {
                             if (($eclass_stud_reg == 1) and isset($provider)) {
-                                $tool_content .= "<br><a href='formuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
+                                $tool_content .= "<br><a href='formuser.php?auth=" . $v . "'>" . q(get_auth_info($v)) . "</a>";
                             } else if (isset($provider)) { //hybridauth registration
-                                $tool_content .= "<br><a href='newuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
+                                $tool_content .= "<br><a href='newuser.php?auth=" . $v . "'>" . q(get_auth_info($v)) . "</a>";
                             }
                         }
                     }
@@ -94,12 +94,12 @@ if ($user_registration) {
                     if ($v != 1) {  // bypass the eclass auth method
                         if ($v < 8) {
                             if ($alt_auth_prof_reg) {
-                                $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
+                                $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "&p=1'>" . q(get_auth_info($v)) . "</a>";
                             } else {
-                                $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
+                                $tool_content .= "<br><a href='altnewuser.php?auth=" . $v . "'>" . q(get_auth_info($v)) . "</a>";
                             }
                         } else if ($alt_auth_prof_reg and isset($provider)) {
-                            $tool_content .= "<br /><a href='formuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
+                            $tool_content .= "<br /><a href='formuser.php?auth=" . $v . "&p=1'>" . q(get_auth_info($v)) . "</a>";
                         }
                     }
                 }
