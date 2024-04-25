@@ -44,7 +44,8 @@ $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 
 
 if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
     if ($_FILES['userfile']['error'] == UPLOAD_ERR_NO_FILE) {
-        Session::Messages($langNoFileUploaded, 'alert-danger');
+        Session::flash('message', $langNoFileUploaded);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/multireguser.php');
     }
     $file = IOFactory::load($_FILES['userfile']['tmp_name']);
