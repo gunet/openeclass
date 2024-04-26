@@ -51,11 +51,16 @@ register_posted_variables([
     'shib_email' => true, 'shib_uname' => true, 'shib_surname' => true,
     'shib_givenname' => true, 'shib_cn' => true, 'shib_studentid' => true,
     'checkseparator' => true,
+    //CAS settings
     'cas_host' => true, 'cas_port' => true, 'cas_context' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'cas_altauth_use' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'cas_altauth_use' => true, 'gunet_identity' => true, 'minedu_institution' => true, 'cas_gunet' => true, 'minedu_departments_association' => true,
+    //Auth common settings
+    'auth_instructions' => true,
+    'auth_title' => true,
+    // HybridAuth settings
     'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true,
     // OAuth 2.0 options
@@ -68,6 +73,24 @@ if (empty($ldap_login_attr)) {
 }
 
 if (isset($_POST['submit'])) {
+
+    $data = json_decode($_POST['minedu_departments_association'], true);
+
+    if ($data !== null) {
+
+        foreach ($data as $association_string) {
+            $association = json_decode($association_string, true);
+            $minedu_School_id = $association['minedu_School_id'];
+            $local_dep_id = $association['local_dep_id'];
+
+            Database::get()->querySingle('INSERT INTO minedu_departments_association
+                                    SET minedu_id = ?d, department_id = ?d',
+                $minedu_School_id, $local_dep_id);
+
+        }
+
+    }
+
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     switch ($auth) {
         case 1:
@@ -134,7 +157,9 @@ if (isset($_POST['submit'])) {
                 'cas_altauth_use' => $cas_altauth_use,
                 'cas_logout' => $cas_logout,
                 'cas_ssout' => $cas_ssout,
-                'casuserstudentid' => $casuserstudentid);
+                'casuserstudentid' => $casuserstudentid,
+                'cas_gunet' => $cas_gunet,
+            );
             break;
         case 8:  // Facebook
         case 10: // Google
@@ -264,7 +289,7 @@ if (isset($_POST['submit'])) {
     </div>";
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
 
 /**
  * @brief display form for completing info about authentication via eclass
