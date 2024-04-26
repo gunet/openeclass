@@ -28,6 +28,9 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'include/lib/hierarchy.class.php';
+
+
 $toolName = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
@@ -35,6 +38,43 @@ $debugCAS = true;
 
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+    if ($auth == 7) {
+
+        load_js('jstree3');
+        load_js('select2');
+        load_js('datatables');
+
+        $tree = new Hierarchy();
+
+        $allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
+        $allowables = array();
+        if ($allow_only_defaults) {
+                // Method: getDepartmentIdsAllowedForCourseCreation
+                // fetches only specific tree nodes, not their sub-children
+                //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+                // the code below searches for the allow_course flag in the user's department subtrees
+                $userdeps = $user->getDepartmentIds($uid);
+                $subs = $tree->buildSubtreesFull($userdeps);
+                foreach ($subs as $node) {
+                    if (intval($node->allow_course) === 1) {
+                        $allowables[] = $node->id;
+                }
+            }
+        }
+
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+        $head_content .= $js;
+
+        $data['buildusernode'] = $html;
+
+        $result = Database::get()->queryArray("
+                    SELECT CONCAT(md.School,' > ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
+                        FROM minedu_department_association AS mda
+                        JOIN minedu_departments AS md ON mda.minedu_id = md.MineduID
+                    JOIN hierarchy AS h ON mda.department_id = h.id
+                ");
+        $data['result'] = $result;
+    }
 } else {
     $data['auth'] = $auth = false;
 }
@@ -51,11 +91,16 @@ register_posted_variables([
     'shib_email' => true, 'shib_uname' => true, 'shib_surname' => true,
     'shib_givenname' => true, 'shib_cn' => true, 'shib_studentid' => true,
     'checkseparator' => true,
+    //CAS settings
     'cas_host' => true, 'cas_port' => true, 'cas_context' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'cas_altauth_use' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'cas_altauth_use' => true, 'gunet_identity' => true, 'minedu_institution' => true, 'cas_gunet' => true, 'minedu_departments_association' => true,
+    //Auth common settings
+    'auth_instructions' => true,
+    'auth_title' => true,
+    // HybridAuth settings
     'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true,
     // OAuth 2.0 options
@@ -63,11 +108,35 @@ register_posted_variables([
     'apiID' => true, 'apiSecret' => true,
 ], 'all');
 
+$checked ='';
+if ($auth_data['cas_gunet'] ?? false) {
+    $checked = 'checked';
+}
+$data['checked'] = $checked;
+
 if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
 }
 
 if (isset($_POST['submit'])) {
+
+    $data = json_decode($_POST['minedu_departments_association'], true);
+
+    if ($data !== null) {
+
+        foreach ($data as $association_string) {
+            $association = json_decode($association_string, true);
+            $minedu_School_id = $association['minedu_School_id'];
+            $local_dep_id = $association['local_dep_id'];
+
+            Database::get()->querySingle('INSERT INTO minedu_departments_association
+                                    SET minedu_id = ?d, department_id = ?d',
+                $minedu_School_id, $local_dep_id);
+
+        }
+
+    }
+
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     switch ($auth) {
         case 1:
@@ -123,6 +192,11 @@ if (isset($_POST['submit'])) {
             update_shibboleth_endpoint($settings);
             break;
         case 7:
+            $checked = '';
+            if ($auth_data['cas_gunet'] ?? false) {
+                $checked = 'checked';
+            }
+            $data['checked'] = $checked;
             $settings = array('cas_host' => $cas_host,
                 'cas_port' => $cas_port,
                 'cas_context' => $cas_context,
@@ -134,7 +208,9 @@ if (isset($_POST['submit'])) {
                 'cas_altauth_use' => $cas_altauth_use,
                 'cas_logout' => $cas_logout,
                 'cas_ssout' => $cas_ssout,
-                'casuserstudentid' => $casuserstudentid);
+                'casuserstudentid' => $casuserstudentid,
+                'cas_gunet' => $cas_gunet,
+            );
             break;
         case 8:  // Facebook
         case 10: // Google
