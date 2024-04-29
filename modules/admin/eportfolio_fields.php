@@ -398,20 +398,17 @@ if (isset($_GET['add_cat'])) { //add a new category form
     } else {
         $form_data_array = array(); //array used to build the sortorder form
 
+        $head_content .= "
+            <style>
+                .tile__name { cursor: move; }
+                .tile__list { cursor: move; }
+            </style>";
         $tool_content .= "<div id='multi'>"; //container for sorting
         foreach ($result as $res) {
             $form_data_array[$res->id] = array();
 
-            $head_content .= "<style>
-                                .tile__name {
-                                    cursor: move;
-                                }
-                                .tile__list {
-                                    cursor: move;
-                                }
-                              </style>";
             $tool_content .= "<div id='cat_".getIndirectReference($res->id)."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
-            $tool_content .= "<caption class='tile__name'><strong>$langCategory :</strong> $res->name<div class='pull-right'>";
+            $tool_content .= "<caption class='tile__name'><strong>$langCategory:</strong> " . q($res->name) . "<div class='pull-right'>";
 
             $dyntools = array(
                 array(
