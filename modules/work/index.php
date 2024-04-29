@@ -619,7 +619,8 @@ if ($is_editor) {
         submit_grades(intval($_POST['grades_id']), $_POST, $email_notify);
     } elseif (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
-        $work_title = q(Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title);
+        $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
+        $work_title = q($work_title_raw);
         $work_id_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id",
             'name' => $work_title);
         if (isset($_POST['on_behalf_of'])) {
@@ -696,7 +697,7 @@ if ($is_editor) {
                 export_grades_to_csv($id);
             }
         } else {
-            $pageName = $work_title;
+            $pageName = $work_title_raw;
             $navigation[] = $works_url;
             if (isset($_GET['disp_results'])) {
                 display_assignment_submissions_graph_results($id);
@@ -714,7 +715,7 @@ if ($is_editor) {
     if (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-        $pageName = q($work_title);
+        $pageName = $work_title_raw;
         $navigation[] = $works_url;
         show_assignment($id);
     } else {
@@ -733,7 +734,7 @@ if ($is_editor) {
             submit_work($id);
         } else {
             $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-            $pageName = $work_title;
+            $pageName = $work_title_raw;
             if (!isset($unit)) {
                 $navigation[] = $works_url;
             }
@@ -745,7 +746,7 @@ if ($is_editor) {
     //call  submit_grade_reviews
     if (isset($_POST['grade_comments_review'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
-        $pageName = $work_title;
+        $pageName = $work_title_raw;
         if (!isset($unit)) {
             $navigation[] = $works_url;
         }

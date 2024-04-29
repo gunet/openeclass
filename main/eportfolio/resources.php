@@ -85,19 +85,19 @@ if ($userdata) {
             $tool_content .= "<script type='text/javascript'>
                                 $('#copy-btn').tooltip({
                                 });
-                    
+
                                 $(function() {
                                   var clipboard = new Clipboard('#copy-btn');
-                    
+
                                   clipboard.on('success', function(e) {
                                     e.clearSelection();
                                     $(e.trigger).attr('title', '$langCopiedSucc').tooltip('fixTitle').tooltip('show');
                                   });
-                    
+
                                   clipboard.on('error', function(e) {
                                     $(e.trigger).attr('title', '$langCopiedErr').tooltip('fixTitle').tooltip('show');
                                   });
-                    
+
                                 });
                               </script>";
         }
@@ -346,7 +346,7 @@ if ($userdata) {
         if ($post) {
             $data = unserialize($post->data);
             if (!empty($post->course_title)) {
-                $post->course_title = $langCourse.': '.$post->course_title;
+                $post->course_title = $langCourse.': '.q($post->course_title);
             } else {
                 $post->course_title = $langUserBlog;
             }
@@ -448,7 +448,7 @@ if ($userdata) {
             foreach ($blog_posts as $post) {
                 $data = unserialize($post->data);
                 if (!empty($post->course_title)) {
-                    $post->course_title = $langCourse.': '.$post->course_title;
+                    $post->course_title = $langCourse.': '.q($post->course_title);
                 } else {
                     $post->course_title = $langUserBlog;
                 }
@@ -499,7 +499,7 @@ if ($userdata) {
                     $assignment_type = $m['group_work'];
                 }
                 $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
-                $submission->course_title = $langCourse.': '.$submission->course_title;
+                $submission->course_title = $langCourse.': '.q($submission->course_title);
                 $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
                                        <div id='header_more_$submission->id' class='collapse'>";
@@ -538,7 +538,7 @@ if ($userdata) {
                                             $submission_header_content
                                     </div>
                                     <div class='panel-body'>
-                                    $submission_content    
+                                    $submission_content
                                     </div>
                                     $submission_footer
                                 </div>";
@@ -595,7 +595,7 @@ if ($userdata) {
                                                             'class' => 'delete',
                                                             'confirm' => $langePortfolioSureToRemoveResource,
                                                             'show' => ($doc->user_id == $uid)
-                                                    )))." 
+                                                    )))."
                                     </td>
                                   </tr>";
             }
