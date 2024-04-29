@@ -85,23 +85,21 @@ if ($userdata) {
 
         if ($userdata->eportfolio_enable == 1) {
             $tool_content .= "<script type='text/javascript'>
-
                                 $(document).ready(function(){
                                     $('#copy-btn').tooltip({container: 'body'});
                                 })
-                    
                                 $(function() {
                                   var clipboard = new Clipboard('#copy-btn');
-                    
+
                                   clipboard.on('success', function(e) {
                                     e.clearSelection();
                                     $(e.trigger).attr('title', '$langCopiedSucc').tooltip('fixTitle').tooltip('show');
                                   });
-                    
+
                                   clipboard.on('error', function(e) {
                                     $(e.trigger).attr('title', '$langCopiedErr').tooltip('fixTitle').tooltip('show');
                                   });
-                    
+
                                 });
                               </script>";
         }
@@ -366,7 +364,7 @@ if ($userdata) {
         if ($post) {
             $data = unserialize($post->data);
             if (!empty($post->course_title)) {
-                $post->course_title = $langCourse.': '.$post->course_title;
+                $post->course_title = $langCourse.': '.q($post->course_title);
             } else {
                 $post->course_title = $langUserBlog;
             }
@@ -466,7 +464,7 @@ if ($userdata) {
                 $tool_content .= "<div class='col'>";
                 $data = unserialize($post->data);
                 if (!empty($post->course_title)) {
-                    $post->course_title = $langCourse.': '.$post->course_title;
+                    $post->course_title = $langCourse.': '.q($post->course_title);
                 } else {
                     $post->course_title = $langUserBlog;
                 }
@@ -517,7 +515,8 @@ if ($userdata) {
                     $assignment_type = $m['group_work'];
                 }
                 $submission_header_content = "<h3>".q($data['title'])."</h3>";
-                $submission->course_title = $langCourse.': '.$submission->course_title;
+                $submission->course_title = $langCourse.': '. q($submission->course_title);
+
                 $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn submitAdminBtn mb-3 btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
                                        <div id='header_more_$submission->id' class='collapse panel-body px-0'>";
@@ -552,10 +551,10 @@ if ($userdata) {
                                                         'confirm' => $langePortfolioSureToRemoveResource,
                                                         'show' => ($submission->user_id == $uid)
                                                 )))."
-                                            </div>                                           
+                                            </div>
                                     </div>
                                     <div class='card-body'>
-                                    $submission_content    
+                                        $submission_content
                                     </div>
                                     $submission_footer
                                 </div>";
@@ -611,7 +610,7 @@ if ($userdata) {
                                                             'class' => 'delete',
                                                             'confirm' => $langePortfolioSureToRemoveResource,
                                                             'show' => ($doc->user_id == $uid)
-                                                    )))." 
+                                                    )))."
                                     </td>
                                   </tr>";
             }
