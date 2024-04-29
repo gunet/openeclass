@@ -26,10 +26,9 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'modules/auth/auth.inc.php';
-
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
@@ -45,33 +44,6 @@ if ($display_captcha) {
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jstree3');
-load_js('pwstrength.js');
-$head_content .= <<<hContent
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    var lang = {
-hContent;
-$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
-$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
-$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
-$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
-$head_content .= <<<hContent
-    };
-
-    $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
-        });
-    });
-
-/* ]]> */
-</script>
-hContent;
-
-$pageName = "$langRegistration $langOfUserS";
-
 $data['action_bar'] = action_bar(
                                 [[
                                     'title' => $langBack,
@@ -82,7 +54,13 @@ $data['action_bar'] = action_bar(
                                 ]], false);
 
 $data['user_registration'] = get_config('user_registration');
-$data['eclass_stud_reg'] = get_config('eclass_stud_reg'); // student registration via eclass
+$data['eclass_stud_reg'] = $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
+
+if ($eclass_stud_reg == 1) {
+    $pageName = "$langUserRequest";
+} else {
+    $pageName = "$langRegistration $langOfUserS";
+}
 
 $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
 list($js, $html) = $tree->buildUserNodePickerIndirect();
@@ -91,7 +69,11 @@ $data['buildusernode'] = $html;
 
 $data['render_profile_fields_form'] = render_profile_fields_form(array('origin' => 'student_register'));
 
-if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
+if (!empty($_GET['provider_id'])) {
+    $provider_id = @q($_GET['provider_id']);
+} else {
+    $provider_id = '';
+}
 
 // check if it's valid and the provider enabled in the db
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
@@ -202,7 +184,7 @@ if (!isset($_POST['submit'])) {
     $data['menuTypeID'] = 0;
     view('modules.auth.newuser', $data);
 
-} else {
+} else { // submit
     if (get_config('email_required')) {
         $email_arr_value = true;
     } else {
@@ -214,23 +196,32 @@ if (!isset($_POST['submit'])) {
         $am_arr_value = false;
     }
 
-    if (empty($provider) && empty($_POST['provider_id'])) {
+    if (isset($_POST['account_request'])) {
         $var_arr = array('uname' => true,
             'surname_form' => true,
             'givenname_form' => true,
-            'password' => true,
-            'password1' => true,
             'email' => $email_arr_value,
             'phone' => false,
             'am' => $am_arr_value);
     } else {
-        $var_arr = array(
-            'uname' => true,
-            'surname_form' => true,
-            'givenname_form' => true,
-            'email' => $email_arr_value,
-            'phone' => false,
-            'am' => $am_arr_value);
+        if (empty($provider) && empty($_POST['provider_id'])) {
+            $var_arr = array('uname' => true,
+                'surname_form' => true,
+                'givenname_form' => true,
+                'password' => true,
+                'password1' => true,
+                'email' => $email_arr_value,
+                'phone' => false,
+                'am' => $am_arr_value);
+        } else {
+            $var_arr = array(
+                'uname' => true,
+                'surname_form' => true,
+                'givenname_form' => true,
+                'email' => $email_arr_value,
+                'phone' => false,
+                'am' => $am_arr_value);
+        }
     }
 
     //add custom profile fields required variables
@@ -252,42 +243,56 @@ if (!isset($_POST['submit'])) {
         $registration_errors[] = $langFieldsMissing;
     } else {
         $uname = canonicalize_whitespace($uname);
-        // check if the username is already in use
-        $username_check = Database::get()->querySingle("SELECT username, email FROM user WHERE username = ?s", $uname);
-        if ($username_check) {
-            if (isset($_POST['toolbox'])) {
-                $login_details = array();
-                foreach ($var_arr as $var => $req) {
-                    $login_details[$var] = $GLOBALS[$var];
-                }
-                Session::flash('login-details', $login_details);
-                Session::flash('username-exists', true);
-                if ($username_check->email === $email) {
-                    Session::flash('email-correct', true);
-                }
-                redirect_to_home_page('main/toolbox.php');
+        if (isset($_POST['account_request'])) {
+            // check if exists user request with the same username
+            if (user_app_exists($uname)) {
+                Session::flash('message', $langUserFree3);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) .
+                    "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) .
+                    "&email=" . urlencode($email) . "&am=" . urlencode($am) .
+                    "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr());
             }
-            $registration_errors[] = $langUserFree;
+        } else {
+            if (empty($provider) && empty($_POST['provider_id'])) {
+                if ($password != $_POST['password1']) { // check if the two passwords match
+                    $registration_errors[] = $langPassTwice;
+                }
+            }
+            // check if the username is already in use
+            $username_check = Database::get()->querySingle("SELECT username, email FROM user WHERE username = ?s", $uname);
+            if ($username_check) {
+                if (isset($_POST['toolbox'])) {
+                    $login_details = array();
+                    foreach ($var_arr as $var => $req) {
+                        $login_details[$var] = $GLOBALS[$var];
+                    }
+                    Session::flash('login-details', $login_details);
+                    Session::flash('username-exists', true);
+                    if ($username_check->email === $email) {
+                        Session::flash('email-correct', true);
+                    }
+                    redirect_to_home_page('main/toolbox.php');
+                }
+                $registration_errors[] = $langUserFree;
+            }
         }
+        // email validity
+        if (!empty($email) and !valid_email($email)) {
+            $registration_errors[] = $langEmailWrong;
+        } else {
+            $email = mb_strtolower(trim($email));
+        }
+
+        // captcha check
         if ($display_captcha) {
-            // captcha check
             $securimage = new Securimage();
             if (!$securimage->check($_POST['captcha_code'])) {
                 $registration_errors[] = $langCaptchaWrong;
             }
         }
     }
-    if (!empty($email) and !valid_email($email)) {
-        $registration_errors[] = $langEmailWrong;
-    } else {
-        $email = mb_strtolower(trim($email));
-    }
 
-    if (empty($provider) && empty($_POST['provider_id'])) {
-        if ($password != $_POST['password1']) { // check if the two passwords match
-            $registration_errors[] = $langPassTwice;
-        }
-    }
     //check for validation errors in custom profile fields
     $cpf_check = cpf_validate_format();
     if ($cpf_check[0] === false) {
@@ -327,7 +332,9 @@ if (!isset($_POST['submit'])) {
                 if ($user_data->identifier) {
                     $result = Database::get()->querySingle("SELECT uid FROM user_ext_uid
                         WHERE uid = ?s AND auth_id = ?d", $user_data->identifier, $auth);
-                    if($result) $registration_errors[] = $langProviderError; //the provider user id already exists the the db. show an error.
+                    if($result) {
+                        $registration_errors[] = $langProviderError;
+                    } //the provider user id already exists the the db. show an error.
                 }
 
             } catch (Exception $e) {
@@ -361,109 +368,198 @@ if (!isset($_POST['submit'])) {
             $verified_mail = 2;
             $vmail = FALSE;
         }
-        if (empty($provider) && empty($_POST['provider_id'])) {
-            $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
-        } else {
-            $password_encrypted = $provider;
-        }
 
-        // check if hybridauth provider and provider user id is used (the
-        // validity of both is checked on a previous step in this script)
-        if (empty($provider) && empty($_POST['provider_id'])) {
-            $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
+        // user account request
+        if (isset($_POST['account_request'])) {
+            $res = Database::get()->query("INSERT INTO user_request SET
+                    givenname = ?s, 
+                    surname = ?s, 
+                    username = ?s, 
+                    email = ?s,
+                    faculty_id = ?d, 
+                    phone = ?s,
+                    state = 1, 
+                    status = " . USER_STUDENT . ",
+                    verified_mail = $verified_mail, 
+                    date_open = " . DBHelper::timeAfter() . ",
+                    comment = ?s, 
+                    lang = ?s, 
+                    request_ip = '" . Log::get_client_ip() . "'",
+                $givenname_form, $surname_form, $uname, $email,
+                $_POST['department'], $phone, $_POST['usercomment'], $language);
+
+            $request_id = $res?->lastInsertID;
+
+            if (!$vmail) { // email verification not needed
+                //----------------------------- Email Request Message --------------------------
+                $dep_body = $tree->getFullPath($_POST['department']);
+                $header_html_topic_notify = "<!-- Header Section -->
+                        <div id='mail-header'>
+                            <br>
+                            <div>
+                                <div id='header-title'>$mailbody1</div>
+                            </div>
+                        </div>";
+
+                $body_html_topic_notify = "<!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div id='mail-body-inner'>
+                        $mailbody2 $givenname $surname $mailbody3 $mailbody4 $mailbody5 $mailbody8
+                            <ul id='forum-category'>
+                                <li><span><b>$langFaculty:</b></span> <span>$dep_body</span></li>
+                                <li><span><b>$langComments:</b></span> <span>$usercomment</a></span></li>
+                                <li><span><b>$langAm :</b></span> <span>$am</span></li>
+                                <li><span><b>$langProfUname:</b></span> <span> $username </span></li>
+                                <li><span><b>$langProfEmail:</b></span> <span> $usermail </span></li>
+                                <li><span><b>$contactphone:</b></span> <span> $userphone </span></li>
+                            </ul><br><br>$logo
+                        </div>
+                    </div>";
+
+                $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+                $plainMailMessage = html2text($MailMessage);
+                $emailAdministrator = get_config('email_sender');
+                if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $mailsubject2, $plainMailMessage, $MailMessage)) {
+                    $data['email_errors'] = $email_errors = true;
+                }
+            } else { // email needs verification -> mail user
+                $data['email_errors'] = $email_errors = false;
+                $hmac = token_generate($uname . $email . $request_id);
+                $subject = $langMailVerificationSubject;
+                $emailhelpdesk = get_config('email_helpdesk');
+                $emailAdministrator = get_config('email_sender');
+
+                $activateLink = "<a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;rid=$request_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$request_id</a>";;
+
+                $header_html_topic_notify = "<!-- Header Section -->
+                    <div id='mail-header'>
+                        <br>
+                        <div>
+                            <div id='header-title'>$mailbody1</div>
+                        </div>
+                    </div>";
+
+                    $body_html_topic_notify = "<!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div id='mail-body-inner'>".
+                                sprintf($langMailVerificationBody1, $activateLink)."
+                        </div>
+                    </div>";
+
+                $MailMessage = $header_html_topic_notify . $body_html_topic_notify;
+                $plainMailMessage = html2text($MailMessage);
+
+                if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainMailMessage, $MailMessage)) {
+                    $data['email_errors'] = $email_errors = true;
+                }
+            }
+            $data['vmail'] = $vmail;
+
+        } else { // new user account
+            if (empty($provider) && empty($_POST['provider_id'])) {
+                $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+            } else {
+                $password_encrypted = $provider;
+            }
+            // check if hybridauth provider and provider user id is used (the
+            // validity of both is checked on a previous step in this script)
+            if (empty($provider) && empty($_POST['provider_id'])) {
+                $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                                      status, am, phone, registered_at, expires_at,
                                      lang, verified_mail, whitelist, description)
                           VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
                                   DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND), ?s, $verified_mail, '', '')",
-                                $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
-        } else {
-            $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
+                    $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
+            } else {
+                $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                     status, am, phone, registered_at, expires_at,
                     lang, verified_mail, whitelist, description)
                     VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
                                   DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND), ?s, $verified_mail, '', '')",
                     $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
-            if ($q1) {
-                Database::get()->query('INSERT INTO user_ext_uid
+                if ($q1) {
+                    Database::get()->query('INSERT INTO user_ext_uid
                     SET user_id = ?d, auth_id = ?d, uid = ?s',
-                    $q1->lastInsertID, $auth, $user_data->identifier);
+                        $q1->lastInsertID, $auth, $user_data->identifier);
+                }
             }
+            $data['email_errors'] = $email_errors = false;
+            $last_id = $q1->lastInsertID;
+            // update personal calendar info table
+            // we don't check if trigger exists since it requires `super` privilege
+            Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
+            $userObj->refresh($last_id, $departments);
+            user_hook($last_id);
+
+            //fill custom profile fields
+            process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
+
+            if ($vmail) {
+                $hmac = token_generate($uname . $email . $last_id);
+            }
+
+            $emailsubject = "$langYourReg $siteName";
+            $telephone = get_config('phone');
+            $administratorName = get_config('admin_name');
+            $emailhelpdesk = get_config('email_helpdesk');
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYouAreReg $siteName</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+                <div id='mail-body'>
+                    <br>
+                    <div id='mail-body-inner'>
+                    <p>$langSettings</p>
+                        <ul id='forum-category'>
+                            <li><span><b>$langUsername:</b></span> <span>$uname</span></li>
+                            <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                        </ul>
+                        <p>" . ($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick <a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "") .
+                        "<br><br>" . "$langProblem" . "<br><br><br>" . "$langFormula" .
+                        "<br>" . "$administratorName" . "<br><br>" .
+                        "$langTel: $telephone " . "<br>" .
+                        "$langEmail: $emailhelpdesk" . "</p>
+                    </div>
+                </div>";
+
+            $html_topic_notify = $header_html_topic_notify . $body_html_topic_notify;
+
+            $emailPlainBody = html2text($html_topic_notify);
+
+            // send email to user
+            if (!empty($email)) {
+                send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $html_topic_notify);
+                $user_msg = $langPersonalSettings;
+            } else {
+                $user_msg = $langPersonalSettingsLess;
+            }
+            // login user if not verification needed
+            if (!$vmail) {
+                $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
+                $uid = $myrow->id;
+                $surname = $myrow->surname;
+                $givenname = $myrow->givenname;
+
+                Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                             VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')", $uid, Log::get_client_ip());
+                $_SESSION['uid'] = $uid;
+                $_SESSION['status'] = USER_STUDENT;
+                $_SESSION['givenname'] = $givenname_form;
+                $_SESSION['surname'] = $surname_form;
+                $_SESSION['uname'] = $uname;
+                $session->setLoginTimestamp();
+            }
+            $data['user_msg'] = $user_msg;
+            $data['vmail'] = $vmail;
         }
-
-        $last_id = $q1->lastInsertID;
-        // update personal calendar info table
-        // we don't check if trigger exists since it requires `super` privilege
-        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
-        $userObj->refresh($last_id, $departments);
-        user_hook($last_id);
-
-        //fill custom profile fields
-        process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
-
-        if ($vmail) {
-            $hmac = token_generate($uname . $email . $last_id);
-        }
-
-        $emailsubject = "$langYourReg $siteName";
-        $telephone = get_config('phone');
-        $administratorName = get_config('admin_name');
-        $emailhelpdesk = get_config('email_helpdesk');
-
-
-        $header_html_topic_notify = "<!-- Header Section -->
-        <div id='mail-header'>
-            <br>
-            <div>
-                <div id='header-title'>$langYouAreReg $siteName</div>
-            </div>
-        </div>";
-
-        $body_html_topic_notify = "<!-- Body Section -->
-        <div id='mail-body'>
-            <br>
-            <div id='mail-body-inner'>
-            <p>$langSettings</p>
-                <ul id='forum-category'>
-                    <li><span><b>$langUsername:</b></span> <span>$uname</span></li>
-                    <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
-                </ul>
-                <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick <a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "") .
-                "<br><br>"."$langProblem"."<br><br><br>"."$langFormula" .
-                "<br>"."$administratorName" ."<br><br>".
-                "$langTel: $telephone " ."<br>".
-                "$langEmail: $emailhelpdesk"."</p>
-            </div>
-        </div>";
-
-        $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify;
-
-        $emailPlainBody = html2text($html_topic_notify);
-
-        // send email to user
-        if (!empty($email)) {
-            send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $html_topic_notify);
-            $user_msg = $langPersonalSettings;
-        } else {
-            $user_msg = $langPersonalSettingsLess;
-        }
-        // login user if not verification needed
-        if (!$vmail) {
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
-            $uid = $myrow->id;
-            $surname = $myrow->surname;
-            $givenname = $myrow->givenname;
-
-            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                             VALUES (?d, ?s, " . DBHelper::timeAfter() .", 'LOGIN')", $uid, Log::get_client_ip());
-            $_SESSION['uid'] = $uid;
-            $_SESSION['status'] = USER_STUDENT;
-            $_SESSION['givenname'] = $givenname_form;
-            $_SESSION['surname'] = $surname_form;
-            $_SESSION['uname'] = $uname;
-            $session->setLoginTimestamp();
-        }
-        $data['user_msg'] = $user_msg;
-        $data['vmail'] = $vmail;
         $data['menuTypeID'] = 0;
         view('modules.auth.newuser', $data);
     } else { // errors exist
@@ -473,7 +569,12 @@ if (!isset($_POST['submit'])) {
             Session::flash('message',"$error");
             Session::flash('alert-class', 'alert-danger');
         }
-        redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) . "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) . "&email=" . urlencode($email) . "&am=" . urlencode($am) . "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr() . "");
+        redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) .
+            "&surname_form=" . urlencode($surname_form) .
+            "&uname=" . urlencode($uname) .
+            "&email=" . urlencode($email) .
+            "&am=" . urlencode($am) .
+            "&phone=" . urlencode($phone) . augment_url_refill_custom_profile_fields_registr());
     }
 } // end of registration
 

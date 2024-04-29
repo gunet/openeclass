@@ -3701,7 +3701,7 @@ $reguserldap = "Εγγραφή Χρήστη μέσω LDAP";
 $langByLdap = "Μέσω LDAP";
 $langNewProf = "Εισαγωγή στοιχείων νέου λογαριασμού $langsOfTeacher";
 $langDearProf = "Αγαπητέ χρήστη";
-$langRequestSuccess = "Η αίτησή σας στάλθηκε με επιτυχία.";
+$langRequestSuccess = "Η αίτηση σας στάλθηκε με επιτυχία.";
 $langBackPage = "για να επιστρέψετε στην αρχική σελίδα.";
 $emailprompt = "Δώστε την διεύθυνση e-mail σας:";
 $ldapprompt = "Δώστε το συνθηματικό LDAP σας:";
@@ -3845,7 +3845,7 @@ $langUserHasNoConsent = "Δεν έχει συναινέσει";
 $langUserConsentUnknown = "Δεν έχει συναινέσει ακόμα ή δεν το έχει δει";
 
 // formuser.php
-$langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού $langOfStudent";
+$langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού";
 $langUserFillData = "Συμπλήρωση στοιχείων";
 $langUserOpenRequests = "Ανοικτές αιτήσεις";
 $langWarnReject = "Πρόκειται να απορρίψετε την αίτηση!";
@@ -3873,8 +3873,7 @@ $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιο
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
 $langMailVerificationSuccess = "Θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε.";
 $langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail
-                                από την ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
-                        με τα στοιχεία σας.";
+                                από την ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τα στοιχεία σας.";
 $langMailVerificationNote = "(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)";
 $langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.<br><br>$langMailVerificationSuccess<br>$langMailVerificationClick<br>%s";
 $langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.<br><br>$langMailVerificationClick<br>%s";
