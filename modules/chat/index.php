@@ -334,7 +334,7 @@ if ($is_editor) {
                 //]]></script>';
         }
 }
-if ($display == TRUE) {
+if ($display) {
     $q = array();
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -386,9 +386,9 @@ if ($display == TRUE) {
             ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
             $tool_content .= "<td>";
             if (is_valid_chat_user($uid, $conf->conf_id, $conf->status)) { // chat access control
-                $tool_content .= "<a href='./chat.php?conference_id=$conf->conf_id&course=$course_code'>$conf->conf_title</a>";
+                $tool_content .= "<a href='./chat.php?conference_id=$conf->conf_id&course=$course_code'>" . q($conf->conf_title) . "</a>";
             } else {
-                $tool_content .= $conf->conf_title;
+                $tool_content .= q($conf->conf_title);
             }
             $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>" . $conf_details;
             $tool_content .= "</td>";

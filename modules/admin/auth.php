@@ -116,7 +116,7 @@ if (isset($_GET['auth'])) {
             } else {
                 $auth_warn = '';
             }
-            $tool_content .= "<li>" . get_auth_info($auth_id) . " ($langNbUsers: $auth_search_link$auth_change_link)$auth_warn</li>";
+            $tool_content .= "<li>" . q(get_auth_info($auth_id)) . " ($langNbUsers: $auth_search_link$auth_change_link)$auth_warn</li>";
         }
     }
     $tool_content .= "</ul></div>";
