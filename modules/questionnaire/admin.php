@@ -335,7 +335,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 $all_groups = Database::get()->queryArray("SELECT name, id FROM `group`
                                         WHERE course_id = ?d AND `group`.visible = 1", $course_id);
                 foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
+                    $assignee_options .= "<option value='{$assignee_row->id}'>".q($assignee_row->name)."</option>";
                 }
                 $unassigned = array_udiff($all_groups, $assignees,
                   function ($obj_a, $obj_b) {
@@ -343,7 +343,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                   }
                 );
                 foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
+                    $unassigned_options .= "<option value='{$unassigned_row->id}'>" . q($unassigned_row->name) . "</option>";
                 }
 
             } else {
@@ -356,7 +356,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                         AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
                                         AND user.id", $course_id);
                 foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
+                    $assignee_options .= "<option value='{$assignee_row->id}'>" . q($assignee_row->surname . ' ' . $assignee_row->givenname) . "</option>";
                 }
                 $unassigned = array_udiff($all_users, $assignees,
                   function ($obj_a, $obj_b) {
@@ -364,7 +364,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                   }
                 );
                 foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
+                    $unassigned_options .= "<option value='{$unassigned_row->id}'>" . q($unassigned_row->surname . ' ' . $unassigned_row->givenname) . "</option>";
                 }
             }
         }
@@ -819,7 +819,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 "</h3>
             </div>
             <div class='panel-body'>
-                  <h4>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h4>
+                  <h4>" . q($question->question_text) . "<br><small><em>".$aType[$question->qtype - 1]."</em></small></h4>
             </div>
         </div>";
 
