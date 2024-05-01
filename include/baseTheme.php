@@ -4028,6 +4028,10 @@ function view($view_file, $view_data = array()) {
                     background-color:$theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
+                .cal-day-today .number-day-cal {
+                    background-color:$theme_options_styles[bgColorActiveDateTime] !important;
+                }
+
             ";
         }
 
@@ -4089,6 +4093,12 @@ function view($view_file, $view_data = array()) {
 
                 .active-calendar-day{
                     color: $theme_options_styles[TextColorActiveDateTime] !important;;
+                }
+
+                .cal-day-today .number-day-cal,
+                .cal-day-today .number-day-cal:hover,
+                .cal-day-today .number-day-cal:focus{
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
             ";

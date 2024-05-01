@@ -535,7 +535,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class='d-flex align-items-center gap-3 flex-wrap '>
+                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap '>
                             <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                 {{ trans('langMyProfile') }}
                             </a>

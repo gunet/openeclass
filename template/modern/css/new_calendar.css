@@ -76,9 +76,12 @@
 
 .cal-day-today.cal-day-holiday .number-day-cal {
   background-color: #0073E6;
-  padding: 1px 6px 1px 6px;
-  border-radius: 2% ;
+  padding: 4px 4px 3px 3px;
+  border-radius: 50% ;
   color: #ffffff;
+  width: 32px;
+  height: 32px;
+  text-align: center;
 }
 
 /************************************rgba(255, 255, 255, 0.5)**********************************************/
@@ -154,173 +157,6 @@
   justify-content: center ;
   align-items: center ;
 }
-
-/* 
-.myCalendarEvents table {
-  width: 100% !important;
-  box-sizing: border-box;
-  table-layout: fixed !important;
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-.myCalendarEvents tbody tr:hover{
-  background-color: transparent;
-}
-@media(max-width:991px){
-  .myCalendarEvents{
-    min-width:500px ;
-  }
-}
-.myCalendarEvents .fc-header-toolbar{
-  background: #2B3944;
-  border-color: #2B3944;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding:7px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  margin-bottom: 0px;
-}
-.myCalendarEvents .fc-header-toolbar .fc-prev-button{
-  background: transparent;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-prev-button .fc-icon-left-single-arrow{
-  color:#ffffff;
-  text-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-prev-button.fc-state-hover{
-  background: transparent;
-}
-.myCalendarEvents .fc-header-toolbar .fc-prev-button.fc-state-hover .fc-icon-left-single-arrow{
-  color:#ffffff;
-  text-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-next-button{
-  background: transparent;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-next-button .fc-icon-right-single-arrow{
-  color:#ffffff;
-  text-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-next-button.fc-state-hover{
-  background: transparent;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-next-button.fc-state-hover .fc-icon-right-single-arrow{
-  color:#ffffff;
-  text-shadow: none;
-}
-.myCalendarEvents .fc-today-button{
-  background: transparent;
-  color: #ffffff;
-  text-shadow: none;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-center h2{
-  font-size: 15px ;
-  color: #ffffff;
-  padding: 8px;
-  border-radius:4px;
-  background: transparent;
-}
-.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button{
-  background: transparent;
-  color: #ffffff;
-  text-shadow: none;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
-  background: #005ad9 ;
-  border-radius: 4px;
-  color: #ffffff;
-  text-shadow: none;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-  z-index: 0;
-}
-.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button{
-  background: transparent;
-  color: #ffffff;
-  text-shadow: none;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-}
-.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active{
-  background: #005ad9 ;
-  border-radius: 4px;
-  color: #ffffff;
-  text-shadow: none;
-  border: 0px;
-  box-sizing:content-box;
-  box-shadow: none;
-  z-index: 0;
-}
-.myCalendarEvents .fc-head-container.fc-widget-header{
-  background: #e8e8e8;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-.myCalendarEvents .fc-head-container.fc-widget-header .fc-day-header span{
-  color:#003e87;
-  text-transform: uppercase;
-  font-size: 14px;
-  text-shadow: none;
-  font-weight: 700;
-}
-.myCalendarEvents .fc-widget-content table tbody td{
-  height:70px;
-  border: solid 1px #f5f4f4 ;
-  
-}
-.myCalendarEvents .fc-time-grid-event{
-  display: flex ;
-  justify-content: center ;
-  align-items: center ;
-} */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
