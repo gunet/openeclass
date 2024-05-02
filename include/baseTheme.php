@@ -6060,7 +6060,7 @@ function view($view_file, $view_data = array()) {
                 ";
             }
 
-            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1320px');    
+            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1200px');    
             $styles_str .= "
 
                 @media (min-width: 992px) {
