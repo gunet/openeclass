@@ -89,7 +89,7 @@ $Position = '';
 $PositionForm = 'd-lg-block';
 $themeId = get_config('theme_options_id');
 $login_img = $urlAppend . 'template/modern/img/loginIMG.png';
-if($themeId > 0){
+if($themeId > 0) {
   $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $themeId);
   $theme_options_styles = unserialize($theme_options->styles);
   $urlThemeData = $urlAppend . 'courses/theme_data/' . $themeId;
@@ -109,39 +109,39 @@ if(count($active_method) > 0){
     $auth_enabled_method = 1;
 }
 $class_login_img = '';
-if($auth_enabled_method == 1 && count($authLink) > 1){ 
-  $class_login_img = 'jumbotron-image-auth-default'; 
+if($auth_enabled_method == 1 && count($authLink) > 1){
+  $class_login_img = 'jumbotron-image-auth-default';
 }
 $tool_content .= "<h1>$langUserLogin</h1>";
 $tool_content .= "
                   <div class='padding-default mt-4'>
                     <div class='row row-cols-1 row-cols-lg-2 g-4'>
                       <div class='col $Position'>";
-                        if($auth_enabled_method == 1){
-                          if(count($authLink) > 0){
-          $tool_content .= "<div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
+                        if($auth_enabled_method == 1) {
+                          if(count($authLink) > 0) {
+                              $tool_content .= "<div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
                               <div class='card-body d-flex justify-content-center align-items-center'>";
                                   $i = 0;
                                   $j = 0;
-                $tool_content .= "<div class='w-100 h-100'>
+                                    $tool_content .= "<div class='w-100 h-100'>
                                       <div class='col-12 container-pages d-flex align-items-center h-100'>";
-                                         
-                                          foreach($authLink as $authInfo){
-                                              if($i==0){
+
+                                          foreach($authLink as $authInfo) {
+                                              if($i==0) {
                                                 $Page = 'slide-page';
-                                              }elseif($i == 1){
+                                              } elseif($i == 1) {
                                                 $Page = 'next-page-1';
-                                              }elseif($i == 2){
+                                              } elseif($i == 2) {
                                                 $Page = 'next-page-2';
                                               }
-                                              
-                            $tool_content .= "<div class='col-12 page $Page h-100'>
+
+                                $tool_content .= "<div class='col-12 page $Page h-100'>
                                                   <div class='row h-100'>
                                                       <div class='col-12 align-self-start'>
                                                           <div class='d-flex justify-content-between align-items-center flex-wrap gap-2'>
-                                                              <h2 class='mb-3'>".(!empty($authInfo[2]) ? $authInfo[2] : $langLogin)."</h2>";
-                                                              if(!empty($authInfo[3])){
-                                               $tool_content .= " <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction".$j."'>
+                                                              <h2 class='mb-3'>".(!empty($authInfo[2]) ? q($authInfo[2]) : $langLogin)."</h2>";
+                                                              if(!empty($authInfo[3])) {
+                                                                    $tool_content .= " <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction".$j."'>
                                                                       $langInstructions
                                                                   </a>
                                                                   <div class='modal fade' id='authInstruction".$j."' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
@@ -168,42 +168,37 @@ $tool_content .= "
                                                   
                                                       <div class='col-12 align-self-center'>
                                                           <div class='text-center'>".$authInfo[1]."</div>
-                                                      </div>
-                                                  
+                                                      </div>                                                  
                                                 
                                                       <div class='col-12 align-self-end'>";
-                                                        if(count($authLink) > 1){
-                                                            $tool_content .= " <div id='or' class='ms-auto me-auto mb-2'>$langOr</div>";  
-                                                        }  
+                                                        if(count($authLink) > 1) {
+                                                            $tool_content .= " <div id='or' class='ms-auto me-auto mb-2'>$langOr</div>";
+                                                        }
                                                         if(count($authLink) == 2){
                                             $tool_content .= "<div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
                                                                 <button class='btn submitAdminBtn " . ( ($i==0) ? 'firstNext' : 'prev-'.$i ) . " next'>";
-                                                                    if($i==0){
-                                                                        if(!empty($authLink[1][2])){
+                                                                    if($i==0) {
+                                                                        if(!empty($authLink[1][2])) {
                                                                             $tool_content .= "<span class='TextBold'>".$authLink[1][2]."</span>";
-                                                                        }else{
-                                                                            
+                                                                        } else {
                                                                             $tool_content .= "<span class='TextBold'>".$langLogin."</span>";
                                                                         }
                                                                     }
-                                                                    if($i==1){
+                                                                    if($i==1) {
                                                                         if(!empty($authLink[0][2])){
                                                                             $tool_content .= "<span class='TextBold'>".$authLink[0][2]."</span>";
                                                                         }else{
                                                                           $tool_content .= "<span class='TextBold'>".$langLogin."</span>";
                                                                         }
-                                                                        
                                                                     }
 
-                                                                    
-                                                                    
                                             $tool_content .= " </button>
                                                             </div>";
                                                         }
 
                                                         if(count($authLink) >= 3){
                                         $tool_content .= "<div class='d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap'>";
-                                                                
+
                                                                     if($i==0){
                                                        $tool_content .= "<button class='btn submitAdminBtn firstNext next'>
                                                                             
@@ -213,7 +208,7 @@ $tool_content .= "
                                                                             
                                                                             ".(!empty($authLink[2][2]) ? $authLink[2][2] : $langLogin)."
                                                                         </button>";
-                                                                        
+
                                                                     }
 
                                                                     if($i==1){
@@ -225,7 +220,7 @@ $tool_content .= "
                                                                             
                                                                             ".(!empty($authLink[2][2]) ? $authLink[2][2] : $langLogin)."
                                                                         </button>";
-                                                                        
+
                                                                     }
 
                                                                     if($i==2){
@@ -237,23 +232,23 @@ $tool_content .= "
                                                                             
                                                                             ".(!empty($authLink[0][2]) ? $authLink[0][2] : $langLogin)."
                                                                         </button>";
-                                                                        
+
                                                                     }
 
 
                                                                     if(count($authLink) > 3){
                                                       $tool_content .= "<div class='col-12'>
                                                                           <div id='oreven' class='ms-auto me-auto mb-2'>$langOrYet</div>
-                                                                        </div>";  
+                                                                        </div>";
 
-                                                                          
+
                                                         $tool_content .= "
                                                                         <div class='col-12 d-flex justify-content-center align-items-center'>
                                                                           <button type='button' class='btn submitAdminBtn border-0 text-decoration-underline bg-transparent' data-bs-toggle='modal' data-bs-target='#LoginFormAnotherOption-$i'>
                                                                               ".(!empty($authLink[count($authLink)-1][2]) ? $authLink[count($authLink)-1][2] : $langLogin)."
                                                                           </button>";
 
-                                                                          
+
                                                         $tool_content .= "<div class='modal fade' id='LoginFormAnotherOption-$i' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='LoginFormAnotherOptionLabel-$i' aria-hidden='true'>
                                                                             <div class='modal-dialog'>
                                                                               <div class='modal-content'>
@@ -270,10 +265,10 @@ $tool_content .= "
                                                                             </div>
                                                                           </div>
                                                                         </div>";
-                                                                        
-                                                                    } 
-                                                                    
-                                                                
+
+                                                                    }
+
+
                                           $tool_content .= "</div>";
                                                       }
 
@@ -281,8 +276,8 @@ $tool_content .= "
 
 
 
-                                                      
-                                                      
+
+
 
 
 
@@ -323,7 +318,7 @@ $tool_content .= "
                                   </div>
                               </div>
                             </div>";
-                          } 
+                          }
                         }else{
           $tool_content .= "<div class='card cardLogin h-100 p-3'>
                               <div class='card-body py-1'>
@@ -427,7 +422,7 @@ $tool_content .= "
 //             $active = '';
 //           }
 
-          
+
 
 //           if($counter == 0) {
 //             $tool_content .= "<div class='col-lg-5 col-md-6 col-12 ms-auto me-auto tab-content mt-5'>";
@@ -448,7 +443,7 @@ $tool_content .= "
 
 
 //                 $tool_content .="  " . $authInfo[1] . "
-                                  
+
 //                                 </div>";
 //           }
 
