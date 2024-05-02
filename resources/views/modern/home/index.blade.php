@@ -345,7 +345,7 @@
                                                                 <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                                     {{$announcement->title}}
                                                                 </a>
-                                                                <div class='TextRegular msmall-text Neutral-900-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
+                                                                <div class='TextRegular msmall-text Neutral-900-cl text-content mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
                                                             </li>
                                                         @endif
                                                         @php $counterAn++; @endphp
@@ -354,7 +354,7 @@
                                             @else
                                                 <ul class='list-group list-group-flush'>
                                                     <li class='list-group-item element'>
-                                                        <div class='TextRegular msmall-text'>{{ trans('langNoAnnouncementsExist') }}</div>
+                                                        <div class='TextRegular msmall-text text-content'>{{ trans('langNoAnnouncementsExist') }}</div>
                                                     </li>
                                                 </ul>
                                             @endif

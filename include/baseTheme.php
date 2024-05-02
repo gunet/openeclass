@@ -5419,7 +5419,7 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['TextColorAnnouncementHomepage'])){
             $styles_str .= "
                 .homepage-annnouncements-container .card h3,
-                .homepage-annnouncements-container .card .Neutral-900-cl{
+                .homepage-annnouncements-container .card .text-content{
                     color: $theme_options_styles[TextColorAnnouncementHomepage];
                 }
                 
@@ -6042,6 +6042,54 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clBadgeAccent];
                 }
             ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////// BACKGROUND COLOR TO THE PLATFORM CONTENT WHEN PLATFORM IS BOXED TYPE ////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['view_platform']) && $theme_options_styles['view_platform'] == 'boxed'){
+
+            if(!empty($theme_options_styles['bgColorContentPlatform'])){
+                $styles_str .= "
+                    .ContentEclass{
+                        background-color: $theme_options_styles[bgColorContentPlatform];
+                    }
+                ";
+            }
+
+            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1320px');    
+            $styles_str .= "
+
+                @media (min-width: 992px) {
+                    .ContentEclass{
+                        margin-left: auto;
+                        margin-right: auto;
+                        min-width: 992px;
+                        max-width: $maxWidthPlatform ;
+                    }
+
+                    #bgr-cheat-header,
+                    #bgr-cheat-header-mentoring{
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        max-width: $maxWidthPlatform ;
+                    }
+
+                    #bgr-cheat-header.fixed, 
+                    #bgr-cheat-header-mentoring.fixed {
+                        margin-left: auto;
+                        margin-right: auto;
+                        max-width: $maxWidthPlatform ;
+                    }
+                }
+
+            ";
+
         }
 
 

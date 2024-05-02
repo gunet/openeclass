@@ -6227,3 +6227,7 @@ $langDisplayAnnouncement = "See the announcement...";
 $langDontDisplayAgain = "Do not appear again";
 $langEnableQuickNote = "Enable quick note for all users";
 $langNoExistNotifications = "There aren't available notifications for the current course.";
+$langViewPlatform = "Display platform";
+$langViewBoxedType = "In boxed format";
+$langViewFluidType = "In fluid format";
+$langBgColorPlatformBoxed = "Boxed platform background color";

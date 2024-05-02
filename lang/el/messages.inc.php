@@ -6699,3 +6699,7 @@ $langDontDisplayAgain = "Να μην εμφανιστεί ξανά";
 $langNotRegistered = "Μη εγγεγραμένοι";
 $langEnableQuickNote = "Ενεργοποίησηση γρήγορης σημείωσης για τους χρήστες";
 $langNoExistNotifications = "Δεν υπάρχουν διαθέσιμες ειδοποιήσεις για το συγκεκριμένο μάθημα.";
+$langViewPlatform = "Εμφάνιση πλατφόρμας";
+$langViewBoxedType = "Σε μορφή boxed";
+$langViewFluidType = "Σε μορφή fluid";
+$langBgColorPlatformBoxed = "Χρώμα φόντου πλατφόρμας σε μορφή boxed";

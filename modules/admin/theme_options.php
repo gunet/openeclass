@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor',
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor', 'bgColorContentPlatform',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter',
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
@@ -77,6 +77,7 @@ $defaults = array(
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
+                "fluid" => array('view_platform'),
                 "small-right" => array("loginImgPlacement"),
                 "" => array('fluidContainerWidth')
             );
@@ -552,6 +553,24 @@ if (isset($_POST['optionsSave'])) {
 
 
 
+            $('#view_platform_boxed').change(function() {
+                if($('#view_platform_fluid').is(':checked')){
+                    $('#view_platform_boxed').prop('checked',true);
+                    $('#view_platform_fluid').prop('checked',false);
+                }
+                $('#boxed_options').removeClass('d-none');
+                $('#boxed_options').addClass('d-block');
+            });
+
+            $('#view_platform_fluid').change(function() {
+                if($('#view_platform_boxed').is(':checked')){
+                    $('#view_platform_fluid').prop('checked',true);
+                    $('#view_platform_boxed').prop('checked',false);
+                }
+                $('#boxed_options').removeClass('d-block');
+                $('#boxed_options').addClass('d-none');
+            });
+
         });
     </script>";
     $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version = 4 ORDER BY name, id");
@@ -943,6 +962,34 @@ $tool_content .= "
         
             <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
                 <div class='form-wrapper form-edit form-create-theme rounded'>
+
+                    <h3 class='theme_options_legend text-decoration-underline'>$langViewPlatform</h3>
+                    <div class='form-group'>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input type='checkbox' name='view_platform' id='view_platform_boxed' value='boxed' ".(($theme_options_styles['view_platform'] == 'boxed')? 'checked' : '').">
+                                <span class='checkmark'></span>
+                                $langViewBoxedType
+                            </label>
+                        </div>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input type='checkbox' name='view_platform' id='view_platform_fluid' value='fluid' ".(($theme_options_styles['view_platform'] == 'fluid')? 'checked' : '').">
+                                <span class='checkmark'></span>
+                                $langViewFluidType
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id='boxed_options' class='form-group ".(($theme_options_styles['view_platform'] == 'fluid')? 'd-none' : 'd-block')." '>
+                        <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                            <label for='bgColorContentPlatform' class='control-label-notes mb-2 me-2'>$langBgColorPlatformBoxed:</label>
+                            <input name='bgColorContentPlatform' type='text' class='form-control colorpicker' id='bgColorContentPlatform' value='$theme_options_styles[bgColorContentPlatform]'>
+                        </div>
+                    </div>
+
+                    <hr>
+
                     <h3 class='theme_options_legend text-decoration-underline'>$langLayoutConfig</h3>
                     <div class='form-group'>
                         <label class='col-sm-12 control-label-notes mb-2'>$langLayout:</label>
