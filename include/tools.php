@@ -43,11 +43,6 @@ function getSideMenu($menuTypeID, $rich=true) {
             break;
         }
 
-        case 4: { // custom tools
-            $menu = customMenu();
-            break;
-        }
-
         case 5: { // tools when embedded in tinymce
             $menu = pickerMenu();
             break;
@@ -55,7 +50,7 @@ function getSideMenu($menuTypeID, $rich=true) {
 
         default: // Only for compatibility!
             $menu = [];
-            breaK;
+            break;
     }
     return $menu;
 }

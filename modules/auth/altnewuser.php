@@ -40,7 +40,6 @@ $data['action_bar'] = action_bar(
                                 ]], false);
 
 $data['user_registration'] = get_config('user_registration');
-$data['alt_auth_prof_reg'] = get_config('alt_auth_prof_reg');
 $data['alt_auth_stud_reg'] = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
 
 if (isset($_REQUEST['auth'])) {
@@ -77,12 +76,6 @@ if (($auth != 7) and ($auth != 6)) {
 
 if (!empty($msg)) {
     $pageName = "$langConfirmUser ($msg)";
-}
-
-if (isset($_GET['p']) and $_GET['p']) {
-    $_SESSION['u_prof'] = 1;
-} else {
-    $_SESSION['u_prof'] = 0;
 }
 
 unset($uid);
