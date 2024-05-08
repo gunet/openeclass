@@ -6705,3 +6705,4 @@ $langViewFluidType = "Πλήρες πλάτος";
 $langHelpBoxedWidthInfo = "Το πλάτος των header και footer διαμορφώνεται ανάλογα με τις ρυθμίσεις layout με μέγιστο πλάτος (1920px)";
 $langHelpFluidWidthInfo = "Το πλάτος των header και footer διαμορφώνεται ανάλογα με το πλάτος της τρέχουσας οθόνης";
 $langNavSettingsnavsettingsMainSection = "Main Section";
+$langAddOpacityImage = "Προσθήκη χρώματος στην εικόνα φόντου από την επιλογή <<χρώμα φόντου>>";

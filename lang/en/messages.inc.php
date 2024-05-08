@@ -6233,3 +6233,4 @@ $langViewFluidType = "Full width";
 $langHelpBoxedWidthInfo = "The width of the header and footer is configured according to the layout settings with a maximum width (1920px)";
 $langHelpFluidWidthInfo = "The width of the header and footer is configured according to the width of the current screen";
 $langNavSettingsnavsettingsMainSection = "Main Section";
+$langAddOpacityImage = "Add color to background image from <<background color>>";

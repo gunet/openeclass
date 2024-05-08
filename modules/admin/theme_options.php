@@ -1077,6 +1077,15 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>
+                    <div class='form-group mt-4'>
+                        <div class='checkbox'>
+                            <label class='label-container'>
+                                <input type='checkbox' name='bgOpacityImage' value='1' ".((isset($theme_options_styles['bgOpacityImage']))? 'checked' : '').">
+                                <span class='checkmark'></span>
+                                $langAddOpacityImage
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 

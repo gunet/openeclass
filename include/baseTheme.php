@@ -378,11 +378,22 @@ function view($view_file, $view_data = array()) {
             }
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "#ffffff";
-            $styles_str .= "
-                                body{
-                                    background: $bg_color$bg_image;$background_type
-                                }
-                            ";
+            $LinearGr = (isset($theme_options_styles['bgOpacityImage']) && isset($theme_options_styles['bgColor'])) ? "linear-gradient($bg_color,$bg_color)," : "";
+            
+            if(isset($theme_options_styles['bgOpacityImage'])){
+                $styles_str .= "
+                    body{
+                        background: $LinearGr$bg_image;$background_type
+                    }
+                ";
+            }else{
+                $styles_str .= "
+                    body{
+                        background: $bg_color$bg_image;$background_type
+                    }
+                ";
+            }
+            
         }
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
