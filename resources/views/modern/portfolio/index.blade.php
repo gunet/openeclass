@@ -513,7 +513,7 @@
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
                 <div class='row row-cols-1 g-4'>
-                    <div class="col portfolio-content d-flex justify-content-between align-items-start flex-wrap gap-5">
+                    <div class="col portfolio-content d-flex justify-content-between align-items-start flex-wrap gap-lg-5 gap-3">
                         <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
