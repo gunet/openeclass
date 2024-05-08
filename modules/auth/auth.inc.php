@@ -1364,12 +1364,19 @@ function shib_cas_login($type) {
 
             $userObj = new User();
 
-            $options = login_hook(array(
+            $options = login_hook([
                 'user_id' => $info->id,
                 'attributes' => $attributes,
                 'status' => $info->status,
                 'departments' => $userObj->getDepartmentIds($info->id),
-                'am' => $am));
+                'am' => $am]);
+
+            if ($type == 'cas') {
+                $cas_settings = unserialize(get_auth_settings(7)['auth_settings']);
+                if ($cas_settings['cas_gunet'] ?? false) {
+                    $options = gunet_idp_hook($options);
+                }
+            }
 
             if (!$options['accept']) {
                 deny_access();
@@ -1699,6 +1706,57 @@ function unset_shib_cas_session () {
         'auth_id', 'auth_email', 'auth_givenname', 'auth_surname', 'auth_studentid'] as $var) {
             unset($_SESSION[$var]);
     }
+}
+
+
+/**
+ * @brief Hook function to modify user options on login if GUnet Identity Schema is enabled
+ * @return array $options
+ */
+function gunet_idp_hook($options) {
+    $attributes = $options['attributes'];
+    if (isset($attributes['schacpersonaluniquecode'])) {
+        $spuc = is_array($attributes['schacpersonaluniquecode'])? $attributes['schacpersonaluniquecode']: [$attributes['schacpersonaluniquecode']];
+        $new_am = canonicalize_whitespace(implode(' ', array_map(function ($item) {
+            if (preg_match('/^urn:mace:terena.org:schac:personalUniqueCode/i', $item)) {
+                $parts = explode(':', $item);
+                return $parts[8];
+            } else {
+                return '';
+            }
+        }, $spuc)));
+        if ($new_am != '') {
+            $options['am'] = $new_am;
+        }
+    }
+
+    if (isset($attributes['schacpersonalposition'])) {
+        $spp = is_array($attributes['schacpersonalposition'])? $attributes['schacpersonalposition']: [$attributes['schacpersonalposition']];
+        $assoc = Database::get()->queryArray('SELECT * FROM minedu_department_association');
+        $minedu_id_map = [];
+        foreach ($assoc as $item) {
+            $minedu_id_map[$item->minedu_id] = $item->department_id;
+        }
+        $new_departments = [];
+        foreach ($spp as $item) {
+            $parts = explode(':', $item);
+            if (isset($parts[9])) {
+                $minedu_id = $parts[9];
+                if (isset($minedu_id_map[$minedu_id])) {
+                    $new_departments[] = $minedu_id_map[$minedu_id];
+                }
+            }
+        }
+        if ($new_departments) {
+            if ($status == USER_STUDENT) {
+                $options['departments'] = $new_departments;
+            } else {
+                $options['departments'] = array_unique(array_merge($options['departments'], $new_departments));
+            }
+        }
+    }
+
+    return $options;
 }
 
 //function triggerGame($uid, $is_admin) {

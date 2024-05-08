@@ -56,7 +56,7 @@ register_posted_variables([
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'cas_altauth_use' => true, 'gunet_identity' => true, 'minedu_institution' => true, 'cas_gunet' => true, 'minedu_departments_association' => true,
+    'cas_altauth_use' => true, 'minedu_institution' => true, 'cas_gunet' => true, 'minedu_department_association' => true,
     //Auth common settings
     'auth_instructions' => true,
     'auth_title' => true,
@@ -74,24 +74,21 @@ if (empty($ldap_login_attr)) {
 
 if (isset($_POST['submit'])) {
 
-    $data = json_decode($_POST['minedu_departments_association'], true);
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
-    if ($data !== null) {
+    if ($minedu_department_association) {
+        $minedu_assoc = json_decode($minedu_department_association, true);
+        if ($minedu_assoc !== null) {
+            Database::get()->query('DELETE FROM minedu_department_association');
+            foreach ($minedu_assoc as $association) {
+                Database::get()->query('INSERT INTO minedu_department_association
+                    SET minedu_id = ?d, department_id = ?d',
+                    $association['minedu_id'], $association['department_id']);
 
-        foreach ($data as $association_string) {
-            $association = json_decode($association_string, true);
-            $minedu_School_id = $association['minedu_School_id'];
-            $local_dep_id = $association['local_dep_id'];
-
-            Database::get()->querySingle('INSERT INTO minedu_departments_association
-                                    SET minedu_id = ?d, department_id = ?d',
-                $minedu_School_id, $local_dep_id);
-
+            }
         }
-
     }
 
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     switch ($auth) {
         case 1:
             $settings = array();
@@ -146,20 +143,36 @@ if (isset($_POST['submit'])) {
             update_shibboleth_endpoint($settings);
             break;
         case 7:
-            $settings = array('cas_host' => $cas_host,
-                'cas_port' => $cas_port,
-                'cas_context' => $cas_context,
-                'cas_cachain' => $cas_cachain,
-                'casusermailattr' => $casusermailattr,
-                'casuserfirstattr' => $casuserfirstattr,
-                'casuserlastattr' => $casuserlastattr,
-                'cas_altauth' => $cas_altauth,
-                'cas_altauth_use' => $cas_altauth_use,
-                'cas_logout' => $cas_logout,
-                'cas_ssout' => $cas_ssout,
-                'casuserstudentid' => $casuserstudentid,
-                'cas_gunet' => $cas_gunet,
-            );
+            if ($cas_gunet) {
+                $settings = array('cas_host' => $cas_host,
+                    'cas_port' => '443',
+                    'cas_context' => '',
+                    'cas_cachain' => $cas_cachain,
+                    'casusermailattr' => 'mail',
+                    'casuserfirstattr' => 'givenName-lang-el givenName;lang-el givenname',
+                    'casuserlastattr' => 'sn-lang-el sn;lang-el sn',
+                    'cas_altauth' => '0',
+                    'cas_altauth_use' => 'mobile',
+                    'cas_logout' => '/logout',
+                    'cas_ssout' => '1',
+                    'casuserstudentid' => '',
+                    'cas_gunet' => $cas_gunet,
+                    'minedu_institution' => $minedu_institution);
+            } else {
+                $settings = array('cas_host' => $cas_host,
+                    'cas_port' => $cas_port,
+                    'cas_context' => $cas_context,
+                    'cas_cachain' => $cas_cachain,
+                    'casusermailattr' => $casusermailattr,
+                    'casuserfirstattr' => $casuserfirstattr,
+                    'casuserlastattr' => $casuserlastattr,
+                    'cas_altauth' => $cas_altauth,
+                    'cas_altauth_use' => $cas_altauth_use,
+                    'cas_logout' => $cas_logout,
+                    'cas_ssout' => $cas_ssout,
+                    'casuserstudentid' => $casuserstudentid,
+                    'cas_gunet' => $cas_gunet);
+            }
             break;
         case 8:  // Facebook
         case 10: // Google
@@ -193,11 +206,7 @@ if (isset($_POST['submit'])) {
     }
 
     // update table `auth`
-    if ($auth != 6 && $auth < 8) {
-        $auth_settings = pack_settings($settings);
-    } elseif ($auth >= 8) {
-        $auth_settings = serialize($settings);
-    }
+    $auth_settings = serialize($settings);
     $result = Database::get()->query('INSERT INTO auth
         (auth_id, auth_name, auth_settings, auth_instructions, auth_default, auth_title) VALUES
         (?d, ?s, ?s, ?s, 1, ?s) ON DUPLICATE KEY UPDATE

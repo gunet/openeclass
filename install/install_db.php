@@ -2265,6 +2265,13 @@ $db->query("CREATE TABLE `minedu_departments` (
     `Comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL)
     $tbl_options");
 
+$db->query("CREATE TABLE `minedu_department_association` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `minedu_id` int(11) NOT NULL DEFAULT 0,
+    `department_id` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
+
 $db->query('CREATE TABLE `login_lock` (
    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
    `user_id` INT(11) NOT NULL,

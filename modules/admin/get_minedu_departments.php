@@ -23,7 +23,6 @@ require_once '../../include/baseTheme.php';
 
 $qtype = isset($_GET['qtype']) ? $_GET['qtype'] : null;
 
-
 switch ($qtype) {
 
     case 'Institution':
@@ -34,49 +33,44 @@ switch ($qtype) {
         if ($result) {
             foreach ($result as $r) {
                 $institutionName = $r->Institution;
-
                 if (!isset($uniqueInstitutions[$institutionName])) {
                     $uniqueInstitutions[$institutionName] = 0;
                 }
-
                 $uniqueInstitutions[$institutionName]++;
             }
         }
 
         $ajax_results = array();
-
         foreach ($uniqueInstitutions as $institutionName => $count) {
             $ajax_results[] = array(
                 'Institution' => $institutionName,
                 'Count' => $count
             );
         }
-
-
         break;
 
     case 'School':
         $Institution = isset($_GET['Institution']) ? $_GET['Institution'] : null;
-        $result = Database::get()->queryArray('SELECT MineduID, Department, School  FROM minedu_departments WHERE Institution = ?s ORDER BY School ASC',$Institution);
+        $result = Database::get()->queryArray("SELECT MineduID, Department, School
+            FROM minedu_departments
+            WHERE Institution = ?s AND MineduID REGEXP '^[0-9]+$'
+            ORDER BY School ASC", $Institution);
 
         $ajax_results = array();
-
         if ($result) {
             foreach ($result as $r) {
-
-                $department = !empty($r->School) ? $r->School . ' > ' . $r->Department : $r->Department;
-
+                $department = !empty($r->School) ? $r->School . ' - ' . $r->Department : $r->Department;
                 $ajax_results[] = array(
                     'MineduID' => $r->MineduID,
                     'Department' => $department
                 );
             }
         }
-
         break;
 
     default:
         echo json_encode('Invalid query type');
+        die;
 }
 
 echo json_encode($ajax_results);

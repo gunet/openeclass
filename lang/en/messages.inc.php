@@ -5783,3 +5783,5 @@ $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';
 $langUserCreated = "New account created successfully!";
+$langCASGUnetIdentity = 'Enable GUnet Single-Sign-On Service';
+$langSchoolDepartment = 'School - Faculty';
