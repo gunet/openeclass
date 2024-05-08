@@ -382,29 +382,11 @@ function view($view_file, $view_data = array()) {
                                 body{
                                     background: $bg_color$bg_image;$background_type
                                 }
-                                .main-container,
-                                .module-container{
-                                    background-color: $bg_color;
-                                }
                             ";
         }
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////// BACKGROUND TRANSPARENT TO THE BASIC WRAPPERS  ///////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        if (isset($theme_options_styles['bgTransparentBasicWrappers'])){
-            $styles_str .= "
-                .main-container,
-                .module-container{
-                    background-color: transparent;
-                }
-            ";
-        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6052,14 +6034,6 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['view_platform']) && $theme_options_styles['view_platform'] == 'boxed'){
 
-            if(!empty($theme_options_styles['bgColorContentPlatform'])){
-                $styles_str .= "
-                    .ContentEclass{
-                        background-color: $theme_options_styles[bgColorContentPlatform];
-                    }
-                ";
-            }
-
             $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1200px');    
             $styles_str .= "
 
@@ -6086,11 +6060,32 @@ function view($view_file, $view_data = array()) {
                         margin-right: auto;
                         max-width: $maxWidthPlatform ;
                     }
+
+                    .notification-top-bar{
+                        left: auto;
+                        max-width: $maxWidthPlatform ;
+                    }
                 }
 
             ";
 
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// BACKGROUND COLOR TO THE MAIN SECTION ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorContentPlatform'])){
+            $styles_str .= "
+                .ContentEclass,
+                .main-container,
+                .module-container{
+                    background-color: $theme_options_styles[bgColorContentPlatform];
+                }
+            ";
+         }
 
 
 

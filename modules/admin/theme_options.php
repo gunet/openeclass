@@ -558,8 +558,6 @@ if (isset($_POST['optionsSave'])) {
                     $('#view_platform_boxed').prop('checked',true);
                     $('#view_platform_fluid').prop('checked',false);
                 }
-                $('#boxed_options').removeClass('d-none');
-                $('#boxed_options').addClass('d-block');
             });
 
             $('#view_platform_fluid').change(function() {
@@ -567,8 +565,6 @@ if (isset($_POST['optionsSave'])) {
                     $('#view_platform_fluid').prop('checked',true);
                     $('#view_platform_boxed').prop('checked',false);
                 }
-                $('#boxed_options').removeClass('d-block');
-                $('#boxed_options').addClass('d-none');
             });
 
         });
@@ -924,6 +920,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link active' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsBody' aria-controls='navsettingsBody' role='tab' data-bs-toggle='tab'>$langNavBody</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsHeader' aria-controls='navsettingsHeader' role='tab' data-bs-toggle='tab'>$langNavSettingsHeader</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsMainSection' aria-controls='navsettingsMainSection' role='tab' data-bs-toggle='tab'>$langNavSettingsnavsettingsMainSection</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsFooter' aria-controls='navsettingsFooter' role='tab' data-bs-toggle='tab'>$langNavSettingsFooter</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navLinks' aria-controls='navLinks' role='tab' data-bs-toggle='tab'>$langNavLinks</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navButtons' aria-controls='navButtons' role='tab' data-bs-toggle='tab'>$langNavButtons</a></li>
@@ -971,6 +968,7 @@ $tool_content .= "
                                 <span class='checkmark'></span>
                                 $langViewBoxedType
                             </label>
+                            <small class='ms-5'>$langHelpBoxedWidthInfo</small>
                         </div>
                         <div class='checkbox'>
                             <label class='label-container'>
@@ -978,13 +976,7 @@ $tool_content .= "
                                 <span class='checkmark'></span>
                                 $langViewFluidType
                             </label>
-                        </div>
-                    </div>
-
-                    <div id='boxed_options' class='form-group ".(($theme_options_styles['view_platform'] == 'fluid')? 'd-none' : 'd-block')." '>
-                        <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                            <label for='bgColorContentPlatform' class='control-label-notes mb-2 me-2'>$langBgColorPlatformBoxed:</label>
-                            <input name='bgColorContentPlatform' type='text' class='form-control colorpicker' id='bgColorContentPlatform' value='$theme_options_styles[bgColorContentPlatform]'>
+                            <small class='ms-5'>$langHelpFluidWidthInfo</small>
                         </div>
                     </div>
 
@@ -1085,18 +1077,6 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langTransparentBasicWrappers</h3>
-                    <div class='form-group mt-2'>
-                        <div class='col-sm-12'>
-                            <div class='checkbox'>
-                                <label class='label-container'>
-                                <input type='checkbox' name='bgTransparentBasicWrappers' value='1' ".((isset($theme_options_styles['bgTransparentBasicWrappers']))? 'checked' : '').">
-                                <span class='checkmark'></span>
-                                $langDeactivate
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -1163,6 +1143,21 @@ $tool_content .= "
                                 $langDeactivate
                                 </label>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsMainSection'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgColorConfig</h3>
+                    <div class='form-group'>
+                        <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                            <label for='bgColorContentPlatform' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                            <input name='bgColorContentPlatform' type='text' class='form-control colorpicker' id='bgColorContentPlatform' value='$theme_options_styles[bgColorContentPlatform]'>
                         </div>
                     </div>
                 </div>
@@ -1718,7 +1713,7 @@ $tool_content .= "
 
             <div role='tabpanel' class='tab-pane fade' id='navLinks'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langLinksCongiguration ($langEclass)</h3>
+                    <h3 class='theme_options_legend text-decoration-underline'>$langLinksCongiguration</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
                         <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>

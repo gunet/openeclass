@@ -757,21 +757,6 @@ function get_theme_options() {
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////// BACKGROUND TRANSPARENT TO THE BASIC WRAPPERS  ///////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        if (isset($theme_options_styles['bgTransparentBasicWrappers'])){
-            $styles_str .= "
-                .main-container,
-                .module-container{
-                    background-color: transparent;
-                }
-            ";
-        }
-
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -4903,6 +4888,67 @@ function get_theme_options() {
                     border: solid 1px $theme_options_styles[AboutBorderUnitsContainer];
                 }
             
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////// BACKGROUND COLOR TO THE PLATFORM CONTENT WHEN PLATFORM IS BOXED TYPR ////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['view_platform']) && $theme_options_styles['view_platform'] == 'boxed'){
+
+            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1200px');    
+            $styles_str .= "
+
+                @media (min-width: 992px) {
+                    .ContentEclass{
+                        margin-left: auto;
+                        margin-right: auto;
+                        min-width: 992px;
+                        max-width: $maxWidthPlatform ;
+                    }
+
+                    #bgr-cheat-header,
+                    #bgr-cheat-header-mentoring{
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        max-width: $maxWidthPlatform ;
+                    }
+
+                    #bgr-cheat-header.fixed, 
+                    #bgr-cheat-header-mentoring.fixed {
+                        margin-left: auto;
+                        margin-right: auto;
+                        max-width: $maxWidthPlatform ;
+                    }
+
+                    .notification-top-bar{
+                        left: auto;
+                        max-width: $maxWidthPlatform ;
+                    }
+                }
+
+            ";
+
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// BACKGROUND COLOR TO THE MAIN SECTION ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorContentPlatform'])){
+           $styles_str .= "
+                .ContentEclass,
+                .main-container,
+                .module-container{
+                    background-color: $theme_options_styles[bgColorContentPlatform];
+                }
             ";
         }
 
