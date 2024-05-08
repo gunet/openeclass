@@ -866,7 +866,7 @@ $langGroupSettingsModified = "Group settings modified";
 
 $langBooking = "Reservation";
 $langBookings = "Reservations";
-$langAddAvailableDateForGroupAdmin = "Add availability to the group"; 
+$langAddAvailableDateForGroupAdmin = "Add availability to the group";
 $langAddAvailability = "Add available date";
 $langRedInfoRentezvousOtherProgram = "<div class='Accent-200-cl TextBold'>The available contact days you have registered as a team leader in other courses are shown in RED.</div>";
 $langSuccessInfoRentezvous = "<div class='Success-200-cl TextBold'>The available contact days you have entered in the current course are shown in GREEN color</br>
@@ -4028,7 +4028,7 @@ $langbgColorTooltip = "Tooltip background color";
 $langTextColorTooltip = "Text color";
 $langBgColorListItem = "Background color to the list item";
 $langBgBorderColorListItem = "Border color to the bottom side of list item";
-$langBorderTextColor = "Border color"; 
+$langBorderTextColor = "Border color";
 $langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Short note';
@@ -6281,3 +6281,21 @@ $langInfoAboutCollabRegistration = "The partnership you selected is closed. To r
 $langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
 $langCollabDes = "Collaboration description";
 $langThisCollabDescriptionIsEmpty = "The collaboration has no description";
+$langWithRights = "with course creation rights";
+$langWithCourseCreationRights = "course creation";
+$langWithNoCourseCreationRights = "no course creation";
+$langUserLastLogins = "Login history";
+$langNoUserLastLogins = "The user has never logged in to the platform.";
+$langLastYear = 'Last year';
+$langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
+$langCourseDeleted = "Delete of $langsCourse";
+$langCourseDeletedBy = "Deleted by";
+$langNoticeCourseDeleted = "If the $langsCourse was deleted by you, you can ignore this email. If the deletion was done by mistake and you wish to restore your $langsCourse, please contact the platform administrators.";
+$langExercisePreventCopy = 'Prevent Text Copying';
+$langExercisePreventCopyExplanation = 'Prevent copying and pasting text during execution of the exercise';
+$langDoubleLoginLock = 'You have logged into the platform from another device
+    with the same account. Double logins are disabled, so your current login has
+    been disconnected.';
+$langUserCreated = "New account created successfully!";
+$langCASGUnetIdentity = 'Enable GUnet Single-Sign-On Service';
+$langSchoolDepartment = 'School - Faculty';

@@ -2590,7 +2590,7 @@ function upgrade_to_3_15($tbl_options) : void
  */
 function upgrade_to_3_16($tbl_options) : void
 {
-    if (!DBHelper::tableExists('login_lock')) {
+    if (!dbhelper::tableexists('login_lock')) {
         Database::get()->query('CREATE TABLE `login_lock` (
            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
            `user_id` INT(11) NOT NULL,
@@ -2620,6 +2620,15 @@ function upgrade_to_3_16($tbl_options) : void
     Database::get()->query('UPDATE course_user
         SET document_timestamp = reg_date
         WHERE document_timestamp < reg_date');
+
+    if (!dbhelper::tableexists('minedu_department_association')) {
+        Database::get()->query("CREATE TABLE `minedu_department_association` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `minedu_id` int(11) NOT NULL DEFAULT 0,
+              `department_id` int(11) NOT NULL,
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
 }
 
 /**

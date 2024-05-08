@@ -129,19 +129,19 @@
     <label for='cas_host' class='col-sm-2 control-label'>GUNet:</label>
     <div class='col-sm-10'>
         <input type='checkbox' name='cas_gunet' id='cas_gunet' value='1' {!! $checked !!}>
-        <label for='cas_gunet'>Ενεργοποίηση πιστοποίησης GUNet</label>
+        <label for='cas_gunet'>{{ trans('langCASGUnetIdentity') }}</label>
         <div class='cas_gunet_container hide'>
             <div>
-                <label for='minedu_Institution'>Institution</label>
+                <label for='minedu_Institution'>{{ trans('langInstitution') }}</label>
                 <select id='minedu_Institution' name='minedu_Institution'></select>
             </div>
             <table id='cas_gunet_table'>
                 <thead>
                     <tr>
-                        <th>Minedu</th>
+                        <th>{{ trans('langSchoolDepartment') }}</th>
                         <th>Minedu ID</th>
-                        <th>Department</th>
-                        <th>Department ID</th>
+                        <th>{{ trans('langFaculty') }}</th>
+                        <th>ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,16 +160,16 @@
             <div>
                 <div>
                     <div>
-                        <label for='minedu_Institution'>School > Department</label>
+                        <label for='minedu_Institution'>{{ trans('langSchoolDepartment') }}</label>
                         <select id='minedu_School'></select>
                     </div>
                     <div>
-                        <label for=''>Local Department</label>
+                        <label for=''>{{ trans('langLocalCategory') }}</label>
                             $html
                     </div>
                 </div>
-                <button id='cas_gunet_add' class='btn btn-primary'>Associate Departments</button>
-                <input type='hidden' name='minedu_departments_association'>
+                <button id='cas_gunet_add' class='btn btn-primary'>$langAdd</button>
+                <input type='hidden' name='minedu_department_association' value='{{ $minedu_department_association }}'>
             </div>
         </div>
     </div>
