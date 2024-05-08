@@ -81,7 +81,7 @@
 
 
                                                 <div class='col-12'>
-                                                    <div class='form-group mt-4'>
+                                                    <div class='form-group'>
                                                         <label for='ProfComments' class='col-sm-12 control-label-notes'>{{ trans('langComments') }}</label>
                                                         <div class='col-sm-12'>
                                                             <textarea id='ProfComments' class='form-control' name='usercomment' cols='30' rows='4' placeholder='{{ trans('langReasonsForCreatingCourses') }}...'>{!! q($usercomment) !!}</textarea>
