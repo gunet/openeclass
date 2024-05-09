@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
     } else {
 
         process_eportfolio_fields_data();
-    
+
         Session::Messages($langePortfolioChangeSucc, 'alert-success');
         redirect_to_home_page("main/eportfolio/index.php?id=$uid&token=$token");
     }
@@ -127,7 +127,7 @@ $tool_content .=
             "<div class='row'>
                 <div class='col-sm-9'>
                     <form class='form-horizontal' role='form' action='$sec' method='post'>";
-                    
+
 
 
 //add custom profile fields

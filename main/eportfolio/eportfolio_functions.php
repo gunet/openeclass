@@ -32,33 +32,33 @@ define('EPF_LINK', 5);
  * @return string
  */
 function render_eportfolio_fields_content($uid) {
-    
+
     $showAll = false;
-    
+
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
             <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>";
-    
+
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
-    
+
     $j = 0;
-    
+
     foreach ($result as $c) {
-        
+
         $showCat = false;
         $cat_return_string = array();
         $cat_return_string['panels'] = "";
         $cat_return_string['right_menu'] = "";
-    
+
         $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
-    
+
         if (count($res) > 0) {
-    
+
             $cat_return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
                                                  <div class="panel-body">
                                                      <div class="inner-heading">
-                                                         <span>'.$c->name.'</span>
+                                                         <span>'. q($c->name) .'</span>
                                                      </div>
                                                      <fieldset>';
             if ($j == 0) {
@@ -66,17 +66,17 @@ function render_eportfolio_fields_content($uid) {
             } else {
                 $active = "";
             }
-    
+
             $j++;
-    
+
             $cat_return_string['right_menu'] .= "<li$active><a href='#$c->id'>$c->name</a></li>";
-            
+
             foreach ($res as $f) {
-    
+
                 if (isset($fdata)) {
                     unset($fdata);
                 }
-    
+
                 //get data to prefill fields
                 $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
                                  WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
@@ -86,16 +86,14 @@ function render_eportfolio_fields_content($uid) {
                     $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
                     $cat_return_string['panels'] .= '<span class="tag"><strong>'.q($f->name).': </strong></span>';
                     $cat_return_string['panels'] .= '<span>';
-                    
+
                     switch ($f->datatype) {
+                        case EPF_DATE:
                         case EPF_TEXTBOX:
                             $cat_return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                             break;
                         case EPF_TEXTAREA:
                             $cat_return_string['panels'] .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
-                            break;
-                        case EPF_DATE:
-                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                             break;
                         case EPF_MENU:
                             $options = unserialize($f->data);
@@ -111,30 +109,30 @@ function render_eportfolio_fields_content($uid) {
                     $cat_return_string['panels'] .= "</div>";
                 }
             }
-    
+
             $cat_return_string['panels'] .= '</fieldset>
                        </div>
                    </div>';
-    
+
         }
-        
+
         if ($showCat) {
             $return_string['panels'] .= $cat_return_string['panels'];
-            $return_string['right_menu'] .= $cat_return_string['right_menu'];    
+            $return_string['right_menu'] .= $cat_return_string['right_menu'];
         } else {
             $j--;
         }
-        
+
     }
-    
+
     $return_string['right_menu'] .= '</ul>
                                  </div>';
-    
+
     if (!$showAll) {
         $return_string['panels'] = "";
         $return_string['right_menu'] = "";
     }
-    
+
     return $return_string;
 }
 
@@ -153,17 +151,17 @@ function render_eportfolio_fields_form() {
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
 
     $j = 0;
-    
+
     foreach ($result as $c) {
 
         $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype, data
                                             FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
         if (count($res) > 0) {
-            
+
             $return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
                                        <div class="panel-heading">
-                                           <h2 class="panel-title">'.$c->name.'</h2>
+                                           <h2 class="panel-title">'. q($c->name) .'</h2>
                                        </div>
                                        <div class="panel-body">
                                            <fieldset>';
@@ -172,11 +170,11 @@ function render_eportfolio_fields_form() {
             } else {
                 $active = "";
             }
-            
+
             $j++;
-            
-            $return_string['right_menu'] .= "<li$active><a href='#$c->id'>$c->name</a></li>";
-            
+
+            $return_string['right_menu'] .= "<li$active><a href='#$c->id'> " . q($c->name) . "</a></li>";
+
             foreach ($res as $f) {
 
                 if (isset($fdata)) {
@@ -190,7 +188,7 @@ function render_eportfolio_fields_form() {
                     $form_class = 'form-group';
                     $help_block = '';
                 }
-                
+
                 $return_string['panels'] .= '<div class="'.$form_class.'">';
                 $return_string['panels'] .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.q($f->name).'</label>';
                 $return_string['panels'] .= '<div class="col-sm-10">';
@@ -295,17 +293,17 @@ function render_eportfolio_fields_form() {
                 $return_string['panels'] .= $help_block.'</div></div>';
                 unset($req_label);
             }
-            
+
             $return_string['panels'] .= '</fieldset>
                        </div>
                    </div>';
-            
+
         }
     }
-    
+
     $return_string['right_menu'] .= '</ul>
                                  </div>';
-    
+
     return $return_string;
 }
 
@@ -315,9 +313,9 @@ function render_eportfolio_fields_form() {
  */
 function process_eportfolio_fields_data() {
     global $uid;
-    
+
     $updated = false;
-    
+
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'epf_') { //e-portfolio fields input names start with epf_
             $field_name = substr($key, 4);
@@ -330,7 +328,7 @@ function process_eportfolio_fields_data() {
             } else {
                 Database::get()->query("DELETE FROM eportfolio_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
             }
-            
+
             if (!empty($value)) {
                 if ($result->datatype == EPF_TEXTAREA) {
                     $value = purify($value);
@@ -361,7 +359,7 @@ function epf_validate(&$valitron_object) {
                     $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
                 }
             }
-            
+
             if ($datatype == EPF_LINK) {
                 $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
             } elseif ($datatype == EPF_DATE) {
