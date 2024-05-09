@@ -36,21 +36,19 @@ if (isset($_POST['submit'])) {
     if (allow_to_post($course_id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
             if (empty($_POST['extvideo'])) {
-                
+
                 $content = links_autodetection($_POST['message']);
                 $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, timestamp) VALUES (?d,?d,?s,UNIX_TIMESTAMP())",
                         $course_id, $uid, $content)->lastInsertID;
                 Log::record($course_id, MODULE_ID_WALL, LOG_INSERT,
                     array('id' => $id,
                           'content' => $content));
-              //  Session::Messages($langWallPostSaved, 'alert-success');
                 Session::flash('message',$langWallPostSaved);
                 Session::flash('alert-class', 'alert-success');
             } else {
                 if (ExtVideoUrlParser::validateUrl($_POST['extvideo']) === FALSE) {
                     Session::flash('content', $_POST['message']);
                     Session::flash('extvideo', $_POST['extvideo']);
-                    //Session::Messages($langWallExtVideoLinkNotValid);
                     Session::flash('message',$langWallExtVideoLinkNotValid);
                     Session::flash('alert-class', 'alert-warning');
                 } else {
@@ -61,7 +59,7 @@ if (isset($_POST['submit'])) {
                         array('id' => $id,
                               'content' => $content,
                               'extvideo' => $_POST['extvideo']));
-                   // Session::Messages($langWallPostSaved, 'alert-success');
+
                     Session::flash('message',$langWallPostSaved);
                     Session::flash('alert-class', 'alert-success');
                 }
@@ -76,8 +74,8 @@ if (isset($_POST['submit'])) {
                     insert_docs($id);
                 }
                 //save my documents
-                if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {                    
-                    insert_docs($id,'mydocs');                    
+                if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
+                    insert_docs($id,'mydocs');
                 }
                 //save links
                 if ($is_editor || visible_module(MODULE_ID_LINKS)) {
@@ -106,14 +104,13 @@ if (isset($_POST['submit'])) {
                 echo ('hello');
             }
         } else {
-           // Session::Messages($langWallMessageEmpty);
             Session::flash('message',$langWallMessageEmpty);
             Session::flash('alert-class', 'alert-warning');
             if (!empty($_POST['extvideo'])) {
                 Session::flash('extvideo', $_POST['extvideo']);
             }
         }
-        
+
         decide_wall_redirect();
     }
 } elseif (isset($_GET['delete'])) { //handle delete
@@ -150,7 +147,7 @@ if (isset($_POST['submit'])) {
 
         Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
-       // Session::Messages($langWallPostDeleted, 'alert-success');
+
         Session::flash('message',$langWallPostDeleted);
         Session::flash('alert-class', 'alert-success');
     }
@@ -174,7 +171,6 @@ if (isset($_POST['submit'])) {
                 if (ExtVideoUrlParser::validateUrl($_POST['extvideo']) === FALSE) {
                     Session::flash('content', $_POST['message']);
                     Session::flash('extvideo', $_POST['extvideo']);
-                   // Session::Messages($langWallExtVideoLinkNotValid);
                     Session::flash('message',$langWallExtVideoLinkNotValid);
                     Session::flash('alert-class', 'alert-warniig');
                     redirect_to_home_page("modules/wall/index.php?course=$course_code&edit=$id");
@@ -238,12 +234,12 @@ if (isset($_POST['submit'])) {
             if ($is_editor || visible_module(MODULE_ID_FORUM)) {
                 insert_forum($id);
             }
+
             Session::flash('message',$langWallPostSaved);
             Session::flash('alert-class', 'alert-success');
             decide_wall_redirect();
 
         } else {
-           // Session::Messages($langWallMessageEmpty);
             Session::flash('message',$langWallMessageEmpty);
             Session::flash('alert-class', 'alert-warning');
             if (!empty($_POST['extvideo'])) {
