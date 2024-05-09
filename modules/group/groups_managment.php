@@ -502,8 +502,10 @@ $tool_content .= "<div class='col-12'>
                                                                                                     $langDoc
                                                                                                 </label>
                                                                                             </div>
-                                                                                        </div>
+                                                                                        </div>";
 
+                                                                                        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+                                                                                        $tool_content .= "
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label class='label-container'>
@@ -512,7 +514,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                     $langWiki
                                                                                                 </label>
                                                                                             </div>
-                                                                                        </div>";
+                                                                                        </div>";}
 
                                                                                         if(get_config('individual_group_bookings')){
                                                                                             $tool_content .= "<div class='col-12 form-group mt-2'>

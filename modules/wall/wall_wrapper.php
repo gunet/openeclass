@@ -35,7 +35,7 @@ require_once 'include/log.class.php';
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
-           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, $langOfCourse;
+           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, $langOfCourse, $collaboration_platform;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -86,22 +86,32 @@ function show_post_form() {
             $links_li = '';
         }
 
-        if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
-            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
-                              '.list_exercises().'
-                          </div>';
-            $exercises_li = '<li class="nav-item"><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
-        } else {
+        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+            if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
+                $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
+                                '.list_exercises().'
+                            </div>';
+                $exercises_li = '<li class="nav-item"><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+            } else {
+                $exercises_div = '';
+                $exercises_li = '';
+            }
+        }else{
             $exercises_div = '';
             $exercises_li = '';
         }
 
-        if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
-            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
-                              '.list_assignments().'
-                          </div>';
-            $assignments_li = '<li class="nav-item"><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
-        } else {
+        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+            if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
+                $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
+                                '.list_assignments().'
+                            </div>';
+                $assignments_li = '<li class="nav-item"><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+            } else {
+                $assignments_div = '';
+                $assignments_li = '';
+            }
+        }else{
             $assignments_div = '';
             $assignments_li = '';
         }
@@ -152,7 +162,7 @@ function show_post_form() {
                     </div>
                     <div class="card-body">
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
-                            <fieldset>
+                            <fieldset> 
                                 <div class="form-group">
                                     <textarea style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
                                 </div>
@@ -196,8 +206,8 @@ function show_post_form() {
                                         'value' =>  $langSubmit
                                     )
                                 ))
-                                .'</div></div>
-                            </fieldset>
+                                .'</div></div>  
+                            </fieldset>      
                         </form>
                     </div>
                 </div>

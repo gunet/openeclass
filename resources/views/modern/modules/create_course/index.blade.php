@@ -71,6 +71,33 @@
                 hideCCFields();
             }
         }).change();
+
+        var type_course = $('#typeCourse').val();
+        if (type_course == 1){
+          $('.typeCourse').removeClass('d-block');
+          $('.typeCourse').addClass('d-none');
+          const simple = document.getElementById('simple');
+          simple.checked = true;
+        }else{
+          $('.typeCourse').removeClass('d-none');
+          $('.typeCourse').addClass('d-block');
+          const units = document.getElementById('units');
+          units.checked = true;
+        }
+        $('#typeCourse').change(function(){
+            var item = $(this).val();
+            if (item == 1){
+              $('.typeCourse').removeClass('d-block');
+              $('.typeCourse').addClass('d-none');
+              const simple = document.getElementById('simple');
+              simple.checked = true;
+            }else{
+              $('.typeCourse').removeClass('d-none');
+              $('.typeCourse').addClass('d-block');
+              const units = document.getElementById('units');
+              units.checked = true;
+            }
+        });
     });
 
 </script>
@@ -163,35 +190,53 @@
                             </div>
                         </div>
 
+                        <div class='form-group mt-4'>
+                          <label for="typeCourse" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
+                          @if(get_config('show_collaboration') and get_config('show_always_collaboration'))
+                              <select id='typeCourse' name='typeCourse' class='form-select'>
+                                <option value='1' selected>{{ trans('langTypeCollaboration') }}</option>
+                              </select>
+                          @elseif(get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                              <select id='typeCourse' name='typeCourse' class='form-select'>
+                                <option value='0' selected>{{ trans('langTypeCourse') }}</option>
+                                <option value='1'>{{ trans('langTypeCollaboration') }}</option>
+                              </select>
+                          @else
+                              <select id='typeCourse' name='typeCourse' class='form-select'>
+                                <option value='0' selected>{{ trans('langCourse') }}</option>
+                              </select>
+                          @endif
+                        </div>
+
                             <div class='form-group mt-4'>
                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</label>
 
-                                <div class='radio mb-2'>
+                                <div class='radio mb-2 typeCourse1'>
                                   <label>
                                       <input type='radio' name='view_type' value='simple' id='simple'>
                                       {{ trans('langCourseSimpleFormat') }}
                                   </label>
                                 </div>
 
-                                <div class='radio mb-2'>
+                                <div class='radio mb-2 typeCourse1'>
                                   <label>
                                     <input type='radio' name='view_type' value='units' id='units' checked>
                                     {{ trans('langWithCourseUnits') }}
                                     </label>
                                 </div>
-                                <div class="radio mb-2">
+                                <div class="radio mb-2 typeCourse">
                                   <label>
                                     <input type="radio" name="view_type" value="activity" id="activity">
                                     {{trans('langCourseActivityFormat') }}
                                   </label>
                                 </div>
-                                <div class='radio mb-2'>
+                                <div class='radio mb-2 typeCourse'>
                                   <label>
                                     <input type='radio' name='view_type' value='wall' id='wall'>
                                     {{ trans('langCourseWallFormat') }}
                                   </label>
                                 </div>
-                                <div class='radio'>
+                                <div class='radio typeCourse'>
                                     <label>
                                         <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom'>
                                         {{ trans('langFlippedClassroom') }}

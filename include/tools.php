@@ -63,7 +63,14 @@ function getSideMenu($menuTypeID, $rich=true) {
  * @see function lessonToolsMenu
  */
 function getToolsArray($cat) {
-    global $course_code;
+    global $course_code, $collaboration_platform;
+
+    $table_modules = '';
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        $table_modules = 'module_disable';
+    }else{
+        $table_modules = 'module_disable_collaboration';
+    }
 
     $cid = course_code_to_id($course_code);
 
@@ -78,17 +85,17 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_FORUM . ",
                                           " . MODULE_ID_GROUPS . ",
                                           " . MODULE_ID_ATTENDANCE . ",
-                                          " . MODULE_ID_GRADEBOOK . ",                                          
+                                          " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_REQUEST . ",
                                           " . MODULE_ID_PROGRESS . ",
                                           " . MODULE_ID_LP . ",
                                           " . MODULE_ID_TC . ") AND
-                        module_id NOT IN (SELECT module_id FROM module_disable)";
+                        module_id NOT IN (SELECT module_id FROM $table_modules)";
             if (!check_guest()) {
                 if (isset($_SESSION['uid']) and $_SESSION['uid']) {
                     $result = Database::get()->queryArray("SELECT * FROM course_module
                             WHERE visible = 1 AND
-                                  module_id NOT IN (SELECT module_id FROM module_disable) AND
+                                  module_id NOT IN (SELECT module_id FROM $table_modules) AND
                             course_id = ?d", $cid);
                 } else {
                     $result = Database::get()->queryArray($sql);
@@ -100,7 +107,7 @@ function getToolsArray($cat) {
         case 'PublicButHide':
             $result = Database::get()->queryArray("SELECT * FROM course_module
                                          WHERE visible = 0 AND
-                                               module_id NOT IN (SELECT module_id FROM module_disable) AND
+                                               module_id NOT IN (SELECT module_id FROM $table_modules) AND
                                          course_id = ?d", $cid);
             break;
     }
@@ -288,7 +295,14 @@ function lessonToolsMenu($rich=true): array
  */
 function pickerMenu() {
 
-    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid;
+    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid, $collaboration_platform;
+
+    $table = '';
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        $table = 'module_disable';
+    }else{
+        $table = 'module_disable_collaboration';
+    }
 
     // params
     $originating_module = isset($_REQUEST['originating_module']) ? intval($_REQUEST['originating_module']) : null;
@@ -316,7 +330,7 @@ function pickerMenu() {
         $result = Database::get()->queryArray("SELECT * FROM course_module
                                WHERE course_id = ?d AND
                                      module_id IN (" . MODULE_ID_DOCS . ', ' . MODULE_ID_VIDEO . ', ' . MODULE_ID_LINKS . ") AND
-                                     module_id NOT IN (SELECT module_id FROM module_disable)
+                                     module_id NOT IN (SELECT module_id FROM $table)
                                      $visible
                                ORDER BY module_id", $course_id);
 

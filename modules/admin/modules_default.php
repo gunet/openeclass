@@ -33,7 +33,11 @@ $pageName = $langDefaultModules;
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['module'])) {
-        set_config('default_modules', serialize(array_keys($_POST['module'])));
+        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+            set_config('default_modules', serialize(array_keys($_POST['module'])));
+        }else{
+            set_config('default_modules_collaboration', serialize(array_keys($_POST['module'])));
+        }
     }
     //Session::Messages($langWikiEditionSucceed, 'alert-success');
     Session::flash('message',$langWikiEditionSucceed);
@@ -41,10 +45,21 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page('modules/admin/modules_default.php');
 } else {
     $data['disabled'] = [];
-    foreach (Database::get()->queryArray('SELECT module_id FROM module_disable') as $item) {
+
+
+    $table_modules = '';
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        $table_modules = 'module_disable';
+    }else{
+        $table_modules = 'module_disable_collaboration';
+    }
+
+    foreach (Database::get()->queryArray('SELECT module_id FROM '.$table_modules.'') as $item) {
         $data['disabled'][] = $item->module_id;
     }
+
     $data['modules'] = $modules;
+    
     $data['default'] = default_modules();
 
     $data['action_bar'] = action_bar(

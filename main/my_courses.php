@@ -55,10 +55,11 @@ if(isset($_GET['term'])){
                       course_user.status status,
                       course_user.favorite favorite
                 FROM course JOIN course_user
-                      ON course.id = course_user.course_id
-                      AND course_user.user_id = ?d
+                      ON course.id = course_user.course_id 
+                      AND course_user.user_id = ?d 
                       AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-                  ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+                      AND is_collaborative = ?d
+                  ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $collaboration_value);
   }else{//Get all courses from search-component which user has registered
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                    course.code code,
@@ -71,11 +72,12 @@ if(isset($_GET['term'])){
                    course_user.status status,
                    course_user.favorite favorite
              FROM course JOIN course_user
-                  ON course.id = course_user.course_id
+                  ON course.id = course_user.course_id 
                   WHERE title LIKE ?s
-                  AND course_user.user_id = ?d
+                  AND course_user.user_id = ?d 
                   AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-              ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid);
+                  AND is_collaborative = ?d
+              ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid, $collaboration_value);
   }
 
   if($myCourses){

@@ -202,16 +202,20 @@
                                         {!! trans('langDisableModules') !!}
                                     </a>
                                 </li>
+                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/certbadge.php">
                                         {!! trans('langCertBadge') !!}
                                     </a>
                                 </li>
+                                @endif
+                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{$urlAppend}}modules/admin/activity.php">
                                         {!! trans('langActivityCourse') !!}
                                     </a>
                                 </li>
+                                @endif
                             @endif
                         </ul>
                     </div>
@@ -238,15 +242,24 @@
                                 </a>
                             </li>
                             <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/collaboration_enable.php">
+                                    {!! trans('langCollaborationPlatform') !!}
+                                </a>
+                            </li>
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                            <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/widgets.php">
                                     {!! trans('langWidgets') !!}
                                 </a>
                             </li>
+                            @endif
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/coursecategory.php">
                                     {!! trans('langCourseCategoryActions') !!}
                                 </a>
                             </li>
+                            @endif
                             @if (get_config('phpMyAdminURL'))
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="{{ get_config('phpMyAdminUrl') }}">

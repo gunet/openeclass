@@ -641,6 +641,31 @@ function multiselection($entries, $name, $defaults = array(), $extra = '') {
     return $retString;
 }
 
+/* * ******************************************************************
+  Show a selection box. Taken from main.lib.php
+  Difference: the return value and not just echo the select box
+
+  $entries: an array of (value => label)
+  $name: the name of the selection element
+  $default: if it matches one of the values, specifies the default entry
+ * ********************************************************************* */
+
+function selection3($entries, $name, $default = '') {
+    $select_box = "<select name='$name'>\n";
+    foreach ($entries as $value => $label) {
+        if ($value == $default) {
+            $select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
+                    htmlspecialchars($label) . "</option>\n";
+        } else {
+            $select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
+                    htmlspecialchars($label) . "</option>\n";
+        }
+    }
+    $select_box .= "</select>\n";
+
+    return $select_box;
+}
+
 
 /**
  * @brief function to check if user is a guest user
@@ -1160,7 +1185,16 @@ function visible_module($module_id) {
  */
 function is_module_disable($module_id) {
 
-    $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
+    global $collabortion_platform;
+
+    $table_modules = '';
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        $table_modules = 'module_disable';
+    }else{
+        $table_modules = 'module_disable_collaboration';
+    }
+
+    $q = Database::get()->querySingle("SELECT * FROM $table_modules WHERE module_id = ?d", $module_id);
     if ($q) {
         return true;
     } else {

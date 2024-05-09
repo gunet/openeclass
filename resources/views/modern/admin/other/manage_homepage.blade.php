@@ -156,7 +156,7 @@
                                             </div>
                                     </div>
                                 </div>
-
+                                
                                 
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -174,7 +174,7 @@
 
 
 
-
+                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                     @if($priorities)
                         <div class='col-12 mt-5'>
                             <div id='orderTexts'>
@@ -231,6 +231,9 @@
                                 @endforeach
                             </div>
                         </div>
+                    @endif
+                    @else
+                    <div id='orderTexts'></div>      
                     @endif
 
                 

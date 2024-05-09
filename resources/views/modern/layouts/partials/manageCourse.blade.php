@@ -57,40 +57,43 @@
                 </li>
             @endif
             
-            @if ($is_course_admin)
-                <li>
-                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}">
-                        <i class="fa-solid fa-building-columns settings-icons"></i>
-                        {{trans('langCoursePrerequisites')}}     
-                    </a>
-                </li>
-            @endif
+            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                @if ($is_course_admin)
+                    <li>
+                        <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}">
+                            <i class="fa-solid fa-building-columns settings-icons"></i>
+                            {{trans('langCoursePrerequisites')}}     
+                        </a>
+                    </li>
+                @endif
 
-            @if ($is_course_admin)
-                <li>
-                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
-                        <i class="fa-solid fa-wand-magic-sparkles settings-icons"></i>
-                        {{trans('langWidgets')}}
-                    </a>
-                </li>
-            @endif
+                @if ($is_course_admin)
+                    <li>
+                        <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
+                            <i class="fa-solid fa-wand-magic-sparkles settings-icons"></i>
+                            {{trans('langWidgets')}}
+                        </a>
+                    </li>
+                @endif
 
-            @if ($is_course_admin)
-                <li>
-                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
-                        <i class="fa-solid fa-link settings-icons"></i>
-                        {{trans('langLtiConsumer')}}
-                    </a>
-                </li>
-            @endif
+            
+                @if ($is_course_admin)
+                    <li>
+                        <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
+                            <i class="fa-solid fa-link settings-icons"></i>
+                            {{trans('langLtiConsumer')}}
+                        </a>
+                    </li>
+                @endif
 
-            @if ($is_course_admin)
-                <li>
-                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}">
-                        <i class="fa-solid fa-chart-line settings-icons"></i>
-                        {{trans('langLearningAnalytics')}}
-                    </a>
-                </li>
+                @if ($is_course_admin)
+                    <li>
+                        <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}">
+                            <i class="fa-solid fa-chart-line settings-icons"></i>
+                            {{trans('langLearningAnalytics')}}
+                        </a>
+                    </li>
+                @endif
             @endif
         </ul>
     </div>

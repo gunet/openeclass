@@ -509,7 +509,13 @@
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>
                                                                         <i class="fa-solid fa-book-open fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('total_courses') }}</div>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>
+                                                                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                                                                {{ get_config('total_courses') }}
+                                                                            @else
+                                                                                {{ $total_collaboration_courses }}
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
                                                                     <p class='form-label text-center'>{{ trans('langCourses') }}</p>
                                                                 </div>

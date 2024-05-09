@@ -209,7 +209,7 @@ function getUserCourseInfo($uid): string
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $langAdminAn;
+    global $urlAppend, $langAdminAn, $collaboration_value;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -252,6 +252,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                             WHERE course.id IN ($course_id_sql)
                                     AND course.id = course_module.course_id
                                     AND course.id = announcement.course_id
+                                    AND course.is_collaborative = ". $collaboration_value ."
                                     AND announcement.visible = 1
                                     AND (announcement.start_display <= " . DBHelper::timeAfter() . " OR announcement.start_display IS NULL)
                                     AND (announcement.stop_display >= " . DBHelper::timeAfter() . " OR announcement.stop_display IS NULL)
@@ -399,6 +400,8 @@ function user_accept_policy($uid, $accept = true) {
  */
 function getUserCourses($uid)
 {
+    global $collaboration_value;
+
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                              course.code code,
                              course.public_code,
@@ -416,7 +419,8 @@ function getUserCourses($uid)
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
                             AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+                            AND course.is_collaborative = ?d
+                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid,$collaboration_value);
 
     return $myCourses;
 }
@@ -428,11 +432,14 @@ function getUserCourses($uid)
  */
 function CountStudentCourses($uid) {
 
+    global $collaboration_value;
+
     $total = Database::get()->querySingle("SELECT COUNT(*) AS total
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
                     AND course_user.user_id = ?d
-                    AND course.visible != " . COURSE_INACTIVE, $uid)->total;
+                    AND course.is_collaborative = ?d
+                    AND course.visible != " . COURSE_INACTIVE, $uid, $collaboration_value)->total;
     return $total;
 }
 
@@ -443,10 +450,13 @@ function CountStudentCourses($uid) {
  */
 function CountTeacherCourses($uid) {
 
+    global $collaboration_value;
+
     $total = Database::get()->querySingle("SELECT COUNT(*) AS total
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
-            AND course_user.user_id = ?d", $uid)->total;
+            AND course_user.user_id = ?d
+            AND course.is_collaborative = ?d", $uid, $collaboration_value)->total;
 
     return $total;
 }

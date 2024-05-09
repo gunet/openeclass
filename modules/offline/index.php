@@ -125,7 +125,7 @@ $data = [
 ];
 
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, 
-                                               view_type, start_date, end_date, description, home_layout, course_image, password
+                                               view_type, start_date, end_date, description, home_layout, course_image, password, is_collaborative
                                           FROM course WHERE id = ?d", $course_id);
 if ($course_info->description) {
     $description = preg_replace('|src=(["\']).*/modules/document/file.php?'.$course_code.'/(.*)\1|','src=\1modules/document/\2\1', standard_text_escape($course_info->description));
@@ -153,7 +153,7 @@ $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'uid', 'session', 'head_content', 'toolArr', 'module_id',
     'pageName', 'section_title', 'logo_img', 'logo_img_small', 'styles_str',
     'require_current_course', 'is_course_admin',
-    'currentCourseName');
+    'currentCourseName','collaboration_platform', 'collaboration_value');
 $bladeData = array_merge($global_data, $data);
 $bladeData['pageTitle'] = $course_info->title;
 $bladeData['professor'] = $course_info->prof_names;
@@ -213,7 +213,9 @@ offline_videos($bladeData);
 ///////////////
 // glossary
 ///////////////
-offline_glossary($bladeData, $downloadDir);
+if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+    offline_glossary($bladeData, $downloadDir);
+}
 //////////////
 // links
 //////////////
@@ -225,11 +227,15 @@ offline_description($bladeData, $downloadDir);
 
 ///////////////////
 // not implemented yet
-offline_exercises($bladeData);
-offline_ebook($bladeData);
+if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+    offline_exercises($bladeData);
+    offline_ebook($bladeData);
+}
 offline_agenda($bladeData);
-offline_blog($bladeData);
-offline_wiki($bladeData);
+if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+    offline_blog($bladeData);
+    offline_wiki($bladeData);
+}
 //////////////////////////
 
 /////////////

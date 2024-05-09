@@ -213,6 +213,7 @@
                                                 {{ trans('langWithCourseUnits') }}
                                             </label>
                                             </div>
+                                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                             <div class='radio mb-2'>
                                             <label>
                                                 <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
@@ -231,6 +232,7 @@
                                                     {{ trans('langFlippedClassroom') }}
                                                 </label>
                                             </div>
+                                            @endif
                                         </div>
                                     </div>
                                         

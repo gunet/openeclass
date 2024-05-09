@@ -194,6 +194,13 @@ if (file_exists($extra_messages)) {
     $extra_messages = false;
 }
 require "$webDir/lang/$language/messages.inc.php";
+if (file_exists('config/config.php')) {
+    if(get_config('show_always_collaboration')){
+        require "$webDir/lang/$language/messages_collaboration.inc.php";
+    }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+        require "$webDir/lang/$language/messages_eclass_collaboration.inc.php";
+    }
+}
 if ($extra_messages) {
     include $extra_messages;
 }
@@ -319,6 +326,16 @@ if (isset($_GET['course'])) {
 }
 register_shutdown_function('restore_dbname_override');
 
+
+//About collaboration enable-disable
+if (file_exists('config/config.php')) {
+    if(get_config('show_always_collaboration')){ //always enabled
+        $collaboration_platform = $collaboration_value = 1;
+    }else{
+        $collaboration_platform = $collaboration_value = 0;
+    }
+}
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 $is_editor = false;
@@ -330,14 +347,14 @@ if (isset($require_current_course) and $require_current_course) {
         $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
                 course.title as title, course.prof_names as prof_names, course.lang as lang, view_type, course.course_license as course_license,
-                course.visible as visible, hierarchy.name AS faculte
+                course.visible as visible, course.is_collaborative as is_collaborative, hierarchy.name AS faculte
             FROM course
                 LEFT JOIN course_department ON course.id = course_department.course
                 LEFT JOIN hierarchy ON hierarchy.id = course_department.department
             WHERE course.code = ?s",
             function ($course_info) {
                 global $course_id, $public_code, $course_code, $fac, $course_prof_names, $course_view_type,
-                    $languageInterface, $visible, $currentCourseName, $currentCourseLanguage, $courseLicense;
+                    $languageInterface, $visible, $currentCourseName, $currentCourseLanguage, $courseLicense, $is_collaborative_course;
                 $course_id = $course_info->cid;
                 $public_code = $course_info->public_code;
                 $course_code = $course_info->code;
@@ -349,6 +366,7 @@ if (isset($require_current_course) and $require_current_course) {
                 $visible = $course_info->visible;
                 $currentCourseName = $course_info->title;
                 $currentCourseLanguage = $languageInterface;
+                $is_collaborative_course = $course_info->is_collaborative;
             },
             function ($errormsg) use($urlServer) {
                 if (defined('M_INIT')) {
@@ -438,8 +456,15 @@ if (isset($require_current_course) and $require_current_course) {
                 $extra_messages = false;
             }
             include "lang/$language/messages.inc.php";
+            if (file_exists('config/config.php')) {
+                if(get_config('show_always_collaboration')){
+                    include "lang/$language/messages_collaboration.inc.php";
+                }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+                    include "lang/$language/messages_eclass_collaboration.inc.php";
+                }
+            }
             if ($extra_messages) {
-                include $extra_messages;
+                include $extra_messages; 
             }
         }
     }
@@ -457,33 +482,53 @@ require_once "license_info.php";
 // Course modules array
 // user modules
 // ----------------------------------------
-$modules = array(
-    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-solid fa-film'),
-    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
-    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-regular fa-comment'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-solid fa-file-pen'),
-    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-solid fa-user-group'),
-    MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-regular fa-envelope'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-solid fa-list-ul'),
-    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-solid fa-book-atlas'),
-    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-regular fa-comment-dots'),
-    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-solid fa-question'),
-    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-solid fa-timeline'),
-    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-solid fa-w'),
-    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-solid fa-globe'),
-    MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
-    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
-    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
-    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
-    MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
-    MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
-    MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
 
-);
+if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+    $modules = array(
+        MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
+        MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
+        MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
+        MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-solid fa-film'),
+        MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
+        MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
+        MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-regular fa-comment'),
+        MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-solid fa-file-pen'),
+        MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-solid fa-user-group'),
+        MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-regular fa-envelope'),
+        MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-solid fa-list-ul'),
+        MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-solid fa-book-atlas'),
+        MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-regular fa-comment-dots'),
+        MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-solid fa-question'),
+        MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-solid fa-timeline'),
+        MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-solid fa-w'),
+        MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-solid fa-globe'),
+        MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
+        MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
+        MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
+        MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
+        MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
+        MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
+
+    );
+}else{
+    $modules = array(
+        MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
+        MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
+        MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
+        MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-solid fa-film'),
+        MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
+        MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-regular fa-comment'),
+        MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-solid fa-user-group'),
+        MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-regular fa-envelope'),
+        MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-regular fa-comment-dots'),
+        MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-solid fa-question'),
+        MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
+        MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
+        MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard')
+
+    );
+}
 
 $icons_map = array(
     'icon_map' => array(
@@ -596,18 +641,28 @@ $static_modules = array(
 // -------------------------------------------
 // modules for offline course
 // -------------------------------------------
-$offline_course_modules = array(
-    /*MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar'), */
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-solid fa-file-pen'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-solid fa-list-ul'),
-    /*MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'), */
+if(isset($collaboration_platform) and $collaboration_platform){
+    $offline_course_modules = array(
+       /*MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar'), */
+        MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
+        MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
+        MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
+        MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell')
+    );
+}else{
+    $offline_course_modules = array(
+        /*MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar'), */
+        MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
+        MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
+        MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
+        MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
+        MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-solid fa-file-pen'),
+        MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-solid fa-list-ul'),
+        /*MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'), */
     /*MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),*/
     /*MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns')*/
-);
+    );
+}
 
 // --------------------------------------------------
 // deprecated modules (used ONLY for old statistics)
@@ -682,34 +737,70 @@ if (isset($require_course_reviewer) and $require_course_reviewer) {
 
 $module_id = current_module_id();
 
+// disable collaboration's modules
+if(isset($collaboration_platform) and $collaboration_platform){
+    //init
+    $sizeCheck = Database::get()->queryArray("SELECT *FROM module_disable_collaboration");
+    if(count($sizeCheck) == 0){
+        $optArray = implode(', ', array_fill(0, 16, '(?d)'));
+        Database::get()->query('INSERT INTO module_disable_collaboration (module_id) VALUES ' . $optArray,
+                                (MODULE_ID_ASSIGN),
+                                (MODULE_ID_ATTENDANCE),
+                                (MODULE_ID_GRADEBOOK),
+                                (MODULE_ID_MINDMAP),
+                                (MODULE_ID_PROGRESS),
+                                (MODULE_ID_LP),
+                                (MODULE_ID_EXERCISE),
+                                (MODULE_ID_GLOSSARY),
+                                (MODULE_ID_EBOOK),
+                                (MODULE_ID_WIKI),
+                                (MODULE_ID_ABUSE_REPORT),
+                                (MODULE_ID_COURSEPREREQUISITE),
+                                (MODULE_ID_LTI_CONSUMER),
+                                (MODULE_ID_ANALYTICS),
+                                (MODULE_ID_H5P),
+                                (MODULE_ID_COURSE_WIDGETS)
+                            );
+    }
+   
+}
 // Security check:: Users must not be able to access inactive (if students) or disabled tools.
 if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
+
+    $table_modules = '';
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        $table_modules = 'module_disable';
+    }else{
+        $table_modules = 'module_disable_collaboration';
+    }
+
     if ($is_course_reviewer or $is_editor) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                        WHERE module_id NOT IN (SELECT module_id FROM module_disable) AND
-                              course_id = ?d", $course_id);
+                    WHERE module_id NOT IN (SELECT module_id FROM $table_modules) AND
+                            course_id = ?d", $course_id);
+        
     } elseif (!$uid or check_guest()) {
-        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                        WHERE visible = 1 AND
-                              course_id = ?d AND
-                              module_id NOT IN (SELECT module_id FROM module_disable) AND
-                              module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                                " . MODULE_ID_ASSIGN . ",
-                                                " . MODULE_ID_LTI_CONSUMER . ",
-                                                " . MODULE_ID_TC . ",
-                                                " . MODULE_ID_MESSAGE . ",
-                                                " . MODULE_ID_FORUM . ",
-                                                " . MODULE_ID_GROUPS . ",
-                                                " . MODULE_ID_GRADEBOOK . ",
-                                                " . MODULE_ID_ATTENDANCE . ",                                                
-                                                " . MODULE_ID_REQUEST . ",
-                                                " . MODULE_ID_PROGRESS . ",
-                                                " . MODULE_ID_LP . ")", $course_id);
+            $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                            WHERE visible = 1 AND
+                                course_id = ?d AND
+                                module_id NOT IN (SELECT module_id FROM $table_modules) AND
+                                module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                                    " . MODULE_ID_ASSIGN . ",
+                                                    " . MODULE_ID_LTI_CONSUMER . ",
+                                                    " . MODULE_ID_TC . ",
+                                                    " . MODULE_ID_MESSAGE . ",
+                                                    " . MODULE_ID_FORUM . ",
+                                                    " . MODULE_ID_GROUPS . ",
+                                                    " . MODULE_ID_GRADEBOOK . ",
+                                                    " . MODULE_ID_ATTENDANCE . ",
+                                                    " . MODULE_ID_REQUEST . ",
+                                                    " . MODULE_ID_PROGRESS . ",
+                                                    " . MODULE_ID_LP . ")", $course_id);
     } else {
-        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                        WHERE visible = 1 AND
-                              module_id NOT IN (SELECT module_id FROM module_disable) AND
-                              course_id = ?d", $course_id);
+            $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                            WHERE visible = 1 AND
+                                module_id NOT IN (SELECT module_id FROM $table_modules) AND
+                                course_id = ?d", $course_id);
     }
     $publicModules = array();
     foreach ($moduleIDs as $module) {

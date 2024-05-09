@@ -333,7 +333,10 @@ if (isset($_GET['all'])) {
                     </div>
                    
                 </div>
-            </div>
+            </div>";
+
+            if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+            $tool_content .= "
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
@@ -343,9 +346,8 @@ if (isset($_GET['all'])) {
                             $langWiki
                         </label>
                     </div>
-                    
                 </div>
-            </div>";
+            </div>";}
             
             if(get_config('individual_group_bookings')){
                 $tool_content .= "

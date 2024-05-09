@@ -6707,3 +6707,8 @@ $langHelpFluidWidthInfo = "Το πλάτος των header και footer δια�
 $langNavSettingsnavsettingsMainSection = "Main Section";
 $langAddOpacityImage = "Προσθήκη χρώματος στην εικόνα φόντου από την επιλογή <<χρώμα φόντου>>";
 $langFavicon = "Favicon";
+
+
+$langCollaborationPlatform = "Πλατφόρμα συνεργασίας";
+$langEnableCollaboration = "Ενεργοποίηση πλατφόρμας συνεργασίας";
+$langAlwaysEnabledCollaboration = "Μόνιμα ενεργοποιημένη";

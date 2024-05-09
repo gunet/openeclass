@@ -196,6 +196,13 @@ function load_global_messages() {
             $extra_messages = false;
         }
         include "$webDir/lang/$code/messages.inc.php";
+        if (file_exists('config/config.php')) {
+            if(get_config('show_always_collaboration')){
+              include "$webDir/lang/$code/messages_collaboration.inc.php";
+            }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+                include "$webDir/lang/$code/messages_eclass_collaboration.inc.php";
+            }
+        }
         if ($extra_messages) {
             include $extra_messages;
         }
@@ -2971,6 +2978,25 @@ function upgrade_to_4_0($tbl_options): void {
 
     if (!DBHelper::fieldExists('admin_announcement', 'important')) {
         Database::get()->query("ALTER TABLE `admin_announcement` ADD `important` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    $show_collaboration = get_config('show_collaboration');
+    if (is_null($show_collaboration)) {
+        set_config('show_collaboration', 0);
+    }
+
+    $show_always_collaboration = get_config('show_always_collaboration');
+    if (is_null($show_always_collaboration)) {
+        set_config('show_always_collaboration', 0);
+    }
+
+    if (!DBHelper::fieldExists('course', 'is_collaborative')) {
+        Database::get()->query("ALTER TABLE course ADD `is_collaborative` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::tableExists('module_disable_collaboration')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `module_disable_collaboration` (
+                                        module_id int(11) NOT NULL PRIMARY KEY) $tbl_options");
     }
 
 }

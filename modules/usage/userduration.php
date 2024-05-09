@@ -37,9 +37,7 @@ $helpSubTopic = 'users_participation';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 if (isset($_GET['u'])) { //  stats per user
     if ($_SESSION['uid'] != $_GET['u'] and !$is_course_reviewer) { // security check
         Session::Messages($langCheckCourseAdmin, 'alert-danger');
@@ -59,13 +57,13 @@ if (isset($_GET['u'])) { //  stats per user
     }
 
     $user_actions = Database::get()->queryArray("SELECT
-                            SUM(ABS(actions_daily.duration)) AS duration,
-                              module_id
-                            FROM actions_daily
-                            WHERE course_id = ?d
-                              AND user_id = ?d
-                             AND module_id != " . MODULE_ID_TC . "                             
-                            GROUP BY module_id", $course_id, $_GET['u']);
+                                    SUM(ABS(actions_daily.duration)) AS duration,
+                                    module_id
+                                    FROM actions_daily
+                                    WHERE course_id = ?d
+                                    AND user_id = ?d
+                                    AND module_id != " . MODULE_ID_TC . "                             
+                                    GROUP BY module_id", $course_id, $_GET['u']);
 
 
     if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
@@ -335,7 +333,8 @@ if (isset($_GET['u'])) { //  stats per user
                 array('title' => $langLearningPaths,
                     'url' => "../learnPath/detailsAll.php?course=$course_code",
                     'icon' => 'fa-address-card',
-                    'level' => 'primary-label'),
+                    'level' => 'primary-label',
+                    'show' => (isset($collaboration_platform) and !$collaboration_platform)),
                 array('title' => $langBBB,
                     'url' => "../tc/tcuserduration.php?course=$course_code&amp;per_user=true",
                     'icon' => 'fa-address-card',
@@ -476,12 +475,20 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
  */
 function selection_course_modules() {
 
-    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module, $urlAppend;
+    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module, $urlAppend, $collaboration_platform;
+
+    $table_modules = '';
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        $table_modules = 'module_disable';
+    }else{
+        $table_modules = 'module_disable_collaboration';
+    }
 
     $mod_opts = "<option value='-1'>$langAllModules</option>";
     $result = Database::get()->queryArray("SELECT module_id FROM course_module
                     WHERE course_id = ?d
-                    AND module_id != " . MODULE_ID_TC , $course_id);
+                    AND module_id NOT IN (SELECT module_id FROM $table_modules)
+                    AND module_id != " . MODULE_ID_TC . "", $course_id);
     foreach ($result as $row) {
         $mid = $row->module_id;
         $extra = '';

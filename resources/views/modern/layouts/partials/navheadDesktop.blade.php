@@ -197,12 +197,15 @@
                                                         </a>
                                                     </li>
                                                 @endif
+                                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/usage/index.php?t=u">
                                                         <i class="fa-solid fa-chart-line settings-icons"></i>
                                                         {{ trans('langMyStats') }}
                                                     </a>
                                                 </li>
+                                                @endif
+                                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                                 @if (get_config('personal_blog'))
                                                     <li>
                                                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
@@ -210,6 +213,7 @@
                                                             {{ trans('langMyBlog') }}
                                                         </a>
                                                     </li>
+                                                @endif
                                                 @endif
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/message/index.php">
@@ -223,25 +227,30 @@
                                                         {{ trans('langMyAgenda') }}
                                                     </a>
                                                 </li>
-
+                                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_widgets.php">
                                                         <i class="fa-solid fa-layer-group settings-icons"></i>
                                                         {{ trans('langMyWidgets') }}
                                                     </a>
                                                 </li>
+                                                @endif
+                                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
                                                         <i class="fa-solid fa-a settings-icons"></i>
                                                         {{ trans('langGradeTotal') }}
                                                     </a>
                                                 </li>
+                                                @endif
+                                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mycertificates.php">
                                                         <i class="fa-solid fa-award settings-icons"></i>
                                                         {{ trans('langMyCertificates') }}
                                                     </a>
                                                 </li>
+                                                @endif
                                                 @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
                                                     <li>
                                                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mydocs/index.php">
@@ -353,13 +362,17 @@
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fa-regular fa-address-card settings-icons"></i>{{ trans('langMyePortfolio') }}</a>
                             </li>
                             @endif
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fa-solid fa-chart-line settings-icons"></i>{{ trans('langMyStats') }}</a>
                             </li>
+                            @endif
                             @if (get_config('personal_blog'))
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fa-solid fa-globe settings-icons"></i>{{ trans('langMyBlog') }}</a>
                             </li>
+                            @endif
                             @endif
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/message/index.php"><i class="fa-regular fa-envelope settings-icons"></i>{{ trans('langMyDropBox') }}</a>
@@ -370,15 +383,21 @@
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fa-solid fa-user settings-icons"></i> {{ trans('langMyProfile') }}</a>
                             </li>
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
                             </li>
+                            @endif
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa-solid fa-a settings-icons"></i> {{ trans('langGradeTotal') }}</a>
                             </li>
+                            @endif
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
                             </li>
+                            @endif
                             @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
                             <li>
                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fa-regular fa-file settings-icons"></i> {{ trans('langMyDocs') }}</a>

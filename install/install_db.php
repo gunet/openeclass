@@ -113,6 +113,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
 $db->query("CREATE TABLE IF NOT EXISTS module_disable (
     module_id int(11) NOT NULL PRIMARY KEY) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS module_disable_collaboration (
+    module_id int(11) NOT NULL PRIMARY KEY) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default 0,
@@ -203,6 +206,7 @@ $db->query("CREATE TABLE `course` (
   `lectures_model` int(11) NOT NULL DEFAULT 0,
   `view_units` INT(11) NOT NULL DEFAULT 0,
   `popular_course` INT(11) NOT NULL DEFAULT 0,
+  `is_collaborative` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user` (
@@ -1643,6 +1647,8 @@ $default_config = array(
     'course_guest', 'link',
     'allow_rec_audio', 1,
     'allow_rec_video', 1,
+    'show_always_collaboration', 0,
+    'show_collaboration', 0,
     'version', ECLASS_VERSION);
 
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .

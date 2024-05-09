@@ -37,6 +37,13 @@ add_units_navigation(TRUE);
 load_js('tools.js');
 $page_url = 'modules/course_tools/index.php?course=' . $course_code;
 
+$table_modules = '';
+if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+    $table_modules = 'module_disable';
+}else{
+    $table_modules = 'module_disable_collaboration';
+}
+
 if (isset($_REQUEST['toolStatus'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -130,8 +137,8 @@ if (isset($_POST['submit'])) {
 
 $data['toolSelection'][0] = $data['toolSelection'][1] = array();
 $module_list = Database::get()->queryArray('SELECT module_id, visible
-                                FROM course_module WHERE course_id = ?d 
-                                AND module_id NOT IN (SELECT module_id FROM module_disable)', $course_id);
+                                FROM course_module WHERE course_id = ?d
+                                AND module_id NOT IN (SELECT module_id FROM '.$table_modules.')', $course_id);
 
 foreach ($module_list as $item) {
     if ($item->module_id == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {

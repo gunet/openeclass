@@ -539,9 +539,11 @@
                             <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                 {{ trans('langMyProfile') }}
                             </a>
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                             <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
                                 {{ trans('langMyStats') }}
                             </a>
+                            @endif
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or
                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or

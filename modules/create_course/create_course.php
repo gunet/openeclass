@@ -163,6 +163,13 @@ if (!isset($_POST['create_course'])) {
         $extra_messages = false;
     }
     include "lang/$language/messages.inc.php";
+    if (file_exists('config/config.php')) {
+        if(get_config('show_always_collaboration')){
+          include "lang/$language/messages_collaboration.inc.php";
+        }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+            include "lang/$language/messages_eclass_collaboration.inc.php";
+        }
+    }
     if ($extra_messages) {
         include $extra_messages;
     }
@@ -208,6 +215,9 @@ if (!isset($_POST['create_course'])) {
         $public_code = mb_substr($_POST['public_code'], 0 ,20);
     }
     $description = purify($_POST['description']);
+
+    $typeCourse = isset($_POST['typeCourse']) ? $_POST['typeCourse'] : 0;
+
     $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -228,11 +238,12 @@ if (!isset($_POST['create_course'])) {
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
                         glossary_index = 1,
+                        is_collaborative = ?d,
                         description = ?s",
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $description);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::flash('message',$langGeneralError);

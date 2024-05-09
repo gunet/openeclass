@@ -139,14 +139,24 @@ function create_modules($cid) {
  * @brief default modules enabled in new courses
  */
 function default_modules() {
+
+    global $collaboration_platform;
+
     // Modules enabled by default in new courses
     $default_module_defaults = array(MODULE_ID_AGENDA, MODULE_ID_LINKS,
-        MODULE_ID_DOCS, MODULE_ID_ANNOUNCE,
+        MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION,
         MODULE_ID_MESSAGE);
-
-    if ($def = get_config('default_modules')) {
-        return unserialize($def);
-    } else {
-        return $default_module_defaults;
+    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        if ($def = get_config('default_modules')) {
+            return unserialize($def);
+        } else {
+            return $default_module_defaults;
+        }
+    }else{
+        if ($def = get_config('default_modules_collaboration')) {
+            return unserialize($def);
+        } else {
+            return $default_module_defaults;
+        }
     }
 }

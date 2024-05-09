@@ -159,6 +159,7 @@
                         </div>
                     </div>
 
+                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                     <div class='col-12 mt-5'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -273,6 +274,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
 

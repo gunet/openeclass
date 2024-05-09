@@ -33,10 +33,10 @@ if (get_config('dont_display_about_menu')) {
 
 $toolName = $langInfo;
 
-$data['course_inactive'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
-$data['course_open'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
-$data['course_registration'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_REGISTRATION)->count;
-$data['course_closed'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
+$data['course_inactive'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d AND is_collaborative = ?d", COURSE_INACTIVE, $collaboration_value)->count;
+$data['course_open'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d AND is_collaborative = ?d", COURSE_OPEN, $collaboration_value)->count;
+$data['course_registration'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d AND is_collaborative = ?d", COURSE_REGISTRATION, $collaboration_value)->count;
+$data['course_closed'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d AND is_collaborative = ?d", COURSE_CLOSED, $collaboration_value)->count;
 
 
 $count_total = 0;

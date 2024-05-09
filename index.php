@@ -121,6 +121,13 @@ if (isset($language)) {
         $extra_messages = false;
     }
     include "lang/$language/messages.inc.php";
+    if (file_exists('config/config.php')) {
+        if(get_config('show_always_collaboration')){
+            include "lang/$language/messages_collaboration.inc.php";
+        }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+            include "lang/$language/messages_eclass_collaboration.inc.php";
+        }
+    }
     if ($extra_messages) {
         include $extra_messages;
     }
@@ -264,6 +271,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
 
     }
 
+    $data['total_collaboration_courses'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course WHERE is_collaborative = ?d",1)->total;
 
     $data['popular_courses'] = Database::get()->queryArray('SELECT * FROM `course` 
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
