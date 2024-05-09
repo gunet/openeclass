@@ -11,9 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicon for various devices -->
-    <link rel="shortcut icon" href="{{ $urlAppend }}template/modern/favicon/favicon.ico" />
-    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
-    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
+    <link rel="shortcut icon" href="{{ $favicon_img }}" />
+    <link rel="apple-touch-icon-precomposed" href="{{ $favicon_img }}" />
+    <link rel="icon" type="image/png" href="{{ $favicon_img }}" />
 
     <!-- Bootstrap v5 -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?v=4.0-dev"/>
@@ -135,7 +135,7 @@
                     <div class='{{ $container }} padding-default'>
                         <div class='d-flex justify-content-center align-items-center gap-2'>
                             <button class='btn hide-notification-bar' id='closeNotificationBar' data-bs-toggle='tooltip' data-bs-placement='bottom' title="{{ trans('langDontDisplayAgain') }}">
-                                <span class='fa-solid fa-xmark link-delete fa-md h-auto w-auto me-1'></span>
+                                <i class='fa-solid fa-xmark link-delete fa-lg me-2'></i>
                             </button>
                             <i class='fa-regular fa-bell fa-xl d-block'></i>
                             <span class='d-inline-block text-truncate TextBold title-announcement' style="max-width: auto;">

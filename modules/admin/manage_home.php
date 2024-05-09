@@ -40,6 +40,7 @@ if(isset($_POST['submit'])){
     set_config('homepage_title',$_POST['homepage_title']);
     set_config('homepage_name',$_POST['homepage_name']);
     set_config('homepage_intro', purify($_POST['homepage_intro']));
+    set_config('homepage_testimonial_title',$_POST['homepage_testimonial_title']);
     set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
     set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
     set_config('hide_login_link', $_POST['hide_login_link'] ?? '');

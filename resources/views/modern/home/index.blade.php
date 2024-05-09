@@ -456,7 +456,13 @@
                                 <div class='col'>
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                            <h3>{{ trans('langSaidForUs') }}</h3>
+                                            <h3>
+                                                @if(get_config('homepage_testimonial_title'))
+                                                    {!! get_config('homepage_testimonial_title') !!}
+                                                @else
+                                                    {{ trans('langSaidForUs') }}
+                                                @endif
+                                            </h3>
                                         </div>
                                         <div class='card-body px-3'>
                                             <div class="d-flex justify-content-center">

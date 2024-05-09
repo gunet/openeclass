@@ -11,9 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicon for various devices -->
-    <link rel="shortcut icon" href="{{ $urlAppend }}template/modern/favicon/favicon.ico" />
-    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
-    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
+    <link rel="shortcut icon" href="{{ $favicon_img }}" />
+    <link rel="apple-touch-icon-precomposed" href="{{ $favicon_img }}" />
+    <link rel="icon" type="image/png" href="{{ $favicon_img }}" />
 
     <!-- Bootstrap v5 -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css"/>

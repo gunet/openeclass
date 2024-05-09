@@ -141,6 +141,9 @@ if (isset($_GET['export'])) {
         if(isset($styles['RightColumnCourseBgImage'])){
             array_push($file_list, "courses/theme_data/$theme_id/$styles[RightColumnCourseBgImage]");
         }
+        if (isset($styles['faviconUpload'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[faviconUpload]");
+        }
 
         $zipFile = new ZipArchive();
         $zipFile->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -823,6 +826,16 @@ if (isset($_POST['optionsSave'])) {
     }
 
 
+    if (isset($theme_options_styles['faviconUpload'])) {
+        $faviconUpload = "
+            <img src='$urlThemeData/$theme_options_styles[faviconUpload]' style='max-height:100px;max-width:150px;' alt='Favicon upload'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=faviconUpload'>$langDelete</a>
+            <input type='hidden' name='faviconUpload' value='$theme_options_styles[faviconUpload]'>
+        ";
+    } else {
+       $faviconUpload = "<input type='file' name='faviconUpload' id='faviconUpload'>";
+    }
+
+
     $tool_content .= action_bar(array(
         array('title' => $langImport,
             'url' => "#",
@@ -1030,6 +1043,13 @@ $tool_content .= "
                         </div>
                     </div>
 
+                    <div class='form-group mt-4'>
+                        <label for='faviconUpload' class='col-sm-6 control-label-notes mb-2'>$langFavicon </label>
+                        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                            $faviconUpload
+                        </div>
+                    </div>
+
                    
                 </div>
             </div>
@@ -1077,6 +1097,7 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>
+
                     <div class='form-group mt-4'>
                         <div class='checkbox'>
                             <label class='label-container'>
@@ -1159,10 +1180,9 @@ $tool_content .= "
 
 
 
-
             <div role='tabpanel' class='tab-pane fade' id='navsettingsMainSection'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgColorConfig</h3>
+                    <h3 class='theme_options_legend text-decoration-underline'>$langBgColorConfig</h3>
                     <div class='form-group'>
                         <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                             <label for='bgColorContentPlatform' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1171,7 +1191,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
 
 
 
@@ -2652,7 +2671,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -2668,7 +2687,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];

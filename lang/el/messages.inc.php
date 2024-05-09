@@ -6706,3 +6706,4 @@ $langHelpBoxedWidthInfo = "Το πλάτος των header και footer δια�
 $langHelpFluidWidthInfo = "Το πλάτος των header και footer διαμορφώνεται ανάλογα με το πλάτος της τρέχουσας οθόνης";
 $langNavSettingsnavsettingsMainSection = "Main Section";
 $langAddOpacityImage = "Προσθήκη χρώματος στην εικόνα φόντου από την επιλογή <<χρώμα φόντου>>";
+$langFavicon = "Favicon";

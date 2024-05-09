@@ -104,6 +104,13 @@
                                     </div>
                                 </div>
 
+                                <div class='form-group mt-4'>
+                                    <label for='defaultHomepageTestimonialTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}&nbsp(Testimonials)</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='homepage_testimonial_title' id='defaultHomepageTestimonialTitle' value="{!! q(get_config('homepage_testimonial_title', trans('langSaidForUs'))) !!}">
+                                        <p class='help-block mt-1'>{{trans('langHomePageTitleHelpText')}}</p>
+                                    </div>
+                                </div>
 
                                 <div class='form-group mt-4'>
                                     <label for='defaultHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
@@ -115,7 +122,7 @@
 
 
                                 <div class='form-group mt-4'>
-                                    <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                    <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}</label>
                                     <div class='col-sm-12'>
                                         {!! $homepage_intro !!}
                                         <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
@@ -186,7 +193,13 @@
                                                     {{ trans('langHomepageTexts')}}
                                                     @php $urlEdit = $urlServer . 'modules/admin/homepageTexts_create.php'; @endphp
                                                 @elseif($p->title == 'testimonials')
-                                                    {{ trans('langSaidForUs')}}
+
+                                                    @if(get_config('homepage_testimonial_title'))
+                                                        {!! get_config('homepage_testimonial_title') !!}
+                                                    @else
+                                                        {{ trans('langSaidForUs') }}
+                                                    @endif
+
                                                     @php $urlEdit = $urlServer . 'modules/admin/homepageTexts_create.php'; @endphp
                                                  @elseif($p->title == 'statistics')
                                                     {{ trans('langViewStatics')}}

@@ -293,6 +293,7 @@ function view($view_file, $view_data = array()) {
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $logo_img_small = $themeimg.'/eclass-new-logo.svg';
     $loginIMG = $themeimg.'/loginIMG.png';
+    $favicon_img = $urlAppend . 'template/modern/favicon/openeclass_128x128.png';
 
     //////////////////////////////////////////  Theme creation  ///////////////////////////////////////////////
 
@@ -440,6 +441,16 @@ function view($view_file, $view_data = array()) {
 
         if (isset($theme_options_styles['loginImgL'])){
             $loginIMG =  "$urlThemeData/$theme_options_styles[loginImgL]";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////// FAVICON UPLOAD //////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['faviconUpload'])){
+            $favicon_img =  "$urlThemeData/$theme_options_styles[faviconUpload]";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6157,7 +6168,7 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
-            'pinned_announce_title', 'pinned_announce_body');
+            'pinned_announce_title', 'pinned_announce_body','favicon_img');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
