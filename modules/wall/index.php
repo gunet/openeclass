@@ -123,20 +123,20 @@ if (isset($_POST['submit'])) {
             ));
         }
         Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $id, 'wallpost');
-        
+
         //delete comments and ratings
         Commenting::deleteComments('wallpost', $id);
         Rating::deleteRatings('wallpost', $id);
-        
+
         $post = Database::get()->querySingle("SELECT content, extvideo FROM wall_post WHERE id = ?d", $id);
         $content = $post->content;
         $extvideo = $post->extvideo;
-        
-        Log::record($course_id, MODULE_ID_WALL, LOG_DELETE, 
+
+        Log::record($course_id, MODULE_ID_WALL, LOG_DELETE,
             array('id' => $id,
                   'content' => $content,
                   'extvideo' => $extvideo));
-        
+
         Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');
@@ -152,11 +152,11 @@ if (isset($_POST['submit'])) {
                 Database::get()->query("UPDATE wall_post SET content = ?s, extvideo = ?s WHERE id = ?d AND course_id = ?d",
                     $content, $extvideo, $id, $course_id);
                 Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
-                
+
                 Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
                 array('id' => $id,
                 'content' => $content));
-                
+
             } else {
                 if (ExtVideoUrlParser::validateUrl($_POST['extvideo']) === FALSE) {
                     Session::flash('content', $_POST['message']);
@@ -169,15 +169,15 @@ if (isset($_POST['submit'])) {
                     Database::get()->query("UPDATE wall_post SET content = ?s, extvideo = ?s WHERE id = ?d AND course_id = ?d",
                         $content, $extvideo, $id, $course_id);
                     Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
-                    
+
                     Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
                     array('id' => $id,
                     'content' => $content,
                     'extvideo' => $extvideo));
-                    
+
                 }
             }
-            
+
             //save multimedia content
             if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
                 insert_video($id);
@@ -186,9 +186,9 @@ if (isset($_POST['submit'])) {
             if ($is_editor || visible_module(MODULE_ID_DOCS)) {
                 insert_docs($id);
             }
-            
+
             $post_author = Database::get()->querySingle("SELECT user_id FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id)->user_id;
-            
+
             //save my documents
             if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) ) {
                 insert_docs($id,'mydocs');
@@ -223,7 +223,7 @@ if (isset($_POST['submit'])) {
             if ($is_editor || visible_module(MODULE_ID_FORUM)) {
                 insert_forum($id);
             }
-            
+
             Session::Messages($langWallPostSaved, 'alert-success');
             decide_wall_redirect();
         } else {
@@ -266,11 +266,11 @@ if (isset($_GET['showPost'])) { //show comments case
                                    'icon' => 'fa-reply',
                                    'level' => 'primary-label')
                           ),false);
-        
+
         $post = Database::get()->querySingle("SELECT content, extvideo FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $content = Session::has('content')? Session::get('content') : $post->content;
         $extvideo = Session::has('extvideo')? Session::get('extvideo') : $post->extvideo;
-        
+
         if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos($id).'
@@ -280,7 +280,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '';
             $video_li = '';
         }
-        
+
         if ($is_editor || visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                               <input type="hidden" name="doc_ids" id="docs">
@@ -291,9 +291,9 @@ if (isset($_GET['showPost'])) { //show comments case
             $docs_div = '';
             $docs_li = '';
         }
-        
+
         $post_author = Database::get()->querySingle("SELECT user_id FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id)->user_id;
-        
+
         if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))) {
             $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
@@ -364,7 +364,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $forums_div = '';
             $forums_li = '';
         }
-        
+
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
                 <div class="form-wrapper">

@@ -1864,7 +1864,7 @@ if ($doc_count == 0) {
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
-                                          'confirm' => "$langConfirmDelete $entry[filename]")));
+                                          'confirm' => "$langConfirmDelete " . q($entry['filename']))));
                     $tool_content .= "</td>";
                 } else { // student view
                     $tool_content .= "<td class='text-center'>" .
