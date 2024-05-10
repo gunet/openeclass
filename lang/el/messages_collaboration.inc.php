@@ -23,6 +23,62 @@
  * General Messages - Feel free to suit them in your needs
  * ******************************************************** */
 
+$langEclass = "Πλατφόρμα Συνεργασίας";
+
+$langTeacher = "Συντονιστής";
+$langOfTeacher = "Συντονιστή";
+$langTeachers = "Συντονιστές";
+$langOfTeachers = "Συντονιστών";
+
+$langsTeacher = "συντονιστής";
+$langsOfTeacher = "συντονιστή";
+$langsTeachers = "συντονιστές";
+$langsOfTeachers = "συντονιστών";
+$langCTeacher = "ΣΥΝΤΟΝΙΣΤΗΣ";
+
+$langCourseAdminTeacher = "Διαχειριστής - Συντονιστής";
+$langOfCourseAdminTeacher = "Διαχειριστή - Συντονιστή";
+$langCourseAdminTeachers = "Διαχειριστές - Συντονιστές";
+$langOfCourseAdminTeachers = "Διαχειριστών - Συντονιστών";
+
+$langsCourseAdminTeacher = "διαχειριστής - συντονιστής";
+$langsOfCourseAdminTeacher = "διαχειριστή - συντονιστή";
+$langsCourseAdminTeachers = "διαχειριστές - συντονιστές";
+$langsOfCourseAdminTeachers = "διαχειριστών - συντονιστών";
+
+$langEditor = "Βοηθός συντονιστή";
+$langOfEditor = "Βοηθού συντονιστή";
+$langsEditor = "βοηθός συντονιστή";
+$langsOfEditor = "βοηθού συντονιστή";
+
+$langStudent = "Μέλος";
+$langOfStudent = "Μέλους";
+$langStudents = "Μέλη";
+$langOfStudents = "Μελών";
+$langCStudent = "ΜΕΛΟΣ";
+$langCStudent2 = "ΜΕΛΟΣ";
+
+$langsStudent = "μέλος";
+$langsOfStudent = "μέλους";
+$langsStudents = "μέλη";
+$langsOfStudents = "μελών";
+$langsOfStudentss = "μέλη";
+$langsstudent_acc = "μέλος";
+
+$langCourse = "Συνεργασία";
+$langCourses = "Συνεργασίες";
+$langOfCourses = "Συνεργασιών";
+$langOfCourse = "Συνεργασίας";
+
+$langsCourse = "συνεργασία";
+$langsCourses = "συνεργασίες";
+$langsOfCourse = "συνεργασίας";
+$langsOfCourses = "συνεργασιών";
+$langCourseS = "συνεργασίας";
+$langMyCourses = "Οι συνεργασίες μου";
+
+$langInfoAbout = "Η πλατφόρμα $siteName αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Συνεργασιών. Ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα και υποστηρίζει την υπηρεσία Ασύγχρονης Τηλεκπαίδευσης χωρίς περιορισμούς και δεσμεύσεις. Η πρόσβαση στην υπηρεσία γίνεται με τη χρήση ενός απλού φυλλομετρητή (web browser) χωρίς την απαίτηση εξειδικευμένων τεχνικών γνώσεων.";
+
 $langSiteUrl = "URL της πλατφόρμας συνεργασίας";
 $langInstall = "Eγκατάσταση της πλατφόρμας συνεργασίας";
 $langLocale = 'el_GR.UTF-8';

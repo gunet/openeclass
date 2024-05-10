@@ -6709,6 +6709,26 @@ $langAddOpacityImage = "Προσθήκη χρώματος στην εικόνα 
 $langFavicon = "Favicon";
 
 
+/* * ************************************************************************
+ * Collaboration messages / Collaboration platform is not always enabled.
+ * ************************************************************************ */
 $langCollaborationPlatform = "Πλατφόρμα συνεργασίας";
 $langEnableCollaboration = "Ενεργοποίηση πλατφόρμας συνεργασίας";
 $langAlwaysEnabledCollaboration = "Μόνιμα ενεργοποιημένη";
+if (file_exists('config/config.php')) {
+    if(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+        $langTypeCourse = "μάθημα";
+        $langTypeCollaboration = "Συνεργασία";
+        $langDescrInfo = "Σύντομη περιγραφή";
+        $langOpenCourse = "Ανοικτή";
+        $langClosedCourse = "Κλειστή";
+        $langInactiveCourse = "Ανενεργή";
+        $langCourseInactive= "Πρόσβαση έχουν οι χρήστες με δικαιώματα δημιουργίας μαθήματος ή συνεργασίας";
+        $langClosedCourseShort = "Πρόσβαση έχουν οι χρήστες που βρίσκονται στη λίστα Χρηστών του μαθήματος ή της συνεργασίας";
+        $langCourseFormat = "Μορφή";
+        $langWithCourseUnits = "Μορφή με ενότητες";
+        $langMyCollaborations = "Οι συνεργασίες μου";
+        $langNoParticipatedInCollab = "Δεν συμμετέχετε σε κάποια συνεργασία";
+    }
+}
+$langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";

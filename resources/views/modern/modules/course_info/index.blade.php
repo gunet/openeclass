@@ -213,25 +213,25 @@
                                                 {{ trans('langWithCourseUnits') }}
                                             </label>
                                             </div>
-                                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                            <div class='radio mb-2'>
-                                            <label>
-                                                <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
-                                                {{ trans('langCourseActivityFormat') }}
-                                            </label>
-                                            </div>
-                                            <div class='radio mb-2'>
-                                            <label>
-                                                <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
-                                                {{ trans('langCourseWallFormat') }}
-                                            </label>
-                                            </div>
-                                            <div class='radio mb-2'>
+                                            @if(isset($is_collaborative_course) and !$is_collaborative_course)
+                                                <div class='radio mb-2'>
                                                 <label>
-                                                    <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
-                                                    {{ trans('langFlippedClassroom') }}
+                                                    <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
+                                                    {{ trans('langCourseActivityFormat') }}
                                                 </label>
-                                            </div>
+                                                </div>
+                                                <div class='radio mb-2'>
+                                                <label>
+                                                    <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
+                                                    {{ trans('langCourseWallFormat') }}
+                                                </label>
+                                                </div>
+                                                <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
+                                                        {{ trans('langFlippedClassroom') }}
+                                                    </label>
+                                                </div>
                                             @endif
                                         </div>
                                     </div>

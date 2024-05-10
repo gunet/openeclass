@@ -63,7 +63,7 @@ function view($view_file, $view_data = array()) {
             $require_editor, $langHomePage,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
-            $collaboration_platform, $collaboration_value, $is_enabled_collaboration;
+            $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course;
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -522,42 +522,14 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['fluidContainerWidth'])){
             $container = 'container-fluid';
             $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
-
+            $middleWidthFormImg = $theme_options_styles['fluidContainerWidth'];
+            $middleWidthFormImg = ($middleWidthFormImg - 350)/2;
+            $middleWidthFormImg = $middleWidthFormImg ."px";
             $styles_str .= "
             
-                @media(min-width:1400px) and (max-width:1500px){
+                @media(min-width:992px){
                     .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: 450px;
-                        float:right;
-                    }
-                }
-                @media(min-width:1501px) and (max-width:1600px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: 470px;
-                        float:right;
-                    }
-                }
-                @media(min-width:1601px) and (max-width:1700px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: 490px;
-                        float:right;
-                    }
-                }
-                @media(min-width:1701px) and (max-width:1800px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: 510px;
-                        float:right;
-                    }
-                }
-                @media(min-width:1801px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: 530px;
-                        float:right;
-                    }
-                }
-                @media(min-width:1901px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: 550px;
+                        max-width: $middleWidthFormImg;
                         float:right;
                     }
                 }
@@ -6169,7 +6141,8 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
-            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value', 'is_enabled_collaboration');
+            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value', 
+            'is_enabled_collaboration', 'is_collaborative_course');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();

@@ -125,10 +125,16 @@ $data['user_messages'] = $user_messages;
 $courses = getUserCourses($uid);
 $data['courses'] = $courses;
 
+$collaborations = getUserCollaborations($uid);
+$data['collaborations'] = $collaborations;
+
 $items_per_page = 4;
 $data['items_per_page'] = $items_per_page;
 
 $course_pages = ceil(count($courses)/$items_per_page);
 $data['course_pages'] = $course_pages;
+
+$collaboration_pages = ceil(count($collaborations)/$items_per_page);
+$data['collaboration_pages'] = $collaboration_pages;
 
 view('portfolio.index', $data);

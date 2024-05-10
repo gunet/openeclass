@@ -57,7 +57,7 @@
                 </li>
             @endif
             
-            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+            @if(isset($is_collaborative_course) and !$is_collaborative_course)
                 @if ($is_course_admin)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}">

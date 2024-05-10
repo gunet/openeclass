@@ -197,8 +197,6 @@ require "$webDir/lang/$language/messages.inc.php";
 if (file_exists('config/config.php')) {
     if(get_config('show_always_collaboration') and get_config('show_collaboration')){
         require "$webDir/lang/$language/messages_collaboration.inc.php";
-    }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
-        require "$webDir/lang/$language/messages_eclass_collaboration.inc.php";
     }
 }
 if ($extra_messages) {
@@ -388,6 +386,13 @@ if (isset($require_current_course) and $require_current_course) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
         }
 
+        // Get essential messages when a course is collaborative course
+        if(isset($is_collaborative_course) and $is_collaborative_course){
+            if (file_exists('config/config.php') && (!get_config('show_always_collaboration') and get_config('show_collaboration'))) {
+                include "lang/$language/messages_collaboration.inc.php";
+            }
+        }
+
         // Check for course visibility by current user
         $status = 0;
         // The admin and power users can see all courses as adminOfCourse
@@ -463,8 +468,6 @@ if (isset($require_current_course) and $require_current_course) {
             if (file_exists('config/config.php')) {
                 if(get_config('show_always_collaboration') and get_config('show_collaboration')){
                     include "lang/$language/messages_collaboration.inc.php";
-                }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
-                    include "lang/$language/messages_eclass_collaboration.inc.php";
                 }
             }
             if ($extra_messages) {
@@ -487,7 +490,24 @@ require_once "license_info.php";
 // user modules
 // ----------------------------------------
 
-if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+if(isset($is_collaborative_course) and $is_collaborative_course){
+    $modules = array(
+        MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
+        MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
+        MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
+        MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-solid fa-film'),
+        MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
+        MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-regular fa-comment'),
+        MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-solid fa-user-group'),
+        MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-regular fa-envelope'),
+        MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-regular fa-comment-dots'),
+        MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-solid fa-question'),
+        MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
+        MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
+        MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard')
+
+    );
+}else{
     $modules = array(
         MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
         MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
@@ -513,23 +533,6 @@ if((isset($collaboration_platform) and !$collaboration_platform) or is_null($col
         MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
         MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
-
-    );
-}else{
-    $modules = array(
-        MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
-        MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
-        MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),
-        MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-solid fa-film'),
-        MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-regular fa-bell'),
-        MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-regular fa-comment'),
-        MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-solid fa-user-group'),
-        MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-regular fa-envelope'),
-        MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-regular fa-comment-dots'),
-        MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-solid fa-question'),
-        MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
-        MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
-        MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard')
 
     );
 }
@@ -645,7 +648,7 @@ $static_modules = array(
 // -------------------------------------------
 // modules for offline course
 // -------------------------------------------
-if(isset($collaboration_platform) and $collaboration_platform){
+if(isset($is_collaborative_course) and $is_collaborative_course){
     $offline_course_modules = array(
        /*MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar'), */
         MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
@@ -742,7 +745,7 @@ if (isset($require_course_reviewer) and $require_course_reviewer) {
 $module_id = current_module_id();
 
 // disable collaboration's modules
-if(isset($collaboration_platform) and $collaboration_platform){
+if(file_exists('config/config.php') && get_config('show_collaboration')){
     //init
     $sizeCheck = Database::get()->queryArray("SELECT *FROM module_disable_collaboration");
     if(count($sizeCheck) == 0){
