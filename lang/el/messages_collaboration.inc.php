@@ -23,99 +23,8 @@
  * General Messages - Feel free to suit them in your needs
  * ******************************************************** */
 
-$siteName = "Πλατφόρμα Συνεργασίας";
-
 $langSiteUrl = "URL της πλατφόρμας συνεργασίας";
 $langInstall = "Eγκατάσταση της πλατφόρμας συνεργασίας";
- 
-$langEclass = "Πλατφόρμα Συνεργασίας";
-
-$langTeacher = "Συντονιστής";
-$langOfTeacher = "Συντονιστή";
-$langTeachers = "Συντονιστές";
-$langOfTeachers = "Συντονιστών";
-
-$langsTeacher = "συντονιστής";
-$langsOfTeacher = "συντονιστή";
-$langsTeachers = "συντονιστές";
-$langsOfTeachers = "συντονιστών";
-$langCTeacher = "ΣΥΝΤΟΝΙΣΤΗΣ";
-
-$langCourseAdmin = "Διαχειριστής";
-$langOfCourseAdmin = "Διαχειριστή";
-$langCourseAdmins = "Διαχειριστές";
-$langOfCourseAdmins = "Διαχειριστών";
-
-$langCourseAdminTeacher = "Διαχειριστής - Συντονιστής";
-$langOfCourseAdminTeacher = "Διαχειριστή - Συντονιστή";
-$langCourseAdminTeachers = "Διαχειριστές - Συντονιστές";
-$langOfCourseAdminTeachers = "Διαχειριστών - Συντονιστών";
-
-$langsCourseAdminTeacher = "διαχειριστής - συντονιστής";
-$langsOfCourseAdminTeacher = "διαχειριστή - συντονιστή";
-$langsCourseAdminTeachers = "διαχειριστές - συντονιστές";
-$langsOfCourseAdminTeachers = "διαχειριστών - συντονιστών";
-
-$langsCourseAdmin = "διαχειριστής";
-$langsOfCourseAdmin = "διαχειριστή";
-$langsCourseAdmins = "διαχειριστές";
-$langsOfCourseAdmins = "διαχειριστών";
-
-$langEditor = "Βοηθός συντονιστή";
-$langOfEditor = "Βοηθού συντονιστή";
-$langsEditor = "βοηθός συντονιστή";
-$langsOfEditor = "βοηθού συντονιστή";
-
-$langCourseReviewer = "Επόπτης";
-$langOfCourseReviewer = "Επόπτη";
-$langsCourseReviewer = "επόπτης";
-$langsOfCourseReviewer = "επόπτη";
-
-$langGroupTutor = "Υπεύθυνος ομάδας";
-$langsOfGroupTutor = "υπεύθυνου ομάδας";
-
-$langStudent = "Μέλος";
-$langOfStudent = "Μέλους";
-$langStudents = "Μέλη";
-$langOfStudents = "Μελών";
-$langCStudent = "ΜΕΛΟΣ";
-$langCStudent2 = "ΜΕΛΟΣ";
-
-$langsStudent = "μέλος";
-$langsOfStudent = "μέλους";
-$langsStudents = "μέλη";
-$langsOfStudents = "μελών";
-$langsOfStudentss = "μέλη";
-$langsstudent_acc = "μέλος";
-
-$langGuest = "Χρήστης Επισκέπτης";
-$langGuests = "Χρήστες Επισκέπτες";
-
-$langCourse = "Συνεργασία";
-$langCourses = "Συνεργασίες";
-$langOfCourses = "Συνεργασιών";
-$langOfCourse = "Συνεργασίας";
-
-$langsCourse = "συνεργασία";
-$langsCourses = "συνεργασίες";
-$langsOfCourse = "συνεργασίας";
-$langsOfCourses = "συνεργασιών";
-$langCourseS = "συνεργασίας";
-$langMyCourses = "Οι συνεργασίες μου";
-
-$langFaculty = "Κατηγορία";
-$langOfFaculty = "Κατηγορίας";
-$langOfFaculties = "Κατηγοριών";
-$langFaculties = "Κατηγορίες";
-
-$langsFaculty = "κατηγορία";
-$langsOfFaculty = "κατηγορίας";
-$langsFaculties = "κατηγορίες";
-
-$langInfoAbout = "Η πλατφόρμα $siteName αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Συνεργασιών. Ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα και υποστηρίζει την υπηρεσία Ασύγχρονης Τηλεκπαίδευσης χωρίς περιορισμούς και δεσμεύσεις. Η πρόσβαση στην υπηρεσία γίνεται με τη χρήση ενός απλού φυλλομετρητή (web browser) χωρίς την απαίτηση εξειδικευμένων τεχνικών γνώσεων.";
-
-
-
 $langLocale = 'el_GR.UTF-8';
 $langIntro = "Η πλατφόρμα <strong>$siteName</strong> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών $langOfCourses και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langTotalCourses = "Αριθμός $langsOfCourses";
@@ -848,8 +757,8 @@ $langLessonName = "Όνομα $langsOfCourse";
 
 // profile.php
 $langProfileInfoProfs = "εμφάνιση στους $langsTeachers";
-$langSumCoursesEnrolled = "$langCourses που </br>παρακολουθώ";
-$langSumCoursesSupport = "$langCourses που </br>υποστηρίζω";
+$langSumCoursesEnrolled = "$langCourses που παρακολουθώ";
+$langSumCoursesSupport = "$langCourses που υποστηρίζω";
 $langShowSettingsInfo = "αφορά την εμφάνιση στους υπόλοιπους χρήστες (εκτός των $langsOfTeachers)";
 
 // user.php
@@ -1291,10 +1200,7 @@ $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
 /* * ******************************************
   Messages for collaboration platform
  * ***************************************** */
-$langEclass = "Πλατφόρμα Συνεργασίας για Θέματα Κλιματικής Αλλαγής και Μνημείων Πολιτιστικής Κληρονομιάς";
-$langEclassInfo = "
-Η παρούσα πλατφόρμα υλοποιήθηκε στο πλαίσιο του έργου “Σχεδιασμός Εθνικής Στρατηγικής για την προσαρμογή των μνημείων πολιτιστικής κληρονομιάς στις επιπτώσεις της κλιματικής αλλαγής”. Παρέχει ένα ολοκληρωμένο περιβάλλον αλληλεπίδρασης ανάμεσα στους συνεργαζόμενους φορείς και ειδικούς σε σχέση με το αντικείμενο του έργου.
-";
+
 $langCollaboration = "Συνεργασία";
 $langSmCollaboration = "συνεργασία";
 $langOfCollaboration = "Συνεργασίας";

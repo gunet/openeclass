@@ -51,9 +51,9 @@
 
             @if ($user_registration)
                 <div class='col-12 mt-4'>
-                    <div class='row row-cols-1 row-cols-lg-2 m-auto g-lg-5 g-4'>
+                    <div class='row row-cols-1 row-cols-lg-2 m-auto g-4'>
                         <div class='col-lg-6 col-12 ps-0'>
-                            <div class="tab-content mt-5" id="myContentRegistration">
+                            <div class="tab-content" id="myContentRegistration">
                                 @if (!$registration_info)
                                     <div class="tab-pane fade show active" id="regStudent" role="tabpanel" aria-labelledby="reg-student">
                                         @if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE)

@@ -195,7 +195,7 @@ if (file_exists($extra_messages)) {
 }
 require "$webDir/lang/$language/messages.inc.php";
 if (file_exists('config/config.php')) {
-    if(get_config('show_always_collaboration')){
+    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
         require "$webDir/lang/$language/messages_collaboration.inc.php";
     }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
         require "$webDir/lang/$language/messages_eclass_collaboration.inc.php";
@@ -327,9 +327,13 @@ if (isset($_GET['course'])) {
 register_shutdown_function('restore_dbname_override');
 
 
-//About collaboration enable-disable
+//Regarding activation of collaboration
+$is_enabled_collaboration = false;
 if (file_exists('config/config.php')) {
-    if(get_config('show_always_collaboration')){ //always enabled
+    if(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+        $is_enabled_collaboration = true;
+    }
+    if(get_config('show_always_collaboration') and get_config('show_collaboration')){ //always enabled
         $collaboration_platform = $collaboration_value = 1;
     }else{
         $collaboration_platform = $collaboration_value = 0;
@@ -457,7 +461,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
             include "lang/$language/messages.inc.php";
             if (file_exists('config/config.php')) {
-                if(get_config('show_always_collaboration')){
+                if(get_config('show_always_collaboration') and get_config('show_collaboration')){
                     include "lang/$language/messages_collaboration.inc.php";
                 }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
                     include "lang/$language/messages_eclass_collaboration.inc.php";

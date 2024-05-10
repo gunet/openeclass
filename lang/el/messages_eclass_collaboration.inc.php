@@ -21,7 +21,7 @@ $langCollaborationPlatformInfo = "Η πλατφόρμα συνεργασίας �
 $langOpenCoursesTeacherConfirm = "Δήλωση Συντονιστή - Το Διαθέσιμο Συνεργασιακό Υλικό καλύπτει το 100% της Διδακτέας Ύλης";
 $langOpenCoursesTeacherConfirmVideo = "Δήλωση Συντονιστή - Οι Βιντεοσκοπημένες Διαλέξεις καλύπτουν το 80% της Διδακτέας Ύλης";
 $langCMeta['instructorGroup'] = "Συντονιστες";
-$langTutorDefinition = "Συντνονιστής (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
+$langTutorDefinition = "Συντονιστής (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
 $langTheTeacher = 'Ο συντονιστής';
 $langCMeta['instructorGroup'] = "Συντονιστές";
 $langTiiSViewReports = "Πρόσβαση χρηστών στην Αναφορά Ομοιότητας";
@@ -97,3 +97,7 @@ $langClosedCourseShort = "Πρόσβαση έχουν οι χρήστες που
 $langCourseFormat = "Μορφή";
 $langWithCourseUnits = "Μορφή με ενότητες";
 $langCourseCreate = "Δημιουργία";
+
+
+
+$langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";

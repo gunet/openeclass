@@ -109,8 +109,14 @@ $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, regis
 
 if ($_SESSION['status'] == USER_TEACHER) {
     $data['num_of_courses'] = CountTeacherCourses($uid);
+    if($is_enabled_collaboration){
+        $data['num_of_collaborations'] = CountTeacherCollaborations($uid);
+    }
 } else {
     $data['num_of_courses'] = CountStudentCourses($uid);
+    if($is_enabled_collaboration){
+        $data['num_of_collaborations'] = CountStudentCollaborations($uid);
+    }
 }
 
 $data['user_messages'] = $user_messages;

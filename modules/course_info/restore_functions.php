@@ -2227,7 +2227,7 @@ function getTranslation($name, $lang) {
         }
         include "$webDir/lang/$lang/messages.inc.php";
         if (file_exists('config/config.php')) {
-            if(get_config('show_always_collaboration')){
+            if(get_config('show_always_collaboration') and get_config('show_collaboration')){
               include "$webDir/lang/$lang/messages_collaboration.inc.php";
             }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
                 include "$webDir/lang/$lang/messages_eclass_collaboration.inc.php";

@@ -444,6 +444,22 @@ function CountStudentCourses($uid) {
 }
 
 /**
+ * @brief count student courses (except inactive)
+ * @param $uid
+ * @return void
+ */
+function CountStudentCollaborations($uid) {
+
+    $total = Database::get()->querySingle("SELECT COUNT(*) AS total
+                FROM course JOIN course_user
+                    ON course.id = course_user.course_id
+                    AND course_user.user_id = ?d
+                    AND course.is_collaborative = ?d
+                    AND course.visible != " . COURSE_INACTIVE, $uid, 1)->total;
+    return $total;
+}
+
+/**
  * @brief count teacher courses
  * @param $uid
  * @return mixed
@@ -457,6 +473,22 @@ function CountTeacherCourses($uid) {
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
             AND course.is_collaborative = ?d", $uid, $collaboration_value)->total;
+
+    return $total;
+}
+
+/**
+ * @brief count teacher courses
+ * @param $uid
+ * @return mixed
+ */
+function CountTeacherCollaborations($uid) {
+
+    $total = Database::get()->querySingle("SELECT COUNT(*) AS total
+                FROM course JOIN course_user
+                    ON course.id = course_user.course_id
+            AND course_user.user_id = ?d
+            AND course.is_collaborative = ?d", $uid, 1)->total;
 
     return $total;
 }

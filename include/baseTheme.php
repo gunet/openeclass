@@ -63,7 +63,7 @@ function view($view_file, $view_data = array()) {
             $require_editor, $langHomePage,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
-            $collaboration_platform, $collaboration_value;
+            $collaboration_platform, $collaboration_value, $is_enabled_collaboration;
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -6057,14 +6057,14 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['view_platform']) && $theme_options_styles['view_platform'] == 'boxed'){
 
-            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1200px');    
+            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1140px');    
             $styles_str .= "
 
                 @media (min-width: 992px) {
                     .ContentEclass{
                         margin-left: auto;
                         margin-right: auto;
-                        min-width: 992px;
+                        min-width: 960px;
                         max-width: $maxWidthPlatform ;
                     }
 
@@ -6169,7 +6169,7 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
-            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value');
+            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value', 'is_enabled_collaboration');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();

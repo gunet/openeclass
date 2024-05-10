@@ -531,7 +531,7 @@ if (!isset($_POST['final_submit'])) {
             }
             include "lang/$language/messages.inc.php";
             if (file_exists('config/config.php')) {
-                if(get_config('show_always_collaboration')){
+                if(get_config('show_always_collaboration') and get_config('show_collaboration')){
                   include "lang/$language/messages_collaboration.inc.php";
                 }elseif(!get_config('show_always_collaboration') and get_config('show_collaboration')){
                     include "lang/$language/messages_eclass_collaboration.inc.php";

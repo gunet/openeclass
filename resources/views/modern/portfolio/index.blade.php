@@ -513,7 +513,7 @@
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
                 <div class='row row-cols-1 g-4'>
-                    <div class="col portfolio-content d-flex justify-content-between align-items-start flex-wrap gap-lg-5 gap-3">
+                    <div class="col portfolio-content d-flex justify-content-between align-items-start flex-wrap gap-lg-4 gap-3">
                         <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
@@ -527,15 +527,20 @@
                         </div>
                         <div class='flex-fill d-flex justify-content-center align-items-center'>
                             <div>
-                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
+                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts @if($is_enabled_collaboration) mb-0 @endif'>
                                     <div class='mt-3'>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
                                 </h5>
+                                @if($is_enabled_collaboration)
+                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
+                                    <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
+                                </h5>
+                                @endif
                                 <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
                                     {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap '>
+                        <div class='d-flex justify-content-center align-items-center gap-2 flex-wrap '>
                             <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                 {{ trans('langMyProfile') }}
                             </a>
