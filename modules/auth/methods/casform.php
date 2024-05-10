@@ -115,7 +115,7 @@ $tool_content .= "
                     { sortable: false, targets: 4 },
                   ],
             });
-console.log(data_table);
+
             $('body').on('click', '.delete-entry', function (e) {
                 e.preventDefault();
                 let entry_id = $(this).data('id');
@@ -127,7 +127,8 @@ console.log(data_table);
                 }
                 dataArray = dataArray.filter((val) => val.minedu_id != entry_id);
                 $('input[name=\"minedu_department_association\"]').val(JSON.stringify(dataArray));
-                data_table.row($(this).parents('tr')).remove().draw();
+
+                $(this).closest('tr').remove();
             });
 
             $('#minedu_School').prop('disabled', true).select2();
