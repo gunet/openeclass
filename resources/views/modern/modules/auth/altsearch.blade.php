@@ -136,9 +136,9 @@
                                     </div>
 
                                     @if (isset($_SESSION['shib_uname']))
-                                        <input type='hidden' name='uname' value='{!! q($_SESSION['shib_uname']) !!}'>
+                                        <input type='hidden' name='uname' value='{{ $_SESSION['shib_uname'] }}'>
                                     @else
-                                        <input type='hidden' name='uname' value='{!! q($_SESSION['was_validated']['uname']) !!}'>
+                                        <input type='hidden' name='uname' value='{{ $_SESSION['was_validated']['uname'] }}'>
                                     @endif
                                     <input type='hidden' name='auth' value='{{ $auth }}'>
 

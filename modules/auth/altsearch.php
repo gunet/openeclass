@@ -32,8 +32,6 @@ $autoregister = FALSE;
 $data['user_registration'] = $user_registration = get_config('user_registration');
 $data['alt_auth_stud_reg'] = $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); // user registration via alternative auth methods
 
-//var_dump($_POST);
-
 if (isset($_POST['auth'])) {
     $auth = intval($_POST['auth']);
     $_SESSION['u_tmp'] = $auth;
@@ -108,9 +106,10 @@ if (!isset($_SESSION['was_validated']) or $_SESSION['was_validated']['auth'] != 
             'auth' => $auth,
             'uname' => $uname,
             'uname_exists' => user_exists($uname));
-    } else {
+    } else { // wrong credentials
         Session::flash('message', $langAuthNoValidUser);
         Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/auth/altnewuser.php?auth=$auth");
     }
 } else {
     $is_valid = true;
@@ -166,7 +165,7 @@ if ($is_valid) { // user credentials successful check
                 'usercomment' => $comment_required), 'all');
 
         if (!$ok and $submit) {
-            Session::flash('message', $langFieldsMissing);
+            Session::flash('message', "$langFieldsMissing");
             Session::flash('alert-class', 'alert-danger');
         }
         if (!empty($_SESSION['auth_user_info']['givenname'])) {
@@ -183,7 +182,7 @@ if ($is_valid) { // user credentials successful check
         }
         if (!empty($email) and !valid_email($email)) {
             $ok = NULL;
-            Session::flash('message', $langEmailWrong);
+            Session::flash('message', "$langEmailWrong");
             Session::flash('alert-class', 'alert-danger');
         } else {
             $email = mb_strtolower(trim($email));
@@ -195,8 +194,8 @@ if ($is_valid) { // user credentials successful check
         }
 
         if (@(!empty($_SESSION['was_validated']['uname_exists']) and $_POST['p'] != 1)) {
-            Session::flash('message', $langUserFree);
-            Session::flash('alert-class', 'alert-danger');
+            Session::flash('message', "$langUserFree $langUserFree2");
+            Session::flash('alert-class', 'alert-warning');
         }
         if ($auth != 1) {
             $password = $auth_ids[$auth] ?? '';
@@ -228,7 +227,7 @@ if ($is_valid) { // user credentials successful check
                 // check if mail address is valid
                 if (!empty($email) and !valid_email($email)) {
                     Session::flash('message', $langEmailWrong);
-                    Session::flash('alert-class', 'alert-danger');
+                    Session::flash('alert-class', 'alert-warning');
                 } else {
                     $email = mb_strtolower(trim($email));
                 }
@@ -321,7 +320,7 @@ if ($is_valid) { // user credentials successful check
                 Session::flash('message', "$langUserFree3");
                 Session::flash('alert-class', 'alert-danger');
             }
-        } else if (empty($_SESSION['uname_exists'])) { // user registration
+        } else if (empty($_SESSION['uname_exists']) and $ok) { // user registration
             if (get_config('email_verification_required') && !empty($email)) {
                 $verified_mail = 0;
                 $vmail = TRUE;
