@@ -5785,3 +5785,5 @@ $langDoubleLoginLock = 'You have logged into the platform from another device
 $langUserCreated = "New account created successfully!";
 $langCASGUnetIdentity = 'Enable GUnet Single-Sign-On Service';
 $langSchoolDepartment = 'School - Faculty';
+$langDefaultCategory = 'Default Category';
+$langDefaultCategoryHelp = 'Users who are not assigned to any other category are put in the default category.';

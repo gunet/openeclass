@@ -69,33 +69,18 @@ load_js('jstree3');
 load_js('select2');
 load_js('datatables');
 
-$allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
-$allowables = array();
-if ($allow_only_defaults) {
-    // Method: getDepartmentIdsAllowedForCourseCreation
-    // fetches only specific tree nodes, not their sub-children
-    //$user->getDepartmentIdsAllowedForCourseCreation($uid);
-    // the code below searches for the allow_course flag in the user's department subtrees
-    $userdeps = $user->getDepartmentIds($uid);
-    $subs = $tree->buildSubtreesFull($userdeps);
-    foreach ($subs as $node) {
-        if (intval($node->allow_course) === 1) {
-            $allowables[] = $node->id;
-        }
-    }
-}
-
-list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+list($js, $html) = $tree->buildUserNodePicker(['defaults' => [], 'skip_preloaded_defaults' => false]);
 $head_content .= $js;
 
 $minedu_school_data = Database::get()->queryArray("
     SELECT CONCAT(md.School,' - ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
     FROM minedu_department_association AS mda
-    JOIN minedu_departments AS md ON mda.minedu_id = md.MineduID
-    JOIN hierarchy AS h ON mda.department_id = h.id");
+    JOIN hierarchy AS h ON mda.department_id = h.id
+    LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = md.MineduID
+    ORDER BY School_Department");
 
 $minedu_department_association = json_encode(array_map(function ($item) {
-    return ['minedu_id' => $item->minedu_id, 'department_id' => $item->department_id];
+    return ['minedu_id' => $item->minedu_id ?? 0, 'department_id' => $item->department_id];
 }, $minedu_school_data));
 
 $minedu_institution = $auth_data['minedu_institution'] ?? '';
@@ -120,24 +105,45 @@ $tool_content .= "
                 $('.cas_gunet_container, .cas_port, .cas_logout, .cas_ssout, .cas_context, .casusermailattr, .casuserfirstattr, .casuserlastattr, .casuserstudentid, .cas_altauth, .cas_altauth_use').toggleClass('hide');
             });
 
-            $('#cas_gunet_table').dataTable({
+            var data_table = $('#cas_gunet_table').dataTable({
+                order: [1, 'asc'],
                 searching: false,
                 paging: false,
                 columnDefs: [
                     { width: '40%', targets: [0, 2] },
-                    { width: '10%', targets: [1, 3] }
+                    { width: '10%', targets: [1, 3] },
+                    { sortable: false, targets: 4 },
                   ],
+            });
+console.log(data_table);
+            $('body').on('click', '.delete-entry', function (e) {
+                e.preventDefault();
+                let entry_id = $(this).data('id');
+                let currentData = $('input[name=\"minedu_department_association\"]').val();
+                let dataArray = currentData ? JSON.parse(currentData) : [];
+
+                if (entry_id == '-') {
+                    entry_id = '0';
+                }
+                dataArray = dataArray.filter((val) => val.minedu_id != entry_id);
+                $('input[name=\"minedu_department_association\"]').val(JSON.stringify(dataArray));
+                data_table.row($(this).parents('tr')).remove().draw();
             });
 
             $('#minedu_School').prop('disabled', true).select2();
 
-            $('#minedu_institution').select2().on('select2:select', function (e) {
-                $('#minedu_School').val(null).trigger('change');
+            $('#minedu_institution').select2({
+                    placeholder: '" . js_escape($langWelcomeSelect) . "',
+                    allowClear: true,
+                }).on('select2:select', function (e) {
+                $('#minedu_School').val('').trigger('change');
                 var selectedInstitution = $(this).val();
 
                 if (selectedInstitution) {
                     $('#minedu_School').prop('disabled', false);
                     $('#minedu_School').select2({
+                        allowClear: true,
+                        placeholder: '" . js_escape($langWelcomeSelect) . "',
                         ajax: {
                           url: 'get_minedu_departments.php',
                           dataType: 'json',
@@ -149,9 +155,11 @@ $tool_content .= "
                           processResults: function (data) {
                               console.log('School',data)
                             return {
-                              results: data.map(function (item) {
-                                return { text: item.Department, id: item.MineduID };
-                              })
+                              results: [{text: '". js_escape($langDefaultCategory) . "', id: '0'}].concat(
+                                data.map(function (item) {
+                                  return { text: item.Department, id: item.MineduID };
+                                })
+                              )
                             };
                           }
                         }
@@ -170,12 +178,17 @@ $tool_content .= "
                 let local_dep_id = $( 'input[name=\"department[]\"]' ).val();
                 let local_dep_text = $( '#dialog-set-value' ).val();
 
+                if (minedu_School_id == '0') {
+                    minedu_School_id = '-';
+                }
+
                 var table = $('#cas_gunet_table').DataTable();
                 let newRow = table.row.add([
                     minedu_School_text,
                     minedu_School_id,
                     local_dep_text,
-                    local_dep_id
+                    local_dep_id,
+                    '<button class=\"btn btn-xs delete-entry btn-danger\" title=\"" . js_escape($langDelete) . "\" data-id=\"' + minedu_School_id + '\"><span class=\"fa fa-times\"></span></button>'
                 ]).draw();
 
                 let currentData = $('input[name=\"minedu_department_association\"]').val();
@@ -186,6 +199,7 @@ $tool_content .= "
                     'department_id': local_dep_id
                 });
                 $('input[name=\"minedu_department_association\"]').val(JSON.stringify(dataArray));
+                $('#minedu_School').val('').trigger('change.select2');
             });
         });
     </script>
@@ -206,7 +220,7 @@ $tool_content .= "
             <label for='minedu_institution' class='col-sm-2 control-label'>$langInstitution</label>
             <div class='col-sm-10'>
                 <select id='minedu_institution' name='minedu_institution'>
-                    <option value=''></option>" .
+                    <option></option>" .
                     implode(array_map(function ($item) {
                         global $minedu_institution;
                         $institution = q($item->Institution);
@@ -226,16 +240,22 @@ $tool_content .= "
                             <th>Minedu ID</th>
                             <th>$langFaculty</th>
                             <th>ID</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>" .
                         implode(array_map(function ($item) {
+                            global $langDelete, $langDefaultCategory;
+                            $minedu_id = $item->minedu_id ?? '-';
+                            $minedu_name = $item->School_Department ? q($item->School_Department): $langDefaultCategory;
                             return "
                                 <tr>
-                                    <td>" . q($item->School_Department) . "</td>
-                                    <td>{$item->minedu_id}</td>
+                                    <td>$minedu_name</td>
+                                    <td>$minedu_id</td>
                                     <td>" . q(getSerializedMessage($item->name)) . "</td>
                                     <td>{$item->department_id}</td>
+                                    <td><button class='btn btn-xs delete-entry btn-danger' title='$langDelete' data-id='$minedu_id'><span class='fa fa-times'></span></btn></td>
+                                 </button>
                                 </tr>";
                         }, $minedu_school_data)) . "
                     </tbody>
@@ -253,6 +273,7 @@ $tool_content .= "
                         </div>
                     </div>
                     <button id='cas_gunet_add' class='btn btn-primary'>$langAdd</button>
+                    <div class='help-block'>$langDefaultCategoryHelp</div>
                     <input type='hidden' name='minedu_department_association' value='$minedu_department_association'>
                 </div>
             </div>
