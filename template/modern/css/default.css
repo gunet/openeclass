@@ -5178,7 +5178,9 @@ body:has(.fixed-announcement) .btn-quick-note{
 /***************************************** NOTIFICATION COURSE BUTTON *************************************************/
 /**********************************************************************************************************************/
 .btn-notification-course,
-.btn-notification-course-card{
+.btn-notification-course-card,
+.btn-notification-collaboration,
+.btn-notification-collaboration-card{
   padding: 0px;
   width: 19px;
   height: 19px;
@@ -5187,7 +5189,9 @@ body:has(.fixed-announcement) .btn-quick-note{
   align-items: center;
 }
 .btn-notification-course.not_active,
-.btn-notification-course-card.not_active{
+.btn-notification-course-card.not_active,
+.btn-notification-collaboration.not_active,
+.btn-notification-collaboration-card.not_active{
   display: none;
 }
 

@@ -6729,6 +6729,9 @@ if (file_exists('config/config.php')) {
         $langWithCourseUnits = "Μορφή με ενότητες";
         $langMyCollaborations = "Οι συνεργασίες μου";
         $langNoParticipatedInCollab = "Δεν συμμετέχετε σε κάποια συνεργασία";
+        $langPreviewCollaboration = "Προβολή συνεργασίας";
+        $langUnregCollaboration = "Απεγγραφή από την συνεργασία";
+        $langListOfCollaboration = "Παρακάτω εμφανίζεται η λίστα με τις συνεργασίες στις οποίες συμμετέχετε.";
     }
 }
 $langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";

@@ -3539,6 +3539,9 @@ function get_theme_options() {
                 #portfolio_lessons tbody tr{
                     background-color: $theme_options_styles[BgTables];
                 }
+                #portfolio_collaborations tbody tr{
+                    background-color: $theme_options_styles[BgTables];
+                }
 
                 .table-default tbody tr td, 
                 .announcements_table tbody tr td, 

@@ -109,12 +109,12 @@ $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, regis
 
 if ($_SESSION['status'] == USER_TEACHER) {
     $data['num_of_courses'] = CountTeacherCourses($uid);
-    if($is_enabled_collaboration){
+    if(get_config('show_collaboration')){
         $data['num_of_collaborations'] = CountTeacherCollaborations($uid);
     }
 } else {
     $data['num_of_courses'] = CountStudentCourses($uid);
-    if($is_enabled_collaboration){
+    if(get_config('show_collaboration')){
         $data['num_of_collaborations'] = CountStudentCollaborations($uid);
     }
 }
@@ -127,6 +127,11 @@ $data['courses'] = $courses;
 
 $collaborations = getUserCollaborations($uid);
 $data['collaborations'] = $collaborations;
+
+if(get_config('show_collaboration') and get_config('show_always_collaboration')){
+    $courses = getUserCollaborations($uid);
+    $data['courses'] = $courses;
+}
 
 $items_per_page = 4;
 $data['items_per_page'] = $items_per_page;

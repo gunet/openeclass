@@ -36,6 +36,35 @@
                 }
             });
 
+            jQuery('#portfolio_collaborations').DataTable({
+                "bLengthChange": false,
+                "iDisplayLength": 10,
+                "bSort": false,
+                "fnDrawCallback": function (oSettings) {
+                    $('#portfolio_collaborations_filter label input').attr({
+                        class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
+                        placeholder: '{{ js_escape(trans('langSearch')) }} ...'
+                    });
+                    $('#portfolio_collaborations_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
+                },
+                "oLanguage": {
+                    "sLengthMenu": "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
+                    "sZeroRecords": "{{ trans('langNoResult') }}",
+                    "sInfo": " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}",
+                    "sInfoEmpty": " {{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}",
+                    "sInfoFiltered": '',
+                    "sInfoPostFix": '',
+                    "sSearch": '',
+                    "sUrl": '',
+                    "oPaginate": {
+                        "sFirst": '&laquo;',
+                        "sPrevious": '&lsaquo;',
+                        "sNext": '&rsaquo;',
+                        "sLast": '&raquo;'
+                    }
+                }
+            });
+
             $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap gap-2'>" +
                 "<a class='btn showCoursesBars active'>" +
                 "<i class='fa-solid fa-table-list'></i>" +
@@ -92,7 +121,7 @@
         var idCoursePortfolio = '';
         var btnPortfolio = '';
         var modal_portfolio = '';
-        $("#portfolio_lessons, #cources-pics").on('click','.ClickCoursePortfolio',function() {
+        $("#portfolio_lessons, #cources-pics, #portfolio_collaborations").on('click','.ClickCoursePortfolio',function() {
             // Get the btn id
             idCourse = this.id;
             if(idCourse.includes('CourseTable_')){
@@ -527,12 +556,16 @@
                         </div>
                         <div class='flex-fill d-flex justify-content-center align-items-center'>
                             <div>
+                                @if((!get_config('show_collaboration') && !get_config('show_always_collaboration')) 
+                                   or (get_config('show_collaboration') && !get_config('show_always_collaboration')))
                                 <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts @if($is_enabled_collaboration) mb-0 @endif'>
                                     <div class='mt-3'>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
                                 </h5>
-                                @if($is_enabled_collaboration)
+                                @endif
+                                @if((get_config('show_collaboration') && get_config('show_always_collaboration')) 
+                                   or (get_config('show_collaboration') && !get_config('show_always_collaboration')))
                                 <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
-                                    <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
+                                    <div class="@if(get_config('show_always_collaboration')) mt-3 @endif">{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
                                 </h5>
                                 @endif
                                 <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
@@ -574,7 +607,14 @@
                             <div class='flex-grow-1'>
                                 <div class='card card-transparent border-0 bg-transparent'>
                                     <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp; ({{ $num_of_courses }})</h2>
+                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp; 
+                                            @if(!get_config('show_always_collaboration'))
+                                            ({{ $num_of_courses }})
+                                            @else
+                                            ({{ $num_of_collaborations }})
+                                            @endif
+                                        
+                                        </h2>
                                         <div class='d-flex mt-md-0 mt-3'>
                                             <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
                                                 <i class="fa-regular fa-pen-to-square"></i>&nbsp
@@ -647,10 +687,18 @@
                                                 @endphp
 
                                                 @foreach($courses as $course)
-                                                    @if(!$course->is_collaborative)
-                                                        @php $temp_pages++; @endphp
+                                                    
+                                                        @php 
+                                                            if(get_config('show_collaboration') && get_config('show_always_collaboration') && !$course->is_collaborative){
+                                                                continue;
+                                                            }elseif(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $course->is_collaborative){
+                                                                continue;
+                                                            }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration') && $course->is_collaborative){
+                                                                continue;
+                                                            }else{
+                                                                $temp_pages++; 
+                                                            }
 
-                                                        @php
                                                             if (isset($course->favorite)) {
                                                                 $favorite_icon = 'fa-star Primary-500-cl';
                                                                 $fav_status = 0;
@@ -746,7 +794,7 @@
                                                             $countCards++;
                                                             $allCourses++;
                                                         @endphp
-                                                    @endif
+                                                    
                                                 @endforeach
 
                                             </div>
@@ -816,34 +864,6 @@
                                             </div>
 
                                         </div>
-
-                                        @if($is_enabled_collaboration)
-                                            <div class='card card-transparent border-0 bg-transparent mt-4'>
-                                                <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                                    <h2>{{ trans('langMyCollaborations') }}&nbsp; ({{ $num_of_collaborations }})</h2>
-                                                </div>
-                                                <div class='card-body px-0'>
-                                                    @if(count($collaborations) > 0)
-                                                        @php //print_a($collaborations); @endphp
-                                                        <table class='table-default'>
-                                                            <tbody>
-                                                                @foreach($collaborations as $cl)
-                                                                    <tr>
-                                                                        <td>
-                                                                            <a href='{{ $urlServer }}courses/{{ $cl->code }}/index.php'>{{ $cl->title }}&nbsp;({{ $cl->public_code }})</a>
-                                                                            <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $cl->professor }}</div>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    @else
-                                                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoParticipatedInCollab')}}</span></div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endif
-
 
                                         @if($portfolio_page_main_widgets)
                                             <div class='col-12 mt-4'>

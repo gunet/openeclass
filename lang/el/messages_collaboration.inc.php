@@ -1418,3 +1418,9 @@ $langInvitationAlreadyUsed = 'Έχετε ήδη εγγραφεί στην πλα
     διεύθυνση e-mail σας και τον κωδικό πρόσβασης που είχατε επιλέξει.';
 $langRegisterAsVisitor = 'Εγγραφή ως επισκέπτης';
 $langCourseInvitation = 'Πρόσκληση εγγραφής στη συνεργασία';
+
+
+
+
+$langPreviewCollaboration = "Προβολή συνεργασίας";
+$langUnregCollaboration = "Απεγγραφή από την συνεργασία";

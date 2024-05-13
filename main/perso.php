@@ -46,6 +46,20 @@ if (count($lesson_ids) > 0) {
     $user_announcements = getUserAnnouncements($lesson_ids);
 }
 
+// Main platform and Collaboration platform are always enabled
+if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
+    if(count($collaboration_ids) > 0){
+        $lesson_collaboration_ids = array_merge($collaboration_ids,$lesson_ids);
+        $user_announcements = getUserAnnouncements($lesson_collaboration_ids);
+    }
+}
+// Main platform and Collaboration platform are always enabled
+if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+    if(count($collaboration_ids) > 0){
+        $user_announcements = getUserAnnouncements($collaboration_ids);
+    }
+}
+
 // get user latest personal messages
 $user_messages = getUserMessages();
 

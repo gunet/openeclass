@@ -64,6 +64,7 @@ $(document).ready(function(){
     topFunction();
     nextAuthedicationMethod();
     lesson_notifications();
+    collaboration_notifications();
 
 
     //fix modal appearance
@@ -370,6 +371,55 @@ function lesson_notifications(){
                         if (noexistNotification.length > 0) { 
                             var Table = $('#portfolio_lessons').dataTable();
                             var row = Table.$(".btn-notification-course", {"page": "all"});
+                            row.each(function(index,element){ 
+                                var id_btn = $(element).attr('id');
+                                if(id_btn == 'btnNotification_'+id){
+                                    $(element).css('display','none');
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+}
+
+function collaboration_notifications(){
+    let current_url = document.URL;
+    if(current_url.includes('/main/portfolio.php')){
+        var collabotationIDs = [];
+        $(".collaboration-notifications").each(function () {
+            collabotationIDs.push($(this).data('id'));
+        });
+        $.ajax({
+            type: "GET",
+            url: notificationsCourses.getNotifications,
+            dataType: "json",
+            data: {courseIDs: collabotationIDs},
+            success: function (data) {
+                // For cards
+                $(".collaboration-notifications").each(function () {
+                    var id = $(this).data('id');
+                    if (data.notifications_courses[id]) {
+                        $(this).html(data.notifications_courses[id]['notification_content']);
+                        var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
+                        if (noexistNotification.length > 0) {
+                            $('#btnNotificationCards_'+id).css('display','none');
+                        }
+                    }
+                });
+                // For datatable
+                var portFolioTable = $('#portfolio_collaborations').dataTable();
+                var rowcollection = portFolioTable.$(".collaboration-notifications", {"page": "all"});
+                rowcollection.each(function(index,elem){
+                    var id = $(elem).data('id');
+                    if (data.notifications_courses[id]) {
+                        $(elem).html(data.notifications_courses[id]['notification_content']);
+                        var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
+                        if (noexistNotification.length > 0) { 
+                            var Table = $('#portfolio_collaborations').dataTable();
+                            var row = Table.$(".btn-notification-collaboration", {"page": "all"});
                             row.each(function(index,element){ 
                                 var id_btn = $(element).attr('id');
                                 if(id_btn == 'btnNotification_'+id){

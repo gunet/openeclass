@@ -30,7 +30,7 @@
     }
 
     var lang = {
-        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
+        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengthTooShort')) }}",
         pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
         pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}",
         pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
@@ -72,7 +72,7 @@
             }
         }).change();
 
-        var type_course = $('#typeCourse').val();
+        var type_course = $('#typeCourses').val();
         if (type_course == 1){
           $('.typeCourse').removeClass('d-block');
           $('.typeCourse').addClass('d-none');
@@ -84,7 +84,9 @@
           const units = document.getElementById('units');
           units.checked = true;
         }
-        $('#typeCourse').change(function(){
+
+        $('#typeCourses').change(function(){
+            
             var item = $(this).val();
             if (item == 1){
               $('.typeCourse').removeClass('d-block');
@@ -193,16 +195,16 @@
                         <div class='form-group mt-4'>
                           <label for="typeCourse" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
                           @if(get_config('show_collaboration') and get_config('show_always_collaboration'))
-                              <select id='typeCourse' name='typeCourse' class='form-select'>
+                              <select id='typeCourses' name='typeCourse' class='form-select'>
                                 <option value='1' selected>{{ trans('langTypeCollaboration') }}</option>
                               </select>
                           @elseif(get_config('show_collaboration') and !get_config('show_always_collaboration'))
-                              <select id='typeCourse' name='typeCourse' class='form-select'>
+                              <select id='typeCourses' name='typeCourse' class='form-select'>
                                 <option value='0' selected>{{ trans('langTypeCourse') }}</option>
                                 <option value='1'>{{ trans('langTypeCollaboration') }}</option>
                               </select>
                           @else
-                              <select id='typeCourse' name='typeCourse' class='form-select'>
+                              <select id='typeCourses' name='typeCourse' class='form-select'>
                                 <option value='0' selected>{{ trans('langCourse') }}</option>
                               </select>
                           @endif

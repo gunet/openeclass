@@ -325,27 +325,33 @@
 
 
   /************************************************** portfolio-table **********************************************************************/
-  #portfolio_lessons{
+  #portfolio_lessons,
+  #portfolio_collaborations{
     border: 0px;
     border-radius: 0px;
     margin-bottom:10px;
   }
-  #portfolio_lessons tbody tr{
+  #portfolio_lessons tbody tr,
+  #portfolio_collaborations tbody tr{
     background-color: #ffffff;
   }
 
-  #portfolio_lessons_paginate .paginate_button.current{ 
+  #portfolio_lessons_paginate .paginate_button.current,
+  #portfolio_collaborations_paginate .paginate_button.current{ 
     background: #E8EDF8;
   }
 
-  #portfolio_lessons_wrapper .dataTables_filter{
+  #portfolio_lessons_wrapper .dataTables_filter,
+  #portfolio_collaborations_wrapper .dataTables_filter{
     float: left;
   }
-  #portfolio_lessons_filter input[type="search"]{
+  #portfolio_lessons_filter input[type="search"],
+  #portfolio_collaborations_filter input[type="search"]{
       border-color: #687DA3;
       height:40px;
   }
-  #portfolio_lessons_filter input[type="search"]:focus {   
+  #portfolio_lessons_filter input[type="search"]:focus,
+  #portfolio_collaborations_filter input[type="search"]:focus {   
       border-color: #0073E6;
       box-shadow: none;
       outline: 0 none;
@@ -355,7 +361,8 @@
       font-style: normal;
   }
   @media(min-width:992px){
-      #portfolio_lessons_filter input[type="search"]{
+      #portfolio_lessons_filter input[type="search"],
+      #portfolio_collaborations_filter input[type="search"]{
           width:350px;
       }
   }

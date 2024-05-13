@@ -36,6 +36,14 @@ $data['action_bar'] = action_bar([
 
 if(isset($_POST['submit'])){
 
+    if(isset($_POST['always_enabled_collaboration']) and $_POST['always_enabled_collaboration'] == 'on'){
+        if (!isset($_POST['enable_collaboration'])) {
+            Session::flash('message',$langForbidden); 
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/admin/collaboration_enable.php");
+        }
+    }
+
     if (isset($_POST['enable_collaboration']) and $_POST['enable_collaboration'] == 'on') {
         $enable_collaboration = 1;
     } else {

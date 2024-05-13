@@ -4138,6 +4138,9 @@ function view($view_file, $view_data = array()) {
                 #portfolio_lessons tbody tr{
                     background-color: $theme_options_styles[BgTables];
                 }
+                #portfolio_collaborations tbody tr{
+                    background-color: $theme_options_styles[BgTables];
+                }
 
                 .table-default tbody tr td, 
                 .announcements_table tbody tr td, 
