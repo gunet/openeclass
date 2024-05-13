@@ -491,7 +491,7 @@ require_once "license_info.php";
 // ----------------------------------------
 
 if(isset($is_collaborative_course) and $is_collaborative_course){
-    $modules = array(
+    $modules = $modules_collaborations = array(
         MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
         MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
         MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-regular fa-folder'),

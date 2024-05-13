@@ -63,13 +63,13 @@ function getSideMenu($menuTypeID, $rich=true) {
  * @see function lessonToolsMenu
  */
 function getToolsArray($cat) {
-    global $course_code, $collaboration_platform;
+    global $course_code, $is_collaborative_course;
 
     $table_modules = '';
-    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
-        $table_modules = 'module_disable';
-    }else{
+    if((isset($is_collaborative_course) and $is_collaborative_course)){
         $table_modules = 'module_disable_collaboration';
+    }else{
+        $table_modules = 'module_disable';
     }
 
     $cid = course_code_to_id($course_code);
