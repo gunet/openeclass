@@ -511,7 +511,6 @@ function user_icon($user_id, $size = IMAGESIZE_SMALL) {
 
 /**
  * @brief Display links to the groups a user is member of
- * @global type $urlAppend
  * @param type $course_id
  * @param type $user_id
  * @param type $format
@@ -546,7 +545,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
                     q(ellipsize($r->name, 40)) . "</a>" .
                     ((count($q) > 1) ? '</li>' : '');
         } else {
-            $groups .= (empty($groups) ? '' : ', ') . $r->name;
+            $groups .= (empty($groups) ? '' : ', ') . q($r->name);
         }
     }
     if ($format == 'html') {
