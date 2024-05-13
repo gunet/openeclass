@@ -1778,6 +1778,13 @@ function gunet_idp_hook($options) {
         }
     }
 
+    if (!$options['departments']) {
+        $default = Database::get()->querySingle('SELECT * FROM minedu_department_association WHERE minedu_id = 0');
+        if ($default) {
+            $options['departments'] = [$default->department_id];
+        }
+    }
+
     return $options;
 }
 
