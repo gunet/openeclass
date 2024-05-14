@@ -60,7 +60,7 @@ function view($view_file, $view_data = array()) {
             $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session,
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
-            $require_editor, $langHomePage,
+            $require_editor, $langHomePage, $is_in_tinymce,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course;
@@ -74,11 +74,17 @@ function view($view_file, $view_data = array()) {
 
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
-    $is_in_tinymce = false;
 
     // Setting $menuTypeID and Getting Side Menu
     $menuTypeID = $view_data['menuTypeID'] ?? 2;
-    $toolArr = $is_mobile ? array() : getSideMenu($menuTypeID);
+
+    $toolArr = [];
+    if (isset($course_id) and !$is_mobile) {
+        $toolArr = lessonToolsMenu();
+    }
+    if ($is_in_tinymce) {
+        $toolArr = pickerMenu();
+    }
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
@@ -381,7 +387,7 @@ function view($view_file, $view_data = array()) {
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "#ffffff";
             $LinearGr = (isset($theme_options_styles['bgOpacityImage']) && isset($theme_options_styles['bgColor'])) ? "linear-gradient($bg_color,$bg_color)," : "";
-            
+
             if(isset($theme_options_styles['bgOpacityImage'])){
                 $styles_str .= "
                     body{
@@ -395,7 +401,7 @@ function view($view_file, $view_data = array()) {
                     }
                 ";
             }
-            
+
         }
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
@@ -6032,7 +6038,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['view_platform']) && $theme_options_styles['view_platform'] == 'boxed'){
 
-            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1140px');    
+            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1140px');
             $styles_str .= "
 
                 @media (min-width: 992px) {
@@ -6144,7 +6150,7 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
-            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value', 
+            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
             'is_enabled_collaboration', 'is_collaborative_course');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
