@@ -1184,13 +1184,13 @@ function visible_module($module_id) {
  */
 function is_module_disable($module_id) {
 
-    global $collabortion_platform;
+    global $is_collaborative_course;
 
     $table_modules = '';
-    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
-        $table_modules = 'module_disable';
-    }else{
+    if(isset($is_collaborative_course) and $is_collaborative_course){
         $table_modules = 'module_disable_collaboration';
+    }else{
+        $table_modules = 'module_disable';
     }
 
     $q = Database::get()->querySingle("SELECT * FROM $table_modules WHERE module_id = ?d", $module_id);

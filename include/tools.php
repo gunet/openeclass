@@ -295,13 +295,13 @@ function lessonToolsMenu($rich=true): array
  */
 function pickerMenu() {
 
-    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid, $collaboration_platform;
+    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid, $is_collaborative_course;
 
     $table = '';
-    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
-        $table = 'module_disable';
-    }else{
+    if(isset($is_collaborative_course) and $is_collaborative_course){
         $table = 'module_disable_collaboration';
+    }else{
+        $table = 'module_disable';
     }
 
     // params

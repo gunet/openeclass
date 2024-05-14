@@ -42,6 +42,14 @@ if(isset($_GET['term'])){
 
   $q = $_GET['term'];
 
+  $typeCourse = 0;
+  if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+    $typeCourse = 1;
+  }
+  if(isset($_GET['typeCourse'])){
+    $typeCourse = intval($_GET['typeCourse']);
+  }
+
   //Get all courses which user has registered
   if(empty($q)){
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
@@ -59,7 +67,7 @@ if(isset($_GET['term'])){
                       AND course_user.user_id = ?d 
                       AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                       AND is_collaborative = ?d
-                  ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $collaboration_value);
+                  ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $typeCourse);
   }else{//Get all courses from search-component which user has registered
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                    course.code code,
@@ -77,7 +85,7 @@ if(isset($_GET['term'])){
                   AND course_user.user_id = ?d 
                   AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                   AND is_collaborative = ?d
-              ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid, $collaboration_value);
+              ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid, $typeCourse);
   }
 
   if($myCourses){

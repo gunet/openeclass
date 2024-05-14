@@ -775,10 +775,10 @@ if(file_exists('config/config.php') && get_config('show_collaboration')){
 if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
 
     $table_modules = '';
-    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
-        $table_modules = 'module_disable';
-    }else{
+    if(isset($is_collaborative_course) and $is_collaborative_course){
         $table_modules = 'module_disable_collaboration';
+    }else{
+        $table_modules = 'module_disable';
     }
 
     if ($is_course_reviewer or $is_editor) {

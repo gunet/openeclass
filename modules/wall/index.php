@@ -330,7 +330,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $links_li = '';
         }
 
-        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
             if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
                 $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_edit_exercises" style="padding:10px">
                                 '.list_exercises($id).'
@@ -345,7 +345,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $exercises_li = '';
         }
 
-        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
             if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
                 $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_edit_assigments" style="padding:10px">
                                 '.list_assignments($id).'

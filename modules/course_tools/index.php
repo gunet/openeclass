@@ -38,10 +38,10 @@ load_js('tools.js');
 $page_url = 'modules/course_tools/index.php?course=' . $course_code;
 
 $table_modules = '';
-if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
-    $table_modules = 'module_disable';
-}else{
+if(isset($is_collaborative_course) and $is_collaborative_course){
     $table_modules = 'module_disable_collaboration';
+}else{
+    $table_modules = 'module_disable';
 }
 
 if (isset($_REQUEST['toolStatus'])) {

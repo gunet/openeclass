@@ -35,7 +35,7 @@ require_once 'include/log.class.php';
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
-           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, $langOfCourse, $collaboration_platform;
+           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, $langOfCourse, $is_collaborative_course;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -86,7 +86,7 @@ function show_post_form() {
             $links_li = '';
         }
 
-        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
             if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
                 $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
                                 '.list_exercises().'
@@ -101,7 +101,7 @@ function show_post_form() {
             $exercises_li = '';
         }
 
-        if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+        if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
             if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
                 $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
                                 '.list_assignments().'

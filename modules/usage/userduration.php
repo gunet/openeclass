@@ -334,7 +334,7 @@ if (isset($_GET['u'])) { //  stats per user
                     'url' => "../learnPath/detailsAll.php?course=$course_code",
                     'icon' => 'fa-address-card',
                     'level' => 'primary-label',
-                    'show' => (isset($collaboration_platform) and !$collaboration_platform)),
+                    'show' => ((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)) ),
                 array('title' => $langBBB,
                     'url' => "../tc/tcuserduration.php?course=$course_code&amp;per_user=true",
                     'icon' => 'fa-address-card',
@@ -475,13 +475,13 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
  */
 function selection_course_modules() {
 
-    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module, $urlAppend, $collaboration_platform;
+    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module, $urlAppend, $is_collaborative_course;
 
     $table_modules = '';
-    if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
-        $table_modules = 'module_disable';
-    }else{
+    if(isset($is_collaborative_course) and $is_collaborative_course){
         $table_modules = 'module_disable_collaboration';
+    }else{
+        $table_modules = 'module_disable';
     }
 
     $mod_opts = "<option value='-1'>$langAllModules</option>";

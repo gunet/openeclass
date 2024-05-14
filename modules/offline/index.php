@@ -153,7 +153,7 @@ $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
     'uid', 'session', 'head_content', 'toolArr', 'module_id',
     'pageName', 'section_title', 'logo_img', 'logo_img_small', 'styles_str',
     'require_current_course', 'is_course_admin',
-    'currentCourseName','collaboration_platform', 'collaboration_value');
+    'currentCourseName','collaboration_platform', 'collaboration_value', 'is_collaborative_course');
 $bladeData = array_merge($global_data, $data);
 $bladeData['pageTitle'] = $course_info->title;
 $bladeData['professor'] = $course_info->prof_names;
@@ -213,7 +213,7 @@ offline_videos($bladeData);
 ///////////////
 // glossary
 ///////////////
-if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
     offline_glossary($bladeData, $downloadDir);
 }
 //////////////
@@ -227,12 +227,12 @@ offline_description($bladeData, $downloadDir);
 
 ///////////////////
 // not implemented yet
-if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
     offline_exercises($bladeData);
     offline_ebook($bladeData);
 }
 offline_agenda($bladeData);
-if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course)){
     offline_blog($bladeData);
     offline_wiki($bladeData);
 }

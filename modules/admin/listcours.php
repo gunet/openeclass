@@ -130,8 +130,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
-                                AND course.is_collaborative = ?d
-                                    $query $filter_query $extra_query", $collaboration_value, $terms, $filter_terms, $extra_terms);
+                                    $query $filter_query $extra_query", $terms, $filter_terms, $extra_terms);
 
     $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
