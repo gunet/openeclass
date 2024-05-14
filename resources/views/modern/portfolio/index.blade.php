@@ -689,11 +689,7 @@
                                                 @foreach($courses as $course)
                                                     
                                                         @php 
-                                                            if(get_config('show_collaboration') && get_config('show_always_collaboration') && !$course->is_collaborative){
-                                                                continue;
-                                                            }elseif(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $course->is_collaborative){
-                                                                continue;
-                                                            }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration') && $course->is_collaborative){
+                                                            if(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $course->is_collaborative){
                                                                 continue;
                                                             }else{
                                                                 $temp_pages++; 
@@ -736,6 +732,16 @@
                                                                     </div>
 
                                                                     <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
+                                                                    @if(get_config('show_collaboration') && !get_config('show_always_collaboration'))
+                                                                        <div class="vsmall-text Neutral-900-cl TextRegular mt-1">
+                                                                            {{ trans('langType') }}:&nbsp;
+                                                                            @if($course->is_collaborative)
+                                                                                {{ trans('langTypeCollaboration')}}
+                                                                            @else
+                                                                                {{ trans('langCourse')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
 
                                                                 <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
