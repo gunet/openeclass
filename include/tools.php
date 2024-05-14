@@ -29,33 +29,6 @@ require_once 'modules/message/class.mailbox.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 
 /**
- * @brief Offers an upper-layer logic. Decides what function should be called to
- * create the needed tools array
- * @param int $menuTypeID Type of menu to generate
- * @param bool $rich Whether to include rich text notifications in title
- */
-
-function getSideMenu($menuTypeID, $rich=true) {
-    switch ($menuTypeID) {
-
-        case 2: { //course home (lesson tools)
-            $menu = lessonToolsMenu($rich);
-            break;
-        }
-
-        case 5: { // tools when embedded in tinymce
-            $menu = pickerMenu();
-            break;
-        }
-
-        default: // Only for compatibility!
-            $menu = [];
-            break;
-    }
-    return $menu;
-}
-
-/**
  * @brief Queries the database for tool information in accordance
  * to the parameter passed.
  * @param string $cat Type of lesson tools
@@ -65,13 +38,11 @@ function getSideMenu($menuTypeID, $rich=true) {
 function getToolsArray($cat) {
     global $course_code, $is_collaborative_course;
 
-    $table_modules = '';
-    if((isset($is_collaborative_course) and $is_collaborative_course)){
+    if ((isset($is_collaborative_course) and $is_collaborative_course)) {
         $table_modules = 'module_disable_collaboration';
-    }else{
+    } else {
         $table_modules = 'module_disable';
     }
-
     $cid = course_code_to_id($course_code);
 
     switch ($cat) {
@@ -150,10 +121,11 @@ function getExternalLinks() {
  * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
-function lessonToolsMenu($rich=true): array
+function lessonToolsMenu(bool $rich=true): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer, $courses,
-           $course_code, $modules, $urlAppend, $status, $course_id;
+           $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
+           $langActiveTools, $langInactiveTools, $langLocale;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -164,15 +136,15 @@ function lessonToolsMenu($rich=true): array
     if ($is_editor || $is_course_admin || $is_course_reviewer) {
         $tools_sections =
             array(array('type' => 'Public',
-                        'title' => $GLOBALS['langActiveTools'],
+                        'title' => $langActiveTools,
                         'class' => 'active'),
                   array('type' => 'PublicButHide',
-                        'title' => $GLOBALS['langInactiveTools'],
+                        'title' => $langInactiveTools,
                         'class' => 'inactive'));
     } else {
         $tools_sections =
             array(array('type' => 'Public',
-                        'title' => $GLOBALS['langCourseOptions'],
+                        'title' => $langCourseOptions,
                         'class' => 'active'));
     }
 
@@ -195,7 +167,7 @@ function lessonToolsMenu($rich=true): array
         }
         $sideMenuSubGroup[] = $arrMenuType;
 
-        setlocale(LC_COLLATE, $GLOBALS['langLocale']);
+        setlocale(LC_COLLATE, $langLocale);
         usort($result, function ($a, $b) {
             global $modules;
             return strcoll($modules[$a->module_id]['title'], $modules[$b->module_id]['title']);
@@ -235,9 +207,8 @@ function lessonToolsMenu($rich=true): array
                     $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                    "<span class='badge Neutral-900-bg rounded-circle float-end mt-1 d-flex justify-content-center align-items-center'>$new_docs</span></b>";
-
+                $sideMenuText[] = '<strong class=>' . q($modules[$mid]['title']) .
+                    "<span class='badge Neutral-900-bg rounded-circle float-end mt-1 d-flex justify-content-center align-items-center'>$new_docs</span></strong>";
             } else {
                 $sideMenuText[] = q($modules[$mid]['title']);
             }
@@ -297,10 +268,9 @@ function pickerMenu() {
 
     global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid, $is_collaborative_course;
 
-    $table = '';
-    if(isset($is_collaborative_course) and $is_collaborative_course){
+    if( isset($is_collaborative_course) and $is_collaborative_course) {
         $table = 'module_disable_collaboration';
-    }else{
+    } else {
         $table = 'module_disable';
     }
 

@@ -26,8 +26,7 @@ $require_noerrors = true;
 require_once('minit.php');
 require_once('include/tools.php');
 
-
-$toolArr = getSideMenu(2, false);
+$toolArr = lessonToolsMenu(false);
 
 $groupsArr = array();
 $toolsArr = array();
