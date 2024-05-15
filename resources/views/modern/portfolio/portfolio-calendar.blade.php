@@ -64,33 +64,26 @@
         }
 
     </script>
-    <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
+</div>
 
-
-                <div class='d-flex align-items-center px-2 py-1'>
-                    <span class='event event-important'></span>
-                    <span class="agenda-comment"> {{ trans('langAgendaDueDay') }}</span>
-                </div>
-
-
-                <div class='d-flex align-items-center px-2 py-1'>
-                    <span class='event event-info'></span>
-                    <span class="agenda-comment">{{ trans('langAgendaCourseEvent') }}</span>
-                </div>
-
-
-                <div class='d-flex align-items-center px-2 py-1'>
-                    <span class='event event-success'></span>
-                    <span class="agenda-comment">{{ trans('langAgendaSystemEvent') }}</span>
-                </div>
-
-
-                <div class='d-flex align-items-center px-2 py-1'>
-                    <span class='event event-special'></span>
-                    <span class="agenda-comment">{{ trans('langAgendaPersonalEvent') }}</span>
-                </div>
-
-
+<div class='card bg-transparent card-transparent border-0 sticky-column-course-home'>
+    <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
+        <div class='d-flex align-items-center px-2 py-1'>
+            <span class='event event-important'></span>
+            <span class="agenda-comment"> {{ trans('langAgendaDueDay') }}</span>
+        </div>
+        <div class='d-flex align-items-center px-2 py-1'>
+            <span class='event event-info'></span>
+            <span class="agenda-comment">{{ trans('langAgendaCourseEvent') }}</span>
+        </div>
+        <div class='d-flex align-items-center px-2 py-1'>
+            <span class='event event-success'></span>
+            <span class="agenda-comment">{{ trans('langAgendaSystemEvent') }}</span>
+        </div>
+        <div class='d-flex align-items-center px-2 py-1'>
+            <span class='event event-special'></span>
+            <span class="agenda-comment">{{ trans('langAgendaPersonalEvent') }}</span>
+        </div>
     </div>
 </div>
 

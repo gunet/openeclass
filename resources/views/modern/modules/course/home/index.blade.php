@@ -520,25 +520,31 @@
 
 
                     <div>
+                        <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-4'>
+                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                <h3 class='mb-0'>{{ trans('langAgenda') }}</h3>
+                            </div>
+                        </div>
                         <div class="panel panel-admin panel-admin-calendar card-transparent p-0 border-0 sticky-column-course-home">
-                            <h3 class='mt-1 mb-4'>{{ trans('langAgenda') }}</h3>
                             {!! $user_personal_calendar !!}
-                            <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
-                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
+                        </div>
+                        <div class='card bg-transparent card-transparent border-0 sticky-column-course-home'>
+                            <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
+                                <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-important'></span>
-                                    <span class='small-text agenda-comment'>{{ trans('langAgendaDueDay') }}</span>
+                                    <span class='agenda-comment'>{{ trans('langAgendaDueDay') }}</span>
                                 </div>
-                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
+                                <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-info'></span>
-                                    <span class='small-text agenda-comment'>{{ trans('langAgendaCourseEvent') }}</span>
+                                    <span class='agenda-comment'>{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
-                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
+                                <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-success'></span>
-                                    <span class='small-text agenda-comment'>{{ trans('langAgendaSystemEvent') }}</span>
+                                    <span class='agenda-comment'>{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
-                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
+                                <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-special'></span>
-                                    <span class='small-text agenda-comment'>{{ trans('langAgendaPersonalEvent') }}</span>
+                                    <span class='agenda-comment'>{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -550,7 +556,7 @@
                         <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                             <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
-                                <a class='Course-home-ellipsis-announcements TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
+                                <a class='TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
                             </div>
                             <div class='card-body card-body-default px-0 py-0'>
                                 <ul class='list-group list-group-flush mt-3'>
