@@ -11,7 +11,7 @@
                     <div class='col {!! $Position !!}'>
                         @if($auth_enabled_method == 1)
                             @if (count($authLink) > 0)
-                                <div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
+                            <div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
                                 <div class='card-body d-flex justify-content-center align-items-center'>
                                     <div class='w-100 h-100'>
                                         <div class='col-12 container-pages d-flex align-items-center h-100'>
@@ -21,7 +21,7 @@
                                                 @if ($loop->first)
                                                     <div class='col-12 page slide-page h-100'>
                                                 @else
-                                                    <div class='col-12 page next-page-{{ $loop->iteration }} h-100'>
+                                                    <div class='col-12 page next-page-{{ $loop->iteration-1 }} h-100'>
                                                 @endif
 
                                                 <div class='row h-100'>
@@ -31,8 +31,8 @@
                                                                 {{ $authInfo[2] }} {{-- Auth method title --}}
                                                             </h2>
                                                             @if (!empty($authInfo[3])) {{-- Optional auth instructions --}}
-                                                                <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction{{ $loop->index }}'>
-                                                                    <h5>{{ trans('langInstructionsAuth') }}</h5>
+                                                                <a href='#' class='text-decoration-underline mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction{{ $loop->index }}'>
+                                                                    {{ trans('langInstructionsAuth') }}
                                                                 </a>
                                                                 <div class='modal fade' id='authInstruction{{ $loop->index }}' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
                                                                     <div class='modal-dialog'>
@@ -129,15 +129,15 @@
                                                 </div>
                                             </div>
 
-                                            @if (Session::has('login_error') and $authInfo[0]) {
+                                            @if (Session::has('login_error') and $authInfo[0])
                                                 <div class='col-12'>
                                                     <input id='showWarningModal2' type='hidden' value='1'>
-                                                    <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                                    <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1' data-bs-backdrop='static' data-bs-keyboard='false'>
                                                         <div class='modal-dialog modal-dialog-centered'>
                                                             <div class='modal-content border-0 p-0'>
                                                                 <div class='modal-header d-flex justify-content-between align-items-center'>
                                                                     <div class='modal-title'>{{ trans('langError') }}</div>
-                                                                    <button aria-label='Close' type='button' class='close' data-bs-dismiss='modal'></button>
+                                                                    <button aria-label='Close' type='button' class='close close-error' data-bs-dismiss='modal'></button>
                                                                 </div>
                                                                 <div class='modal-body'>
                                                                     {!! Session::get('login_error') !!}
@@ -182,8 +182,9 @@
 <script type='text/javascript'>
     $(document).ready(function() {
         if($('#showWarningModal2').val() == 1){
-            var myModal = new bootstrap.Modal(document.getElementById('WarningModal2'));
-            myModal.show();
+            var ModalWarning = document.getElementById('WarningModal2');
+            var Modal_W = new bootstrap.Modal(ModalWarning);
+            Modal_W.show();
         }
         $('.close-error').on('click',function(){
             window.location.reload();

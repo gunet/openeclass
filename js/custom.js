@@ -279,7 +279,9 @@ function nextAuthedicationMethod(){
             event.preventDefault();
             slidePage.style.marginLeft = "-100%";
             nextPage1.style.marginLeft = "0%";
-            nextPage2.style.marginLeft = "100%";
+            if(nextPage2 != null){
+                nextPage2.style.marginLeft = "100%";
+            }
         
         });
     }
@@ -289,7 +291,9 @@ function nextAuthedicationMethod(){
             event.preventDefault();
             slidePage.style.marginLeft = "-100%";
             nextPage1.style.marginLeft = "-100%";
-            nextPage2.style.marginLeft = "0%";
+            if(nextPage2 != null){
+                nextPage2.style.marginLeft = "0%";
+            }
         
         });
     }
@@ -299,7 +303,9 @@ function nextAuthedicationMethod(){
             event.preventDefault();
             slidePage.style.marginLeft = "0%";
             nextPage1.style.marginLeft = "100%";
-            nextPage2.style.marginLeft = "100%";
+            if(nextPage2 != null){
+                nextPage2.style.marginLeft = "100%";
+            }
         
         });
     }
@@ -309,7 +315,9 @@ function nextAuthedicationMethod(){
             event.preventDefault();
             slidePage.style.marginLeft = "-100%";
             nextPage1.style.marginLeft = "-100%";
-            nextPage2.style.marginLeft = "0%";
+            if(nextPage2 != null){
+                nextPage2.style.marginLeft = "0%";
+            }
         
         });
     }
@@ -319,7 +327,9 @@ function nextAuthedicationMethod(){
             event.preventDefault();
             slidePage.style.marginLeft = "-100%";
             nextPage1.style.marginLeft = "0%";
-            nextPage2.style.marginLeft = "100%";
+            if(nextPage2 != null){
+                nextPage2.style.marginLeft = "100%";
+            }
         
         });
     }
@@ -329,7 +339,9 @@ function nextAuthedicationMethod(){
             event.preventDefault();
             slidePage.style.marginLeft = "0%";
             nextPage1.style.marginLeft = "100%";
-            nextPage2.style.marginLeft = "-100%";
+            if(nextPage2 != null){
+                nextPage2.style.marginLeft = "-100%";
+            }
         
         });
     }
