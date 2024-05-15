@@ -114,7 +114,7 @@ $data['auth_enabled_method'] = $auth_enabled_method;
 $data['Position'] = $Position;
 $data['PositionForm'] = $PositionForm;
 $data['login_img'] = $login_img;
-$data['class_login_img'] = $class_login_img = '';
+$data['class_login_img'] = $class_login_img;
 $data['menuTypeID'] = 0;
 
 view('main.login_form', $data);
