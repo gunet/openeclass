@@ -106,7 +106,9 @@ $auth_enabled_method = 0;
 $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default IN (1, 2)");
 if (count($active_method) > 0) {
     $auth_enabled_method = 1;
-    $class_login_img = 'jumbotron-image-auth-default';
+    if(count($authLink) > 1){
+      $class_login_img = 'jumbotron-image-auth-default';
+    }
 }
 
 $data['authLink'] = $authLink;
@@ -114,7 +116,7 @@ $data['auth_enabled_method'] = $auth_enabled_method;
 $data['Position'] = $Position;
 $data['PositionForm'] = $PositionForm;
 $data['login_img'] = $login_img;
-$data['class_login_img'] = $class_login_img = '';
+$data['class_login_img'] = $class_login_img;
 $data['menuTypeID'] = 0;
 
 view('main.login_form', $data);
