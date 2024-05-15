@@ -106,7 +106,9 @@ $auth_enabled_method = 0;
 $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default IN (1, 2)");
 if (count($active_method) > 0) {
     $auth_enabled_method = 1;
-    $class_login_img = 'jumbotron-image-auth-default';
+    if(count($authLink) > 1){
+      $class_login_img = 'jumbotron-image-auth-default';
+    }
 }
 
 $data['authLink'] = $authLink;
