@@ -286,14 +286,14 @@ if (isset($_POST['submit'])) {
     $data['course_open'] = $visibleChecked[COURSE_OPEN];
     $data['course_inactive'] = $visibleChecked[COURSE_INACTIVE];
 
-    $data['public_code'] = q($c->public_code);
-    $data['teacher_name'] = q($c->prof_names);
+    $data['public_code'] = $c->public_code;
+    $data['teacher_name'] = $c->prof_names;
 
     $language = $c->lang;
     $data['lang_select_options'] = lang_select_options('course_language', 'class="form-control"', $language);
-    $data['course_keywords'] = q($c->keywords);
+    $data['course_keywords'] = $c->keywords;
 
-    $data['password'] = q($c->password);
+    $data['password'] = $c->password;
 
     $course_type = array('simple' => '', 'units' => '', 'wall' => '', 'activity' => '');
     $course_type[$c->view_type] = 'checked';

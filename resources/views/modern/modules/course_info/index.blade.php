@@ -116,7 +116,7 @@
                           @if(Session::has('message'))
                           <div class='col-12 all-alerts'>
                                 <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                    @php 
+                                    @php
                                         $alert_type = '';
                                         if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                             $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -128,7 +128,7 @@
                                             $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                         }
                                     @endphp
-                                    
+
                                     @if(is_array(Session::get('message')))
                                         @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                         {!! $alert_type !!}<span>
@@ -138,54 +138,53 @@
                                     @else
                                         {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                     @endif
-                                    
+
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </div>
                           @endif
 
-                          
+
                           <div class='d-lg-flex gap-4 mt-4'>
                           <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
 
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
-                                    
-                                      
+
+
                                     <div class='form-group'>
                                         <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
                                         </div>
                                     </div>
-                                
+
                                     <div class='form-group mt-4'>
                                         <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}</label>
                                         <div class='col-sm-12'>
-                                            <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
+                                            <input type='text' class='form-control' name='title' id='title' value='{{ $title }}'>
                                         </div>
                                     </div>
-                                      
 
-                                       
+
                                     <div class='form-group mt-4'>
                                         <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
                                         </div>
                                     </div>
-                            
 
-                                
+
+
                                     <div class='form-group mt-4'>
                                         <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $buildusernode !!}
                                         </div>
                                     </div>
-                                       
-                                    
+
+
 
 
                                     <div class='form-group mt-4'>
@@ -195,9 +194,6 @@
                                         </div>
                                     </div>
 
-
-                                    
-                                        
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</label>
                                         <div class='col-sm-12'>
@@ -235,13 +231,13 @@
                                             @endif
                                         </div>
                                     </div>
-                                        
+
 
                                     @if (isset($isOpenCourseCertified)) {
                                         <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
                                     @endif
 
-                                        
+
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</label>
                                         <div class='col-sm-12'>
@@ -265,8 +261,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                        
-                                    
+
+
 
 
                                     <div class='form-group mt-4'>
@@ -326,7 +322,7 @@
                                     <div class='form-group mt-4'>
                                         <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
                                         <div class='col-sm-12'>
-                                              <input class='form-control' id='coursepassword' type='text' name='password' value='{{ q($password) }}' autocomplete='off'>
+                                              <input class='form-control' id='coursepassword' type='text' name='password' value='{{ $password }}' autocomplete='off'>
                                         </div>
                                         <div class='col-sm-12 text-center padding-thin'>
                                             <span id='result'></span>
@@ -543,7 +539,7 @@
                     </div>
                 </div>
             </div>
-        
+
 </div>
 </div>
 @endsection

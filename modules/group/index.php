@@ -79,7 +79,6 @@ if ($is_editor) {
     if (isset($_GET['deletecategory'])) { // delete group category
         $id = $_GET['id'];
         delete_group_category($id);
-        //Session::Messages($langGroupCategoryDeleted, 'alert-success');
         Session::flash('message',$langGroupCategoryDeleted);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
@@ -102,8 +101,8 @@ if ($is_editor) {
         if($v->validate()) {
             $group_max = $_POST['group_max'];
             $group_quantity = $_POST['group_quantity'];
-            $group_description = isset($_POST['description']) ? $_POST['description'] : '';
-            $private_forum = isset($_POST['private_forum']) ? $_POST['private_forum'] : 0;
+            $group_description = $_POST['description'] ?? '';
+            $private_forum = $_POST['private_forum'] ?? 0;
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
@@ -275,7 +274,6 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
-        //Session::Messages($messsage, 'alert-success');
         Session::flash('message',$messsage);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
@@ -378,7 +376,6 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
             'name' => $myDir? $myDir->name:"[no name]"));
 
-        //Session::Messages($langGroupDel, "alert-success");
         Session::flash('message',$langGroupDel);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -582,15 +579,15 @@ if ($is_editor) {
 
 
                                             $tool_content .= "<p class='form-label mt-3'>$langDescription</p>";
-                                                                if(!empty($group_description)){
-                                                                    $tool_content .= "<p class='small-text'>$group_description</p>";
-                                                                }else{
-                                                                    $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
-                                                                }
+                                                            if (!empty($group_description)) {
+                                                                $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";
+                                                            } else {
+                                                                $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
+                                                            }
 
-                                                                if ($user_group_description && $student_desc) {
-                                                                    $tool_content .= "<small><a href = 'javascirpt:void(0);' data-bs-toggle = 'modal' data-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
-                                                                }
+                                                            if ($user_group_description && $student_desc) {
+                                                                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-bs-toggle = 'modal' data-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                                                            }
                                         $tool_content .= "</div>
                                                             <div class='card-footer d-flex justify-content-end align-items-center border-0 pb-3'>";
                                                             if ($max_members > 0) {
@@ -613,8 +610,6 @@ if ($is_editor) {
                                     $allGroups++;
                                 }
 
-
-
                                 // Card's pagination
                                 $tool_content .= "<input type='hidden' id='KeyallGroup' value='$allGroups'>
                                         <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
@@ -629,7 +624,7 @@ if ($is_editor) {
                                                         for($i=1; $i<=$pagesPag; $i++){
 
                                                             if($i>=1 && $i<=5){
-                                                                if($i==1){
+                                                                if($i==1) {
                                                                     $tool_content .="
                                                                         <li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                             <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
@@ -638,7 +633,7 @@ if ($is_editor) {
                                                                         <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
                                                                             <a>...</a>
                                                                         </li>";
-                                                                }else{
+                                                                } else {
                                                                     if($i<$pagesPag){
                                                                         $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                                             <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
@@ -666,7 +661,7 @@ if ($is_editor) {
                                                             }
                                                         }
 
-                                                    }else{
+                                                    } else {
                                                         for($i=1; $i<=$pagesPag; $i++){
                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                                 <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
@@ -761,17 +756,16 @@ if ($is_editor) {
                                         $tool_content .= "</div>
                                                         <div class='card-body rounded-0'>
                                                                 <p class='form-label'>$langGroupTutor</p>";
-
-                                                                if(count($tutors) > 0){
+                                                                if (count($tutors) > 0) {
                                                                     foreach ($tutors as $t) {
                                                                         $tool_content .= display_user($t->user_id) . "</br><div class='mt-2'></div>";
                                                                     }
-                                                                }else{
+                                                                } else {
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                                 }
                                             $tool_content .= "<p class='form-label mt-3'>$langDescription</p>";
                                                                 if(!empty($group_description)){
-                                                                    $tool_content .= "<p class='small-text'>$group_description</p>";
+                                                                    $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";
                                                                 }else{
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                                 }
@@ -1351,15 +1345,5 @@ $('.page-item-pages .page-link').on('click',function(){
 });
 });
 </script>";
-
-
-
-
-
-
-
-
-
-
 
 draw($tool_content, 2, null, $head_content);
