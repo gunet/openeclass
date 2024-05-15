@@ -3869,6 +3869,7 @@ $langHere = "εδώ";
 $langMailVerificationClick = "Παρακαλούμε πατήστε στη παρακάτω διεύθυνση:";
 $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
+$langRequestWithMailVerify = "Η αίτηση σας έχει σταλεί. Σημειώστε ότι θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε";
 $langRegistrationWithMailVerify = "Η εγγραφή σας έχει ολοκληρωθεί. Σημειώστε ότι θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε";
 $langMailVerificationSuccess = "Θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε.";
 $langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail

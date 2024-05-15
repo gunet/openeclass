@@ -216,7 +216,7 @@ if ($is_valid) { // user credentials successful check
         }
         // user account request
         if (!$autoregister) {
-            if (empty($_SESSION['uname_app_exists'])) {
+            if (empty($_SESSION['uname_app_exists']) and $ok) {
                 $email_verification_required = get_config('email_verification_required');
                 if (!$email_verification_required) {
                     $verified_mail = 2;
@@ -313,7 +313,7 @@ if ($is_valid) { // user credentials successful check
                         Session::flash('alert-class', 'alert-warning');
                     }
 
-                    Session::flash('message', "$langRegistrationWithMailVerify");
+                    Session::flash('message', "$langRequestWithMailVerify");
                     Session::flash('alert-class', 'alert-success');
                 }
             } else { // user account request exists
