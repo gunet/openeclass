@@ -125,21 +125,26 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $extra_terms = array();
     }
 
+    $query_collaboration = '';
+    if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+        $query_collaboration = ' AND course.is_collaborative = 1';
+    }
+
 
     $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id, course.created, course.popular_course
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
-                                    $query $filter_query $extra_query", $terms, $filter_terms, $extra_terms);
+                                    $query $filter_query $query_collaboration $extra_query", $terms, $filter_terms, $extra_terms);
 
     $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
                                                 AND hierarchy.id = course_department.department
-                                                $query", $terms)->total;
+                                                $query $query_collaboration", $terms)->total;
     $filtered_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
                                                 AND hierarchy.id = course_department.department
-                                                $query $filter_query", $terms, $filter_terms)->total;
+                                                $query $filter_query $query_collaboration", $terms, $filter_terms)->total;
 
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;

@@ -62,6 +62,24 @@
                                 <fieldset>
 
                                     <div class='form-group'>
+                                        <label for="type_course" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
+                                        @if(get_config('show_collaboration') and get_config('show_always_collaboration'))
+                                            <select id='type_course' name='courseType' class='form-select'>
+                                                <option value='1' selected>{{ trans('langTypeCollaboration') }}</option>
+                                            </select>
+                                        @elseif(get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                                            <select id='type_course' name='courseType' class='form-select'>
+                                                <option value='0' selected>{{ trans('langTypeCourse') }}</option>
+                                                <option value='1'>{{ trans('langTypeCollaboration') }}</option>
+                                            </select>
+                                        @else
+                                            <select id='type_course' name='courseType' class='form-select'>
+                                                <option value='0' selected>{{ trans('langCourse') }}</option>
+                                            </select>
+                                        @endif
+                                    </div>
+
+                                    <div class='form-group mt-4'>
                                         <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langMultiCourseTitles') }}</label>
                                         <div class='col-sm-12'>{!! text_area('courses', 20, 80, '') !!}</div>
                                     </div>

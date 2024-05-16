@@ -6235,3 +6235,33 @@ $langHelpFluidWidthInfo = "The width of the header and footer is configured acco
 $langNavSettingsnavsettingsMainSection = "Main Section";
 $langAddOpacityImage = "Add color to background image from background color option";
 $langFavicon = "Favicon";
+
+/* * ************************************************************************
+ * Collaboration messages / Collaboration platform is not always enabled.
+ * ************************************************************************ */
+$langCollaborationPlatform = "Collaboration platform";
+$langEnableCollaboration = "Enable collaboration platform";
+$langAlwaysEnabledCollaboration = "Always on";
+if (file_exists('config/config.php')) {
+    if(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+        $langTypeCourse = "course";
+        $langTypeCollaboration = "Collaboration";
+        $langDescrInfo = "Short description";
+        $langOpenCourse = "Open";
+        $langClosedCourse = "Closed";
+        $langInactiveCourse = "Inactive";
+        $langCourseInactive= "Users with course creation or collaboration rights have access";
+        $langClosedCourseShort = "Users who are in the User list of the course or collaboration have access";
+        $langCourseFormat = "Form";
+        $langWithCourseUnits = "Module format";
+        $langMyCollaborations = "My collaborations";
+        $langNoParticipatedInCollab = "You are not participating in any collaboration";
+        $langPreviewCollaboration = "Collaboration view";
+        $langUnregCollaboration = "Unsubscribe from partnership";
+        $langListOfCollaboration = "Below is the list of partnerships you are involved in.";
+        $langDisableCollaborationModulesHelp = "You can choose which of the following subsystems you wish to disable from all platform partnerships.";
+        $langDefaultModulesCollaborationHelp = "The following subsystems are enabled by default in new platform partnerships when they are created.";
+    }
+}
+$langSumCollaborationEnrolled = "Collaborations I participate in";
+$langWikiEditionNoSucceed = "One or more subsystems must be enabled by default.";

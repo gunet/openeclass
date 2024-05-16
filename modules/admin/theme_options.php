@@ -901,8 +901,8 @@ if (isset($_POST['optionsSave'])) {
                 </div>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
                     <div class='form-group mt-4'>
-                        <label for='theme_selection' class='col-12 control-label-notes'>$langAvailableThemes:</label>
                         <div class='col-12'>
+                            <p class='col-12 control-label-notes'>$langAvailableThemes:</p>
                             ".  selection($themes_arr, 'active_theme_options', $theme_id, 'class="form-control form-submit" id="theme_selection"')."
                         </div>
                     </div>
@@ -997,7 +997,7 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline'>$langLayoutConfig</h3>
                     <div class='form-group'>
-                        <label class='col-sm-12 control-label-notes mb-2'>$langLayout:</label>
+                        <p class='col-sm-12 control-label-notes mb-2'>$langLayout:</p>
                         <div class='form-inline col-sm-12'>
                             <div class='row'>
                                 <div class='col-sm-3'>
@@ -1031,20 +1031,20 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLogoConfig</h3>
                     <div class='form-group'>
-                        <label for='imageUpload' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</label>
+                        <p class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</p>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $logo_field
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='imageUploadSmall' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</label>
+                        <p class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</p>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $small_logo_field
                         </div>
                     </div>
 
                     <div class='form-group mt-4'>
-                        <label for='faviconUpload' class='col-sm-6 control-label-notes mb-2'>$langFavicon </label>
+                        <p class='col-sm-12 control-label-notes mb-2'>$langFavicon </p>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $faviconUpload
                         </div>
@@ -1072,7 +1072,7 @@ $tool_content .= "
                         <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='imageBg' class='col-sm-6 control-label-notes mb-2'>$langBgImg:</label>
+                        <p class='col-sm-12 control-label-notes mb-2'>$langBgImg:</p>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $bg_field
                         </div>
@@ -1450,7 +1450,7 @@ $tool_content .= "
 
                 
                     <div class='form-group mt-4'>
-                        <label for='loginImgL' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>
+                        <p class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</p>
                         <div class='col-sm-12'>
                         $login_image_fieldL
                         </div>
@@ -1514,7 +1514,7 @@ $tool_content .= "
                         <input name='clHoveredColorAnnouncementHomepageLinkElement' type='text' class='form-control colorpicker' id='clHoveredColorAnnouncementHomepageLinkElement' value='$theme_options_styles[clHoveredColorAnnouncementHomepageLinkElement]'>
                     </div>
                     
-                    <label class='control-label-notes mt-4'>$langAddPaddingListGroup:</label>
+                    <p class='control-label-notes mt-4'>$langAddPaddingListGroup:</p>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
                             <label class='label-container'>
@@ -2039,7 +2039,7 @@ $tool_content .= "
                         <label for='BgBorderForms' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
                         <input name='BgBorderForms' type='text' class='form-control colorpicker' id='BgBorderForms' value='$theme_options_styles[BgBorderForms]'>
                     </div>
-                    <label class='control-label-notes mt-4'>$langAddPadding:</label>
+                    <p class='control-label-notes mt-4'>$langAddPadding:</p>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
                             <label class='label-container'>

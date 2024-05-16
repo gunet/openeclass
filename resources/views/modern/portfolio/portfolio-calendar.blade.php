@@ -35,7 +35,7 @@
             var calendar = $("#bootstrapcalendar").calendar({
                 tmpl_path: "{{ $urlAppend }}js/bootstrap-calendar-master/tmpls/",
                 events_source: "{{ $urlAppend }}main/calendar_data.php",
-                language: "el-GR",
+                language: "{{ js_escape(trans('langLanguageCode')) }}",
                 views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
                 onAfterViewLoad: function(view) {
                     $("#current-month").text(this.getTitle());

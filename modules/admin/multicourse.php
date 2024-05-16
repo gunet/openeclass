@@ -69,6 +69,7 @@ if (isset($_POST['submit'])) {
             }
             list($code, $cid) = create_course('', $_POST['lang'], $title, '', $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
+                Database::get()->query("UPDATE course SET is_collaborative = ?d WHERE id = ?d",$_POST['courseType'],$cid);
                 if ($prof_uid) {
                     Database::get()->query("INSERT INTO course_user
                                 SET course_id = $cid,
