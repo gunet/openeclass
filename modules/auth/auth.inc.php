@@ -1435,6 +1435,13 @@ function shib_cas_login($type) {
             'attributes' => $attributes,
             'am' => $am));
 
+        if ($type == 'cas') {
+            $cas_settings = unserialize(get_auth_settings(7)['auth_settings']);
+            if ($cas_settings['cas_gunet'] ?? false) {
+                $options = gunet_idp_hook($options);
+            }
+        }
+
         if (!$options['accept']) {
             deny_access();
         }
