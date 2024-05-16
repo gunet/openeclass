@@ -405,13 +405,10 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     $tool_content .= "</ul>";
     $tool_content .= "<ul class='list-unstyled'>";
     $tool_content .= "<strong>$langRequiredPHP</strong>";
-    warnIfExtNotLoaded('session');
-    warnIfExtNotLoaded('pdo');
     warnIfExtNotLoaded('pdo_mysql');
     warnIfExtNotLoaded('gd');
     warnIfExtNotLoaded('mbstring');
     warnIfExtNotLoaded('xml');
-    warnIfExtNotLoaded('dom');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded('curl');

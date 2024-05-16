@@ -646,14 +646,11 @@ elseif (isset($_POST['install1'])) {
     $tool_content .= "</ul>";
     $tool_content .= "<h3>$langRequiredPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
-    warnIfExtNotLoaded('standard');
-    warnIfExtNotLoaded('session');
-    warnIfExtNotLoaded('pdo');
+
     warnIfExtNotLoaded('pdo_mysql');
     warnIfExtNotLoaded('gd');
     warnIfExtNotLoaded('mbstring');
     warnIfExtNotLoaded('xml');
-    warnIfExtNotLoaded('dom');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded('curl');
