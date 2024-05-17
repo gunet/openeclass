@@ -55,8 +55,27 @@
                             
                             <form role='form' class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course->code }}' method='post' onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
+
                                     <div class='form-group'>
-                                        <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                        <label for="typeCourses" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
+                                        @if(get_config('show_collaboration') and get_config('show_always_collaboration'))
+                                            <select id='typeCourses' name='typeCourse' class='form-select'>
+                                                <option value='1' selected>{{ trans('langTypeCollaboration') }}</option>
+                                            </select>
+                                        @elseif(get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                                            <select id='typeCourses' name='typeCourse' class='form-select'>
+                                                <option value='0' {!! (!$course->is_collaborative) ? 'selected' : '' !!}>{{ trans('langTypeCourse') }}</option>
+                                                <option value='1' {!! ($course->is_collaborative) ? 'selected' : '' !!}>{{ trans('langTypeCollaboration') }}</option>
+                                            </select>
+                                        @else
+                                            <select id='typeCourses' name='typeCourse' class='form-select'>
+                                                <option value='0' selected>{{ trans('langCourse') }}</option>
+                                            </select>
+                                        @endif
+                                    </div>
+
+                                    <div class='form-group mt-4'>
+                                        <p class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</p>
                                         <div class='col-sm-12'>
                                             {!! $node_picker !!}
                                         </div>

@@ -91,13 +91,9 @@
             if (item == 1){
               $('.typeCourse').removeClass('d-block');
               $('.typeCourse').addClass('d-none');
-              const simple = document.getElementById('simple');
-              simple.checked = true;
             }else{
               $('.typeCourse').removeClass('d-none');
               $('.typeCourse').addClass('d-block');
-              const units = document.getElementById('units');
-              units.checked = true;
             }
         });
     });
@@ -193,7 +189,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                          <label for="typeCourse" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
+                          <label for="typeCourses" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
                           @if(get_config('show_collaboration') and get_config('show_always_collaboration'))
                               <select id='typeCourses' name='typeCourse' class='form-select'>
                                 <option value='1' selected>{{ trans('langTypeCollaboration') }}</option>

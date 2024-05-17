@@ -44,15 +44,15 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     validateUploadedFile($_FILES['archiveZipped']['name'], 3);
 
     $tool_content .= "<fieldset class='mt-5'>
-        <h3 class='text-center mb-2'>" . $langFileSent . "</h3>
+        <h2 class='mb-2'>" . $langFileSent . "</h2>
         <div class='table-responsive mt-0'><table class='table-default'>
-                   <tr><th width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
-                   <tr><th>$langFileSentSize</td><td>" . q($_FILES['archiveZipped']['size']) . "</th></tr>
-                   <tr><th>$langFileSentType</td><td>" . q($_FILES['archiveZipped']['type']) . "</th></tr>
-                   <tr><th>$langFileSentTName</td><td>" . q($_FILES['archiveZipped']['tmp_name']) . "</th></tr>
+                   <tr><th class='px-2' width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
+                   <tr><th class='px-2'>$langFileSentSize</td><td>" . q($_FILES['archiveZipped']['size']) . "</th></tr>
+                   <tr><th class='px-2'>$langFileSentType</td><td>" . q($_FILES['archiveZipped']['type']) . "</th></tr>
+                   <tr><th class='px-2'>$langFileSentTName</td><td>" . q($_FILES['archiveZipped']['tmp_name']) . "</th></tr>
                 </table></div></fieldset>
                         <fieldset class='mt-5'>
-                        <h3 class='text-center mt-3 mb-2'>" . $langFileUnzipping . "</h3>
+                        <h2 class='mt-3 mb-2'>" . $langFileUnzipping . "</h2>
         <div class='table-responsive mt-0'><table class='table-default'>
                     <tr><td>" . unpack_zip_show_files($_FILES['archiveZipped']['tmp_name']) . "</td></tr>
                 </table></div></fieldset>";
@@ -64,7 +64,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . $langErrorFileMustBeZip . "</span></div>";
     } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
-        <h3 class='text-center mt-3 mb-2'>" . $langFileUnzipping . "</h3>
+        <h2 class='mt-3 mb-2'>" . $langFileUnzipping . "</h2>
         <div class='table-responsive mt-0'><table class='table-default'>";
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></div></fieldset>";

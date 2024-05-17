@@ -78,6 +78,20 @@
                                 </th>
                                 <td>{{ $course->prof_names }}</td>
                             </tr>
+                            <tr>
+                                <th class='px-2'>{{ trans('langType') }}</th>
+                                <td>
+                                    @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                                        @if(!$course->is_collaborative)
+                                            {{ trans('langCourse') }}
+                                        @else
+                                            {{ trans('langTypeCollaboration') }}
+                                        @endif
+                                    @else
+                                        {{ trans('langCourse') }}
+                                    @endif
+                                </td>
+                            </tr>
                         </table>    
                     </div>
                 </div>

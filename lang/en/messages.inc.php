@@ -6261,6 +6261,9 @@ if (file_exists('config/config.php')) {
         $langListOfCollaboration = "Below is the list of partnerships you are involved in.";
         $langDisableCollaborationModulesHelp = "You can choose which of the following subsystems you wish to disable from all platform partnerships.";
         $langDefaultModulesCollaborationHelp = "The following subsystems are enabled by default in new platform partnerships when they are created.";
+        $langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
+        $langWelcomeStudCollab = "«<strong>Courses</strong>» and the category that includes the available online collaborations.";
+        $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» and the type «<strong>Collaboration</strong>» to create your online collaborations.";
     }
 }
 $langSumCollaborationEnrolled = "Collaborations I participate in";

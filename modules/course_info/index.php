@@ -176,11 +176,12 @@ if (isset($_POST['submit'])) {
                                 lang = ?s,
                                 password = ?s,
                                 view_type = ?s,
-                                flipped_flag = ?s
+                                flipped_flag = ?s,
+                                is_collaborative = ?d
                             WHERE id = ?d",
                                 $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
-                                $course_language, $password, $view_type, $flipped_flag, $course_id);
+                                $course_language, $password, $view_type, $flipped_flag, $_POST['typeCourse'], $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
@@ -266,7 +267,7 @@ if (isset($_POST['submit'])) {
     ]);
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id, view_type, flipped_flag
+                	       course_license, password, id, view_type, flipped_flag, is_collaborative
                       FROM course WHERE code = ?s", $course_code);
     if ($depadmin_mode) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
@@ -277,6 +278,8 @@ if (isset($_POST['submit'])) {
     $data['buildusernode'] = $html;
 
     $data['title'] = $c->title;
+
+    $data['isCollabCourse'] = $c->is_collaborative;
 
     $visible = $c->visible;
     $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');

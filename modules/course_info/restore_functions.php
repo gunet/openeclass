@@ -98,7 +98,7 @@ function unpack_zip_show_files($zipfile) {
     $retString = '';
 
     if (count($retArr) > 0) {
-        $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
+        $retString .= "<p>$langEndFileUnzip</p><br />$langLesFound
                            <form action='$_SERVER[SCRIPT_NAME]' method='post'>
                              <ol>";
         $checked = ' checked';
@@ -353,16 +353,17 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
               'icon' => 'fa-reply',
               'level' => 'primary'))) . "
 
-                <div class='col-12'>
-                    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfo1 <br> $langInfo2</span></div>
-                </div>
 
     <div class='d-lg-flex gap-4 mt-5'>
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
 
-                        <div class='form-group'>
+                        <div class='col-12'>
+                            <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfo1 <br> $langInfo2</span></div>
+                        </div>
+
+                        <div class='form-group mt-4'>
                             <label for='course_code' class='col-12 control-label-notes'>$langCourseCode</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' id='course_code' name='course_code' value='" . q($code) . "'>

@@ -6735,6 +6735,9 @@ if (file_exists('config/config.php')) {
         $langListOfCollaboration = "Παρακάτω εμφανίζεται η λίστα με τις συνεργασίες στις οποίες συμμετέχετε.";
         $langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
         $langDefaultModulesCollaborationHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ ορισμού στις νέες συνεργασίες της πλατφόρμας κατά τη δημιουργία τους.";
+        $langNotEnrolledToCollaborations = "Δεν έχετε εγγραφεί σε συνεργασίες";
+        $langWelcomeStudCollab = "«<strong>Μαθήματα</strong>» και την κατηγορία που περιλαμβάνει τις διαθέσιμες ηλεκτρονικές συνεργασίες.";
+        $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» και τον τύπο «<strong>Συνεργασία</strong>» για να δημιουργήσετε τις ηλεκτρονικές σας συνεργασίες.";
     }
 }
 $langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";

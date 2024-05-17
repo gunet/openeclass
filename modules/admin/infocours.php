@@ -71,8 +71,9 @@ if (isset($_POST['submit'])) {
 
     // Update query
     Database::get()->query("UPDATE course SET title = ?s,
-                    prof_names = ?s
-                    WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
+                    prof_names = ?s,
+                    is_collaborative = ?d
+                    WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_POST['typeCourse'], $_GET['c']);
     $course->refresh($cId, $departments);
     //Session::Messages($langModifDone, 'alert-success');
     Session::flash('message',$langModifDone);
@@ -80,7 +81,7 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page('modules/admin/editcours.php?c='.$_GET['c']);
 }
 
-$data['course'] = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id
+$data['course'] = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id, course.is_collaborative AS is_collaborative
                                         FROM course
                                        WHERE course.code = ?s" ,$_GET['c']);
 $toolName = $langCourseInfo;

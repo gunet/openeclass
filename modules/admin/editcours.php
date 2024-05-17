@@ -67,7 +67,7 @@ $data['action_bar'] = action_bar([
 // A course has been selected
 if (isset($c)) {
     // Get information about selected course
-    $data['course'] = Database::get()->querySingle("SELECT code, title, prof_names, visible, doc_quota, video_quota, group_quota, dropbox_quota
+    $data['course'] = Database::get()->querySingle("SELECT code, title, prof_names, visible, doc_quota, video_quota, group_quota, dropbox_quota, is_collaborative
 			FROM course WHERE code = ?s", $c);
     $data['departments'] = $course->getDepartmentIds($cId);
 }

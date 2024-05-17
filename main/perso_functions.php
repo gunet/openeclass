@@ -39,7 +39,8 @@ function getUserCourseInfo($uid): string
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist, $langListOfCollaboration,
-           $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration;
+           $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
+           $langWelcomeStudCollab, $langWelcomeProfCollab;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -56,23 +57,21 @@ function getUserCourseInfo($uid): string
         $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
+
+            // Don't display specific courses
+            if(get_config('show_collaboration') && get_config('show_always_collaboration') && !$data->is_collaborative){
+                continue;
+            }elseif(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $data->is_collaborative){
+                continue;
+            }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration') && $data->is_collaborative){
+                continue;
+            }
             
             $courses[$data->code] = $data->status;
             $_SESSION['courses'] = $courses;
             $lesson_ids[] = (!$data->is_collaborative) ? $data->course_id : '';
             $collaboration_ids[] = ($data->is_collaborative) ? $data->course_id : '';
             $visclass = '';
-
-            // Don't display collaborative course
-            $collaborative_course = '';
-            if(get_config('show_collaboration') && get_config('show_always_collaboration') && !$data->is_collaborative){
-                $collaborative_course = 'd-none';
-            }elseif(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $data->is_collaborative){
-                $collaborative_course = 'd-none';
-            }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration') && $data->is_collaborative){
-                $collaborative_course = 'd-none';
-            }
-
 
             //Get syllabus for course
             $syllabus = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
@@ -96,7 +95,7 @@ function getUserCourseInfo($uid): string
                 $license = copyright_info($data->course_id);
             }
             $lesson_content .= "
-                <tr class='$visclass row-course $collaborative_course'>
+                <tr class='$visclass row-course'>
                     <td class='border-top-0 border-start-0 border-end-0'>
                         <div class='d-flex gap-3 flex-wrap'>
                             <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
@@ -371,7 +370,12 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "</tbody></table>";
             
         }else{
-
+            $lesson_content .= "<div class='col-sm-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToCollaborations!</span></div></div>";
+            if ($session->status == USER_TEACHER) {
+                $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeProfCollab</span></div></div>";
+            } else {
+                $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeStudCollab</span></div></div>";
+            }
         }
     }
 
