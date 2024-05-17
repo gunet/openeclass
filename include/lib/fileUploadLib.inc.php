@@ -541,6 +541,11 @@ function isWhitelistAllowed($filename) {
 
     $whitelist = explode(',', preg_replace('/\s+/', '', $wh)); // strip any whitespace
 
+    // Hard-code common PHP file extensions exclusion
+    if (preg_match('/\.(php.?|phtml|phar)$/i', $filename)) {
+        return false;
+    }
+
     if (in_array('*', $whitelist)) {
         return true;
     }
