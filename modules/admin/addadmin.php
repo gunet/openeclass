@@ -197,8 +197,8 @@ foreach ($out as $row) {
         USERMANAGE_USER => $langManageUser,
         DEPARTMENTMANAGE_USER => $langManageDepartment,
     ][$row->privilege];
-    if ($row->privilege == DEPARTMENTMANAGE_USER) {
-        $data['message'] = '<ul>' .
+    if ($row->privilege == DEPARTMENTMANAGE_USER) { 
+        $data['message'][$row->user_id] = '<ul>' .
             implode('', array_map(function ($department_id) use ($tree) {
                 return '<li>' . $tree->getFullPath($department_id) . '</li>';
             }, $row->department_id)) .

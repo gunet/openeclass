@@ -461,7 +461,7 @@ $(document).ready(function() {
 
     $( "#nodCnt" ).on('click', "a[href='#nodCnt']", function (e) {
         e.preventDefault();
-        $(this).find('span').tooltip('destroy').closest('p').remove();
+        $(this).find('span').tooltip('dispose').closest('p').remove();
         $('#dialog-set-key').val(null);
         $('#dialog-set-value').val(null);
     });
