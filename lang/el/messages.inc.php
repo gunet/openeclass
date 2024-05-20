@@ -6738,9 +6738,14 @@ if (file_exists('config/config.php')) {
         $langNotEnrolledToCollaborations = "Δεν έχετε εγγραφεί σε συνεργασίες";
         $langWelcomeStudCollab = "«<strong>Μαθήματα</strong>» και την κατηγορία που περιλαμβάνει τις διαθέσιμες ηλεκτρονικές συνεργασίες.";
         $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» και τον τύπο «<strong>Συνεργασία</strong>» για να δημιουργήσετε τις ηλεκτρονικές σας συνεργασίες.";
-        $langCollabDes = "Περιγραφή συνεργασίας";
-        $langThisCollabDescriptionIsEmpty = "Η συνεργασία δεν διαθέτει περιγραφή";
     }
 }
 $langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";
 $langWikiEditionNoSucceed = "Ένα ή περισσότερα υποσυστήματα πρέπει να είναι ενεργοποιημένα εξ ορισμού.";
+$m['password_collab'] = "Συνθηματικό συνεργασίας";
+$langLabelCollabUserRequest = "Αίτηση εγγραφής στη συνεργασία";
+$langInfoAboutCollabRegistration = "Η συνεργασία που επιλέξατε είναι κλειστή. Για να εγγραφείτε, θα πρέπει
+        να συμπληρώσετε την παρακάτω αίτηση, η οποία θα καταγραφεί και θα αποσταλεί στους διαχειριστές της συνεργασίας.";
+$langRequestReasonsCollab = "Αναφέρετε τους λόγους που επιθυμείτε την εγγραφή σας στη συνεργασία.";
+$langCollabDes = "Περιγραφή συνεργασίας";
+$langThisCollabDescriptionIsEmpty = "Η συνεργασία δεν διαθέτει περιγραφή";

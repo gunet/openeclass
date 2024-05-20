@@ -1491,3 +1491,9 @@ $langUsageVisits = "Collaboration Visits";
  $langRegisterAsVisitor = 'Register as a guest';
  $langCourseInvitation = 'Invitation to register for the partnership';
  $langCourseMetadata = "Metadata $langsOfCourse";
+
+ $langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
+ to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
+ $langLabelCollabUserRequest = "Application for collaboration registration";
+ $langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
+ $m['password_collab'] = "Password for collaboration";

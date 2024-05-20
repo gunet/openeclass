@@ -6264,9 +6264,14 @@ if (file_exists('config/config.php')) {
         $langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
         $langWelcomeStudCollab = "«<strong>Courses</strong>» and the category that includes the available online collaborations.";
         $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» and the type «<strong>Collaboration</strong>» to create your online collaborations.";
-        $langCollabDes = "Collaboration description";
-        $langThisCollabDescriptionIsEmpty = "The collaboration has no description";
     }
 }
 $langSumCollaborationEnrolled = "Collaborations I participate in";
 $langWikiEditionNoSucceed = "One or more subsystems must be enabled by default.";
+$m['password_collab'] = "Password for collaboration";
+$langLabelCollabUserRequest = "Application for collaboration registration";
+$langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
+        to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
+$langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
+$langCollabDes = "Collaboration description";
+$langThisCollabDescriptionIsEmpty = "The collaboration has no description";

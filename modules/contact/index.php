@@ -39,6 +39,7 @@ if ($disable_course_user_requests) {
 
 if (isset($_REQUEST['course_id']) and (!empty($_REQUEST['course_id']))) {
     $course_id = $_REQUEST['course_id'];
+    $is_collaborative_course = Database::get()->querySingle("SELECT is_collaborative FROM course WHERE id = ?d",$course_id)->is_collaborative;
 } else {
     redirect_to_home_page();
 }
@@ -92,7 +93,16 @@ draw($tool_content, 1);
  */
 function form($user) {
     global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, 
-            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend;
+            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend, 
+            $is_collaborative_course, $langInfoAboutCollabRegistration, $langLabelCollabUserRequest,
+            $langRequestReasonsCollab, $langTypeCollaboration;
+
+    if($is_collaborative_course){
+        $langInfoAboutRegistration = $langInfoAboutCollabRegistration;
+        $langLabelCollabUserRequest = $langLabelCollabUserRequest;
+        $langRequestReasons = $langRequestReasonsCollab;
+        $langOfCourse = $langTypeCollaboration;
+    }
            
     $userprof = '';
     $profdata = Database::get()->queryArray("SELECT user.surname, user.givenname
@@ -109,7 +119,6 @@ function form($user) {
         <div class='col-sm-12'><label class='control-label-notes'>$langRequest $langOfCourse:</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
         <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>$user</small></div>
         <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>$userprof</small></div>
-                       
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
               <textarea name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
