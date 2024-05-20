@@ -25,7 +25,7 @@ $tree = new Hierarchy();
 
 
 $checked ='';
-if ($auth_data['cas_gunet']) {
+if ($auth_data['cas_gunet'] ?? false) {
     $checked = 'checked';
 }
 if (!method_exists('phpCAS', 'setDebug')) {
@@ -76,7 +76,7 @@ $minedu_school_data = Database::get()->queryArray("
     SELECT CONCAT(md.School,' - ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
     FROM minedu_department_association AS mda
     JOIN hierarchy AS h ON mda.department_id = h.id
-    LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = md.MineduID
+    LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = CONVERT(md.MineduID, CHAR)
     ORDER BY School_Department");
 
 $minedu_department_association = json_encode(array_map(function ($item) {
