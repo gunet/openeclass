@@ -28,6 +28,9 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'include/lib/hierarchy.class.php';
+
+
 $toolName = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
@@ -35,11 +38,49 @@ $debugCAS = true;
 
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+    if ($auth == 7) {
+
+        load_js('jstree3');
+        load_js('select2');
+        load_js('datatables');
+
+        $tree = new Hierarchy();
+
+        $allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
+        $allowables = array();
+        if ($allow_only_defaults) {
+                // Method: getDepartmentIdsAllowedForCourseCreation
+                // fetches only specific tree nodes, not their sub-children
+                //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+                // the code below searches for the allow_course flag in the user's department subtrees
+                $userdeps = $user->getDepartmentIds($uid);
+                $subs = $tree->buildSubtreesFull($userdeps);
+                foreach ($subs as $node) {
+                    if (intval($node->allow_course) === 1) {
+                        $allowables[] = $node->id;
+                }
+            }
+        }
+
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+        $head_content .= $js;
+
+        $data['buildusernode'] = $html;
+
+        $result = Database::get()->queryArray("
+                    SELECT CONCAT(md.School,' > ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
+                        FROM minedu_department_association AS mda
+                        JOIN minedu_departments AS md ON mda.minedu_id = md.MineduID
+                    JOIN hierarchy AS h ON mda.department_id = h.id
+                ");
+        $data['result'] = $result;
+    }
 } else {
     $data['auth'] = $auth = false;
 }
 
-register_posted_variables(array('imaphost' => true, 'pop3host' => true,
+register_posted_variables([
+    'imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true, 'ldapbind_dn' => true,
     'ldapbind_pw' => true, 'ldap_login_attr' => true,
     'ldap_firstname_attr' => true, 'ldap_surname_attr' => true,
@@ -50,19 +91,52 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'shib_email' => true, 'shib_uname' => true, 'shib_surname' => true,
     'shib_givenname' => true, 'shib_cn' => true, 'shib_studentid' => true,
     'checkseparator' => true,
+    //CAS settings
     'cas_host' => true, 'cas_port' => true, 'cas_context' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'cas_altauth_use' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'cas_altauth_use' => true, 'gunet_identity' => true, 'minedu_institution' => true, 'cas_gunet' => true, 'minedu_departments_association' => true,
+    //Auth common settings
+    'auth_instructions' => true,
+    'auth_title' => true,
+    // HybridAuth settings
     'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
-    'test_username' => true), 'all');
+    'test_username' => true,
+    // OAuth 2.0 options
+    'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
+    'apiID' => true, 'apiSecret' => true,
+], 'all');
+
+$checked ='';
+if ($auth_data['cas_gunet'] ?? false) {
+    $checked = 'checked';
+}
+$data['checked'] = $checked;
 
 if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
 }
 
 if (isset($_POST['submit'])) {
+
+    $data = json_decode($_POST['minedu_departments_association'], true);
+
+    if ($data !== null) {
+
+        foreach ($data as $association_string) {
+            $association = json_decode($association_string, true);
+            $minedu_School_id = $association['minedu_School_id'];
+            $local_dep_id = $association['local_dep_id'];
+
+            Database::get()->querySingle('INSERT INTO minedu_departments_association
+                                    SET minedu_id = ?d, department_id = ?d',
+                $minedu_School_id, $local_dep_id);
+
+        }
+
+    }
+
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     switch ($auth) {
         case 1:
@@ -118,6 +192,11 @@ if (isset($_POST['submit'])) {
             update_shibboleth_endpoint($settings);
             break;
         case 7:
+            $checked = '';
+            if ($auth_data['cas_gunet'] ?? false) {
+                $checked = 'checked';
+            }
+            $data['checked'] = $checked;
             $settings = array('cas_host' => $cas_host,
                 'cas_port' => $cas_port,
                 'cas_context' => $cas_context,
@@ -129,7 +208,9 @@ if (isset($_POST['submit'])) {
                 'cas_altauth_use' => $cas_altauth_use,
                 'cas_logout' => $cas_logout,
                 'cas_ssout' => $cas_ssout,
-                'casuserstudentid' => $casuserstudentid);
+                'casuserstudentid' => $casuserstudentid,
+                'cas_gunet' => $cas_gunet,
+            );
             break;
         case 8:  // Facebook
         case 10: // Google
@@ -145,6 +226,19 @@ if (isset($_POST['submit'])) {
                 'secret' => $hybridauth_secret);
             $auth_instructions = $hybridauth_instructions;
             break;
+        case 15:
+            $settings = [
+                'apiBaseUrl' => $apiBaseUrl,
+                'id' => $apiID,
+                'secret' => $apiSecret,
+                'authorizePath' => $authorizePath,
+                'accessTokenPath' => $accessTokenPath,
+                'profileMethod' => $profileMethod,
+                'casusermailattr' => $casusermailattr,
+                'casuserfirstattr' => $casuserfirstattr,
+                'casuserlastattr' => $casuserlastattr,
+                'casuserstudentid' => $casuserstudentid];
+            break;
         default:
             break;
     }
@@ -155,24 +249,23 @@ if (isset($_POST['submit'])) {
     } elseif ($auth >= 8) {
         $auth_settings = serialize($settings);
     }
-    $result = Database::get()->query("UPDATE auth
-        SET auth_settings = ?s,
-            auth_instructions = ?s,
+    $result = Database::get()->query('INSERT INTO auth
+        (auth_id, auth_name, auth_settings, auth_instructions, auth_default, auth_title) VALUES
+        (?d, ?s, ?s, ?s, 1, ?s) ON DUPLICATE KEY UPDATE
+            auth_settings = VALUES(auth_settings),
+            auth_instructions = VALUES(auth_instructions),
             auth_default = GREATEST(auth_default, 1),
-            auth_title = ?s
-        WHERE auth_id = ?d",
+            auth_title = VALUES(auth_title)',
         function ($error) use (&$tool_content, $langErrActiv) {
-            //Session::Messages($langErrActiv, 'alert-warning');
             Session::flash('message',$langErrActiv);
             Session::flash('alert-class', 'alert-warning');
         }, $auth_settings, $auth_instructions, $auth_title, $auth);
+
     if ($result) {
         if ($result->affectedRows == 1) {
-            //Session::Messages($langHasActivate, 'alert-success');
             Session::flash('message',$langHasActivate);
             Session::flash('alert-class', 'alert-success');
         } else {
-            //Session::Messages($langAlreadyActiv, 'alert-info');
             Session::flash('message',$langAlreadyActiv);
             Session::flash('alert-class', 'alert-info');
         }
@@ -240,6 +333,7 @@ if (isset($_POST['submit'])) {
                 $data['authHelp'] = "";
             }
         }
+
     }
 }
 

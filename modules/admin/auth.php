@@ -110,6 +110,22 @@ $action_bar = action_bar(array(
 
 $data['auth_ids'] = $auth_ids;
 $data['auth_active_ids'] = $auth_active_ids = get_auth_active_methods();
-$data['authMethods'] = $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
+$data['auth_disabled_ids'] = $auth_disabled_ids = $auth_ids;
+$data['authMethods'] = $authMethods = Database::get()->queryArray("SELECT * FROM auth 
+                            WHERE auth_default <> 0 OR auth_id = 1 OR auth_settings <> ''
+                            ORDER BY auth_default DESC, auth_id");
+
+foreach ($authMethods as $authMethod) {
+    unset($auth_disabled_ids[$authMethod->auth_id]);
+}
+
+unset($auth_disabled_ids[14]); // Remove LTI users auth
+
+$data['add_options'] = array_map(function ($auth_id) {
+    return [
+        'title' => get_auth_info($auth_id),
+        'url' => "auth_process.php?auth=$auth_id",
+        'icon' => 'fa-plus-circle'];
+}, array_keys($auth_disabled_ids));
 
 view ('admin.users.auth.index', $data);
