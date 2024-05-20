@@ -41,10 +41,18 @@
 
 
                                     @if(empty($c->description))
+                                        @if(!$c->is_collaborative)
                                         <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
+                                        @else
+                                        <p class='form-label mb-1'>{{ trans('langCollabDes')}}</p>
+                                        @endif
                                         <p>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
                                     @else
+                                        @if(!$c->is_collaborative)
                                         <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
+                                        @else
+                                        <p class='form-label mb-1'>{{ trans('langCollabDes')}}</p>
+                                        @endif
                                         <p>{!! $c->description !!}</p>
                                     @endif
 

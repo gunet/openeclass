@@ -116,13 +116,13 @@
     
 
                                                     @if(!get_config('show_modal_openCourses'))
-                                                        <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}" aria-label="{{ trans('langPreview') }}&nbsp;{{ trans('langOfCourse') }}">
+                                                        <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}" aria-label="{{ trans('langPreview') }}">
                                                             <i class="fa-solid fa-display fa-lg"></i>
                                                         </a>
                                                     @endif
 
                                                     @if(get_config('show_modal_openCourses'))
-                                                        <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}" aria-label="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                        <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}" aria-label="{{trans('langPreview')}}">
                                                             <i class='fa-solid fa-display fa-lg'></i>
                                                         </button>
 
@@ -158,7 +158,11 @@
 
                                                                     <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'>
                                                                         @if(empty($mycourse->de))
+                                                                            @if($mycourse->clb)
+                                                                            <p class='text-center'>{{ trans('langThisCollabDescriptionIsEmpty') }}</p>
+                                                                            @else
                                                                             <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                                                            @endif
                                                                         @else
                                                                             {!! $mycourse->de !!}
                                                                         @endif

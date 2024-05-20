@@ -69,7 +69,7 @@
                         <div class="d-flex justify-content-start align-items-center h-40px @if(get_config('dont_display_login_form') or ( !isset($_SESSION['uid']) and !get_config('dont_display_login_form') and !empty($authNameEnabled) )) pe-3 @endif">
                             {!! lang_selections_Desktop('idLangSelectionDesktop') !!}
                         </div>
-                        @if(get_config('dont_display_login_form'))
+                        @if(get_config('dont_display_login_form') && count($session->active_ui_languages) > 1)
                             <div class='split-left h-40px ps-0 pe-3'></div>
                         @endif
                     </div>

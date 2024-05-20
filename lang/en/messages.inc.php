@@ -6256,7 +6256,7 @@ if (file_exists('config/config.php')) {
         $langWithCourseUnits = "Module format";
         $langMyCollaborations = "My collaborations";
         $langNoParticipatedInCollab = "You are not participating in any collaboration";
-        $langPreviewCollaboration = "Collaboration view";
+        $langPreviewCollaboration = " collaboration";
         $langUnregCollaboration = "Unsubscribe from partnership";
         $langListOfCollaboration = "Below is the list of partnerships you are involved in.";
         $langDisableCollaborationModulesHelp = "You can choose which of the following subsystems you wish to disable from all platform partnerships.";
@@ -6264,6 +6264,8 @@ if (file_exists('config/config.php')) {
         $langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
         $langWelcomeStudCollab = "«<strong>Courses</strong>» and the category that includes the available online collaborations.";
         $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» and the type «<strong>Collaboration</strong>» to create your online collaborations.";
+        $langCollabDes = "Collaboration description";
+        $langThisCollabDescriptionIsEmpty = "The collaboration has no description";
     }
 }
 $langSumCollaborationEnrolled = "Collaborations I participate in";
