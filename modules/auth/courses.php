@@ -212,7 +212,7 @@ function getdepnumcourses($fac) {
  */
 function expanded_faculte($facid, $uid) {
     global $m, $langTutor, $langRegistration, $langCourseCode, $langLabelCourseUserRequest,
-    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess;
+    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess, $langLabelCollabUserRequest;
 
     $retString = '';
 
@@ -253,12 +253,13 @@ function expanded_faculte($facid, $uid) {
                             course.title i,
                             course.visible visible,
                             course.prof_names t,
+                            course.is_collaborative clb,
                             course.password password
                        FROM course, course_department
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $langLabelCourseUserRequest, $unlock_all_courses) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $langLabelCourseUserRequest, $unlock_all_courses, $langLabelCollabUserRequest) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
@@ -278,7 +279,13 @@ function expanded_faculte($facid, $uid) {
             if ($disable_course_user_requests) {
                 $course_request_access_link = '';
             } else {
-                $course_request_access_link = "<br><small><em><a class='text-decoration-underline' href='../contact/index.php?course_id=" . $cid . "'>$langLabelCourseUserRequest</a></em></small>";
+                $msg_collab_course = '';
+                if($mycours->clb){
+                    $msg_collab_course = $langLabelCollabUserRequest;
+                }else{
+                    $msg_collab_course = $langLabelCourseUserRequest;
+                }
+                $course_request_access_link = "<br><small><em><a class='text-decoration-underline' href='../contact/index.php?course_id=" . $cid . "'>$msg_collab_course</a></em></small>";
             }
         } else {
             $codelink = $course_title;
@@ -309,8 +316,14 @@ function expanded_faculte($facid, $uid) {
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
+                $msg_password = '';
+                if($mycours->clb){
+                    $msg_password = $m['password_collab'];
+                }else{
+                    $msg_password = $m['code'];
+                }
                 if (!empty($password)) {
-                    $requirepassword = "<br /><span class='Warning-200-cl'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
+                    $requirepassword = "<br /><span class='badge Warning-200-bg'>$msg_password:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
                 } else {
                     $requirepassword = '';
                 }
@@ -320,7 +333,13 @@ function expanded_faculte($facid, $uid) {
             }
         } else { // display unregistered courses
             if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {
-                $requirepassword = "<br /><span class='Warning-200-cl'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
+                $msg_password = '';
+                if($mycours->clb){
+                    $msg_password = $m['password_collab'];
+                }else{
+                    $msg_password = $m['code'];
+                }
+                $requirepassword = "<br /><span class='badge Warning-200-bg'>$msg_password:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
             } else {
                 $requirepassword = '';
             }

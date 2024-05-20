@@ -40,7 +40,7 @@ function getUserCourseInfo($uid): string
            $langWelcomeSelect, $langPreview, $langOfCourse,
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist, $langListOfCollaboration,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
-           $langWelcomeStudCollab, $langWelcomeProfCollab;
+           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -119,7 +119,7 @@ function getUserCourseInfo($uid): string
                         <div class='col-12 portfolio-tools'>
                             <div class='d-inline-flex'>";
 
-            $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
+            $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse'>
                                 <i class='fa-solid fa-display'></i>
                             </a>
 
@@ -150,7 +150,11 @@ function getUserCourseInfo($uid): string
             $lesson_content .= "</div>
                     <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
             if(empty($data->description)) {
-                $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                if($data->is_collaborative){
+                    $lesson_content .= "<p class='text-center'>$langThisCollabDescriptionIsEmpty</p>";
+                }else{
+                    $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                }
             } else {
                 $lesson_content .= "{$data->description}";
             }
@@ -281,7 +285,7 @@ function getUserCourseInfo($uid): string
                                 <div class='col-12 portfolio-tools'>
                                     <div class='d-inline-flex'>";
 
-                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreviewCollaboration'>
+                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration'>
                                         <i class='fa-solid fa-display'></i>
                                     </a>
 
@@ -312,7 +316,11 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "</div>
                             <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
                     if(empty($data->description)) {
-                        $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                        if($data->is_collaborative){
+                            $lesson_content .= "<p class='text-center'>$langThisCollabDescriptionIsEmpty</p>";
+                        }else{        
+                            $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                        }
                     } else {
                         $lesson_content .= "{$data->description}";
                     }

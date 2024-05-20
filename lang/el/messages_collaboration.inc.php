@@ -1422,8 +1422,14 @@ $langCourseInvitation = 'Πρόσκληση εγγραφής στη συνεργ
 
 
 
-$langPreviewCollaboration = "Προβολή συνεργασίας";
+$langPreviewCollaboration = " συνεργασίας";
 $langUnregCollaboration = "Απεγγραφή από την συνεργασία";
 $langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
 $langDefaultModulesCollaborationHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ ορισμού στις νέες συνεργασίες της πλατφόρμας κατά τη δημιουργία τους.";
 $langCourseMetadata = "Μεταδεδομένα $langsOfCourse";
+
+$langInfoAboutCollabRegistration = "Η συνεργασία που επιλέξατε είναι κλειστή. Για να εγγραφείτε, θα πρέπει
+να συμπληρώσετε την παρακάτω αίτηση, η οποία θα καταγραφεί και θα αποσταλεί στους διαχειριστές της συνεργασίας.";
+$langLabelCollabUserRequest = "Αίτηση εγγραφής στη συνεργασία";
+$langRequestReasonsCollab = "Αναφέρετε τους λόγους που επιθυμείτε την εγγραφή σας στη συνεργασία.";
+$m['password_collab'] = "Συνθηματικό συνεργασίας";

@@ -6262,7 +6262,7 @@ if (file_exists('config/config.php')) {
         $langWithCourseUnits = "Module format";
         $langMyCollaborations = "My collaborations";
         $langNoParticipatedInCollab = "You are not participating in any collaboration";
-        $langPreviewCollaboration = "Collaboration view";
+        $langPreviewCollaboration = " collaboration";
         $langUnregCollaboration = "Unsubscribe from partnership";
         $langListOfCollaboration = "Below is the list of partnerships you are involved in.";
         $langDisableCollaborationModulesHelp = "You can choose which of the following subsystems you wish to disable from all platform partnerships.";
@@ -6274,3 +6274,10 @@ if (file_exists('config/config.php')) {
 }
 $langSumCollaborationEnrolled = "Collaborations I participate in";
 $langWikiEditionNoSucceed = "One or more subsystems must be enabled by default.";
+$m['password_collab'] = "Password for collaboration";
+$langLabelCollabUserRequest = "Application for collaboration registration";
+$langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
+        to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
+$langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
+$langCollabDes = "Collaboration description";
+$langThisCollabDescriptionIsEmpty = "The collaboration has no description";

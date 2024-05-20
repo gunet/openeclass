@@ -6736,7 +6736,7 @@ if (file_exists('config/config.php')) {
         $langWithCourseUnits = "Μορφή με ενότητες";
         $langMyCollaborations = "Οι συνεργασίες μου";
         $langNoParticipatedInCollab = "Δεν συμμετέχετε σε κάποια συνεργασία";
-        $langPreviewCollaboration = "Προβολή συνεργασίας";
+        $langPreviewCollaboration = " συνεργασίας";
         $langUnregCollaboration = "Απεγγραφή από την συνεργασία";
         $langListOfCollaboration = "Παρακάτω εμφανίζεται η λίστα με τις συνεργασίες στις οποίες συμμετέχετε.";
         $langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
@@ -6748,3 +6748,10 @@ if (file_exists('config/config.php')) {
 }
 $langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";
 $langWikiEditionNoSucceed = "Ένα ή περισσότερα υποσυστήματα πρέπει να είναι ενεργοποιημένα εξ ορισμού.";
+$m['password_collab'] = "Συνθηματικό συνεργασίας";
+$langLabelCollabUserRequest = "Αίτηση εγγραφής στη συνεργασία";
+$langInfoAboutCollabRegistration = "Η συνεργασία που επιλέξατε είναι κλειστή. Για να εγγραφείτε, θα πρέπει
+        να συμπληρώσετε την παρακάτω αίτηση, η οποία θα καταγραφεί και θα αποσταλεί στους διαχειριστές της συνεργασίας.";
+$langRequestReasonsCollab = "Αναφέρετε τους λόγους που επιθυμείτε την εγγραφή σας στη συνεργασία.";
+$langCollabDes = "Περιγραφή συνεργασίας";
+$langThisCollabDescriptionIsEmpty = "Η συνεργασία δεν διαθέτει περιγραφή";

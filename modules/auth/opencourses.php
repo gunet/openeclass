@@ -136,6 +136,7 @@ if ($runQuery) {
                                course.description de,
                                course.course_image img,
                                course.popular_course p,
+                               course.is_collaborative clb,
                                course.id id
                                $queryExtraSelect
                           FROM course, course_department $queryExtraJoin
