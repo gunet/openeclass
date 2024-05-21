@@ -11,10 +11,10 @@
     <script>
         $(document).ready(function() {
             if ($('#cas_gunet').prop('checked')) {
-                $('.cas_gunet_container, .cas_port, .cas_logout, .cas_ssout, .cas_context, .casusermailattr, .casuserfirstattr, .casuserlastattr, .casuserstudentid, .cas_altauth, .cas_altauth_use').toggleClass('hide');
+                $('.cas_gunet_container, .cas_port, .cas_logout, .cas_ssout, .cas_context, .casusermailattr, .casuserfirstattr, .casuserlastattr, .casuserstudentid, .cas_altauth, .cas_altauth_use').toggleClass('d-none');
             }
             $('#cas_gunet').change(function() {
-                $('.cas_gunet_container, .cas_port, .cas_logout, .cas_ssout, .cas_context, .casusermailattr, .casuserfirstattr, .casuserlastattr, .casuserstudentid, .cas_altauth, .cas_altauth_use').toggleClass('hide');
+                $('.cas_gunet_container, .cas_port, .cas_logout, .cas_ssout, .cas_context, .casusermailattr, .casuserfirstattr, .casuserlastattr, .casuserstudentid, .cas_altauth, .cas_altauth_use').toggleClass('d-none');
             });
 
             var data_table = $('#cas_gunet_table').dataTable({
@@ -56,7 +56,7 @@
                     $('#minedu_School').prop('disabled', false);
                     $('#minedu_School').select2({
                         allowClear: true,
-                        placeholder: '" . js_escape($langWelcomeSelect) . "',
+                        placeholder: '{{ trans('langWelcomeSelect') }}',
                         ajax: {
                             url: 'get_minedu_departments.php',
                             dataType: 'json',
@@ -126,15 +126,26 @@
 </div>
 
 <div class='form-group mt-3'>
-    <label for='cas_host' class='col-sm-2 control-label'>GUNet:</label>
-    <div class='col-sm-10'>
+    <div class='col-12'>
         <input type='checkbox' name='cas_gunet' id='cas_gunet' value='1' {!! $checked !!}>
         <label for='cas_gunet'>{{ trans('langCASGUnetIdentity') }}</label>
-        <div class='cas_gunet_container hide'>
-            <div>
-                <label for='minedu_Institution'>{{ trans('langInstitution') }}</label>
-                <select id='minedu_Institution' name='minedu_Institution'></select>
-            </div>
+    </div>
+</div>
+
+<div class='cas_gunet_container d-none'>
+    <div class='form-group mt-3'>
+        <label for='minedu_Institution'>{{ trans('langInstitution') }}</label>
+        <div class='col-12'>
+            <select id='minedu_institution' name='minedu_institution'>
+                <option></option>
+                {!! $minedu_institutions_select_options !!}
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <label for='minedu_institution'>{{ trans('langSchoolDepartmentAssociation') }}</label>
+        <div class='col-12'>
             <table id='cas_gunet_table'>
                 <thead>
                     <tr>
@@ -146,16 +157,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($result)
-                        @foreach ($result as $r)
-                            <tr>
-                                <td>{{ $r->School_Department }}</td>
-                                <td>{{ $r->minedu_id }}</td>
-                                <td>{{ getSerializedMessage($r->name) }}</td>
-                                <td>{{ $r->department_id }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                    {!! $tdata_minedu_school_data !!}
                 </tbody>
             </table>
             <div>
@@ -166,10 +168,10 @@
                     </div>
                     <div>
                         <label for=''>{{ trans('langLocalCategory') }}</label>
-                            $html
+                            {!! $buildusernode !!}
                     </div>
                 </div>
-                <button id='cas_gunet_add' class='btn btn-primary'>$langAdd</button>
+                <button id='cas_gunet_add' class='btn btn-primary'>{{ trans('langAdd') }}</button>
                 <div class='help-block'>{{ trans('langDefaultCategoryHelp') }}</div>
                 <input type='hidden' name='minedu_department_association' value='{{ $minedu_department_association }}'>
             </div>
@@ -177,7 +179,7 @@
     </div>
 </div>
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 cas_port'>
     <label for='cas_port' class='col-sm-12 control-label-notes'>{{ trans('langcas_port') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcas_port') }}..." name='cas_port' id='cas_port' type='text' value='{{ isset($auth_data['cas_port']) ? $auth_data['cas_port'] : '443' }}'>
@@ -186,7 +188,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 cas_context'>
     <label for='cas_context' class='col-sm-12 control-label-notes'>{{ trans('langcas_context') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcas_context') }}..." name='cas_context' id='cas_context' type='text' value='{{ isset($auth_data['cas_context']) ? $auth_data['cas_context'] : '' }}'>
@@ -195,7 +197,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 cas_logout'>
     <label for='cas_logout' class='col-sm-12 control-label-notes'>{{ trans('langcas_logout') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcas_logout') }}..." name='cas_logout' id='cas_logout' type='text' value='{{ isset($auth_data['cas_logout']) ? $auth_data['cas_logout'] : '' }}'>
@@ -204,7 +206,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 cas_ssout'>
     <label for='cas_logout' class='col-sm-12 control-label-notes'>{{ trans('langcas_ssout') }}</label>
     <div class='col-sm-12'>
         {!! selection(
@@ -218,7 +220,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 cas_cachain'>
     <label for='cas_cachain' class='col-sm-12 control-label-notes'>{{ trans('langcas_cachain') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcas_cachain') }}..." name='cas_cachain' id='cas_cachain' type='text' value='{{ isset($auth_data['cas_cachain']) ? $auth_data['cas_cachain'] : '' }}'>
@@ -227,7 +229,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 casusermailattr'>
     <label for='casusermailattr' class='col-sm-12 control-label-notes'>{{ trans('langcasusermailattr') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcasusermailattr') }}..." name='casusermailattr' id='casusermailattr' type='text' value='{{ isset($auth_data['casusermailattr']) ? $auth_data['casusermailattr'] : 'mail' }}'>
@@ -236,7 +238,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 casuserfirstattr'>
     <label for='casuserfirstattr' class='col-sm-12 control-label-notes'>{{ trans('langcasuserfirstattr') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcasuserfirstattr') }}..." name='casuserfirstattr' id='casuserfirstattr' type='text' value='{{ isset($auth_data['casuserfirstattr']) ? $auth_data['casuserfirstattr'] : 'givenName' }}'>
@@ -245,7 +247,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 casuserlastattr'>
     <label for='casuserlastattr' class='col-sm-12 control-label-notes'>{{ trans('langcasuserlastattr') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcasuserlastattr') }}..." name='casuserlastattr' id='casuserlastattr' type='text' value='{{ isset($auth_data['casuserlastattr']) ? $auth_data['casuserlastattr'] : 'sn' }}'>
@@ -254,7 +256,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 casuserstudentid'>
     <label for='casuserstudentid' class='col-sm-12 control-label-notes'>{{ trans('langcasuserstudentid') }}</label>
     <div class='col-sm-12'>
         <input class='form-control' placeholder="{{ trans('langcasuserstudentid') }}..." name='casuserstudentid' id='casuserstudentid' type='text' value='{{ isset($auth_data['casuserstudentid']) ? $auth_data['casuserstudentid'] : '' }}'>
@@ -263,7 +265,7 @@
 
 
 
-<div class='form-group mt-3'>
+<div class='form-group mt-3 cas_altauth'>
     <label for='cas_altauth' class='col-sm-12 control-label-notes'>{{ trans('langcas_altauth') }}:</label>
     <div class='col-sm-12'>
         {!! selection(

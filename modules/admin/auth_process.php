@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,10 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /**
  * @brief Platform Authentication Methods and their settings
- * @file auth_process.php
  */
 
 $require_admin = true;
@@ -38,11 +36,8 @@ $debugCAS = true;
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
     if ($auth == 7) {
-
         load_js('jstree3');
         load_js('select2');
-        load_js('datatables');
-
         $tree = new Hierarchy();
 
         list($js, $html) = $tree->buildUserNodePicker(['defaults' => [], 'skip_preloaded_defaults' => false]);
@@ -51,20 +46,41 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
         $data['buildusernode'] = $html;
 
         $minedu_school_data = Database::get()->queryArray("
-                    SELECT CONCAT(md.School,' - ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
-                    FROM minedu_department_association AS mda                        
+                SELECT CONCAT(md.School,' - ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
+                    FROM minedu_department_association AS mda
                     JOIN hierarchy AS h ON mda.department_id = h.id
-                    LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = md.MineduID
+                    LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = CONVERT(md.MineduID, CHAR)
                     ORDER BY School_Department");
 
-        $minedu_department_association = json_encode(array_map(function ($item) {
+
+        $data['minedu_department_association'] = $minedu_department_association = json_encode(array_map(function ($item) {
             return ['minedu_id' => $item->minedu_id ?? 0, 'department_id' => $item->department_id];
         }, $minedu_school_data));
 
         $minedu_institution = $auth_data['minedu_institution'] ?? '';
         $minedu_institutions = Database::get()->queryArray('SELECT DISTINCT Institution FROM minedu_departments ORDER BY Institution');
 
-        $data['result'] = $result;
+        $data['minedu_institutions_select_options'] = implode(array_map(function ($item) {
+            global $minedu_institution;
+            $institution = q($item->Institution);
+            $selected = $item->Institution == $minedu_institution? 'selected': '';
+            return "<option value='$institution' $selected>$institution</option>";
+        }, $minedu_institutions));
+
+        $data['tdata_minedu_school_data'] = implode(array_map(function ($item) {
+            global $langDelete, $langDefaultCategory;
+            $minedu_id = $item->minedu_id ?? '-';
+            $minedu_name = $item->School_Department ? q($item->School_Department): $langDefaultCategory;
+            return "
+                <tr>
+                    <td>$minedu_name</td>
+                    <td>$minedu_id</td>
+                    <td>" . q(getSerializedMessage($item->name)) . "</td>
+                    <td>{$item->department_id}</td>
+                    <td><button class='btn btn-xs delete-entry btn-danger' title='$langDelete' data-id='$minedu_id'><span class='fa fa-times'></span></btn></td>
+                 </button>
+                </tr>";
+        }, $minedu_school_data));
     }
 } else {
     $data['auth'] = $auth = false;
@@ -99,20 +115,12 @@ register_posted_variables([
     'apiID' => true, 'apiSecret' => true,
 ], 'all');
 
-$checked ='';
-if ($auth_data['cas_gunet'] ?? false) {
-    $checked = 'checked';
-}
-$data['checked'] = $checked;
-
 if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
 }
 
 if (isset($_POST['submit'])) {
-
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-
     if ($minedu_department_association) {
         $minedu_assoc = json_decode($minedu_department_association, true);
         if ($minedu_assoc !== null) {
@@ -121,7 +129,6 @@ if (isset($_POST['submit'])) {
                 Database::get()->query('INSERT INTO minedu_department_association
                     SET minedu_id = ?d, department_id = ?d',
                     $association['minedu_id'], $association['department_id']);
-
             }
         }
     }
@@ -252,6 +259,7 @@ if (isset($_POST['submit'])) {
 
     // update table `auth`
     $auth_settings = serialize($settings);
+
     $result = Database::get()->query('INSERT INTO auth
         (auth_id, auth_name, auth_settings, auth_instructions, auth_default, auth_title) VALUES
         (?d, ?s, ?s, ?s, 1, ?s) ON DUPLICATE KEY UPDATE
@@ -262,7 +270,7 @@ if (isset($_POST['submit'])) {
         function ($error) use (&$tool_content, $langErrActiv) {
             Session::flash('message',$langErrActiv);
             Session::flash('alert-class', 'alert-warning');
-        }, $auth_settings, $auth_instructions, $auth_title, $auth);
+        }, $auth, $auth_ids[$auth], $auth_settings, $auth_instructions, $auth_title);
 
     if ($result) {
         if ($result->affectedRows == 1) {
@@ -296,6 +304,13 @@ if (isset($_POST['submit'])) {
 
     $pageName = get_auth_info($auth);
     $data['auth_data'] = $auth_data = get_auth_settings($auth);
+
+    $checked ='';
+    if ($auth_data['cas_gunet'] ?? false) {
+        $checked = 'checked';
+    }
+    $data['checked'] = $checked;
+
     if ($auth == 6) {
         $data['secureIndexPath'] = $webDir . '/secure/index.php';
         $data['shib_vars'] = get_shibboleth_vars($data['secureIndexPath']);
