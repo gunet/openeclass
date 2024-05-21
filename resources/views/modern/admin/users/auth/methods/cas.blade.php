@@ -142,6 +142,7 @@
                         <th>Minedu ID</th>
                         <th>{{ trans('langFaculty') }}</th>
                         <th>ID</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -169,6 +170,7 @@
                     </div>
                 </div>
                 <button id='cas_gunet_add' class='btn btn-primary'>$langAdd</button>
+                <div class='help-block'>{{ trans('langDefaultCategoryHelp') }}</div>
                 <input type='hidden' name='minedu_department_association' value='{{ $minedu_department_association }}'>
             </div>
         </div>

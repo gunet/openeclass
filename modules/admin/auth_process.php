@@ -45,35 +45,20 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
 
         $tree = new Hierarchy();
 
-        $allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
-        $allowables = array();
-        if ($allow_only_defaults) {
-                // Method: getDepartmentIdsAllowedForCourseCreation
-                // fetches only specific tree nodes, not their sub-children
-                //$user->getDepartmentIdsAllowedForCourseCreation($uid);
-                // the code below searches for the allow_course flag in the user's department subtrees
-                $userdeps = $user->getDepartmentIds($uid);
-                $subs = $tree->buildSubtreesFull($userdeps);
-                foreach ($subs as $node) {
-                    if (intval($node->allow_course) === 1) {
-                        $allowables[] = $node->id;
-                }
-            }
-        }
-
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+        list($js, $html) = $tree->buildUserNodePicker(['defaults' => [], 'skip_preloaded_defaults' => false]);
         $head_content .= $js;
 
         $data['buildusernode'] = $html;
 
         $minedu_school_data = Database::get()->queryArray("
                     SELECT CONCAT(md.School,' - ', md.Department) AS School_Department, md.MineduID AS minedu_id, mda.department_id, h.name
-                    FROM minedu_department_association AS mda
-                    JOIN minedu_departments AS md ON mda.minedu_id = md.MineduID
-                    JOIN hierarchy AS h ON mda.department_id = h.id");
+                    FROM minedu_department_association AS mda                        
+                    JOIN hierarchy AS h ON mda.department_id = h.id
+                    LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = md.MineduID
+                    ORDER BY School_Department");
 
         $minedu_department_association = json_encode(array_map(function ($item) {
-            return ['minedu_id' => $item->minedu_id, 'department_id' => $item->department_id];
+            return ['minedu_id' => $item->minedu_id ?? 0, 'department_id' => $item->department_id];
         }, $minedu_school_data));
 
         $minedu_institution = $auth_data['minedu_institution'] ?? '';
