@@ -6761,3 +6761,6 @@ $langInfoAboutCollabRegistration = "Η συνεργασία που επιλέξ�
 $langRequestReasonsCollab = "Αναφέρετε τους λόγους που επιθυμείτε την εγγραφή σας στη συνεργασία.";
 $langCollabDes = "Περιγραφή συνεργασίας";
 $langThisCollabDescriptionIsEmpty = "Η συνεργασία δεν διαθέτει περιγραφή";
+$langSameAsYourEmail = 'ίδιο με τη διεύθυνση e-mail σας';
+$langCollabInvitation = "Πρόσκληση εγγραφής στην συνεργασία";
+$langCollab = "Συνεργασία";

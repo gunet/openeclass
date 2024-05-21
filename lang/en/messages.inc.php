@@ -6301,3 +6301,6 @@ $langCASGUnetIdentity = 'Enable GUnet Single-Sign-On Service';
 $langSchoolDepartment = 'School - Faculty';
 $langDefaultCategory = 'Default Category';
 $langDefaultCategoryHelp = 'Users who are not assigned to any other category are put in the default category.';
+$langSameAsYourEmail = 'same as your e-mail address';
+$langCollabInvitation = "Invitation to register for the collaboration";
+$langCollab = "collaboration";

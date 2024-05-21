@@ -155,8 +155,9 @@ if ($user_id) {
     }
 }
 
-$pageName = $langCourseInvitation;
+$pageName = $course->is_collaborative ? $langCollabInvitation : $langCourseInvitation;
 $pageTitle = $langRegCourses;
+$langCourse = $course->is_collaborative ? $langCollab : $langCourse;
 
 $tree = new Hierarchy();
 $courseObject = new Course();
@@ -310,12 +311,12 @@ $tool_content .= "
                 <div class='card-body'>
                     <fieldset>
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langCourse:</label>
-                            <div class='col-sm-10'>
+                            <label class='col-sm-12 control-label-notes'>$langCourse:</label>
+                            <div class='col-sm-12'>
                                 <p class='form-control-static'>" . q($course->title) . "</p>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group mt-4'>
                             <label class='col-sm-12 control-label-notes'>$langFaculty:</label>
                             <div class='col-sm-12'>
                                 <p class='form-control-static'>$departments</p>
