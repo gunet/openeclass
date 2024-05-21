@@ -926,7 +926,8 @@ function get_theme_options() {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
-                .split-left{
+                .split-left,
+                .split-content{
                     border-left: solid 1px $theme_options_styles[linkColorHeader];
                 }
 

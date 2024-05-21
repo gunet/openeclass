@@ -374,7 +374,6 @@ $data['action_bar'] = action_bar([
         'title' => $langUserEmailNotification,
         'url' => "{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1",
         'icon' => 'fa-envelope',
-        'text-class' => 'text-success',
         'show' => ($uid && get_user_email_notification($uid, $course_id)),
         'link-attrs' => "id='email_notification'"
     ],
@@ -382,7 +381,6 @@ $data['action_bar'] = action_bar([
         'title' => $langNoUserEmailNotification,
         'url' => "{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0",
         'icon' => 'fa-triangle-exclamation',
-        'text-class' => 'text-danger',
         'show' => ($uid && !(get_user_email_notification($uid, $course_id))),
         'link-attrs' => "id='email_notification'"
     ],

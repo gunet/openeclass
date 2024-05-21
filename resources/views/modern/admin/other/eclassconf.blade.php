@@ -1311,9 +1311,9 @@
                                     {!! showSecondFactorChallenge() !!}
 
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
-                                            <a class='btn cancelAdminBtn ms-1' href='index.php'>{{ trans('langCancel') }}</a>
+                                            <a class='btn cancelAdminBtn' href='index.php'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}

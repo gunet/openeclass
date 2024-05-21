@@ -70,8 +70,8 @@ if (count($roots) <= 0) {
                 $tool_content .= "                       
                     </ul>
                 </div>
-                <div class='col-lg-6 col-12'>
-                    <img class='form-image' src='{$urlAppend}template/modern/img/CoursesImg.png' />
+                <div class='col-lg-6 col-12 d-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                 </div>
             </div>
         </div>";

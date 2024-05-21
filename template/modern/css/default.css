@@ -29,6 +29,12 @@ iframe{
 .padding-default.container-fluid{
   padding: 32px 24px 32px 24px;
 }
+.padding-default-form-login.container{
+  padding: 64px 16px 32px 16px;
+}
+.padding-default-form-login.container-fluid{
+  padding: 64px 24px 32px 24px;
+}
 
 /* whole-height - header - footer + header*/
 @media(min-width:992px){
@@ -286,7 +292,12 @@ img {
 }
 
 .split-left{
-  width:1px;
+  padding-left: 15px;
+  border-left: solid 1px #e8e8e8 ;
+}
+.split-content{
+  width: 1px;
+  height: 40px;
   border-left: solid 1px #e8e8e8 ;
 }
 
@@ -930,6 +941,11 @@ b a {
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .fa-chevron-down,
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus .fa-chevron-down{
   margin-top: -4px;
+}
+
+.btn-mobile-quick-search{
+  height:38px !important; 
+  margin-top:1px;
 }
 
 
@@ -4962,6 +4978,10 @@ body .delThemeBtn{
   padding-right: 0px;
 }
 
+.form-image-modules{
+  padding: 16px 0px 16px 16px;
+}
+
 /* personal docs */
 .main-section:has(.form-content-modules) .form-image-modules{
   max-width: 650px;
@@ -5023,7 +5043,7 @@ body .delThemeBtn{
 }
 
 .main-section:not(:has(.course-wrapper)) .form-image-modules{
-  width:auto;
+  width: 100%;
 }
 
 

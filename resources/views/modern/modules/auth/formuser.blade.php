@@ -113,9 +113,9 @@
                                                 
 
 
-                                                <div class='col-12 mt-5'>
+                                                <div class='col-12 d-flex justify-content-end mt-4'>
                                                     <div class='form-group'>
-                                                        <input class='btn w-100 secodandary-submit' type='submit' name='submit' value='{{ trans('langSubmitNew') }}'>
+                                                        <input class='btn submitAdminBtn secodandary-submit' type='submit' name='submit' value='{{ trans('langSubmitNew') }}'>
                                                     </div>
                                                 </div>
                                                 
@@ -124,7 +124,7 @@
                                         </div>
                                     </div>
                                     <div class='col-lg-6 col-12 d-none d-lg-block'>
-                                        <img class='form-image' src='{!! get_registration_form_image() !!}' alt='Request'>
+                                        <img class='form-image-modules' src='{!! get_registration_form_image() !!}' alt='Request'>
                                     </div>
                                 </div>
                             </div>

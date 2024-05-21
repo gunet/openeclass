@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class='col-lg-6 col-12 mt-lg-0 mt-4 d-none d-lg-block'>
-                        <img class='form-image' src='{!! get_FAQ_image() !!}' alt='Frequest questions' />
+                        <img class='form-image-modules' src='{!! get_FAQ_image() !!}' alt='Frequest questions' />
                     </div>
                 </div>
             </div>

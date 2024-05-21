@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class='col-lg-6 col-12 d-none d-lg-block'>
-                            <img class='form-image' src='{!! get_registration_form_image() !!}' alt='{{ trans('langRegistration') }}'>
+                            <img class='form-image-modules' src='{!! get_registration_form_image() !!}' alt='{{ trans('langRegistration') }}'>
                         </div>
                     </div>
                 </div>

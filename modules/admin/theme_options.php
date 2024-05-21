@@ -892,8 +892,8 @@ if (isset($_POST['optionsSave'])) {
 
 
     @$tool_content .= "
-    <div class='row m-auto g-4 mb-4'>
-        <div class='col-lg-6 col-12 px-0'>
+    <div class='row m-auto mb-4'>
+        <div class='col-lg-6 col-12 ms-auto me-auto'>
             <div class='form-wrapper form-edit theme-option-wrapper'>
                 <div class='d-flex justify-content-start align-items-center gap-2'>
                     <h3 class='mb-1'>$langActiveTheme:</h3>
@@ -916,9 +916,6 @@ if (isset($_POST['optionsSave'])) {
                     </div>
                 </div>
             </div>
-        </div>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-            <img class='form-image-modules' src='". get_form_image() ."' alt='form-image'>
         </div>
     </div>";
 

@@ -86,7 +86,7 @@
                     <!-- only one auth_method is enabled and this method is not eclass -->
                     @if(!$authCase)
                         <div class="col-12 order-first homepage-login-container @if(get_config('show_only_loginScreen')) onlyLoginContainer @endif">
-                            <div class='{{ $container }} padding-default'>
+                            <div class='{{ $container }} padding-default padding-default-form-login'>
                                 <div class='row row-cols-1 row-cols-lg-2 g-4'>
                                     <div class="col @if($PositionFormLogin or get_config('show_only_loginScreen')) ms-auto me-auto @endif">
 
