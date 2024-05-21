@@ -116,14 +116,11 @@ if (isset($_POST['no_cas'])) {
     }
 }
 if (isset($_POST['submit'])) {
-    if ($cas['auth_default'] == 1) {
-        phpCAS::forceAuthentication();
-    }
+    phpCAS::forceAuthentication();
     if ($uid) {
         $user_id = $uid;
     }
 }
-
 if (!$uid and $cas and phpCAS::checkAuthentication()) {
     $_SESSION['cas_attributes'] = phpCAS::getAttributes();
     $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
@@ -141,25 +138,11 @@ if (!$uid and $cas and phpCAS::checkAuthentication()) {
                     $attrs['surname'], $attrs['givenname'], $username, 'cas',
                     mb_strtolower(trim($attrs['email'])), USER_STUDENT, get_config('default_language'),
                     $attrs['studentid']);
-
         if ($user) {
-            $user_id = $user->id;
-        } else {
-            $user = Database::get()->query("INSERT IGNORE INTO user
-                        SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
-                            email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
-                            expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
-                            lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
-                            description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
-                        $attrs['surname'], $attrs['givenname'], $username, 'cas',
-                        mb_strtolower(trim($attrs['email'])), USER_STUDENT, get_config('default_language'),
-                        $attrs['studentid']);
-            if ($user) {
-                $user_id = $user->lastInsertID;
-                Database::get()->query('INSERT IGNORE INTO user_department
-                    SET user = ?d, department = ?d',
-                    $user_id, 1);
-            }
+            $user_id = $user->lastInsertID;
+            Database::get()->query('INSERT IGNORE INTO user_department
+                SET user = ?d, department = ?d',
+                $user_id, 1);
         }
     }
 }
@@ -172,7 +155,7 @@ if ($user_id) {
     }
 }
 
-$pageName = 'Πρόσκληση εγγραφής στο μάθημα';
+$pageName = $langCourseInvitation;
 $pageTitle = $langRegCourses;
 
 $tree = new Hierarchy();
@@ -205,7 +188,7 @@ $head_content .= <<<hContent
               if (pass && pass2 && pass != pass2) {
                   $('.pw-group').addClass('has-error');
                   form_error = true;
-                  $('#result').html('<span id="result" class="label label-error">Έχετε πληκτρολογήσει δύο διαφορετικούς κωδικούς πρόσβασης</span>');
+                  $('#result').html('<span id="result" class="label label-error">$langPassTwice</span>');
               } else {
                   $('.pw-group').removeClass('has-error');
                   form_error = false;
@@ -235,59 +218,70 @@ if ($uid) {
     }
     $givenname = q($q->givenname);
     $surname = q($q->surname);
-    $eclass_login = "
+    $eclass_login_form = "
         <div class='row m-auto'>
             <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
-                <div class='card-body'>
-                    <fieldset>
-                        <div class='form-group'>
-                            <div class='col-12'>
-                                <p class='form-control-static'>
-                                    $eclass_login_help
-                                <p>
-                            </div>
+                <div class='card-body'>                    
+                    <div class='form-group'>
+                        <div class='col-12'>
+                            <p class='form-control-static'>
+                                $eclass_login_help
+                            <p>
                         </div>
-                        <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>$langUsername:</label>
-                            <div class='col-sm-12'>
-                                <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
-                                <span class='help-text'>($langSameAsYourEmail)</span>
-                            </div>
+                    </div>
+                    <div class='form-group mt-4'>
+                        <label class='col-sm-12 control-label-notes'>$langUsername:</label>
+                        <div class='col-sm-12'>
+                            <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
+                            <span class='help-text'>($langSameAsYourEmail)</span>
                         </div>
-                        <div class='form-group pw-group mt-4'>
-                            <label for='password_field' class='col-sm-12 control-label-notes'>$langPass:</label >
-                            <div class='col-sm-12' >
-                                <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice' required>
-                                <span id='result'></span>
-                            </div>
+                    </div>
+                    <div class='form-group pw-group mt-4'>
+                        <label for='password_field' class='col-sm-12 control-label-notes'>$langPass:</label >
+                        <div class='col-sm-12' >
+                            <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice' required>
+                            <span id='result'></span>
+                        </div>
+                    </div >
+                    <div class='form-group pw-group mt-4'>
+                        <label for='password_field_2' class='col-sm-12 control-label-notes'>$langConfirmation:</label >
+                        <div class='col-sm-12' >
+                            <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off' required>
                         </div >
-                        <div class='form-group pw-group mt-4'>
-                            <label for='password_field_2' class='col-sm-12 control-label-notes'>$langConfirmation:</label >
-                            <div class='col-sm-12' >
-                                <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off' required>
-                            </div >
+                    </div>
+                    <div class='form-group mt-4'>
+                        <label for='name_field' class='col-sm-12 control-label-notes'>$langName:</label>
+                        <div class='col-sm-12'>
+                            <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
                         </div>
-                        <div class='form-group mt-4'>
-                            <label for='name_field' class='col-sm-12 control-label-notes'>$langName:</label>
-                            <div class='col-sm-12'>
-                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
-                            </div>
+                    </div>
+                    <div class='form-group mt-4'>
+                        <label for='surname_field' class='col-sm-12 control-label-notes'>$langSurname:</label>
+                        <div class='col-sm-12'>
+                            <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
                         </div>
-                        <div class='form-group mt-4'>
-                            <label for='surname_field' class='col-sm-12 control-label-notes'>$langSurname:</label>
-                            <div class='col-sm-12'>
-                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
-                            </div>
+                    </div>
+                    <div class='form-group mt-5'>
+                        <div class='col-sm-12 text-center'>
+                            <button type='submit' name='no_cas' class='btn btn-primary'>$langRegisterAsVisitor</button>
                         </div>
-                        <div class='form-group mt-5'>
-                            <div class='col-sm-12 text-center'>
-                                <button type='submit' name='no_cas' class='btn btn-primary'>$langRegisterAsVisitor</button>
-                            </div>
-                        </div>
-                    </fieldset>
+                    </div>
                 </div>
             </div>
-            <div class='form-group'>
+        </div>";
+    if ($cas) {
+        $auth_title = getSerializedMessage($cas_auth->auth_title);
+        $message = sprintf($langInvitationAcceptViaCAS, q($auth_title));
+        $main_accept_form = "
+            <div class='form-group mt-4'>
+                <div class='col-sm-8 col-sm-offset-2'>
+                    <p class='form-control-static'>
+                        $langCourseInvitationReceived
+                        $message
+                    </p>
+                </div>
+            </div>
+            <div class='form-group mt-4'>
                 <div class='col-sm-12 text-center'>
                     <button type='submit' name='submit' class='btn btn-primary'>$langLoginAndRegister</button>
                 </div>
@@ -302,6 +296,10 @@ if ($uid) {
                     </div>
                 </div>
             </div>";
+    } else {
+        $main_accept_form = $eclass_login_form;
+        $alt_accept_form = '';
+    }
 }
 
 $tool_content .= "
@@ -311,6 +309,12 @@ $tool_content .= "
             <div class=' card panelCard px-lg-4 py-lg-3'>
                 <div class='card-body'>
                     <fieldset>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langCourse:</label>
+                            <div class='col-sm-10'>
+                                <p class='form-control-static'>" . q($course->title) . "</p>
+                            </div>
+                        </div>
                         <div class='form-group'>
                             <label class='col-sm-12 control-label-notes'>$langFaculty:</label>
                             <div class='col-sm-12'>
@@ -323,24 +327,12 @@ $tool_content .= "
                                 <p class='form-control-static'>" . q($course->public_code) . "</p>
                             </div>
                         </div>
-                        <div class='form-group mt-4'>
-                            <div class='col-sm-8 col-sm-offset-2'>
-                                <p class='form-control-static'>
-                                    Έχετε λάβει πρόσκληση συμμετοχής στη ανωτέρω συνεργασία.
-                                    $message
-                                </p>
-                            </div>
-                        </div>
-                        <div class='form-group mt-5'>
-                            <div class='col-sm-12 text-center'>
-                                <button type='submit' name='submit' class='btn btn-primary'>$label</button>
-                            </div>
-                        </div>
+                        $main_accept_form
                     </fieldset>
                 </div>
             </div>
         </div>
-        $eclass_login
+        $alt_accept_form
     </form>";
 
 draw($tool_content, 1, null, $head_content);
