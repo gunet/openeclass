@@ -48,37 +48,56 @@
                     </ul>
                 @endif
             </div>
-            <div class='d-flex justify-content-end align-items-center h-100 pe-0'>
+            <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
                 @if(get_config('enable_search'))
                     <div class='h-100 d-flex justify-content-start align-items-center'>
-                        <div class='h-40px pe-2'>
-                            <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' role='search'>
+                        <div class='h-40px'>
+                            <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px gap-2" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' role='search'>
                                 <div>
                                     <a id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                                     </a>
                                 </div>
-                                <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
+                                <input id="search_terms" type="text" class="inputSearch form-control rounded-0 px-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
                             </form>
                         </div>
-                        <div class='split-left h-40px ps-0 pe-3'></div>
                     </div>
                 @endif
-                @if(!isset($_SESSION['uid']))
-                    <div class='h-100 d-flex justify-content-start align-items-center'>
-                        <div class="d-flex justify-content-start align-items-center h-40px @if(get_config('dont_display_login_form') or ( !isset($_SESSION['uid']) and !get_config('dont_display_login_form') and !empty($authNameEnabled) )) pe-3 @endif">
+                @if(!isset($_SESSION['uid']) && count($session->active_ui_languages) > 1)
+                    <div class='h-40 d-flex justify-content-start align-items-center split-left'>
+                        <div class="d-flex justify-content-start align-items-center h-40px">
                             {!! lang_selections_Desktop('idLangSelectionDesktop') !!}
                         </div>
-                        @if(get_config('dont_display_login_form') && count($session->active_ui_languages) > 1)
-                            <div class='split-left h-40px ps-0 pe-3'></div>
-                        @endif
                     </div>
+                @endif
+                @if(isset($_SESSION['uid']) && get_config('enable_search'))
+                    <div class='split-content'></div>
                 @endif
                 <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
                     <div class='d-flex justify-content-start align-items-center h-80px'>
                         @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
-                            @if($authCase)
-                                @if(!empty($authNameEnabled))
+                            <div class='d-flex justify-content-center align-items-center split-left h-40px'>
+                                @if($authCase)
+                                    @if(!empty($authNameEnabled))
+                                        @if($authNameEnabled == 'cas')
+                                            <a class='header-login-text' href="{{ $urlServer }}modules/auth/cas.php">
+                                                {{ trans('langUserLogin') }}
+                                            </a>
+                                        @else
+                                            <a class='header-login-text' href="{{ $urlServer }}secure/">
+                                                {{ trans('langUserLogin') }}
+                                            </a>
+                                        @endif
+                                    @endif
+                                @else
+                                    <a class='header-login-text' href="{{ $urlServer }}main/login_form.php">
+                                        {{ trans('langUserLogin') }}
+                                    </a>
+                                @endif
+                            </div>
+                        @elseif(!isset($_SESSION['uid']) and !get_config('dont_display_login_form'))
+                             @if(!empty($authNameEnabled))
+                                <div class='d-flex justify-content-center align-items-center split-left h-40px'>
                                     @if($authNameEnabled == 'cas')
                                         <a class='header-login-text' href="{{ $urlServer }}modules/auth/cas.php">
                                             {{ trans('langUserLogin') }}
@@ -88,24 +107,7 @@
                                             {{ trans('langUserLogin') }}
                                         </a>
                                     @endif
-                                @endif
-                            @else
-                                <a class='header-login-text' href="{{ $urlServer }}main/login_form.php">
-                                    {{ trans('langUserLogin') }}
-                                </a>
-                            @endif
-                        @elseif(!isset($_SESSION['uid']) and !get_config('dont_display_login_form'))
-                             @if(!empty($authNameEnabled))
-                                <div class='split-left h-40px ps-0 pe-3'></div>
-                                @if($authNameEnabled == 'cas')
-                                    <a class='header-login-text' href="{{ $urlServer }}modules/auth/cas.php">
-                                        {{ trans('langUserLogin') }}
-                                    </a>
-                                @else
-                                    <a class='header-login-text' href="{{ $urlServer }}secure/">
-                                        {{ trans('langUserLogin') }}
-                                    </a>
-                                @endif
+                                </div>
                             @endif
                         @endif
                         @if(isset($_SESSION['uid']))
@@ -439,11 +441,20 @@
                     @else
                         <form action="{{ $urlAppend }}modules/search/search.php">
                     @endif
-                            <label for='search-mobile' class='form-label'>{{ trans('langSearch') }}</label>
+                            {{--
                             <input id='search-mobile' type="text" class="form-control w-100" placeholder="{{ trans('langGiveText')}}..." name="search_terms">
                             <button class="btn submitAdminBtnDefault mt-3 ms-auto me-auto" type="submit" name="quickSearch" aria-label='Quick search'>
                                 {{ trans('langSubmit') }}
-                            </button>
+                            </button>--}}
+
+                            <div class="input-group">
+                                <input id='search-mobile' type="text" class="form-control mt-0" 
+                                        placeholder="{{ trans('langSearch')}}..." name="search_terms" aria-label="Search terms" aria-describedby="search-btn-mobile">
+                                <button class="btn btn-primary btn-mobile-quick-search" type="submit" id="search-btn-mobile" name="quickSearch" aria-label='Quick search'>
+                                    <i class="fa-solid fa-magnifying-glass-arrow-right fa-lg"></i>
+                                </button>
+                            </div>
+
                         </form>
                 </div>
             @endif

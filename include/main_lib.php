@@ -3677,10 +3677,10 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $temporary_button_class = "";
 
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
+        $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($pageName)."</h6>";
     }
     if (isset($tmp_pageName) and !empty($tmp_pageName)) {
-        $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($tmp_pageName)."</h6>";
+        $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($tmp_pageName)."</h6>";
     }
     foreach (array_reverse($options) as $option) {
 

@@ -541,7 +541,7 @@ function view($view_file, $view_data = array()) {
                 }
                 
                 .main-section:not(:has(.course-wrapper)) .form-image-modules{
-                    width:auto;
+                    width:100%;
                 } 
             ";
         }
@@ -704,7 +704,8 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
-                .split-left{
+                .split-left,
+                .split-content{
                     border-left: solid 1px $theme_options_styles[linkColorHeader];
                 }
 

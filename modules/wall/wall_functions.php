@@ -380,7 +380,7 @@ function generate_infinite_container_html($posts, $next_page) {
         } else {
             $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
             if ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
                 //if ($next_page == 2) { //needed only for the first page and not for dynamically added content
