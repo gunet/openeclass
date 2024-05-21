@@ -158,10 +158,10 @@ $action_url = "exercise_result_by_question.php?exerciseId={$exerciseIdIndirect}"
 $tool_content .= "<form id='grade_form' method='POST' action='$action_url'>$questions_table </form></div></div>";
 
 //creating buttons at the end of page
-$tool_content .= "<br><div class='col-12 d-flex justify-content-center align-items-center'>";
+$tool_content .= "<br><div class='col-12 d-flex justify-content-center align-items-center gap-2'>";
 //submit button
 $tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn submitAdminBtn' id='submitButton'>"
-        . "<a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>
+        . "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>
            $langReturn
        </a></div>";
 

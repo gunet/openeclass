@@ -157,16 +157,9 @@ $tool_content .= "
             <div class='form-group mt-4'>
                 <textarea class='form-control' name='user_info' rows='10'>" . q(Session::get('user_info')) . "</textarea>
             </div>
-            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-               
-                   
-                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
-
-                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                 
-               
-                
-              
+            <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
+                <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn cancelAdminBtn'>$langCancel</a>
             </div>
         </fieldset>
         ". generate_csrf_token_form_field() ."

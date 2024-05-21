@@ -143,9 +143,9 @@ hContent;
                         </div>
                         </div>
                         <div class='form-group mt-4'>
-                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                             <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                            <a href='index.php?course=" . $course_code . "'' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+                            <a href='index.php?course=" . $course_code . "'' class='btn cancelAdminBtn'>$langCancel</a>
                         </div>
                         </div>
                     </fieldset>

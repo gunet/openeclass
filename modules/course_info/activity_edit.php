@@ -102,16 +102,9 @@ foreach ($items as $item) {
 $tool_content .= "
         </div>
         <div class='row'>
-            <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
-               
-                   
-                        <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                 
-                        <a href='" . q($courseHome) . "' class='btn cancelAdminBtn ms-1'>" . q($langCancel) . "</a>
-                  
-                
-               
-                
+            <div class='col-12 mt-5 d-flex justify-content-center align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                <a href='" . q($courseHome) . "' class='btn cancelAdminBtn'>" . q($langCancel) . "</a>
             </div>
         </div>
     </div>

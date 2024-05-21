@@ -356,9 +356,9 @@ if (!isset($_POST['next'])) {
                     <div id='dynamic_units'></div>
                     <input id='unit_count' type='hidden' name='unit_count' value='1'>
                 </div>
-                <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                             <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
-                            <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+                            <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>
                 </div>
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>
@@ -591,9 +591,9 @@ if (!isset($_POST['next'])) {
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                            <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
-                             <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn ms-1'>$langCancel</a>                       
+                    <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
+                        <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
+                        <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn'>$langCancel</a>                       
                     </div>
                     <input type='hidden' name='next'>
                     <input name='checked_in_class' type='hidden' value='1'></input>

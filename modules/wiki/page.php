@@ -947,9 +947,9 @@ switch ($action) {
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                             <input class='btn submitAdminBtn' type='submit' value='". $langSubmit ."'>
-                            <a class='btn cancelAdminBtn ms-1' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                            <a class='btn cancelAdminBtn' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
                         </div>
                     </div>
                 </form>

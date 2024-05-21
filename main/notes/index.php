@@ -179,9 +179,9 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                     ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
                   </div>
                 </div>
-                <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                      <input class='btn submitAdminBtn' type='submit' name='submitNote' value='$langAdd'> 
-                     <a class='btn cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                     <a class='btn cancelAdminBtn' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
                   
                 </div>";
                 if($noteToModify!=""){

@@ -66,14 +66,8 @@
 
                                                     <div class='form-group mt-5'>    
                                                         <div class='col-12 d-flex justify-content-end align-items-center'>
-                                                           
-                                                               
-                                                                  {!! $form_buttons !!}
-                                                              
-                                                               
-                                                                    <a class='btn cancelAdminBtn ms-1' href="{{$cat_url}}">{{trans('langCancel')}}</a>
-                                                               
-                                                            
+                                                            {!! $form_buttons !!}
+                                                            <a class='btn cancelAdminBtn ms-1' href="{{$cat_url}}">{{trans('langCancel')}}</a>
                                                         </div>
                                                     </div>
                                                     {!! generate_csrf_token_form_field() !!}   

@@ -77,9 +77,9 @@ if (isset($_GET['delete'])) {
               </div>
             </div>
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langAddModify) . "'>
-                    <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                    <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
                 </div>
             </div>            
         </form>

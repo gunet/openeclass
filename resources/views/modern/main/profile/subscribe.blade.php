@@ -67,13 +67,9 @@
                                         @endif
                                         </div>
                                         <br>
-                                        <div class='col-12 d-flex justify-content-end align-items-center mt-5'>
-
-                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-
-
-                                                <a class='btn cancelAdminBtn ms-1' href='display_profile.php'>{{ trans('langCancel') }}</a>
-
+                                        <div class='col-12 d-flex justify-content-end align-items-center mt-5 gap-2'>
+                                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                            <a class='btn cancelAdminBtn' href='display_profile.php'>{{ trans('langCancel') }}</a>
                                         </div>
 
 

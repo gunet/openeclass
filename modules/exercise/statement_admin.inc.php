@@ -355,9 +355,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>
             <div class='row'>
-                <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>                                          
+                <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>                                          
                         <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>                     
-                        <a href='$link_back' class='btn cancelAdminBtn ms-1'>$langCancel</a>                    
+                        <a href='$link_back' class='btn cancelAdminBtn'>$langCancel</a>                    
                 </div>
             </div>
           </fieldset>

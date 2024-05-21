@@ -139,9 +139,9 @@ $tool_content .=
             </div>
 
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-end align-items-center'>
+                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                    <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+                    <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn'>$langCancel</a>
                 </div>
             </div>";
 

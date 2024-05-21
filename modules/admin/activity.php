@@ -122,19 +122,9 @@ if (isset($_POST['toReorder'])) {
 
             
 
-            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-              
-               
-                 
-                   <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                 
-                 
-                   <a href='activity.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                
-             
-               
-               
-             
+            <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                <a href='activity.php' class='btn cancelAdminBtn'>$langCancel</a>
             </div>
           </fieldset>
           ". generate_csrf_token_form_field() ."

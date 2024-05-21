@@ -97,14 +97,9 @@
                                   
                                     
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-end align-items-center'>
-                                           
-                                                
-                                                    <input type='submit' class='btn submitAdminBtn' name='submitCategory' value="{{ $form_legend }}">
-                                               
-                                                    <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
-                                               
-                                           
+                                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                            <input type='submit' class='btn submitAdminBtn' name='submitCategory' value="{{ $form_legend }}">
+                                            <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                 </fieldset>

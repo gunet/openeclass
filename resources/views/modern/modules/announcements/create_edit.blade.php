@@ -180,9 +180,9 @@
                                             <input type='hidden' name='course' value='{{ $course_code }}'>
                                             <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
                                             <div class='col-12'>
-                                                <div class='col-12 d-flex justify-content-end align-items-center'>
+                                                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                                     <button type="submit" class="btn submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                                    <a href="index.php?course={{ $course_code }}" class="btn cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
+                                                    <a href="index.php?course={{ $course_code }}" class="btn cancelAdminBtn">{{ trans('langCancel') }}</a>
                                                 </div>
                                             </div>
                                         </div>

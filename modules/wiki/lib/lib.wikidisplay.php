@@ -271,15 +271,9 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
     $form .= "                  </div>
                             </div>
                             <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    
-                                      
-                                            <input class='btn submitAdminBtn' type='submit' name='action[exEdit]' value='$langSave'>
-                                       
-                                        
-                                            <a class='btn cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
-                                       
-                                    
+                                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                    <input class='btn submitAdminBtn' type='submit' name='action[exEdit]' value='$langSave'>
+                                    <a class='btn cancelAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
                                 </div>
                             </div>
                         </fieldset>

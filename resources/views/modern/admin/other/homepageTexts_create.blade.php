@@ -199,10 +199,9 @@
 
                                    
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-end align-items-center'>
-
-                                                <button type="submit" class="btn submitAdminBtn" name="{{ $new? "submitText" : "modifyText" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
-                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
+                                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                            <button type="submit" class="btn submitAdminBtn" name="{{ $new? "submitText" : "modifyText" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
+                                            <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn cancelAdminBtn">{{ trans('langCancel') }}</a>
 
                                         </div>
                                     </div>

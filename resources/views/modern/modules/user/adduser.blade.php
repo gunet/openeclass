@@ -47,9 +47,9 @@
                                             <input class='form-control' id='am' type='text' name='search_am' value='{!! q($search_am) !!} ' placeholder='{{ trans('langAm') }}'></div>
                                     </div>
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                             <input class='btn submitAdminBtn' type='submit' name='search' value='{{ trans('langSearch') }}'>
-                                            <a class='btn cancelAdminBtn ms-1' href='index.php?course={{ $course_code }}'>{{ trans('langCancel') }}</a>
+                                            <a class='btn cancelAdminBtn' href='index.php?course={{ $course_code }}'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                 </form>

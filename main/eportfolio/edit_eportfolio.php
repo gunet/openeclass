@@ -140,9 +140,9 @@ $ret_str = render_eportfolio_fields_form();
 $tool_content .= $ret_str['panels'];
 
 $tool_content .= "
-    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+    <div class='form-group mt-5 d-flex justify-content-center align-items-center gap-2'>
         <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>     
-        <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+        <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn'>$langCancel</a>
                   </div>
       ". generate_csrf_token_form_field() ."  
       </div></form>

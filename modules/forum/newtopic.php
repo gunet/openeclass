@@ -186,9 +186,9 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class='form-group mt-5'>
-              <div class='col-12 d-flex justify-content-end align-items-center'>                                   
+              <div class='col-12 d-flex justify-content-end align-items-center gap-2'>                                   
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>                                    
-                    <a class='btn cancelAdminBtn ms-1' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>                                    
+                    <a class='btn cancelAdminBtn' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>                                    
               </div>
             </div>
 	</fieldset>

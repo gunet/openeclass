@@ -79,17 +79,9 @@
                             
 
                             <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-end align-items-center'>
-                                 
-                                      
-                                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langConnTest') }}'>
-                                      
-                                      
-                                            <a class='btn cancelAdminBtn ms-1' href='auth.php'>{{ trans('langCancel') }}</a>
-                                       
-                                
-                                    
-                                    
+                                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                   <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langConnTest') }}'>
+                                    <a class='btn cancelAdminBtn' href='auth.php'>{{ trans('langCancel') }}</a>
                                 </div>
                             </div>
                         </fieldset>

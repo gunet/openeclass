@@ -729,7 +729,7 @@ if (isset($_GET['modifyAnswers'])) {
                          <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                              $back_button
                              <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$submit_text'>
-                             <a class='btn cancelAdminBtn ms-1' href='$cancel_link'>$langCancel</a>
+                             <a class='btn cancelAdminBtn' href='$cancel_link'>$langCancel</a>
                          </div>
                      </div>
                 </fieldset>

@@ -68,9 +68,9 @@
                                         <input type='hidden' name='lessons[]' value='{{ $results->id }}'>
                                     @endforeach
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}' onclick='return confirmation("{{ trans('langConfirmMultiMoveCourses') }}");'>
-                                            <a href='index.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                            <a href='index.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                 </fieldset>

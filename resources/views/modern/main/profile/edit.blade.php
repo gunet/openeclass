@@ -249,9 +249,9 @@
                         {{ $SecFactorProfile }}
                         <div class="mt-3"></div>
                         {{ $SecFactorChallenge }}
-                        <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
-                           <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                <a href='display_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                        <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                            <a href='display_profile.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                         </div>
 
                 </fieldset>

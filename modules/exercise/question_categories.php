@@ -92,17 +92,9 @@ if (isset($_POST['submitCat'])) {
                     </div>
                 </div>
                 <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-end align-items-center'>
-                      
-                          
-                            <input class='btn submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
-                         
-                          
-                            <a href='question_categories.php?course=$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                           
-                       
-                        
-                        
+                    <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                        <input class='btn submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
+                        <a href='question_categories.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
                     </div>
                 </div>
             </form>

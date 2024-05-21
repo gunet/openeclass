@@ -153,9 +153,9 @@
 
                                     
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                            <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
-                                           <a class='btn cancelAdminBtn ms-1' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
+                                           <a class='btn cancelAdminBtn' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}

@@ -109,9 +109,9 @@ if (isset($_GET['all'])) {
         </div>";
         $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
         $tool_content .= "<div class='form-group mt-5'>
-        <div class='col-12 d-flex justify-content-end align-items-center'>
+        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
             <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation'>
-            <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+            <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
         </div>
         </div>
         </fieldset>
@@ -366,17 +366,9 @@ if (isset($_GET['all'])) {
             
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
         $tool_content .= "<div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-end align-items-center'>
-              
-                    
-                    <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
-                   
-                 
-                     <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-                   
-               
-                
-               
+            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
+                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>
         </fieldset>

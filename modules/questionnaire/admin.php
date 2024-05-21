@@ -901,9 +901,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
         $tool_content .= "
                     <div class='form-group mt-4'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
                             <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
-                            <a class='btn cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
+                            <a class='btn cancelAdminBtn' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
                         </div>
                     </div>
                     </form>

@@ -295,9 +295,9 @@ function show_edit_form($id, $sid, $assign) {
                                     </div>";
                                 }
                                 $tool_content .= "<div class='form-group'>
-                                    <div class='col-12 d-inline-flex justify-content-end'>
+                                    <div class='col-12 d-inline-flex justify-content-end gap-2'>
                                         <input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
-                                        <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+                                        <a class='btn cancelAdminBtn' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
                                     </div>
                                 </div>
                             </form>";
@@ -492,9 +492,9 @@ function show_edit_form($id, $sid, $assign) {
 
                     $tool_content .= "
 					<div class='form-group mt-5'>
-						<div class='col-12 d-inline-flex justify-content-end'>
+						<div class='col-12 d-inline-flex justify-content-end gap-2'>
 							<input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
-							<a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+							<a class='btn cancelAdminBtn' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 
 						</div>
 					</div>

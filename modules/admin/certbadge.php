@@ -267,9 +267,9 @@ if (isset($_GET['action'])) {
                             </div>
                             $cert_hidden_id
 
-                            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                            <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                                 <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
-                                <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                <a class='btn cancelAdminBtn' href='index.php'>$langCancel</a>
                             </div>
                     </form>
                 </div>
@@ -326,9 +326,9 @@ if (isset($_GET['action'])) {
                             </div>
                             $badge_hidden_id
 
-                            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                            <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                                 <button class='btn submitAdminBtn' type ='submit' name='submit_badge_icon'>$langUpload</button>
-                                 <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                 <a class='btn cancelAdminBtn' href='index.php'>$langCancel</a>
                             </div>
 
                     </form>

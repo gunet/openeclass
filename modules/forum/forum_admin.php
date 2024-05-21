@@ -120,9 +120,9 @@ if (isset($_GET['forumgo'])) {
                 </div>
             </div>
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-end align-items-center'>
+                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                     <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
-                    <a href='index.php?course=$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+                    <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
                 </div>
             </div>
         </fieldset>
@@ -182,15 +182,9 @@ elseif (isset($_GET['forumgoedit'])) {
     $tool_content .= "
        </div>
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-end align-items-center'>
-
-
-                        <input class='btn submitAdminBtn' type='submit' value='$langModify'>
-
-
-                         <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-
-
+            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' value='$langModify'>
+                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>
         </fieldset>
@@ -220,15 +214,9 @@ elseif (isset($_GET['forumcatedit'])) {
             </div>
         </div>
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-end align-items-center'>
-
-
-                        <input class='btn submitAdminBtn' type='submit' value='$langModify'>
-
-
-                        <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-
-
+            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' value='$langModify'>
+                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>
         </fieldset>
@@ -597,15 +585,9 @@ elseif (isset($_GET['forumgodel'])) {
             </div>
         </div>
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-end align-items-center'>
-
-
-                        <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
-
-
-                        <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-
-
+            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
+                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>
         </fieldset>

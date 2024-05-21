@@ -135,17 +135,9 @@
                                 <div class='mt-4'></div>
                                 {!! showSecondFactorChallenge() !!}
                                 <div class='form-group mt-5'>
-                                    <div class='col-12 d-flex justify-content-end align-items-center'>
-                                       
-                                           
-                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                          
-                                        
-                                                <a href='autoenroll.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>    
-                                          
-                                       
-                                        
-                                        
+                                    <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                        <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                        <a href='autoenroll.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>    
                                     </div>
                                 </div>
                             </fieldset>
