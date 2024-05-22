@@ -724,7 +724,7 @@
 
 
 
-
+                                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='seven'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -762,6 +762,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
+                                    @endif
 
 
 
@@ -1335,8 +1336,9 @@
 
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#five">{{ trans('langEmailSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#six">{{ trans('langCourseSettings') }}</a>
+                                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#seven">{{ trans('langMetaCommentary') }}</a>
-
+                                    @endif
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#eight">{{ trans('langOtherOptions') }}</a>
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#nine">{{ trans('langDocumentSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#ten">{{ trans('langDefaultQuota') }}</a>

@@ -1497,3 +1497,5 @@ $langUsageVisits = "Collaboration Visits";
  $langLabelCollabUserRequest = "Application for collaboration registration";
  $langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
  $m['password_collab'] = "Password for collaboration";
+ $lang_openCourse_inModal = "Should the collaboration information be displayed in Modal (Frame) in the open collaborations?</br>
+ If you do not select this option, the information of the partnership will be displayed in a new page of your browser.";

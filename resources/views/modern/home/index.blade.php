@@ -563,7 +563,7 @@
 
             @if(!get_config('show_only_loginScreen'))
                 @if(!get_config('dont_display_open_courses'))
-                    @if(get_config('opencourses_enable'))
+                    @if(get_config('opencourses_enable') && ((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)))
                         <div class='col-12 order-{{ $open_courses_priority }} homepage-opencourses-container'>
                             <div class='{{ $container }} padding-default'>
                                 <div class='row row-cols-1 g-4'>

@@ -64,6 +64,9 @@ register_posted_variables(array('announcements' => true,
 if (isset($_GET['all'])) {
     $all = intval($_GET['all']);
     $announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1;
+    if(isset($is_collaborative_course) and $is_collaborative_course){
+        $exercises = 0;
+    }
 }
 
 if (isset($_REQUEST['search_terms'])) {
@@ -134,8 +137,9 @@ if (empty($search_terms)) {
                             $langForums
                           </label>
                         </div>
-                    </div>
-                    <div class='col-6 col-sm-4'>
+                    </div>";
+                    if(!$is_collaborative_course){
+                    $tool_content .=" <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                         <label class='label-container'>
                             <input type='checkbox' name='exercises' checked>
@@ -143,7 +147,8 @@ if (empty($search_terms)) {
                             $langExercices
                           </label>
                         </div>
-                    </div>
+                    </div>";}
+                    $tool_content .= "
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                         <label class='label-container'>

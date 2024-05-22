@@ -47,19 +47,14 @@ $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-// add my changes because course_id is always wrong!! //
-////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////
 if(isset($_GET['course_code'])){
     $course_code = $_GET['course_code'];
     $course_id = course_code_to_id($course_code);
 }
 ////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
+
 
 // departments and validation
 $depadmin_mode = get_config('restrict_teacher_owndep') && !$is_admin;
@@ -251,15 +246,15 @@ if (isset($_POST['submit'])) {
         ['title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',
-            'show' => get_config('course_metadata')],
+            'show' => (get_config('course_metadata') && !$is_collaborative_course)],
         ['title' => $langCourseMetadataControlPanel,
             'url' => "../course_metadata/control.php?course=$course_code",
             'icon' => 'fa-list',
-            'show' => get_config('opencourses_enable') && $is_opencourses_reviewer],
+            'show' => (get_config('opencourses_enable') && $is_opencourses_reviewer && !$is_collaborative_course)],
         ['title' => $langCourseCategoryActions,
             'url' => "../course_category/index.php?course=$course_code",
             'icon' => 'fa-file-text',
-            'show' => ((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))],
+            'show' => (!$is_collaborative_course)],
         ['title' => $langDelCourse,
             'url' => "delete_course.php?course=$course_code",
             'icon' => 'fa-xmark',

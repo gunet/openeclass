@@ -76,7 +76,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
 
     public function asForm($data = null) {
-        global $course_code, $langSubmit, $langRequiredFields, $langBack;;
+        global $course_code, $langSubmit, $langRequiredFields, $langBack;
         $out = action_bar(array(
         array('title' => $langBack,
             'url' => "../course_info/index.php",
@@ -186,7 +186,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
-        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? " data-toggle='tooltip' title='" . q($GLOBALS['langCMeta']['help_' . $fullKey]) . "'" : '';
+        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? " data-bs-toggle='tooltip' title='" . q($GLOBALS['langCMeta']['help_' . $fullKey]) . "'" : '';
         $fullKeyNoLang = $fullKey;
         $sameAsCourseLang = false;
         $lang = '';
