@@ -1943,7 +1943,8 @@ $db->query("CREATE TABLE `certificate_template` (
     `name` varchar(255) not null,
     `description` text,
     `filename` varchar(255),
-    `orientation` varchar(10)
+    `orientation` varchar(10),
+    `all_courses` tinyint(1) not null default 1
 ) $tbl_options");
 
 $db->query("CREATE TABLE `badge_icon` (
@@ -2076,6 +2077,15 @@ $db->query("CREATE TABLE `certified_users` (
    PRIMARY KEY (`id`),
    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL
   ) $tbl_options");
+
+$db->query("CREATE TABLE `course_certificate_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `certificate_template_id` mediumint(8) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`certificate_template_id`) REFERENCES `certificate_template` (`id`) ON DELETE CASCADE
+) $tbl_options");
 
 $db->query("CREATE TABLE `course_prerequisite` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

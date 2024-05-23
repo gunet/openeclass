@@ -2621,6 +2621,19 @@ function upgrade_to_3_16($tbl_options) : void
               PRIMARY KEY (`id`),
               FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
     }
+
+    if (!dbhelper::tableexists('course_certificate_template')) {
+        Database::get()->query("CREATE TABLE `course_certificate_template` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `course_id` int(11) NOT NULL,
+              `certificate_template_id` mediumint(8) NOT NULL,
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+              FOREIGN KEY (`certificate_template_id`) REFERENCES `certificate_template` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('certificate_template', 'all_courses')) {
+        Database::get()->query("ALTER TABLE `certificate_template` ADD `all_courses` tinyint(1) NOT NULL DEFAULT 1");
+    }
 }
 
 /**
