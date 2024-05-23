@@ -95,7 +95,7 @@ define('MODULE_ID_ANALYTICS', 51);
 define('MODULE_ID_H5P', 52);
 define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_REQUEST', 100);
-
+define('MODULE_ID_SESSION', 101);
 //user activities
 define('MODULE_ID_EBOOK_READ','FC1');
 define('MODULE_ID_VIDEO_WATCH','FC2');

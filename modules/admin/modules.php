@@ -44,8 +44,7 @@ if (isset($_POST['submit'])) {
     }
 
     if(get_config('show_collaboration')){
-        $alwaysdisabledCollaborationModules = array(MODULE_ID_ASSIGN, MODULE_ID_ATTENDANCE, MODULE_ID_GRADEBOOK, MODULE_ID_MINDMAP, 
-                                                    MODULE_ID_PROGRESS,MODULE_ID_LP,MODULE_ID_EXERCISE,MODULE_ID_GLOSSARY,MODULE_ID_EBOOK,
+        $alwaysdisabledCollaborationModules = array(MODULE_ID_MINDMAP, MODULE_ID_PROGRESS,MODULE_ID_LP,MODULE_ID_EXERCISE,MODULE_ID_GLOSSARY,MODULE_ID_EBOOK,
                                                     MODULE_ID_WIKI,MODULE_ID_ABUSE_REPORT,MODULE_ID_COURSEPREREQUISITE,MODULE_ID_LTI_CONSUMER,
                                                     MODULE_ID_ANALYTICS,MODULE_ID_H5P,MODULE_ID_COURSE_WIDGETS);
 
@@ -119,17 +118,20 @@ if (isset($_POST['submit'])) {
             MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-solid fa-question'),
             MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
             MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
-            MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard')
+            MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+            MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
+            MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
+            MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
+            MODULE_ID_SESSION => array('title' => $langSession, 'link' => 'session', 'image' => 'fa-solid fa-handshake')
         );
 
 
-        $alwaysEnabledModulesCollaborations = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
+        $alwaysEnabledModulesCollaborations = array(MODULE_ID_SESSION, MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
         foreach ($alwaysEnabledModulesCollaborations as $alwaysEnabledModuleCollaboration) {
             unset($modules_collaborations[$alwaysEnabledModuleCollaboration]);
         }
 
-        $alwaysdisabledCollaborationModules = array(MODULE_ID_ASSIGN, MODULE_ID_ATTENDANCE, MODULE_ID_GRADEBOOK, MODULE_ID_MINDMAP, 
-                                                    MODULE_ID_PROGRESS,MODULE_ID_LP,MODULE_ID_EXERCISE,MODULE_ID_GLOSSARY,MODULE_ID_EBOOK,
+        $alwaysdisabledCollaborationModules = array(MODULE_ID_MINDMAP, MODULE_ID_PROGRESS,MODULE_ID_LP,MODULE_ID_EXERCISE,MODULE_ID_GLOSSARY,MODULE_ID_EBOOK,
                                                     MODULE_ID_WIKI,MODULE_ID_ABUSE_REPORT,MODULE_ID_COURSEPREREQUISITE,MODULE_ID_LTI_CONSUMER,
                                                     MODULE_ID_ANALYTICS,MODULE_ID_H5P,MODULE_ID_COURSE_WIDGETS);
 

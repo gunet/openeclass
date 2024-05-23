@@ -2488,6 +2488,43 @@ $db->query("CREATE TABLE `zoom_user` (
       `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (user_id)) $tbl_options");
 
+$db->query("CREATE TABLE `mod_session` (
+        `id` INT(11) NOT NULL AUTO_INCREMENT,
+        `creator` INT(11) NOT NULL DEFAULT 0,
+        `title` VARCHAR(255) NOT NULL DEFAULT '',
+        `comments` MEDIUMTEXT,
+        `type` VARCHAR(255) NOT NULL DEFAULT '',
+        `start` DATETIME DEFAULT NULL,
+        `finish` DATETIME DEFAULT NULL,
+        `visible` TINYINT(4),
+        `public` TINYINT(4) NOT NULL DEFAULT 1,
+        `order` INT(11) NOT NULL DEFAULT 0,
+        `course_id` INT(11) NOT NULL,
+        PRIMARY KEY(id),
+        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) $tbl_options");
+
+$db->query("CREATE TABLE `mod_session_users` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `session_id` INT(11) NOT NULL DEFAULT 0,
+            `participants` INT(11) NOT NULL DEFAULT 0,
+            PRIMARY KEY(id),
+            FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
+
+
+$db->query("CREATE TABLE `session_resources` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT,
+                            `session_id` INT(11) NOT NULL DEFAULT 0,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comments` MEDIUMTEXT,
+                            `res_id` INT(11) NOT NULL DEFAULT 0,
+                            `type` VARCHAR(255) NOT NULL DEFAULT '',
+                            `visible` TINYINT(4),
+                            `order` INT(11) NOT NULL DEFAULT 0,
+                            `date` DATETIME NOT NULL,
+                            PRIMARY KEY(id),
+                            FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
+
+
 $_SESSION['theme'] = 'modern';
 
 importThemes();

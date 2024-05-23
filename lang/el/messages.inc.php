@@ -6764,3 +6764,4 @@ $langThisCollabDescriptionIsEmpty = "Η συνεργασία δεν διαθέτ
 $langSameAsYourEmail = 'ίδιο με τη διεύθυνση e-mail σας';
 $langCollabInvitation = "Πρόσκληση εγγραφής στην συνεργασία";
 $langCollab = "Συνεργασία";
+$langSession = "Συνεδρίες";

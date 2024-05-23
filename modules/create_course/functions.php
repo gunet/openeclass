@@ -120,7 +120,13 @@ function create_course_dirs($code) {
 function create_modules($cid) {
     global $modules;
 
-    $module_ids[1] = default_modules();
+    $isCollabCourse = Database::get()->querySingle("SELECT is_collaborative FROM course WHERE id = ?d",$cid);
+    if($isCollabCourse->is_collaborative){
+        $module_ids[1] = default_modules_collaboration();
+    }else{
+        $module_ids[1] = default_modules();
+    }
+    
     $module_ids[0] = array_diff(array_keys($modules), $module_ids[1]);
 
     $args = $placeholders = array();
@@ -157,7 +163,7 @@ function default_modules() {
 function default_modules_collaboration() {
 
     // Modules enabled by default in new collaborations
-    $default_module_defaults_collab = array(MODULE_ID_AGENDA, MODULE_ID_LINKS,
+    $default_module_defaults_collab = array(MODULE_ID_SESSION, MODULE_ID_AGENDA, MODULE_ID_LINKS,
         MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE);
 
     if ($def_collab = get_config('default_modules_collaboration')) {

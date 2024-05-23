@@ -6304,3 +6304,4 @@ $langDefaultCategoryHelp = 'Users who are not assigned to any other category are
 $langSameAsYourEmail = 'same as your e-mail address';
 $langCollabInvitation = "Invitation to register for the collaboration";
 $langCollab = "collaboration";
+$langSession = "sessions";
