@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2024-02-19 16:49:59
+// Generated 2024-05-20 11:38:32
 
 $langYes = "Sì";
 $langNo = "No";
@@ -5453,8 +5453,6 @@ $langFCSimulate = "Simulation";
 $langFCProblemSolving = "Problem Solving";
 $langFCMindMap = "Mind Map";
 $langFCEvaluate = "Evaluation";
-$langFCDigitalStorytelling = "Digital Storytelling";
-$langFCSupportingMaterial="Supporting Material";
 $langFlippedEdit = "Edit Flipped Classroom Options";
 $langJustEdited = "You just edited the course titled ";
 $langUnitActivityDeleteConfirm = "Are you sure you want to delete this activity?";
@@ -5730,3 +5728,43 @@ $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';
 $langUserCreated = "New account created successfully!";
+$langUserDeactivated = 'The account of user "%s" has been disabled!';
+$langUserActivated = 'The account of user "%s" has been enabled!';
+$langCASGUnetIdentity = 'Enable GUnet Single-Sign-On Service';
+$langSchoolDepartment = 'School - Faculty';
+$langLocalCategory = 'Local Category';
+$langSchoolDepartmentAssociation = 'Assignment of Schools and Faculties to local categories';
+$langDefaultCategory = 'Default Category';
+$langDefaultCategoryHelp = 'Users who are not assigned to any other category are put in the default category.';
+$langSSOMailAttr = "Profile attribute for e-mail";
+$langSSOGivenNameAttr = "Profile attribute for First Name";
+$langSSOSurnameAttr = "Profile attribute for Last Name";
+$langSSOStudentIDAttr = "Profile attribute for Student ID";
+$langFCDigitalStorytelling = "Digital Storytelling";
+$langFCSupportingMaterial = "Supporting Material";
+$langAddNewAuthMethod = 'Add new authentication mode';
+$langViaOAuth2 = 'authentication via OAuth 2.0';
+$langFilesExists = "Operation not possible.<br>Some files with the same name already exist.<br>";
+$langAvailable = "available";
+$langNoQuestionWeight = "The question does not have a grade";
+$langNoQuestionAnswers = "There are no answers to the question";
+$langNoFileUploaded = "No file was uploaded!";
+$langZoomCreateMeetingError = "An error occurred during zoom meeting creation.";
+$langZoomAccessTokenError = "An error occurred while generating zoom access token.";
+$langZoomUserCreateError = "An error occurred while creating zoom user.";
+$langZoomListUsersError = "Error while fetching zoom users";
+$langZoomUserExistsError = "An error occurred while searching for user with email: ";
+$langZoomUserTypeError = "An error occurred while changing user's type";
+$langZoomUserNotRegistered = "Could not find a registered user using the email: ";
+$langZoomUserNotFound = "User not found";
+$langZoomSuccessRegister = "You registered successfully. Please follow the link in your email.";
+$langShowZoomApiUsers = "Show Zoom Api users";
+$langZoomConnect = "Choose how to connect to the Zoom service";
+$langZoomConnectViaApi = "Via the Zoom API";
+$langZoomConnectNoApi = "Without using the Zoom API";
+$langNoApiCredentials = "API credentials are not set";
+$langEmptyParameter = "Empty parameter";
+$langNoEmptySeats = "No empty seats available";
+$langZoomErrorUserNotFound = "The user was not found in the Zoom account";
+$langFree = "Free";
+$langPaid = "Paid";
