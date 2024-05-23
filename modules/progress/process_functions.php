@@ -614,10 +614,21 @@ function get_certificate_template($template_id) {
  * @return type
  */
 function get_certificate_templates() {
+    global $course_id;
 
     $templates = array();
 
-    $t = Database::get()->queryArray("SELECT id, name FROM certificate_template");
+    if ($course_id) {
+        $t = Database::get()->queryArray("SELECT certificate_template.id, name
+            FROM certificate_template
+            LEFT JOIN course_certificate_template
+                ON certificate_template.id = certificate_template_id
+            WHERE all_courses = 1 OR course_certificate_template.course_id = ?d
+            ORDER BY course_certificate_template.course_id IS NULL, name",
+            $course_id);
+    } else {
+        $t = Database::get()->queryArray("SELECT id, name FROM certificate_template ORDER BY name");
+    }
     foreach ($t as $data) {
         $templates[$data->id] = $data->name;
     }
