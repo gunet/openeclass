@@ -150,7 +150,7 @@ if ($t == 1) { // download gradebook activities results
         $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
     // format `total grade` column
-    $sheet->getCell($columns, 1)->getStyle()->getFont()->setBold(true)->getColor()->setARGB(Color::COLOR_RED);
+    $sheet->getCell([$columns, 1])->getStyle()->getFont()->setBold(true)->getColor()->setARGB(Color::COLOR_RED);
 
 } elseif ($t == 3) { // download gradebook activity results
     $activity_id = $_GET['activity_id'];
