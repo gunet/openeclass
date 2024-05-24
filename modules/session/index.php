@@ -72,15 +72,12 @@ if($is_editor){
 
     if($is_tutor_course){ // is tutor course
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                                                        WHERE visible = ?d
-                                                                        AND course_id = ?d",1,$course_id); 
+                                                                        WHERE course_id = ?d",$course_id); 
                                                                         
     }elseif($is_consultant){// is consultant user
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                                                    WHERE visible = ?d
-                                                                    AND course_id = ?d
-                                                                    AND ( finish > NOW() OR start > NOW() )
-                                                                    AND creator = ?d",1,$course_id,$uid); 
+                                                                    WHERE course_id = ?d
+                                                                    AND creator = ?d",$course_id,$uid); 
     }
 
 }else{// is simple user

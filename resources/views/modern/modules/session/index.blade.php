@@ -3,7 +3,7 @@
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
-            $('#table_individual_session').DataTable({
+            $('#table_sessions').DataTable({
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -123,7 +123,7 @@
                         {{-- is tutor course for all individuals sessions --}}
                         @if($is_tutor_course)
                             @if(count($individuals_group_sessions) > 0)
-                                <table class='table-default' id='table_individual_session'>
+                                <table class='table-default' id='table_sessions'>
                                     <thead>
                                         <tr>
                                             <th>{{ trans('langTitle') }}</th>
@@ -137,20 +137,20 @@
                                     <tbody>
                                         @foreach($individuals_group_sessions as $s)
                                             <tr>
-                                                <td class='@if($s->finish < $current_time) opacity-help @endif'>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
                                                     <a class='link-color' 
                                                         href='{{ $urlAppend }}module/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                         {{ $s->title }}
                                                     </a>
                                                 </td>
-                                                <td class='@if($s->finish < $current_time) opacity-help @endif'>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
                                                     @if($s->type=='one')
                                                         {{ trans('langIndividualSession') }}
                                                     @else
                                                         {{ trans('langGroupSession') }}
                                                     @endif
                                                 </td>
-                                                <td class='@if($s->finish < $current_time) opacity-help @endif'>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
                                                     @if($s->start < $current_time && $current_time < $s->finish)
                                                         {{ trans('langInProgress') }}
                                                     @elseif($current_time < $s->start)
@@ -159,8 +159,8 @@
                                                         {{ trans('langSessionHasExpired') }}
                                                     @endif
                                                 </td>
-                                                <td class='@if($s->finish < $current_time) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
-                                                <td class='@if($s->finish < $current_time) opacity-help @endif'>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
                                                 <td class='text-end'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langEdit'),
@@ -190,7 +190,7 @@
                         @else
                             <h3 class='mb-3'>{{ trans('langMySessions')}}</h3>
                             @if(count($individuals_group_sessions) > 0)
-                                <table class='table-default' id='table_individual_session'>
+                                <table class='table-default' id='table_sessions'>
                                     <thead>
                                         <tr>
                                             <th>{{ trans('langTitle') }}</th>
@@ -204,20 +204,20 @@
                                     <tbody>
                                         @foreach($individuals_group_sessions as $s)
                                             <tr>
-                                                <td>
+                                                <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>
                                                     <a class='link-color' 
                                                         href='{{ $urlAppend }}module/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                         {{ $s->title }}
                                                     </a>
                                                 </td>
-                                                <td>
+                                                <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>
                                                     @if($s->type=='one')
                                                         {{ trans('langIndividualSession') }}
                                                     @else
                                                         {{ trans('langGroupSession') }}
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>
                                                     @if($s->start < $current_time && $current_time < $s->finish)
                                                         {{ trans('langInProgress') }}
                                                     @elseif($current_time < $s->start)
@@ -226,8 +226,8 @@
                                                         {{ trans('langSessionHasExpired') }}
                                                     @endif
                                                 </td>
-                                                <td>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
-                                                <td>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
+                                                <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
+                                                <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
                                                 <td class='text-end'>
                                                     @if($is_consultant)
                                                         {!! action_button(array(
