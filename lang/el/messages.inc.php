@@ -6764,4 +6764,29 @@ $langThisCollabDescriptionIsEmpty = "Η συνεργασία δεν διαθέτ
 $langSameAsYourEmail = 'ίδιο με τη διεύθυνση e-mail σας';
 $langCollabInvitation = "Πρόσκληση εγγραφής στην συνεργασία";
 $langCollab = "Συνεργασία";
+
+/* * ************************************************************************
+ * Session module.
+ * ************************************************************************ */
 $langSession = "Συνεδρίες";
+$langAddSession = "Προσθήκη συνεδρίας";
+$langIndividualSession = "Ατομική συνεδρία";
+$langGroupSession = "Ομαδική συνεδρία";
+$langSelectUser = "Επιλογή χρήστη";
+$langSelectConsultant = "Επιλογή συμβούλου";
+$langAddSessionCompleted = "Η δημιουργία της συνεδρίας ολοκληρώθηκε με επιτυχία";
+$langAddSessionNotCompleted = "Η δημιουργία της συνεδρίας δεν ολοκληρώθηκε";
+$langAddInCorrectDateVal = "Έχετε καταχωρίσει λανθασμένη ημερομηνία λήξης.";
+$langStatement = "Κατάσταση";
+$langIndividualSessions = "Ατομικές συνεδρίες";
+$langGroupSessions = "Ομαδικές συνεδρίες";
+$langInProgress = "Σε εξέλιξη...";
+$langSessionHasNotStarted = "Δεν έχει ξεκινήσει ακόμα...";
+$langSessionHasExpired = "Έχει λήξει!";
+$langLeaveSession = "Αποχώρηση από την συνεδρία";
+$langDelSessionSuccess = "Η συγκεκριμένη συνεδρία διαγράφηκε με επιτυχία";
+$langMySessions = "Οι συνεδρίες μου";
+$langContinueToDelSession = "Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
+$langContinueToLeaveSession = "Θέλετε να αποχωρήσετε από την συγκεκριμένη συνεδρία?";
+$langLeaveSession = "Αποχώρηση από την συνεδρία";
+$langLeaveSessionSuccess = "Αποχωρήσατε με επιτυχία από την συγκεκριμένη συνεδρία";
