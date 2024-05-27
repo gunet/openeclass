@@ -760,8 +760,8 @@ if ($is_editor) {
 }  elseif ($is_course_reviewer) { // course reviewer view
     if (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
-        $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-        $pageName = $work_title_raw;
+        $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
+        $pageName = q($work_title_raw);
         $navigation[] = $works_url;
         show_assignment($id);
     } else {
@@ -779,8 +779,8 @@ if ($is_editor) {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
         } else {
-            $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-            $pageName = $work_title_raw;
+            $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
+            $pageName = q($work_title_raw);
             if (!isset($unit)) {
                 $navigation[] = $works_url;
             }
@@ -791,8 +791,8 @@ if ($is_editor) {
     }
     //call  submit_grade_reviews
     if (isset($_POST['grade_comments_review'])) {
-        $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
-        $pageName = $work_title_raw;
+        $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
+        $pageName = q($work_title_raw);
         if (!isset($unit)) {
             $navigation[] = $works_url;
         }
