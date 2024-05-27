@@ -6304,4 +6304,29 @@ $langDefaultCategoryHelp = 'Users who are not assigned to any other category are
 $langSameAsYourEmail = 'same as your e-mail address';
 $langCollabInvitation = "Invitation to register for the collaboration";
 $langCollab = "collaboration";
-$langSession = "sessions";
+/* * ************************************************************************
+ * Session module.
+ * ************************************************************************ */
+$langSession = "Sessions";
+$langAddSession = "Add session";
+$langIndividualSession = "Individual session";
+$langGroupSession = "Group session";
+$langSelectUser = "User choice";
+$langSelectConsultant = "Selection of consultant";
+$langAddSessionCompleted = "Session creation completed successfully";
+$langAddSessionNotCompleted = "Session creation failed";
+$langAddInCorrectDateVal = "You have entered an incorrect expiry date.";
+$langStatement = "Condition";
+$langIndividualSessions = "Individual sessions";
+$langGroupSessions = "Group sessions";
+$langInProgress = "is active...";
+$langSessionHasNotStarted = "It hasn't started yet...";
+$langSessionHasExpired = "It has expired!";
+$langLeaveSession = "Leave the session";
+$langDelSessionSuccess = "This session was successfully deleted";
+$langMySessions = "My sessions";
+$langContinueToDelSession = "Do you want to proceed with this action?";
+$langContinueToLeaveSession = "Do you want to leave this session?";
+$langLeaveSession = "Leave the session";
+$langLeaveSessionSuccess = "You have successfully abandoned this session";
+$langEditSession = "Edit session";

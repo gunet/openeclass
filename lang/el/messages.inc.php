@@ -6790,3 +6790,4 @@ $langContinueToDelSession = "Θέλετε να προχωρήσετε στην �
 $langContinueToLeaveSession = "Θέλετε να αποχωρήσετε από την συγκεκριμένη συνεδρία?";
 $langLeaveSession = "Αποχώρηση από την συνεδρία";
 $langLeaveSessionSuccess = "Αποχωρήσατε με επιτυχία από την συγκεκριμένη συνεδρία";
+$langEditSession = "Επεξεργασία συνεδρίας";

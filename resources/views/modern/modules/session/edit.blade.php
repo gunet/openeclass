@@ -19,6 +19,21 @@
                 autoclose: true
             });
 
+            if ($('#one_session').is(':checked')){
+                $('#select_one_session').removeClass('d-none');
+                $('#select_one_session').addClass('d-block');
+                $('#select_group_session').removeClass('d-block');
+                $('#select_group_session').addClass('d-none');
+            }
+
+            if ($('#group_session').is(':checked')){
+                $('#select_users_group_session').select2();
+                $('#select_one_session').removeClass('d-block');
+                $('#select_one_session').addClass('d-none');
+                $('#select_group_session').removeClass('d-none');
+                $('#select_group_session').addClass('d-block');
+            }
+
             $('#one_session').on('change',function(){
                 $('#select_one_session').removeClass('d-none');
                 $('#select_one_session').addClass('d-block');
@@ -104,7 +119,7 @@
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
-                                <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method='post'>
+                                <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&session={{ $session_id }}" method='post'>
                                     <fieldset>
 
                                         <div class="form-group">
@@ -115,7 +130,7 @@
                                                         {{ trans('langSelectConsultant') }}
                                                     </option>
                                                     @foreach($creators as $c)
-                                                        <option value='{{ $c->user_id }}' {!! $c->user_id == $uid ? 'selected' : '' !!}>
+                                                        <option value='{{ $c->user_id }}' {!! $c->user_id == $creator ? 'selected' : '' !!}>
                                                             {{ $c->givenname }}&nbsp;{{ $c->surname }}
                                                         </option>
                                                     @endforeach
@@ -135,7 +150,7 @@
                                         <div class="form-group mt-4">
                                             <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle')}}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>
-                                                <input id='title' type='text' name='title' class='form-control'>
+                                                <input id='title' type='text' name='title' class='form-control' value='{{ $title }}'>
                                                 @if(Session::getError('title'))
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('title') !!}</span>
                                                 @endif
@@ -150,13 +165,13 @@
                                         <div class='form-group mt-4'>
                                             <div class="radio">
                                                 <label>
-                                                    <input type='radio' name='session_type' value='one' id='one_session' checked>
+                                                    <input type='radio' name='session_type' value='one' id='one_session' {!! $session_type=='one' ? 'checked' : '' !!}>
                                                     {{ trans('langIndividualSession') }}
                                                 </label>
                                             </div>
                                             <div class="radio mt-2">
                                                 <label>
-                                                    <input type='radio' name='session_type' value='group' id='group_session'>
+                                                    <input type='radio' name='session_type' value='group' id='group_session' {!! $session_type=='group' ? 'checked' : '' !!}>
                                                     {{ trans('langGroupSession') }}
                                                 </label>
                                             </div>
@@ -164,9 +179,11 @@
                                             <p class='control-label-notes mb-0 mt-3'>{{ trans('langSelectUser') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
                                             <div id='select_one_session' class='d-block mt-1'>
                                                 <select name='one_participant' class='form-select'>
-                                                    <option value='' selected>{{ trans('langSelectUser') }}</option>
+                                                    <option value=''>{{ trans('langSelectUser') }}</option>
                                                     @foreach($simple_users as $u)
-                                                        <option value='{{ $u->user_id }}'>{{ $u->givenname }}&nbsp;{{ $u->surname }}</option>
+                                                        <option value='{{ $u->user_id }}' {!! in_array($u->user_id,$participants_arr) ? 'selected' : '' !!}>
+                                                            {{ $u->givenname }}&nbsp;{{ $u->surname }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                                 @if(Session::getError('one_participant'))
@@ -176,7 +193,9 @@
                                             <div id='select_group_session' class='d-none mt-1'>
                                                 <select id='select_users_group_session' name='many_participants[]' class='form-select' multiple>
                                                     @foreach($simple_users as $u)
-                                                        <option value='{{ $u->user_id }}'>{{ $u->givenname }}&nbsp;{{ $u->surname }}</option>
+                                                        <option value='{{ $u->user_id }}' {!! in_array($u->user_id,$participants_arr) ? 'selected' : '' !!}>
+                                                            {{ $u->givenname }}&nbsp;{{ $u->surname }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                                 @if(Session::getError('many_participants'))
@@ -190,7 +209,7 @@
                                             <div class='col-sm-12'>
                                                 <div class='input-group'>
                                                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' id='start_session' name='start_session' type='text'>
+                                                    <input class='form-control mt-0 border-start-0' id='start_session' name='start_session' type='text' value='{{ $start }}'>
                                                 </div>
                                             </div>
                                             @if(Session::getError('start_session'))
@@ -203,7 +222,7 @@
                                             <div class='col-sm-12'>
                                                 <div class='input-group'>
                                                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' id='end_session' name='end_session' type='text'>
+                                                    <input class='form-control mt-0 border-start-0' id='end_session' name='end_session' type='text' value='{{ $finish }}'>
                                                 </div>
                                             </div>
                                             @if(Session::getError('end_session'))
@@ -214,7 +233,7 @@
                                         <div class='form-group mt-4'>
                                             <div class='checkbox'>
                                                 <label class='label-container'>
-                                                    <input type='checkbox' name='session_visible'>
+                                                    <input type='checkbox' name='session_visible' {!! $visible==1 ? 'checked' : '' !!}>
                                                     <span class='checkmark'></span>
                                                     {{ trans('langVisible') }}
                                                 </label>
@@ -225,7 +244,7 @@
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end aling-items-center'>
-                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                                <input class='btn submitAdminBtn' type='submit' name='modify' value='{{ trans('langModify') }}'>
                                             </div>
                                         </div>
 

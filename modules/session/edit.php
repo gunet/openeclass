@@ -38,13 +38,13 @@ require_once 'functions.php';
 $action = new action();
 $action->record(MODULE_ID_SESSION);
 
-$pageName = $langAddSession;
+$pageName = $langEditSession;
 
 load_js('tools.js');
 load_js('select2');
 load_js('bootstrap-datetimepicker');
 
-if(isset($_POST['submit'])){
+if(isset($_POST['modify'])){
   if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
   $v = new Valitron\Validator($_POST);
@@ -80,25 +80,28 @@ if(isset($_POST['submit'])){
     $type_session = $_POST['session_type'];
     $visible_session = (isset($_POST['session_visible']) and $_POST['session_visible']=='on') ? 1 : 0;
 
-    $insert = Database::get()->query("INSERT INTO mod_session SET
+    $insert = Database::get()->query("UPDATE mod_session SET
                                         creator = ?d,
                                         title = ?s,
                                         comments = ?s,
                                         type = ?s,
                                         start = ?t,
                                         finish = ?t,
-                                        visible = ?d,
-                                        course_id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $course_id);
+                                        visible = ?d
+                                        WHERE course_id = ?d
+                                        AND id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $course_id, $_GET['session']);
 
     if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
+      Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
       $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                session_id = ?d,
-                                                participants = ?d", $insert->lastInsertID, $_POST['one_participant']);
+                                                participants = ?d,
+                                                session_id = ?d", $_POST['one_participant'], $_GET['session']);
     }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
+      Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
       foreach($_POST['many_participants'] as $m){
         $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
                                                   session_id = ?d,
-                                                  participants = ?d", $insert->lastInsertID, $m);
+                                                  participants = ?d", $_GET['session'], $m);
       }
     }
 
@@ -109,17 +112,38 @@ if(isset($_POST['submit'])){
     }else{
       Session::flash('message',$langAddSessionNotCompleted);
       Session::flash('alert-class', 'alert-danger');
-      redirect_to_home_page("modules/session/new.php?course=".$course_code);
+      redirect_to_home_page("modules/session/edit.php?course=".$course_code."&session=".$_GET['session']);
     }
     
   }else{
     Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-    redirect_to_home_page("modules/session/new.php?course=".$course_code);
+    redirect_to_home_page("modules/session/edit.php?course=".$course_code."&session=".$_GET['session']);
   }
 
 }
 
+$data['session_id'] = $_GET['session'];
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
+$data['session_info'] = $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$_GET['session']);
+$data['title'] = $session_info->title;
+$data['creator'] = $session_info->creator;
+$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments);
+$data['session_type'] = $session_info->type;
+$startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->start);
+$data['start'] = q($startDate_obj->format('d-m-Y H:i'));
+$endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->finish);
+$data['finish'] = q($endDate_obj->format('d-m-Y H:i'));
+$data['visible'] = $session_info->visible;
+$users_participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
+                                                            WHERE session_id = ?d",$_GET['session']);
+$participants_arr = [];
+if(count($users_participants) > 0){
+    foreach($users_participants as $u){
+        $participants_arr[] = $u->participants;
+    }
+}
+$data['participants_arr'] = $participants_arr;               
+
 if($is_tutor_course){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
@@ -129,7 +153,7 @@ if($is_tutor_course){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }
  
-$data['comments'] = rich_text_editor('comments', 5, 40, '' );
+
 $data['simple_users'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                       LEFT JOIN user ON course_user.user_id=user.id
                                                       WHERE course_user.status = ?d
@@ -148,4 +172,4 @@ $data['action_bar'] = action_bar([
 ], false);
 
 
-view('modules.session.new', $data);
+view('modules.session.edit', $data);

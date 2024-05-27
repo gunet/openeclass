@@ -14,6 +14,7 @@
                     {'bSortable' : false },
                     {'bSortable' : false },
                     {'bSortable' : false },
+                    {'bSortable' : false },
                 ],
                 'order' : [],
                 'oLanguage': {
@@ -126,12 +127,13 @@
                                 <table class='table-default' id='table_sessions'>
                                     <thead>
                                         <tr>
-                                            <th>{{ trans('langTitle') }}</th>
-                                            <th>{{ trans('langType') }}</th>
-                                            <th>{{ trans('langStatement') }}</th>
-                                            <th>{{ trans('langStart') }}</th>
-                                            <th>{{ trans('langFinish') }}</th>
-                                            <th></th>
+                                            <th class='px-2'>{{ trans('langTitle') }}</th>
+                                            <th class='px-2'>{{ trans('langType') }}</th>
+                                            <th class='px-2'>{{ trans('langStatement') }}</th>
+                                            <th class='px-2'>{{ trans('langStart') }}</th>
+                                            <th class='px-2'>{{ trans('langFinish') }}</th>
+                                            <th class='px-2'>{{ trans('langVisible') }}</th>
+                                            <th class='px-2'></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -161,10 +163,17 @@
                                                 </td>
                                                 <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
                                                 <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                    @if(!$s->visible)
+                                                        {{ trans('langNo')}}
+                                                    @else
+                                                        {{ trans('langYes')}}
+                                                    @endif
+                                                </td>
                                                 <td class='text-end'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langEdit'),
-                                                                'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code,
+                                                                'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
                                                                 'icon-class' => "edit-session",
                                                                 'icon' => 'fa-edit'),
                                                         array('title' => trans('langCancel'),
@@ -193,12 +202,13 @@
                                 <table class='table-default' id='table_sessions'>
                                     <thead>
                                         <tr>
-                                            <th>{{ trans('langTitle') }}</th>
-                                            <th>{{ trans('langType') }}</th>
-                                            <th>{{ trans('langStatement') }}</th>
-                                            <th>{{ trans('langStart') }}</th>
-                                            <th>{{ trans('langFinish') }}</th>
-                                            <th></th>
+                                            <th class='px-2'>{{ trans('langTitle') }}</th>
+                                            <th class='px-2'>{{ trans('langType') }}</th>
+                                            <th class='px-2'>{{ trans('langStatement') }}</th>
+                                            <th class='px-2'>{{ trans('langStart') }}</th>
+                                            <th class='px-2'>{{ trans('langFinish') }}</th>
+                                            <th class='px-2'>{{ trans('langVisible') }}</th>
+                                            <th class='px-2'></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -228,11 +238,18 @@
                                                 </td>
                                                 <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
                                                 <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                    @if(!$s->visible)
+                                                        {{ trans('langNo')}}
+                                                    @else
+                                                        {{ trans('langYes')}}
+                                                    @endif
+                                                </td>
                                                 <td class='text-end'>
                                                     @if($is_consultant)
                                                         {!! action_button(array(
                                                             array('title' => trans('langEdit'),
-                                                                    'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code,
+                                                                    'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
                                                                     'icon-class' => "edit-session",
                                                                     'icon' => 'fa-edit'),
                                                             array('title' => trans('langCancel'),
