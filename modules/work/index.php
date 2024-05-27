@@ -5647,12 +5647,12 @@ function show_student_assignments() {
                         $lock_description .= "<li>$langIPUnlock</li>";
                     }
                     $lock_description .= "</ul>";
-                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$lock_description'></span>";
                 }
             }
 
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             $title_temp = q($row->title);
@@ -5821,10 +5821,10 @@ function show_assignments() {
                     $lock_description .= "<li>$langIPUnlock</li>";
                 }
                 $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$lock_description'></span>";
             }
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             if ($row->assign_to_specific == 1) {

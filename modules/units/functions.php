@@ -996,7 +996,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             enable_password_bootbox();
             $class = 'class="password_protected"';
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$lock_description'></span>";
         } else {
             $class = $exclamation_icon = '';
         }
@@ -1071,7 +1071,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if ($exercise->password_lock) {
             enable_password_bootbox();
             $link_class = 'password_protected';
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langPassCode'></span>";
         }
 
         $assign_to_users_message = '';
