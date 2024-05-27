@@ -26,7 +26,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = true;
 $require_editor = true;
 
-include '../../include/init.php';
+include '../../include/baseTheme.php';
 require_once 'functions.php';
 
 if (isset($_GET['t'])) {

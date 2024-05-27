@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,14 +17,14 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_login = TRUE;
 
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'course_calendar.inc.php';
 
-header('Content-Type:text/calendar; charset='.$charset); 
+header('Content-Type:text/calendar; charset='.$charset);
 header("Content-Disposition: attachment; filename=\"mycalendar.ics\"");
 echo icalendar($_GET['c']);

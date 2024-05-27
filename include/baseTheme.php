@@ -25,6 +25,7 @@
  * needs to output to the user's browser must include this file and use
  * the view() or draw() calls to output the UI to the user's browser.
  *
+ *
  */
 use Jenssegers\Blade\Blade;
 $navigation = array();

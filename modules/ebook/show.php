@@ -98,7 +98,7 @@ if (count($path_components) >= 4) {
 define('EBOOK_DOCUMENTS', true);
 $require_current_course = true;
 $guest_allowed = true;
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'template/template.inc.php';
 require_once 'include/action.php';
 require_once 'include/lib/fileDisplayLib.inc.php';

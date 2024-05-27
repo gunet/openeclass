@@ -27,7 +27,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = true;
 $require_course_reviewer = true;
 
-include '../../include/init.php';
+include '../../include/baseTheme.php';
 require_once 'process_functions.php';
 
 if (isset($_GET['certificate_id'])) {

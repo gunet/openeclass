@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_login = TRUE;
@@ -29,7 +29,7 @@ if (!session_id()) {
 if(isset($_SESSION['dbname'])){
     $require_current_course = true;
 }
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'notifications.inc.php';
 
 if(isset($_GET['c']) && isset($_GET['m'])){
@@ -39,9 +39,9 @@ elseif(isset($_GET['c'])){
     $x='c';$res = get_course_notifications($_GET['c']);
 }
 elseif(isset($_GET['m'])){
-   $x='m';$res = get_module_notifications($_GET['m']); 
+   $x='m';$res = get_module_notifications($_GET['m']);
 } else {
-   $x='u';$res = get_user_notifications(); 
+   $x='u';$res = get_user_notifications();
 }
 
 if(!is_null($res)){

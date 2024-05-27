@@ -25,7 +25,7 @@ if (!isset($_GET['uid']) and !isset($_GET['token'])) {
     $require_login = true;
 }
 
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'calendar_events.class.php';
 
 if (empty($require_login)) {

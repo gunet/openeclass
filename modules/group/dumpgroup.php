@@ -25,7 +25,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = true;
 $require_editor = true;
 
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'group_functions.php';
 
 $group_id = intval($_REQUEST['group_id']);
