@@ -22,9 +22,9 @@
 
 // For creating bbb urls & params
 $guest_allow = true;
+require_once '../../include/baseTheme.php';
 require_once 'bbb-api.php';
 require_once 'functions.php';
-require_once '../../include/init.php';
 
 if (isset($_GET['meeting_id'])) {
     $meeting_id = $_GET['meeting_id'];
