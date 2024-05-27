@@ -29,7 +29,7 @@
  * requires output to the user's browser must include this file and use
  * the draw method to output the UI to the user's browser.
  *
- * An exception of this scenario is when the user uses the personalised
+ * An exception to this scenario is when the user uses the personalised
  * interface. In that case function drawPerso needs to be called.
  *
  */

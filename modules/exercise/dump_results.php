@@ -25,7 +25,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = TRUE;
 $require_course_reviewer = TRUE;
 
-require_once '../../include/init.php';
+require_once '../../include/baseTheme.php';
 require_once 'exercise.class.php';
 require_once 'modules/exercise/question.class.php';
 require_once 'modules/exercise/answer.class.php';
