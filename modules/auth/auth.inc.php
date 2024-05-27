@@ -1382,7 +1382,7 @@ function shib_cas_login($type) {
                 'am' => $am]);
 
             if ($type == 'cas') {
-                $cas_settings = unserialize(get_auth_settings(7)['auth_settings']);
+                $cas_settings = @unserialize(get_auth_settings(7)['auth_settings']);
                 if ($cas_settings['cas_gunet'] ?? false) {
                     $options = gunet_idp_hook($options);
                 }
