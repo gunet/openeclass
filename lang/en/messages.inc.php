@@ -6330,3 +6330,6 @@ $langContinueToLeaveSession = "Do you want to leave this session?";
 $langLeaveSession = "Leave the session";
 $langLeaveSessionSuccess = "You have successfully abandoned this session";
 $langEditSession = "Edit session";
+$langCompleteSession = "Session completion";
+$langSessionResourseDeleted = "The resource in this session was deleted successfully!";
+$langNoAvailableSessionRecourses = "There are no resources available in this session";

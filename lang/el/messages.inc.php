@@ -6791,3 +6791,6 @@ $langContinueToLeaveSession = "Θέλετε να αποχωρήσετε από �
 $langLeaveSession = "Αποχώρηση από την συνεδρία";
 $langLeaveSessionSuccess = "Αποχωρήσατε με επιτυχία από την συγκεκριμένη συνεδρία";
 $langEditSession = "Επεξεργασία συνεδρίας";
+$langCompleteSession = "Ολοκλήρωση συνεδρίας";
+$langSessionResourseDeleted = "Ο πόρος στην συγκεκριμένη συνεδρία διαγράφηκε επιτυχώς!";
+$langNoAvailableSessionRecourses = "Δεν υπάρχουν διαθέσιμοι πόροι στην συγκεκριμένη συνεδρία";

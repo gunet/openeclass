@@ -32,13 +32,10 @@ $helpTopic = 'course_sessions';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-require_once 'include/action.php';
 require_once 'functions.php';
 
-$action = new action();
-$action->record(MODULE_ID_SESSION);
-
 $pageName = $langEditSession;
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
 load_js('tools.js');
 load_js('select2');

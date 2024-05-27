@@ -141,7 +141,7 @@
                                             <tr>
                                                 <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
                                                     <a class='link-color' 
-                                                        href='{{ $urlAppend }}module/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
+                                                        href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                         {{ $s->title }}
                                                     </a>
                                                 </td>
@@ -197,7 +197,6 @@
 
                         {{-- is consultant user or simple user for their individuals sessions --}}
                         @else
-                            <h3 class='mb-3'>{{ trans('langMySessions')}}</h3>
                             @if(count($individuals_group_sessions) > 0)
                                 <table class='table-default' id='table_sessions'>
                                     <thead>
@@ -216,7 +215,7 @@
                                             <tr>
                                                 <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>
                                                     <a class='link-color' 
-                                                        href='{{ $urlAppend }}module/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
+                                                        href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                         {{ $s->title }}
                                                     </a>
                                                 </td>

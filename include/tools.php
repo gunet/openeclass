@@ -207,8 +207,8 @@ function lessonToolsMenu(bool $rich=true): array
                     $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                $sideMenuText[] = '<strong class=>' . q($modules[$mid]['title']) .
-                    "<span class='badge Neutral-900-bg rounded-circle float-end mt-1 d-flex justify-content-center align-items-center'>$new_docs</span></strong>";
+                $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
+                    "<span class='badge Neutral-900-bg rounded-circle float-end mt-1 d-flex justify-content-center align-items-center'>$new_docs</span></b>";
             } else {
                 $sideMenuText[] = q($modules[$mid]['title']);
             }
