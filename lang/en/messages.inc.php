@@ -6333,3 +6333,6 @@ $langEditSession = "Edit session";
 $langCompleteSession = "Session completion";
 $langSessionResourseDeleted = "The resource in this session was deleted successfully!";
 $langNoAvailableSessionRecourses = "There are no resources available in this session";
+$langResourceCompleted = "The resource updated successfully";
+$langAddResource = "Add resource";
+$langEditResource = "Edit resource";

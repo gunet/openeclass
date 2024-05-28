@@ -22,7 +22,12 @@
 
  
 function is_tutor_course($cid,$userId){
+    global $is_admin, $is_departmentmanage_user, $is_power_user;
+
     $result = Database::get()->querySingle("SELECT tutor FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
+    if($is_admin or $is_departmentmanage_user or $is_power_user){
+        $result->tutor = 1;
+    }
     return $result->tutor;
 }
 
@@ -204,6 +209,7 @@ function show_session_resources($sid)
         $req = Database::get()->queryArray("SELECT * FROM session_resources WHERE session_id = ?d AND `order` >= 0 ORDER BY `order`", $sid);
 
         if (count($req) > 0) {
+            load_js('sortable/Sortable.min.js');
             load_js('screenfull/screenfull.min.js');
             $head_content .= "<script>
             $(document).ready(function(){
@@ -564,7 +570,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     } else {
         $res_type_to_session_compl = false;
     }
-    if (!$is_editor) {
+    //if (!$is_editor) {
         // if (prereq_unit_has_completion_enabled($_GET['id'])) {
         //     $activity_result = unit_resource_completion($_GET['id'], $resource_id);
         //     switch ($activity_result) {
@@ -585,7 +591,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
         // } else {
         //     return '';
         // }
-    }
+    //}
 
     if ($res_type == 'description') {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
@@ -593,7 +599,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     } else {
         $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
         $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
-        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;edit=$resource_id";
+        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;editResource=$resource_id";
     }
 
     //$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
@@ -606,10 +612,10 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                 <div>";
 
         $content .= action_button(array(
-                // array('title' => $langEditChange,
-                //       'url' => $edit_link,
-                //       'icon' => 'fa-edit',
-                //       'show' => $status != 'del'),
+                array('title' => $langEditChange,
+                      'url' => $edit_link,
+                      'icon' => 'fa-edit',
+                      'show' => $status != 'del'),
                 // array('title' => $showorhide,
                 //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                 //       'icon' => $icon_vis,

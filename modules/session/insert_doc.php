@@ -93,7 +93,7 @@ function list_documents($sid) {
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }
-        $tool_content .= "<form action='session_space.php?course=$course_code&session=$sid' method='post'><input type='hidden' name='id' value='$sid' />" .
+        $tool_content .= "<form action='resource.php?course=$course_code&session=$sid' method='post'><input type='hidden' name='id' value='$sid' />" .
                 "<div class='table-responsive'><table class='table-default'>";
         if( !empty($path)) {
         $tool_content .=

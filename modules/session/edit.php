@@ -34,8 +34,10 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
 
+$sessionTitle = title_session($course_id,$_GET['session']);
 $pageName = $langEditSession;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
+$navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $_GET['session'] , 'name' => $sessionTitle);
 
 load_js('tools.js');
 load_js('select2');

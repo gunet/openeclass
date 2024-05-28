@@ -85,17 +85,17 @@
                                         'icon' => 'fa fa-gear',
                                         'button-class' => 'btn-success'),
                                     array('title' => trans('langSelect') . ' ' . trans('langInsertDoc'),
-                                        'url' => $urlAppend . 'modules/session/session_space.php?course=' . $course_code . '&session=' . $session_id . '&type=doc',
+                                        'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $session_id . '&type=doc',
                                         'icon' => 'fa fa-folder',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_DOCS)),
                                     array('title' => trans('langSelect') . ' ' . trans('langInsertWork'),
-                                        'url' => $urlAppend . 'modules/session/session_space.php?course=' . $course_code . '&session=' . $session_id . '&type=work',
+                                        'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $session_id . '&type=work',
                                         'icon' => 'fa fa-upload',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_ASSIGN)),
                                     array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeeting'),
-                                        'url' => $urlAppend . 'modules/session/session_space.php?course=' . $course_code . '&session=' . $session_id . '&type=tc',
+                                        'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $session_id . '&type=tc',
                                         'icon' => 'fa fa-exchange',
                                         'level' => 'secondary',
                                         'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
@@ -103,83 +103,86 @@
                             !!}
 
                             <div class='mt-4'>
-
-                            @if(count($all_session) > 0)
-                                <div class='col-12'>
-                                    <div class="card panelCard card-units px-lg-4 py-lg-3 p-3">
-                                        <div class='card-body p-0'>
-                                            <ul class="tree-units">
-                                                <li>
-                                                    <details open>
-                                                        <summary><h3 class='mb-0'>{{ trans('langSession')}}</h3></summary>
-                                                        <ul>
-                                                            @foreach ($all_session as $cu)
-                                                                <li>
-                                                                    <a class='TextBold @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'
-                                                                        href='{{ $urlServer }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $cu->id }}'>
-                                                                        {{ $cu->title }}
-                                                                    </a>
-                                                                    <br>
-                                                                    @if (!is_null($cu->start))
-                                                                        <small>
-                                                                            <span class='help-block @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'>
-                                                                                {{ trans('langStart')}}:&nbsp;{!! format_locale_date(strtotime($cu->start), 'short', false) !!} &nbsp;&nbsp; -- &nbsp;&nbsp;
-                                                                                {{ trans('langEnd')}}:&nbsp;{!! format_locale_date(strtotime($cu->finish), 'short', false) !!} </br>
-                                                                            </span>
-                                                                        </small>
-                                                                    @endif
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </details>
-                                                </li>
-                                            </ul>
+                                @if(count($all_session) > 0)
+                                    <div class='col-12'>
+                                        <div class="card panelCard card-units px-lg-4 py-lg-3 p-3">
+                                            <div class='card-body p-0'>
+                                                <ul class="tree-units">
+                                                    <li>
+                                                        <details open>
+                                                            <summary><h3 class='mb-0'>{{ trans('langSession')}}</h3></summary>
+                                                            <ul>
+                                                                @foreach ($all_session as $cu)
+                                                                    <li>
+                                                                        <a class='TextBold @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'
+                                                                            href='{{ $urlServer }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $cu->id }}'>
+                                                                            {{ $cu->title }}
+                                                                        </a>
+                                                                        <br>
+                                                                        @if (!is_null($cu->start))
+                                                                            <small>
+                                                                                <span class='help-block @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'>
+                                                                                    {{ trans('langStart')}}:&nbsp;{!! format_locale_date(strtotime($cu->start), 'short', false) !!} &nbsp;&nbsp; -- &nbsp;&nbsp;
+                                                                                    {{ trans('langEnd')}}:&nbsp;{!! format_locale_date(strtotime($cu->finish), 'short', false) !!} </br>
+                                                                                </span>
+                                                                            </small>
+                                                                        @endif
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
-
+                                @endif
                             </div>
                         @endif
                     </div>
-
-                    @if($is_editor)
-                        <div class='col-12 mt-4'>
-                            {!! $type_resource !!}
-                        </div>
-                    @endif
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>{{ $pageName }}</h3>
-                               {{-- 
-                                @if($course_start_week or $course_finish_week)
-                                    <div>
-                                        <small>{{ $course_start_week }}&nbsp;{{ $course_finish_week }}</small>
-                                    </div>
-                                @endif 
-                                --}}
+                                <a class='link-color' data-bs-toggle='modal' data-bs-target='#session-participants'>
+                                    {{ trans('langParticipants') }}
+                                </a>
                             </div>
                             <div class="card-body">
-                                {{-- 
-                                    <div>
-                                        {!! $comments !!}
-                                    </div> 
-                                --}}
-                                <div class='unit-resources mt-3'>
-                                    {!! $tool_content_sessions !!}
-                                </div>
+                                {!! $tool_content_sessions !!}
                             </div>
                         </div>
                     </div>
-
 
                 </div>
             </div>
 
         </div>
     
+    </div>
+</div>
+
+
+
+<div class='modal fade' id='session-participants' tabindex='-1' role='dialog' aria-labelledby='ParticipantsLabel' aria-hidden='true'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <div class='modal-title' id='ParticipantsLabel'>{{ trans('langParticipants') }}</div>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <div class='col-12'>
+                    <ul>
+                        @foreach($participants as $p)
+                            <li class='mb-2'>{!! display_user($p->participants, false, false, '', $course_code) !!}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

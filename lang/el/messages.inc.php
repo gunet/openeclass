@@ -6794,3 +6794,6 @@ $langEditSession = "Επεξεργασία συνεδρίας";
 $langCompleteSession = "Ολοκλήρωση συνεδρίας";
 $langSessionResourseDeleted = "Ο πόρος στην συγκεκριμένη συνεδρία διαγράφηκε επιτυχώς!";
 $langNoAvailableSessionRecourses = "Δεν υπάρχουν διαθέσιμοι πόροι στην συγκεκριμένη συνεδρία";
+$langResourceCompleted = "Ο πόρος ενημερώθηκε επιτυχώς";
+$langAddResource = "Προσθήκη πόρου";
+$langEditResource = "Επεξεργασία πόρου";

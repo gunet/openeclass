@@ -11,7 +11,7 @@ function list_assignment($sid) {
     if (count($result) == 0) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     } else {
-        $tool_content .= "<form action='session_space.php?course=$course_code&session=$sid' method='post'>" .
+        $tool_content .= "<form action='resource.php?course=$course_code&session=$sid' method='post'>" .
                 "<input type='hidden' name='id' value='$sid'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
