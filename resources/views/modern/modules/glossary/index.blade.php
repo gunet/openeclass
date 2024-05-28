@@ -118,17 +118,12 @@
                                                                     !!}
                                                                 </div>
                                                             @endif
-
                                                         </div>
                                                         <div class="card-body">
                                                             <p class="card-text">
                                                                 <p class='mb-0 TextBold'>{{ trans('langGlossaryDefinition') }}</p>
                                                                 <p class='small-text'>
-                                                                    @if(!empty($glossary_term->definition))
-                                                                        {!! $glossary_term->definition !!}
-                                                                    @else
-                                                                        {{ trans('langNoInfoAvailable') }}
-                                                                    @endif
+                                                                    {{ $glossary_term->definition }}
                                                                 </p>
                                                             </p>
                                                             <p class="card-text mt-3">
@@ -165,8 +160,6 @@
                                                                     @endif
                                                                 </p>
                                                             </p>
-
-
                                                         </div>
                                                         <div class='card-footer d-flex justify-content-center align-items-center border-0 mb-2'>
 

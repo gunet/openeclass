@@ -6,14 +6,14 @@
         <div class='{{ $container }} module-container py-lg-0'>
                 <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-                    <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+                    <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                         <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                             @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                         </div>
                     </div>
 
                     <div class="col_maincontent_active">
-                        
+
                             <div class="row">
 
                                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -27,22 +27,22 @@
                                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                                     </div>
                                 </div>
-                                
-                                        
+
+
                                 @include('layouts.partials.legend_view')
-                                
+
                                 {!! $action_bar !!}
-                                
+
                                 <div class='d-lg-flex gap-4 mt-4'>
                                         <div class='flex-grow-1'>
                                     <div class='form-wrapper form-edit rounded'>
                                         <form role='form' action='{{ $edit_url }}' method='post'>
 
                                                 @if(isset($glossary_item))
-                                                <input type='hidden' name='id' value='{{ getIndirectReference($glossary_item->id) }}'>                
+                                                <input type='hidden' name='id' value='{{ getIndirectReference($glossary_item->id) }}'>
                                                 @endif
 
-                                            
+
                                                 <div class='form-group{{ Session::getError('term') ? " has-error" : "" }}'>
                                                     <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryTerm') }} </label>
                                                     <div class='col-sm-12'>
@@ -55,7 +55,7 @@
                                                     <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryDefinition') }} </label>
                                                     <div class='col-sm-12'>
                                                         <textarea name="definition" placeholder="{{ trans('langGiveText') }}" rows="4" cols="60" class="form-control">{{ $definition }}</textarea>
-                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('definition') }}</span>    
+                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('definition') }}</span>
                                                     </div>
                                                 </div>
 
@@ -63,7 +63,7 @@
                                                     <label for='url' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryUrl') }} </label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' placeholder="{{ trans('langGlossaryUrl') }}" class='form-control' id='url' name='url' value='{{ $url }}'>
-                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('url') }}</span>     
+                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('url') }}</span>
                                                     </div>
                                                 </div>
 
@@ -76,32 +76,32 @@
 
                                                 <div class="mt-4">{!! isset($category_selection) ? $category_selection : "" !!}</div>
 
-                                                                                    
-                                                <div class='form-group mt-5'>    
+
+                                                <div class='form-group mt-5'>
                                                     <div class='col-12 d-flex justify-content-end align-items-center'>
                                                         {!! $form_buttons !!}
                                                         <a class='btn cancelAdminBtn ms-1' href="{{$base_url}}">{{trans('langCancel')}}</a>
                                                     </div>
                                                 </div>
-                                                
-                                        
+
+
                                             {!! generate_csrf_token_form_field() !!}
-                                            
+
                                         </form>
                                     </div>
                                 </div><div class='d-none d-lg-block'>
                             <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
                         </div>
                         </div>
-                                            
-                                        
-                                 
+
+
+
                             </div>
-                       
+
                     </div>
                 </div>
-            
-        </div>            
-        </div>         
+
+        </div>
+        </div>
 @endsection
 

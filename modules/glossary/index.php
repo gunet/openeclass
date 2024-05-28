@@ -137,7 +137,6 @@ if ($is_editor) {
                                            glossary_index = ?d WHERE id = ?d"
                 , $expand_glossary, (isset($_POST['index']) ? 1 : 0), $course_id);
         invalidate_glossary_cache();
-        //Session::Messages($langQuotaSuccess, 'alert-success');
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/glossary/index.php?course=$course_code");
@@ -207,7 +206,6 @@ if ($is_editor) {
 
             if ($q and $q->affectedRows) {
                 invalidate_glossary_cache();
-                //Session::Messages($success_message, 'alert-success');
                 Session::flash('message',$success_message);
                 Session::flash('alert-class', 'alert-success');
             }
@@ -278,7 +276,7 @@ if ($is_editor) {
             }
             $submit_value = $langModify;
         }
-        $data['term'] = Session::has('term') ? Session::get('term') : ( isset($_GET['add']) ? "" : q($glossary_item->term) );
+        $data['term'] = Session::has('term') ? Session::get('term') : ( isset($_GET['add']) ? "" : $glossary_item->term);
         $data['url'] = Session::has('url') ? Session::get('url') : ( isset($_GET['add']) ? "" : q($glossary_item->url) );
         $data['definition'] = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $glossary_item->definition );
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $glossary_item->notes );

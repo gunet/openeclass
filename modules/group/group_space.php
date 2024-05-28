@@ -41,7 +41,6 @@ if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['grou
 }
 
 if (!is_group_visible($group_id, $course_id) and !$is_editor) {
-    //Session::Messages($langForbidden, 'alert-danger');
     Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -59,7 +58,6 @@ $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
 if ((!$is_editor) and ($status != USER_GUEST)) {
     if (!$is_member and !$self_reg) { // check if we are group member
-        //Session::Messages($langForbidden, 'alert-danger');
         Session::flash('message',$langForbidden);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -80,12 +78,10 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array( 'uid' => $uid, 'name' => $group));
 
-            //Session::Messages($langGroupNowMember, 'alert-success');
             Session::flash('message',$langGroupNowMember);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
         } else {
-            //Session::Messages($langForbidden, 'alert-danger');
             Session::flash('message',$langForbidden);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -99,12 +95,10 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid, 'name' => $group));
 
-            //Session::Messages($langGroupNowNotMember, 'alert-success');
             Session::flash('message',$langGroupNowNotMember);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         } else {
-           // Session::Messages($langForbidden, 'alert-danger');
             Session::flash('message',$langForbidden);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -244,12 +238,6 @@ if (isset($_GET['group_as'])) {
         }
     }
 
-    // if ($tutors) {
-    //     $tool_content_tutor = implode(', ', $tutors);
-    // } else {
-    //     $tool_content_tutor = $langNoInfoAvailable;
-    // }
-
     $group_description = trim($group_description);
     if (empty($group_description)) {
         $tool_content_description = $langNoInfoAvailable;
@@ -263,10 +251,9 @@ if (isset($_GET['group_as'])) {
                 <div class='col-xl-7 col-lg-6 col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$group_name</h3>
+                            <h3>" . q($group_name) . "</h3>
                         </div>
-                        <div class='card-body'>
-                        
+                        <div class='card-body'>                        
                                 <p class='form-label'>$langGroupTutor</p>";
                                 if($tutors){
                                     $tool_content .= "<ul>";
@@ -277,8 +264,7 @@ if (isset($_GET['group_as'])) {
                                 }else{
                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                 }
-               $tool_content .= "                            
-                                <p class='form-label mt-4'>$langDescription</p>
+               $tool_content .= "<p class='form-label mt-4'>$langDescription</p>
                                 <p class='small-text'>$tool_content_description</p>
                                 <div class='card-footer d-flex justify-content-end align-items-center border-0 pb-3'>";
                             if ($max_members > 0) {

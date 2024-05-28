@@ -35,7 +35,7 @@ require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
 
-$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
@@ -63,7 +63,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     if($theme_id > 0){
         echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
     }
-    
+
     echo "<script>
     
 </script>
@@ -138,7 +138,6 @@ $lp_comment = $q->comment;
 // build_display_element_list return an 1-level array where children is the deep of the module
 
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
-$i = 0;
 $is_blocked = false;
 
 // look for maxDeep
@@ -152,9 +151,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
 // -------------------------- learning path list header ----------------------------
-
-echo "<ul><li class='category'>$lp_name</li>";
-
+echo "<ul><li class='category'>" . q($lp_name) . "</li>";
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
