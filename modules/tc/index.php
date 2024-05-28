@@ -375,7 +375,7 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                     }
                 }
-            } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
+            } elseif ($serv->type == 'jitsi') { // if tc server is `jitsi`
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
                 $course_user = Database::get()->querySingle("SELECT * FROM course_user 
@@ -396,7 +396,7 @@ elseif(isset($_GET['choice']))
                 } else {
                     header("Location: " . rtrim($serv->hostname, '/') . $sess->meeting_id  . '/?pwd=' . $sess->mod_pw);
                 }
-            } elseif ($serv->type == 'webex') { // webex
+            } elseif ($serv->type == 'webex' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // WebEx or 'Google Meet' or 'Microsoft Teams'
                 header("Location: " . $sess->meeting_id);
             }
             break;
