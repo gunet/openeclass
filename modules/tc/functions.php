@@ -163,8 +163,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $options = NULL;
             $options_show = "";
         }
-        $google_meet_link = ($tc_type == 'googlemeet') ? "https://meet.google.com/" . $row->meeting_id : '';
-        $microsoft_teams_link = ($tc_type == 'microsoftteams') ? "https://teams.live.com/" . $row->meeting_id : '';
+        $google_meet_link = $microsoft_teams_link = $row->meeting_id;
         if ($tc_type == 'zoom') {
             $zoom_link = $row->meeting_id . "?pwd=" . $row->mod_pw;
         }
@@ -1018,7 +1017,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '' , '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'googlemeet') {
-            $meeting_id = preg_replace('/http(s|):\/\/meet.google.com\//', '', $options);
+            $meeting_id = $options;
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1040,7 +1039,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '', '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'microsoftteams') {
-            $meeting_id = preg_replace('/http(s|):\/\/teams.live.com\//', '', $options);
+            $meeting_id = $options;
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
