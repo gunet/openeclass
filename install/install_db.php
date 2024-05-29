@@ -2494,6 +2494,7 @@ $db->query("CREATE TABLE `mod_session` (
         `title` VARCHAR(255) NOT NULL DEFAULT '',
         `comments` MEDIUMTEXT,
         `type` VARCHAR(255) NOT NULL DEFAULT '',
+        `type_remote` int(11) NOT NULL DEFAULT 0,
         `start` DATETIME DEFAULT NULL,
         `finish` DATETIME DEFAULT NULL,
         `visible` TINYINT(4),

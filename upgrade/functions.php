@@ -3026,6 +3026,7 @@ function upgrade_to_4_0($tbl_options): void {
             `title` VARCHAR(255) NOT NULL DEFAULT '',
             `comments` MEDIUMTEXT,
             `type` VARCHAR(255) NOT NULL DEFAULT '',
+            `type_remote` int(11) NOT NULL DEFAULT 0,
             `start` DATETIME DEFAULT NULL,
             `finish` DATETIME DEFAULT NULL,
             `visible` TINYINT(4),
@@ -3058,6 +3059,10 @@ function upgrade_to_4_0($tbl_options): void {
                                 `date` DATETIME NOT NULL,
                                 PRIMARY KEY(id),
                                 FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('mod_session', 'type_remote')) {
+        Database::get()->query("ALTER TABLE mod_session ADD `type_remote` int(11) NOT NULL DEFAULT 0");
     }
 
 }

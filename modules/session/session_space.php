@@ -59,6 +59,13 @@ $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('session_resources', null, null, $_POST['toReorder'], isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+    }
+    exit;
+}
+
 if(isset($_GET['editResource'])){
     $resourse_id = $_GET['editResource'];
     redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$session_id."&resource_id=".$resourse_id);
@@ -76,10 +83,12 @@ $data['tool_content_sessions'] = show_session_resources($session_id);
 if($is_editor){
     if($is_consultant){
         $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
-                                    WHERE course_id = ?d AND creator = ?d",$course_id,$uid);
+                                    WHERE course_id = ?d AND creator = ?d
+                                    ORDER BY start ASC",$course_id,$uid);
     }elseif($is_tutor_course){
         $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
-                                                WHERE course_id = ?d",$course_id);
+                                                WHERE course_id = ?d
+                                                ORDER BY start ASC",$course_id);
     }
 }else{// is simple user
     $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session
@@ -87,7 +96,8 @@ if($is_editor){
                                                     AND course_id = ?d
                                                     AND ( finish > NOW() OR start > NOW() )
                                                     AND id IN (SELECT session_id FROM mod_session_users
-                                                                WHERE participants = ?d)",1,$course_id,$uid); 
+                                                                WHERE participants = ?d)
+                                                    ORDER BY start ASC",1,$course_id,$uid); 
 
     $data['action_bar'] = action_bar([
         [ 'title' => $langBack,

@@ -145,7 +145,7 @@ if ($is_editor) {
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif(isset($_POST['add_assignment'])) { // add assignment activity in certificate
-        add_assignment_to_certificate($element, $element_id);
+        add_assignment_to_certificate($element, $element_id, AssignmentEvent::ACTIVITY);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");

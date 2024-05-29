@@ -76,6 +76,7 @@ if(isset($_POST['submit'])){
     $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
     $type_session = $_POST['session_type'];
     $visible_session = (isset($_POST['session_visible']) and $_POST['session_visible']=='on') ? 1 : 0;
+    $type_remote = $_POST['type_remote'];
 
     $insert = Database::get()->query("INSERT INTO mod_session SET
                                         creator = ?d,
@@ -85,7 +86,8 @@ if(isset($_POST['submit'])){
                                         start = ?t,
                                         finish = ?t,
                                         visible = ?d,
-                                        course_id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $course_id);
+                                        course_id = ?d,
+                                        type_remote = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $course_id, $type_remote);
 
     if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
       $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 

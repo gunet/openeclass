@@ -7,7 +7,7 @@
                     format: 'dd-mm-yyyy hh:ii',
                     pickerPosition: 'bottom-right',
                     language: '{{ $language }}',
-                    minuteStep: 10,
+                    minuteStep: 5,
                     autoclose: true
                 });
 
@@ -15,7 +15,7 @@
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
                 language: '{{ $language }}',
-                minuteStep: 10,
+                minuteStep: 5,
                 autoclose: true
             });
 
@@ -228,6 +228,14 @@
                                             @if(Session::getError('end_session'))
                                                 <span class='help-block Accent-200-cl'>{!! Session::getError('end_session') !!}</span>
                                             @endif
+                                        </div>
+
+                                        <div class='form-group mt-4'>
+                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</p>
+                                            <select class='form-select' name='type_remote'>
+                                                <option value='0' {!! $type_remote==0 ? 'selected' : '' !!}>{{ trans('langNotRemote') }}</option>
+                                                <option value='1' {!! $type_remote==1 ? 'selected' : '' !!}>{{ trans('langRemote') }}</option>
+                                            </select>
                                         </div>
 
                                         <div class='form-group mt-4'>

@@ -78,6 +78,7 @@ if(isset($_POST['modify'])){
     $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
     $type_session = $_POST['session_type'];
     $visible_session = (isset($_POST['session_visible']) and $_POST['session_visible']=='on') ? 1 : 0;
+    $type_remote = $_POST['type_remote'];
 
     $insert = Database::get()->query("UPDATE mod_session SET
                                         creator = ?d,
@@ -86,9 +87,10 @@ if(isset($_POST['modify'])){
                                         type = ?s,
                                         start = ?t,
                                         finish = ?t,
-                                        visible = ?d
+                                        visible = ?d,
+                                        type_remote = ?d
                                         WHERE course_id = ?d
-                                        AND id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $course_id, $_GET['session']);
+                                        AND id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $type_remote, $course_id, $_GET['session']);
 
     if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
       Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
@@ -133,6 +135,7 @@ $data['start'] = q($startDate_obj->format('d-m-Y H:i'));
 $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->finish);
 $data['finish'] = q($endDate_obj->format('d-m-Y H:i'));
 $data['visible'] = $session_info->visible;
+$data['type_remote'] = $session_info->type_remote;
 $users_participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
                                                             WHERE session_id = ?d",$_GET['session']);
 $participants_arr = [];

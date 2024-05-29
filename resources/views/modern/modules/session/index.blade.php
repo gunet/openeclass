@@ -8,7 +8,8 @@
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'aoColumns': [
-                    {'bSortable' : false, 'sWidth': '20%' },
+                    {'bSortable' : false },
+                    {'bSortable' : false },
                     {'bSortable' : false },
                     {'bSortable' : false },
                     {'bSortable' : false },
@@ -128,7 +129,8 @@
                                     <thead>
                                         <tr>
                                             <th class='px-2'>{{ trans('langTitle') }}</th>
-                                            <th class='px-2'>{{ trans('langType') }}</th>
+                                            <th class='px-2'>{{ trans('langSSession') }}</th>
+                                            <th class='px-2'>{{ trans('langTypeRemote') }}</th>
                                             <th class='px-2'>{{ trans('langStatement') }}</th>
                                             <th class='px-2'>{{ trans('langStart') }}</th>
                                             <th class='px-2'>{{ trans('langFinish') }}</th>
@@ -147,9 +149,16 @@
                                                 </td>
                                                 <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
                                                     @if($s->type=='one')
-                                                        {{ trans('langIndividualSession') }}
+                                                        {{ trans('langIndividualS') }}
                                                     @else
-                                                        {{ trans('langGroupSession') }}
+                                                        {{ trans('langGroupS') }}
+                                                    @endif
+                                                </td>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                    @if($s->type_remote)
+                                                        {{ trans('langRemote') }}
+                                                    @else
+                                                        {{ trans('langNotRemote') }}
                                                     @endif
                                                 </td>
                                                 <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
@@ -202,7 +211,8 @@
                                     <thead>
                                         <tr>
                                             <th class='px-2'>{{ trans('langTitle') }}</th>
-                                            <th class='px-2'>{{ trans('langType') }}</th>
+                                            <th class='px-2'>{{ trans('langSSession') }}</th>
+                                            <th class='px-2'>{{ trans('langTypeRemote') }}</th>
                                             <th class='px-2'>{{ trans('langStatement') }}</th>
                                             <th class='px-2'>{{ trans('langStart') }}</th>
                                             <th class='px-2'>{{ trans('langFinish') }}</th>
@@ -221,9 +231,16 @@
                                                 </td>
                                                 <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>
                                                     @if($s->type=='one')
-                                                        {{ trans('langIndividualSession') }}
+                                                        {{ trans('langIndividualS') }}
                                                     @else
-                                                        {{ trans('langGroupSession') }}
+                                                        {{ trans('langGroupS') }}
+                                                    @endif
+                                                </td>
+                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                    @if($s->type_remote)
+                                                        {{ trans('langRemote') }}
+                                                    @else
+                                                        {{ trans('langNotRemote') }}
                                                     @endif
                                                 </td>
                                                 <td class='@if($is_consultant && ($s->finish < $current_time or !$s->visible)) opacity-help @endif'>

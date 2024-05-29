@@ -38,6 +38,9 @@ require_once 'functions.php';
 $action = new action();
 $action->record(MODULE_ID_SESSION);
 
+load_js('tools.js');
+load_js('datatables');
+
 $pageName = $langSession;
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
@@ -72,12 +75,14 @@ if($is_editor){
 
     if($is_tutor_course){ // is tutor course
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                                                        WHERE course_id = ?d",$course_id); 
+                                                                        WHERE course_id = ?d
+                                                                        ORDER BY start ASC",$course_id); 
                                                                         
     }elseif($is_consultant){// is consultant user
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                     WHERE course_id = ?d
-                                                                    AND creator = ?d",$course_id,$uid); 
+                                                                    AND creator = ?d
+                                                                    ORDER BY start ASC",$course_id,$uid); 
     }
 
 }else{// is simple user
@@ -95,7 +100,8 @@ if($is_editor){
                                                                     AND course_id = ?d
                                                                     AND ( finish > NOW() OR start > NOW() )
                                                                     AND id IN (SELECT session_id FROM mod_session_users
-                                                                                WHERE participants = ?d)",1,$course_id,$uid); 
+                                                                                WHERE participants = ?d)
+                                                                    ORDER BY start ASC",1,$course_id,$uid); 
 }
 
 view('modules.session.index', $data);

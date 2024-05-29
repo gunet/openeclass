@@ -113,7 +113,7 @@
                                                             <summary><h3 class='mb-0'>{{ trans('langSession')}}</h3></summary>
                                                             <ul>
                                                                 @foreach ($all_session as $cu)
-                                                                    <li>
+                                                                    <li class='@if($cu->finish < $current_time or !$cu->visible) opacity-help @endif'>
                                                                         <a class='TextBold @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'
                                                                             href='{{ $urlServer }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $cu->id }}'>
                                                                             {{ $cu->title }}
@@ -126,6 +126,13 @@
                                                                                     {{ trans('langEnd')}}:&nbsp;{!! format_locale_date(strtotime($cu->finish), 'short', false) !!} </br>
                                                                                 </span>
                                                                             </small>
+                                                                        @endif
+                                                                        @if($cu->finish < $current_time or !$cu->visible) 
+                                                                            @if($cu->finish < $current_time)
+                                                                                <span class='badge Accent-200-bg'>{{ trans('langHasExpired') }}</span>
+                                                                            @elseif(!$cu->visible)
+                                                                                <span class='badge Accent-200-bg'>{{ trans('langNotDisplay') }}</span>
+                                                                            @endif
                                                                         @endif
                                                                     </li>
                                                                 @endforeach
