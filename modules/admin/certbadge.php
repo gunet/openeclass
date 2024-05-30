@@ -24,9 +24,37 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
+load_js('select2');
+
+$head_content .= "<script type='text/javascript'>
+$(document).ready(function() {   
+    $('#select-courses').select2();
+    $('#selectAll').click(function(e) {
+        e.preventDefault();
+        var stringVal = [];
+        $('#select-courses').find('option').each(function(){
+            stringVal.push($(this).val());
+        });
+        $('#select-courses').val(stringVal).trigger('change');
+    });
+    $('#removeAll').click(function(e) {
+        e.preventDefault();
+        var stringVal = [];
+        $('#select-courses').val(stringVal).trigger('change');
+    });
+    $('#allCourses').click(function(e) {
+        var sc = $('#select-courses');
+        e.preventDefault();
+        if (!sc.find('option[value=0]').length) {
+            sc.prepend('<option value=\"0\">" . js_escape($langToAllCourses) . "</option>');
+        }
+        $('#select-courses').val(['0']).trigger('change');
+    });
+});
+</script>";
+
 $toolName = $langCertBadgeAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
 
 $tool_content .= action_bar(array(
         array('title' => "$langAddNewCertTemplate",
@@ -75,6 +103,16 @@ if (isset($_GET['del_cert'])) { // delete certificate template
 }
 
 if (isset($_POST['submit_cert_template'])) { // insert certificate template
+    if (isset($_POST['cert_template_courses'])) {
+        $cert_template_courses = $_POST['cert_template_courses'];
+    } else {
+        $cert_template_courses = [];
+    }
+    if (in_array(0, $cert_template_courses)) {
+        $allcourses = 1; // cert template is assigned to all courses
+    } else {
+        $allcourses = 0; // cert template is assigned to specific courses
+    }
     if (isset($_POST['cert_id'])) {
         if ($_FILES['filename']['size'] > 0) { // replace file if needed
             $filename = $_FILES['filename']['name'];
@@ -98,9 +136,17 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                         Database::get()->querySingle("UPDATE certificate_template SET
                                                         name = ?s,
                                                         description = ?s,
-                                                        filename = ?s
+                                                        filename = ?s,
+                                                        orientation = ?s,
+                                                        all_courses = ?s
                                                        WHERE id = ?d",
-                                                    $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
+                                                    $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation'], $allcourses, $_POST['cert_id']);
+                        Database::get()->query("DELETE FROM course_certificate_template WHERE certificate_template_id = ?d", $_POST['cert_id']);
+                        if ($allcourses == 0) {
+                            foreach ($cert_template_courses as $cert_template_course_id) {
+                                Database::get()->query("INSERT INTO course_certificate_template SET course_id = ?d, certificate_template_id = ?d", $cert_template_course_id, $_POST['cert_id']);
+                            }
+                        }
                         Session::Messages($langDownloadEnd, 'alert-success');
                     } else {
                         die("Error : Zip file couldn't be extracted!");
@@ -111,9 +157,16 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
             Database::get()->querySingle("UPDATE certificate_template SET
                                             name = ?s,
                                             description = ?s,
-                                            orientation = ?s
+                                            orientation = ?s,
+                                            all_courses = ?s
                                         WHERE id = ?d",
-                                    $_POST['name'], $_POST['description'], $_POST['orientation'], $_POST['cert_id']);
+                                    $_POST['name'], $_POST['description'], $_POST['orientation'], $allcourses, $_POST['cert_id']);
+            Database::get()->query("DELETE FROM course_certificate_template WHERE certificate_template_id = ?d", $_POST['cert_id']);
+            if ($allcourses == 0) {
+                foreach ($cert_template_courses as $cert_template_course_id) {
+                    Database::get()->query("INSERT INTO course_certificate_template SET course_id = ?d, certificate_template_id = ?d", $cert_template_course_id, $_POST['cert_id']);
+                }
+            }
         }
     } else {
         $filename = $_FILES['filename']['name'];
@@ -132,11 +185,18 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                 }
                 if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
                     $archive->close();
-                    Database::get()->querySingle("INSERT INTO certificate_template SET
+                    $q = Database::get()->query("INSERT INTO certificate_template SET
                                         name = ?s,
                                         description = ?s,
                                         filename = ?s,
-                                        orientation = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation']);
+                                        orientation = ?s,
+                                        all_courses = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation'], $allcourses);
+                    $cert_template_id = $q->lastInsertID;
+                    if ($allcourses == 0) {
+                        foreach ($cert_template_courses as $cert_template_course_id) {
+                            Database::get()->query("INSERT INTO course_certificate_template SET course_id = ?d, certificate_template_id = ?d", $cert_template_course_id, $cert_template_id);
+                        }
+                    }
                     Session::Messages($langDownloadEnd, 'alert-success');
                 } else {
                     die("Error : Zip file couldn't be extracted!");
@@ -190,8 +250,9 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
 
 // display forms
 if (isset($_GET['action'])) {
+    $navigation[] = array('url' => 'certbadge.php', 'name' => $langCertBadge);
     if (($_GET['action'] == 'add_cert') or ($_GET['action'] == 'edit_cert')) { // add certificate template
-        $cert_name = $cert_description = $cert_hidden_id = $cert_htmlfile = '';
+        $cert_name = $cert_description = $cert_hidden_id = $cert_htmlfile = $cert_all_courses = '';
         $cert_orientation_l = 'checked';
         $cert_orientation_p = '';
         if (isset($_GET['cid'])) {
@@ -201,6 +262,7 @@ if (isset($_GET['action'])) {
             $cert_description = $cert_data->description;
             $cert_htmlfile = $cert_data->filename;
             $cert_orientation = $cert_data->orientation;
+            $cert_all_courses = $cert_data->all_courses;
             if ($cert_orientation == "P") {
                 $cert_orientation_l = '';
                 $cert_orientation_p = 'checked';
@@ -242,6 +304,40 @@ if (isset($_GET['action'])) {
                                     " . rich_text_editor('description', 2, 60, $cert_description) . "
                                 </div>
                             </div>
+                  
+                            <div class='form-group' id='courses-list'>
+                                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:&nbsp;&nbsp;
+                                <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span></label>
+                                <div class='col-sm-10'>
+                                <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";
+                                $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                                    WHERE id NOT IN (SELECT course_id FROM course_certificate_template)                                                                    
+                                                                    ORDER BY title");
+                                if (isset($_GET['cid'])) {
+                                    if ($cert_all_courses == '1') {
+                                        $tool_content .= "<option value='0' selected>$langToAllCourses</option>";
+                                    } else {
+                                        $cert_template_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
+                                                                            IN (SELECT course_id FROM course_certificate_template WHERE certificate_template_id = ?d) ORDER BY title", $cert_id);
+                                        if (count($cert_template_courses_list) > 0) {
+                                            foreach ($cert_template_courses_list as $c) {
+                                                $tool_content .= "<option value='$c->id' selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                                            }
+                                            $tool_content .= "<option value='0'><h2>$langToAllCourses</h2></option>";
+                                        }
+                                    }
+                                } else {
+                                   $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+                                }
+
+                                foreach($courses_list as $c) {
+                                    $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                                }
+                                $tool_content .= "</select>
+                                        <a href='#' id='allCourses'>$langToAllCourses</a> | <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                                    </div>
+                                </div>
+
                             $cert_hidden_id
                             <div class='form-group'>
                                 <div class='col-xs-offset-2 col-xs-10'>
@@ -374,4 +470,4 @@ if (isset($_GET['action'])) {
     $tool_content .= "</div></div></div>";
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
