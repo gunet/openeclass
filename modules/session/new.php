@@ -64,8 +64,10 @@ if(isset($_POST['submit'])){
   ));
 
   if($v->validate()) {
-    $start_session = !empty($_POST['start_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session'])->format('Y-m-d H:i:s') : null;
-    $end_session = !empty($_POST['end_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['end_session'])->format('Y-m-d H:i:s') : null;
+    // $start_session = !empty($_POST['start_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session'])->format('Y-m-d H:i:s') : null;
+    // $end_session = !empty($_POST['end_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['end_session'])->format('Y-m-d H:i:s') : null;
+    $start_session = !empty($_POST['start_session']) ? $_POST['start_session'] : null;
+    $end_session = !empty($_POST['end_session']) ? $_POST['end_session'] : null;
     if(!is_null($start_session) && !is_null($end_session) && $end_session < $start_session){
       Session::flash('message',$langAddInCorrectDateVal);
       Session::flash('alert-class', 'alert-danger');

@@ -681,3 +681,10 @@ function enable_password_session_bootbox() {
 }
 
 
+function session_exists($sid){
+    global $course_code;
+    $result = Database::get()->queryArray("SELECT * FROM mod_session WHERE id =?d",$sid);
+    if(count($result) == 0){
+        redirect_to_home_page("modules/session/index.php?course=".$course_code);
+    }
+}

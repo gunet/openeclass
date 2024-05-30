@@ -6804,3 +6804,6 @@ $langRemote = "Εξ αποστάσεως";
 $langIndividualS = "Ατομική";
 $langGroupS = "Ομαδική";
 $langNotDisplay = "Μη εμφανής";
+
+$langStartEndSessionDateTime = "Ώρα έναρξης - λήξης συνεδρίας";
+$langDateMaxMinutes = "Η διάρκεια συνεδρίας πρέπει είναι 45 λεπτά.";
