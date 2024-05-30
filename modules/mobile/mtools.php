@@ -52,14 +52,18 @@ if ($course_info->view_type == 'units') {
         $cu = Database::get()->querySingle("SELECT id FROM course_units
                                              WHERE course_id = ?d AND `order` >= 0
                                           ORDER BY `order` ASC LIMIT 1", $course_id);
-        $first_unit_id = $cu->id;
+        if ($cu) {
+            $first_unit_id = $cu->id;
+        }
     } else {
         $cu = Database::get()->querySingle("SELECT id, start_week FROM course_units 
                                             WHERE course_id = ?d 
                                             AND visible = 1 AND `order` >= 0 
                                             ORDER BY `order` ASC LIMIT 1", $course_id);
-        if (is_null($cu->start_week) or (!(is_null($cu->start_week)) and (date('Y-m-d') >= $cu->start_week))) {
-            $first_unit_id = $cu->id;
+        if ($cu) {
+            if (is_null($cu->start_week) or (!(is_null($cu->start_week)) and (date('Y-m-d') >= $cu->start_week))) {
+                $first_unit_id = $cu->id;
+            }
         }
     }
 
