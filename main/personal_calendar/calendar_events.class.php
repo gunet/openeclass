@@ -52,7 +52,8 @@ class Calendar_Events {
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/index.php?id=thisid&course=thiscourse',
             'teleconference' => 'modules/tc/index.php?course=thiscourse',
-            'request' => 'modules/request/index.php?course=thiscourse&id=thisid');
+            'request' => 'modules/request/index.php?course=thiscourse&id=thisid',
+            'session' => 'modules/session/session_space.php?course=thiscourse&session=thisid');
 
     /** @staticvar object with user calendar settings
     */
@@ -264,6 +265,19 @@ class Calendar_Events {
                         . "JOIN course c ON cu.course_id=c.id "
                         . "WHERE cu.user_id = ?d AND tc.active = '1' AND c.visible != " . COURSE_INACTIVE . " "
                         . "AND (cu.status = 1 OR cu.editor = 1 OR cu.reviewer = 1 OR $group_sql_template3) "
+                        . $dc;
+                $q_args = array_merge($q_args, $q_args_templ);
+
+                // session
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'ms.start', $datecond);
+                $q .= "SELECT ms.id, CONCAT(c.title,': ',ms.title), ms.start start, date_format(ms.start,'%Y-%m-%d') startdate, '00:00' duration, date_format(ms.start, '%Y-%m-%d %H:%i') `end`, ms.comments content, 'course' event_group, 'event-info' class, 'session' event_type,  c.code course "
+                        . "FROM mod_session ms JOIN course_user cu ON ms.course_id = cu.course_id "
+                        . "JOIN course c ON cu.course_id=c.id "
+                        . "WHERE cu.user_id = ?d AND ms.visible = '1' AND c.visible != " . COURSE_INACTIVE . " "
+                        . "AND ((ms.creator = $uid) OR (ms.id IN (SELECT session_id FROM mod_session_users WHERE participants = $uid)))"
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
 

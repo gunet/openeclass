@@ -182,11 +182,18 @@
             </div>
             <div class='modal-body'>
                 <div class='col-12'>
+                    @if(count($participants)>0)
                     <ul>
                         @foreach($participants as $p)
                             <li class='mb-2'>{!! display_user($p->participants, false, false, '', $course_code) !!}</li>
                         @endforeach
                     </ul>
+                    @else
+                        <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>{{ trans('langNoInfoAvailable')}}</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
