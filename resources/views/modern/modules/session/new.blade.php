@@ -131,8 +131,13 @@
                     }
  
                 });
-            });
 
+                $('#calendarAddSessionDate').removeClass('d-none');
+                $('#calendarAddSessionDate').removeClass('d-block');
+
+                $('.fc-next-button').trigger('click');
+                $('.fc-prev-button').trigger('click');
+            });
 
             $('#addDateTimeBtn').on('click', function(e){
                 e.preventDefault();
@@ -140,6 +145,7 @@
                 $('#endTime').val(document.getElementById('endTimeTmp').value);
                 $('#startDateValue').val(document.getElementById('whenTmp').value);
                 $("#createEventSession").modal('hide');
+                $('#staticDateTimeSession').modal('hide');
             });
 
 
@@ -157,6 +163,21 @@
                 $('#select_one_session').addClass('d-none');
                 $('#select_group_session').removeClass('d-none');
                 $('#select_group_session').addClass('d-block');
+            });
+
+
+            $('#selectAll').click(function(e) {
+                e.preventDefault();
+                var stringVal = [];
+                $('#select_users_group_session').find('option').each(function(){
+                    stringVal.push($(this).val());
+                });
+                $('#select_users_group_session').val(stringVal).trigger('change');
+            });
+            $('#removeAll').click(function(e) {
+                e.preventDefault();
+                var stringVal = [];
+                $('#select_users_group_session').val(stringVal).trigger('change');
             });
         });
 
@@ -304,90 +325,37 @@
                                                         <option value='{{ $u->user_id }}'>{{ $u->givenname }}&nbsp;{{ $u->surname }}</option>
                                                     @endforeach
                                                 </select>
+                                                <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                                 @if(Session::getError('many_participants'))
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('many_participants') !!}</span>
                                                 @endif
                                             </div>
                                         </div>
-                                        
-                                        {{--
-                                            <div class='input-append date form-group mt-4'>
-                                                <label class='col-sm-12 control-label-notes'>{{ trans('langStart') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
-                                                <div class='col-sm-12'>
-                                                    <div class='input-group'>
-                                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' id='start_session' name='start_session' type='text'>
-                                                    </div>
-                                                </div>
-                                                @if(Session::getError('start_session'))
-                                                    <span class='help-block Accent-200-cl'>{!! Session::getError('start_session') !!}</span>
-                                                @endif
-                                            </div>
-
-                                            <div class='input-append date form-group mt-4'>
-                                                <label class='col-sm-12 control-label-notes'>{{ trans('langEnd') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
-                                                <div class='col-sm-12'>
-                                                    <div class='input-group'>
-                                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' id='end_session' name='end_session' type='text'>
-                                                    </div>
-                                                </div>
-                                                @if(Session::getError('end_session'))
-                                                    <span class='help-block Accent-200-cl'>{!! Session::getError('end_session') !!}</span>
-                                                @endif
-                                            </div>
-                                        --}}
 
                                         <div class='form-group mt-4'>
-                                            <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }}</p>
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text p-0" id="start-end-datetime-session">
-                                                    <a type="button" class="btn submitAdminBtnDefault d-inline-flex rounded-0" 
+                                            <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
+                                            <div class="input-group mb-3 rounded-2 border-0 gap-2">
+                                                <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
+                                                    <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
                                                         data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal'>
-                                                        {{ trans('langAdd') }}
+                                                        <i class='fa-solid fa-calendar'></i>
                                                     </a>
                                                 </span>
-                                                <input id='startDateValue' type="text" class="form-control mt-0 pe-none" aria-describedby="start-end-datetime-session">
+                                                <input id='startDateValue' type="text" class="form-control mt-0 pe-none rounded-2" aria-describedby="start-end-datetime-session">
                                                 <input type="hidden" id="startTimeTmp">
                                                 <input type="hidden" id="endTimeTmp">
                                                 <input type="hidden" id="whenTmp">
                                                 <input type="hidden" id="startTime" name='start_session'>
                                                 <input type="hidden" id="endTime" name='end_session'>
                                             </div>
-                                            
-
-                                            <!-- Show Calendar for adding session datetime -->
-                                            <div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-fullscreen mt-0">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticDateTimeSessionLabel">{{ trans('langStartEndSessionDateTime') }}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div id='calendarAddSessionDate' class='calendarAddDaysCl'></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div id="createEventSession" class="modal fade in" role="dialog">
-                                                <div class="modal-dialog modal-md">
-                                                    <div class="modal-content">
-                                                        <div class="modal-body">
-                                                            <div class='form-wrapper form-edit rounded'>
-                                                                <div class="controls controls-row" id="when"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class='modal-footer'>
-                                                            <button class='btn btn-primary' id='addDateTimeBtn'>{{ trans('langAdd') }}</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @if(Session::getError('start_session') or Session::getError('end_session'))
+                                                @if(Session::getError('start_session'))
+                                                    <span class='help-block Accent-200-cl'>{!! Session::getError('start_session') !!}</span>
+                                                @else
+                                                    <span class='help-block Accent-200-cl'>{!! Session::getError('end_session') !!}</span>
+                                                @endif
+                                            @endif
                                         </div>
-                                        
-                                        
 
                                         <div class='form-group mt-4'>
                                             <p class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</p>
@@ -411,7 +379,7 @@
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end aling-items-center'>
-                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                             </div>
                                         </div>
 
@@ -424,6 +392,48 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Show Calendar for adding session datetime -->
+<div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen mt-0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticDateTimeSessionLabel">{{ trans('langStartEndSessionDateTime') }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class='alert alert-info'>
+                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                    <span>{!! trans('langInfoNewSession') !!}</span>
+                </div>
+                <div id='calendarAddSessionDate' class='calendarAddDaysCl d-none'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show selected slot -->
+<div id="createEventSession" class="modal fade in" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">{{ trans('langAdd') }}</div>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class='form-wrapper form-edit rounded'>
+                    <div class="controls controls-row" id="when"></div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-primary' id='addDateTimeBtn'>{{ trans('langAdd') }}</button>
             </div>
         </div>
     </div>

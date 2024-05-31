@@ -1601,6 +1601,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                     border-color: $theme_options_styles[buttonBgColor];
                 }
+
+                .exist_event_session{
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                }
                   
 
             ";
@@ -1732,8 +1737,14 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .pagination-glossary .page-item.active:hover .page-link{
-                    background-color: $theme_options_styles[buttonBgColor];
-                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                    border-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+                .exist_event_session:hover,
+                .exist_event_session:focus{
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
+                    border-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
             ";
@@ -1857,6 +1868,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .pagination-glossary .page-item.active .page-link{
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .calendarAddDaysCl .exist_event_session .fc-time span{
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
             ";

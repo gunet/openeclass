@@ -3,20 +3,148 @@
 @push('head_scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#start_session').datetimepicker({
-                    format: 'dd-mm-yyyy hh:ii',
-                    pickerPosition: 'bottom-right',
-                    language: '{{ $language }}',
-                    minuteStep: 5,
-                    autoclose: true
+            $('#openSessionCal').on('click', function(e){
+                e.preventDefault();
+                var calendar = $('#calendarAddSessionDate').fullCalendar({
+                    header:{
+                        left: 'prev,next ',
+                        center: 'title',
+                        right: ''
+                    },
+                    defaultView: 'agendaWeek',
+                    slotDuration: '00:45' ,
+                    minTime: '08:00:00',
+                    maxTime: '23:00:00',
+                    contentHeight:"auto",
+                    editable: false,
+                    selectable: true,
+                    allDaySlot: false,
+                    displayEventTime: true,
+                    events: "{{ $urlAppend }}modules/session/disabled_session_slots.php?course={{ $course_id }}&show_sessions=true&edit=true&session={{ $session_id }}",
+                
+                    eventRender: function( event, element, view ) {
+                        var title = element.find( '.fc-title' );
+                        title.html( title.text() );
+                        var timee = element.find( '.fc-time span' );
+                        element.popover({
+                            title: timee[0].innerText+'</br>'+event.title,
+                            trigger: 'hover',
+                            placement: 'top',
+                            container: 'body',
+                            html: true,
+                            sanitize: false
+                        });
+                    },
+
+                    //header and other values
+                    select: function(start, end) {
+
+                        var dateStart = $.fullCalendar.moment(start).format('hh:mm');
+                        var dateEnd = $.fullCalendar.moment(end).format('hh:mm');
+
+                        var startDate_hour = $.fullCalendar.moment(start).format('hh');
+                        startDate_hour = parseInt(startDate_hour);
+                        var startDate_min = $.fullCalendar.moment(start).format('mm');
+                        startDate_min = parseInt(startDate_min);
+
+                        var endDate_hour = $.fullCalendar.moment(end).format('hh');
+                        endDate_hour = parseInt(endDate_hour);
+                        var endDate_min = $.fullCalendar.moment(end).format('mm');
+                        endDate_min = parseInt(endDate_min);
+
+                        var start_day = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY');
+                        var end_day = $.fullCalendar.moment(end).format('dddd, Do MMMM YYYY');
+
+                        var is_hour_ok = 0;
+                        if(endDate_hour==startDate_hour+1){
+                            is_hour_ok = 1;
+                        }
+                        if(endDate_hour==1 && startDate_hour==12){
+                            is_hour_ok = 1;
+                        }
+                        if(endDate_hour==startDate_hour){
+                            is_hour_ok = 1;
+                        }
+
+                        var is_minute_ok = 0;
+                        if(startDate_min>=30){
+                            var diffStartMin = 60 - startDate_min;
+                        }else{
+                            var diffStartMin = 30 - startDate_min;
+                        }
+
+                        if(endDate_min>=30){
+                            var diffEndMin = 60 - endDate_min;
+                        }else{
+                            var diffEndMin = 30 - endDate_min;
+                        }
+
+                        var sumDiffMin = diffStartMin+diffEndMin;
+
+                        if(sumDiffMin<=45){
+                            is_minute_ok = 1;
+                        }
+                        if(endDate_hour==1 && startDate_hour==12){
+                            is_minute_ok = 1;
+                        }
+                        if(endDate_hour==startDate_hour){
+                            is_minute_ok = 1;
+                        }
+
+                        // Special cases for slot duration
+                        if( (dateStart=='10:15' && dateEnd=='11:45') ||
+                            (dateStart=='01:15' && dateEnd=='02:45') ||
+                            (dateStart=='04:15' && dateEnd=='05:45') ||
+                            (dateStart=='07:15' && dateEnd=='08:45')  ){
+                                is_minute_ok = 0;
+                            }
+
+                        if(is_hour_ok==1 && is_minute_ok==1 && start_day==end_day){
+                            if(!start.isBefore(moment())){
+                                endtime = $.fullCalendar.moment(end).format('h:mm');
+                                starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
+                                var mywhen = starttime + ' - ' + endtime;
+
+                                start = moment(start).format('YYYY-MM-DD HH:mm');
+                                end = moment(end).format('YYYY-MM-DD HH:mm');
+
+                                $('#startTimeTmp').val(start);
+                                $('#endTimeTmp').val(end);
+                                $('#whenTmp').val(mywhen);
+                                $('#createEventSession #when').text(mywhen);
+                                $('#createEventSession').modal('toggle');
+                                
+                            }else{
+                                alert("{{ js_escape(trans('langDateHasExpired')) }}");
+                            }
+                        }else{
+                            alert("{{ js_escape(trans('langDateMaxMinutes')) }}");
+                            //window.location.reload();
+                        }
+                    },
+
+                    eventClick: function(event) {
+                        if(event.className == 'exist_event_session'){
+                            return false;
+                        }
+                    }
+ 
                 });
 
-            $('#end_session').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
-                language: '{{ $language }}',
-                minuteStep: 5,
-                autoclose: true
+                $('#calendarAddSessionDate').removeClass('d-none');
+                $('#calendarAddSessionDate').removeClass('d-block');
+
+                $('.fc-next-button').trigger('click');
+                $('.fc-prev-button').trigger('click');
+            });
+
+            $('#addDateTimeBtn').on('click', function(e){
+                e.preventDefault();
+                $('#startTime').val(document.getElementById('startTimeTmp').value);
+                $('#endTime').val(document.getElementById('endTimeTmp').value);
+                $('#startDateValue').val(document.getElementById('whenTmp').value);
+                $("#createEventSession").modal('hide');
+                $('#staticDateTimeSession').modal('hide');
             });
 
             if ($('#one_session').is(':checked')){
@@ -48,6 +176,22 @@
                 $('#select_group_session').removeClass('d-none');
                 $('#select_group_session').addClass('d-block');
             });
+
+
+            $('#selectAll').click(function(e) {
+                e.preventDefault();
+                var stringVal = [];
+                $('#select_users_group_session').find('option').each(function(){
+                    stringVal.push($(this).val());
+                });
+                $('#select_users_group_session').val(stringVal).trigger('change');
+            });
+            $('#removeAll').click(function(e) {
+                e.preventDefault();
+                var stringVal = [];
+                $('#select_users_group_session').val(stringVal).trigger('change');
+            });
+
         });
     </script>
 @endpush
@@ -198,35 +342,35 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                                <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                                 @if(Session::getError('many_participants'))
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('many_participants') !!}</span>
                                                 @endif
                                             </div>
                                         </div>
-                                        
-                                        <div class='input-append date form-group mt-4'>
-                                            <label class='col-sm-12 control-label-notes'>{{ trans('langStart') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
-                                            <div class='col-sm-12'>
-                                                <div class='input-group'>
-                                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' id='start_session' name='start_session' type='text' value='{{ $start }}'>
-                                                </div>
-                                            </div>
-                                            @if(Session::getError('start_session'))
-                                                <span class='help-block Accent-200-cl'>{!! Session::getError('start_session') !!}</span>
-                                            @endif
-                                        </div>
 
-                                        <div class='input-append date form-group mt-4'>
-                                            <label class='col-sm-12 control-label-notes'>{{ trans('langEnd') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
-                                            <div class='col-sm-12'>
-                                                <div class='input-group'>
-                                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' id='end_session' name='end_session' type='text' value='{{ $finish }}'>
-                                                </div>
+                                        <div class='form-group mt-4'>
+                                            <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
+                                            <div class="input-group mb-3 rounded-2 border-0 gap-2">
+                                                <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
+                                                    <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
+                                                        data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal'>
+                                                        <i class='fa-solid fa-calendar'></i>
+                                                    </a>
+                                                </span>
+                                                <input id='startDateValue' type="text" class="form-control mt-0 pe-none rounded-2" aria-describedby="start-end-datetime-session" value='{{ $start }} -- {{ $finish_text }}'>
+                                                <input type="hidden" id="startTimeTmp">
+                                                <input type="hidden" id="endTimeTmp">
+                                                <input type="hidden" id="whenTmp">
+                                                <input type="hidden" id="startTime" name='start_session' value='{{ $start }}'>
+                                                <input type="hidden" id="endTime" name='end_session' value='{{ $finish }}'>
                                             </div>
-                                            @if(Session::getError('end_session'))
-                                                <span class='help-block Accent-200-cl'>{!! Session::getError('end_session') !!}</span>
+                                            @if(Session::getError('start_session') or Session::getError('end_session'))
+                                                @if(Session::getError('start_session'))
+                                                    <span class='help-block Accent-200-cl'>{!! Session::getError('start_session') !!}</span>
+                                                @else
+                                                    <span class='help-block Accent-200-cl'>{!! Session::getError('end_session') !!}</span>
+                                                @endif
                                             @endif
                                         </div>
 
@@ -265,6 +409,48 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Show Calendar for adding session datetime -->
+<div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen mt-0">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticDateTimeSessionLabel">{{ trans('langStartEndSessionDateTime') }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class='alert alert-info'>
+                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                    <span>{!! trans('langInfoEditSession') !!}</span>
+                </div>
+                <div id='calendarAddSessionDate' class='calendarAddDaysCl d-none'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show selected slot -->
+<div id="createEventSession" class="modal fade in" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">{{ trans('langAdd') }}</div>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class='form-wrapper form-edit rounded'>
+                    <div class="controls controls-row" id="when"></div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-primary' id='addDateTimeBtn'>{{ trans('langAdd') }}</button>
             </div>
         </div>
     </div>

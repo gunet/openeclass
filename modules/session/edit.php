@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'course_sessions';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
 
@@ -66,8 +67,10 @@ if(isset($_POST['modify'])){
   ));
 
   if($v->validate()) {
-    $start_session = !empty($_POST['start_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session'])->format('Y-m-d H:i:s') : null;
-    $end_session = !empty($_POST['end_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['end_session'])->format('Y-m-d H:i:s') : null;
+    // $start_session = !empty($_POST['start_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session'])->format('Y-m-d H:i:s') : null;
+    // $end_session = !empty($_POST['end_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['end_session'])->format('Y-m-d H:i:s') : null;
+    $start_session = !empty($_POST['start_session']) ? $_POST['start_session'] : null;
+    $end_session = !empty($_POST['end_session']) ? $_POST['end_session'] : null;
     if(!is_null($start_session) && !is_null($end_session) && $end_session < $start_session){
       Session::flash('message',$langAddInCorrectDateVal);
       Session::flash('alert-class', 'alert-danger');
@@ -107,6 +110,61 @@ if(isset($_POST['modify'])){
     }
 
     if($insert_users){
+
+      // Send notification - email to the user - participant
+      $creatorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$creator)->givenname;
+      $creatorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$creator)->surname;
+      $dateFrom = $start_session;
+      $dateEnd = $end_session;
+
+      $emailHeader = "
+      <!-- Header Section -->
+              <div id='mail-header'>
+                  <br>
+                  <div>
+                      <div id='header-title'>$langAvailableSession</div>
+                  </div>
+              </div>";
+
+      $emailMain = "
+      <!-- Body Section -->
+          <div id='mail-body'>
+              <br>
+              <div>$langDetailsSession</div>
+              <div id='mail-body-inner'>
+                  <ul id='forum-category'>
+                      <li><span><b>$langTitle: </b></span> <span>$title</span></li>
+                      <li><span><b>$langConsultant: </b></span> <span>$creatorName $creatorSurname</span></li>
+                      <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
+                  </ul>
+              </div>
+              <div>
+                  <br>
+                  <p>$langProblem</p><br>" . get_config('admin_name') . "
+                  <ul id='forum-category'>
+                      <li>$langManager: $siteName</li>
+                      <li>$langTel: -</li>
+                      <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                  </ul>
+              </div>
+          </div>";
+
+      $emailsubject = $siteName.':'.$langAvailableSession;
+
+      $emailbody = $emailHeader.$emailMain;
+
+      $emailPlainBody = html2text($emailbody);
+
+      if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
+        $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['one_participant'])->email;
+        send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+      }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
+        foreach($_POST['many_participants'] as $m){
+          $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+          send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+        }
+      }
+
       Session::flash('message',$langAddSessionCompleted);
       Session::flash('alert-class', 'alert-success');
       redirect_to_home_page("modules/session/index.php?course=".$course_code);
@@ -134,6 +192,7 @@ $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->start)
 $data['start'] = q($startDate_obj->format('d-m-Y H:i'));
 $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->finish);
 $data['finish'] = q($endDate_obj->format('d-m-Y H:i'));
+$data['finish_text'] = q($endDate_obj->format('H:i'));
 $data['visible'] = $session_info->visible;
 $data['type_remote'] = $session_info->type_remote;
 $users_participants = Database::get()->queryArray("SELECT participants FROM mod_session_users

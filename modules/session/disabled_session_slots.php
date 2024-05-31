@@ -43,16 +43,21 @@ if(isset($_GET['course']) and isset($_GET['show_sessions'])){
 
     $result_sessions = Database::get()->queryArray("SELECT * FROM mod_session WHERE course_id = ?d",$course_id);
 
+    $session_edit_id = 0;
+    if(isset($_GET['edit']) && isset($_GET['session'])){
+        $session_edit_id = $_GET['session'];
+    }
+
     if($result_sessions){
         foreach($result_sessions as $row){
             $sessionArr[] = [
                 'id' => $row->id,
                 'creator' => $row->creator,
-                'title' => $row->title,
+                'title' => getTitleSession($row->id,$course_id),
                 'start' => $row->start,
                 'end' => $row->finish,
-                'className' => 'exist_event_session',
-                'backgroundColor' => '#000000',
+                'className' => getClassSession($row->id,$session_edit_id),
+                'backgroundColor' => backgroundColorSession($row->id,$session_edit_id),
                 'course_id' => $row->course_id
             ];
         }
@@ -65,4 +70,80 @@ if(isset($_GET['course']) and isset($_GET['show_sessions'])){
     exit();
 
 
+}
+
+function getTitleSession($sid,$cid){
+
+    global $langTitle, $langConsultant, $langParticipants;
+
+    $html = "";
+    $creator = "";
+    $title_session = "";
+    $html_participant = "";
+
+    $creator_info = Database::get()->querySingle("SELECT mod_session.id,mod_session.creator,mod_session.title,user.id,user.givenname,user.surname FROM mod_session
+                                             LEFT JOIN user ON mod_session.creator=user.id
+                                             WHERE mod_session.id=?d
+                                             AND mod_session.course_id=?d",$sid,$cid);
+    if($creator_info){
+        $title_session = $creator_info->title;
+        $creator = $creator_info->givenname . " " . $creator_info->surname;
+    }
+
+    $participants_info = Database::get()->queryArray("SELECT mod_session_users.session_id,mod_session_users.participants,user.id,user.givenname,user.surname FROM mod_session_users
+                                                        LEFT JOIN user ON mod_session_users.participants=user.id
+                                                        WHERE mod_session_users.session_id=?d",$sid);
+         
+    if(count($participants_info)>0){
+        $html_participant .= "<ul class='list-group list-group-flush'>";
+        foreach($participants_info as $p){
+            $html_participant .= "<li class='list-group-item element'>". $p->givenname . "&nbsp;" . $p->surname . "</li>";
+        }
+        $html_participant .= "</ul>";
+    }
+
+
+    $html .= "
+        <div class='col-12 container-events-available px-2'>
+            <div class='col-12 mb-1'>
+                <p class='Neutral-800-cl text-decoration-underline mb-0'>$langTitle</p>
+                <small class='Neutral-800-cl mb-0'>$title_session</small>
+            </div>
+            <div class='col-12 mb-1'>
+                <p class='Neutral-800-cl text-decoration-underline mb-0'>$langConsultant</p>
+                <small class='Neutral-800-cl mb-0'>$creator</small>
+            </div>
+            <div class='col-12 mb-1'>
+                <p class='Neutral-800-cl text-decoration-underline mb-0'>$langParticipants</p>
+                <small class='Neutral-800-cl mb-0'>$html_participant</small>
+            </div>
+        </div>
+    ";
+
+    return $html;
+}
+
+function backgroundColorSession($sid,$sid_edit){
+
+    $color = "";
+
+    if($sid != $sid_edit){// show other sessions
+        $color = "#0073E6";
+    }else{// edit session
+        $color = "#1E7E0E";
+    }
+    
+    return $color;
+}
+
+function getClassSession($sid,$sid_edit){
+    $class_name = "";
+
+    if($sid != $sid_edit){// show other sessions
+        $class_name = "exist_event_session";
+    }else{// edit session
+        $class_name = "exist_edit_event_session";
+    }
+    
+    return $class_name;
 }

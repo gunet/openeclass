@@ -6342,3 +6342,20 @@ $langNotRemote = "Not remote";
 $langRemote = "Remote";
 $langIndividualS = "Individual";
 $langGroupS = "Group";
+$langNotDisplay = "No display";
+$langStartEndSessionDateTime = "Session start - end time";
+$langDateMaxMinutes = "Session duration should be 45 minutes.";
+$langConsultant = "Consultant";
+$langDetailsSession = "Session details";
+$langAvailableSession = "New session";
+$langInfoNewSession = "In the calendar you will see all the registered sessions of the collaboration if there are any.
+You cannot register a new session in these slots. You can choose the free day and time slots
+in order to make an entry. </br>
+By selecting one of them by clicking on the desired slot and after pressing the << add >> button in the new window that will appear,
+you will temporarily enter the new session start and end date. </br></br>
+<strong>The registration is completed by submitting the form from the << submit >> button.</strong>";
+$langInfoEditSession = "In the calendar you will see all the registered sessions of the collaboration if there are any.
+The green color is for the current session you want to edit.
+By selecting a different day and time slot by clicking on the desired slot </br> and after pressing the << add >> button,
+you will temporarily enter the new session start and end date. </br></br>
+<strong>The registration is completed by submitting the form from the << change >> button.</strong>";
