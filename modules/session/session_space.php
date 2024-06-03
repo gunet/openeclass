@@ -46,15 +46,15 @@ require_once 'functions.php';
 load_js('tools.js');
 
 if(isset($_GET['session'])){
-    $data['session_id'] = $session_id = $_GET['session'];
+    $data['sessionID'] = $sessionID = $_GET['session'];
 }
 elseif(isset($_GET['id'])){
-    $data['session_id'] = $session_id = $_GET['id'];
+    $data['sessionID'] = $sessionID = $_GET['id'];
 }
 
-session_exists($session_id);
+session_exists($sessionID);
 
-$pageName = title_session($course_id,$session_id);
+$pageName = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
@@ -68,18 +68,75 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     exit;
 }
 
+// ---------------------------
+// download directory or file
+// ---------------------------
+if (isset($_GET['download'])) {
+    $downloadDir = $_GET['download'];
+
+    if ($downloadDir == '/') {
+        $format = '.dir';
+        $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $public_code);
+    } else {
+        $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
+                        WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND
+                        path = ?s", $course_id, 0, 0, $downloadDir);
+        if (!$q) {
+            not_found($downloadDir);
+        }
+        $real_filename = $q->filename;
+        $format = $q->format;
+        $visible = $q->visible;
+        $extra_path = $q->extra_path;
+        $public = $q->public;
+        if (!(resource_access($visible, $public) or (isset($status) and $status == USER_TEACHER))) {
+            not_found($downloadDir);
+        }
+    }
+    // Allow unlimited time for creating the archive
+    set_time_limit(0);
+
+    if ($format == '.dir') {
+        if (!$uid) {
+            forbidden($downloadDir);
+        }
+        $real_filename = $real_filename . '.zip';
+        $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
+        zip_documents_directory($dload_filename, $downloadDir, $can_upload);
+        $delete = true;
+    } elseif ($extra_path) {
+        if ($real_path = common_doc_path($extra_path, true)) {
+            // Common document
+            if (!$common_doc_visible) {
+                forbidden($downloadDir);
+            }
+            $dload_filename = $real_path;
+            $delete = false;
+        } else {
+            // External document - redirect to URL
+            redirect($extra_path);
+        }
+    } else {
+        $dload_filename = $basedir . $downloadDir;
+        $delete = false;
+    }
+
+    send_file_to_client($dload_filename, $real_filename, null, true, $delete);
+    exit;
+}
+
 if(isset($_GET['editResource'])){
     $resourse_id = $_GET['editResource'];
-    redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$session_id."&resource_id=".$resourse_id);
+    redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$sessionID."&resource_id=".$resourse_id);
 }
 
 if(isset($_GET['del'])){
     Database::get()->query("DELETE FROM session_resources WHERE id = ?d",$_GET['del']);
     Session::flash('message',$langSessionResourseDeleted);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$session_id);
+    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
 }
-$data['tool_content_sessions'] = show_session_resources($session_id);
+$data['tool_content_sessions'] = show_session_resources($sessionID);
 
 // An consultant can create a session
 if($is_editor){
@@ -111,6 +168,6 @@ if($is_editor){
 }
 
 $data['participants'] = Database::get()->queryArray("SELECT participants FROM mod_session_users 
-                                                     WHERE session_id = ?d",$session_id);
+                                                     WHERE session_id = ?d",$sessionID);
 
 view('modules.session.session_space', $data);

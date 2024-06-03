@@ -6359,3 +6359,5 @@ The green color is for the current session you want to edit.
 By selecting a different day and time slot by clicking on the desired slot </br> and after pressing the << add >> button,
 you will temporarily enter the new session start and end date. </br></br>
 <strong>The registration is completed by submitting the form from the << change >> button.</strong>";
+$langEmptyUploadFile = "You have not selected a file to upload.";
+$langUploadDocCompleted = "Upload completed successfully.";

@@ -66,7 +66,7 @@
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
-                                <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&session={{ $session_id }}" method='post'>
+                                <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&session={{ $sessionID }}" method='post'>
                                     <fieldset>
 
                                         <input type='hidden' name='resourceId' value='{{ $resource_id }}'>

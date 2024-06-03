@@ -181,7 +181,7 @@ if(isset($_POST['modify'])){
 
 }
 
-$data['session_id'] = $_GET['session'];
+$data['sessionID'] = $_GET['session'];
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['session_info'] = $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$_GET['session']);
 $data['title'] = $session_info->title;

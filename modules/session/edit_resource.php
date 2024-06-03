@@ -34,13 +34,13 @@ require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
 if(isset($_GET['session'])){
-    $data['session_id'] = $session_id = $_GET['session'];
+    $data['sessionID'] = $sessionID = $_GET['session'];
 }
 
-$sessionTitle = title_session($course_id,$session_id);
+$sessionTitle = title_session($course_id,$sessionID);
 $pageName = $langEditResource;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
-$navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $session_id , 'name' => $sessionTitle);
+$navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 
 if(isset($_POST['modify_resource'])){
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -59,7 +59,7 @@ if(isset($_POST['modify_resource'])){
 
         Session::flash('message',$langResourceCompleted);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$session_id);
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
     }
 }
 
@@ -70,7 +70,7 @@ $data['comments'] = rich_text_editor('comments', 5, 40, $resource_info->comments
 
 $data['action_bar'] = action_bar([
     [ 'title' => $langBack,
-        'url' => $urlAppend . 'modules/session/session_space.php?course=' . $course_code . "&session=" . $session_id,
+        'url' => $urlAppend . 'modules/session/session_space.php?course=' . $course_code . "&session=" . $sessionID,
         'icon' => 'fa-reply',
         'button-class' => 'btn-success',
         'level' => 'primary-label' ]

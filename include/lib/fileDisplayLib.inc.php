@@ -171,7 +171,7 @@ function public_file_path($disk_path, $filename = null) {
  * @return type
  */
 function file_url($path, $filename = null, $courseCode = null) {
-    global $course_code, $urlServer, $group_id, $ebook_id, $uid;
+    global $course_code, $urlServer, $group_id, $ebook_id, $uid, $sessionID;
     $courseCode = ($courseCode == null) ? $course_code : $courseCode;
 
     if (defined('EBOOK_DOCUMENTS')) {
@@ -185,6 +185,9 @@ function file_url($path, $filename = null, $courseCode = null) {
         } elseif (defined('MY_DOCUMENTS')) {
             $courseCode = 'user';
             $gid = ",$uid";
+        } elseif (defined('SESSION_DOCUMENTS')){
+            $courseCode = 'session';
+            $gid = ",$sessionID";
         } elseif (defined('GROUP_DOCUMENTS')) {
             $gid = ",$group_id";
         } else {

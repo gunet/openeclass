@@ -98,7 +98,6 @@ if($is_editor){
     $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                     WHERE visible = ?d
                                                                     AND course_id = ?d
-                                                                    AND ( finish > NOW() OR start > NOW() )
                                                                     AND id IN (SELECT session_id FROM mod_session_users
                                                                                 WHERE participants = ?d)
                                                                     ORDER BY start ASC",1,$course_id,$uid); 

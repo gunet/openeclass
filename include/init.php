@@ -338,6 +338,14 @@ if (file_exists('config/config.php')) {
     }
 }
 
+// Regarding session docs
+if(isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($require_current_course) and $require_current_course){
+    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['fileSessionId']);
+    $course_id = $q->course_id;
+    $_SESSION['dbname'] = course_id_to_code($course_id);
+    //unset($_SESSION['fileSessionId']);
+}
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 $is_editor = false;

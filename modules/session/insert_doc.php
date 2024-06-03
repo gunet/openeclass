@@ -25,9 +25,9 @@ require_once 'modules/document/doc_init.php';
 doc_init();
 
 /**
- * @brief list documents while inserting them in course unit
+ * @brief list documents while inserting them in course session
  */
-function list_documents($sid) {
+function list_documents($sid, $cid) {
     global $webDir, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
     $langDate, $langAddModulesButton, $langChoice,
@@ -39,7 +39,7 @@ function list_documents($sid) {
     $dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
     $dir_html = $dir_param ? "<input type='hidden' name='dir' value='$dir_param'>" : '';
 
-    if ($sid == -1) {
+    if ($cid == -1) {
         $common_docs = true;
         $pageName = $langCommonDocs;
         $group_sql = "course_id = -1 AND subsystem = " . COMMON . "";
@@ -166,4 +166,62 @@ function list_documents($sid) {
     }
 
     return $tool_content;
+}
+
+
+function upload_file($sid){
+    global $webDir, $tool_content, $course_code, $langTitle, $langComments, $langSubmit, $langDownloadFile;
+
+        $tool_content .= "  
+                            <div class='d-lg-flex gap-4 mt-4'>
+                                <div class='flex-grow-1'>
+                                    <div class='form-wrapper form-edit rounded'>
+                                        <form role='form' class='form-horizontal' action='resource.php?course=$course_code&session=$sid' method='post' enctype='multipart/form-data'>
+                                            <fieldset>
+
+                                                <input type='hidden' name='id' value='$sid' />
+
+                                                <div class='form-group'>
+                                                    <label for='file-upload' class='col-12 control-label-notes'>$langDownloadFile&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                                    <input id='file-upload' type='file' name='file-upload'/>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <label for='title' class='col-12 control-label-notes'>$langTitle&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                                    <div class='col-12'>
+                                                        <input id='title' type='text' name='title' class='form-control'>";
+                                                        if(Session::getError('title')){
+                                         $tool_content .= "<span class='help-block Accent-200-cl'>" . Session::getError('title') . "</span> ";
+                                                        }
+                                  $tool_content .= "</div>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <label for='comments' class='col-12 control-label-notes'>$langComments</label>
+                                                    " . rich_text_editor('comments', 5, 40, '') . "
+                                                </div>
+
+                                                <div class='form-group mt-5'>
+                                                    <div class='col-12 d-flex justify-content-end aling-items-center'>
+                                                        <input class='btn submitAdminBtn' type='submit' name='submit_upload' value='$langSubmit'>
+                                                    </div>
+                                                </div>
+
+                                                " . generate_csrf_token_form_field() . "    
+
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class='d-none d-lg-block'>
+                                    <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            ";
+
+    return $tool_content;
+
 }

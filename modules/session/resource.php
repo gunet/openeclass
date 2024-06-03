@@ -46,33 +46,37 @@ require_once 'functions.php';
 load_js('tools.js');
 
 if(isset($_GET['session'])){
-    $data['session_id'] = $session_id = $_GET['session'];
+    $data['sessionID'] = $sessionID = $_GET['session'];
 }
 elseif(isset($_GET['id'])){
-    $data['session_id'] = $session_id = $_GET['id'];
+    $data['sessionID'] = $sessionID = $_GET['id'];
 }
 
-$sessionTitle = title_session($course_id,$session_id);
+$sessionTitle = title_session($course_id,$sessionID);
 $pageName = $langAddResource;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
-$navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $session_id , 'name' => $sessionTitle);
+$navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 
 if(isset($_POST['submit_doc'])){
-    insert_session_docs($session_id);
+    insert_session_docs($sessionID);
 }elseif(isset($_POST['submit_tc'])){
-    insert_session_tc($session_id);
+    insert_session_tc($sessionID);
 }elseif(isset($_POST['submit_work'])){
-    insert_session_work($session_id);
+    insert_session_work($sessionID);
+}elseif(isset($_POST['submit_upload'])){
+    upload_session_doc($sessionID);
 }
 
 $type_resource = '';
 if(isset($_GET['type'])){
     if($_GET['type'] == 'doc'){
-        $type_resource = list_documents($session_id);
+        $type_resource = list_documents($sessionID,$course_id);
     }elseif($_GET['type'] == 'work'){
-        $type_resource = list_assignment($session_id);
+        $type_resource = list_assignment($sessionID);
     }elseif($_GET['type'] == 'tc'){
-        $type_resource = list_teleconferences($session_id);
+        $type_resource = list_teleconferences($sessionID);
+    }elseif($_GET['type'] == 'doc_upload'){
+        $type_resource = upload_file($sessionID);
     }
 }
 $data['type_resource'] = $type_resource;

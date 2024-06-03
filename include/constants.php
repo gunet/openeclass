@@ -212,6 +212,7 @@ define('GROUP', 1);
 define('EBOOK', 2);
 define('COMMON', 3);
 define('MYDOCS', 4);
+define('MYSESSIONS',5);
 
 // path for certificates / badges templates
 define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");
