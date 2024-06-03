@@ -387,7 +387,6 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
                 q($title) . "</a>";
         } else {
             if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
-                define('MAIN_DOCUMENTS', true);
                 $file->title = $title;
                 $image = choose_image('.' . $file->format);
                 $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
@@ -398,15 +397,14 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
                 $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
                 $link = MultimediaHelper::chooseMediaAhref($file_obj);
             }else{// These files are regarded with session documents
-                define('SESSION_DOCUMENTS', true);
                 $file->title = $title;
                 $image = choose_image('.' . $file->format);
                 $download_url = "{$urlServer}modules/document/session_space.php?course=$course_code&amp;download=$file->path";
                 $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                     "<input type='hidden' value='$download_url'>" : '';
                 $file_obj = MediaResourceFactory::initFromDocument($file);
-                $file_obj->setAccessURL(file_url($file->path, $file->filename));
-                $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+                $file_obj->setAccessURL(session_file_url($file->path, $file->filename));
+                $file_obj->setPlayURL(session_file_playurl($file->path, $file->filename));
                 $link = MultimediaHelper::chooseMediaAhref($file_obj);
             }
         }

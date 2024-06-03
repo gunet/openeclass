@@ -105,8 +105,8 @@
                                 starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
                                 var mywhen = starttime + ' - ' + endtime;
 
-                                start = moment(start).format('YYYY-MM-DD HH:mm');
-                                end = moment(end).format('YYYY-MM-DD HH:mm');
+                                start = moment(start).format('DD-MM-YYYY HH:mm');
+                                end = moment(end).format('DD-MM-YYYY HH:mm');
 
                                 $('#startTimeTmp').val(start);
                                 $('#endTimeTmp').val(end);

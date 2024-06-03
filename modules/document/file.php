@@ -85,7 +85,6 @@ if ($cinfo_components[0] == 'common') {
     define('MY_DOCUMENTS', true);
     $mydocs_uid = $cinfo_components[1];
 } elseif ($cinfo_components[0] == 'session'){
-    define('SESSION_DOCUMENTS', true);
     $require_current_course = true;
     $_SESSION['fileSessionId'] = $cinfo_components[1];
 } else {
