@@ -72,7 +72,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 // download directory or file
 // ---------------------------
 if (isset($_GET['download'])) {
-    $downloadDir = $_GET['download'];
+    $downloadDir = getDirectReference($_GET['download']);
 
     if ($downloadDir == '/') {
         $format = '.dir';
@@ -80,7 +80,9 @@ if (isset($_GET['download'])) {
     } else {
         $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
                         WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND
-                        path = ?s", $course_id, 0, 0, $downloadDir);
+                        path = ?s", $course_id, MYSESSIONS, $sessionID, $downloadDir);
+                        
+        
         if (!$q) {
             not_found($downloadDir);
         }
@@ -117,6 +119,7 @@ if (isset($_GET['download'])) {
             redirect($extra_path);
         }
     } else {
+        $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID;
         $dload_filename = $basedir . $downloadDir;
         $delete = false;
     }

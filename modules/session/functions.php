@@ -356,7 +356,7 @@ function show_sessionResource($info) {
  */
 function show_session_doc($title, $comments, $resource_id, $file_id) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToUnitPrereq;
+           $id, $course_code, $langResourceBelongsToUnitPrereq, $sessionID;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
@@ -389,7 +389,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
             if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
                 $file->title = $title;
                 $image = choose_image('.' . $file->format);
-                $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
+                $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getInDirectReference($file->path);
                 $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                     "<input type='hidden' value='$download_url'>" : '';
                 $file_obj = MediaResourceFactory::initFromDocument($file);
@@ -399,7 +399,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
             }else{// These files are regarded with session documents
                 $file->title = $title;
                 $image = choose_image('.' . $file->format);
-                $download_url = "{$urlServer}modules/document/session_space.php?course=$course_code&amp;download=$file->path";
+                $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
                 $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                     "<input type='hidden' value='$download_url'>" : '';
                 $file_obj = MediaResourceFactory::initFromDocument($file);
@@ -421,7 +421,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-start'>$download_hidden_link $link $res_prereq_icon $comment</td>
           <td>$file->creator</td>" .
-          session_actions('doc', $resource_id, $status) .
+          session_actions('doc', $resource_id, $status, $file->id) .
             "</tr>";
 }
 
@@ -504,7 +504,8 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td>$exlink $res_prereq_icon $comment_box $assign_to_users_message</td>" .
+          <td>$exlink $res_prereq_icon $comment_box $assign_to_users_message</td>
+          <td></td>" .
             session_actions('lp', $resource_id, $visibility) . '
         </tr>';
 }
@@ -556,7 +557,8 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td>$tclink $comment_box</td>" .
+          <td>$tclink $comment_box</td>
+          <td></td>" .
         session_actions('tc', $resource_id, $visibility) . '
         </tr>';
 }
@@ -575,13 +577,21 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
-    $langNeverBrowsed, $langAddToUnitCompletion;
+    $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload, $sessionID;
 
     $res_types_sessions_completion = ['work', 'doc', 'poll'];
     if (in_array($res_type, $res_types_sessions_completion)) {
         $res_type_to_session_compl = true;
     } else {
         $res_type_to_session_compl = false;
+    }
+
+    $downloadPath = "";
+    $fromSystem = 0;
+    if($res_type == 'doc' && $res_id){
+        $res = Database::get()->querySingle("SELECT path,subsystem FROM document WHERE id = ?d",$res_id);
+        $downloadPath = $res->path;
+        $fromSystem = $res->subsystem;
     }
     //if (!$is_editor) {
         // if (prereq_unit_has_completion_enabled($_GET['id'])) {
@@ -616,42 +626,62 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     }
 
     //$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
-    if($is_editor){
-        $content = "<td style='padding: 10px 0; width: 85px;'>
-                <div class='d-flex justify-content-center gap-3'>
-                    <div class='reorder-btn d-flex justify-content-center align-items-center'>
-                        <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
-                    </div>
-                <div>";
-
-        $content .= action_button(array(
-                array('title' => $langEditChange,
-                      'url' => $edit_link,
-                      'icon' => 'fa-edit',
-                      'show' => $status != 'del'),
-                // array('title' => $showorhide,
-                //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
-                //       'icon' => $icon_vis,
-                //       'show' => $status != 'del' and (in_array($res_type, array('text', 'video', 'forum', 'topic')) or $q->flipped_flag==2)),
-                // array('title' => $langAddToCourseHome,
-                //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
-                //       'icon' => $icon_vis,
-                //       'show' => $status != 'del' and in_array($res_type, array('description'))),
-                // array('title' => $langAddToUnitCompletion,
-                //        'url' => "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$_GET[id]&amp;badge=1&add=true&amp;act=$res_type&amp;unit_res_id=$resource_id",
-                //        'icon' => 'fa-star',
-                //        'show' => prereq_unit_has_completion_enabled($_GET['id']) && $res_type_to_session_compl),
-                array('title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
-                      'icon' => 'fa-xmark',
-                      'confirm' => $langConfirmDelete,
-                      'class' => 'delete')
-            ));
+    if($fromSystem == MYSESSIONS){
+        $download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;download=" . getIndirectReference($downloadPath);
     }else{
-        $content = "<td></td>";
+        $download_url = $urlAppend . "modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($downloadPath);
     }
+    
+    if($is_editor){
+        $content = "<td>
+                        <div class='d-flex justify-content-end align-items-center gap-3 w-100'>
+                            <div class='reorder-btn d-flex justify-content-center align-items-center'>
+                                <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                            </div>";
 
-    $content .= "</div></div></td>";
+                    $content .= action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => $edit_link,
+                                'icon' => 'fa-edit',
+                                'show' => $status != 'del'),
+                            // array('title' => $showorhide,
+                            //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
+                            //       'icon' => $icon_vis,
+                            //       'show' => $status != 'del' and (in_array($res_type, array('text', 'video', 'forum', 'topic')) or $q->flipped_flag==2)),
+                            // array('title' => $langAddToCourseHome,
+                            //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
+                            //       'icon' => $icon_vis,
+                            //       'show' => $status != 'del' and in_array($res_type, array('description'))),
+                            // array('title' => $langAddToUnitCompletion,
+                            //        'url' => "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$_GET[id]&amp;badge=1&add=true&amp;act=$res_type&amp;unit_res_id=$resource_id",
+                            //        'icon' => 'fa-star',
+                            //        'show' => prereq_unit_has_completion_enabled($_GET['id']) && $res_type_to_session_compl),
+                            array('title' => $langDownload,
+                                'url' => "$download_url",
+                                'icon' => 'fa-download',
+                                'show' => $res_type == 'doc'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
+                                'icon' => 'fa-xmark',
+                                'confirm' => $langConfirmDelete,
+                                'class' => 'delete')
+                        ));
+        $content .= "   <div>
+                    </td>";
+    }else{
+        if($res_type == 'doc'){
+            $content = "<td>";
+                    $content .= action_button(array(
+                        array('title' => $langDownload,
+                            'url' => "$download_url",
+                            'icon' => 'fa-download')
+                    ));
+            $content .= "</td>";
+        }else{
+            $content = "<td></td>";
+        }
+        
+    }
 
     $first = false;
     return $content;

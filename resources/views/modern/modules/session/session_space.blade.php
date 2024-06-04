@@ -29,10 +29,6 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    
-                    @if(!$is_editor)
-                        {!! $action_bar !!}
-                    @endif
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
