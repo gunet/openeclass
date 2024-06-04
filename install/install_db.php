@@ -2099,6 +2099,7 @@ $db->query("CREATE TABLE `badge` (
   `id` int(11) not null auto_increment primary key,
   `course_id` int(11) not null,
   `unit_id` int(11) not null default 0,
+  `session_id` int(11) not null default 0,
   `issuer` varchar(255) not null default '',
   `icon` mediumint(8),
   `title` varchar(255) not null,

@@ -3065,6 +3065,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE mod_session ADD `type_remote` int(11) NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::fieldExists('badge', 'session_id')) {
+        Database::get()->query("ALTER TABLE badge ADD `session_id` int(11) NOT NULL DEFAULT 0");
+    }
+
 }
 
 

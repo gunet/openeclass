@@ -80,7 +80,7 @@
                                 'show' => $is_editor
                             ),
                             array('title' => trans('langCompleteSession'),
-                                'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID,
+                                'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID . '&manage=1',
                                 'icon' => 'fa fa-gear',
                                 'button-class' => 'btn-success',
                                 'show' => $is_editor

@@ -745,14 +745,15 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @return type
  * @global type $course_id
  */
-function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = null) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0) {
 
     global $course_id;
 
-    if ($unit_id) {
+    if ($unit_id or $session_id) {
         $new_id = Database::get()->query("INSERT INTO badge
                                 SET course_id = ?d,
                                 unit_id = ?d,
+                                session_id = ?d,
                                 title = ?s,
                                 description = ?s,
                                 message = ?s,
@@ -760,7 +761,7 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 issuer = ?s,
                                 active = ?d,
                                 bundle = ?d,
-                                expires = ?t", $course_id, $unit_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
+                                expires = ?t", $course_id, $unit_id, $session_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
     } else {
         if ($table == 'certificate') {
             $new_id = Database::get()->query("INSERT INTO certificate
@@ -992,7 +993,7 @@ function delete_certificate($element, $element_id) {
  * @param type $element_id
  * @param int $unit_id
  */
-function purge_certificate($element, $element_id, $unit_id = 0) {
+function purge_certificate($element, $element_id, $unit_id = 0, $session_id = 0) {
 
     global $course_id;
 
@@ -1003,8 +1004,8 @@ function purge_certificate($element, $element_id, $unit_id = 0) {
         Database::get()->query("DELETE FROM badge_criterion WHERE badge IN
                                 (SELECT id FROM badge WHERE id = ?d AND course_id = ?d)", $element_id, $course_id);
         Database::get()->query("DELETE FROM user_badge WHERE badge IN
-                                (SELECT id FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = ?d)", $element_id, $course_id, $unit_id);
-        Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = ?d", $element_id, $course_id, $unit_id);
+                                (SELECT id FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = ?d AND session_id = ?d)", $element_id, $course_id, $unit_id, $session_id);
+        Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d AND unit_id = ?d AND session_id = ?d", $element_id, $course_id, $unit_id, $session_id);
     } else { // purge certificates
         Database::get()->query("DELETE FROM user_certificate_criterion WHERE certificate_criterion IN
                             (SELECT id FROM certificate_criterion WHERE certificate IN

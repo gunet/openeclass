@@ -842,3 +842,688 @@ function upload_session_doc($sid){
         redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// REGARGIND SESSION COMPLETION
+
+/**
+ * @return string
+ */
+function localhostUrl() {
+    return sprintf(
+        "%s://%s",
+        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+        $_SERVER['SERVER_NAME']
+    );
+}
+
+/**
+ * @brief check if we have created unit completion badge
+ * @return boolean
+ * @global type $course_id
+ * @param int $session_id
+ */
+function is_session_completion_enabled($session_id) {
+    global $course_id;
+
+    $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d
+                                                    AND bundle = -1", $course_id, $session_id);
+
+    if ($sql) {
+        return $sql->id;
+    } else {
+        return 0;
+    }
+}
+
+/**
+ * @brief display badge / certificate settings
+ * @param type $element
+ * @param type $element_id
+ */
+function display_session_settings($element, $element_id, $session_id = 0): void
+{
+
+    global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
+           $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
+           $langpublisher, $langEditChange, $is_editor;
+
+    $field = ($element == 'certificate') ? 'template' : 'icon';
+
+    $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle
+                            FROM $element WHERE id = ?d AND course_id = ?d AND session_id = ?d", $element_id, $course_id, $session_id);
+
+    $bundle = $data->bundle;
+    $issuer = $data->issuer;
+    $title = $data->title;
+    $description = $data->description;
+    $message = $data->message;
+
+    if ($bundle != -1) {
+        if ($element == 'badge') {
+            $badge_details = get_badge_icon($data->icon);
+            $badge_name = key($badge_details);
+            $badge_icon = $badge_details[$badge_name];
+            $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
+        } else {
+            $template_details = get_certificate_template($data->template);
+            $template_name = key($template_details);
+            $template_filename = $template_details[$template_name];
+            $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
+            $icon_link = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
+        }
+        $tool_content .= "
+                <div class='col-12'>
+                    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
+                                <h3>
+                                    $langProgressBasicInfo
+                                </h3>";
+                            if ($is_editor) {
+                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1&amp;session={$session_id}' class='btn submitAdminBtn gap-2'>"
+                                            . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
+                                            </a>
+                                        </div>";
+                            }
+                        $tool_content .= "</div>
+                        <div class='card-body'>
+                            <div class='d-flex justify-content-md-start justify-content-center align-items-start flex-wrap gap-5'>
+                                <div>
+                                    <img class='img-responsive center-block m-auto d-block' src='$icon_link'>
+                                </div>
+                                <div class='flex-grow-1'>
+                                    <ul class='list-group list-group-flush'>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langTitle</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$title</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langDescription</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$description</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langMessage</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct text-start'>$message</div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langpublisher</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct text-start'>$issuer</div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
+    } else { // course completion
+        if (!$session_id) {
+            $tool_content .= "
+            <div class='col-12'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-body'>
+
+                        <h3 class='mb-0 text-center'>$langCourseCompletion</h3>
+
+                    </div>
+                </div>
+            </div>";
+        }
+    }
+}
+
+/**
+ * @brief display all certificate activities
+ * @param type $element
+ * @param type $certificate_id
+ */
+function display_session_activities($element, $id, $session_id = 0) {
+
+    global $tool_content, $course_code, $is_editor,
+           $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
+           $langOfAssignment, $langOfPoll, $langConfirmDelete, $langDelete, $langEditChange,
+           $langDocumentAsModuleLabel, $langCourseParticipation,
+           $langAdd, $langBack, $langUsers,
+           $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
+           $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
+           $langNoUnitPrerequisite, $langSessionCompletion;
+
+    if ($session_id) {
+        $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
+    } else {
+        if ($element == 'certificate') {
+            $link_id = "course=$course_code&amp;certificate_id=$id&amp;session=$session_id";
+        } else {
+            $link_id = "course=$course_code&amp;badge_id=$id&amp;session=$session_id";
+        }
+    }
+
+    $tool_content .= action_bar(
+            array(
+                array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$session_id",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary',
+                    'show'  =>  $session_id ? false : true),
+                array('title' => $langUsers,
+                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
+                    'icon' => 'fa-users',
+                    'level' => 'primary-label',
+                    'show'  =>  $session_id ? false : true)
+            ),
+            false
+        );
+
+    if ($session_id) {
+        // check if unit completion is enabled
+        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
+                                                            WHERE course_id = ?d AND session_id = ?d
+                                                            AND bundle = -1", $course_id, $session_id)->active;
+
+        // check if current element is unit completion badge
+        $cc_is_current = false;
+        if ($element == 'badge') {
+            $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
+            if ($bundle && $bundle == -1) {
+                $cc_is_current = true;
+            }
+        }
+    } else {
+        // check if course completion is enabled
+        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
+                                                            WHERE course_id = ?d AND bundle = -1
+                                                            AND session_id = ?d", $course_id, $session_id)->active;
+
+        // check if current element is course completion badge
+        $cc_is_current = false;
+        if ($element == 'badge') {
+            $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
+            if ($bundle && $bundle == -1) {
+                $cc_is_current = true;
+            }
+        }
+    }
+
+    // certificate details
+    $tool_content .= display_session_settings($element, $id, $session_id);
+    $addActivityBtn = action_button(array(
+        array('title' => $session_id ? $langOfUnitCompletion : $langOfCourseCompletion,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". ($session_id ? "unitcompletion" : "coursecompletion"),
+            'icon' => 'fa fa-trophy',
+            'show' => !$cc_enable),
+        array('title' => $langOfAssignment,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
+            'icon' => 'fa fa-flask space-after-icon',
+            'class' => ''),
+        array('title' => $langDocumentAsModuleLabel,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
+            'icon' => 'fa fa-folder-open fa-fw',
+            'class' => ''),
+        array('title' => $langOfPoll,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
+            'icon' => 'fa fa-question-circle fa-fw',
+            'class' => ''),
+        array('title' => $langOfCourseCompletion,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
+            'icon' => 'fa fa-trophy',
+            'show' => $cc_enable && !$cc_is_current)),
+        array(
+            'secondary_title' => $langAdd,
+            'secondary_icon' => 'fa-plus',
+            'secondary_btn_class' => 'submitAdminBtn'
+        ));
+
+    //get available activities
+    $result = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
+
+    if (!$session_id) {
+        $tool_content .= "
+            <div class='col-12 mt-4'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                        <h3>
+                            $langAttendanceActList
+                        </h3>";
+                    if ($is_editor) {
+                        $tool_content .= "<div>
+                            $addActivityBtn
+                        </div>";
+                    }
+ $tool_content .=  "</div>";
+        $tool_content .= "
+                    <div class='card-body'>";
+                        if (count($result) == 0) {
+                            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+                        } else {
+                          $tool_content .= "<div class='table-responsive mt-0'>
+                                                <table class='table-default'><thead>
+                                                    <tr class='list-header'>
+                                                        <th>
+                                                            $langTitle
+                                                        </th>
+                                                        <th>
+                                                            $langType
+                                                        </th>
+                                                        <th>
+                                                            $langValue
+                                                        </div>
+                                                        <th>
+                                                            <i class='fa fa-cogs'></i>
+                                                        </th>
+                                                    </tr></thead>";
+                                                    foreach ($result as $details) {
+                                                        $resource_data = get_resource_details($element, $details->id);
+                                                        $tool_content .= "
+                                                        <tr>
+                                                            <td>".$resource_data['title']."</td>
+                                                            <td>". $resource_data['type']."</td>
+                                                            <td>";
+                                                                if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                                                    $op = get_operators();
+                                                                    $tool_content .= $op[$details->operator];
+                                                                } else {
+                                                                    $tool_content .= "&mdash;";
+                                                                }
+                                                                if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                                                    $tool_content .= "</td>";
+                                                                } else {
+                                                                    $tool_content .= "$details->threshold</td>";
+                                                                }
+                                                                $tool_content .= "<td>";
+                                                                $tool_content .= "<div class='text-end'>".
+                                                                    action_button(array(
+                                                                        array('title' => $langEditChange,
+                                                                            'icon' => 'fa-edit',
+                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;act_mod=$details->id",
+                                                                            'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                        ),
+                                                                        array('title' => $langDelete,
+                                                                            'icon' => 'fa-xmark',
+                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;del_cert_res=$details->id",
+                                                                            'confirm' => $langConfirmDelete,
+                                                                            'class' => 'delete'))).
+                                                                "</div>
+                                                            </td>
+                                                        </tr>";
+                                                    }
+
+                                    $tool_content .= "
+                                                </table>
+                                            </div>";
+                        }
+        $tool_content .= "
+                    </div>
+                </div>
+            </div>";
+    } else {
+            $tool_content .= "<div class='main-content'>
+                                <div class='col-12'>
+                                    <div class='card panelCard px-lg-4 py-lg-3'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                            <h3>
+                                                $langSessionCompletion
+                                            </h3>
+                                            <div>
+                                                $addActivityBtn
+                                            </div>
+                                        </div>
+                                        <div class='panel-body'>";
+
+                                            if (count($result) == 0) {
+                                                $tool_content .= "<p class='margin-top-fat text-center text-muted mb-3'>$langNoActivCert</p>";
+                                            } else {
+
+                                                $tool_content .= " <div class='res-table-wrapper'>
+                                                                        <div class='table-responsive'>
+                                                                            <table class='table-default'><thead>
+                                                                                <tr class='list-header'>
+                                                                                    <th>
+                                                                                        $langTitle
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        $langType
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        $langValue
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        <i class='fa fa-cogs'></i>
+                                                                                    </th>
+                                                                                </tr></thead>";
+                                                                                foreach ($result as $details) {
+                                                                                    $resource_data = get_resource_details($element, $details->id, $session_id);
+                                                                                    $tool_content .= "
+                                                                                    <tr>
+                                                                                        <td>".$resource_data['title']."</td>
+                                                                                        <td>". $resource_data['type']."</td>
+                                                                                        <td>";
+                                                                                    if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+                                                                                        $op = get_operators();
+                                                                                        $tool_content .= $op[$details->operator];
+                                                                                    } else {
+                                                                                        $tool_content .= "&mdash;";
+                                                                                    }
+                                                                                    if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                                                                                        $tool_content .= "&nbsp;</td>";
+                                                                                    } else {
+                                                                                        $tool_content .= "&nbsp;$details->threshold</td>";
+                                                                                    }
+                                                                                    $tool_content .= "<td class='text-end'>".
+                                                                                        action_button(array(
+                                                                                            array('title' => $langEditChange,
+                                                                                                'icon' => 'fa-edit',
+                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;act_mod=$details->id",
+                                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                                            ),
+                                                                                            array('title' => $langDelete,
+                                                                                                'icon' => 'fa-xmark',
+                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;del_cert_res=$details->id",
+                                                                                                'confirm' => $langConfirmDelete,
+                                                                                                'class' => 'delete'))).
+                                                                                        "</td></tr>";
+                                                                                }
+
+                                                          $tool_content .= "</table>
+                                                                        </div>
+                                                                    </div>";
+                                            }
+                       $tool_content .= "</div>
+                                    </div>";
+            $tool_content .=    "</div>
+                            </div>";
+
+                        //************* UNIT PREREQUISITES *************//
+        //                 $course_units = Database::get()->queryArray("SELECT * FROM course_units
+        //                                                                     WHERE course_id = ?d", $course_id);
+
+        //                 $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit
+        //                                                                             FROM unit_prerequisite up
+        //                                                                             JOIN course_units cu ON (cu.id = up.unit_id)
+        //                                                                             WHERE cu.id = ".$unit_id);
+
+        //                 $action_button_content = [];
+
+        //                 foreach ($course_units as $prereq) {
+        //                     if ($prereq->id == $unit_id) { // Don't include current unit on prerequisites list
+        //                         continue;
+        //                     }
+        //                     $action_button_content[] = [
+        //                         'title' =>  $prereq->title,
+        //                         'icon'  =>  'fa fa-book fa-fw',
+        //                         'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&unit_id=$unit_id",
+        //                         'class' =>  '',
+        //                         'show'  =>  !is_unit_prereq_enabled($unit_id),
+        //                     ];
+        //                 }
+        //                 $addPrereqBtn = action_button($action_button_content,
+        //                     array(
+        //                         'secondary_title' => $langNewUnitPrerequisite,
+        //                         'secondary_icon' => 'fa-plus',
+        //                         'secondary_btn_class' => 'submitAdminBtn',
+        //                     ));
+        // $tool_content .= "
+
+        //                 <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+        //                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+        //                         <h3>
+        //                             $langUnitPrerequisites
+        //                         </h3>
+        //                         <div>
+        //                             $addPrereqBtn
+        //                         </div>
+        //                     </div>
+        //                     <div class='card-body'>
+        //                         <div class='res-table-wrapper'>";
+        //                                 $delPrereqBtn = action_button(array(
+        //                                 array('title' => $langDelete,
+        //                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&unit_id=$unit_id",
+        //                                     'icon' => 'fa-xmark',
+        //                                     'class' => 'delete',
+        //                                     'confirm' => $langConfirmDelete)));
+
+        //                         if ( $unit_prerequisite_id ) {
+        //                             $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units
+        //                                                                                         WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
+
+        //                                 $tool_content .= "
+        //                                 <div class='table-responsive'>
+        //                                     <table class='table-default'>
+        //                                         <tr>
+        //                                             <td><p class='text-start'>$prereq_unit_title</p></td>
+
+        //                                             <td>$delPrereqBtn</td>
+        //                                         </tr>
+        //                                     </table>
+        //                                 </div>";
+        //                         } else {
+        //                             $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
+        //                         }
+
+        //     $tool_content .= "  </div>
+        //                     </div>
+        //                 </div>
+
+    }
+}
+
+/**
+ * @brief display editing form about resource
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langModify
+ * @global type $langOperator
+ * @global type $langUsedCertRes
+ * @param type $element_id
+ * @param type $element
+ * @param type $activity_id
+ * @param int $unit_id
+ */
+function display_session_modification_activity($element, $element_id, $activity_id, $session_id = 0) {
+
+    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    if (resource_usage($element, $activity_id)) { // check if resource has been used by user
+        Session::flash('message',$langUsedCertRes);
+        Session::flash('alert-class', 'alert-warning');
+        if ($unit_id) {
+            redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$session_id");
+        } else {
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;{$element}_id=$element_id");
+        }
+
+    } else { // otherwise editing is not allowed
+        $data = Database::get()->querySingle("SELECT threshold, operator FROM {$element}_criterion
+                                            WHERE id = ?d AND $element = ?d", $activity_id, $element_id);
+
+        if ($session_id) {
+            $action = "complete.php?course=$course_code&manage=1&session=$session_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $operators = get_operators();
+
+        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'><form action=$action method='post'><div class='form-wrapper form-edit rounded'>";
+        $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
+        $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langOperator:</label>";
+        $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
+        $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='cert_threshold' value='$data->threshold'></span>";
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='mod_cert_activity' value='$langModify'>";
+        $tool_content .= "</div>";
+        $tool_content .= "</div></form>
+
+    </div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+</div>
+</div>";
+    }
+}
+
+
+
+
+/**
+ * @brief choose activity for inserting in certificate / badge
+ * @param type $element_id
+ * @param type $element
+ * @param type $activity
+ * @param type $unit_id
+ * @param type $unit_resource_id
+ */
+function insert_session_activity($element, $element_id, $activity, $session_id = 0, $session_resource_id = 0) {
+
+    switch ($activity) {
+        case 'coursecompletion':
+            add_course_completion_to_certificate($element_id);
+            break;
+        case 'unitcompletion':
+            add_unit_completion_to_certificate($element_id, $session_id);
+            break;
+        case AssignmentEvent::ACTIVITY:
+        case 'work':
+            display_session_available_assignments($element, $element_id, AssignmentEvent::ACTIVITY, $session_id, $session_resource_id);
+            break;
+        case 'document':
+        case 'doc':
+            display_available_documents($element, $element_id, $session_id, $session_resource_id);
+            break;
+        case 'poll':
+            display_available_polls($element, $element_id, $session_id, $session_resource_id);
+            break;
+        case CourseCompletionEvent::ACTIVITY:
+            display_available_coursecompletiongrade($element, $element_id, $unit_id);
+            break;
+        default: break;
+        }
+}
+
+/**
+ * @brief assignments display form
+ * @param type $element
+ * @param type $element_id
+ * @param int $unit_id
+ * @param int $unit_resource_id
+ */
+function display_session_available_assignments($element, $element_id, $activity_type, $session_id = 0, $session_resource_id = 0) {
+
+    global $course_id, $tool_content, $langNoAssign, $course_code,
+           $langTitle, $langGroupWorkDeadline_of_Submission,
+           $langAddModulesButton, $langChoice, $langParticipateSimple,
+           $langOperator, $langGradebookGrade, $urlServer;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $form_submit_name = 'add_assignment';
+    if ($activity_type == AssignmentSubmitEvent::ACTIVITY) {
+        $form_submit_name = 'add_assignment_participation';
+    }
+    $notInSql = "(SELECT resource FROM {$element}_criterion WHERE $element = ?d
+                     AND resource != ''
+                     AND activity_type = '" . $activity_type . "'
+                     AND module = " . MODULE_ID_ASSIGN . ")";
+
+    if ($session_id) {
+        if ($session_resource_id) {
+            $resWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
+                              FROM assignment, session_resources
+                             WHERE assignment.id = session_resources.res_id
+                               AND session_id = ?d
+                               AND session_resources.id = ?d";
+            $result = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $session_resource_id, $element_id);
+        } else {
+            $unitWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
+                               FROM assignment, session_resources
+                              WHERE assignment.id = session_resources.res_id
+                                AND session_id = ?d
+                                AND session_resources.type = 'work'
+                                AND visible = 1";
+            $result = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $element_id);
+        }
+    } else {
+        $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
+                              AND active = 1
+                              AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
+        $result = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSql ORDER BY title", $course_id, $element_id);
+    }
+
+    if (count($result) == 0) {
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
+    } else {
+        if ($session_id) {
+            $action = "complete.php?course=$course_code&manage=1&session=$session_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
+            "<input type='hidden' name = '$element_name' value='$element_id'>" .
+            "<div class='table-responsive'><table class='table-default'>" .
+            "<thead><tr class='list-header'>" .
+            "<th>$langTitle</th>" .
+            "<th>$langGroupWorkDeadline_of_Submission</th>";
+        if ($activity_type == AssignmentEvent::ACTIVITY) {
+            "<th>$langOperator</th>" .
+            "<th>$langGradebookGrade</th>";
+        }
+        $tool_content .=
+            "<th>$langChoice</th>" .
+            "</tr></thead>";
+        foreach ($result as $row) {
+            $assignment_id = $row->id;
+            $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
+            $tool_content .= "<tr>" .
+                "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
+                "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>";
+            if ($activity_type == AssignmentEvent::ACTIVITY) {
+                $tool_content .=
+                "<td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
+                "<td><input class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
+            }
+            $tool_content .=
+                "<td><label class='label-container'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                "</tr>";
+        }
+        $tool_content .= "</table></div>
+                          <div class='text-end mt-3'>
+                            <input class='btn submitAdminBtn' type='submit' name='$form_submit_name' value='$langAddModulesButton'>
+                          </div></form>";
+    }
+}

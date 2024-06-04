@@ -1509,3 +1509,14 @@ $langUsageVisits = "Collaboration Visits";
  $m['password_collab'] = "Password for collaboration";
  $lang_openCourse_inModal = "Should the collaboration information be displayed in Modal (Frame) in the open collaborations?</br>
  If you do not select this option, the information of the partnership will be displayed in a new page of your browser.";
+ $langGroupWorkIntro = '
+	Assignments available in this collaboration are displayed below. Please select
+	the assignment you wish to submit on behalf of your group and
+	add any comments you want to be read by the collaboration consultant or coordinator. Please note that, when a submission has already been made by you or another member of your group, and you submit a new file for the same assignment, this file will replace the old file in the system (the old file will be deleted).
+	Furthermore, no new submissions are allowed when the assignment has
+	been graded.';
+$langSessionCompletionActivated = "Session completion enabled";
+$langInvalidCourseSessionPrerequisites = "Session completion is not enabled.";
+$langManageSession = "Session management";
+$langSessionCompletion = "End of session";
+$langSessionCompletionMessage = "The session ended successfully";
