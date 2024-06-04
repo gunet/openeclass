@@ -39,6 +39,16 @@ $langsTeachers = "coordinators";
 $langsOfTeachers = "coordinators";
 $langCTeacher = "COORDINATOR";
 
+$langConsultant = "Consultant";
+$langOfConsultant = "Consultant";
+$langConsultants = "Consultants";
+$langOfConsultants = "Consultants";
+
+$langsTeacher = "consultant";
+$langsOfTeacher = "consultant";
+$langsTeachers = "consultants";
+$langsOfTeachers = "consultants";
+
 $langCourseAdmin = "Admin";
 $langOfCourseAdmin = "Admin";
 $langCourseAdmins = "Administrators";

@@ -36,6 +36,16 @@ $langsTeachers = "συντονιστές";
 $langsOfTeachers = "συντονιστών";
 $langCTeacher = "ΣΥΝΤΟΝΙΣΤΗΣ";
 
+$langConsultant = "Σύμβουλος";
+$langOfConsultant = "Σύμβουλο";
+$langConsultants = "Σύμβουλους";
+$langOfConsultants = "Συμβούλων";
+
+$langsTeacher = "σύμβουλος";
+$langsOfTeacher = "σύμβουλο";
+$langsTeachers = "σύμβουλοι";
+$langsOfTeachers = "σύμβούλων";
+
 $langCourseAdminTeacher = "Διαχειριστής - Συντονιστής";
 $langOfCourseAdminTeacher = "Διαχειριστή - Συντονιστή";
 $langCourseAdminTeachers = "Διαχειριστές - Συντονιστές";
@@ -51,19 +61,19 @@ $langOfEditor = "Βοηθού συντονιστή";
 $langsEditor = "βοηθός συντονιστή";
 $langsOfEditor = "βοηθού συντονιστή";
 
-$langStudent = "Μέλος";
-$langOfStudent = "Μέλους";
-$langStudents = "Μέλη";
-$langOfStudents = "Μελών";
+$langStudent = "Μέλος - ωφελούμενος";
+$langOfStudent = "Μέλους - ωφελούμενου";
+$langStudents = "Μέλη - ωφελούμενοι";
+$langOfStudents = "Μελών - ωφελούμενων";
 $langCStudent = "ΜΕΛΟΣ";
 $langCStudent2 = "ΜΕΛΟΣ";
 
-$langsStudent = "μέλος";
-$langsOfStudent = "μέλους";
-$langsStudents = "μέλη";
-$langsOfStudents = "μελών";
-$langsOfStudentss = "μέλη";
-$langsstudent_acc = "μέλος";
+$langsStudent = "μέλος - ωφελούμενος";
+$langsOfStudent = "μέλους - ωφελούμενου";
+$langsStudents = "μέλη - ωφελούμενοι";
+$langsOfStudents = "μελών - ωφελούμενων";
+$langsOfStudentss = "μέλη - ωφελούμενοι";
+$langsstudent_acc = "μέλος- ωφελούμενος";
 
 $langCourse = "Συνεργασία";
 $langCourses = "Συνεργασίες";

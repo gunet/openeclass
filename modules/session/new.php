@@ -58,8 +58,8 @@ if(isset($_POST['submit'])){
   $v->labels(array(
       'title' => "$langTheField $langTitle",
       'creators' => "$langTheField $langCreator",
-      'one_participant' => "$langTheField $langSelectUser",
-      'many_participants' => "$langTheField $langSelectUser",
+      'one_participant' => "$langTheField $langParticipants",
+      'many_participants' => "$langTheField $langParticipants",
       'start_session' => "$langTheField $langDate",
       'end_session' => "$langTheField $langDate"
   ));

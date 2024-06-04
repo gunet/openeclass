@@ -419,7 +419,8 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
-          <td class='text-start'>$download_hidden_link $link $res_prereq_icon $comment</td>" .
+          <td class='text-start'>$download_hidden_link $link $res_prereq_icon $comment</td>
+          <td>$file->creator</td>" .
           session_actions('doc', $resource_id, $status) .
             "</tr>";
 }
@@ -703,7 +704,8 @@ function session_exists($sid){
 
 function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
-            $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, $langUploadDocCompleted, $sessionID;
+            $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
+            $langUploadDocCompleted, $sessionID, $langFileExists;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -718,6 +720,21 @@ function upload_session_doc($sid){
         if($_FILES['file-upload']['error'] > 0) { 
             // cover_image is empty (and not an error), or no file was uploaded
             Session::flash('message',$langEmptyUploadFile);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        }
+
+        //if file exists
+        $path_exists = Database::get()->queryArray("SELECT * FROM document
+                                            WHERE course_id = ?d 
+                                            AND subsystem = ?d 
+                                            AND subsystem_id = ?d 
+                                            AND filename = ?s 
+                                            AND lock_user_id = ?d",
+                                            $course_id, MYSESSIONS, $sid, $_FILES['file-upload']['name'], $uid);
+
+        if (count($path_exists) > 0) {
+            Session::flash('message',$langFileExists);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
         }

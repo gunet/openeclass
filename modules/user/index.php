@@ -187,7 +187,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'show' => $myrow->status != USER_GUEST,
             ),
             array(
-                'title' => $langTeacher,
+                'title' => (isset($is_collaborative_course) && $is_collaborative_course) ? $langConsultant : $langTeacher,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->editor == '0' ? "fa-square" : "fa-square-check",
                 'show' => $myrow->status != USER_GUEST,
@@ -212,7 +212,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             )
         ));
         if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
-            $user_roles = [ $langTeacher ];
+            $user_roles = (isset($is_collaborative_course) && $is_collaborative_course) ? [ $langConsultant ] : [ $langTeacher ];
         } elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
             $user_roles = [ $langCourseReviewer ];
         } elseif ($myrow->status == USER_TEACHER) {

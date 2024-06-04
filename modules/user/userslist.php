@@ -73,11 +73,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalRecords'] = $all_users;
     $data['iTotalDisplayRecords'] = $filtered_users;
     $data['aaData'] = array();
+    if(isset($is_collaborative_course) && $is_collaborative_course){
+        $langIsUser = $langConsultant;
+    }else{
+        $langIsUser = $langEditor;
+    }
     foreach ($result as $myrow) {
         $user_roles = array();
         ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
-        if ($myrow->editor == '1') array_push($user_roles, $langEditor);
+        if ($myrow->editor == '1') array_push($user_roles, $langIsUser);
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
         //setting datables column data
         $data['aaData'][] = array(

@@ -131,6 +131,17 @@ if(isset($_GET['editResource'])){
 }
 
 if(isset($_GET['del'])){
+    $q = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d",$_GET['del']);
+    $file = Database::get()->queryArray("SELECT filename,path FROM document WHERE id = ?d",$q->res_id);
+    if(count($file) > 0){
+        $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/";
+        foreach($file as $f){
+            unlink($target_dir.$f->path);
+        }
+    }
+    if($q->type == 'doc'){
+        Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,MYSESSIONS);
+    }
     Database::get()->query("DELETE FROM session_resources WHERE id = ?d",$_GET['del']);
     Session::flash('message',$langSessionResourseDeleted);
     Session::flash('alert-class', 'alert-success');
