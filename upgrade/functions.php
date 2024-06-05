@@ -2539,6 +2539,10 @@ function upgrade_to_3_15($tbl_options) : void
         Database::get()->query("UPDATE course_user SET can_view_course = 1");
     }
 
+    if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
+        Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
+    }
+
     Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
 
     if (!DBHelper::tableExists('course_invitation')) {
@@ -2582,7 +2586,7 @@ function upgrade_to_3_15($tbl_options) : void
  */
 function upgrade_to_3_16($tbl_options) : void
 {
-    if (!dbhelper::tableexists('login_lock')) {
+    if (!dbhelper::tableExists('login_lock')) {
         Database::get()->query('CREATE TABLE `login_lock` (
            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
            `user_id` INT(11) NOT NULL,
@@ -2613,7 +2617,7 @@ function upgrade_to_3_16($tbl_options) : void
         SET document_timestamp = reg_date
         WHERE document_timestamp < reg_date');
 
-    if (!dbhelper::tableexists('minedu_department_association')) {
+    if (!dbhelper::tableExists('minedu_department_association')) {
         Database::get()->query("CREATE TABLE `minedu_department_association` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `minedu_id` int(11) NOT NULL DEFAULT 0,
@@ -2622,7 +2626,7 @@ function upgrade_to_3_16($tbl_options) : void
               FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
     }
 
-    if (!dbhelper::tableexists('course_certificate_template')) {
+    if (!dbhelper::tableExists('course_certificate_template')) {
         Database::get()->query("CREATE TABLE `course_certificate_template` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `course_id` int(11) NOT NULL,
@@ -3427,6 +3431,7 @@ function convert_db_encoding_to_utf8mb4(): void
         "ALTER TABLE `lti_apps` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `lti_apps` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `monthly_summary` CHANGE month month varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `monthly_summary` CHANGE details details mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `note` CHANGE title title varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `note` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
         "ALTER TABLE `note` CHANGE `reference_obj_type` `reference_obj_type` enum('course','personalevent','user',
