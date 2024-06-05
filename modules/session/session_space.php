@@ -41,6 +41,7 @@ require_once 'include/lib/mediaresource.factory.php';
 // require_once 'insert_doc.php';
 // require_once 'insert_work.php';
 // require_once 'insert_tc.php';
+require_once 'modules/document/doc_init.php';
 require_once 'functions.php';
 
 load_js('tools.js');
@@ -51,6 +52,8 @@ if(isset($_GET['session'])){
 elseif(isset($_GET['id'])){
     $data['sessionID'] = $sessionID = $_GET['id'];
 }
+
+doc_init();
 
 session_exists($sessionID);
 
@@ -164,6 +167,11 @@ if($is_editor){
                                                 ORDER BY start ASC",$course_id);
     }
 }else{// is simple user
+
+    $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$sessionID);
+    if((date('Y-m-d H:i:s') < $session_info->start) or !$session_info->visible){
+        redirect_to_home_page("modules/session/index.php?course=".$course_code);
+    }
     $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                     WHERE visible = ?d
                                                     AND course_id = ?d
