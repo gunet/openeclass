@@ -66,12 +66,15 @@ if ($is_editor) {
         }
         $sessionID = $_GET['session'];
         $course_code = $_GET['course'];
+        $course_id = course_code_to_id($course_code);
+        session_exists($sessionID);
+        $sessionTitle = title_session($course_id,$sessionID);
+        $pageName = $langSessionCompletion;
+        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
+        $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
         $currentSession = Database::get()->querySingle("SELECT * FROM mod_session 
                                                     WHERE course_id = ?d AND id = ?d", $course_id, $sessionID);
     } else {
-        //Session::Messages($langNoExercises);
-        Session::flash('message',$langNoExercises);
-        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
     }
 
@@ -87,7 +90,7 @@ if ($is_editor) {
         $previousUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;manage=1&amp;session=$sessionID";
         $pageName = $currentSession->title;
     } else {
-        $previousUrl = "$_SERVER[SCRIPT_NAME]/../index.php?course=$course_code&id=$sessionID";
+        $previousUrl = $urlAppend . "modules/session/session_space.php?course=$course_code&session=$sessionID";
         $pageName = $currentSession->title;
     }
 
@@ -127,7 +130,7 @@ if ($is_editor) {
     $allCourseSessions = Database::get()->queryArray("SELECT * FROM mod_session 
                                                     WHERE course_id = ?d", $course_id);
     if (!$allCourseSessions) {
-        Session::flash('message',$langNoUnits);
+        Session::flash('message',$langNoSessions);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
     }
@@ -177,7 +180,6 @@ if ($is_editor) {
             Session::flash('alert-class', 'alert-success');
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sessionID);
             if (purge_certificate('badge', $badge->id, 0, $sessionID)) {
-                //delete_unit_prerequisite($sessionID);
                 Session::flash('message',"$langGlossaryDeleted");
                 Session::flash('alert-class', 'alert-success');
             }
@@ -201,10 +203,10 @@ if ($is_editor) {
             }
         }
     } elseif ( isset($_GET['prereq']) ) {
-        insert_prerequisite_unit($unit_id, $_GET['prereq']);
+        insert_session_prerequisite_unit($sessionID, $_GET['prereq']);
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
     } elseif ( isset($_GET['del_un_prereq']) ) {
-        delete_unit_prerequisite($unit_id);
+        delete_session_prerequisite($sessionID);
         Session::flash('message',"$langDelUnitPrerequisiteSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");

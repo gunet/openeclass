@@ -3069,6 +3069,15 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE badge ADD `session_id` int(11) NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::tableExists('session_prerequisite')) {
+        Database::get()->query("CREATE TABLE `session_prerequisite` (
+                                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                `course_id` int(11) not null,
+                                `session_id` int(11) not null,
+                                `prerequisite_session` int(11) not null,
+                                PRIMARY KEY (`id`)) $tbl_options");
+    }
+
 }
 
 

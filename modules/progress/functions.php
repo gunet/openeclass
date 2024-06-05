@@ -705,12 +705,12 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                                 WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
 
                                         $tool_content .= "
-                                        <div class='table-responsive'>
+                                        <div class='table-responsive mt-0'>
                                             <table class='table-default'>
                                                 <tr>
-                                                    <td><p class='text-start'>$prereq_unit_title</p></td>
+                                                    <td><p>$prereq_unit_title</p></td>
 
-                                                    <td>$delPrereqBtn</td>
+                                                    <td class='text-end'>$delPrereqBtn</td>
                                                 </tr>
                                             </table>
                                         </div>";
@@ -1220,7 +1220,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = format_locale_date(strtotime($entry['date']), 'short', false);
-                    $tool_content .= "<td class='text-end'>$size</td><td>$date</td>";
+                    $tool_content .= "<td>$size</td><td>$date</td>";
                 }
                 $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";

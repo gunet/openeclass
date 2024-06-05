@@ -383,7 +383,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
         if ($file->format == '.dir') {
             $image = 'fa-folder-open';
             $download_hidden_link = '';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$_GET[session]'>" .
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=$_GET[session]'>" .
                 q($title) . "</a>";
         } else {
             if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
@@ -1020,8 +1020,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langBack, $langUsers,
            $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
-           $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
-           $langNoUnitPrerequisite, $langSessionCompletion;
+           $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
+           $langNoSessionPrerequisite, $langSessionCompletion;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1050,12 +1050,12 @@ function display_session_activities($element, $id, $session_id = 0) {
         );
 
     if ($session_id) {
-        // check if unit completion is enabled
+        // check if session completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
                                                             WHERE course_id = ?d AND session_id = ?d
                                                             AND bundle = -1", $course_id, $session_id)->active;
 
-        // check if current element is unit completion badge
+        // check if current element is session completion badge
         $cc_is_current = false;
         if ($element == 'badge') {
             $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
@@ -1267,76 +1267,76 @@ function display_session_activities($element, $id, $session_id = 0) {
             $tool_content .=    "</div>
                             </div>";
 
-                        //************* UNIT PREREQUISITES *************//
-        //                 $course_units = Database::get()->queryArray("SELECT * FROM course_units
-        //                                                                     WHERE course_id = ?d", $course_id);
+                        //************* SESSION PREREQUISITES *************//
+                        $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                                            WHERE course_id = ?d", $course_id);
 
-        //                 $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit
-        //                                                                             FROM unit_prerequisite up
-        //                                                                             JOIN course_units cu ON (cu.id = up.unit_id)
-        //                                                                             WHERE cu.id = ".$unit_id);
+                        $session_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_session
+                                                                                    FROM session_prerequisite up
+                                                                                    JOIN mod_session cu ON (cu.id = up.session_id)
+                                                                                    WHERE cu.id = ".$session_id);
 
-        //                 $action_button_content = [];
+                        $action_button_content = [];
 
-        //                 foreach ($course_units as $prereq) {
-        //                     if ($prereq->id == $unit_id) { // Don't include current unit on prerequisites list
-        //                         continue;
-        //                     }
-        //                     $action_button_content[] = [
-        //                         'title' =>  $prereq->title,
-        //                         'icon'  =>  'fa fa-book fa-fw',
-        //                         'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&unit_id=$unit_id",
-        //                         'class' =>  '',
-        //                         'show'  =>  !is_unit_prereq_enabled($unit_id),
-        //                     ];
-        //                 }
-        //                 $addPrereqBtn = action_button($action_button_content,
-        //                     array(
-        //                         'secondary_title' => $langNewUnitPrerequisite,
-        //                         'secondary_icon' => 'fa-plus',
-        //                         'secondary_btn_class' => 'submitAdminBtn',
-        //                     ));
-        // $tool_content .= "
+                        foreach ($course_sessions as $prereq) {
+                            if ($prereq->id == $session_id) { // Don't include current unit on prerequisites list
+                                continue;
+                            }
+                            $action_button_content[] = [
+                                'title' =>  $prereq->title,
+                                'icon'  =>  'fa fa-book fa-fw',
+                                'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&session=$session_id",
+                                'class' =>  '',
+                                'show'  =>  !is_session_prereq_enabled($unit_id),
+                            ];
+                        }
+                        $addPrereqBtn = action_button($action_button_content,
+                            array(
+                                'secondary_title' => $langNewUnitPrerequisite,
+                                'secondary_icon' => 'fa-plus',
+                                'secondary_btn_class' => 'submitAdminBtn',
+                            ));
+        $tool_content .= "
 
-        //                 <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
-        //                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-        //                         <h3>
-        //                             $langUnitPrerequisites
-        //                         </h3>
-        //                         <div>
-        //                             $addPrereqBtn
-        //                         </div>
-        //                     </div>
-        //                     <div class='card-body'>
-        //                         <div class='res-table-wrapper'>";
-        //                                 $delPrereqBtn = action_button(array(
-        //                                 array('title' => $langDelete,
-        //                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&unit_id=$unit_id",
-        //                                     'icon' => 'fa-xmark',
-        //                                     'class' => 'delete',
-        //                                     'confirm' => $langConfirmDelete)));
+                        <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <h3>
+                                    $langSessionPrerequisites
+                                </h3>
+                                <div>
+                                    $addPrereqBtn
+                                </div>
+                            </div>
+                            <div class='card-body'>
+                                <div class='res-table-wrapper'>";
+                                        $delPrereqBtn = action_button(array(
+                                        array('title' => $langDelete,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&session=$session_id",
+                                            'icon' => 'fa-xmark',
+                                            'class' => 'delete',
+                                            'confirm' => $langConfirmDelete)));
 
-        //                         if ( $unit_prerequisite_id ) {
-        //                             $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units
-        //                                                                                         WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
+                                if ( $session_prerequisite_id ) {
+                                    $prereq_session_title = Database::get()->querySingle("SELECT title FROM mod_session
+                                                                                                WHERE id = ?d", $session_prerequisite_id->prerequisite_session)->title;
 
-        //                                 $tool_content .= "
-        //                                 <div class='table-responsive'>
-        //                                     <table class='table-default'>
-        //                                         <tr>
-        //                                             <td><p class='text-start'>$prereq_unit_title</p></td>
+                                        $tool_content .= "
+                                        <div class='table-responsive'>
+                                            <table class='table-default'>
+                                                <tr>
+                                                    <td><p class='text-start'>$prereq_session_title</p></td>
 
-        //                                             <td>$delPrereqBtn</td>
-        //                                         </tr>
-        //                                     </table>
-        //                                 </div>";
-        //                         } else {
-        //                             $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
-        //                         }
+                                                    <td class='text-end'>$delPrereqBtn</td>
+                                                </tr>
+                                            </table>
+                                        </div>";
+                                } else {
+                                    $tool_content .= "<p class='text-center text-muted'>$langNoSessionPrerequisite</p>";
+                                }
 
-        //     $tool_content .= "  </div>
-        //                     </div>
-        //                 </div>
+            $tool_content .= "  </div>
+                            </div>
+                        </div>";
 
     }
 }
@@ -1413,26 +1413,26 @@ function display_session_modification_activity($element, $element_id, $activity_
 function insert_session_activity($element, $element_id, $activity, $session_id = 0, $session_resource_id = 0) {
 
     switch ($activity) {
-        case 'coursecompletion':
-            add_course_completion_to_certificate($element_id);
-            break;
-        case 'unitcompletion':
-            add_unit_completion_to_certificate($element_id, $session_id);
-            break;
+        // case 'coursecompletion':
+        //     add_course_completion_to_certificate($element_id);
+        //     break;
+        // case 'unitcompletion':
+        //     add_unit_completion_to_certificate($element_id, $session_id);
+        //     break;
         case AssignmentEvent::ACTIVITY:
         case 'work':
             display_session_available_assignments($element, $element_id, AssignmentEvent::ACTIVITY, $session_id, $session_resource_id);
             break;
         case 'document':
         case 'doc':
-            display_available_documents($element, $element_id, $session_id, $session_resource_id);
+            display_session_available_documents($element, $element_id, $session_id, $session_resource_id);
             break;
         case 'poll':
-            display_available_polls($element, $element_id, $session_id, $session_resource_id);
+            display_session_available_polls($element, $element_id, $session_id, $session_resource_id);
             break;
-        case CourseCompletionEvent::ACTIVITY:
-            display_available_coursecompletiongrade($element, $element_id, $unit_id);
-            break;
+        // case CourseCompletionEvent::ACTIVITY:
+        //     display_available_coursecompletiongrade($element, $element_id, $unit_id);
+        //     break;
         default: break;
         }
 }
@@ -1470,20 +1470,21 @@ function display_session_available_assignments($element, $element_id, $activity_
                                AND session_resources.id = ?d";
             $result = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $session_resource_id, $element_id);
         } else {
-            $unitWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
+            $sessionWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
                                FROM assignment, session_resources
                               WHERE assignment.id = session_resources.res_id
                                 AND session_id = ?d
                                 AND session_resources.type = 'work'
                                 AND visible = 1";
-            $result = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $element_id);
+            $result = Database::get()->queryArray("$sessionWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $element_id);
         }
-    } else {
-        $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
-                              AND active = 1
-                              AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
-        $result = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSql ORDER BY title", $course_id, $element_id);
-    }
+    } 
+    // else {
+    //     $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
+    //                           AND active = 1
+    //                           AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
+    //     $result = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSql ORDER BY title", $course_id, $element_id);
+    // }
 
     if (count($result) == 0) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
@@ -1526,4 +1527,368 @@ function display_session_available_assignments($element, $element_id, $activity_
                             <input class='btn submitAdminBtn' type='submit' name='$form_submit_name' value='$langAddModulesButton'>
                           </div></form>";
     }
+}
+
+
+/**
+ * @brief document display form
+ * @param type $element
+ * @param type $element_id
+ * @param int $unit_id
+ */
+function display_session_available_documents($element, $element_id, $session_id = 0, $session_resource_id = 0) {
+
+    global $webDir, $tool_content,
+            $langDirectory, $langUp, $langName, $langSize,
+            $langDate, $langAddModulesButton, $langChoice,
+            $langNoDocuments, $course_code, $group_sql;
+
+    require_once 'modules/document/doc_init.php';
+    require_once 'include/lib/mediaresource.factory.php';
+    require_once 'include/lib/fileManageLib.inc.php';
+    require_once 'include/lib/fileDisplayLib.inc.php';
+    require_once 'include/lib/multimediahelper.class.php';
+
+    doc_init();
+
+    $common_docs = false;
+    if($session_id){
+        $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $session_id;
+    }else{
+        $basedir = $webDir . '/courses/' . $course_code . '/document';
+    }
+    
+    $path = get_dir_path('path');
+    $dir_param = get_dir_path('dir');
+    $dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
+    $dir_html = $dir_param ? "<input type='hidden' name='dir' value='$dir_param'>" : '';
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
+    if ($session_id) {
+        if ($session_resource_id) {
+            $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
+                                            FROM document, session_resources
+                                            WHERE document.id = session_resources.res_id
+                                                AND session_id = ?d
+                                                AND session_resources.id = ?d"
+                                            , $session_id, $session_resource_id);
+        } else {
+            $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
+                                            FROM document, session_resources
+                                            WHERE document.id = session_resources.res_id
+                                                AND session_id = ?d
+                                                AND session_resources.type = 'doc'
+                                                AND session_resources.visible = 1", $session_id);
+        }
+
+    } 
+    // else {
+    //     $result = Database::get()->queryArray("SELECT id, subsystem, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+    //                                  WHERE $group_sql AND visible = 1 AND
+    //                                       path LIKE ?s AND
+    //                                       path NOT LIKE ?s AND id NOT IN
+    //                                     (SELECT resource FROM {$element}_criterion WHERE $element = ?d
+    //                                         AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
+    //                             ORDER BY sort_key COLLATE utf8mb4_general_ci",
+    //         "$path/%", "$path/%/%", $element_id);
+    // }
+
+
+
+    $fileinfo = array();
+    $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$session_id&amp;$element_name=$element_id&amp;add=true&amp;act=document$dir_setter&amp;type=doc&amp;path=";
+
+    foreach ($result as $row) {
+        $fullpath = $basedir . $row->path;
+        if ($row->extra_path) {
+            $size = 0;
+        } else {
+            $size = file_exists($fullpath)? filesize($fullpath): 0;
+        }
+        $fileinfo[] = array(
+            'id' => $row->id,
+            'subsystem' => $row->subsystem,
+            'is_dir' => is_dir($fullpath),
+            'size' => $size,
+            'title' => $row->title,
+            'name' => htmlspecialchars($row->filename),
+            'format' => $row->format,
+            'path' => $row->path,
+            'visible' => $row->visible,
+            'comment' => $row->comment,
+            'copyrighted' => $row->copyrighted,
+            'date' => $row->date_modified,
+            'object' => MediaResourceFactory::initFromDocument($row));
+    }
+
+    if (count($fileinfo) == 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoDocuments</span></div></div>";
+    } else {
+        if (!empty($path)) {
+            if($session_id){
+                $group_sql = "course_id = $course_id AND subsystem = " . MYSESSIONS;
+            }
+            $dirname = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $path);
+            $parentpath = dirname($path);
+            $dirname =  htmlspecialchars($dirname->filename);
+            $parentlink = $urlbase . $parentpath;
+            $parenthtml = "<span class='float-end'><a href='$parentlink'>$langUp " .
+                    icon('fa-level-up') . "</a></span>";
+            $colspan = 4;
+        }
+        if ($session_id) {
+            $action = "complete.php?course=$course_code&manage=1&session=$session_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
+                "<div class='table-responsive'><table class='table-default'>";
+        if( !empty($path)) {
+        $tool_content .=
+                "<tr>" .
+                "<th colspan='$colspan'><div>$langDirectory: $dirname$parenthtml</div></th>" .
+                "</tr>" ;
+        }
+        $tool_content .=
+                "<thead><tr class='list-header'>" .
+                "<th>$langName</th>" .
+                "<th>$langSize</th>" .
+                "<th>$langDate</th>" .
+                "<th></th>" .
+                "</tr></thead>";
+        $counter = 0;
+        foreach (array(true, false) as $is_dir) {
+            foreach ($fileinfo as $entry) {
+                if ($entry['is_dir'] != $is_dir) {
+                    continue;
+                }
+                $dir = $entry['path'];
+                if ($is_dir) {
+                    $image = 'fa-folder-open';
+                    $file_url = $urlbase . $dir;
+                    $link_text = $entry['name'];
+                    $link_href = "<a href='$file_url'>$link_text</a>";
+                } else {
+                    $image = choose_image('.' . $entry['format']);
+                    if($entry['subsystem'] == MYSESSIONS){
+                        $file_url = session_file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
+                    }else{
+                        $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
+                    }
+                    
+
+                    $dObj = $entry['object'];
+                    $dObj->setAccessURL($file_url);
+                    if($entry['subsystem'] == MYSESSIONS){
+                        $dObj->setPlayURL(session_file_playurl($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code));
+                    }else{
+                        $dObj->setPlayURL(file_playurl($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code));
+                    }
+                    
+
+                    $link_href = MultimediaHelper::chooseMediaAhref($dObj);
+                }
+                if ($entry['visible'] == 'i') {
+                    $vis = 'invisible';
+                } else {
+                    $vis = '';
+                }
+                $tool_content .= "<tr class='$vis'>";
+                $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
+
+                /* * * comments ** */
+                if (!empty($entry['comment'])) {
+                    $tool_content .= "<div style='margin-top: 10px;' class='comment'>" .
+                            standard_text_escape($entry['comment']) .
+                            "</div>";
+                }
+                $tool_content .= "</td>";
+                if ($is_dir) {
+                    // skip display of date and time for directories
+                    $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+                } else {
+                    $size = format_file_size($entry['size']);
+                    $date = format_locale_date(strtotime($entry['date']), 'short', false);
+                    $tool_content .= "<td>$size</td><td>$date</td>";
+                }
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
+                $tool_content .= "</tr>";
+                $counter++;
+            }
+        }
+        $tool_content .= "</table></div>";
+        $tool_content .= "<div class='text-end mt-3'>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
+    }
+}
+
+
+/**
+ * @brief poll display form
+ * @param type $element
+ * @param type $element_id
+ * @param int $session_id
+ * @param int $session_resource_id
+ */
+function display_session_available_polls($element, $element_id, $session_id = 0, int $session_resource_id = 0) {
+
+    global $course_id, $course_code, $urlServer, $tool_content,
+            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
+    if ($session_id) {
+        if ($session_resource_id) {
+            $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, session_resources
+                                            WHERE poll.pid = session_resources.res_id
+                                                AND poll.active = 1
+                                                AND poll.end_date >= ". DBHelper::timeAfter() . "
+                                                AND session_id = ?d
+                                                AND session_resources.id = ?d"
+                                            , $session_id, $session_resource_id);
+        } else {
+            $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, session_resources
+                                            WHERE poll.pid = session_resources.res_id
+                                                AND poll.active = 1
+                                                AND poll.end_date >= ". DBHelper::timeAfter() . "
+                                                AND session_id = ?d
+                                                AND session_resources.type = 'poll'
+                                                AND visible = 1", $session_id);
+        }
+
+    } 
+    // else {
+    //     $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
+    //                                 AND poll.active = 1
+    //                                 AND poll.end_date >= ". DBHelper::timeAfter() . "
+    //                                 AND poll.pid NOT IN
+    //                             (SELECT resource FROM {$element}_criterion WHERE $element = ?d
+    //                                 AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
+    //         $course_id, $element_id);
+    // }
+
+    $pollinfo = array();
+    foreach ($result as $row) {
+        $pollinfo[] = array(
+            'id' => $row->pid,
+            'title' => $row->name,
+            'description' => $row->description);
+    }
+    if (count($pollinfo) == 0) {
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPollNone</span></div></div>";
+    } else {
+        if ($unit_id) {
+            $action = "complete.php?course=$course_code&manage=1&session=$session_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
+                "<thead><tr class='list-header'>" .
+                "<th>$langQuestionnaire</th>" .
+                "<th>$langChoice</th>" .
+                "</tr></thead>";
+        foreach ($pollinfo as $entry) {
+            $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>&nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "</tr>";
+        }
+        $tool_content .= "</table></div>";
+        $tool_content .= "<div class='text-end mt-3'>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_poll' value='$langAddModulesButton'></div></form>";
+    }
+}
+
+/**
+ * @param int $prereq_session_id
+ * @return bool
+ */
+function prereq_session_has_completion_enabled($prereq_session_id) {
+    $query = "SELECT bc.id FROM badge_criterion bc WHERE bc.badge IN (SELECT b.id FROM badge b WHERE b.session_id = ?d)";
+    $exists = Database::get()->querySingle($query, $prereq_session_id);
+    if ($exists) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @param int $unit_id
+ * @param int $prereq_unit_id
+ */
+function insert_session_prerequisite_unit($session_id, $prereq_session_id) {
+
+    global $is_editor,
+           $course_id, $course_code,
+           $langResultsFailed, $langSessionHasNotCompletionEnabled, $langNewSessionPrerequisiteFailInvalid,
+           $langNewUnitPrerequisiteSuccess, $langNewSessionPrerequisiteFailAlreadyIn;
+
+    if ($is_editor) { // Auth check
+        if ($prereq_session_id < 0) {
+            //Session::Messages($langNewSessionPrerequisiteFailInvalid);
+            Session::flash('message',$langNewSessionPrerequisiteFailInvalid);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+        }
+
+        $prereqHasCompletion = prereq_session_has_completion_enabled($prereq_session_id);
+
+        if ( !$prereqHasCompletion ) {
+            //Session::Messages($langSessionHasNotCompletionEnabled);
+            Session::flash('message',$langSessionHasNotCompletionEnabled);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+        }
+
+        // check already exists
+        $result = Database::get()->queryArray("SELECT up.id
+                                 FROM session_prerequisite up
+                                 WHERE up.course_id = ?d
+                                 AND up.session_id = ?d
+                                 AND up.prerequisite_session = ?d", $course_id, $session_id, $prereq_session_id);
+
+        if (count($result) > 0) {
+            //Session::Messages($langNewSessionPrerequisiteFailAlreadyIn, 'alert-danger');
+            Session::flash('message',$langNewSessionPrerequisiteFailAlreadyIn);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+        }
+
+        //Session::Messages($langNewUnitPrerequisiteSuccess, 'alert-success');
+        Session::flash('message',$langNewUnitPrerequisiteSuccess);
+        Session::flash('alert-class', 'alert-success');
+        Database::get()->query("INSERT INTO session_prerequisite (course_id, session_id, prerequisite_session)
+                                                VALUES (?d, ?d, ?d)", $course_id, $session_id, $prereq_session_id);
+    } else {
+        //Session::Messages($langResultsFailed);
+        Session::flash('message',$langResultsFailed);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+    }
+}
+
+/**
+ * @param int $session_id
+ * @return bool
+ */
+function is_session_prereq_enabled($session_id) {
+    $prereq_id = Database::get()->queryArray("SELECT prerequisite_session FROM session_prerequisite
+                                                        WHERE session_id = ?d", $session_id);
+    if (count($prereq_id) > 0) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @param int $unit_id
+ */
+function delete_session_prerequisite($session_id) {
+    $query = "DELETE FROM session_prerequisite WHERE session_id = ?d";
+    Database::get()->query($query, $session_id);
 }

@@ -1461,3 +1461,9 @@ $langInvalidCourseSessionPrerequisites = "Η ολοκλήρωση της συν�
 $langManageSession = "Διαχείριση συνεδριών";
 $langSessionCompletion = "Ολοκλήρωση συνεδρίας";
 $langSessionCompletionMessage = "Η συνεδρία ολοκληρώθηκε με επιτυχία";
+
+$langNewSessionPrerequisiteFailInvalid = "Αδυναμία προσθήκης! Παρακαλούμε επιλέξτε μία έγκυρη συνεδρία.";
+$langSessionHasNotCompletionEnabled = "Αδυναμία προσθήκης! Η συνεδρία που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση συνεδρίας.";
+$langNewSessionPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η συνεδρία που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
+$langSessionPrerequisites = "Προαπαιτούμενη συνεδρία";
+$langNoSessionPrerequisite = "Δεν έχει οριστεί προαπαιτούμενη συνεδρία.";

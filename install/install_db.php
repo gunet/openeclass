@@ -2223,6 +2223,13 @@ $db->query("CREATE TABLE `unit_prerequisite` (
   `prerequisite_unit` int(11) not null,
   PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `session_prerequisite` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) not null,
+    `session_id` int(11) not null,
+    `prerequisite_session` int(11) not null,
+    PRIMARY KEY (`id`)) $tbl_options");
+
 $db->query("CREATE TABLE `user_consent` (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT(11) NOT NULL,
