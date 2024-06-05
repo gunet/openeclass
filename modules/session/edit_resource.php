@@ -35,6 +35,7 @@ require_once 'functions.php';
 
 if(isset($_GET['session'])){
     $data['sessionID'] = $sessionID = $_GET['session'];
+    session_exists($sessionID);
 }
 
 $sessionTitle = title_session($course_id,$sessionID);

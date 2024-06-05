@@ -52,6 +52,8 @@ elseif(isset($_GET['id'])){
     $data['sessionID'] = $sessionID = $_GET['id'];
 }
 
+session_exists($sessionID);
+
 $sessionTitle = title_session($course_id,$sessionID);
 $pageName = $langAddResource;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);

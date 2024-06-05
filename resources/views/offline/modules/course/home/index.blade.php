@@ -98,7 +98,7 @@
                                 <div class='col-xs-12'>
                                     <div class='item-content'>
                                         <div class='item-header clearfix'>
-                                            <div class='item-title h4'>
+                                            <div class='item-title '>
                                                 @if ($course_info->view_type == 'weekly')
                                                     <a href="{{ $urlAppend }}modules/weeks/index.php?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}">
                                                         @if(!empty($course_unit->title))

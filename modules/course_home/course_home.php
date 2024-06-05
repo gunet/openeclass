@@ -676,11 +676,11 @@ if ($total_cunits > 0) {
             if (!$is_editor) {
                 if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                     $not_shown = true;
-                    $icon = icon('fa-clock', $langUnitNotStarted);
+                    $icon = icon('fa-clock fa-md', $langUnitNotStarted);
                 // or has completed units (if any)
                 } else if (!in_array($cu->id, $visible_units_id)) {
                     $not_shown = true;
-                    $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+                    $icon = icon('fa-minus-circle fa-md', $langUnitNotCompleted);
                 } else {
 
                     if (in_array($cu->id, $visible_units_id)) {
@@ -689,9 +689,9 @@ if ($total_cunits > 0) {
                             $badge_id = $sql_badge->id;
                             $per = get_cert_percentage_completion('badge', $badge_id);
                             if ($per == 100) {
-                                $icon = icon('fa-check-circle', $langInstallEnd);
+                                $icon = icon('fa-check-circle fa-md', $langInstallEnd);
                             } else {
-                                $icon = icon('fa-hourglass-2', $per . "%");
+                                $icon = icon('fa-hourglass-2 fa-md', $per . "%");
                             }
                         }
                     }
@@ -714,7 +714,7 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title h4 $class_vis'>";
+                        <div class='item-title  $class_vis'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
@@ -794,11 +794,11 @@ if ($total_cunits > 0) {
             if (!$is_editor) {
                 if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                     $not_shown = true;
-                    $icon = icon('fa-clock', $langUnitNotStarted);
+                    $icon = icon('fa-clock fa-md', $langUnitNotStarted);
                 // or has completed units (if any)
                 } else if (!in_array($cu->id, $visible_units_id)) {
                     $not_shown = true;
-                    $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+                    $icon = icon('fa-minus-circle fa-md', $langUnitNotCompleted);
                 } else {
 
                     if (in_array($cu->id, $visible_units_id)) {
@@ -807,9 +807,9 @@ if ($total_cunits > 0) {
                             $badge_id = $sql_badge->id;
                             $per = get_cert_percentage_completion('badge', $badge_id);
                             if ($per == 100) {
-                                $icon = icon('fa-check-circle', $langInstallEnd);
+                                $icon = icon('fa-check-circle fa-md', $langInstallEnd);
                             } else {
-                                $icon = icon('fa-hourglass-2', $per . "%");
+                                $icon = icon('fa-hourglass-2 fa-md', $per . "%");
                             }
                         }
                     }
@@ -830,7 +830,7 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 pb-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title h4 $class_vis Primary-500-cl'>";
+                        <div class='item-title  $class_vis'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {

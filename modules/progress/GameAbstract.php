@@ -31,6 +31,7 @@ abstract class GameAbstract {
     protected $active;
     protected $criterionIds;
     protected $unit_id;
+    protected $session_id;
 
     protected $table;
     protected $field;
@@ -51,6 +52,7 @@ abstract class GameAbstract {
         $this->active = $properties->active;
         $this->criterionIds = $properties->criterionIds;
         $this->unit_id = $properties->unit_id;
+        $this->session_id = $properties->session_id;
 
         $this->table = 'user_' . $properties->type;
         $this->field = $properties->type;
@@ -62,13 +64,14 @@ abstract class GameAbstract {
 
     abstract public function evaluate($context);
 
-    private function triggerCourseCompletionEvent($uid, $unit_id = 0) {
-        $course_id = Database::get()->querySingle("select course_id from $this->field where id = ?d and unit_id = ?d", $this->id, $unit_id)->course_id;
+    private function triggerCourseCompletionEvent($uid, $unit_id = 0, $session_id = 0) {
+        $course_id = Database::get()->querySingle("select course_id from $this->field where id = ?d and unit_id = ?d and session_id =?d", $this->id, $unit_id, $session_id)->course_id;
         if ($course_id && $course_id > 0) {
             $eventData = new stdClass();
             $eventData->courseId = $course_id;
             $eventData->uid = $uid;
             $eventData->unit_id = $unit_id;
+            $eventData->session_id = $session_id;
             $eventData->activityType = CourseCompletionEvent::ACTIVITY;
             $eventData->module = MODULE_ID_PROGRESS;
 
@@ -99,12 +102,38 @@ abstract class GameAbstract {
                 if (!$exists) {
                     Database::get()->query("insert into $this->table (user, $this->field, completed_criteria, total_criteria, updated) values (?d, ?d, ?d, ?d, " . DBHelper::timeAfter() . ")", $uid, $this->id, $completed_criteria, $total_criteria);
                     if (!$terminal) {
-                        $this->triggerCourseCompletionEvent($uid, $unit_id);
+                        $this->triggerCourseCompletionEvent($uid, $unit_id, 0);
                     }
                 } else {
                     Database::get()->query("update $this->table set completed_criteria = ?d, total_criteria = ?d, updated = " . DBHelper::timeAfter() . " where user = ?d and $this->field = ?d", $completed_criteria, $total_criteria, $uid, $this->id);
                     if (!$terminal) {
-                        $this->triggerCourseCompletionEvent($uid, $unit_id);
+                        $this->triggerCourseCompletionEvent($uid, $unit_id, 0);
+                    }
+                }
+            }
+        } elseif ( isset($context['session_id']) and ($context['session_id'] > 0) ){
+            $session_id = $context['session_id'];
+
+            if ($uid) {
+                $completed_criteria = 0;
+                foreach($this->criterionIds as $crit) {
+                    if (in_array($crit, $userCriterionIds)) {
+                        $completed_criteria++;
+                    }
+                }
+
+                $total_criteria = count($this->criterionIds);
+                $exists = Database::get()->querySingle("select count(id) as cnt from $this->table where user = ?d and $this->field = ?d", $uid, $this->id)->cnt;
+
+                if (!$exists) {
+                    Database::get()->query("insert into $this->table (user, $this->field, completed_criteria, total_criteria, updated) values (?d, ?d, ?d, ?d, " . DBHelper::timeAfter() . ")", $uid, $this->id, $completed_criteria, $total_criteria);
+                    if (!$terminal) {
+                        $this->triggerCourseCompletionEvent($uid, 0, $session_id);
+                    }
+                } else {
+                    Database::get()->query("update $this->table set completed_criteria = ?d, total_criteria = ?d, updated = " . DBHelper::timeAfter() . " where user = ?d and $this->field = ?d", $completed_criteria, $total_criteria, $uid, $this->id);
+                    if (!$terminal) {
+                        $this->triggerCourseCompletionEvent($uid, 0, $session_id);
                     }
                 }
             }

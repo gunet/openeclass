@@ -84,24 +84,25 @@ class Game extends GameAbstract {
         return $this->evaluateProper($context, true);
     }
 
-    private static function checkCompletenessProper($uid, $course_id, $unit_id, $terminal = false) {
+    private static function checkCompletenessProper($uid, $course_id, $unit_id, $session_id, $terminal = false) {
         $context = new Hoa\Ruler\Context();
         $context['uid'] = $uid;
         $context['courseId'] = $course_id;
         $context['unit_id'] = $unit_id;
+        $context['session_id'] = $session_id;
         $context['userCriterionIds'] = array();
 
         $iter = array('badge', 'certificate');
 
         foreach ($iter as $key) {
-            if ($unit_id) {
+            if ($unit_id or $session_id) {
                 if ($key == 'certificate') {
                     continue;
                 }
-                $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t) and unit_id = ".$unit_id;
+                $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t) and unit_id = ".$unit_id." and session_id =".$session_id;
             } else {
                 if ($key == 'badge') {
-                    $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t) and unit_id = ".$unit_id;
+                    $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t) and unit_id = ".$unit_id." and session_id =".$session_id;
                 } else {
                     $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t)";
                 }
@@ -132,11 +133,11 @@ class Game extends GameAbstract {
         }
     }
 
-    public static function checkCompleteness($uid, $course_id, $unit_id = 0) {
-        self::checkCompletenessProper($uid, $course_id, $unit_id, false);
+    public static function checkCompleteness($uid, $course_id, $unit_id = 0, $session_id = 0) {
+        self::checkCompletenessProper($uid, $course_id, $unit_id, $session_id, false);
     }
 
-    public static function checkCompletenessTerminal($uid, $course_id, $unit_id = 0) {
-        self::checkCompletenessProper($uid, $course_id, $unit_id, true);
+    public static function checkCompletenessTerminal($uid, $course_id, $unit_id = 0, $session_id = 0) {
+        self::checkCompletenessProper($uid, $course_id, $unit_id, $session_id, true);
     }
 }

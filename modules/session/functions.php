@@ -1287,7 +1287,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                 'icon'  =>  'fa fa-book fa-fw',
                                 'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&session=$session_id",
                                 'class' =>  '',
-                                'show'  =>  !is_session_prereq_enabled($unit_id),
+                                'show'  =>  !is_session_prereq_enabled($session_id),
                             ];
                         }
                         $addPrereqBtn = action_button($action_button_content,
@@ -1351,7 +1351,7 @@ function display_session_activities($element, $id, $session_id = 0) {
  * @param type $element_id
  * @param type $element
  * @param type $activity_id
- * @param int $unit_id
+ * @param int $session_id
  */
 function display_session_modification_activity($element, $element_id, $activity_id, $session_id = 0) {
 
@@ -1361,10 +1361,10 @@ function display_session_modification_activity($element, $element_id, $activity_
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
-        if ($unit_id) {
+        if ($session_id) {
             redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$session_id");
         } else {
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;{$element}_id=$element_id");
+            redirect_to_home_page("modules/session/complete.php?course=$course_code&session=$session_id&manage=1");
         }
 
     } else { // otherwise editing is not allowed
@@ -1886,9 +1886,48 @@ function is_session_prereq_enabled($session_id) {
 }
 
 /**
- * @param int $unit_id
+ * @param int $session_id
  */
 function delete_session_prerequisite($session_id) {
     $query = "DELETE FROM session_prerequisite WHERE session_id = ?d";
     Database::get()->query($query, $session_id);
+}
+
+
+/**
+ * @global type $course_id
+ * @param int $uid
+ * @param type $all_units
+ * @return array
+ */
+function findUserVisibleSessions($uid, $all_sessions) {
+    global $course_id;
+
+    $user_sessions = [];
+    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start, cu.finish, cu.visible, cu.public, ub.completed
+                                                          FROM mod_session cu
+                                                          INNER JOIN badge b ON (b.session_id = cu.id)
+                                                          INNER JOIN user_badge ub ON (b.id = ub.badge)
+                                                          WHERE ub.user = ?d
+                                                          AND cu.course_id = ?d
+                                                          AND cu.visible = 1
+                                                          AND cu.public = 1
+                                                          AND cu.order >= 0", $uid, $course_id);
+    if ( isset($userInBadges) and $userInBadges ) {
+        foreach ($userInBadges as $userInBadge) {
+            if ($userInBadge->completed == 0) {
+                $userIncompleteSessions[] = $userInBadge->id;
+            }
+        }
+    }
+    foreach ($all_sessions as $session) {
+        $sessionPrereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite
+                                                                WHERE session_id = ?d", $session->id);
+
+        if ( $sessionPrereq and isset($userIncompleteSessions) and in_array($sessionPrereq->prerequisite_session, $userIncompleteSessions) ) {
+            continue;
+        }
+        $user_sessions[] = $session;
+    }
+    return $user_sessions;
 }

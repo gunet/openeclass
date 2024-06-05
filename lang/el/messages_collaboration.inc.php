@@ -1467,3 +1467,6 @@ $langSessionHasNotCompletionEnabled = "Αδυναμία προσθήκης! Η �
 $langNewSessionPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η συνεδρία που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
 $langSessionPrerequisites = "Προαπαιτούμενη συνεδρία";
 $langNoSessionPrerequisite = "Δεν έχει οριστεί προαπαιτούμενη συνεδρία.";
+
+$langSessionNotStarted = "Η συνεδρία δεν έχει ξεκινήσει ακόμα";
+$langSessionNotCompleted = "Οι δραστηριότητες της προηγούμενης συνεδρίας δεν έχουν ολοκληρωθεί";

@@ -122,8 +122,8 @@
                     @endif
 
                     <div class='col-12'>
-                        {{-- is tutor course for all individuals sessions --}}
-                        @if($is_tutor_course)
+                        {{-- is tutor course or consultant for all individuals sessions --}}
+                        @if($is_tutor_course or $is_consultant)
                             @if(count($individuals_group_sessions) > 0)
                                 <table class='table-default' id='table_sessions'>
                                     <thead>
@@ -204,7 +204,7 @@
                                 </div>
                             @endif
 
-                        {{-- is consultant user or simple user for their individuals sessions --}}
+                        {{-- is simple user for their individuals sessions --}}
                         @else
                             @if(count($individuals_group_sessions) > 0)
                                 <table class='table-default' id='table_sessions'>
@@ -223,27 +223,30 @@
                                     <tbody>
                                         @foreach($individuals_group_sessions as $s)
                                             <tr>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
-                                                    <a class='link-color' 
-                                                        href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
-                                                        {{ $s->title }}
-                                                    </a>
+                                                <td>
+                                                    <div class='d-flex gap-2'>
+                                                        <a class="link-color @if($s->display == 'not_visible') opacity-help pe-none @endif"
+                                                            href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
+                                                            {{ $s->title }}
+                                                        </a>
+                                                        {!! $s->icon !!}
+                                                    </div>
                                                 </td>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">
                                                     @if($s->type=='one')
                                                         {{ trans('langIndividualS') }}
                                                     @else
                                                         {{ trans('langGroupS') }}
                                                     @endif
                                                 </td>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">
                                                     @if($s->type_remote)
                                                         {{ trans('langRemote') }}
                                                     @else
                                                         {{ trans('langNotRemote') }}
                                                     @endif
                                                 </td>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">
                                                     @if($s->start < $current_time && $current_time < $s->finish)
                                                         {{ trans('langInProgress') }}
                                                     @elseif($current_time < $s->start)
@@ -252,9 +255,9 @@
                                                         {{ trans('langSessionHasExpired') }}
                                                     @endif
                                                 </td>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
-                                                <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
+                                                <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">{{ format_locale_date(strtotime($s->start), 'short') }}</td>
+                                                <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">{{ format_locale_date(strtotime($s->finish), 'short') }}</td>
+                                                <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">
                                                     @if(!$s->visible)
                                                         {{ trans('langNo')}}
                                                     @else
@@ -262,29 +265,14 @@
                                                     @endif
                                                 </td>
                                                 <td class='text-end'>
-                                                    @if($is_consultant)
-                                                        {!! action_button(array(
-                                                            array('title' => trans('langEdit'),
-                                                                    'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
-                                                                    'icon-class' => "edit-session",
-                                                                    'icon' => 'fa-edit'),
-                                                            array('title' => trans('langCancel'),
-                                                                    'url' => "#",
-                                                                    'icon-class' => "delete-session",
-                                                                    'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
-                                                                    'icon' => 'fa-xmark')
-                                                            )
-                                                        ) !!}
-                                                    @else
-                                                        {!! action_button(array(
-                                                            array('title' => trans('langLeaveSession'),
-                                                                    'url' => "#",
-                                                                    'icon-class' => "leave-session",
-                                                                    'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionLeave'",
-                                                                    'icon' => 'fa-xmark')
-                                                            )
-                                                        ) !!}
-                                                    @endif
+                                                    {!! action_button(array(
+                                                        array('title' => trans('langLeaveSession'),
+                                                                'url' => "#",
+                                                                'icon-class' => "leave-session",
+                                                                'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionLeave'",
+                                                                'icon' => 'fa-xmark')
+                                                        )
+                                                    ) !!}
                                                 </td>
                                             </tr>
                                         @endforeach

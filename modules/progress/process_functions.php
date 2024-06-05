@@ -1459,3 +1459,19 @@ function check_unit_progress($unit_id) {
 
     return true;
 }
+
+/**
+ * @brief check unit progress
+ * @param $unit_id
+ * @return bool
+ */
+function check_session_progress($session_id) {
+    global $uid, $course_id;
+
+    require_once 'Game.php';
+
+    // check for completeness in order to refresh user data
+    Game::checkCompleteness($uid, $course_id, 0, $session_id);
+
+    return true;
+}

@@ -96,11 +96,51 @@ if($is_editor){
     ], false);
     
     $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                                                    WHERE visible = ?d
-                                                                    AND course_id = ?d
-                                                                    AND id IN (SELECT session_id FROM mod_session_users
-                                                                                WHERE participants = ?d)
-                                                                    ORDER BY start ASC",1,$course_id,$uid); 
-}
+                                            WHERE visible = ?d
+                                            AND course_id = ?d
+                                            AND id IN (SELECT session_id FROM mod_session_users
+                                                        WHERE participants = ?d)
+                                            ORDER BY start ASC",1,$course_id,$uid); 
 
+
+    foreach ($data['individuals_group_sessions'] as $s) {
+        check_session_progress($s->id);  // check session completion - call to Game.php
+    }
+
+    $visible_sessions_id = [];
+    $visible_user_sessions = findUserVisibleSessions($uid, $data['individuals_group_sessions']);
+    foreach ($visible_user_sessions as $d) {
+        $visible_sessions_id[] = $d->id;
+    }
+
+    foreach($data['individuals_group_sessions'] as $cu){
+        $not_shown = false;
+        $vis = $cu->visible;
+        if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
+            $not_shown = true;
+            $icon = icon('fa-clock fa-md', $langSessionNotStarted);
+        // or has completed units (if any)
+        } else if (!in_array($cu->id, $visible_sessions_id)) {
+            $not_shown = true;
+            $icon = icon('fa-minus-circle fa-md', $langSessionNotCompleted);
+        } else {
+
+            if (in_array($cu->id, $visible_sessions_id)) {
+                $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
+                if ($sql_badge) {
+                    $badge_id = $sql_badge->id;
+                    $per = get_cert_percentage_completion('badge', $badge_id);
+                    if ($per == 100) {
+                        $icon = icon('fa-check-circle fa-md', $langInstallEnd);
+                    } else {
+                        $icon = icon('fa-hourglass-2 fa-md', $per . "%");
+                    }
+                }
+            }
+        }
+        $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+        $cu->icon = $icon;
+    }
+
+}
 view('modules.session.index', $data);
