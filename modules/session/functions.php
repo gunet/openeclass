@@ -356,7 +356,7 @@ function show_sessionResource($info) {
  */
 function show_session_doc($title, $comments, $resource_id, $file_id) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToUnitPrereq, $sessionID;
+           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
@@ -370,11 +370,11 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
         $image = 'fa-xmark link-delete';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
-        // if ($can_upload) {
-        //     if (resource_belongs_to_unit_completion($_GET['id'], $file->id)) {
-        //         $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
-        //     }
-        // }
+        if ($can_upload) {
+            if (resource_belongs_to_session_completion($_GET['session'], $file->id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);
+            }
+        }
 
         $status = $file->visible;
         if (!$can_upload and (!resource_access($file->visible, $file->public))) {
@@ -437,7 +437,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
  */
 function show_session_work($title, $comments, $resource_id, $work_id, $visibility) {
 
-    global $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
+    global $urlServer, $is_editor, $uid, $m, $langResourceBelongsToSessionPrereq,
             $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
@@ -475,9 +475,9 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
             } else if ($work->assign_to_specific == 2) {
                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
             }
-            // if (resource_belongs_to_unit_completion($_GET['id'], $work_id)) {
-            //     $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
-            // }
+            if (resource_belongs_to_session_completion($_GET['session'], $work_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);
+            }
         }
 
         if ($work->password_lock) {
@@ -564,6 +564,26 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 }
 
 
+/**
+ * @brief checks if a unit resource belongs to unit prerequisites
+ * @param $unit_id
+ * @param $unit_resource_id
+ * @return boolean
+ */
+function resource_belongs_to_session_completion($session_id, $session_resource_id) {
+
+    $q = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge
+                    ON badge.id = badge_criterion.badge
+                    WHERE session_id = ?d
+                        AND resource = ?d", $session_id, $session_resource_id);
+    if ($q) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 
 /**
  * @brief resource actions
@@ -593,28 +613,28 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
         $downloadPath = $res->path;
         $fromSystem = $res->subsystem;
     }
-    //if (!$is_editor) {
-        // if (prereq_unit_has_completion_enabled($_GET['id'])) {
-        //     $activity_result = unit_resource_completion($_GET['id'], $resource_id);
-        //     switch ($activity_result) {
-        //         case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
-        //                             <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
-        //                             </td>";
-        //             break;
-        //         case 0:
-        //             $content = "<td class='style='padding: 10px 0; width: 85px;'>
-        //                         <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
-        //                         </td>";
-        //             break;
-        //         default:
-        //             $content = "<td class='style='padding: 10px 0; width: 85px;'>&nbsp;</td>";
-        //             break;
-        //     }
-        //     return $content;
-        // } else {
-        //     return '';
-        // }
-    //}
+    if (!$is_editor) {
+        if (prereq_session_has_completion_enabled($_GET['session'])) {
+            $activity_result = session_resource_completion($_GET['session'], $resource_id);
+            switch ($activity_result) {
+                case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
+                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
+                                    </td>";
+                    break;
+                case 0:
+                    $content = "<td class='style='padding: 10px 0; width: 85px;'>
+                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
+                                </td>";
+                    break;
+                default:
+                    $content = "<td class='style='padding: 10px 0; width: 85px;'>&nbsp;</td>";
+                    break;
+            }
+            return $content;
+        } else {
+            return '';
+        }
+    }
 
     if ($res_type == 'description') {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
@@ -1930,4 +1950,36 @@ function findUserVisibleSessions($uid, $all_sessions) {
         $user_sessions[] = $session;
     }
     return $user_sessions;
+}
+
+
+
+/**
+ * @brief check if unit resource has completed
+ * @param $session_id
+ * @param $session_resource_id
+ * @return integer
+ */
+function session_resource_completion($session_id, $session_resource_id) {
+
+    global $uid, $course_id;
+
+    $badge_id = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $session_id)->id;
+    $res_id = Database::get()->querySingle("SELECT res_id FROM session_resources WHERE id = ?d", $session_resource_id)->res_id;
+    $q = Database::get()->querySingle("SELECT * FROM badge_criterion WHERE badge = ?d AND resource = ?d", $badge_id, $res_id);
+    if ($q) {
+        // complete user resources
+        $sql = Database::get()->querySingle("SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion
+                                                    ON user_badge_criterion.badge_criterion = badge_criterion.id
+                                                        AND badge_criterion.badge = ?d
+                                                        AND badge_criterion.resource = ?d
+                                                        AND user = ?d", $badge_id, $res_id, $uid);
+        if ($sql) {
+            return 1; // activity has been completed
+        } else {
+            return 0; // activity has not been completed
+        }
+    } else {
+        return 2; // there is no activity
+    }
 }

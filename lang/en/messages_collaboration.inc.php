@@ -1525,6 +1525,7 @@ $langSessionHasNotCompletionEnabled = "Unable to add! The session you selected d
 $langNewSessionPrerequisiteFailAlreadyIn = "Unable to add, the session you selected is already in the list of prerequisites.";
 $langSessionPrerequisites = "Prerequisite session";
 $langNoSessionPrerequisite = "No prerequisite session has been set.";
-
 $langSessionNotStarted = "The session has not started yet";
 $langSessionNotCompleted = "The activities of the previous session have not been completed";
+
+$langResourceBelongsToSessionPrereq = "The activity participates in session completion";
