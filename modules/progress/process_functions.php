@@ -1259,7 +1259,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $student_name = uid_to_name($user);
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
         $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id);
-        $cert_data = ($cert_date && $cert_date->cert_date) ? $cert_date->cert_date : time();
+        $cert_date = ($cert_date && $cert_date->cert_date) ? $cert_date->cert_date : time();
         $certificate_date = format_locale_date($cert_date, 'full', false);
 
     } else { // logged out
