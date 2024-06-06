@@ -8,7 +8,7 @@
 	</div>
 
 	<% if (events.length > 0) { %>
-		<div class="events-list w-100 d-flex justify-content-center m-0 ps-0" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
+		<div class="events-list w-100 d-flex justify-content-center align-items-center flex-wrap" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
 			<% _.each(events, function(event) { %>
 				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
 					class="event <%= event['class'] %>" data-bs-toggle="tooltip"

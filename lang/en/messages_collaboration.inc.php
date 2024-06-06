@@ -1527,5 +1527,5 @@ $langSessionPrerequisites = "Prerequisite session";
 $langNoSessionPrerequisite = "No prerequisite session has been set.";
 $langSessionNotStarted = "The session has not started yet";
 $langSessionNotCompleted = "The activities of the previous session have not been completed";
-
 $langResourceBelongsToSessionPrereq = "The activity participates in session completion";
+$langSessionResourseParticipatesInSessionCompletion = "The resource cannot be deleted as it participates as a session completion activity";

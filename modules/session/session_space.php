@@ -137,21 +137,34 @@ if(isset($_GET['editResource'])){
 }
 
 if(isset($_GET['del'])){
-    $q = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d",$_GET['del']);
-    $file = Database::get()->queryArray("SELECT filename,path FROM document WHERE id = ?d",$q->res_id);
-    if(count($file) > 0){
-        $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/";
-        foreach($file as $f){
-            unlink($target_dir.$f->path);
+
+    $activity_result = 2;
+    if (prereq_session_has_completion_enabled($sessionID)) {
+        $activity_result = session_resource_completion($sessionID, $_GET['del']);
+    }
+
+    if($activity_result == 2){
+        $q = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d",$_GET['del']);
+        $file = Database::get()->queryArray("SELECT filename,path FROM document WHERE id = ?d",$q->res_id);
+        if(count($file) > 0){
+            $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/";
+            foreach($file as $f){
+                unlink($target_dir.$f->path);
+            }
         }
+        if($q->type == 'doc'){
+            Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,MYSESSIONS);
+        }
+        Database::get()->query("DELETE FROM session_resources WHERE id = ?d",$_GET['del']);
+        Session::flash('message',$langSessionResourseDeleted);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
+    }else{
+        Session::flash('message',$langSessionResourseParticipatesInSessionCompletion);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
     }
-    if($q->type == 'doc'){
-        Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,MYSESSIONS);
-    }
-    Database::get()->query("DELETE FROM session_resources WHERE id = ?d",$_GET['del']);
-    Session::flash('message',$langSessionResourseDeleted);
-    Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
+    
 }
 $data['tool_content_sessions'] = show_session_resources($sessionID);
 

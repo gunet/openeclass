@@ -594,7 +594,7 @@ function resource_belongs_to_session_completion($session_id, $session_resource_i
  * @return string
  */
 function session_actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEditChange, $langDelete,
+    global $is_editor, $langEditChange, $langDelete, $uid,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
     $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload, $sessionID;
@@ -609,50 +609,85 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     $downloadPath = "";
     $fromSystem = 0;
     if($res_type == 'doc' && $res_id){
-        $res = Database::get()->querySingle("SELECT path,subsystem FROM document WHERE id = ?d",$res_id);
+        $res = Database::get()->querySingle("SELECT path,subsystem,lock_user_id FROM document WHERE id = ?d",$res_id);
         $downloadPath = $res->path;
         $fromSystem = $res->subsystem;
     }
-    if (!$is_editor) {
-        if (prereq_session_has_completion_enabled($_GET['session'])) {
-            $activity_result = session_resource_completion($_GET['session'], $resource_id);
-            switch ($activity_result) {
-                case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
-                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
-                                    </td>";
-                    break;
-                case 0:
-                    $content = "<td class='style='padding: 10px 0; width: 85px;'>
-                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
-                                </td>";
-                    break;
-                default:
-                    $content = "<td class='style='padding: 10px 0; width: 85px;'>&nbsp;</td>";
-                    break;
-            }
-            return $content;
-        } else {
-            return '';
-        }
-    }
 
-    if ($res_type == 'description') {
-        $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
-        $edit_link = "edit.php?course=$course_code&amp;id=$_GET[session]&amp;numBloc=$res_id";
-    } else {
-        $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
-        $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
-        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;editResource=$resource_id";
-    }
-
-    //$q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
     if($fromSystem == MYSESSIONS){
         $download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;download=" . getIndirectReference($downloadPath);
     }else{
         $download_url = $urlAppend . "modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($downloadPath);
     }
-    
+
+    if (!$is_editor) {
+        if (prereq_session_has_completion_enabled($_GET['session'])) {
+            $activity_result = session_resource_completion($_GET['session'], $resource_id);
+            switch ($activity_result) {
+                case 1: $content = "<td class='text-end pe-3' style='padding: 10px 0; width: 85px;'>
+                                        <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
+                                    </td>";
+                    break;
+                case 0:
+                    $content = "<td class='text-end pe-3' style='padding: 10px 0; width: 85px;'>
+                                    <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
+                                </td>";
+                    break;
+                default:
+                    if($res_type == 'doc'){
+                        $content = "<td class='text-end pe-1' style='padding: 10px 0; width: 85px;'>";
+                                $content .= action_button(array(
+                                    array('title' => $langDownload,
+                                          'url' => "$download_url",
+                                          'icon' => 'fa-download'),
+                                    array('title' => $langDelete,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
+                                          'icon' => 'fa-xmark',
+                                          'confirm' => $langConfirmDelete,
+                                          'class' => 'delete',
+                                          'show' => ($uid == $res->lock_user_id))
+                                ));
+                        $content .= "</td>";
+                    }else{
+                        $content = "<td></td>";
+                    }
+
+                    break;
+            }
+            return $content;
+        } else {
+            if($res_type == 'doc'){
+                $content = "<td class='text-end pe-1' style='padding: 10px 0; width: 85px;'>";
+                        $content .= action_button(array(
+                            array('title' => $langDownload,
+                                  'url' => "$download_url",
+                                  'icon' => 'fa-download'),
+                            array('title' => $langDelete,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
+                                  'icon' => 'fa-xmark',
+                                  'confirm' => $langConfirmDelete,
+                                  'class' => 'delete',
+                                  'show' => ($uid == $res->lock_user_id))
+                        ));
+                $content .= "</td>";
+            }else{
+                $content = "<td></td>";
+            }
+            return $content;
+        }
+    }
+
     if($is_editor){
+
+        if ($res_type == 'description') {
+            $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
+            $edit_link = "edit.php?course=$course_code&amp;id=$_GET[session]&amp;numBloc=$res_id";
+        } else {
+            $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
+            $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
+            $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;editResource=$resource_id";
+        }
+
         $content = "<td>
                         <div class='d-flex justify-content-end align-items-center gap-3 w-100'>
                             <div class='reorder-btn d-flex justify-content-center align-items-center'>
@@ -688,19 +723,6 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                         ));
         $content .= "   <div>
                     </td>";
-    }else{
-        if($res_type == 'doc'){
-            $content = "<td>";
-                    $content .= action_button(array(
-                        array('title' => $langDownload,
-                            'url' => "$download_url",
-                            'icon' => 'fa-download')
-                    ));
-            $content .= "</td>";
-        }else{
-            $content = "<td></td>";
-        }
-        
     }
 
     $first = false;
@@ -808,6 +830,9 @@ function upload_session_doc($sid){
 
             $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
             $file_date = date('Y-m-d G:i:s');
+
+            $title = isset($_POST['title']) ? q($_POST['title']) : '';
+            $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
     
             $doc_inserted = Database::get()->query("INSERT INTO document SET
                 course_id = ?d,
@@ -817,7 +842,7 @@ function upload_session_doc($sid){
                 extra_path = '',
                 filename = ?s,
                 visible = 1,
-                comment = '',
+                comment = ?s,
                 category = 0,
                 title = ?s,
                 creator = ?s,
@@ -832,12 +857,10 @@ function upload_session_doc($sid){
                 editable = 0,
                 lock_user_id = ?d",
                     $course_id, MYSESSIONS, $sid, $session_filepath,
-                    $session_real_filename, $session_real_filename, $file_creator,
+                    $session_real_filename, $comments, $title, $file_creator,
                     $file_date, $file_date, $file_creator, get_file_extension($session_filename),
                     $language, $uid);
     
-            $title = isset($_POST['title']) ? q($_POST['title']) : '';
-            $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
             $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
             $order = $order+1;
 
