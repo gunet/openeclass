@@ -185,9 +185,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->course_reviewer == '0' ? "give" : "remove")."CourseReviewer=". getIndirectReference($myrow->id),
                 'icon' => $myrow->course_reviewer == '0' ? "fa-square" : "fa-square-check",
                 'show' => $myrow->status != USER_GUEST,
+            ),array(
+                'title' => $langConsultant,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".(($myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') ? "remove" : "give")."Consultant=". getIndirectReference($myrow->id),
+                'icon' => ($myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') ? "fa-square-check" : "fa-square",
+                'show' => ($myrow->status != USER_GUEST && isset($is_collaborative_course) && $is_collaborative_course),
             ),
             array(
-                'title' => (isset($is_collaborative_course) && $is_collaborative_course) ? $langConsultant : $langTeacher,
+                'title' => $langTeacher,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->editor == '0' ? "fa-square" : "fa-square-check",
                 'show' => $myrow->status != USER_GUEST,
@@ -212,14 +217,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             )
         ));
         if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
-            $user_roles = (isset($is_collaborative_course) && $is_collaborative_course) ? [ $langConsultant ] : [ $langTeacher ];
+            $user_roles = [ $langTeacher ];
         } elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
             $user_roles = [ $langCourseReviewer ];
         } elseif ($myrow->status == USER_TEACHER) {
             $user_roles = [ $langCourseAdminTeacher ];
         } elseif ($myrow->status == USER_GUEST) {
             $user_roles = [ $langGuestName ];
-        } else {
+        } elseif ($myrow->status == USER_STUDENT and $myrow->tutor == '1' and $myrow->editor == '0'){
+            $user_roles = [ $langConsultant ];
+        }else {
             $user_roles = [ $langStudent ];
         }
 
@@ -325,6 +332,22 @@ if (isset($_GET['giveAdmin'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
         'dest_uid' => $removed_course_reviewer_gid,
         'right' => '-4'));
+} elseif(isset($_GET['removeConsultant'])){
+    $removed_consultant_gid = intval(getDirectReference($_GET['removeConsultant']));
+    Database::get()->query("UPDATE course_user SET tutor = 0, status = 5, editor = 0
+                        WHERE user_id = ?d
+                        AND course_id = ?d", $removed_consultant_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+        'dest_uid' => $removed_consultant_gid,
+        'right' => '-5'));
+} elseif(isset($_GET['giveConsultant'])){
+    $give_consultant_gid = intval(getDirectReference($_GET['giveConsultant']));
+    Database::get()->query("UPDATE course_user SET tutor = 1, status = 5, editor = 0
+                        WHERE user_id = ?d
+                        AND course_id = ?d", $give_consultant_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+        'dest_uid' => $removed_consultant_gid,
+        'right' => '+5'));
 }
 
 if (get_config('opencourses_enable')) {

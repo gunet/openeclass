@@ -63,7 +63,7 @@ if(isset($_POST['leave_session'])){
 }
 
 // An consultant can create a session
-if($is_editor){
+if($is_tutor_course or $is_consultant){
 
     $data['action_bar'] = action_bar([
         [ 'title' => $langAddSession,

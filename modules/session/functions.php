@@ -24,16 +24,29 @@
 function is_tutor_course($cid,$userId){
     global $is_admin, $is_departmentmanage_user, $is_power_user;
 
-    $result = Database::get()->querySingle("SELECT tutor FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
+    $result = Database::get()->querySingle("SELECT * FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
     if($is_admin or $is_departmentmanage_user or $is_power_user){
-        $result->tutor = 1;
+        return 1;
+    }elseif($result->status == USER_TEACHER && $result->tutor){
+        return 1;
+    }else{
+        return 0;
     }
-    return $result->tutor;
+    
 }
 
 function is_consultant($cid,$userId){
-    $result = Database::get()->querySingle("SELECT editor FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
-    return $result->editor;
+    global $is_editor;
+
+    $result = Database::get()->querySingle("SELECT * FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
+    if($result->status == USER_STUDENT && $result->tutor && !$result->editor && !$result->course_reviewer && !$result->reviewer){
+        return 1;
+    }elseif($is_editor){
+        return 1;
+    }else{
+        return 0;
+    }
+    
 }
 
 function title_session($cid,$sid){
@@ -326,10 +339,10 @@ function show_session_resources($sid)
  */
 function show_sessionResource($info) {
 
-    global $langUnknownResType, $is_editor;
+    global $langUnknownResType, $is_consultant;
 
     $html = '';
-    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' .
+    if ($info->visible == 0 and $info->type != 'doc' and ! $is_consultant) { // special case handling for old unit resources with type 'doc' .
         return;
     }
     switch ($info->type) {
@@ -437,12 +450,12 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
  */
 function show_session_work($title, $comments, $resource_id, $work_id, $visibility) {
 
-    global $urlServer, $is_editor, $uid, $m, $langResourceBelongsToSessionPrereq,
+    global $urlServer, $is_consultant, $uid, $m, $langResourceBelongsToSessionPrereq,
             $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
     $res_prereq_icon = '';
-    if ($is_editor) {
+    if ($is_consultant) {
         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
     } else {
         $gids = user_group_session_info($uid, $course_id);
@@ -461,7 +474,7 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
     }
 
     if (!$work) { // check if it was deleted
-        if (!$is_editor) {
+        if (!$is_consultant) {
             return '';
         } else {
             $imagelink = icon('fa-xmark link-delete');
@@ -469,7 +482,7 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
         }
     } else {
         $assign_to_users_message = '';
-        if ($is_editor) {
+        if ($is_consultant) {
             if ($work->assign_to_specific == 1) {
                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
             } else if ($work->assign_to_specific == 2) {
@@ -520,24 +533,24 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
  * @return string
  */
 function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
-    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id;
+    global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
 
-    if (!$module_visible and !$is_editor) {
+    if (!$module_visible and !$is_consultant) {
         return '';
     }
 
     $tc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
     if (!$tc) { // check if it was deleted
-        if (!$is_editor) {
+        if (!$is_consultant) {
             return '';
         } else {
             $imagelink = icon('fa-xmark link-delete');
             $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
         }
     } else {
-        if (!$is_editor and !$tc->active) {
+        if (!$is_consultant and !$tc->active) {
             return '';
         }
         $tclink = q($title);
@@ -594,7 +607,7 @@ function resource_belongs_to_session_completion($session_id, $session_resource_i
  * @return string
  */
 function session_actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEditChange, $langDelete, $uid,
+    global $is_consultant, $langEditChange, $langDelete, $uid,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
     $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload, $sessionID;
@@ -620,7 +633,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
         $download_url = $urlAppend . "modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($downloadPath);
     }
 
-    if (!$is_editor) {
+    if (!$is_consultant) {
         if (prereq_session_has_completion_enabled($_GET['session'])) {
             $activity_result = session_resource_completion($_GET['session'], $resource_id);
             switch ($activity_result) {
@@ -677,7 +690,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
         }
     }
 
-    if($is_editor){
+    if($is_consultant){
 
         if ($res_type == 'description') {
             $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
@@ -938,7 +951,7 @@ function display_session_settings($element, $element_id, $session_id = 0): void
 
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
            $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
-           $langpublisher, $langEditChange, $is_editor;
+           $langpublisher, $langEditChange, $is_consultant;
 
     $field = ($element == 'certificate') ? 'template' : 'icon';
 
@@ -971,7 +984,7 @@ function display_session_settings($element, $element_id, $session_id = 0): void
                                 <h3>
                                     $langProgressBasicInfo
                                 </h3>";
-                            if ($is_editor) {
+                            if ($is_consultant) {
                                 $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1&amp;session={$session_id}' class='btn submitAdminBtn gap-2'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                             </a>
@@ -1057,7 +1070,7 @@ function display_session_settings($element, $element_id, $session_id = 0): void
  */
 function display_session_activities($element, $id, $session_id = 0) {
 
-    global $tool_content, $course_code, $is_editor,
+    global $tool_content, $course_code, $is_consultant,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langOfPoll, $langConfirmDelete, $langDelete, $langEditChange,
            $langDocumentAsModuleLabel, $langCourseParticipation,
@@ -1162,7 +1175,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                         <h3>
                             $langAttendanceActList
                         </h3>";
-                    if ($is_editor) {
+                    if ($is_consultant) {
                         $tool_content .= "<div>
                             $addActivityBtn
                         </div>";
@@ -1866,12 +1879,12 @@ function prereq_session_has_completion_enabled($prereq_session_id) {
  */
 function insert_session_prerequisite_unit($session_id, $prereq_session_id) {
 
-    global $is_editor,
+    global $is_consultant,
            $course_id, $course_code,
            $langResultsFailed, $langSessionHasNotCompletionEnabled, $langNewSessionPrerequisiteFailInvalid,
            $langNewUnitPrerequisiteSuccess, $langNewSessionPrerequisiteFailAlreadyIn;
 
-    if ($is_editor) { // Auth check
+    if ($is_consultant) { // Auth check
         if ($prereq_session_id < 0) {
             //Session::Messages($langNewSessionPrerequisiteFailInvalid);
             Session::flash('message',$langNewSessionPrerequisiteFailInvalid);

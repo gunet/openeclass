@@ -77,13 +77,13 @@
                                 'icon' => 'fa fa-edit',
                                 'level' => 'primary-label',
                                 'button-class' => 'btn-success',
-                                'show' => $is_editor
+                                'show' => $is_consultant
                             ),
                             array('title' => trans('langCompleteSession'),
                                 'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID . '&manage=1',
                                 'icon' => 'fa fa-gear',
                                 'button-class' => 'btn-success',
-                                'show' => $is_editor
+                                'show' => $is_consultant
                             ),
                             array('title' => trans('langDownloadFile'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
@@ -94,25 +94,25 @@
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc',
                                 'icon' => 'fa-regular fa-folder',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_editor)
+                                'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertWork'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=work',
                                 'icon' => 'fa fa-upload',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_ASSIGN) && $is_editor)
+                                'show' => (!is_module_disable(MODULE_ID_ASSIGN) && $is_consultant)
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeeting'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=tc',
                                 'icon' => 'fa-solid fa-users-rectangle',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id) && $is_editor)
+                                'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id) && $is_consultant)
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertQuestionnaire'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
                                 'icon' => 'fa-solid fa-question',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_editor)
+                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_consultant)
                             )
                         ))
                     !!}

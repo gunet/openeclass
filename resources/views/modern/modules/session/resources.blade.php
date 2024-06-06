@@ -30,7 +30,7 @@
 
                     @include('layouts.partials.legend_view')
                     
-                    @if(!$is_editor)
+                    @if(!$is_tutor_course && !$is_consultant)
                         {!! $action_bar !!}
                     @endif
 

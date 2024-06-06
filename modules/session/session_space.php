@@ -169,7 +169,7 @@ if(isset($_GET['del'])){
 $data['tool_content_sessions'] = show_session_resources($sessionID);
 
 // An consultant can create a session
-if($is_editor){
+if($is_tutor_course or $is_consultant){
     if($is_consultant){
         $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
                                     WHERE course_id = ?d AND creator = ?d

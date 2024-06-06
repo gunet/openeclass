@@ -406,17 +406,24 @@ if (isset($require_current_course) and $require_current_course) {
 
         // Check for course visibility by current user
         $status = 0;
+        $is_consultant = 0;
         // The admin and power users can see all courses as adminOfCourse
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
+            $is_consultant = 1;
         } elseif ($uid) {
-            $stat = Database::get()->querySingle("SELECT status, editor, course_reviewer FROM course_user
+            $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user
                                                            WHERE user_id = ?d AND
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
                 $is_editor = $stat->editor;
                 $is_course_reviewer = $stat->course_reviewer;
+                if(($stat->status == USER_STUDENT && $stat->tutor 
+                        && !$stat->editor && !$stat->course_reviewer)
+                            or $is_editor){
+                    $is_consultant = 1;
+                }
             }
             if ($is_departmentmanage_user and isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
@@ -442,6 +449,7 @@ if (isset($require_current_course) and $require_current_course) {
                     $status = USER_TEACHER;
                     $is_editor = $is_course_admin = $is_course_reviewer = true;
                     $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
+                    $is_consultant = 1;
                 }
             }
         }
@@ -754,6 +762,12 @@ if (isset($require_editor) and $require_editor) {
 
 if (isset($require_course_reviewer) and $require_course_reviewer) {
     if (!$is_course_reviewer) {
+        $toolContent_ErrorExists = $langCheckProf;
+    }
+}
+
+if(isset($require_consultant) and $require_consultant){
+    if(!$is_consultant){
         $toolContent_ErrorExists = $langCheckProf;
     }
 }

@@ -25,7 +25,7 @@
  */
 
 $require_current_course = true;
-$require_editor = true;
+$require_consultant = true;
 $require_help = true;
 $helpTopic = 'ManageCourseSessions';
 require_once '../../include/baseTheme.php';
@@ -57,7 +57,7 @@ $element = "badge";
 $display = TRUE;
 $localhostUrl = localhostUrl();
 
-if ($is_editor) {
+if ($is_consultant) {
     if (isset($_GET['course']) and isset($_GET['session'])) {
         if (isset($_GET['session_res_id'])) {
             $session_resource_id = $_GET['session_res_id'];
@@ -222,7 +222,7 @@ if ($show_completion_button) {
 }
 
 if (isset($display) and $display == TRUE) {
-    if ($is_editor) {
+    if ($is_consultant) {
         if (isset($element_id) and ($element_id != 0)) {
             $pageName = $element_title;
             // display certificate settings and resources
