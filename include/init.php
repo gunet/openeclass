@@ -419,9 +419,8 @@ if (isset($require_current_course) and $require_current_course) {
                 $status = $stat->status;
                 $is_editor = $stat->editor;
                 $is_course_reviewer = $stat->course_reviewer;
-                if(($stat->status == USER_STUDENT && $stat->tutor 
-                        && !$stat->editor && !$stat->course_reviewer)
-                            or $is_editor){
+                if(($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer)
+                    or ($is_editor) or ($stat->status == USER_TEACHER && $stat->tutor)){
                     $is_consultant = 1;
                 }
             }
