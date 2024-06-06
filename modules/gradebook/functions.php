@@ -786,8 +786,7 @@ function display_gradebook($gradebook) {
            $langGradebookAddActivity, $langInsertWorkCap, $langExercise, $langLearnPath,
            $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade, $langRefreshGrades,
            $langExportGradebook, $langExportGradebookWithUsers,
-           $is_editor, $is_course_reviewer;
-
+           $is_editor, $is_course_reviewer, $is_collaborative_course;
 
     $gradebook_id = getIndirectReference($gradebook->id);
     if ($is_editor) {
@@ -817,7 +816,22 @@ function display_gradebook($gradebook) {
                                 'icon' => 'fa fa-ellipsis-h space-after-icon',
                                 'class' => ''),
                           ),
-                      'icon' => 'fa-plus'),
+                      'icon' => 'fa-plus',
+                      'show' => (isset($is_collaborative_course) and !$is_collaborative_course)),
+                array('title' => $langAdd,
+                      'level' => 'primary-label',
+                      'options' => array(
+                          array('title' => $langGradebookAddActivity,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivity=1",
+                                'icon' => 'fa fa-plus fa space-after-icon',
+                                'class' => ''),
+                            array('title' => "$langInsertWorkCap",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityAs=1",
+                                'icon' => 'fa fa-flask space-after-icon',
+                                'class' => ''),
+                          ),
+                      'icon' => 'fa-plus',
+                      'show' => (isset($is_collaborative_course) and $is_collaborative_course)),
                 array('title' => $langEditChange,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
                       'icon' => 'fa-cog'),

@@ -565,7 +565,7 @@
                             </div>
                         </div>
 
-                        @if ($uid)
+                        @if ($uid && (isset($is_collaborative_course) and !$is_collaborative_course))
                             @if(isset($course_completion_id) and $course_completion_id > 0)
                                 <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                                     <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
@@ -626,29 +626,33 @@
                             @endif
                         @endif
 
-                        @if (isset($level) && !empty($level))
-                            <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
-                                <div class='card-header px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langOpenCourseShort') }}</h3>
-                                </div>
-                                <div class='card-body card-body-default px-0 py-0'>
-                                    {!! $opencourses_level !!}
-                                    <div class='mt-3 text-center'>
-                                        {!! $opencourses_level_footer !!}
+                        @if(isset($is_collaborative_course) and !$is_collaborative_course)
+                            @if (isset($level) && !empty($level))
+                                <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
+                                    <div class='card-header px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
+                                        <h3>{{ trans('langOpenCourseShort') }}</h3>
+                                    </div>
+                                    <div class='card-body card-body-default px-0 py-0'>
+                                        {!! $opencourses_level !!}
+                                        <div class='mt-3 text-center'>
+                                            {!! $opencourses_level_footer !!}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
 
-                        @if($course_home_sidebar_widgets)
-                            <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
-                                <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langWidgets') }}</h3>
+                        @if(isset($is_collaborative_course) and !$is_collaborative_course)
+                            @if($course_home_sidebar_widgets)
+                                <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
+                                    <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
+                                        <h3>{{ trans('langWidgets') }}</h3>
+                                    </div>
+                                    <div class='card-body card-body-default px-0 py-0'>
+                                        {!! html_entity_decode($course_home_sidebar_widgets) !!}
+                                    </div>
                                 </div>
-                                <div class='card-body card-body-default px-0 py-0'>
-                                    {!! html_entity_decode($course_home_sidebar_widgets) !!}
-                                </div>
-                            </div>
+                            @endif
                         @endif
 
                     </div>

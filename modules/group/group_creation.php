@@ -335,7 +335,7 @@ if (isset($_GET['all'])) {
                 </div>
             </div>";
 
-            if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)){
+            if((isset($is_collaborative_course) and !$is_collaborative_course)){
             $tool_content .= "
             <div class='form-group mt-4'>
                 <div class='col-12'>

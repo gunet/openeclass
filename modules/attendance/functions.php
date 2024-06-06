@@ -235,7 +235,7 @@ function display_attendance_activities($attendance_id) {
            $langHere, $langAttendanceNoActMessage3, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
-           $is_editor, $is_course_reviewer;
+           $is_editor, $is_course_reviewer, $is_collaborative_course;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
@@ -268,7 +268,25 @@ function display_attendance_activities($attendance_id) {
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityTc=1",
                             'icon' => 'fa fa-exchange space-after-icon',
                             'class' => '')),
-                    'icon' => 'fa-plus'),
+                    'icon' => 'fa-plus',
+                    'show' => (isset($is_collaborative_course) and !$is_collaborative_course)),
+                array('title' => $langAdd,
+                    'level' => 'primary-label',
+                    'options' => array(
+                        array('title' => $langGradebookAddActivity,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivity=1",
+                            'icon' => 'fa fa-plus space-after-icon',
+                            'class' => ''),
+                        array('title' => "$langInsertWorkCap",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityAs=1",
+                            'icon' => 'fa fa-flask space-after-icon',
+                            'class' => ''),
+                        array('title' => "$langBBB",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityTc=1",
+                            'icon' => 'fa fa-exchange space-after-icon',
+                            'class' => '')),
+                    'icon' => 'fa-plus',
+                    'show' => (isset($is_collaborative_course) and $is_collaborative_course)),
                 array('title' => $langConfig,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
                     'icon' => 'fa-cog'),

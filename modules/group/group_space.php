@@ -192,7 +192,7 @@ if (isset($_GET['group_as'])) {
                         'url' => "../wiki/index.php?course=$course_code&amp;gid=$group_id",
                         'icon' => 'fa-won-sign',
                         'level' => 'primary',
-                        'show' => $wiki),
+                        'show' => ($wiki && isset($is_collaborative_course) && !$is_collaborative_course)),
                     array('title' => $langGroupAssignments,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
                         'icon' => 'fa-globe',
@@ -307,7 +307,7 @@ if (isset($_GET['group_as'])) {
                                                       </li>";
                                 }
 
-                                if($wiki){
+                                if($wiki && isset($is_collaborative_course) && !$is_collaborative_course){
                                     $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../wiki/index.php?course=$course_code&amp;gid=$group_id'>
                                                             <span class='fa-solid fa-won-sign pt-0 pe-1'></span>$langWiki
