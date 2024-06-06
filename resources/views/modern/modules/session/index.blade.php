@@ -167,7 +167,7 @@
                                                     @elseif($current_time < $s->start)
                                                         {{ trans('langSessionHasNotStarted') }}
                                                     @else
-                                                        {{ trans('langSessionHasExpired') }}
+                                                        <span class='Accent-200-cl'>{{ trans('langSessionHasExpired') }}</span>
                                                     @endif
                                                 </td>
                                                 <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>{{ format_locale_date(strtotime($s->start), 'short') }}</td>
@@ -229,7 +229,7 @@
                                                             href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                             {{ $s->title }}
                                                         </a>
-                                                        {!! $s->icon !!}
+                                                        
                                                     </div>
                                                 </td>
                                                 <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">
@@ -252,7 +252,7 @@
                                                     @elseif($current_time < $s->start)
                                                         {{ trans('langSessionHasNotStarted') }}
                                                     @else
-                                                        {{ trans('langSessionHasExpired') }}
+                                                        <span class='Accent-200-cl'>{{ trans('langSessionHasExpired') }}</span>
                                                     @endif
                                                 </td>
                                                 <td class="@if($s->display == 'not_visible') opacity-help pe-none @endif">{{ format_locale_date(strtotime($s->start), 'short') }}</td>
@@ -265,14 +265,17 @@
                                                     @endif
                                                 </td>
                                                 <td class='text-end'>
-                                                    {!! action_button(array(
-                                                        array('title' => trans('langLeaveSession'),
-                                                                'url' => "#",
-                                                                'icon-class' => "leave-session",
-                                                                'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionLeave'",
-                                                                'icon' => 'fa-xmark')
-                                                        )
-                                                    ) !!}
+                                                    {!! $s->icon !!}
+                                                    {{--
+                                                        {!! action_button(array(
+                                                            array('title' => trans('langLeaveSession'),
+                                                                    'url' => "#",
+                                                                    'icon-class' => "leave-session",
+                                                                    'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionLeave'",
+                                                                    'icon' => 'fa-xmark')
+                                                            )
+                                                        ) !!}
+                                                    --}}
                                                 </td>
                                             </tr>
                                         @endforeach

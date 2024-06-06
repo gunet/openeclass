@@ -85,9 +85,14 @@
                                 'button-class' => 'btn-success',
                                 'show' => $is_editor
                             ),
+                            array('title' => trans('langDownloadFile'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
+                                'icon' => 'fa-solid fa-file',
+                                'level' => 'secondary'
+                            ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertDoc'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc',
-                                'icon' => 'fa fa-folder',
+                                'icon' => 'fa-regular fa-folder',
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_editor)
                             ),
@@ -99,14 +104,15 @@
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeeting'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=tc',
-                                'icon' => 'fa fa-exchange',
+                                'icon' => 'fa-solid fa-users-rectangle',
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id) && $is_editor)
                             ),
-                            array('title' => trans('langDownloadFile'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
-                                'icon' => 'fa fa-folder',
-                                'level' => 'secondary'
+                            array('title' => trans('langSelect') . ' ' . trans('langInsertQuestionnaire'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
+                                'icon' => 'fa-solid fa-question',
+                                'level' => 'secondary',
+                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_editor)
                             )
                         ))
                     !!}
