@@ -435,7 +435,7 @@ if ($is_valid) { // user credentials successful check
     }
 }
 
-$data['menuTypeID'] = 0;
+//$data['menuTypeID'] = 0;
 view('modules.auth.altsearch', $data);
 
 /**

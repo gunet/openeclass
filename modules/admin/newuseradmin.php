@@ -34,11 +34,12 @@ $tree = new Hierarchy();
 $user = new User();
 
 if (isset($_POST['submit'])) {
+    print_a($_REQUEST);
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
         csrf_token_error();
     }
     $rid = intval($_POST['rid']);
-    if (isset($_GET['type']) and $_GET['type'] == 'prof') { // change user rights
+    if (isset($_POST['type']) and $_POST['type'] == 'prof') { // change user rights
         $q = Database::get()->query("UPDATE user SET status = " . USER_TEACHER . " WHERE id = ?d", $_POST['u']);
         $depid = intval($_POST['department'] ?? 0);
         validateNode($depid, isDepartmentAdmin());
@@ -68,7 +69,7 @@ if (isset($_POST['submit'])) {
                     <p>$langProblem</p><br>" . get_config('admin_name') . "
                     <ul id='forum-category'>
                         <li>$langManager: $siteName</li>
-                        <li>$langTel: $telephone</li>
+                        <li>$langTel: " . get_config('phone') . "</li>
                         <li>$langEmail: " . get_config('email_helpdesk') . "</li>
                     </ul></p>
                 </div>
@@ -112,9 +113,10 @@ if (isset($_POST['submit'])) {
 
         if (!$v->validate()) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            //redirect_to_home_page('modules/admin/newuseradmin.php?id=' . $_POST['rid'] . '&auth=' . $_POST['auth_form']);
         } else {
             // register user
-            $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
+            $depid = intval($_POST['department'] ?? 0);
             $verified_mail = intval($_POST['verified_mail_form']);
             $all_set = register_posted_variables(array(
                 'auth_form' => true,
@@ -182,7 +184,6 @@ if (isset($_POST['submit'])) {
                 $reqtype = '?type=user';
             }
 
-            $telephone = get_config('phone');
             // send email
             $emailsubject = "$langYourReg $siteName";
             $emailheader = "
@@ -211,7 +212,7 @@ if (isset($_POST['submit'])) {
                     <p>$langProblem</p><br>" . get_config('admin_name') . "
                     <ul id='forum-category'>
                         <li>$langManager: $siteName</li>
-                        <li>$langTel: $telephone</li>
+                        <li>$langTel: " . get_config('phone') . "</li>
                         <li>$langEmail: " . get_config('email_helpdesk') . "</li>
                     </ul></p>
                 </div>
@@ -225,17 +226,22 @@ if (isset($_POST['submit'])) {
             Session::flash('alert-class', 'alert-success');
         }
     }
+
     if ($rid) {
         $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
-        redirect_to_home_page('modules/admin/listreq.php' .
-            ($req_type == USER_STUDENT? '?type=user': ''));
+        redirect_to_home_page('modules/admin/listreq.php' . ($req_type == USER_STUDENT? '?type=user': ''));
     } else {
         redirect_to_home_page('modules/admin/newuseradmin.php' . $reqtype);
     }
 }
 
-$toolName = $langCreateAccount;
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+if (isset($_GET['id']) and isset($_GET['type']) and $_GET['type'] == 'prof') { // creating course request
+    $toolName = $langCourseCreate;
+} else {
+    $toolName = $langCreateAccount;
+}
 
 // javascript
 load_js('jstree3');
@@ -280,46 +286,58 @@ $data['ext_uid'] = $ext_uid = null;
 $data['ps'] = $data['pn'] = $data['pu'] = $data['pe'] = $data['pam'] = $data['pphone'] = $data['pcom'] = $data['pdate'] = '';
 $depid = Session::has('department')? intval(Session::get('department')): null;
 $data['pv'] = Session::has('verified_mail_form')? Session::get('verified_mail_form'): '';
-if (isset($_GET['id'])) { // if we come from prof request
-    $data['id'] = $id = intval($_GET['id']);
-    $data['u'] = '';
-    $res = Database::get()->querySingle("SELECT givenname, surname, username, email, faculty_id, phone, am,
+$data['auth'] = $data['u'] = '';
+if (isset($_GET['auth'])) {
+    $data['auth'] = $auth = intval($_GET['auth']);
+}
+if (isset($_GET['type'])) {
+    $data['type'] = $_GET['type'];
+} else {
+    $data['type'] = '';
+}
+
+$data['id'] = $id = intval($_GET['id']);
+$res = Database::get()->querySingle("SELECT givenname, surname, username, password, email, faculty_id, phone, am,
                         comment, lang, date_open, status, verified_mail FROM user_request WHERE id = ?d", $id);
+if ($res) {
+    $data['ext_uid'] = $ext_uid = Database::get()->querySingle('SELECT *
+            FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
+    $data['ps'] = $res->surname;
+    $data['pn'] = $res->givenname;
+    $data['pu'] = $res->username;
+    $data['password'] = $res->password;
+    $data['pe'] = $res->email;
+    $data['pv'] = intval($res->verified_mail);
+    $depid = intval($res->faculty_id);
+    $data['pam'] = $res->am;
+    $data['pphone'] = $res->phone;
+    $data['pcom'] = $res->comment;
+    $data['language'] = $res->lang;
+    if ($res->faculty_id) {
+        validateNode($depid, isDepartmentAdmin());
+    }
+}
+
+if (isset($_GET['id']) and isset($_GET['type']) and $_GET['type'] == 'prof') { // creating course request
     if ($res) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $res->username);
         if ($u) {
             $data['existing_user'] = $existing_user = true;
             $data['u'] = $u->id;
         }
-        $data['ext_uid'] = $ext_uid = Database::get()->querySingle('SELECT *
-            FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
-        $data['ps'] = $res->surname;
-        $data['pn'] = $res->givenname;
-        $data['pu'] = $res->username;
-        $data['pe'] = $res->email;
-        $data['pv'] = intval($res->verified_mail);
-        $depid = intval($res->faculty_id);
-        $data['pam'] = $res->am;
-        $data['pphone'] = $res->phone;
-        $data['pcom'] = $res->comment;
-        $data['language'] = $res->lang;
         $data['pstatus'] = $pstatus = USER_STUDENT;
         $cpf_context = array('origin' => 'student_register');
         $data['params'] = $params = '';
         $data['prof_selected'] = '';
         $data['user_selected'] = 'checked';
         $data['pdate'] = format_locale_date(strtotime($res->date_open), 'short', false);
-
         // faculty id validation
-        if ($res->faculty_id) {
-            validateNode($depid, isDepartmentAdmin());
-        }
+
         $data['cpf_context'] = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
     } else {
         $data['cpf_context'] = array('origin' => 'teacher_register');
     }
-
-} else {
+} else { // user account request
     $data['pstatus'] =  $pstatus = USER_STUDENT;
     $data['cpf_context'] = array('origin' => 'student_register');
     $data['params'] =  $params = '';
@@ -342,7 +360,6 @@ if (isDepartmentAdmin()) {
 list($tree_js, $tree_html) = $tree->buildUserNodePicker($nodePickerParams);
 $head_content .= $tree_js;
 $data['tree_html'] = $tree_html;
-
 
 if (!$eclass_method_unique) {
     $data['auth_m'] = $auth_m = array();

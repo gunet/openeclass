@@ -17,7 +17,17 @@
 
             $('#auth_selection').change(function () {
                 var state = $(this).find(':selected').attr('value') != '1';
-                $('#password').prop('disabled', state);
+                if (state == true) {
+                    $('#password').prop({
+                        'disabled': true,
+                        'class': 'form-control bg-light text-muted'}
+                        );
+                } else {
+                    $('#password').prop({
+                        'disabled': false,
+                        'class': 'form-control'
+                    });
+                }
             }).change();
 
             $('#user_date_expires_at').datetimepicker({
@@ -119,6 +129,7 @@
                             </div>
                             <input type="hidden" name="u" value="{{ $u }}">
                             <input type='hidden' name='rid' value='{{ $id }}'>
+                            <input type="hidden" name="type" value="{{ $type }}">
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                             </div>
@@ -158,18 +169,16 @@
                             @if ($eclass_method_unique)
                                 <input type='hidden' name='auth_form' value='1'>
                             @else
-
                                 <div class="form-group{{ Session::hasError('auth_selection') ? ' has-error' : '' }} mt-4">
                                     <label for="auth_selection" class="col-sm-12 control-label-notes">{{ trans('langEditAuthMethod') }}</label>
                                     <div class="col-sm-12">
-                                    {!! selection($auth_m, 'auth_form', '', "id='auth_selection' class='form-control'") !!}
+                                    {!! selection($auth_m, 'auth_form', $auth, "id='auth_selection' class='form-control'") !!}
                                         @if (Session::hasError('auth_selection'))
                                             <span class="help-block Accent-200-cl">{{ Session::getError('auth_selection') }}</span>
                                         @endif
                                     </div>
                                 </div>
                             @endif
-
                             <div class="form-group{{ Session::hasError('password') ? ' has-error' : '' }} mt-4">
                                 <label for="passsword_form" class="col-sm-12 control-label-notes">{{ trans('langPass') }}</label>
                                 <div class="col-sm-12">
@@ -180,7 +189,6 @@
                                     <span id='result'></span >
                                 </div>
                             </div>
-
                             <div class="form-group{{ Session::hasError('email_form') ? ' has-error' : '' }} mt-4">
                                 <label for="email_form" class="col-sm-12 control-label-notes">{{ trans('langEmail') }}</label>
                                 <div class="col-sm-12">
@@ -286,7 +294,6 @@
                                 </div>
                             </div>
                             @if ($ext_uid)
-
                                 <div class="form-group mt-4">
                                     <label for="provider" class="col-sm-12 control-label-notes">{{ trans('langProviderConnectWith') }}</label>
                                     <div class="col-sm-12">

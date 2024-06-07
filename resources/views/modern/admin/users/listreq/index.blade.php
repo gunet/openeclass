@@ -66,37 +66,37 @@
                                         {!! action_button(array(
                                             array('title' => trans('langEditChange').' ('. trans('langViaPop').')',
                                                 'icon' => 'fa-edit',
-                                                'url' => "../auth/ldapnewprofadmin.php?id=$user_request->id&amp;auth=2")
+                                                'url' => "newuseradmin.php?id=$user_request->id&amp;auth=2")
                                         )) !!}
                                     @elseif ($user_request->password == 'imap')
                                         {!! action_button(array(
                                             array('title' => trans('langEditChange').' ('. trans('langViaImap').')',
                                                 'icon' => 'fa-edit',
-                                                'url' => "../auth/ldapnewprofadmin.php?id=$user_request->id&amp;auth=3")
+                                                'url' => "newuseradmin.php?id=$user_request->id&amp;auth=3")
                                         )) !!}
                                     @elseif ($user_request->password == 'ldap')
                                         {!! action_button(array(
                                             array('title' => trans('langEditChange').' ('. trans('langViaLdap').')',
                                                 'icon' => 'fa-edit',
-                                                'url' => "../auth/ldapnewprofadmin.php?id=$user_request->id&amp;auth=4")
+                                                'url' => "newuseradmin.php?id=$user_request->id&amp;auth=4")
                                         )) !!}
                                     @elseif ($user_request->password == 'db')
                                         {!! action_button(array(
                                             array('title' => trans('langEditChange').' ('. trans('langViaDB').')',
                                                 'icon' => 'fa-edit',
-                                                'url' => "../auth/ldapnewprofadmin.php?id=$user_request->id&amp;auth=5")
+                                                'url' => "newuseradmin.php?id=$user_request->id&amp;auth=5")
                                         )) !!}
                                     @elseif ($user_request->password == 'shibboleth')
                                         {!! action_button(array(
                                             array('title' => trans('langEditChange').' ('. trans('langViaShibboleth').')',
                                                 'icon' => 'fa-edit',
-                                                'url' => "../auth/ldapnewprofadmin.php?id=$user_request->id&amp;auth=6")
+                                                'url' => "newuseradmin.php?id=$user_request->id&amp;auth=6")
                                         )) !!}
                                     @elseif ($user_request->password == 'cas')
                                         {!! action_button(array(
                                             array('title' => trans('langEditChange').' ('. trans('langViaCAS').')',
                                                 'icon' => 'fa-edit',
-                                                'url' => "../auth/ldapnewprofadmin.php?id=$user_request->id&amp;auth=7")
+                                                'url' => "newuseradmin.php?id=$user_request->id&amp;auth=7")
                                         )) !!}
                                     @else
                                         {!! action_button(array(
