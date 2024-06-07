@@ -334,7 +334,7 @@ if (isset($_GET['giveAdmin'])) {
         'right' => '-4'));
 } elseif(isset($_GET['removeConsultant'])){
     $removed_consultant_gid = intval(getDirectReference($_GET['removeConsultant']));
-    Database::get()->query("UPDATE course_user SET tutor = 0, status = 5, editor = 0
+    Database::get()->query("UPDATE course_user SET tutor = 0, status = " . USER_STUDENT . ", editor = 0
                         WHERE user_id = ?d
                         AND course_id = ?d", $removed_consultant_gid, $course_id);
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
@@ -342,7 +342,7 @@ if (isset($_GET['giveAdmin'])) {
         'right' => '-5'));
 } elseif(isset($_GET['giveConsultant'])){
     $give_consultant_gid = intval(getDirectReference($_GET['giveConsultant']));
-    Database::get()->query("UPDATE course_user SET tutor = 1, status = 5, editor = 0
+    Database::get()->query("UPDATE course_user SET tutor = 1, status = " . USER_STUDENT . ", editor = 0
                         WHERE user_id = ?d
                         AND course_id = ?d", $give_consultant_gid, $course_id);
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,

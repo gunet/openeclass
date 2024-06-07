@@ -22,10 +22,12 @@
 
  
 function is_tutor_course($cid,$userId){
-    global $is_admin, $is_departmentmanage_user, $is_power_user;
+    global $is_admin, $is_departmentmanage_user, $is_power_user, $atleastone;
 
     $result = Database::get()->querySingle("SELECT * FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
-    if($is_admin or $is_departmentmanage_user or $is_power_user){
+    if($is_admin or $is_power_user){
+        return 1;
+    }elseif($is_departmentmanage_user and $atleastone){
         return 1;
     }elseif($result->status == USER_TEACHER && $result->tutor){
         return 1;

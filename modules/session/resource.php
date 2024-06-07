@@ -27,6 +27,7 @@
 
 $require_login = true;
 $require_current_course = true;
+$require_consultant = true;
 $require_help = TRUE;
 $helpTopic = 'course_sessions';
 
