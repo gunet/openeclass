@@ -1529,3 +1529,10 @@ $langSessionNotStarted = "The session has not started yet";
 $langSessionNotCompleted = "The activities of the previous session have not been completed";
 $langResourceBelongsToSessionPrereq = "The activity participates in session completion";
 $langSessionResourseParticipatesInSessionCompletion = "The resource cannot be deleted as it participates as a session completion activity";
+
+$langWithoutCompletedResource = "No activity submission";
+$langSessionHasCompleted = "The session ended successfully";
+$langCompletedSessionWithoutActivity = "End session without submitting activities";
+$langSessionCompletedNotContinue = "Ending the session is not allowed.</br>
+ Maybe there is an incomplete prerequisite session or there are activities that have not been completed";
+$langCompletedSession = "Completed";

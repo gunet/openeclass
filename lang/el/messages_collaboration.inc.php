@@ -1473,3 +1473,9 @@ $langResourceBelongsToSessionPrereq = "Η δραστηριότητα συμμε�
 $langSessionResourseParticipatesInSessionCompletion = "Ο πόρος δεν μπορεί να διαγραφεί καθώς συμμετέχει ως δραστηριότητα ολοκλήρωσης της συνεδρίας";
 
 $langInsertQuestionnaire = "ερωτηματολογίου";
+$langWithoutCompletedResource = "Χωρίς υποβολή δραστηριοτήτων";
+$langSessionHasCompleted = "Η συνεδρία ολοκληρώθηκε επιτυχώς";
+$langCompletedSessionWithoutActivity = "Ολοκλήρωση συνεδρίας χωρίς υποβολή δραστηριοτήτων";
+$langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρίας δεν είναι επιτρεπτή.</br>
+                                    Ισως υπάρχει μη ολοκληρωμένη προαπαιτούμενη συνεδρία ή υπάρχουν δραστηριότητες που δεν έχουν ολοκληρωθεί";
+$langCompletedSession = "Ολοκληρωμένη";

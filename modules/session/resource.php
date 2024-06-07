@@ -27,7 +27,9 @@
 
 $require_login = true;
 $require_current_course = true;
-$require_consultant = true;
+if(isset($_GET['type']) and !$_GET['type']=='doc_upload'){
+    $require_consultant = true;
+}
 $require_help = TRUE;
 $helpTopic = 'course_sessions';
 
@@ -59,6 +61,7 @@ $sessionTitle = title_session($course_id,$sessionID);
 $pageName = $langAddResource;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
+$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 
 if(isset($_POST['submit_doc'])){
     insert_session_docs($sessionID);
@@ -81,6 +84,9 @@ if(isset($_GET['type'])){
     }elseif($_GET['type'] == 'doc_upload'){
         $type_resource = upload_file($sessionID);
     }
+    // elseif($_GET['type'] == 'add_tc'){
+    //     $type_resource = session_tc_creation($sessionID);
+    // }
 }
 $data['type_resource'] = $type_resource;
 

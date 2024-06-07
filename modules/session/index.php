@@ -139,7 +139,7 @@ if($is_tutor_course or $is_consultant){
             }
         }
         $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
-        $cu->icon = $icon;
+        $cu->icon = $icon ?? '';
     }
 
 }

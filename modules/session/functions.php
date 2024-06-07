@@ -371,7 +371,9 @@ function show_sessionResource($info) {
  */
 function show_session_doc($title, $comments, $resource_id, $file_id) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID;
+           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID, $is_consultant;
+
+    $can_upload = $can_upload || $is_consultant;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
@@ -1079,7 +1081,7 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langAdd, $langBack, $langUsers,
            $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
-           $langNoSessionPrerequisite, $langSessionCompletion;
+           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, $langCompletedSession;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1121,6 +1123,15 @@ function display_session_activities($element, $id, $session_id = 0) {
                 $cc_is_current = true;
             }
         }
+
+        // check if current session is completed
+        $is_session_completed = false;
+        $is_session_completed_message = "";
+        $check_s = Database::get()->querySingle("SELECT completed FROM user_{$element} WHERE $element = ?d",$id);
+        if($check_s){
+            $is_session_completed = true;
+            $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
+        } 
     } else {
         // check if course completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
@@ -1140,10 +1151,10 @@ function display_session_activities($element, $id, $session_id = 0) {
     // certificate details
     $tool_content .= display_session_settings($element, $id, $session_id);
     $addActivityBtn = action_button(array(
-        array('title' => $session_id ? $langOfUnitCompletion : $langOfCourseCompletion,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". ($session_id ? "unitcompletion" : "coursecompletion"),
-            'icon' => 'fa fa-trophy',
-            'show' => !$cc_enable),
+        array('title' => $langWithoutCompletedResource,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withoutCompletedResource",
+            'icon' => 'fa fa-trophy'
+        ),
         array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
@@ -1152,14 +1163,15 @@ function display_session_activities($element, $id, $session_id = 0) {
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
             'icon' => 'fa fa-folder-open fa-fw',
             'class' => ''),
-        array('title' => $langOfPoll,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
-            'icon' => 'fa fa-question-circle fa-fw',
-            'class' => ''),
-        array('title' => $langOfCourseCompletion,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
-            'icon' => 'fa fa-trophy',
-            'show' => $cc_enable && !$cc_is_current)),
+        // array('title' => $langOfPoll,
+        //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
+        //     'icon' => 'fa fa-question-circle fa-fw',
+        //     'class' => ''),
+        // array('title' => $langOfCourseCompletion,
+        //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
+        //     'icon' => 'fa fa-trophy',
+        //     'show' => $cc_enable && !$cc_is_current)
+        ),
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => 'fa-plus',
@@ -1169,92 +1181,13 @@ function display_session_activities($element, $id, $session_id = 0) {
     //get available activities
     $result = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
 
-    if (!$session_id) {
-        $tool_content .= "
-            <div class='col-12 mt-4'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                        <h3>
-                            $langAttendanceActList
-                        </h3>";
-                    if ($is_consultant) {
-                        $tool_content .= "<div>
-                            $addActivityBtn
-                        </div>";
-                    }
- $tool_content .=  "</div>";
-        $tool_content .= "
-                    <div class='card-body'>";
-                        if (count($result) == 0) {
-                            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-                        } else {
-                          $tool_content .= "<div class='table-responsive mt-0'>
-                                                <table class='table-default'><thead>
-                                                    <tr class='list-header'>
-                                                        <th>
-                                                            $langTitle
-                                                        </th>
-                                                        <th>
-                                                            $langType
-                                                        </th>
-                                                        <th>
-                                                            $langValue
-                                                        </div>
-                                                        <th>
-                                                            <i class='fa fa-cogs'></i>
-                                                        </th>
-                                                    </tr></thead>";
-                                                    foreach ($result as $details) {
-                                                        $resource_data = get_resource_details($element, $details->id);
-                                                        $tool_content .= "
-                                                        <tr>
-                                                            <td>".$resource_data['title']."</td>
-                                                            <td>". $resource_data['type']."</td>
-                                                            <td>";
-                                                                if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
-                                                                    $op = get_operators();
-                                                                    $tool_content .= $op[$details->operator];
-                                                                } else {
-                                                                    $tool_content .= "&mdash;";
-                                                                }
-                                                                if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
-                                                                    $tool_content .= "</td>";
-                                                                } else {
-                                                                    $tool_content .= "$details->threshold</td>";
-                                                                }
-                                                                $tool_content .= "<td>";
-                                                                $tool_content .= "<div class='text-end'>".
-                                                                    action_button(array(
-                                                                        array('title' => $langEditChange,
-                                                                            'icon' => 'fa-edit',
-                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;act_mod=$details->id",
-                                                                            'show' => in_array($details->activity_type, criteria_with_operators())
-                                                                        ),
-                                                                        array('title' => $langDelete,
-                                                                            'icon' => 'fa-xmark',
-                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;del_cert_res=$details->id",
-                                                                            'confirm' => $langConfirmDelete,
-                                                                            'class' => 'delete'))).
-                                                                "</div>
-                                                            </td>
-                                                        </tr>";
-                                                    }
-
-                                    $tool_content .= "
-                                                </table>
-                                            </div>";
-                        }
-        $tool_content .= "
-                    </div>
-                </div>
-            </div>";
-    } else {
+    if($session_id) {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-12'>
                                     <div class='card panelCard px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                             <h3>
-                                                $langSessionCompletion
+                                                $langSessionCompletion </br> $is_session_completed_message
                                             </h3>
                                             <div>
                                                 $addActivityBtn
@@ -1479,7 +1412,7 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
         //     break;
         case AssignmentEvent::ACTIVITY:
         case 'work':
-            display_session_available_assignments($element, $element_id, AssignmentEvent::ACTIVITY, $session_id, $session_resource_id);
+            display_session_available_assignments($element, $element_id, AssignmentSubmitEvent::ACTIVITY, $session_id, $session_resource_id);
             break;
         case 'document':
         case 'doc':
@@ -1491,6 +1424,8 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
         // case CourseCompletionEvent::ACTIVITY:
         //     display_available_coursecompletiongrade($element, $element_id, $unit_id);
         //     break;
+        case 'withoutCompletedResource':
+            session_completion_without_resources($element, $element_id, $session_id, $session_resource_id);
         default: break;
         }
 }
@@ -1537,12 +1472,6 @@ function display_session_available_assignments($element, $element_id, $activity_
             $result = Database::get()->queryArray("$sessionWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $element_id);
         }
     } 
-    // else {
-    //     $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
-    //                           AND active = 1
-    //                           AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
-    //     $result = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSql ORDER BY title", $course_id, $element_id);
-    // }
 
     if (count($result) == 0) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
@@ -1569,7 +1498,7 @@ function display_session_available_assignments($element, $element_id, $activity_
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
-                "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
+                "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
                 "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>";
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $tool_content .=
@@ -1641,17 +1570,6 @@ function display_session_available_documents($element, $element_id, $session_id 
         }
 
     } 
-    // else {
-    //     $result = Database::get()->queryArray("SELECT id, subsystem, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
-    //                                  WHERE $group_sql AND visible = 1 AND
-    //                                       path LIKE ?s AND
-    //                                       path NOT LIKE ?s AND id NOT IN
-    //                                     (SELECT resource FROM {$element}_criterion WHERE $element = ?d
-    //                                         AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
-    //                             ORDER BY sort_key COLLATE utf8mb4_general_ci",
-    //         "$path/%", "$path/%/%", $element_id);
-    // }
-
 
 
     $fileinfo = array();
@@ -1782,6 +1700,76 @@ function display_session_available_documents($element, $element_id, $session_id 
     }
 }
 
+/**
+ * @brief session completion without resources
+ * @param type $element
+ * @param type $element_id
+ * @param int $session_id
+ * @param int $session_resource_id
+ */
+function session_completion_without_resources($element, $element_id, $session_id = 0, $session_resource_id = 0){
+
+    global $course_code, $course_id, $langSessionHasCompleted, $langSessionCompletedNotContinue;
+
+    if($session_id){
+        // Initially we should check if a session has completed prequisite session
+        $has_completed_prerequisite_session = false;
+        $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
+                                                    WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
+        if(isset($has_prereq->prerequisite_session) and $has_prereq->prerequisite_session){
+            // Now we must check if prerequisite session is completed in order to continue
+            $badge = Database::get()->querySingle("SELECT id FROM {$element} WHERE session_id = ?d",$has_prereq->prerequisite_session);
+            $pr = Database::get()->querySingle("SELECT completed FROM user_{$element} WHERE $element = ?d",$badge->id);
+            if(isset($pr->completed) and $pr->completed){
+                $has_completed_prerequisite_session = true;
+            }
+        }elseif(!isset($has_prereq->prerequisite_session)){
+            $has_completed_prerequisite_session = true;
+        }
+        
+        if(isset($has_completed_prerequisite_session) and $has_completed_prerequisite_session){
+            // Now we have to check if badge contains activities for completing.
+            $res = Database::get()->querySingle("SELECT activity_type FROM {$element}_criterion
+                                                 WHERE activity_type <> ?s
+                                                 AND $element = ?d",'noactivity',$element_id);
+            if($res){
+                $has_completed_prerequisite_session = false;
+            }
+        }
+        
+        if($has_completed_prerequisite_session){
+            $crit = Database::get()->query("INSERT INTO {$element}_criterion SET $element = ?d, activity_type = ?s",$element_id,'noactivity');
+            $par = Database::get()->queryArray("SELECT participants FROM mod_session_users
+                                                        WHERE session_id = ?d",$session_id);
+    
+            if($crit && count($par) > 0){
+                foreach ($par as $p) {
+                    Database::get()->query("INSERT INTO user_{$element} SET
+                                                user = ?d,
+                                                $element = ?d,
+                                                updated = " . DBHelper::timeAfter() . ",
+                                                assigned = " . DBHelper::timeAfter() . ",
+                                                completed = ?d",$p->participants,$element_id,1);
+    
+                    Database::get()->query("INSERT INTO user_{$element}_criterion SET 
+                                                user = ?d,
+                                                created = " . DBHelper::timeAfter() . ",
+                                                {$element}_criterion = ?d",$p->participants, $crit->lastInsertID);
+                }
+            }
+            Session::flash('message',$langSessionHasCompleted);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+        }else{
+            Session::flash('message',$langSessionCompletedNotContinue);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+        }
+    }else{
+        redirect_to_home_page("courses/$course_code/");
+    }
+}
+
 
 /**
  * @brief poll display form
@@ -1817,15 +1805,6 @@ function display_session_available_polls($element, $element_id, $session_id = 0,
         }
 
     } 
-    // else {
-    //     $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
-    //                                 AND poll.active = 1
-    //                                 AND poll.end_date >= ". DBHelper::timeAfter() . "
-    //                                 AND poll.pid NOT IN
-    //                             (SELECT resource FROM {$element}_criterion WHERE $element = ?d
-    //                                 AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
-    //         $course_id, $element_id);
-    // }
 
     $pollinfo = array();
     foreach ($result as $row) {
@@ -1867,8 +1846,10 @@ function display_session_available_polls($element, $element_id, $session_id = 0,
  * @return bool
  */
 function prereq_session_has_completion_enabled($prereq_session_id) {
-    $query = "SELECT bc.id FROM badge_criterion bc WHERE bc.badge IN (SELECT b.id FROM badge b WHERE b.session_id = ?d)";
-    $exists = Database::get()->querySingle($query, $prereq_session_id);
+    // This is for session completion enabled when session contains any resource
+    //$query = "SELECT bc.id FROM badge_criterion bc WHERE bc.badge IN (SELECT b.id FROM badge b WHERE b.session_id = ?d)";
+    //$exists = Database::get()->querySingle($query, $prereq_session_id);
+    $exists = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d", $prereq_session_id);
     if ($exists) {
         return true;
     }
@@ -2021,3 +2002,15 @@ function session_resource_completion($session_id, $session_resource_id) {
         return 2; // there is no activity
     }
 }
+
+// /**
+//  * @brief create tc link for current session using BBB
+//  * @param $session_id
+//  */
+// function session_tc_creation($session_id){
+//     global $course_code, $course_id;
+//     $session_info = Database::get()->querySingle("SELECT * mod_session WHERE id = ?d",$session_id);
+//     if($session_info->type_remote){
+
+//     } 
+// }

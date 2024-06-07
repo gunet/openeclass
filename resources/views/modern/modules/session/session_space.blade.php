@@ -102,18 +102,12 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_ASSIGN) && $is_consultant)
                             ),
-                            array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeeting'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=tc',
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc',
                                 'icon' => 'fa-solid fa-users-rectangle',
                                 'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id) && $is_consultant)
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant)
                             ),
-                            array('title' => trans('langSelect') . ' ' . trans('langInsertQuestionnaire'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
-                                'icon' => 'fa-solid fa-question',
-                                'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_consultant)
-                            )
                         ))
                     !!}
                         

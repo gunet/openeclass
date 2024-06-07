@@ -41,6 +41,9 @@ function add_assignment_to_certificate($element, $element_id, $activity_type) {
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $operator = $_POST['operator'][$data];
                 $threshold = $_POST['threshold'][$data];
+            }elseif ($activity_type == AssignmentSubmitEvent::ACTIVITY){
+                $operator = null;
+                $threshold = null;
             }
             Database::get()->query("INSERT INTO {$element}_criterion
                                     SET $element = ?d,
@@ -1069,7 +1072,7 @@ function get_resource_details($element, $resource_id) {
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
-            $langAttendance;
+            $langAttendance, $langCompletedSessionWithoutActivity;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
@@ -1223,6 +1226,9 @@ function get_resource_details($element, $resource_id) {
                 $title = $q->title;
             }
             $type = "$langAttendance";
+            break;
+        case 'noactivity':
+            $title = "$langCompletedSessionWithoutActivity";
             break;
         default:
             $title = "$langAllActivities";
