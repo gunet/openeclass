@@ -346,7 +346,7 @@ if (isset($_GET['giveAdmin'])) {
                         WHERE user_id = ?d
                         AND course_id = ?d", $give_consultant_gid, $course_id);
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
-        'dest_uid' => $removed_consultant_gid,
+        'dest_uid' => $give_consultant_gid,
         'right' => '+5'));
 }
 

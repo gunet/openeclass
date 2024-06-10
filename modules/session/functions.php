@@ -56,6 +56,24 @@ function title_session($cid,$sid){
     return $result->title;
 }
 
+function date_session($cid,$sid){
+    $s = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+    $start = $s->start;
+
+    $f = Database::get()->querySingle("SELECT finish FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+    $finish = $f->finish;
+
+    $result = format_locale_date(strtotime($start), 'short');
+
+    return $result;
+}
+
+function participant_name($userId){
+    $name = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$userId);
+    $surname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$userId);
+    return $name->givenname . ' ' . $surname->surname;
+}
+
 /**
  * @brief fills an array with user groups (group_id => group_name)
  * passing $as_id will give back only the groups that have been given the specific assignment
@@ -83,6 +101,21 @@ function user_group_session_info($uid, $course_id, $as_id = NULL) {
         $gids[$r->grp_id] = $r->grp_name;
     }
     return $gids;
+}
+
+/**
+ * @brief all participants ids in session
+ * @param integer $sid
+ */
+function session_participants_ids($sid){
+    $partipants_ids = array();
+    $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$sid);
+    if(count($res) > 0){
+        foreach($res as $r){
+            $partipants_ids[] = $r->participants;
+        }
+    }
+    return $partipants_ids;
 }
 
 /**
@@ -1128,7 +1161,8 @@ function display_session_activities($element, $id, $session_id = 0) {
         $is_session_completed = false;
         $is_session_completed_message = "";
         $check_s = Database::get()->querySingle("SELECT completed FROM user_{$element} WHERE $element = ?d",$id);
-        if($check_s){
+        $checker = $check_s->completed ?? 0;
+        if($checker){
             $is_session_completed = true;
             $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
         } 
@@ -2000,6 +2034,25 @@ function session_resource_completion($session_id, $session_resource_id) {
         }
     } else {
         return 2; // there is no activity
+    }
+}
+
+/**
+ * @brief get certificate / badge percentage completion
+ * @param type $element
+ * @param type $userId
+ * @param type $element_id
+ * @return type
+ */
+function get_cert_percentage_completion_by_user($element, $element_id, $userId) {
+
+    $data = Database::get()->querySingle("SELECT completed_criteria, total_criteria "
+            . "FROM user_{$element} WHERE user = ?d AND $element = ?d", $userId, $element_id);
+
+    if (!$data or !$data->total_criteria) {
+        return 0;
+    } else {
+        return round($data->completed_criteria / $data->total_criteria * 100, 0);
     }
 }
 

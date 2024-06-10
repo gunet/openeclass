@@ -33,6 +33,7 @@ $helpTopic = 'course_sessions';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
+require_once 'modules/progress/process_functions.php';
 require_once 'functions.php';
 
 $action = new action();
@@ -48,6 +49,19 @@ $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
+    $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
+    if($sqlbadge){
+        $badge_id = $sqlbadge->id;
+        $res = Database::get()->querySingle("SELECT id FROM badge_criterion WHERE badge = ?d",$badge_id);
+        if($res){
+            $badge_criterion_id = $res->id;
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$badge_criterion_id);
+            Database::get()->query("DELETE FROM user_badge WHERE badge = ?d",$badge_id);
+            Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d",$badge_criterion_id);
+            Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
+        }
+    }
+    Database::get()->query("DELETE FROM session_prerequisite WHERE session_id = ?d OR prerequisite_session = ?d",$_POST['session_id'],$_POST['session_id']);
     Database::get()->query("DELETE FROM mod_session WHERE id = ?d",$_POST['session_id']);
     Session::flash('message',$langDelSessionSuccess);
     Session::flash('alert-class', 'alert-success');
@@ -70,7 +84,20 @@ if($is_tutor_course or $is_consultant){
           'url' => 'new.php?course=' . $course_code,
           'icon' => 'fa-plus-circle',
           'button-class' => 'btn-success',
-          'level' => 'primary-label' ]
+          'level' => 'primary-label' ],
+        [
+            'title' => $langCompletedConsulting,
+            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&addSessions=true",
+            'icon' => 'fa-solid fa-medal',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label'
+        ],
+        [
+            'title' => $langTableCompletedConsulting,
+            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
+            'icon' => 'fa-solid fa-list',
+            'button-class' => 'btn-success'
+        ],
     ], false);
 
     if($is_tutor_course){ // is tutor course
@@ -92,7 +119,13 @@ if($is_tutor_course or $is_consultant){
           'url' => $urlAppend . 'courses/' . $course_code . '/',
           'icon' => 'fa-reply',
           'button-class' => 'btn-success',
-          'level' => 'primary-label' ]
+          'level' => 'primary-label' ],
+        [
+            'title' => $langTableCompletedConsulting,
+            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
+            'icon' => 'fa-solid fa-list',
+            'button-class' => 'btn-success'
+        ],
     ], false);
     
     $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session

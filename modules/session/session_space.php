@@ -170,14 +170,14 @@ $data['tool_content_sessions'] = show_session_resources($sessionID);
 
 // An consultant can create a session
 if($is_tutor_course or $is_consultant){
-    if($is_consultant){
-        $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
-                                    WHERE course_id = ?d AND creator = ?d
-                                    ORDER BY start ASC",$course_id,$uid);
-    }elseif($is_tutor_course){
+    if($is_tutor_course){
         $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
                                                 WHERE course_id = ?d
                                                 ORDER BY start ASC",$course_id);
+    }elseif($is_consultant){
+        $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+                                    WHERE course_id = ?d AND creator = ?d
+                                    ORDER BY start ASC",$course_id,$uid);
     }
 }else{// is simple user
 

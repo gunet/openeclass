@@ -3091,6 +3091,16 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `certificate_template` ADD `all_courses` tinyint(1) NOT NULL DEFAULT 1");
     }
 
+    if (!DBHelper::tableexists('mod_session_completion')) {
+        Database::get()->query("CREATE TABLE `mod_session_completion` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `course_id` int(11) NOT NULL,
+              `session_id` int(11) NOT NULL,
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+              FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
 }
 
 

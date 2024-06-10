@@ -221,7 +221,9 @@ if($is_tutor_course){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
                                                     WHERE course_user.editor = ?d
-                                                    AND course_user.course_id = ?d", 1, $course_id);
+                                                    AND course_user.status = ?d
+                                                    AND course_user.course_id = ?d
+                                                    AND course_user.tutor = ?d", 0, USER_STUDENT, $course_id, 1);
 }else{// is the consultant
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }

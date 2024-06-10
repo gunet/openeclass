@@ -1428,10 +1428,6 @@ $langInvitationAlreadyUsed = 'Έχετε ήδη εγγραφεί στην πλα
     διεύθυνση e-mail σας και τον κωδικό πρόσβασης που είχατε επιλέξει.';
 $langRegisterAsVisitor = 'Εγγραφή ως επισκέπτης';
 $langCourseInvitation = 'Πρόσκληση εγγραφής στη συνεργασία';
-
-
-
-
 $langPreviewCollaboration = " συνεργασίας";
 $langUnregCollaboration = "Απεγγραφή από την συνεργασία";
 $langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
@@ -1445,7 +1441,6 @@ $langRequestReasonsCollab = "Αναφέρετε τους λόγους που ε�
 $m['password_collab'] = "Συνθηματικό συνεργασίας";
 $lang_openCourse_inModal = "Να εμφανίζονται οι πληροφορίες της συνεργασίας σε Modal(Πλαίσιο) στις ανοικτές συνεργασίες;</br>
                             Σε περίπτωση που δεν επιλέξετε αυτήν την επιλογή, οι πληροφορίες της συνεργασίας θα εμφανίζονται σε καινούρια σελίδα του browser σας.";
-
 $langGroupWorkIntro = "
 	Παρακάτω εμφανίζονται οι διαθέσιμες εργασίες που έχουν ανατεθεί
 	στα πλαίσια αυτού της $langsOfCourse. Παρακαλούμε επιλέξτε την εργασία όπου θέλετε
@@ -1461,7 +1456,6 @@ $langInvalidCourseSessionPrerequisites = "Η ολοκλήρωση της συν�
 $langManageSession = "Διαχείριση συνεδριών";
 $langSessionCompletion = "Ολοκλήρωση συνεδρίας";
 $langSessionCompletionMessage = "Η συνεδρία ολοκληρώθηκε με επιτυχία";
-
 $langNewSessionPrerequisiteFailInvalid = "Αδυναμία προσθήκης! Παρακαλούμε επιλέξτε μία έγκυρη συνεδρία.";
 $langSessionHasNotCompletionEnabled = "Αδυναμία προσθήκης! Η συνεδρία που επιλέξατε δεν έχει ενεργοποιημένη την ολοκλήρωση συνεδρίας.";
 $langNewSessionPrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, η συνεδρία που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
@@ -1471,7 +1465,6 @@ $langSessionNotStarted = "Η συνεδρία δεν έχει ξεκινήσει
 $langSessionNotCompleted = "Οι δραστηριότητες της προηγούμενης συνεδρίας δεν έχουν ολοκληρωθεί";
 $langResourceBelongsToSessionPrereq = "Η δραστηριότητα συμμετέχει στην ολοκλήρωση της συνεδρίας";
 $langSessionResourseParticipatesInSessionCompletion = "Ο πόρος δεν μπορεί να διαγραφεί καθώς συμμετέχει ως δραστηριότητα ολοκλήρωσης της συνεδρίας";
-
 $langInsertQuestionnaire = "ερωτηματολογίου";
 $langWithoutCompletedResource = "Χωρίς υποβολή δραστηριοτήτων";
 $langSessionHasCompleted = "Η συνεδρία ολοκληρώθηκε επιτυχώς";
@@ -1479,3 +1472,11 @@ $langCompletedSessionWithoutActivity = "Ολοκλήρωση συνεδρίας 
 $langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρίας δεν είναι επιτρεπτή.</br>
                                     Ισως υπάρχει μη ολοκληρωμένη προαπαιτούμενη συνεδρία ή υπάρχουν δραστηριότητες που δεν έχουν ολοκληρωθεί";
 $langCompletedSession = "Ολοκληρωμένη";
+
+$langCompletedConsulting = "Ολοκλήρωση συμβουλευτικής";
+$langAddSessionConsultingCompleted = "Η καταχώριση των συνεδριών για την ολοκλήρωση συμβουλευτικής ολοκληρώθηκε.";
+$langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλες οι διαθέσιμες συνεδρίες που δεν έχουν ξεκινήσει ακόμα. </br>
+                                Επιλέξτε ποιες από αυτές θα αφορούν την ολοκλήρωση συμβουλευτικής ενός χρήστη.";
+$langTableCompletedConsulting = "Πίνακας παρακολούθησης δράσεων συμβουλευτικής";
+$langCompletedSessions = "Ολοκληρωμένη συνεδρία";
+$langNotCompletedSession = "Μη ολοκληρωμένη συνεδρία";

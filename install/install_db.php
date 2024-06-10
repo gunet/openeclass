@@ -2533,6 +2533,14 @@ $db->query("CREATE TABLE `session_resources` (
                             PRIMARY KEY(id),
                             FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
 
+$db->query("CREATE TABLE `mod_session_completion` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `course_id` int(11) NOT NULL,
+                            `session_id` int(11) NOT NULL,
+                            PRIMARY KEY (`id`),
+                            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+                            FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
+
 
 $_SESSION['theme'] = 'modern';
 
