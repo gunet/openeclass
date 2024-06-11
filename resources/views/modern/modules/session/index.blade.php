@@ -132,7 +132,7 @@
                                     @foreach($individuals_group_sessions as $s)
                                         <tr>
                                             <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
-                                                <a class='link-color' 
+                                                <a class="link-color @if(!$is_tutor_course && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
                                                     href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                     {{ $s->title }}
                                                 </a>
@@ -155,7 +155,7 @@
                                                             'icon-class' => "edit-session",
                                                             'icon' => 'fa-edit',
                                                             'show' => ($is_tutor_course or $is_consultant)),
-                                                    array('title' => trans('langCancel'),
+                                                    array('title' => trans('langDelete'),
                                                             'url' => "#",
                                                             'icon-class' => "delete-session",
                                                             'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
