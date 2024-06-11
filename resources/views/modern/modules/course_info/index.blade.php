@@ -73,29 +73,6 @@
                 hideCCFields();
             }
         }).change();
-
-
-        var type_course = $('#typeCourses').val();
-        if (type_course == 1){
-          $('.typeCourse').removeClass('d-block');
-          $('.typeCourse').addClass('d-none');
-        }else{
-          $('.typeCourse').removeClass('d-none');
-          $('.typeCourse').addClass('d-block');
-        }
-
-        $('#typeCourses').change(function(){
-            
-            var item = $(this).val();
-            if (item == 1){
-              $('.typeCourse').removeClass('d-block');
-              $('.typeCourse').addClass('d-none');
-            }else{
-              $('.typeCourse').removeClass('d-none');
-              $('.typeCourse').addClass('d-block');
-            }
-        });
-
     });
 
 </script>
@@ -175,26 +152,8 @@
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
 
-                                    <div class='form-group mt-4'>
-                                        <label for="typeCourses" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
-                                        @if(get_config('show_collaboration') and get_config('show_always_collaboration'))
-                                            <select id='typeCourses' name='typeCourse' class='form-select'>
-                                                <option value='1' selected>{{ trans('langTypeCollaboration') }}</option>
-                                            </select>
-                                        @elseif(get_config('show_collaboration') and !get_config('show_always_collaboration'))
-                                            <select id='typeCourses' name='typeCourse' class='form-select'>
-                                                <option value='0' {!! (!$isCollabCourse) ? 'selected' : '' !!}>{{ trans('langTypeCourse') }}</option>
-                                                <option value='1' {!! ($isCollabCourse) ? 'selected' : '' !!}>{{ trans('langTypeCollaboration') }}</option>
-                                            </select>
-                                        @else
-                                            <select id='typeCourses' name='typeCourse' class='form-select'>
-                                                <option value='0' selected>{{ trans('langCourse') }}</option>
-                                            </select>
-                                        @endif
-                                    </div>
-
-                                    <div class='form-group mt-4'>
-                                        <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
+                                    <div class='form-group'>
+                                        <label for='fcode' class='col-sm-12 control-label-notes'>{{ trans('langCode') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
                                         </div>
@@ -237,35 +196,41 @@
                                     <div class='form-group mt-4'>
                                         <p class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</p>
                                         <div class='col-sm-12'>
-                                            <div class='radio mb-2 typeCourse1'>
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) pe-none opacity-help @endif">
                                                 <label>
                                                     <input type='radio' name='view_type' value='simple' id='simple' {{ $course_type_simple }}>
                                                     {{ trans('langCourseSimpleFormat') }}
                                                 </label>
                                             </div>
-                                            <div class='radio mb-2 typeCourse1'>
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) pe-none opacity-help @endif">
                                                 <label>
                                                     <input type='radio' name='view_type' value='units' id='units' {{ $course_type_units }}>
                                                     {{ trans('langWithCourseUnits') }}
                                                 </label>
                                             </div>
                                             
-                                            <div class='radio mb-2 typeCourse'>
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) pe-none opacity-help @endif">
                                                 <label>
                                                     <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
                                                     {{ trans('langCourseActivityFormat') }}
                                                 </label>
                                             </div>
-                                            <div class='radio mb-2 typeCourse'>
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) pe-none opacity-help @endif">
                                                 <label>
                                                     <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
                                                     {{ trans('langCourseWallFormat') }}
                                                 </label>
                                             </div>
-                                            <div class='radio mb-2 typeCourse'>
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) pe-none opacity-help @endif">
                                                 <label>
                                                     <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
                                                     {{ trans('langFlippedClassroom') }}
+                                                </label>
+                                            </div>
+                                            <div class="radio @if(!get_config('show_collaboration') and !get_config('show_always_collaboration')) d-none @endif">
+                                                <label>
+                                                    <input type='radio' name='view_type' value='sessions' id='sessions' {{ $course_type_sessions }}>
+                                                    {{ trans('langSessionType') }}
                                                 </label>
                                             </div>
                                         </div>

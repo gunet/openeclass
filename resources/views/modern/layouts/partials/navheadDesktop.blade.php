@@ -3,7 +3,7 @@
 
 
     <div class='d-none d-lg-block w-100 header-large-screen'>
-        <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
+        <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
             <div class='d-flex justify-content-start align-items-center h-100'>
                 <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label='Homepage'>
                     <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="Logo"/>

@@ -71,9 +71,8 @@ if (isset($_POST['submit'])) {
 
     // Update query
     Database::get()->query("UPDATE course SET title = ?s,
-                    prof_names = ?s,
-                    is_collaborative = ?d
-                    WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_POST['typeCourse'], $_GET['c']);
+                    prof_names = ?s
+                    WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
     //Session::Messages($langModifDone, 'alert-success');
     Session::flash('message',$langModifDone);

@@ -214,7 +214,10 @@ if (!isset($_POST['create_course'])) {
     }
     $description = purify($_POST['description']);
 
-    $typeCourse = isset($_POST['typeCourse']) ? $_POST['typeCourse'] : 0;
+    $typeCourse = 0;
+    if(isset($view_type) && $view_type == 'sessions'){
+        $typeCourse = 1;
+    }
 
     $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,

@@ -6361,3 +6361,4 @@ you will temporarily enter the new session start and end date. </br></br>
 <strong>The registration is completed by submitting the form from the << change >> button.</strong>";
 $langEmptyUploadFile = "You have not selected a file to upload.";
 $langUploadDocCompleted = "Upload completed successfully.";
+$langSessionType = "Session type";

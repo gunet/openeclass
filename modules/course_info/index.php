@@ -144,6 +144,10 @@ if (isset($_POST['submit'])) {
             }
         }
 
+        $typeCourse = 0;
+        if(isset($view_type) && $view_type == 'sessions'){
+            $typeCourse = 1;
+        }
 
         $old_deps = $course->getDepartmentIds($course_id);
         $deps_changed = count(array_diff($old_deps, $departments)) +
@@ -176,7 +180,7 @@ if (isset($_POST['submit'])) {
                             WHERE id = ?d",
                                 $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
-                                $course_language, $password, $view_type, $flipped_flag, $_POST['typeCourse'], $course_id);
+                                $course_language, $password, $view_type, $flipped_flag, $typeCourse, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
@@ -274,8 +278,6 @@ if (isset($_POST['submit'])) {
 
     $data['title'] = $c->title;
 
-    $data['isCollabCourse'] = $c->is_collaborative;
-
     $visible = $c->visible;
     $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
     $visibleChecked[$visible] = " checked='checked'";
@@ -304,6 +306,12 @@ if (isset($_POST['submit'])) {
     } else {
         $data['course_type_flipped_classroom'] = '';
     }
+    if($c->view_type == "sessions" && $c->is_collaborative == 1){
+        $data['course_type_sessions'] = 'checked';
+    }else{
+        $data['course_type_sessions'] = '';
+    }
+    
 
     $course_license = $c->course_license;
     if ($course_license > 0 and $course_license < 10) {
