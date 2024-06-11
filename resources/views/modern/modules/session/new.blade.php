@@ -254,7 +254,7 @@
                                     <fieldset>
 
                                         <div class="form-group">
-                                            <label for='creators' class='control-label-notes'>{{ trans('langCreator') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='creators' class='control-label-notes'>{{ trans('langResponsibleOfSession') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
                                             <select class='form-select' name='creators' id='creators'>
                                                 @if($is_tutor_course)
                                                     <option value=''>
@@ -307,7 +307,7 @@
                                                 </label>
                                             </div>
 
-                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langParticipants') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
+                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langSessionParticipants') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
                                             <div id='select_one_session' class='d-block mt-1'>
                                                 <select name='one_participant' class='form-select'>
                                                     <option value='' selected>{{ trans('langSelectUser') }}</option>

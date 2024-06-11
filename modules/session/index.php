@@ -49,7 +49,7 @@ $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
-    $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
+    $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $_POST['session_id']);
     if($sqlbadge){
         $badge_id = $sqlbadge->id;
         $res = Database::get()->querySingle("SELECT id FROM badge_criterion WHERE badge = ?d",$badge_id);
@@ -58,6 +58,8 @@ if(isset($_POST['delete_session'])){
             Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$badge_criterion_id);
             Database::get()->query("DELETE FROM user_badge WHERE badge = ?d",$badge_id);
             Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d",$badge_criterion_id);
+            Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
+        }elseif($badge_id > 0){
             Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
         }
     }

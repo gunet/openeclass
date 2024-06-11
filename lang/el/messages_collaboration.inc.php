@@ -1472,7 +1472,6 @@ $langCompletedSessionWithoutActivity = "Ολοκλήρωση συνεδρίας 
 $langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρίας δεν είναι επιτρεπτή.</br>
                                     Ισως υπάρχει μη ολοκληρωμένη προαπαιτούμενη συνεδρία ή υπάρχουν δραστηριότητες που δεν έχουν ολοκληρωθεί";
 $langCompletedSession = "Ολοκληρωμένη";
-
 $langCompletedConsulting = "Ολοκλήρωση συμβουλευτικής";
 $langAddSessionConsultingCompleted = "Η καταχώριση των συνεδριών για την ολοκλήρωση συμβουλευτικής ολοκληρώθηκε.";
 $langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλες οι διαθέσιμες συνεδρίες για την συγκεκριμένη συνεργασία. </br>
@@ -1480,3 +1479,6 @@ $langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλε
 $langTableCompletedConsulting = "Πίνακας παρακολούθησης δράσεων συμβουλευτικής";
 $langCompletedSessions = "Ολοκληρωμένη συνεδρία";
 $langNotCompletedSession = "Μη ολοκληρωμένη συνεδρία";
+
+$langResponsibleOfSession = "Εγγεγραμμένοι σύμβουλοι - Υπευθύνος συνεδρίας";
+$langSessionParticipants = "Εγγεγραμμένοι ωφελούμενοι/μέλοι - Συμμετέχοντες";

@@ -1535,7 +1535,6 @@ $langCompletedSessionWithoutActivity = "End session without submitting activitie
 $langSessionCompletedNotContinue = "Ending the session is not allowed.</br>
  Maybe there is an incomplete prerequisite session or there are activities that have not been completed";
 $langCompletedSession = "Completed";
-
 $langCompletedConsulting = "Complete counseling";
 $langAddSessionConsultingCompleted = "Registration of counseling completion sessions is complete.";
 $langCompletedConsultingInfo = "All available sessions for this collaboration are shown below. </br>
@@ -1543,3 +1542,5 @@ $langCompletedConsultingInfo = "All available sessions for this collaboration ar
 $langTableCompletedConsulting = "Monitoring table of counseling actions";
 $langCompletedSessions = "Completed session";
 $langNotCompletedSession = "Incomplete session";
+$langResponsibleOfSession = "Registered Counselors - Session Manager";
+$langSessionParticipants = "Registered beneficiaries/members - Participants";

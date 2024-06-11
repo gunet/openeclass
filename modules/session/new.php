@@ -184,12 +184,14 @@ $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 if($is_tutor_course){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
-                                                    WHERE course_user.editor = ?d
-                                                    AND course_user.course_id = ?d", 1, $course_id);
+                                                    WHERE course_user.status = ?d
+                                                    AND course_user.tutor = ?d
+                                                    AND course_user.editor = ?d
+                                                    AND course_user.course_id = ?d", USER_STUDENT, 1, 0, $course_id);
 }else{// is the consultant
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }
- 
+
 $data['comments'] = rich_text_editor('comments', 5, 40, '' );
 $data['simple_users'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                       LEFT JOIN user ON course_user.user_id=user.id
