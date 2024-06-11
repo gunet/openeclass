@@ -1130,7 +1130,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langAdd, $langBack, $langUsers,
            $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
-           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, $langCompletedSession;
+           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, 
+           $langCompletedSession, $langNotCompletedSession;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1173,15 +1174,26 @@ function display_session_activities($element, $id, $session_id = 0) {
             }
         }
 
-        // check if current session is completed
+        // check if current session is completed by all users
         $is_session_completed = false;
         $is_session_completed_message = "";
-        $check_s = Database::get()->querySingle("SELECT completed FROM user_{$element} WHERE $element = ?d",$id);
-        $checker = $check_s->completed ?? 0;
-        if($checker){
-            $is_session_completed = true;
-            $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
-        } 
+        $checker = 0;
+        $all_users_badges = Database::get()->queryArray("SELECT completed,completed_criteria,total_criteria FROM user_{$element} WHERE $element = ?d",$id);
+        if(count($all_users_badges) > 0){
+            foreach($all_users_badges as $b){
+                if($b->completed > 0 && ( $b->completed_criteria > 0 && $b->completed_criteria == $b->total_criteria ) ){
+                    $checker++;
+                }
+            }
+            if($checker == count($all_users_badges)){
+                $is_session_completed = true;
+                $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
+            }else{
+                $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
+            }
+        }else{
+            $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
+        }
     } else {
         // check if course completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge

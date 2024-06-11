@@ -86,8 +86,8 @@ if(isset($_GET['addSessions'])){
 }else{
   $pageName = $langTableCompletedConsulting;
   $res = Database::get()->queryArray("SELECT session_id FROM mod_session_completion WHERE course_id = ?d",$course_id);
+  $completedSessionByUsers = array();
   if(isset($_GET['showCompletedConsulting']) && count($res) > 0){// for user-consultant or tutor
-    $completedSessionByUsers = array();
     if(count($res) > 0){
       foreach($res as $r){
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$r->session_id);
@@ -137,7 +137,7 @@ if(isset($_GET['addSessions'])){
         }
       }
     }
-    $data['completedSessionByUsers'] = $completedSessionByUsers;
   }
+  $data['completedSessionByUsers'] = $completedSessionByUsers;
   view('modules.session.show_results', $data);
 }

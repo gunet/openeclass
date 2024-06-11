@@ -53,15 +53,11 @@ if(isset($_POST['delete_session'])){
     if($sqlbadge){
         $badge_id = $sqlbadge->id;
         $res = Database::get()->querySingle("SELECT id FROM badge_criterion WHERE badge = ?d",$badge_id);
-        if($res){
-            $badge_criterion_id = $res->id;
-            Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$badge_criterion_id);
-            Database::get()->query("DELETE FROM user_badge WHERE badge = ?d",$badge_id);
-            Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d",$badge_criterion_id);
-            Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
-        }elseif($badge_id > 0){
-            Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
-        }
+        $badge_criterion_id = $res->id;
+        Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$badge_criterion_id);
+        Database::get()->query("DELETE FROM user_badge WHERE badge = ?d",$badge_id);
+        Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d",$badge_criterion_id);
+        Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
     }
     Database::get()->query("DELETE FROM session_prerequisite WHERE session_id = ?d OR prerequisite_session = ?d",$_POST['session_id'],$_POST['session_id']);
     Database::get()->query("DELETE FROM mod_session WHERE id = ?d",$_POST['session_id']);
