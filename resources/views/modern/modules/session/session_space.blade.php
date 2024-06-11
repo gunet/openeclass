@@ -158,11 +158,16 @@
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>{{ $pageName }}</h3>
-                                <a class='link-color' data-bs-toggle='modal' data-bs-target='#session-participants'>
-                                    {{ trans('langParticipants') }}
-                                </a>
+                            <div class='card-header border-0'>
+                                <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                    <h3>{{ $pageName }}</h3>
+                                    <a class='link-color' data-bs-toggle='modal' data-bs-target='#session-participants'>
+                                        {{ trans('langParticipants') }}
+                                    </a>
+                                </div>
+                                @if($comments)
+                                    <div>{!! $comments->comments !!}</div>
+                                @endif
                             </div>
                             <div class="card-body">
                                 {!! $tool_content_sessions !!}

@@ -88,35 +88,50 @@ if(isset($_GET['addSessions'])){
   $res = Database::get()->queryArray("SELECT session_id FROM mod_session_completion WHERE course_id = ?d",$course_id);
   if(isset($_GET['showCompletedConsulting']) && count($res) > 0){// for user-consultant or tutor
     $completedSessionByUsers = array();
-    if(count($res)){
+    if(count($res) > 0){
       foreach($res as $r){
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$r->session_id);
-        $userParticipant = array();
-        $participants_ids = array();
         if($is_tutor_course or $is_consultant){
+          $userParticipant = array();
+          $participants_ids = array();
           $participants_ids = session_participants_ids($r->session_id);
-        }else{
-          $participants_ids[] = $uid;
-        }
-        if(count($participants_ids)>0){
-          foreach($participants_ids as $p){
-            if($badge){
-              $badge_id = $badge->id;
-              $per = get_cert_percentage_completion_by_user('badge',$badge_id,$p);
-              if ($per == 100) {
-                  $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
-              } else {
-                  $icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+          if(count($participants_ids)>0){
+            foreach($participants_ids as $p){
+              if($badge){
+                $badge_id = $badge->id;
+                $per = get_cert_percentage_completion_by_user('badge',$badge_id,$p);
+                if ($per == 100) {
+                    $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
+                } else {
+                    $icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+                }
+                $userParticipant[$p] = [
+                  'user' => participant_name($p),
+                  'session_id' => $r->session_id,
+                  'icon' => $icon,
+                  'info' => ($per == 100) ? $langCompletedSessions : $langNotCompletedSession
+                ];
               }
-              $userParticipant[$p] = [
-                'user' => participant_name($p),
-                'session_id' => $r->session_id,
-                'icon' => $icon,
-                'info' => ($per == 100) ? $langCompletedSessions : $langNotCompletedSession
-              ];
+            }
+            if($badge){
+              $completedSessionByUsers[$r->session_id] = $userParticipant;
             }
           }
-          if($badge){
+        }else{
+          if(participation_in_session($r->session_id) && $badge){
+            $badge_id = $badge->id;
+            $per = get_cert_percentage_completion_by_user('badge',$badge_id,$uid);
+            if ($per == 100) {
+                $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
+            } else {
+                $icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+            }
+            $userParticipant[$uid] = [
+              'user' => participant_name($uid),
+              'session_id' => $r->session_id,
+              'icon' => $icon,
+              'info' => ($per == 100) ? $langCompletedSessions : $langNotCompletedSession
+            ];
             $completedSessionByUsers[$r->session_id] = $userParticipant;
           }
         }

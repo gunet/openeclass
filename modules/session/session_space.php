@@ -205,4 +205,6 @@ if($is_tutor_course or $is_consultant){
 $data['participants'] = Database::get()->queryArray("SELECT participants FROM mod_session_users 
                                                      WHERE session_id = ?d",$sessionID);
 
+$data['comments'] = Database::get()->querySingle("SELECT comments FROM mod_session WHERE id = ?d",$sessionID);
+
 view('modules.session.session_space', $data);

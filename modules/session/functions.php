@@ -119,6 +119,22 @@ function session_participants_ids($sid){
 }
 
 /**
+ * @brief check if a user participates in a session
+ * @param integer $sid
+ */
+function participation_in_session($sid){
+    global $uid;
+    
+    $res = Database::get()->queryArray("SELECT * FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$sid,$uid);
+    if(count($res) > 0){
+        return true;
+    }else{
+        return false;
+    }
+    
+}
+
+/**
  * @brief insert docs in database
  * @param integer $sid
  */
