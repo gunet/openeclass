@@ -489,7 +489,7 @@ if (isset($require_current_course) and $require_current_course) {
                 }
             }
             if ($extra_messages) {
-                include $extra_messages; 
+                include $extra_messages;
             }
         }
     }
@@ -774,29 +774,29 @@ if(isset($require_consultant) and $require_consultant){
 $module_id = current_module_id();
 
 // disable collaboration's modules
-if(file_exists('config/config.php') && get_config('show_collaboration')){
-    //init
-    $sizeCheck = Database::get()->queryArray("SELECT *FROM module_disable_collaboration");
-    if(count($sizeCheck) == 0){
-        $optArray = implode(', ', array_fill(0, 16, '(?d)'));
+if (file_exists('config/config.php') && get_config('show_collaboration')){
+    $sizeCheck = Database::get()->queryArray('SELECT * FROM module_disable_collaboration LIMIT 1');
+    if (!$sizeCheck) {
+        $tools_to_disable = [
+            MODULE_ID_MINDMAP,
+            MODULE_ID_PROGRESS,
+            MODULE_ID_LP,
+            MODULE_ID_EXERCISE,
+            MODULE_ID_GLOSSARY,
+            MODULE_ID_EBOOK,
+            MODULE_ID_WIKI,
+            MODULE_ID_ABUSE_REPORT,
+            MODULE_ID_COURSEPREREQUISITE,
+            MODULE_ID_LTI_CONSUMER,
+            MODULE_ID_ANALYTICS,
+            MODULE_ID_H5P,
+            MODULE_ID_COURSE_WIDGETS];
+        $optArray = implode(', ', array_fill(0, count($tools_to_disable), '(?d)'));
         Database::get()->query('INSERT INTO module_disable_collaboration (module_id) VALUES ' . $optArray,
-                                (MODULE_ID_MINDMAP),
-                                (MODULE_ID_PROGRESS),
-                                (MODULE_ID_LP),
-                                (MODULE_ID_EXERCISE),
-                                (MODULE_ID_GLOSSARY),
-                                (MODULE_ID_EBOOK),
-                                (MODULE_ID_WIKI),
-                                (MODULE_ID_ABUSE_REPORT),
-                                (MODULE_ID_COURSEPREREQUISITE),
-                                (MODULE_ID_LTI_CONSUMER),
-                                (MODULE_ID_ANALYTICS),
-                                (MODULE_ID_H5P),
-                                (MODULE_ID_COURSE_WIDGETS)
-                            );
+            $tools_to_disable);
     }
-   
 }
+
 // Security check:: Users must not be able to access inactive (if students) or disabled tools.
 if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
 
@@ -811,7 +811,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                     WHERE module_id NOT IN (SELECT module_id FROM $table_modules) AND
                             course_id = ?d", $course_id);
-        
+
     } elseif (!$uid or check_guest()) {
             $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                             WHERE visible = 1 AND
