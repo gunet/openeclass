@@ -64,8 +64,8 @@ $langUserWithNoRights = "Χρήστη χωρίς δικαιώματα δημιο
 $langUsersWithTeacherRights = "Χρήστες με δικαιώματα δημιουργίας μαθημάτων";
 $langUsersWithNoTeacherRights = "Χρήστες χωρίς δικαιώματα δημιουργίας μαθημάτων";
 $langWithRights = "με δικαίωμα δημιουργίας μαθημάτων";
-$langWithCourseCreationRights = "δημουργίας μαθημάτων";
-$langWithNoCourseCreationRights = "όχι δημουργίας μαθημάτων";
+$langWithCourseCreationRights = "δημιουργίας μαθημάτων";
+$langWithNoCourseCreationRights = "όχι δημιουργίας μαθημάτων";
 $langSupportUser = "Υποστήριξη";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
@@ -428,8 +428,8 @@ $langBackRequests = "Επιστροφή στις αιτήσεις";
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
 $langToAllUsers = "σε όλους τους χρήστες";
-$langProfOnly = "στους " . $langsTeachers . " ";
-$langStudentsOnly = "στους " . $langsOfStudentss . " ";
+$langProfOnly = "σε χρήστες με δικαίωμα δημιουργίας μαθημάτων";
+$langStudentsOnly = "σε χρήστες χωρίς δικαίωμα δημιουργίας μαθημάτων";
 
 // searchcours.php
 $langSearchCourse = "Αναζήτηση $langOfCourses";

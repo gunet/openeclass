@@ -35,13 +35,6 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('jstree3');
 
-// Display link back to index.php
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
-
 $allowables = [];
 if (isDepartmentAdmin()) {
     $userdeps = $user->getAdminDepartmentIds($uid);
@@ -69,7 +62,6 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         $subs = array();
         if ($dep) {
             $subs = $tree->buildSubtrees(array($dep));
-            //add_param('department', $dep);
         } else if (isDepartmentAdmin()) {
             $subs = $user->getAdminDepartmentIds($uid);
         }
@@ -92,7 +84,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         } else {
             $sql = Database::get()->queryArray("SELECT email, user.id FROM user $depqryadd $qry_criteria");
         }
-    } elseif (isset($_POST['send_to_prof']) and $_POST['send_to_prof'] == "1") { // Only professors
+    } elseif (isset($_POST['send_to_prof']) and $_POST['send_to_prof'] == "1") { // Only teachers
         if (isDepartmentAdmin()) {
             $sql = Database::get()->queryArray("SELECT email, user.id FROM user, user_department WHERE user.id = user_department.user
                                                                 AND user.status = " . USER_TEACHER . " AND " . $depwh);
@@ -118,7 +110,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         $user_id = $m->id;
         // checks if user is notified by email and his email address is valid
         if (valid_email($emailTo) and get_user_email_notification($user_id)) {
-            array_push($recipients, $emailTo);
+            $recipients[] = $emailTo;
         }
 
         $emailheader = "
@@ -134,8 +126,8 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         <!-- Body Section -->
         <div id='mail-body'>
             <br>
-            <div><b>$langSubject:</b> <span class='left-space'>$_POST[email_title]</span></div><br>
-            <div><b>$langMailBody:</b></div>
+            <div><b>$langMailSubject</b> <span class='left-space'>$_POST[email_title]</span></div><br>
+            <div><b>$langMailBody</b></div>
             <div id='mail-body-inner'>
                 $_POST[body_mail]
             </div>
@@ -163,7 +155,6 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     if (count($recipients) > 0) {
         send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
     }
-    //Session::Messages($emailsuccess, 'alert-success');
     Session::flash('message',$emailsuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/mailtoprof.php');
