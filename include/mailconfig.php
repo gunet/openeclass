@@ -226,7 +226,7 @@ function mail_settings_form() {
                            <label for='formSMTPPassword' class='col-sm-12 control-label-notes'>$langPassword:</label>
                            <div class='col-sm-12'>
                                 <div class='input-group'>
-                                    <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value='".q(get_var('smtp_password'))."'><span id='revealPass' class='input-group-addon'><span class='fa-solid fa-eye'></span></span>
+                                    <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value='".q(get_var('smtp_password'))."'><span id='revealPass' class='input-group-addon'><span class='fa fa-eye'></span></span>
                                 </div>
                            </div>
                         </div>

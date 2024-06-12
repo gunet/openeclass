@@ -282,7 +282,9 @@ if (isset($_POST['install2'])) {
     $gpl_link = '../info/license/gpl_print.txt';
     $tool_content .= "
     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoLicence</span></div>
-       <form class='form-horizontal form-wrapper shadow-lg p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card-body'>
+       <form class='form-horizontal form-wrapper' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group step2-form'>
              <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('info/license/gpl.txt'))) . "</pre>
@@ -302,7 +304,7 @@ if (isset($_POST['install2'])) {
                 </div>
               </div>
            </div>
-         </fieldset>" . hidden_vars($all_vars) . "</form>";
+         </fieldset>" . hidden_vars($all_vars) . "</form></div></div>";
 
     draw($tool_content);
 }
@@ -633,19 +635,20 @@ elseif (isset($_POST['install1'])) {
         exit();
     }
 
-    $tool_content .= "<form class='form-wrapper shadow-lg p-3 rounded' action='$_SERVER[SCRIPT_NAME]' method='post'>
+    $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-body'><form class='form-wrapper' action='$_SERVER[SCRIPT_NAME]' method='post'>
     <h3>$langCheckReq</h3>";
 
-    $tool_content .= "<ul class='list-unstyled'>
-        <li>" . icon('fa-check') . " <strong>Webserver</strong> <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>
+    $tool_content .= "<ul class='list-group list-group-flush'>
+        <li class='list-group-item element'>" . icon('fa-check') . " <strong>Webserver</strong> <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>
     </ul>";
 
-    $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "<ul class='list-group list-group-flush'>";
     $tool_content .= "<strong>$langPHPVersion</strong>";
     checkPHPVersion('8.0');
     $tool_content .= "</ul>";
     $tool_content .= "<h3>$langRequiredPHP</h3>";
-    $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "<ul class='list-group list-group-flush'>";
 
     warnIfExtNotLoaded('pdo_mysql');
     warnIfExtNotLoaded('gd');
@@ -657,7 +660,7 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('zip');
     warnIfExtNotLoaded('intl');
     $tool_content .= "</ul><h5 class='control-label-notes'>$langOptionalPHP</h5>";
-    $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "<ul class='list-group list-group-flush'>";
     warnIfExtNotLoaded('soap');
     warnIfExtNotLoaded('ldap');
     $tool_content .= "</ul>";
@@ -676,7 +679,7 @@ elseif (isset($_POST['install1'])) {
     <div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
     <div class='smaller'>$langBeforeInstall2<a href='$readme_file' target=_blank>$langHere</a>.</div></div><br />
     <div class='col-12 d-flex justify-content-center mt-5'><input type='submit' class='btn w-100' name='install2' value='$langNextStep &raquo;' /></div>" .
-            hidden_vars($all_vars) . "</form>\n";
+            hidden_vars($all_vars) . "</form></div></div>\n";
     draw($tool_content);
 } elseif (!$autoinstall) {
     $langLanguages = array(
@@ -686,34 +689,40 @@ elseif (isset($_POST['install1'])) {
     $tool_content .= "
     <div class='row'>
       <div class='col-sm-12 text-center'>        
-        <h4 class='Primary-500-cl mt-3'>$langWelcomeWizard</h4>
+        <h3 class='mt-3'>$langWelcomeWizard</h3>
         <div class='col-12 col-md-6 m-auto d-block mt-3'>
-          <div class='panel panel-default rounded-0'>
-            <div class='panel-heading text-center rounded-0'>$langThisWizard</div>
-            <div class='panel-body rounded-0'>
-              <ul class='text-start'>
-                  <li>$langWizardHelp1</li>
-                  <li>$langWizardHelp2</li>
-                  <li>$langWizardHelp3</li>
+          <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+              <h3>$langThisWizard</h3>
+            </div>
+            <div class='card-body'>
+              <ul class='list-group list-group-flush'>
+                  <li class='list-group-item element text-start'>$langWizardHelp1</li>
+                  <li class='list-group-item element text-start'>$langWizardHelp2</li>
+                  <li class='list-group-item element text-start'>$langWizardHelp3</li>
               </ul>
             </div>
           </div>
         </div>
         <div class='col-12 col-md-6 m-auto d-block mt-3'>
-          <form class='form-horizontal form-wrapper shadow-lg p-3 rounded bg-light' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-            <fieldset>
-              <div class='form-group'>
-                <label for='lang' class='col-sm-6 control-label-notes'>$langChooseLang:</label>
-                <div class='col-sm-12'>" . selection($langLanguages, 'lang', $lang, 'class="form-control" onChange=\"document.langform.submit();\"') . "</div>
-              </div>
-              <div class='form-group mt-5'>
-                <div class='col-12'>
-                  <input type='submit' class='btn w-100' name='install1' value='$langNextStep &raquo;'>
-                  <input type='hidden' name='welcomeScreen' value='true'>
-                </div>
-              </div>
-            <fieldset>
-          </form>
+          <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card-body'>
+              <form class='form-horizontal form-wrapper' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
+                <fieldset>
+                  <div class='form-group'>
+                    <label for='lang' class='col-sm-12 control-label-notes text-start'>$langChooseLang:</label>
+                    <div class='col-sm-12'>" . selection($langLanguages, 'lang', $lang, 'class="form-control" onChange=\"document.langform.submit();\"') . "</div>
+                  </div>
+                  <div class='form-group mt-4'>
+                    <div class='col-12'>
+                      <input type='submit' class='btn w-100' name='install1' value='$langNextStep &raquo;'>
+                      <input type='hidden' name='welcomeScreen' value='true'>
+                    </div>
+                  </div>
+                <fieldset>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>";

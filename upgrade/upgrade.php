@@ -399,12 +399,16 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         $tool_content .= "<div class='alert alert-info'>$langEmailSendWarn</div>";
     }
 
-    $tool_content .= "<ul class='list-unstyled'>";
-    $tool_content .= "<strong>$langPHPVersion</strong>";
+    $tool_content .= "<div class='row row-cols-lg-3 row-cols-1 g-3 mt-1'>";
+    $tool_content .= "<div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langPHPVersion</h3></div><div class='card-body'>";
+    $tool_content .= "<ul class='list-group list-group-flush'>";
     checkPHPVersion('8.0');
     $tool_content .= "</ul>";
-    $tool_content .= "<ul class='list-unstyled'>";
-    $tool_content .= "<strong>$langRequiredPHP</strong>";
+    $tool_content .= "</div></div></div>";
+    $tool_content .= "<div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langRequiredPHP</h3></div><div class='card-body'>";
+    $tool_content .= "<ul class='list-group list-group-flush'>";
     warnIfExtNotLoaded('pdo_mysql');
     warnIfExtNotLoaded('gd');
     warnIfExtNotLoaded('mbstring');
@@ -414,64 +418,74 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     warnIfExtNotLoaded('curl');
     warnIfExtNotLoaded('zip');
     warnIfExtNotLoaded('intl');
-    $tool_content .= "</ul><strong>$langOptionalPHP</strong>";
-    $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "</ul></div></div></div><div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
+    <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langOptionalPHP</h3></div><div class='card-body'>";
+    $tool_content .= "<ul class='list-group list-group-flush'>";
     warnIfExtNotLoaded('soap');
     warnIfExtNotLoaded('ldap');
-    $tool_content .= "</ul>";
+    $tool_content .= "</ul></div></div></div>";
+    $tool_content .= "</div>";
 
     $tool_content .= "
-      <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
+        <div class='col'>
+            <div class='form-wrapper'>
+                <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
-    if (get_config('email_transport', 'mail') == 'mail' and
-            !get_config('email_announce')) {
-        $head_content .= '<script>$(function () {' . $mail_form_js . '});</script>';
-        mail_settings_form();
-    }
+        if (get_config('email_transport', 'mail') == 'mail' and
+                !get_config('email_announce')) {
+            $head_content .= '<script>$(function () {' . $mail_form_js . '});</script>';
+            mail_settings_form();
+        }
 
-    setGlobalContactInfo();
-    $tool_content .= "
-        <div class='panel panel-default'>
-          <div class='panel-heading'>
-            <h2 class='panel-title'>$langUpgContact</h2>
-          </div>
-          <div class='panel-body'>
-            <fieldset>
-          <div class='form-group'>
-                <label class='col-sm-6 control-label-notes' for='id_Institution'>$langInstituteShortName:</label>
-                <div class='col-sm-12'>
-              <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
+        setGlobalContactInfo();
+        $tool_content .= "
+
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                            <h3>$langUpgContact</h2>
+                        </div>
+                        <div class='card-body'>
+                            <fieldset>
+                                <div class='form-group'>
+                                    <label class='col-sm-12 control-label-notes' for='id_Institution'>$langInstituteShortName:</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label class='col-sm-12 control-label-notes' for='id_postaddress'>$langUpgAddress</label>
+                                    <div class='col-sm-12'>
+                                        <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label class='col-sm-12 control-label-notes' for='id_telephone'>$langUpgTel</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label class='col-sm-12 control-label-notes' for='id_fax'>Fax:</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-12 d-flex justify-content-end'>
+                                        <input class='btn btn-primary' name='submit2' value='$langContinue &raquo;' type='submit'>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes' for='id_postaddress'>$langUpgAddress</label>
-                <div class='col-sm-12'>
-              <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
-            </div>
-          </div>
-          <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes' for='id_telephone'>$langUpgTel</label>
-                <div class='col-sm-12'>
-              <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
-            </div>
-          </div>
-          <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes' for='id_fax'>Fax:</label>
-                <div class='col-sm-12'>
-              <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
-            </div>
-          </div>
-          <div class='form-group mt-3'>
-            <div class='col-md-12'>
-              <input class='pull-right btn btn-primary' name='submit2' value='$langContinue &raquo;' type='submit'>
-                </div>
-              </div>
-            </fieldset>
-            </div>
-          </div>
-        </form>
-      </div>";
+        </div>
+        <div class='col d-none d-lg-block text-end'>
+            <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
+        </div>
+    </div>";
 
 } else {
 

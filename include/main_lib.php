@@ -4287,9 +4287,9 @@ function checkPHPVersion($version) {
     global $tool_content;
 
     if (version_compare(PHP_VERSION, $version) > 0) {
-        $tool_content .= "<li>" . icon('fa-check') . " " . PHP_VERSION . "</li>";
+        $tool_content .= "<li class='list-group-item element'>" . icon('fa-check') . " " . PHP_VERSION . "</li>";
     } else {
-        $tool_content .= "<li class='bg-danger'>" . icon('fa-xmark') . " " . PHP_VERSION . "</li>";
+        $tool_content .= "<li class='list-group-item element text-danger'>" . icon('fa-xmark') . " " . PHP_VERSION . "</li>";
     }
 
 }
@@ -4306,10 +4306,10 @@ function warnIfExtNotLoaded($extensionName) {
     global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
 
     if (extension_loaded($extensionName)) {
-        $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
+        $tool_content .= '<li class="list-group-item element">' . icon('fa-check') . ' ' . $extensionName . '</li>';
     } else {
         $tool_content .= "
-                <li class='bg-danger'>" . icon('fa-xmark') . " $extensionName
+                <li class='list-group-item element text-danger'>" . icon('fa-xmark') . " $extensionName
                 <b>$langModuleNotInstalled</b>
                 (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
                 </li>";
