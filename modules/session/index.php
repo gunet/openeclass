@@ -110,6 +110,24 @@ if($is_tutor_course or $is_consultant){
                                                                     ORDER BY start ASC",$course_id,$uid); 
     }
 
+    if(count($data['individuals_group_sessions']) > 0){
+        foreach ($data['individuals_group_sessions'] as $s) {
+            $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
+            $per = 0;
+            if ($sql_badge) {
+                $badge_id = $sql_badge->id;
+                $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$s->id);
+                if(count($participants) > 0){
+                    foreach($participants as $p){
+                        $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
+                    }
+                }
+
+            }
+            $s->percentage = $per/count($participants);
+        }
+    }
+
 }else{// is simple user
 
     $data['action_bar'] = action_bar([
@@ -171,6 +189,7 @@ if($is_tutor_course or $is_consultant){
         }
         $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
         $cu->icon = $icon ?? '';
+        $cu->percentage = $per ?? '';
     }
 
 }

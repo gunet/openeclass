@@ -119,6 +119,8 @@
 
                     <div class='col-12'>
                         @if(count($individuals_group_sessions) > 0)
+
+                        {{--
                             <table class='table-default' id='table_sessions'>
                                 <thead>
                                     <tr>
@@ -237,7 +239,128 @@
                                         </div>
                                     @endforeach
                                 </tbody>
-                        </table>
+                            </table>
+
+                        --}}
+
+
+
+                            <div class='row row-cols-1 m-auto'>
+                                @foreach($individuals_group_sessions as $s)
+                                    <div class='col px-0 mb-4'>
+                                        <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+                                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                <h3>{{ $s->title }}</h3>
+                                                <div>
+                                                    {!! action_button(array(
+                                                        array('title' => trans('langEdit'),
+                                                                'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
+                                                                'icon-class' => "edit-session",
+                                                                'icon' => 'fa-edit',
+                                                                'show' => ($is_tutor_course or $is_consultant)),
+                                                        array('title' => trans('langDelete'),
+                                                                'url' => "#",
+                                                                'icon-class' => "delete-session",
+                                                                'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
+                                                                'icon' => 'fa-xmark',
+                                                                'show' => ($is_tutor_course or $is_consultant))
+                                                        )
+                                                    ) !!}
+                                                </div>
+                                            </div>
+                                            <div class='card-body'>
+                                                <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                    <div>
+                                                        <ul class='list-group list-group-flush'>
+                                                            <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                                <div>{{ trans('langStart') }}:</div>
+                                                                <div class='secondary-text'>{{ format_locale_date(strtotime($s->start), 'short') }}</div>
+                                                            </li>
+                                                            <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                                <div>{{ trans('langFinish') }}</div>
+                                                                <div class='secondary-text'>{{ format_locale_date(strtotime($s->finish), 'short') }}</div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <ul class='list-group list-group-flush'>
+                                                            <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                                <div>{{ trans('langSSession') }}:</div>
+                                                                <div class='secondary-text'>
+                                                                    @if($s->type=='one')
+                                                                        {{ trans('langIndividualS') }}
+                                                                    @else
+                                                                        {{ trans('langGroupS') }}
+                                                                    @endif
+                                                                </div>
+                                                            </li>
+                                                            <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                                <div>{{ trans('langTypeRemote') }}:</div>
+                                                                <div class='secondary-text'>
+                                                                    @if($s->type_remote)
+                                                                        {{ trans('langRemote') }}
+                                                                    @else
+                                                                        {{ trans('langNotRemote') }}
+                                                                    @endif
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div>
+                                                        <ul class='list-group list-group-flush'>
+                                                            <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                                <div>{{ trans('langStatement') }}:</div>
+                                                                <div class='secondary-text'>
+                                                                    @if($s->start < $current_time && $current_time < $s->finish)
+                                                                        {{ trans('langInProgress') }}
+                                                                    @elseif($current_time < $s->start)
+                                                                        {{ trans('langSessionHasNotStarted') }}
+                                                                    @else
+                                                                        <span class='text-danger TextBold'>{{ trans('langSessionHasExpired') }}</span>
+                                                                    @endif
+                                                                </div>
+                                                            </li>
+                                                            <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                                <div>{{ trans('langVisible') }}:</div>
+                                                                <div class='secondary-text'>
+                                                                    @if(!$s->visible)
+                                                                        {{ trans('langNo')}}
+                                                                    @else
+                                                                        {{ trans('langYes')}}
+                                                                    @endif
+                                                                </div>
+                                                            </li>
+    
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class='d-flex justify-content-between align-items-center gap-5 flex-wrap mt-4'>
+                                                    <div class='flex-fill'>
+                                                        <div class="progress">
+                                                            <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
+                                                        </div>
+                                                    </div>
+                                                    <a class="btn successAdminBtn 
+                                                                @if(!$is_tutor_course && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
+                                                        href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
+                                                        {{ trans('langEnter') }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+
+
+
+
+
+
+
+
+
                         @else
                             <div class='alert alert-warning'>
                                 <i class='fa-solid fa-triangle-exclamation fa-lg'></i>

@@ -3492,6 +3492,12 @@ table{
   padding-left: 0px;
   padding-right: 0px;
 }
+.list-group-item.list-group-item-action.secondary{
+  font-size: 14px;
+}
+.list-group-item.list-group-item-action.secondary .secondary-text{
+  font-weight: 400;
+}
 
 .list-group-item.list-group-item-action a{
   font-family: 'Manrope', sans-serif;
