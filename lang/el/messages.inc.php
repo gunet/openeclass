@@ -6824,3 +6824,6 @@ $langInfoEditSession = "Στο ημερολόγιο θα δείτε όλες τ�
 $langEmptyUploadFile = "Δεν έχετε επιλέξει κάποιο αρχείο για ανέβασμα.";
 $langUploadDocCompleted = "Το ανέβασμα ολοκληρώθηκε με επιτυχία.";
 $langSessionType = "Μορφή συνεδρίας";
+$langRemoteConference = "Τηλεδιάσκεψη";
+$langTcNotStartedYet = "Η τηλεδιάσκεψη δεν έχει ξεκινήσει ακόμα";
+$langAddTcSession = "Δημιουργία συνδέσμου τηλεδιάσκεψης";

@@ -99,6 +99,16 @@ function session_not_started($cid,$sid){
     }
 }
 
+function is_remote_session($cid,$sid){
+    $res = Database::get()->querySingle("SELECT type_remote FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+
+    if($res->type_remote){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function participant_name($userId){
     $name = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$userId);
     $surname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$userId);
@@ -617,14 +627,15 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
  * @return string
  */
 function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
-    global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id;
+    global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id, 
+            $urlServer, $course_code, $langTcNotStartedYet, $langHasExpired, $langInProgress;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
 
     if (!$module_visible and !$is_consultant) {
         return '';
     }
-
+    $locked = $help_info = $has_expired = $comment_box = $langProgress = '';
     $tc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
     if (!$tc) { // check if it was deleted
         if (!$is_consultant) {
@@ -637,24 +648,48 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
         if (!$is_consultant and !$tc->active) {
             return '';
         }
-        $tclink = q($title);
-        if (!$module_visible) {
-            $tclink .= " <i>($langInactiveModule)</i>";
+        $resourse_info = Database::get()->querySingle("SELECT title,comments FROM session_resources WHERE id = ?d",$resource_id);
+        $new_title = $resourse_info->title;
+        $new_meeting_id = $tc->meeting_id;
+        $new_att_pw = $tc->att_pw;
+        $unlock_interval = $tc->unlock_interval;
+        $start_datetime = new DateTime(date('Y-m-d H:i:s')); 
+        $diff = $start_datetime->diff(new DateTime($tc->start_date));
+        $total_minutes = ($diff->days * 24 * 60);
+        $total_minutes += ($diff->h * 60);
+        $total_minutes += $diff->i;
+        if($tc->start_date > date('Y-m-d H:i:s')){
+            if($total_minutes > $unlock_interval && $total_minutes > 0){
+                $locked = 'pe-none opacity-help';
+                $help_info = "&nbsp;<span class='TextBold'>($langTcNotStartedYet)</span>";
+            }
         }
+        if($tc->start_date < date('Y-m-d H:i:s') && $tc->end_date > date('Y-m-d H:i:s')){
+            $langProgress = "&nbsp;<span class='TextBold'>($langInProgress)</span>";
+        }
+        if($tc->end_date < date('Y-m-d H:i:s')){
+            $locked = 'opacity-help';
+            $has_expired = "&nbsp;<span class='TextBold text-danger'>($langHasExpired)</span>";
+        }
+        $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
+        $tclink = "<a class='$locked' href='$bbblink' target='_blank'>";
+        if (!$module_visible) {
+            $tclink .= " <i>($langInactiveModule)</i>&nbsp;";
+        }
+        $tclink .= "$new_title</a>";
         $imagelink = icon('fa-exchange');
+
+        if (!empty($resourse_info->comments)) {
+            $comment_box = "&nbsp;$resourse_info->comments";
+        }
     }
 
-    if (!empty($comments)) {
-        $comment_box = "<br>$comments";
-    } else {
-        $comment_box = '';
-    }
     $class_vis = (!$tc->active or !$module_visible) ?
         ' class="not_visible"' : ' ';
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td>$tclink $comment_box</td>
+          <td>$tclink $comment_box $help_info $has_expired $langProgress</td>
           <td></td>" .
         session_actions('tc', $resource_id, $visibility) . '
         </tr>';
@@ -2115,14 +2150,134 @@ function get_cert_percentage_completion_by_user($element, $element_id, $userId) 
     }
 }
 
-// /**
-//  * @brief create tc link for current session using BBB
-//  * @param $session_id
-//  */
-// function session_tc_creation($session_id){
-//     global $course_code, $course_id;
-//     $session_info = Database::get()->querySingle("SELECT * mod_session WHERE id = ?d",$session_id);
-//     if($session_info->type_remote){
+/**
+ * @brief create tc link for current session using BBB
+ * @param $sid
+ * @param $cid
+ * @param $tc_type
+ * @param $token
+ */
+function session_tc_creation($sid,$cid,$tc_type,$token){
 
-//     } 
-// }
+    global $course_code, $langRemoteConference;
+
+    if ($tc_type == 'bbb') {
+
+        if (!isset($token) || !validate_csrf_token($token)) csrf_token_error();
+
+        $t_title = Database::get()->querySingle("SELECT title FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid)->title;
+        $title = $langRemoteConference . '-' . $t_title;
+        $desc = '';
+        $start = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid)->start;
+        $end = Database::get()->querySingle("SELECT finish FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid)->finish;
+        $status = 1;
+        $notifyUsers = 1;
+        $notifyExternalUsers = 0;
+        $addAnnouncement = 1;
+        $minutes_before = "10";
+        $external_users = NULL;
+        $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
+        $sessionUsers = Database::get()->querySingle("SELECT COUNT(*) AS count FROM mod_session_users WHERE session_id = ?d",$sid)->count;
+        if (!empty($bbb_max_part_per_room) and ($sessionUsers > $bbb_max_part_per_room)) {
+            $sessionUsers = $bbb_max_part_per_room;
+        }
+        $options_arr = array();
+        if (get_config('bbb_muteOnStart')) {
+            $options_arr['muteOnStart'] = 1;
+        }
+        if (get_config('bbb_DisableMic')) {
+            $options_arr['lockSettingsDisableMic'] = 1;
+        }
+        if (get_config('bbb_DisableCam')) {
+            $options_arr['lockSettingsDisableCam'] = 1;
+        }
+        if (get_config('bbb_webcamsOnlyForModerator')) {
+            $options_arr['webcamsOnlyForModerator'] = 1;
+        }
+        if (get_config('bbb_DisablePrivateChat')) {
+            $options_arr['lockSettingsDisablePrivateChat'] = 1;
+        }
+        if (get_config('bbb_DisablePublicChat')) {
+            $options_arr['lockSettingsDisablePublicChat'] = 1;
+        }
+        if (get_config('bbb_DisableNote')) {
+            $options_arr['lockSettingsDisableNote'] = 1;
+        }
+        if (get_config('bbb_HideUserList')) {
+            $options_arr['lockSettingsHideUserList'] = 1;
+        }
+        if (get_config('bbb_hideParticipants')) {
+            $options_arr['hideParticipants'] = 1;
+        }
+        if (count($options_arr) > 0) {
+            $options = serialize($options_arr);
+        } else {
+            $options = NULL;
+        }
+        $record = 'false';
+        // if (isset($_POST['record'])) {
+        //     $record = $_POST['record'];
+        // }
+
+        $t = Database::get()->querySingle("SELECT tc_servers.id FROM tc_servers JOIN course_external_server
+                                                    ON tc_servers.id = external_server
+                                                    WHERE course_id = ?d
+                                                        AND`type` = ?s
+                                                        AND enabled = 'true'
+                                                    ORDER BY weight
+                                                        ASC", $cid, $tc_type);
+        if ($t) {
+            $server_id = $t->id;
+        } else { // else course will use default tc_server
+            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = ?s and enabled = 'true' ORDER BY weight ASC", $tc_type)->id;
+        }
+
+        $participants_users = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$sid);
+        $r_group = '';
+        foreach ($participants_users as $group) {
+            $r_group .= $group->participants .',';
+        }
+        $r_group = mb_substr($r_group, 0, -1);
+        $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+                                                        title = ?s,
+                                                        description = ?s,
+                                                        start_date = ?t,
+                                                        end_date = ?t,
+                                                        public = 1,
+                                                        active = ?s,
+                                                        running_at = ?d,
+                                                        meeting_id = ?s,
+                                                        mod_pw = ?s,
+                                                        att_pw = ?s,
+                                                        unlock_interval = ?s,
+                                                        external_users = ?s,
+                                                        participants = ?s,
+                                                        record = ?s,
+                                                        sessionUsers = ?s,
+                                                        options = ?s",
+            $cid, $title, $desc, $start, $end, $status, $server_id,
+            generateRandomString(), generateRandomString(), generateRandomString(),
+            $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+
+            //insert tc in session resourses
+            if($q){
+                $comments = '';
+                $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
+                $order = $order + 1;
+                $Insert = Database::get()->query("INSERT INTO session_resources SET
+                                            session_id = ?d,
+                                            type = 'tc',
+                                            title = ?s,
+                                            comments = ?s,
+                                            visible = 1,
+                                            `order` = ?d,
+                                            `date` = " . DBHelper::timeAfter() . ",
+                                            res_id = ?d", $sid, $title, $comments, $order, $q->lastInsertID);
+                if($Insert){
+                    return true;
+                }
+            }
+    }else{
+        return false;
+    }
+}

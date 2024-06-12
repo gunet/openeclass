@@ -6362,3 +6362,6 @@ you will temporarily enter the new session start and end date. </br></br>
 $langEmptyUploadFile = "You have not selected a file to upload.";
 $langUploadDocCompleted = "Upload completed successfully.";
 $langSessionType = "Session type";
+$langRemoteConference = "Video conference";
+$langTcNotStartedYet = "The video conference has not started yet";
+$langAddTcSession = "Create a video conference link";

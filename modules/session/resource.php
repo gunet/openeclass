@@ -83,10 +83,18 @@ if(isset($_GET['type'])){
         $type_resource = list_teleconferences($sessionID);
     }elseif($_GET['type'] == 'doc_upload'){
         $type_resource = upload_file($sessionID);
+    }elseif($_GET['type'] == 'add_tc'){
+        $is_created_tc = session_tc_creation($sessionID,$course_id,'bbb',$_GET['token']);
+        if($is_created_tc){
+            Session::flash('message',$langBBBAddSuccessful);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sessionID");
+        }else{
+            Session::flash('message',$langForbidden);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sessionID");
+        }
     }
-    // elseif($_GET['type'] == 'add_tc'){
-    //     $type_resource = session_tc_creation($sessionID);
-    // }
 }
 $data['type_resource'] = $type_resource;
 

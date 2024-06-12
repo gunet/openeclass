@@ -103,15 +103,17 @@
                                 'show' => (!is_module_disable(MODULE_ID_ASSIGN) && $is_consultant)
                             ),
                             array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc',
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc' . '&token=' . $_SESSION['csrf_token'],
+                                'class' => "add-session",
+                                'data_action_class' => 'submitAdminBtn',
+                                'confirm' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
                                 'icon' => 'fa-solid fa-users-rectangle',
-                                'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant)
+                                'confirm_title' => trans('langAddTcSession'),
+                                'confirm_button' => trans('langSubmit'),
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID))
                             ),
                         ))
                     !!}
-                        
-
 
                     @if(count($all_session) > 0)
                         <div class='col-12'>
