@@ -68,6 +68,37 @@ function date_session($cid,$sid){
     return $result;
 }
 
+function is_session_visible($cid,$sid){
+    $res = Database::get()->querySingle("SELECT visible FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+    $start = $res->visible;
+
+    if(!$res->visible){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function session_activation($cid,$sid){
+    $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+
+    if(date('Y-m-d H:i:s') < $res->start or date('Y-m-d H:i:s') > $res->finish){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function session_not_started($cid,$sid){
+    $res = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+
+    if(date('Y-m-d H:i:s') < $res->start){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function participant_name($userId){
     $name = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$userId);
     $surname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$userId);

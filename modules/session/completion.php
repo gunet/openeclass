@@ -119,6 +119,9 @@ if(isset($_GET['addSessions'])){
           }
         }else{
           if(participation_in_session($r->session_id) && $badge){
+            if(!is_session_visible($course_id,$r->session_id)){
+              continue;
+            }
             $badge_id = $badge->id;
             $per = get_cert_percentage_completion_by_user('badge',$badge_id,$uid);
             if ($per == 100) {

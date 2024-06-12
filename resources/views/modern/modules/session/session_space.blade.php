@@ -123,25 +123,30 @@
                                                 <summary><h3 class='mb-0'>{{ trans('langSession')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($all_session as $cu)
-                                                        <li class='@if($cu->finish < $current_time or !$cu->visible) opacity-help @endif'>
-                                                            <a class='TextBold @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'
+                                                        <li>
+                                                            <a class='TextBold 
+                                                                @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif
+                                                                @if(!$is_consultant && ($cu->start > $current_time)) pe-none opacity-help @endif
+                                                                @if(!$is_consultant && ($cu->finish < $current_time)) opacity-help @endif'
                                                                 href='{{ $urlServer }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $cu->id }}'>
                                                                 {{ $cu->title }}
                                                             </a>
                                                             <br>
                                                             @if (!is_null($cu->start))
                                                                 <small>
-                                                                    <span class='help-block @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif'>
+                                                                    <span class='help-block'>
                                                                         {{ trans('langStart')}}:&nbsp;{!! format_locale_date(strtotime($cu->start), 'short', false) !!} &nbsp;&nbsp; -- &nbsp;&nbsp;
                                                                         {{ trans('langEnd')}}:&nbsp;{!! format_locale_date(strtotime($cu->finish), 'short', false) !!} </br>
                                                                     </span>
                                                                 </small>
                                                             @endif
-                                                            @if($cu->finish < $current_time or !$cu->visible) 
+                                                            @if($cu->finish < $current_time or !$cu->visible or $cu->start > $current_time) 
                                                                 @if($cu->finish < $current_time)
                                                                     <span class='badge Accent-200-bg'>{{ trans('langHasExpired') }}</span>
                                                                 @elseif(!$cu->visible)
                                                                     <span class='badge Accent-200-bg'>{{ trans('langNotDisplay') }}</span>
+                                                                @elseif($cu->start > $current_time)
+                                                                    <span class='badge Neutral-900-bg'>{{ trans('langSessionNotStarted') }}</span>
                                                                 @endif
                                                             @endif
                                                         </li>

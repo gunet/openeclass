@@ -71,7 +71,10 @@
                                             <div class='col'>
                                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                        <a class='link-color normal-text TextBold' href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $c}}">
+                                                        <a class='link-color normal-text TextBold
+                                                                    @if(!$is_consultant && !session_activation($course_id,$c)) opacity-help @endif
+                                                                    @if(!$is_consultant && session_not_started($course_id,$c)) pe-none @endif' 
+                                                            href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $c}}">
                                                             {!! title_session($course_id,$c) !!}
                                                         </a>
                                                         <span class='TextBold'>{!! date_session($course_id,$c) !!}</span>

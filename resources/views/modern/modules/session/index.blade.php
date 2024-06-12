@@ -205,7 +205,7 @@
                                                                     @elseif($current_time < $s->start)
                                                                         {{ trans('langSessionHasNotStarted') }}
                                                                     @else
-                                                                        {{ trans('langSessionHasExpired') }}
+                                                                        <span class='text-danger TextBold'>{{ trans('langSessionHasExpired') }}</span>
                                                                     @endif
                                                                 </p>
                                                             </li>
