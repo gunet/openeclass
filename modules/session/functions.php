@@ -1243,23 +1243,24 @@ function display_session_activities($element, $id, $session_id = 0) {
         // check if current session is completed by all users
         $is_session_completed = false;
         $is_session_completed_message = "";
-        $checker = 0;
-        $all_users_badges = Database::get()->queryArray("SELECT completed,completed_criteria,total_criteria FROM user_{$element} WHERE $element = ?d",$id);
-        if(count($all_users_badges) > 0){
-            foreach($all_users_badges as $b){
-                if($b->completed > 0 && ( $b->completed_criteria > 0 && $b->completed_criteria == $b->total_criteria ) ){
-                    $checker++;
+        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $session_id);
+        if ($sql_badge) {
+            $per = 0;
+            $badge_id = $sql_badge->id;
+            $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$session_id);
+            if(count($participants) > 0){
+                foreach($participants as $p){
+                    $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
                 }
             }
-            if($checker == count($all_users_badges)){
-                $is_session_completed = true;
-                $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
+            if( $per/count($participants) == 100 ){
+                 $is_session_completed = true;
+                 $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
             }else{
                 $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
             }
-        }else{
-            $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
         }
+        
     } else {
         // check if course completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
