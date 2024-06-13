@@ -38,9 +38,6 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-// require_once 'insert_doc.php';
-// require_once 'insert_work.php';
-// require_once 'insert_tc.php';
 require_once 'modules/document/doc_init.php';
 require_once 'functions.php';
 

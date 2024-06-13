@@ -1108,7 +1108,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
         $year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
         $tool_content .= '
-                <div id="calendar_wrapper" class="border-card">
+                <div id="calendar_wrapper" class="border-card rounded-3">
                     <div class="col-12 overflow-auto">
                         <div class="calendar-header">
                             <div class="col-12">

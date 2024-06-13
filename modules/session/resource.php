@@ -33,8 +33,6 @@ if(isset($_GET['type']) and !$_GET['type']=='doc_upload'){
 $require_help = TRUE;
 $helpTopic = 'course_sessions';
 
-check_activation_of_collaboration();
-
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -47,6 +45,8 @@ require_once 'insert_doc.php';
 require_once 'insert_work.php';
 require_once 'insert_tc.php';
 require_once 'functions.php';
+
+check_activation_of_collaboration();
 
 load_js('tools.js');
 
