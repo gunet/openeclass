@@ -6829,3 +6829,4 @@ $langTcNotStartedYet = "Η τηλεδιάσκεψη δεν έχει ξεκινή
 $langAddTcSession = "Δημιουργία συνδέσμου τηλεδιάσκεψης";
 $langPercentageSessionCompletion = "Ποσοστό ολοκλήρωσης συνεδρίας";
 $langAllSessions = "Όλες οι συνεδρίες";
+$langSessionHasNotBadge = "Η συνεδρία δεν διαθέτει πόρους ολοκλήρωσης.";

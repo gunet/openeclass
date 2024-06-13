@@ -1476,7 +1476,7 @@ $langCompletedConsulting = "Ολοκλήρωση συμβουλευτικής";
 $langAddSessionConsultingCompleted = "Η καταχώριση των συνεδριών για την ολοκλήρωση συμβουλευτικής ολοκληρώθηκε.";
 $langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλες οι διαθέσιμες συνεδρίες για την συγκεκριμένη συνεργασία. </br>
                                 Επιλέξτε ποιες από αυτές θα αφορούν την ολοκλήρωση συμβουλευτικής ενός χρήστη.";
-$langTableCompletedConsulting = "Πίνακας παρακολούθησης δράσεων συμβουλευτικής";
+$langTableCompletedConsulting = "Λίστα συνεδριών ολοκλήρωσης συμβουλευτικής";
 $langCompletedSessions = "Ολοκληρωμένη συνεδρία";
 $langNotCompletedSession = "Μη ολοκληρωμένη συνεδρία";
 

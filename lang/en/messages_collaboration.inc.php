@@ -1539,7 +1539,7 @@ $langCompletedConsulting = "Complete counseling";
 $langAddSessionConsultingCompleted = "Registration of counseling completion sessions is complete.";
 $langCompletedConsultingInfo = "All available sessions for this collaboration are shown below. </br>
  Choose which of these will concern the completion of a user's consultation.";
-$langTableCompletedConsulting = "Monitoring table of counseling actions";
+$langTableCompletedConsulting = "List of counseling completion sessions";
 $langCompletedSessions = "Completed session";
 $langNotCompletedSession = "Incomplete session";
 $langResponsibleOfSession = "Registered Counselors - Session Manager";

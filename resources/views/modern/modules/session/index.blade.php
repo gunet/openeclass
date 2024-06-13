@@ -312,9 +312,20 @@
                                                                 <div>{{ trans('langStatement') }}:</div>
                                                                 <div class='secondary-text'>
                                                                     @if($s->start < $current_time && $current_time < $s->finish)
-                                                                        {{ trans('langInProgress') }}
+                                                                        <div class="d-flex align-items-center gap-2">
+                                                                            <div class="spinner-grow text-success" role="status" style='width:20px; height:20px;'>
+                                                                                <span class="visually-hidden">Loading...</span>
+                                                                            </div>
+                                                                            {{ trans('langInProgress') }}
+                                                                        </div>
                                                                     @elseif($current_time < $s->start)
-                                                                        {{ trans('langSessionHasNotStarted') }}
+                                                                        <div class="d-flex align-items-center gap-2">
+                                                                            <div class="spinner-border text-warning" role="status" style='width:20px; height:20px;'>
+                                                                                <span class="visually-hidden">Loading...</span>
+                                                                            </div>
+                                                                            {{ trans('langSessionHasNotStarted') }}
+                                                                        </div>
+                                                                        
                                                                     @else
                                                                         <span class='text-danger TextBold'>{{ trans('langSessionHasExpired') }}</span>
                                                                     @endif
@@ -335,12 +346,18 @@
                                                     </div>
                                                 </div>
                                                 <div class='d-flex justify-content-between align-items-center gap-5 flex-wrap mt-4'>
+                                                    
                                                     <div class='flex-fill'>
-                                                        <h5>{{ trans('langPercentageSessionCompletion') }}</h5>
-                                                        <div class="progress">
-                                                            <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
-                                                        </div>
+                                                        <h5>{{ trans('langPercentageSessionCompletion') }}:</h5>
+                                                        @if($s->has_badge > 0)
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
+                                                            </div>
+                                                        @else
+                                                            <div class='secondary-text'>{{ trans('langSessionHasNotBadge') }}</div>
+                                                        @endif
                                                     </div>
+                                                    
                                                     <a class="btn successAdminBtn 
                                                                 @if(!$is_tutor_course && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
                                                         href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>

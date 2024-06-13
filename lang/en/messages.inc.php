@@ -6367,3 +6367,4 @@ $langTcNotStartedYet = "The video conference has not started yet";
 $langAddTcSession = "Create a video conference link";
 $langPercentageSessionCompletion = "Session completion rate";
 $langAllSessions = "All sessions";
+$langSessionHasNotBadge = "The session has no completion resources.";

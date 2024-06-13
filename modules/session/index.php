@@ -115,9 +115,10 @@ if($is_tutor_course or $is_consultant){
     if(count($data['individuals_group_sessions']) > 0){
         foreach ($data['individuals_group_sessions'] as $s) {
             $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
-            $per = 0;
+            $per = $has_badge = 0;
             if ($sql_badge) {
                 $badge_id = $sql_badge->id;
+                $has_badge = $badge_id;
                 $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$s->id);
                 if(count($participants) > 0){
                     foreach($participants as $p){
@@ -127,6 +128,7 @@ if($is_tutor_course or $is_consultant){
 
             }
             $s->percentage = $per/count($participants);
+            $s->has_badge = $has_badge;
         }
     }
 
@@ -168,6 +170,7 @@ if($is_tutor_course or $is_consultant){
         $not_shown = false;
         $vis = $cu->visible;
         $per = 0;
+        $has_badge = 0;
         if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
             $not_shown = true;
             $icon = icon('fa-clock fa-md', $langSessionNotStarted);
@@ -181,6 +184,7 @@ if($is_tutor_course or $is_consultant){
                 $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
                 if ($sql_badge) {
                     $badge_id = $sql_badge->id;
+                    $has_badge = $badge_id;
                     $per = get_cert_percentage_completion('badge', $badge_id);
                     if ($per == 100) {
                         $icon = icon('fa-check-circle fa-md', $langInstallEnd);
@@ -193,6 +197,7 @@ if($is_tutor_course or $is_consultant){
         $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
         $cu->icon = $icon ?? '';
         $cu->percentage = $per;
+        $cu->has_badge = $has_badge;
     }
 
 }
