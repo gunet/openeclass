@@ -1347,7 +1347,7 @@ function tc_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <thead><tr class='list-header'>
-                               <th style='width: 50%'>$langTitle</th>
+                               <th>$langTitle</th>
                                <th>$langDuration</th>
                                <th>$langParticipants</th>";
         if ($is_editor) {
@@ -1463,10 +1463,10 @@ function tc_session_details() {
                         </div>
                     </td>
                     <td>
-                        <div style='padding-top: 7px;'>
+                        <div>
                             <span class='text-success'>$langFrom</span>: ".format_locale_date(strtotime($start_date))."$starttimeLabel<br/>
                         </div>
-                        <div style='padding-top: 7px;'>
+                        <div>
                             <span class='text-danger'>$langTill</span>: $timeLabel</br></br>
                         </div>
                     </td>

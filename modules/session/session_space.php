@@ -44,6 +44,8 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'modules/document/doc_init.php';
 require_once 'functions.php';
 
+check_activation_of_collaboration();
+
 load_js('tools.js');
 
 if(isset($_GET['session'])){

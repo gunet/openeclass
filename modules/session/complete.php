@@ -56,6 +56,7 @@ $toolName = $langManageSession;
 $element = "badge";
 $display = TRUE;
 $localhostUrl = localhostUrl();
+check_activation_of_collaboration();
 
 if ($is_consultant) {
     if (isset($_GET['course']) and isset($_GET['session'])) {

@@ -31,6 +31,7 @@ $helpTopic = 'course_sessions';
 
 require_once '../../include/baseTheme.php';
 
+check_activation_of_collaboration();
 
 if(isset($_GET['course']) and isset($_GET['show_sessions'])){
 

@@ -541,9 +541,9 @@
     <div class='row m-auto'>
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
-                <div class='row row-cols-1 g-4'>
-                    <div class="col portfolio-content d-flex justify-content-between align-items-start flex-wrap gap-lg-4 gap-3">
-                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
+                <div class='row row-cols-xl-3 row-cols-md-2 row-cols-1'>
+
+                        <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 <div>
@@ -554,18 +554,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class='flex-fill d-flex justify-content-center align-items-center'>
+
+                        <div class='col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4'>
                             <div>
                                 @if((!get_config('show_collaboration') && !get_config('show_always_collaboration')) 
                                    or (get_config('show_collaboration') && !get_config('show_always_collaboration')))
-                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts @if($is_enabled_collaboration) mb-0 @endif'>
-                                    <div class='mt-3'>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
+                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
+                                    <div>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
                                 </h5>
                                 @endif
                                 @if((get_config('show_collaboration') && get_config('show_always_collaboration')) 
                                    or (get_config('show_collaboration') && !get_config('show_always_collaboration')))
-                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts'>
-                                    <div class="@if(get_config('show_always_collaboration')) mt-3 @endif">{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
+                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
+                                    <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
                                 </h5>
                                 @endif
                                 <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
@@ -573,25 +574,24 @@
                                 </p>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-center align-items-center gap-2 flex-wrap '>
-                            <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
+
+                        <div class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4'>
+                            <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                 {{ trans('langMyProfile') }}
                             </a>
-                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                            <a class='btn myProfileBtn mt-4' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
+                            <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
                                 {{ trans('langMyStats') }}
                             </a>
-                            @endif
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or
                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                 (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                    <a class="btn myProfileBtn mt-4" type="button" href="{{ $urlAppend }}modules/admin/index.php">
+                                    <a class="btn myProfileBtn" type="button" href="{{ $urlAppend }}modules/admin/index.php">
                                         {{ trans('langAdminTool') }}
                                     </a>
                             @endif
                         </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>

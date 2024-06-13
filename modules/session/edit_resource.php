@@ -33,6 +33,8 @@ $helpTopic = 'course_sessions';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
+check_activation_of_collaboration();
+
 if(isset($_GET['session'])){
     $data['sessionID'] = $sessionID = $_GET['session'];
     session_exists($sessionID);

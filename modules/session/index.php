@@ -36,6 +36,8 @@ require_once 'include/action.php';
 require_once 'modules/progress/process_functions.php';
 require_once 'functions.php';
 
+check_activation_of_collaboration();
+
 $action = new action();
 $action->record(MODULE_ID_SESSION);
 

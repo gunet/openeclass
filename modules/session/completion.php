@@ -36,6 +36,8 @@ $helpTopic = 'course_sessions';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
+check_activation_of_collaboration();
+
 $pageName = $langCompletedConsulting;
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);

@@ -36,6 +36,8 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
 
+check_activation_of_collaboration();
+
 $sessionTitle = title_session($course_id,$_GET['session']);
 $pageName = $langEditSession;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);

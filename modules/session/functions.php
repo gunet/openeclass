@@ -897,6 +897,11 @@ function enable_password_session_bootbox() {
     }
 }
 
+function check_activation_of_collaboration(){
+    if(!get_config('show_collaboration')){
+        redirect_to_home_page("main/portfolio.php");
+    }
+}
 
 function session_exists($sid){
     global $course_code;
