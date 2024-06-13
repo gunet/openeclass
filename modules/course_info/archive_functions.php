@@ -234,6 +234,9 @@ function doArchive($course_id, $course_code) {
 
 function addDir($zip, $path, $newPath) {
     $result = true;
+    if (!is_dir($path)) {
+        return $result;
+    }
     $dir = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
     $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
     foreach ($iterator as $name => $item) {
