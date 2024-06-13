@@ -232,10 +232,7 @@ $data['action_bar'] = action_bar(array(
             array('title' => $langAllCourses,
                 'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
-                'level' => 'primary-label'),
-            array('title' => $langReturnSearch,
-                'url' => "searchcours.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
+                'level' => 'primary-label')
+            ));
 
 view('admin.courses.listcours', $data);

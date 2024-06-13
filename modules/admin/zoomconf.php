@@ -145,11 +145,7 @@ if (isset($_POST['submit'])) {
             'url' => 'zoomconf.php?show_api_users=1',
             'icon' => 'fa-user',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'),
-        array('title' => $langBack,
-            'url' => 'zoomconf.php',
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')
+            'button-class' => 'btn-success')
         ));
 
     $boolean_field = "";
@@ -220,12 +216,6 @@ if (isset($_POST['submit'])) {
     draw($tool_content, 3, null, $head_content);
 
 } elseif (isset($_GET['zoom_type_custom'])) { // config zoom without api
-
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => 'zoomconf.php',
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
 
     $boolean_field = "";
 
@@ -314,13 +304,6 @@ if (isset($_POST['submit'])) {
     }
     $apiUsers = $zoomUserRepo->listAllZoomUsers();
 
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => 'zoomconf.php?zoom_type_api=1',
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')
-    ));
-
     load_js('tools.js');
     load_js('datatables');
     $head_content .= "
@@ -374,12 +357,6 @@ if (isset($_POST['submit'])) {
     Session::Messages("$langQuotaSuccess", 'alert-success');
     redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
 } else {
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => 'extapp.php',
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
-
     $tool_content .= "  <div class='row'>
                             <div class='col-lg-6 col-12'>
                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>

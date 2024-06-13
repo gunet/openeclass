@@ -25,6 +25,9 @@
  */
 
 $require_departmentmanage_user = true;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'course_search';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -41,39 +44,11 @@ $toolName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary'),
     array('title' => $langAllCourses,
         'url' => "listcours.php",
         'icon' => 'fa-search',
         'level' => 'primary-label')
     ));
-
-
-/*if (isset($_GET['searchcode'])) {
-    switch ($searchcode) {
-        case "2":
-            $typeSel[2] = "selected";
-            break;
-        case "1":
-            $typeSel[1] = "selected";
-            break;
-        case "0":
-            $typeSel[0] = "selected";
-            break;
-        case "3":
-            $typeSel[0] = "selected";
-            break;
-        case "4":
-            $typeSel[0] = "selected";
-            break;
-        default:
-            $typeSel[-1] = "selected";
-            break;
-    }
-}*/
 
 $data['reg_flag_data'][1] = $langAfter;
 $data['reg_flag_data'][2] = $langBefore;

@@ -24,11 +24,15 @@
  * @brief  Allows platform admin to login as another user without asking for password
  */
 
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'other_user_connection';
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$pageName = $langChangeUser;
+$toolName = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (!($is_admin or $is_power_user or $is_usermanage_user or $is_departmentmanage_user)) {
@@ -84,18 +88,10 @@ if (isset($_REQUEST['username'])) {
         redirect_to_home_page();
     } else {
         $message = sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username'])));
-        //Session::Messages($message, 'alert-danger');
         Session::flash('message',$message);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/change_user.php');
     }
 }
 
-$data['action_bar'] = action_bar(array(
-                array('title' => $langBack,
-                    'url' => "index.php",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
-                ),false);
-
-view('admin.users.change_user', $data);
+view('admin.users.change_user');

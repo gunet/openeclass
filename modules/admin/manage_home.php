@@ -81,12 +81,6 @@ $data['priorities'] = Database::get()->queryArray("SELECT * FROM homepagePriorit
 $data['action_bar'] = action_bar(
     [
         [
-            'title' => $langBack,
-            'url' => "{$urlAppend}modules/admin/index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary'
-        ],
-        [
             'title' => $langAdminCreateHomeTexts.'-'.'Testimonials',
             'url' => "{$urlAppend}modules/admin/homepageTexts_create.php",
             'icon' => 'fa-plus-circle',
@@ -101,6 +95,5 @@ $data['action_bar'] = action_bar(
             'button-class' => 'btn-success'
         ],
     ],false);
-
 
 view('admin.other.manage_homepage', $data);

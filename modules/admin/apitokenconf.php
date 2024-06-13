@@ -26,10 +26,6 @@ $duration_time = 365*24*60*60; // one year (in seconds)
 
 $toolName = $langCreateAPIToken;
 $tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => 'extapp.php',
-        'icon' => 'fa-reply',
-        'level' => 'primary'),
     array('title' => $langAdd,
         'url' => 'apitokenconf.php?add',
         'icon' => 'fa-plus',

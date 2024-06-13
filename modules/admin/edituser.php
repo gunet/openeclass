@@ -65,7 +65,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 $toolName = "$langEditUser: " . uid_to_name($u);
 
-$u_submitted = isset($_POST['u_submitted']) ? $_POST['u_submitted'] : '';
+$u_submitted = $_POST['u_submitted'] ?? '';
 
 if ($u) {
     if (isDepartmentAdmin())
@@ -129,10 +129,6 @@ if ($u) {
         // Display Actions Toolbar
         $ind_u = intval($u);
         $data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                'url' => "listusers.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",
                 'icon' => 'fa-share-alt',
@@ -252,11 +248,8 @@ if ($u) {
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif ($cpf_check[0] === false) {
-            $cpf_error_str = '';
             unset($cpf_check[0]);
-            foreach ($cpf_check as $cpf_error) {
-                $cpf_error_str .= $cpf_error;
-            }
+            $cpf_error_str = implode('', $cpf_check);
             Session::flash('message',"$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>");
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);

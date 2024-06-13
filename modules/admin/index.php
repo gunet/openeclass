@@ -36,11 +36,6 @@ $data['release_info'] = get_eclass_release();
 
 // Construct a table with platform identification info
 $data['action_bar'] = action_bar(array(
-       [ 'title' => $langBack,
-         'url' => "{$urlServer}main/portfolio.php",
-         'icon' => 'fa-reply',
-         'button-class' => 'submitAdminBtn d-none',
-         'level' => 'primary' ],
         [ 'title' => $langMaintenanceOff,
           'url' => "maintenance_config.php",
           'icon' => 'fa-unlock',

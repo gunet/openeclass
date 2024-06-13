@@ -52,22 +52,12 @@ if (!in_array($language, $session->active_ui_languages)) {
 // link to add a new course category
 if (!isset($_REQUEST['action'])) {
     $tool_content .= action_bar(array(
-        array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $langAdd,
                 'url' => "$_SERVER[SCRIPT_NAME]?action=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')
         ));
-} else {
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
 }
 
 // Display all available course categories

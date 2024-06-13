@@ -21,18 +21,16 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'course_certbadge';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
 $toolName = $langCertBadgeAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-
 $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => 'index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary'),
         array('title' => "$langAddNewCertTemplate",
               'url' => "$_SERVER[SCRIPT_NAME]?action=add_cert",
               'icon' => 'fa-plus-circle',
@@ -57,7 +55,6 @@ if (isset($_GET['del_badge'])) { // delete badge icon
         $badge_icon = $sql_badge_icon->filename;
         if (unlink($webDir . BADGE_TEMPLATE_PATH . $badge_icon)) {
             Database::get()->query("DELETE FROM badge_icon WHERE id = ?d", $_GET['del_badge']);
-            //Session::Messages($langDelWithSuccess, 'alert-success');
             Session::flash('message',$langDelWithSuccess);
             Session::flash('alert-class', 'alert-success');
         }
@@ -69,14 +66,12 @@ if (isset($_GET['del_cert'])) { // delete certificate template
     $cert_template_id = $sql_cert_template->id;
     $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM certificate WHERE template = ?d", $cert_template_id)->cnt;
     if ($cnt > 0) { // don't delete it if it's used by a certificate (foreign key constrain)
-        //Session::Messages($langTemplateBelongsToCert, 'alert-warning');
         Session::flash('message',$langTemplateBelongsToCert);
         Session::flash('alert-class', 'alert-warning');
     } else {
         $cert_template = $sql_cert_template->filename;
         if (unlink($webDir . CERT_TEMPLATE_PATH . $cert_template)) {
             Database::get()->query("DELETE FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
-            //Session::Messages($langDelWithSuccess, 'alert-success');
             Session::flash('message',$langDelWithSuccess);
             Session::flash('alert-class', 'alert-success');
         }
@@ -110,7 +105,6 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                                         filename = ?s
                                                        WHERE id = ?d",
                                                     $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
-                        //Session::Messages($langDownloadEnd, 'alert-success');
                         Session::flash('message',$langDownloadEnd);
                         Session::flash('alert-class', 'alert-success');
                     } else {
@@ -148,7 +142,6 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                         description = ?s,
                                         filename = ?s,
                                         orientation = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation']);
-                    //Session::Messages($langDownloadEnd, 'alert-success');
                     Session::flash('message',$langDownloadEnd);
                     Session::flash('alert-class', 'alert-success');
                 } else {

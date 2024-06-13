@@ -55,15 +55,6 @@ $toolName = $langCourseEdit;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
-$data['action_bar'] = action_bar([
-                [
-                    'title' => $langBack,
-                    'url' => "searchcours.php",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary'
-                ]
-            ]);
-
 // A course has been selected
 if (isset($c)) {
     // Get information about selected course

@@ -10,11 +10,7 @@
 
                 @include('layouts.partials.legend_view')
 
-                @if(isset($action_bar))
-                    {!! $action_bar !!}
-                @else
-                    <div class='mt-4'></div>
-                @endif
+                <div class='mt-4'></div>
 
                 @if(Session::has('message'))
                     <div class='col-12 all-alerts'>

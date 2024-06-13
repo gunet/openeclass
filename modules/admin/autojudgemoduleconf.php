@@ -53,11 +53,6 @@ if (isset($_POST['submit'])) {
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/extapp.php');
 } // end of if($submit)
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary')),false);
 
 $data['connectorOptions'] = array_map(function($connectorClass) {
     $connector = new $connectorClass();
@@ -82,4 +77,3 @@ $head_content .= "
     </script>";
 
 view('admin.other.extapps.autojudgemoduleconf', $data);
-

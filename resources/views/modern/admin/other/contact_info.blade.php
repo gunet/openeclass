@@ -7,13 +7,10 @@
         <div class="row m-auto">
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
             @include('layouts.partials.legend_view')
-            {!! $action_bar !!}
 
             <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit'>
                     <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-
-                            
 
                                 <div class='form-group'>
                                     <label for='formpostaddress' class='col-sm-12 control-label-notes'>{{ trans('langPostMail') }}</label>
@@ -42,9 +39,6 @@
                                         <a class='btn cancelAdminBtn' href='index.php'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </div>
-
-                            
-
                     </form>
                 </div>
             </div>

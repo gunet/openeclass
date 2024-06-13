@@ -3832,10 +3832,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $pageTitleActive = "";
     if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
-            $titleHeader = (!empty($tmp_pageName) ? $tmp_pageName : '');
+            //$titleHeader = (!empty($tmp_pageName) ? $tmp_pageName : '');
+            $titleHeader = (!empty($pageName) ? $pageName : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
-                            <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>
+                            <div class='col-lg-5 col-md-6 col-12'><h3 class='mb-0'>$titleHeader</h3></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                     <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -3866,7 +3867,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             }
             $titleHeader = (!empty($pageName) ? $pageName : $toolName);
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
-                        <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>
+                        <div class='col-lg-5 col-md-6 col-12'><h3 class='mb-0'>$titleHeader</h3></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>

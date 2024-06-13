@@ -124,11 +124,7 @@ $data['action_bar'] =
             array('title' => $langReqHaveBlocked,
                 'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
                 'icon' => 'fa-ban',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "$basetoolurl",
-                'icon' => 'fa-reply',
-                'level' => 'primary')
+                'level' => 'primary-label')
         ));
 
 // -----------------------------------

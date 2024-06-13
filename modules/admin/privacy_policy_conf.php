@@ -55,15 +55,6 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page("modules/admin/index.php");
 }
 
-$data['action_bar'] = action_bar([
-    [
-        'title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary'
-    ]
-]);
-
 $data['cbox_activate_privacy_policy_text'] = get_config('activate_privacy_policy_text') ? 'checked' : '';
 $data['cbox_activate_privacy_policy_consent'] = get_config('activate_privacy_policy_consent') ? 'checked' : '';
 

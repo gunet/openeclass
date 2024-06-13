@@ -33,7 +33,6 @@ if (isset($_POST['toReorder'])) {
         $id = getDirectReference($_GET['delete']);
         if ($id) {
             Database::get()->query('DELETE FROM activity_heading WHERE id = ?d', $id);
-            //Session::Messages($langGlossaryDeleted, 'alert-success');
             Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
         }
@@ -57,7 +56,6 @@ if (isset($_POST['toReorder'])) {
         Database::get()->query('INSERT INTO activity_heading SET required = ?d, heading = ?s, `order` = ?d',
             intval(!!$_POST['required']), serialize($headings), $maxOrder + 1);
     }
-    //Session::Messages($langFaqEditSuccess, 'alert-success');
     Session::flash('message',$langFaqEditSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/activity.php');
@@ -70,7 +68,6 @@ if (isset($_POST['toReorder'])) {
         $idInput = "<input type='hidden' name='id' value='$_GET[edit]'>";
         $item = Database::get()->querySingle('SELECT * FROM activity_heading WHERE id = ?d', $id);
         if (!$item) {
-            //Session::Messages($langGeneralError, 'alert-danger');
             Session::flash('message',$langGeneralError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/activity.php');
@@ -80,13 +77,7 @@ if (isset($_POST['toReorder'])) {
     }
     $navigation[] = array('url' => 'activity.php', 'name' => $langActivityCourse);
     $toolName = $langActivityCourseAdd;
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => 'activity.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary'))) . "
-              <div class='row'>
-              
+    $tool_content .= "<div class='row'>              
        <div class='col-lg-6 col-12'>
         <div class='form-wrapper form-edit rounded border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
@@ -186,10 +177,6 @@ $(function() {
 </script>";
 
     $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => 'index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary'),
         array('title' => $langAdd,
               'url' => 'activity.php?add=true',
               'icon' => 'fa-plus-circle',
@@ -217,11 +204,9 @@ $(function() {
             $tool_content .= "
       <div class='card panelCard px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-          
-           
+                     
             <h3>$heading</h3>
-            
-            
+                        
             <div class='d-flex justify-content-end align-items-center'>$type " .
                 icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
                 <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>

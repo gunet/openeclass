@@ -20,6 +20,10 @@
 
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'system_settings';
+$helpSubTopic = 'general_settings';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/modalconfirmation.php';
@@ -272,14 +276,6 @@ else {
         });
         </script>";
     // Display link to index.php
-    $data['action_bar'] = action_bar([
-                        [
-                            'title' => $langBack,
-                            'url' => "index.php",
-                            'icon' => 'fa-reply',
-                            'level' => 'primary'
-                        ]
-                    ]);
     $data['registration_info_textarea'] = rich_text_editor('registration_info', 4, 80, get_config('registration_info', ''));
     if (function_exists('imagettfbbox')) {
         $data['cbox_display_captcha'] = get_config('display_captcha') ? 'checked' : '';

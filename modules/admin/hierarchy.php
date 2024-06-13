@@ -31,6 +31,9 @@
   ============================================================================== */
 
 $require_departmentmanage_user = true;
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'facutlies_departments_actions';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -68,22 +71,12 @@ if (!in_array($language, $session->active_ui_languages)) {
 // link to add a new node
 if (!isset($_REQUEST['action'])) {
     $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $langAdd,
                 'url' => "$_SERVER[SCRIPT_NAME]?action=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')
         ));
-} else {
-    $data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
 }
 
 // Display all available nodes

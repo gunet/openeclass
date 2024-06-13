@@ -20,6 +20,9 @@
  * ======================================================================== */
 
 $require_usermanage_user = TRUE;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'info_e_mail';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';

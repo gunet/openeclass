@@ -20,6 +20,9 @@
  * ======================================================================== */
 
 $require_usermanage_user = true;
+$require_help = true;
+$helpTopic = ' users_administration';
+$helpSubTopic = 'user_registration';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -271,12 +274,6 @@ if (isset($_GET['id'])) {
     } else {
         $backlink = 'index.php';
     }
-    $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-              'url' => $backlink,
-              'class' => 'back_btn',
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
 }
 
 $lang = false;
@@ -296,27 +293,30 @@ if (isset($_GET['type'])) {
     $data['type'] = '';
 }
 
-$data['id'] = $id = intval($_GET['id']);
-$res = Database::get()->querySingle("SELECT givenname, surname, username, password, email, faculty_id, phone, am,
+if (isset($_GET['id'])) {
+    $data['id'] = $id = intval($_GET['id']);
+    $res = Database::get()->querySingle("SELECT givenname, surname, username, password, email, faculty_id, phone, am,
                         comment, lang, date_open, status, verified_mail FROM user_request WHERE id = ?d", $id);
-if ($res) {
-    $data['ext_uid'] = $ext_uid = Database::get()->querySingle('SELECT *
+    if ($res) {
+        $data['ext_uid'] = $ext_uid = Database::get()->querySingle('SELECT *
             FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
-    $data['ps'] = $res->surname;
-    $data['pn'] = $res->givenname;
-    $data['pu'] = $res->username;
-    $data['password'] = $res->password;
-    $data['pe'] = $res->email;
-    $data['pv'] = intval($res->verified_mail);
-    $depid = intval($res->faculty_id);
-    $data['pam'] = $res->am;
-    $data['pphone'] = $res->phone;
-    $data['pcom'] = $res->comment;
-    $data['language'] = $res->lang;
-    if ($res->faculty_id) {
-        validateNode($depid, isDepartmentAdmin());
+        $data['ps'] = $res->surname;
+        $data['pn'] = $res->givenname;
+        $data['pu'] = $res->username;
+        $data['password'] = $res->password;
+        $data['pe'] = $res->email;
+        $data['pv'] = intval($res->verified_mail);
+        $depid = intval($res->faculty_id);
+        $data['pam'] = $res->am;
+        $data['pphone'] = $res->phone;
+        $data['pcom'] = $res->comment;
+        $data['language'] = $res->lang;
+        if ($res->faculty_id) {
+            validateNode($depid, isDepartmentAdmin());
+        }
     }
 }
+
 
 if (isset($_GET['id']) and isset($_GET['type']) and $_GET['type'] == 'prof') { // creating course request
     if ($res) {

@@ -20,6 +20,10 @@
  * ======================================================================== */
 
 $require_departmentmanage_user = true;
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'course_restore';
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';

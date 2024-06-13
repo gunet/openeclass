@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.3
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,6 +25,9 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'users_authentication';
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 

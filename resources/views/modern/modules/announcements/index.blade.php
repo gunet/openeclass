@@ -368,14 +368,18 @@
 
             <div class="col_maincontent_active">
 
-                <div class="row">
+                <div class="row m-auto">
 
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view')
 
-                    {!! $action_bar !!}
+                    @if(isset($action_bar))
+                        {!! $action_bar !!}
+                    @else
+                        <div class='mt-4'></div>
+                    @endif
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                         <div class="offcanvas-header">

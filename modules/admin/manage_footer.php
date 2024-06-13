@@ -54,15 +54,4 @@ if(isset($_POST['submit'])){
 
 $data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('footer_intro'));
 
-$data['action_bar'] = action_bar(
-    [
-        [
-            'title' => $langBack,
-            'url' => "{$urlAppend}modules/admin/index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary'
-        ]
-    ],false);
-
-
 view('admin.other.manage_footer', $data);

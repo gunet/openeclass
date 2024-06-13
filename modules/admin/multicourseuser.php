@@ -21,6 +21,10 @@
  */
 
 $require_usermanage_user = TRUE;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'course_mass_user_registration';
+
 include '../../include/baseTheme.php';
 
 $toolName = $langMultiRegCourseUser;

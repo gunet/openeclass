@@ -11,12 +11,6 @@ $toolName = $langConfig . ' ' . $app->getDisplayName();
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => 'extapp.php',
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
-
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>

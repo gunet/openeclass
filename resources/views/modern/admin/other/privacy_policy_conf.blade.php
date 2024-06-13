@@ -25,13 +25,10 @@
             <div class="row m-auto">
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                 @include('layouts.partials.legend_view')
-                {!! $action_bar !!}
 
                 <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit'>
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-
-                           
 
                                 <div class='landing-default'>
                                     @foreach ($selectable_langs as $langCode => $langName)
@@ -70,14 +67,14 @@
                                         <a class='btn cancelAdminBtn' href='index.php'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </div>
-                            
+
                         </form>
                     </div>
                 </div>
                 <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                     <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
                 </div>
-                    
+
             </div>
         </div>
     </div>

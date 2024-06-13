@@ -20,6 +20,10 @@
  * ======================================================================== */
 
 $require_departmentmanage_user = true;
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'mass_courses_creation';
+
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'include/lib/course.class.php';
@@ -27,7 +31,6 @@ require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'modules/admin/hierarchy_validations.php';
 require_once 'modules/create_course/functions.php';
-
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -38,7 +41,6 @@ if (isset($_POST['submit'])) {
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
-        //Session::Messages($langEmptyAddNode);
         Session::flash('message',$langEmptyAddNode);
         Session::flash('alert-class', 'alert-success');
         header("Location:" . $urlServer . "modules/admin/multicourse.php");
@@ -96,12 +98,10 @@ if (isset($_POST['submit'])) {
         $line = strtok("\n");
     }
     if (!empty($sucess_messages)){
-         //Session::Messages ($sucess_messages, 'alert-success');
          Session::flash('message',$sucess_messages);
          Session::flash('alert-class', 'alert-success');
     }
     if (!empty($error_messages)){
-         //Session::Messages ($error_messages);
          Session::flash('message',$error_messages);
          Session::flash('alert-class', 'alert-danger');
     }
@@ -112,11 +112,6 @@ if (isset($_POST['submit'])) {
 $toolName = $langMultiCourse;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
 $tree = new hierarchy();
 $course = new course();
 $user = new user();
@@ -130,7 +125,6 @@ $head_content .= $js;
 $data['html'] = $html;
 
 view('admin.courses.multicourse', $data);
-
 
 
 /**

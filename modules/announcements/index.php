@@ -279,7 +279,7 @@ if (isset($_GET['an_id'])) {
 
 } else {
     // Show index
-    $data['action_bar'] = action_bar([
+    $data['action_bar'] = $action_bar = action_bar([
             [ 'title' => $langAddAnn,
               'url' => $urlAppend . "modules/announcements/new.php?course=$course_code",
               'icon' => 'fa-plus-circle',
@@ -290,7 +290,7 @@ if (isset($_GET['an_id'])) {
               'class' => 'bulk-processing',
               'icon' => 'fa-hat-wizard',
               'button-class' => 'btn-success',
-              'show' => $is_editor ],
+              'show' => $is_editor ]
         ]);
 
     $data['subscribeUrl'] = $urlAppend . 'main/profile/emailunsubscribe.php?cid=' . $course_id;

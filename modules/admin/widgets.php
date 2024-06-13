@@ -357,13 +357,6 @@ $view_data = recursiveWidgetIterator('Widgets', $view_data);
 $pageName = $langWidgets;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$view_data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-          'url' => $urlServer,
-          'icon' => 'fa-reply',
-          'level' => 'primary',
-          'button-class' => 'btn-secondary')), false);
-
 view('admin.widgets.index', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {

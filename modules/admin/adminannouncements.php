@@ -20,6 +20,10 @@
  * ======================================================================== */
 
 $require_admin = TRUE;
+$require_help = true;
+$helpTopic = 'system_settings';
+$helpSubTopic = 'admin_announcements';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
@@ -222,12 +226,6 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         }
         // display add announcement command
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
-        $data['action_bar'] = action_bar(array(
-                    array('title' => $langBack,
-                        'url' => $_SERVER['SCRIPT_NAME'],
-                        'icon' => 'fa-reply',
-                        'level' => 'primary')
-                    ));
 
     if (isset($_GET['modify'])) {
         $id = $_GET['modify'];
@@ -295,29 +293,10 @@ elseif (isset($_GET['ann_id'])) {
         redirect_to_home_page("modules/admin/adminannouncements.php");
     }else{
         $data['announcementsID'] = $row;
-
-        $data['action_bar'] = action_bar([
-            [
-                'title' => $langBack,
-                'url' => $_SERVER['SCRIPT_NAME'],
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            ]
-        ]);
         $view = 'admin.other.announcements.show';
     }
-}
-
-
-
-else {
+} else {
     $data['action_bar'] = action_bar([
-                                [
-                                    'title' => $langBack,
-                                    'url' => "{$urlServer}modules/admin/manage_home.php",
-                                    'icon' => 'fa-reply',
-                                    'level' => 'primary'
-                                ],
                                 [
                                     'title' => $langAdminAddAnn,
                                     'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
@@ -329,7 +308,6 @@ else {
                             ]);
     $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     $view = 'admin.other.announcements.index';
-
 }
 
 view($view, $data);

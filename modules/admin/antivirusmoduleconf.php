@@ -20,11 +20,6 @@
  * ======================================================================== */
 
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
-
-
-
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -49,7 +44,6 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    //Session::Messages($langAntivirusUpdated, 'alert-success');
     Session::flash('message',$langAntivirusUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/antivirusmoduleconf.php');
@@ -76,14 +70,5 @@ $head_content .= "
         update_connector_config_visibility();
     });
     </script>";
-
-
-// Display link to index.php
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
-
 
 view ('admin.other.extapps.antivirus_config', $data);

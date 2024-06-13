@@ -24,6 +24,10 @@
  *      @brief: user search form based upon criteria/filters
  */
 $require_usermanage_user = TRUE;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'user_search';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -65,10 +69,6 @@ if (isDepartmentAdmin()) {
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $langAllUsers,
                 'url' => "listusers.php?search=yes",
                 'icon' => 'fa-solid fa-users',
@@ -96,7 +96,6 @@ $data['verified_mail_data'] = array(
     3 => $langAllUsers);
 $data['authtype_data'] = $auth_ids;
 $data['authtype_data'][0] = $langAllAuthTypes;
-
 
 $tree = new Hierarchy();
 list($js, $html) = $tree->buildNodePicker($depts_defaults);

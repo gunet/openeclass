@@ -40,7 +40,14 @@ if (isset($_GET['topic'])) {
 if (isset($_GET['subtopic'])) {
     $subtopic = '/' . htmlspecialchars($_GET['subtopic'], ENT_QUOTES);
 }
-$user_status = (isset($_SESSION['status']) and  $_SESSION['status'] == USER_TEACHER)? 'teacher' : 'student';
+if (isset($_SESSION['is_admin']) and !isset($course_code)) {
+    $user_status = 'admin';
+} else if (isset($_SESSION['status']) and  $_SESSION['status'] == USER_TEACHER) {
+    $user_status = 'teacher';
+} else {
+    $user_status = 'student';
+}
+
 $link = "https://docs.openeclass.org/$language/$shortVer/$user_status/$topic$subtopic?do=export_xhtml";
 header('Content-Type: text/html; charset=UTF-8');
 

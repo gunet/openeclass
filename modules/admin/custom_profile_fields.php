@@ -21,6 +21,9 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = ' users_administration';
+$helpSubTopic = 'user_profile_fields';
 require_once '../../include/baseTheme.php';
 require 'modules/admin/custom_profile_fields_functions.php';
 
@@ -139,7 +142,6 @@ require 'modules/admin/custom_profile_fields_functions.php';
                             WHERE custom_profile_fields_category.id = ?d", $catid);
     //delete category
     Database::get()->query("DELETE FROM custom_profile_fields_category WHERE id = ?d", $catid);
-    //Session::Messages($langCPFCatDelSuccess, 'alert-success');
     Session::flash('message',$langCPFCatDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -150,7 +152,6 @@ require 'modules/admin/custom_profile_fields_functions.php';
     if (isset($_POST['cat_id'])) { //save edited category
         $catid = intval(getDirectReference($_POST['cat_id']));
         Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
-        //Session::Messages($langCPFCatModSuccess, 'alert-success');
         Session::flash('message',$langCPFCatModSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -163,7 +164,6 @@ require 'modules/admin/custom_profile_fields_functions.php';
             $sortorder = 0;
         }
         Database::get()->query("INSERT INTO custom_profile_fields_category (name, sortorder) VALUES (?s, ?d)", $_POST['cat_name'], $sortorder);
-        //Session::Messages($langCPFCatAddedSuccess, 'alert-success');
         Session::flash('message',$langCPFCatAddedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -308,10 +308,6 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
                         }
                       </style>";
     $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary'),
         array('title' => $langCategoryAdd,
               'url' => "custom_profile_fields.php?add_cat",
               'icon' => 'fa-plus-circle',

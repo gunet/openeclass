@@ -15,13 +15,5 @@ if (isset($_POST['submit'])) {
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/index.php');
 }
-$data['action_bar'] = action_bar([
-    [
-        'title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary'
-    ]
-]);
 
-view('admin.other.contact_info', $data);
+view('admin.other.contact_info');

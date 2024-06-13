@@ -27,6 +27,9 @@ define('EPF_MENU', 4);
 define('EPF_LINK', 5);
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'user_e_portfolio_fields';
 require_once '../../include/baseTheme.php';
 
 $toolName = $langEPFAdmin;
@@ -76,7 +79,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
                             WHERE eportfolio_fields_category.id = ?d", $catid);
     //delete category
     Database::get()->query("DELETE FROM eportfolio_fields_category WHERE id = ?d", $catid);
-    //Session::Messages($langEPFCatDelSuccess, 'alert-success');
     Session::flash('message',$langEPFCatDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -281,12 +283,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
             Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) 
                                     VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $data);
-            //Session::Messages($langEPFFieldAddSuccess, 'alert-success');
             Session::flash('message',$langEPFFieldAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/eportfolio_fields.php");
         } else { //shortname is not unique, abort
-            //Session::Messages($langCPFCreateUniqueShortnameError, 'alert-danger');
             Session::flash('message',$langCPFCreateUniqueShortnameError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -437,10 +437,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
     load_js('sortable');
 
     $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary'),
         array('title' => $langCategoryAdd,
               'url' => "eportfolio_fields.php?add_cat",
               'icon' => 'fa-plus-circle',

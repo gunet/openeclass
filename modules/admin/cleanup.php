@@ -20,6 +20,9 @@
  * ======================================================================== */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'system_settings';
+$helpSubTopic ='clean_up_proceed';
 require_once '../../include/baseTheme.php';
 
 if (isset($_POST['submit'])) {
@@ -30,7 +33,6 @@ if (isset($_POST['submit'])) {
         $messages[] = sprintf("$langCleaningUp", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
         cleanup("$webDir/courses/$dir", $days);
     }
-    //Session::Messages($messages, 'alert-success');
     Session::flash('message',$messages);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/cleanup.php');
@@ -39,15 +41,7 @@ if (isset($_POST['submit'])) {
 $toolName = $langCleanUp;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-$data['action_bar'] = action_bar([
-                                    [
-                                        'title' => $langBack,
-                                        'url' => "index.php",
-                                        'icon' => 'fa-reply',
-                                        'level' => 'primary'
-                                    ]
-                                ]);
-view('admin.server.cleanup', $data);
+view('admin.server.cleanup');
 
 // Remove all files under $path older than $max_age days
 // Afterwards, remove $path as well if it points to an empty directory

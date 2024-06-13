@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
     }
 
     redirect_to_home_page('modules/admin/modules_default.php');
-    
+
 } else {
 
     if(!get_config('show_always_collaboration')){
@@ -97,14 +97,5 @@ if (isset($_POST['submit'])) {
     if(get_config('show_collaboration')){
         $data['defaultCollaboration'] = default_modules_collaboration();
     }
-
-    $data['action_bar'] = action_bar(
-        [
-            [ 'title' => $langBack,
-              'url' => $urlAppend . 'modules/admin/modules.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary' ]
-        ], false);
-
     view('admin.other.modules_default', $data);
 }

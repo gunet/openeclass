@@ -20,6 +20,9 @@
  * ======================================================================== */
 
 $require_admin = TRUE;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'administrators';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -148,22 +151,11 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
     $data['pickerHtml'] = $pickerHtml;
 
     $data['showFormAdmin'] = true;
-    $data['action_bar'] = action_bar([
-     [ 'title' => $langBack,
-       'url' => "index.php",
-       'icon' => 'fa-reply',
-       'level' => 'primary' ],
-   ]);
-
 
 }else {
     $toolName = $langAdmins;
     $data['showFormAdmin'] = false;
     $data['action_bar'] = action_bar([
-        [ 'title' => $langBack,
-          'url' => "index.php",
-          'icon' => 'fa-reply',
-          'level' => 'primary' ],
         [ 'title' => $langAdd,
           'url' => 'addadmin.php?add=admin',
           'icon' => 'fa-plus-circle',
@@ -197,7 +189,7 @@ foreach ($out as $row) {
         USERMANAGE_USER => $langManageUser,
         DEPARTMENTMANAGE_USER => $langManageDepartment,
     ][$row->privilege];
-    if ($row->privilege == DEPARTMENTMANAGE_USER) { 
+    if ($row->privilege == DEPARTMENTMANAGE_USER) {
         $data['message'][$row->user_id] = '<ul>' .
             implode('', array_map(function ($department_id) use ($tree) {
                 return '<li>' . $tree->getFullPath($department_id) . '</li>';

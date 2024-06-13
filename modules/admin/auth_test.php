@@ -153,13 +153,5 @@ if ($submit and $test_username !== '' and $data['test_password'] !== '') {
     }
 }
 
-$data['action_bar'] = action_bar(array(
-        array(
-            'title' => $langBack,
-            'icon' => 'fa-reply',
-            'level' => 'primary',
-            'url' => 'auth.php'
-        )));
-
 $data['auth_ids'] = $auth_ids;
 view('admin.users.auth.auth_test', $data);

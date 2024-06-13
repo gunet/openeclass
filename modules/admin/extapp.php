@@ -21,6 +21,10 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'system_settings';
+$helpSubTopic = 'external_tools';
+
 require_once '../../include/baseTheme.php';
 require_once 'extconfig/externals.php';
 
@@ -79,20 +83,9 @@ if ($appName) {
 
     $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
     $pageName = $langModify . ' ' . $app->getDisplayName();
-    $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-              'url' => 'extapp.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
 
     $view = "admin.other.extapps.config";
 } else {
-    $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary')));
-
     $view = "admin.other.extapps.index";
 }
 

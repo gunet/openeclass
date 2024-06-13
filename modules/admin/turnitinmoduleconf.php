@@ -61,11 +61,6 @@ if (isset($_GET['add_template'])) {
 
     $pageName = $langNewTIITool;
     $navigation[] = array('url' => 'turnitinmoduleconf.php', 'name' => $langTurnitinConf);
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "turnitinmoduleconf.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary')));
 
     new_lti_app(null, true, "https://api.turnitin.com/api/lti/1p0/assignment");
 
@@ -114,10 +109,6 @@ if (isset($_GET['add_template'])) {
     } else { //display available TII templates
 
         $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "extapp.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $langNewTIITool,
                 'url' => "turnitinmoduleconf.php?add_template",
                 'icon' => 'fa-plus-circle',

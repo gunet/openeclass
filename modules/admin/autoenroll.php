@@ -20,6 +20,10 @@
 
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'auto_registration';
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
@@ -38,7 +42,6 @@ if (isset($_GET['delete'])) {
         forbidden();
     }
     if (Database::get()->query('DELETE FROM autoenroll_rule WHERE id = ?d', $rule)->affectedRows) {
-        //Session::Messages($langAutoEnrollDeleted);
         Session::flash('message',$langAutoEnrollDeleted);
         Session::flash('alert-class', 'alert-success');
     }
@@ -72,12 +75,10 @@ if (isset($_GET['delete'])) {
                 'rule, department_id', $rule, $_POST['rule_deps']);
         }
     }
-    //Session::Messages($langAutoEnrollAdded, 'alert-success');
     Session::flash('message',$langAutoEnrollAdded);
     Session::flash('alert-class', 'alert-success');
     if (isset($_POST['apply'])) {
         apply_autoenroll($rule);
-        //Session::Messages($langRuleApplied, 'alert-info');
         Session::flash('message',$langRuleApplied);
         Session::flash('alert-class', 'alert-info');
     }
@@ -221,14 +222,6 @@ if (isset($_GET['delete'])) {
 
     $pageName = isset($_GET['add']) ? $langAutoEnrollNew : $langEditChange;
     $navigation[] = array('url' => 'autoenroll.php', 'name' => $langAutoEnroll);
-    $data['action_bar'] = action_bar([
-            [
-                'title' => $langBack,
-                'url' => 'autoenroll.php',
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            ]
-        ]);
 
     $view = 'admin.users.autoenroll.create';
 } else {

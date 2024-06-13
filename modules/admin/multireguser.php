@@ -24,6 +24,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 define('SUFFIX_LEN', 4);
 
 $require_usermanage_user = true;
+
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'mass_user_account_creation';
+
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/pwgen.inc.php';
@@ -181,12 +186,6 @@ $view = 'admin.users.multireguser_result';
     });
     $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
                                     ACCESS_USERS => $langProfileInfoUsers);
-    $data['action_bar'] = action_bar(array(
-                array('title' => $langBack,
-                    'url' => "index.php",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
-                ), false);
 
     $data['eclass_method_unique'] = TRUE;
     $auth = get_auth_active_methods();

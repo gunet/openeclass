@@ -19,8 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_admin = TRUE;
+$require_help = true;
+$helpTopic = 'system_settings';
+$helpSubTopic = 'faq_creation';
+
 require_once '../../include/baseTheme.php';
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -77,12 +80,6 @@ $pageName = $langAdminCreateFaq;
 $data['action_bar'] = action_bar(
     [
         [
-            'title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary'
-        ],
-        [
             'title' => $langFaqAdd,
             'url' => $_SERVER['SCRIPT_NAME'].'?faq=new',
             'icon' => 'fa-plus-circle',
@@ -93,12 +90,11 @@ $data['action_bar'] = action_bar(
             'title' => $langFaqExpandAll,
             'url' => "#",
             'class' => 'expand',
-            'icon' => 'fa-plus-circle',
+            'icon' => 'fa-folder-open',
             'level' => 'primary-label',
             'modal-class' => 'expand',
             'show' => !isset($_GET['faq'])
         ]
-        
     ],false);
 
 $data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
@@ -117,7 +113,5 @@ if ($data['new']) {
     $data['id'] = '';
     $data['editor'] = rich_text_editor('answer', 5, 40, '' );
 }
-
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
 view('admin.other.faq_create', $data);

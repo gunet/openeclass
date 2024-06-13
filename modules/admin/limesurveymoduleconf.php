@@ -61,11 +61,6 @@ if (isset($_GET['add_template'])) {
 
     $pageName = $langNewLimesurveyTool;
     $navigation[] = array('url' => 'limesurveymoduleconf.php', 'name' => $langLimesurveyConf);
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "limesurveymoduleconf.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary')));
 
     new_lti_app(null, true, null); // TODO: can we have a default lime url?
 
@@ -104,21 +99,12 @@ if (isset($_GET['add_template'])) {
 
         $pageName = $langEdit;
         $navigation[] = array('url' => 'limesurveymoduleconf.php', 'name' => $langLimesurveyConf);
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "limesurveymoduleconf.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
 
         edit_lti_app(getDirectReference($_GET['edit_template']));
 
     } else { //display available TII templates
 
         $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "extapp.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => $langNewLimesurveyTool,
                 'url' => "limesurveymoduleconf.php?add_template",
                 'icon' => 'fa-plus-circle',

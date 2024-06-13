@@ -21,6 +21,10 @@
 
 
 $require_usermanage_user = TRUE;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'mass_user_account_deletion';
+
 include '../../include/baseTheme.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -257,12 +261,6 @@ if (isset($_POST['submit'])) {
         }, $terms);
     }
 
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
-
     if (isset($_POST['activate_submit'])) {
         $infoText = $langActivateUserInfo;
         $monthsField = "
@@ -328,7 +326,6 @@ if (isset($_POST['submit'])) {
         </div></div>";
 }
 draw($tool_content, null, '', $head_content);
-
 
 /**
  * @brief Translate username to uid

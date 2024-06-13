@@ -43,17 +43,17 @@ if (isset($_POST['submit'])) {
             $param->persistValue();
         }
         //Session::Messages($langFileUpdatedSuccess, 'alert-info');
-        Session::flash('message',$langFileUpdatedSuccess); 
+        Session::flash('message',$langFileUpdatedSuccess);
         Session::flash('alert-class', 'alert-info');
     } else {
         $result = $app->storeParams();
         if ($result) {
             //Session::Messages($result, 'alert-danger');
-            Session::flash('message',$result); 
+            Session::flash('message',$result);
             Session::flash('alert-class', 'alert-danger');
         } else {
             //Session::Messages($langFileUpdatedSuccess, 'alert-success');
-            Session::flash('message',$langFileUpdatedSuccess); 
+            Session::flash('message',$langFileUpdatedSuccess);
             Session::flash('alert-class', 'alert-success');
         }
     }
@@ -63,8 +63,7 @@ if (isset($_POST['submit'])) {
     $delos_https = preg_match('/^https/i', $app->getParam(OpenDelosApp::URL)->value());
 
     if ($server_https && !$delos_https) {
-        //Session::Messages($langOpenDelosHttpsError, 'alert-danger');
-        Session::flash('message',$langOpenDelosHttpsError); 
+        Session::flash('message',$langOpenDelosHttpsError);
         Session::flash('alert-class', 'alert-danger');
         $app->setEnabled(0);
     }
@@ -74,11 +73,6 @@ if (isset($_POST['submit'])) {
 
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 $toolName = $langConfig . ' ' . $app->getDisplayName();
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => 'extapp.php',
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
 
 $boolean_field = "";
 

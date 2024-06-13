@@ -11,8 +11,6 @@
 
                     @include('layouts.partials.legend_view')
 
-                    {!! $action_bar !!}
-
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -164,7 +162,7 @@
                                 </div>
                         </div>
 
-    
+
 
         </div>
 

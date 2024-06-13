@@ -19,10 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-// Disable modules admin page
-
 $require_admin = true;
+
 require_once '../../include/baseTheme.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -55,7 +53,7 @@ if (isset($_POST['submit'])) {
         $values = implode(',', $always_disabled_m);
         Database::get()->query('DELETE FROM module_disable_collaboration WHERE module_id NOT IN ('.$values.')');
 
-        if (isset($_POST['moduleDisableCollaboration'])) {  
+        if (isset($_POST['moduleDisableCollaboration'])) {
             $optArrayCollab = implode(', ', array_fill(0, count($_POST['moduleDisableCollaboration']), '(?d)'));
             Database::get()->query('INSERT INTO module_disable_collaboration (module_id) VALUES ' . $optArrayCollab, array_keys($_POST['moduleDisableCollaboration']));
         }
@@ -84,13 +82,9 @@ if (isset($_POST['submit'])) {
 
     $data['action_bar'] = action_bar(
                         [
-                            [ 'title' => $langBack,
-                              'url' => $urlAppend . 'modules/admin/index.php',
-                              'icon' => 'fa-reply',
-                              'level' => 'primary' ],
                             [ 'title' => $langDefaultModules,
                               'url' => $urlAppend . 'modules/admin/modules_default.php',
-                              'icon' => 'fa-square-check',
+                              'icon' => 'fa-toolbox',
                               'level' => 'primary-label' ]
 
                         ], false);
@@ -138,7 +132,7 @@ if (isset($_POST['submit'])) {
         foreach($alwaysdisabledCollaborationModules as $disabledCollaborationModule){
             unset($modules_collaborations[$disabledCollaborationModule]);
         }
-        
+
         $data['modules_collaboration'] = $modules_collaborations;
     }
 }

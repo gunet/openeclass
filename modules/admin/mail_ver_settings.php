@@ -27,6 +27,10 @@
  *
  */
 $require_admin = TRUE;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'user_mail_verification';
+
 require_once '../../include/baseTheme.php';
 
 register_posted_variables(array(
@@ -72,15 +76,6 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
 
 $toolName = $langMailVerification;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-$data['action_bar'] = action_bar([
-                        [
-                            'title' => $langBack,
-                            'url' => "index.php",
-                            'icon' => 'fa-reply',
-                            'level' => 'primary'
-                        ]
-                    ]);
 
 // admin hasn't clicked on edit
 if (empty($submit0) && empty($submit1) && empty($submit2)) {

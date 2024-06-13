@@ -11,13 +11,6 @@ $toolName = $langH5pInteractiveContent;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => 'extapp.php',
-        'icon' => 'fa-reply',
-        'level' => 'primary')
-), false);
-
 if (isset($_GET['update']) and $_GET['update']) {
     $hubUpdater = new H5PHubUpdater();
     $hubUpdater->fetchLatestContentTypes();

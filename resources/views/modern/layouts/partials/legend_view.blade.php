@@ -2,46 +2,53 @@
 
     $go_back_url = $_SERVER['REQUEST_URI'];
 
-    if(!$module_visibility){
+    if(!$module_visibility) {
         $visible_module = 0;
     }else{
         $visible_module = 1;
     }
 @endphp
 
-@if($course_code and !isset($_GET['fromFlipped']))
+@if(!isset($_GET['fromFlipped']))
     <div class='d-block mt-4'>
         <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
             <div class='flex-grow-1'>
                 @if($toolName)
-                    <div class='col-12 mb-2'>
-                        <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                        <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
-                    </div>
-                    <div class='col-12 d-inline-flex'>
-                        <!-- toolName -->
-                        <h3>
-                            {{ $toolName }}
-                            @if ($pageName and ($pageName != $toolName))
-                                - {{ $pageName }}
-                            @endif
-                        </h3>
-                    </div>
-                @else
-                    <div class='col-12 mb-2'>
-                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                    @if ($course_code)
+                        <div class='col-12 mb-2'>
                             <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                            {!! course_access_icon(course_status($course_id)) !!}
-                            @if($courseLicense > 0)
-                                {!! copyright_info($course_id) !!}
-                            @endif
-                        </div>
-                        <div class='d-flex justify-content-start align-items-center gap-2 mt-2'>
                             <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
                         </div>
-                    </div>
+                    @endif
+                    @if (!isset($action_bar))
+                        <div class='col-12 d-inline-flex'>
+                            <!-- toolName -->
+                            <h3>
+                                {{ $toolName }}
+                                @if ($pageName and ($pageName != $toolName))
+                                    - {{ $pageName }}
+                                @endif
+                            </h3>
+                        </div>
+                    @else
+                        <div class='col-12 d-inline-flex mb-4'></div>
+                    @endif
+                @else
+                    @if ($course_code)
+                        <div class='col-12 mb-2'>
+                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                <h2 class='mb-0'>{{ $currentCourseName }}</h2>
+                                {!! course_access_icon(course_status($course_id)) !!}
+                                @if($courseLicense > 0)
+                                    {!! copyright_info($course_id) !!}
+                                @endif
+                            </div>
+                            <div class='d-flex justify-content-start align-items-center gap-2 mt-2'>
+                                <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
+                            </div>
+                        </div>
+                    @endif
                 @endif
-
             </div>
 
             <div class='d-flex flex-column'>
@@ -82,10 +89,10 @@
                            <span class="fa-solid fa-rss"></span>
                         </a>
                     @endif
-                    @if($toolName)
-                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none'
+                    @if ($require_help)
+                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}' class='btn helpAdminBtn text-decoration-none'
                             data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
-                            <i class="fa-solid fa-circle-info"></i>
+                            <i class="fas fa-question-circle"></i>
                         </a>
                     @endif
                 </div>

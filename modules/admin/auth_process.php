@@ -291,10 +291,6 @@ if (isset($_POST['submit'])) {
     }
 
     $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-              'icon' => 'fa-reply',
-              'level' => 'primary',
-              'url' => 'auth.php'),
         array('title' => $langConnTest,
               'url' => "auth_test.php?auth=$auth",
               'icon' => 'fa-plug',

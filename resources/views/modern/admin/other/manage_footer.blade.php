@@ -10,12 +10,10 @@
 
                     @include('layouts.partials.legend_view')
 
-                    {!! $action_bar !!}
-
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -27,7 +25,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -37,7 +35,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -78,7 +76,7 @@
                                             {{trans('lang_dont_display_manual_menu')}}
                                         </label>
                                     </div>
-                                    
+
                                     <div class='checkbox'>
                                         <label class='label-container'>
                                             <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text' value='1' {!! get_config('activate_privacy_policy_text') ? 'checked' : '' !!}>
@@ -93,10 +91,10 @@
                                             {{ trans('langAskPrivacyPolicyConsent') }}
                                         </label>
                                     </div>
-                                   
+
                                 </div>
 
-                                
+
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
                                         <button type="submit" class="btn submitAdminBtn" name="submit">{{ trans('langSave') }}</button>
@@ -104,7 +102,7 @@
                                 </div>
 
                             </form>
-                            
+
                         </div>
                     </div>
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
@@ -113,7 +111,7 @@
 
         </div>
     </div>
-  
+
 </div>
 
 @endsection
