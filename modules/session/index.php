@@ -167,6 +167,7 @@ if($is_tutor_course or $is_consultant){
     foreach($data['individuals_group_sessions'] as $cu){
         $not_shown = false;
         $vis = $cu->visible;
+        $per = 0;
         if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
             $not_shown = true;
             $icon = icon('fa-clock fa-md', $langSessionNotStarted);
@@ -191,7 +192,7 @@ if($is_tutor_course or $is_consultant){
         }
         $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
         $cu->icon = $icon ?? '';
-        $cu->percentage = $per ?? '';
+        $cu->percentage = $per;
     }
 
 }
