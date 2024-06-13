@@ -20,7 +20,7 @@
                             <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
                         </div>
                     @endif
-                    @if (!isset($action_bar))
+                    @if (!isset($action_bar) or empty($action_bar))
                         <div class='col-12 d-inline-flex'>
                             <!-- toolName -->
                             <h3>

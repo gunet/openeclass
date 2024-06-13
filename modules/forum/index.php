@@ -39,14 +39,10 @@ $action->record(MODULE_ID_FORUM);
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
-
-
 load_js('tools.js');
 
 if ($is_editor) {
-    $tool_content .= "
-	<div id='operations_container'>" .
-            action_bar(array(
+    $tool_content .= action_bar(array(
                 array('title' => $langCategoryAdd,
                     'url' => "forum_admin.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
@@ -57,8 +53,7 @@ if ($is_editor) {
                     'icon' => 'fa-cogs',
                     'level' => 'primary',
                     'button-class' => 'btn-secondary')
-            )) .
-            "</div>";
+            ));
 }
 
 
@@ -129,7 +124,7 @@ if ($total_categories > 0) {
                                 <div>
                                         <strong>$langCategory :</strong> $cat_title
                                 </div>";
-                
+
                             $tool_content .= action_button(
                                     array(
                                         array(
@@ -160,7 +155,7 @@ if ($total_categories > 0) {
                                             'btn_class' => 'deleteAdminBtn',
                                             'confirm' => $langConfirmDelete,
                                             'show' => $is_editor
-                                            
+
                                         )
                                     )
                                 );
@@ -269,7 +264,7 @@ if ($total_categories > 0) {
                         $tool_content .= "<td class='text-end'>";
 
 
-                        
+
                         $tool_content .= action_button(
                             array(
                                 array(
@@ -291,12 +286,12 @@ if ($total_categories > 0) {
                                     'show' => $is_editor))
                                 );
 
-                        
-                        
-                        
-                        
+
+
+
+
                     }
-                        
+
                 } else {
                     $tool_content .= "<tr>" .
                         "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>" .

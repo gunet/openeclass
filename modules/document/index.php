@@ -1562,7 +1562,7 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         $pageName = $langReplace;
     }
     $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-    $data['actionBar'] = action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'url' => "group_space.php?course=$course_code&group_id=$group_id",
               'icon' => 'fa-reply',
@@ -1607,7 +1607,7 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
 
         ), false);
 } else {
-    $data['actionBar'] = $data['dialogBox'] = '';
+    $data['action_bar'] = $data['dialogBox'] = '';
 }
 
 if (count($data['fileInfo'])) {

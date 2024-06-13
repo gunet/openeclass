@@ -362,21 +362,9 @@ if ($is_editor) {
     if (isset($_GET['editUsers']) or isset($_GET['gradeBooks'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langGradebookManagement;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif(isset($_GET['editSettings'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langConfig;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif (isset($_GET['gradebookBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langGradebookActiveUsers;
@@ -384,43 +372,23 @@ if ($is_editor) {
             array('title' => $langRefreshList,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editUsers=1",
                   'icon' => 'fa-users',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa fa-reply',
-                  'level' => 'primary')
+                  'level' => 'primary-label'
+                  )
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langEditChange;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif (isset($_GET['imp'])) {
         $actID = intval($_GET['imp']);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "", "name" => get_gradebook_activity_title($gradebook_id, $actID));
         $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langImportGrades . ")";
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID),
-                  'icon' => 'fa fa-reply',
-                  'level' => 'primary')
-        ));
 
     } elseif (isset($_GET['ins'])) {
         $actID = intval(getDirectReference($_GET['ins']));
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langGradebookBook .")";
         $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'),
             array('title' => $langImportGrades,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;imp=$actID",
                   'level' => 'primary-label',
@@ -455,10 +423,6 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary'),
             array('title' => $langGradebookBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply',
@@ -470,11 +434,6 @@ if ($is_editor) {
     } elseif (isset($_GET['new'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $pageName = $langNewGradebook;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
     } elseif (isset($_GET['gradebook_id']) && $is_editor) {
         $pageName = get_gradebook_title($gradebook_id);
     }  elseif ( !isset($_GET['gradebook_id'])) {

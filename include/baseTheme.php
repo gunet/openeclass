@@ -29,6 +29,7 @@
  */
 use Jenssegers\Blade\Blade;
 $navigation = array();
+$action_bar = array();
 $sectionName = '';
 $pageName = '';
 $toolName = '';
@@ -61,9 +62,9 @@ function view($view_file, $view_data = array()) {
             $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session,
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
-            $require_editor, $langHomePage, $is_in_tinymce,
+            $require_editor, $langHomePage, $is_in_tinymce, $action_bar,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
-            $tmp_pageName, $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
+            $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course, $is_consultant, $require_consultant;
 
     if (!isset($course_id) or !$course_id) {
@@ -6157,7 +6158,7 @@ function view($view_file, $view_data = array()) {
 
     $global_data = compact('is_editor', 'is_course_reviewer', 'course_code', 'course_id', 'language',
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
-            'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
+            'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 'action_bar',
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
@@ -6165,7 +6166,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName',
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
             'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
             'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant');

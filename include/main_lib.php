@@ -3668,7 +3668,7 @@ function form_buttons($btnArray) {
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete,
-           $course_code, $toolName, $pageName, $tmp_pageName;
+           $course_code, $toolName, $pageName;
 
     $out_primary = $out_secondary = array();
     $i=0;
@@ -3679,9 +3679,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
         $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($pageName)."</h6>";
     }
-    if (isset($tmp_pageName) and !empty($tmp_pageName)) {
-        $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($tmp_pageName)."</h6>";
-    }
+
     foreach (array_reverse($options) as $option) {
 
         if(isset($option['temporary-button-class'])){
@@ -3832,7 +3830,6 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $pageTitleActive = "";
     if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
-            //$titleHeader = (!empty($tmp_pageName) ? $tmp_pageName : '');
             $titleHeader = (!empty($pageName) ? $pageName : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
@@ -4029,14 +4026,13 @@ function make_dir($dir) {
 
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,
-        $langOpenCoursesShort, $langListOpenCoursesShort,$langCourses,$langCourse,$langNationalOpenCourses,
-        $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg, $langOpenCourses;
+        $langCourses,$langCourse,$langNationalOpenCourses,
+        $themeimg, $langOpenCourses;
+
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
-
-
 
                 <div class='card card-transparent border-0 bg-transparent h-100'>
                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
@@ -4078,11 +4074,6 @@ function setOpenCoursesExtraHTML() {
                         </div>
                     </div>
                 </div>
-
-
-
-
-
             ";
 
 }

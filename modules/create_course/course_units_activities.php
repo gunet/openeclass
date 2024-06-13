@@ -19,7 +19,7 @@ require_once 'functions.php';
 
 $course = new Course();
 
-$tmp_pageName = $langCourseEdit;
+$toolName = $langCourseEdit;
 
 load_js('tools.js');
 

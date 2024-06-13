@@ -149,7 +149,7 @@
                         @include('layouts.partials.legend_view')
                     @endif
 
-                    {!! $actionBar !!}
+                    {!! $action_bar !!}
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -199,8 +199,8 @@
                     @if (count($fileInfo) or $curDirName)
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
-                            
-                                
+
+
                                     <div class='d-flex justify-content-between gap-5'>
                                         <div class='d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
@@ -263,11 +263,11 @@
                                                                 <input type='hidden' id='source_path' name='source_path' value=''>
                                                             </div>
 
-                                                            
+
 
                                                         </form>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                             <div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>
@@ -275,7 +275,7 @@
                                             </div>
                                         </div>
                                     </div>
-                            
+
                         </div>
 
 
@@ -287,7 +287,7 @@
                                         <tr class="list-header">
                                             <th style='width:5%;' class='checkbox_th d-none'></th>
                                             <th style='width:50%;'>{!! headlink(trans('langName'), 'name') !!}</th>
-                                            
+
                                             <th style='width:15%;'>{{ trans('langSize') }}</th>
                                             <th style='width:15%;'>{!! headlink(trans('langDate'), 'date') !!}</th>
 
@@ -379,7 +379,7 @@
                                                     @endif
                                                 </td>
 
-                                                
+
 
                                                 @if ($file->is_dir)
                                                     <td style='width:20%;'>&nbsp;</td>

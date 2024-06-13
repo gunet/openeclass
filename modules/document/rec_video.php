@@ -15,11 +15,4 @@ if (!get_config('allow_rec_video')) {
 $toolName = $langUploadRecVideo;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
 
-$data['backButton'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php?course=$course_code",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label'
-    )));
-
-view('modules.document.rec_video', $data);
+view('modules.document.rec_video');

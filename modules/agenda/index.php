@@ -208,7 +208,6 @@ if ($is_editor) {
                 $agdx->store($id);
             }
         }
-        //Session::Messages($langStoredOK, 'alert-success');
         Session::flash('message',$langStoredOK);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/agenda/index.php?course=$course_code");
@@ -218,7 +217,6 @@ if ($is_editor) {
         $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
         $alerttype = ($resp['success'])? 'alert-success' : 'alert-error';
 
-        //Session::Messages($msgresp, $alerttype);
         Session::flash('message',$msgresp);
         Session::flash('alert-class', $alerttype);
         redirect_to_home_page("modules/agenda/index.php?course=$course_code");
@@ -227,12 +225,6 @@ if ($is_editor) {
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
         $pageName = $langAddEvent;
-        $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary',
-                      'show' => $is_editor)));
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
         $applytogroup = '';
         if (isset($id) && $id) {

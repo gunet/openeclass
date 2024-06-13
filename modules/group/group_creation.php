@@ -35,17 +35,21 @@ require_once 'include/course_settings.php';
 require_once 'group_functions.php';
 
 $toolName = $langGroups;
-$pageName = $langNewGroupCreate;
+$pageName = $langCreateOneGroup;
+if (isset($_GET['all'])) {
+    $pageName = $langCreationGroups;
+}
+
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
-$tool_content .= action_bar(array(
+/*$tool_content .= action_bar(array(
     array(
         'title' => $langBack,
         'level' => 'primary',
         'icon' => 'fa-reply',
         'url' => "index.php?course=$course_code"
     )
-));
+)); */
 
 load_js('select2');
 
@@ -348,7 +352,7 @@ if (isset($_GET['all'])) {
                     </div>
                 </div>
             </div>";}
-            
+
             if(get_config('individual_group_bookings')){
                 $tool_content .= "
                     <div class='form-group mt-4'>
@@ -363,7 +367,7 @@ if (isset($_GET['all'])) {
                         </div>
                     </div>";
             }
-            
+
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
         $tool_content .= "<div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>

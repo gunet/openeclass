@@ -70,15 +70,6 @@
 
                     @include('layouts.partials.legend_view')
 
-                    {!!
-                        action_bar(array(
-                            array('title' => $GLOBALS['langBack'],
-                                'url' => $backPath,
-                                'icon' => 'fa-reply',
-                                'level' => 'primary-label')
-                            )
-                        )
-                    !!}
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
