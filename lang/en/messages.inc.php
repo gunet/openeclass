@@ -6365,3 +6365,5 @@ $langSessionType = "Session type";
 $langRemoteConference = "Video conference";
 $langTcNotStartedYet = "The video conference has not started yet";
 $langAddTcSession = "Create a video conference link";
+$langPercentageSessionCompletion = "Session completion rate";
+$langAllSessions = "All sessions";

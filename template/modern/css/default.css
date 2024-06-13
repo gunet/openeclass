@@ -4609,7 +4609,9 @@ body .delThemeBtn{
   --spacing : 1.5rem;
   --radius  : 10px;
   margin-bottom: 0px;
-
+}
+.tree-units:hover{
+  cursor: pointer;
 }
 
 .tree-units li{
@@ -4646,7 +4648,7 @@ body .delThemeBtn{
 
 .tree-units summary{
   display : block;
-  cursor  : pointer;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 .tree-units summary::marker,

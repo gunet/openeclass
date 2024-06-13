@@ -277,7 +277,7 @@
                                                                 <div class='secondary-text'>{{ format_locale_date(strtotime($s->start), 'short') }}</div>
                                                             </li>
                                                             <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                                <div>{{ trans('langFinish') }}</div>
+                                                                <div>{{ trans('langFinish') }}:</div>
                                                                 <div class='secondary-text'>{{ format_locale_date(strtotime($s->finish), 'short') }}</div>
                                                             </li>
                                                         </ul>
@@ -336,6 +336,7 @@
                                                 </div>
                                                 <div class='d-flex justify-content-between align-items-center gap-5 flex-wrap mt-4'>
                                                     <div class='flex-fill'>
+                                                        <h5>{{ trans('langPercentageSessionCompletion') }}</h5>
                                                         <div class="progress">
                                                             <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
                                                         </div>

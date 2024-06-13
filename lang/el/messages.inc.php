@@ -6827,3 +6827,5 @@ $langSessionType = "Μορφή συνεδρίας";
 $langRemoteConference = "Τηλεδιάσκεψη";
 $langTcNotStartedYet = "Η τηλεδιάσκεψη δεν έχει ξεκινήσει ακόμα";
 $langAddTcSession = "Δημιουργία συνδέσμου τηλεδιάσκεψης";
+$langPercentageSessionCompletion = "Ποσοστό ολοκλήρωσης συνεδρίας";
+$langAllSessions = "Όλες οι συνεδρίες";

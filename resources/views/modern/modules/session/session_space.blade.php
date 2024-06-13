@@ -122,7 +122,15 @@
                                     <ul class="tree-units">
                                         <li>
                                             <details>
-                                                <summary><h3 class='mb-0'>{{ trans('langSession')}}</h3></summary>
+                                                <summary>
+                                                    <h3 class='mb-0'>
+                                                        @if($is_consultant)
+                                                            {{ trans('langAllSessions') }}
+                                                        @else
+                                                            {{ trans('langMySessions')}}
+                                                        @endif
+                                                    </h3>
+                                                </summary>
                                                 <ul>
                                                     @foreach ($all_session as $cu)
                                                         <li>
@@ -203,9 +211,9 @@
             <div class='modal-body'>
                 <div class='col-12'>
                     @if(count($participants)>0)
-                    <ul>
+                    <ul class='list-group list-group-flush'>
                         @foreach($participants as $p)
-                            <li class='mb-2'>{!! display_user($p->participants, false, false, '', $course_code) !!}</li>
+                            <li class='list-group-item element'>{!! display_user($p->participants, false, false, '', $course_code) !!}</li>
                         @endforeach
                     </ul>
                     @else
