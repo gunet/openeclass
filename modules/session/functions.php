@@ -1230,7 +1230,14 @@ function display_session_activities($element, $id, $session_id = 0) {
             false
         );
 
+    $active_completion_without_resource = 'opacity-help pe-none';
     if ($session_id) {
+        // Check the time that session starts
+        $started = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$session_id,$course_id);
+        if($started && (date('Y-m-d H:i:s') >= $started->start)){
+            $active_completion_without_resource = '';
+        }
+
         // check if session completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
                                                             WHERE course_id = ?d AND session_id = ?d
@@ -1267,19 +1274,7 @@ function display_session_activities($element, $id, $session_id = 0) {
         }
         
     } else {
-        // check if course completion is enabled
-        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
-                                                            WHERE course_id = ?d AND bundle = -1
-                                                            AND session_id = ?d", $course_id, $session_id)->active;
-
-        // check if current element is course completion badge
-        $cc_is_current = false;
-        if ($element == 'badge') {
-            $bundle = Database::get()->querySingle("select bundle from badge where id = ?d", $id)->bundle;
-            if ($bundle && $bundle == -1) {
-                $cc_is_current = true;
-            }
-        }
+        redirect_to_home_page("modules/session/complete.php?course=$course_code&session=$session_id&manage=1");
     }
 
     // certificate details
@@ -1287,6 +1282,7 @@ function display_session_activities($element, $id, $session_id = 0) {
     $addActivityBtn = action_button(array(
         array('title' => $langWithoutCompletedResource,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withoutCompletedResource",
+            'class' => $active_completion_without_resource,
             'icon' => 'fa fa-trophy'
         ),
         array('title' => $langOfAssignment,
