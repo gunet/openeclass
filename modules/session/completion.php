@@ -70,9 +70,17 @@ $data['action_bar'] = action_bar([
   ], false);
 
 if(isset($_GET['addSessions'])){
-  $data['all_sessions'] = $all_sessions = Database::get()->queryArray("SELECT * FROM mod_session
-                                                      WHERE course_id = ?d
-                                                      ORDER BY start ASC",$course_id);
+  if($is_tutor_course){
+      $data['all_sessions'] = $all_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                                      WHERE id IN (SELECT session_id FROM badge WHERE course_id = ?d)
+                                                                      ORDER BY start ASC",$course_id);
+  }elseif($is_consultant){
+    $data['all_sessions'] = $all_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                                      WHERE id IN (SELECT session_id FROM badge WHERE course_id = ?d)
+                                                                      AND creator = ?d
+                                                                      ORDER BY start ASC",$course_id,$uid);
+  }
+
 
   $data['defined_sessions'] = $defined_sessions = Database::get()->queryArray("SELECT * FROM mod_session_completion 
                                                                     WHERE course_id = ?d",$course_id);
@@ -94,6 +102,12 @@ if(isset($_GET['addSessions'])){
       foreach($res as $r){
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$r->session_id);
         if($is_tutor_course or $is_consultant){
+          if($is_consultant && !$is_tutor_course){
+            // check if consultant is participated in current session as creator
+            if(!is_session_consultant($r->session_id,$course_id)){
+              continue;
+            }
+          }
           $userParticipant = array();
           $participants_ids = array();
           $participants_ids = session_participants_ids($r->session_id);
