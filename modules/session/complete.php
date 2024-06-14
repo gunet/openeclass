@@ -57,6 +57,8 @@ $element = "badge";
 $display = TRUE;
 $localhostUrl = localhostUrl();
 check_activation_of_collaboration();
+student_view_is_active();
+is_admin_of_session();
 
 if ($is_consultant) {
     if (isset($_GET['course']) and isset($_GET['session'])) {

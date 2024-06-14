@@ -47,6 +47,10 @@ require_once 'insert_tc.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
+student_view_is_active();
+if(isset($_GET['type']) && $_GET['type'] != 'doc_upload'){
+    is_admin_of_session();
+}
 
 load_js('tools.js');
 

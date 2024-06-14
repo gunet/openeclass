@@ -126,6 +126,22 @@ function participant_name($userId){
     return $name->givenname . ' ' . $surname->surname;
 }
 
+function student_view_is_active(){
+    global $is_tutor_course, $is_consultant;
+
+    if (isset($_SESSION['student_view'])) {
+        $is_tutor_course = $is_consultant = false;
+    }
+}
+
+function is_admin_of_session(){
+    global $is_tutor_course, $is_consultant, $course_code;
+
+    if(!$is_tutor_course && !$is_consultant){
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+}
+
 /**
  * @brief fills an array with user groups (group_id => group_name)
  * passing $as_id will give back only the groups that have been given the specific assignment

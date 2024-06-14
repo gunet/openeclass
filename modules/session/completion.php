@@ -42,6 +42,10 @@ $pageName = $langCompletedConsulting;
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
+student_view_is_active();
+if(!isset($_GET['showCompletedConsulting'])){
+  is_admin_of_session();
+}
 
 if(isset($_POST['submit'])){
   if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

@@ -353,6 +353,8 @@
                                                             <div class="progress">
                                                                 <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
                                                             </div>
+                                                        @elseif($s->has_badge == -1)
+                                                            <div class='secondary-text'>{{ trans('langSessionNotStarted') }}</div>
                                                         @else
                                                             <div class='secondary-text'>{{ trans('langSessionHasNotBadge') }}</div>
                                                         @endif

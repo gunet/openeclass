@@ -62,6 +62,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
+student_view_is_active();
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {

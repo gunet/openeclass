@@ -48,6 +48,7 @@ $pageName = $langSession;
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
+student_view_is_active();
 
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
@@ -175,12 +176,12 @@ if($is_tutor_course or $is_consultant){
         if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
             $not_shown = true;
             $icon = icon('fa-clock fa-md', $langSessionNotStarted);
-        // or has completed units (if any)
+            $has_badge = -1;
         } else if (!in_array($cu->id, $visible_sessions_id)) {
             $not_shown = true;
             $icon = icon('fa-minus-circle fa-md', $langSessionNotCompleted);
+            $has_badge = -2;
         } else {
-
             if (in_array($cu->id, $visible_sessions_id)) {
                 $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
                 if ($sql_badge) {
