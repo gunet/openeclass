@@ -1464,8 +1464,8 @@ function check_unit_progress($unit_id) {
 }
 
 /**
- * @brief check unit progress
- * @param $unit_id
+ * @brief check session progress
+ * @param $session_id
  * @return bool
  */
 function check_session_progress($session_id) {

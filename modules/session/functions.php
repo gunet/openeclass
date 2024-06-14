@@ -1274,7 +1274,7 @@ function display_session_activities($element, $id, $session_id = 0) {
         }
         
     } else {
-        redirect_to_home_page("modules/session/complete.php?course=$course_code&session=$session_id&manage=1");
+        redirect_to_home_page("courses/$course_code/");
     }
 
     // certificate details
@@ -1879,7 +1879,9 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                 $element = ?d,
                                                 updated = " . DBHelper::timeAfter() . ",
                                                 assigned = " . DBHelper::timeAfter() . ",
-                                                completed = ?d",$p->participants,$element_id,1);
+                                                completed = ?d,
+                                                completed_criteria = ?d,
+                                                total_criteria = ?d",$p->participants,$element_id,1,1,1);
     
                     Database::get()->query("INSERT INTO user_{$element}_criterion SET 
                                                 user = ?d,
