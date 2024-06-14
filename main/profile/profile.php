@@ -500,16 +500,6 @@ if ($myrow->pic_public) {
 $data['sec'] = $urlServer . 'main/profile/profile.php';
 $passurl = $urlServer . 'main/profile/password.php';
 
-$data['action_bar'] =
-        action_bar(
-        [
-            ['title' => $langBack,
-                'url' => "display_profile.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            ]
-        ]);
-
 if (get_user_email_notification_from_courses($uid)) {
     $data['selectedyes'] = 'checked';
     $data['selectedno'] = '';
@@ -517,7 +507,6 @@ if (get_user_email_notification_from_courses($uid)) {
     $data['selectedyes'] = '';
     $data['selectedno'] = 'checked';
 }
-
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);

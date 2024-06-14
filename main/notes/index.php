@@ -34,8 +34,6 @@
  */
 
 $require_login = true;
-$require_help = TRUE;
-$helpTopic = 'portfolio';
 
 include '../../include/baseTheme.php';
 $require_valid_uid = true;
@@ -145,16 +143,9 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $type_selected = isset($note) ? $note->reference_obj_type : null;
     $object_selected = isset($note) ? $note->reference_obj_id : null;
 
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => $_SERVER['SCRIPT_NAME']
-        )
-    )). "
+    $tool_content .= "
 
-<div class='row'>
+    <div class='row'>
         
     <div class='col-lg-6 col-12'>
         <div class='form-wrapper form-edit rounded border-0 px-0'>
@@ -198,14 +189,6 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
 </div>";
 
 } elseif (isset($_GET['nid'])) {
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => $_SERVER['SCRIPT_NAME']
-        )
-    ));
 
     $note = Notes::get_note(intval(getDirectReference($_GET['nid'])));
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
@@ -239,16 +222,14 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         </div></div>";
 } else {
     /* display actions toolbar */
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
                 array('title' => $langAddNote,
                     'url' => "$_SERVER[SCRIPT_NAME]?addNote=1",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')
             ));
-
-
-
+    $tool_content .= $action_bar;
     /* display notes */
     //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
     if (isset($_GET['course'])) {

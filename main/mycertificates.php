@@ -32,11 +32,7 @@ if (is_module_disable(MODULE_ID_PROGRESS)) {
 
 $toolName = $langMyCertificates;
 $content = false;
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => $urlServer,
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
+
 $table_content = '';
 $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                 FROM course, course_user, user, course_module
@@ -52,7 +48,7 @@ if (count($courses) > 0) {
     $table_content .= "<div class = 'table-responsive'>
             <table class='table-default'>
             <thead><tr class='list-header'><th>$langCourse</th><th>$langResults</th></tr></thead>";
-    
+
     // get completed certificates with public url
     $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_id, identifier "
                                         . "FROM certified_users "
@@ -62,23 +58,23 @@ if (count($courses) > 0) {
                 $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
                 $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title)</td>
                     <td>
-                    <a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content . 
+                    <a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content .
                             "</td></tr>";
         }
     }
-    
+
     $counter_game_certificate = 0;
     $counter_game_badge = 0;
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
         $code = $course1->code;
-                
+
         // check for completeness in order to refresh user data
-        Game::checkCompleteness($uid, $course_id);    
-        $iter = array('certificate', 'badge');    
+        Game::checkCompleteness($uid, $course_id);
+        $iter = array('certificate', 'badge');
         foreach ($iter as $key) {
             ${'game_'.$key} = array();
-        }    
+        }
         // populate with data
         foreach ($iter as $key) {
             $gameQ = "SELECT a.*, b.title,"
@@ -91,7 +87,7 @@ if (count($courses) > 0) {
                     . "AND b.bundle != -1 "
                     . "AND (b.expires IS NULL OR b.expires > NOW())";
         $sql = Database::get()->queryArray($gameQ, $uid, $course_id);
-        foreach ($sql as $game) {        
+        foreach ($sql as $game) {
             if ($key == 'badge') { // get badge icon
                 $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
                                                          (SELECT icon FROM badge WHERE id = ?d)", $game->id)->filename;
@@ -104,7 +100,7 @@ if (count($courses) > 0) {
         if (count($game_certificate) > 0) {
             $counter_game_certificate++;
             foreach ($game_certificate as $key => $certificate) {
-                $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) . "%";                
+                $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) . "%";
                 $invisible = 'not_visible';
                 if ($certificate->completed == 1) {
                     continue;
@@ -113,9 +109,9 @@ if (count($courses) > 0) {
                     <td>
                     <a href= '{$urlServer}modules/progress/index.php?course=$code&amp;certificate_id=$certificate->certificate&amp;u=$uid'>" . $cert_content . "</a> 
                             </td></tr>";
-            }            
+            }
         }
-                
+
         // get badges
         if (count($game_badge) > 0) {
             $counter_game_badge++;
@@ -129,7 +125,7 @@ if (count($courses) > 0) {
                 }
                 $table_content .= "<tr class='$invisible'><td>" . $course1->title . " ($badge->title)</td>
                     <td>
-                    <a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content . 
+                    <a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content .
                             "</td></tr>";
             }
         }

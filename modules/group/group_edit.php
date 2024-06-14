@@ -275,16 +275,13 @@ if (!empty($message)) {
     $tool_content .= $message;
 }
 $back_url = isset($_GET['from']) && $_GET['from'] == 'group' ? "group_space.php?course=$course_code&group_id=$group_id" : "index.php?course=$course_code";
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => $back_url),
+$action_bar = action_bar(array(
       array('title' => $langAdminUsers,
             'url' => "../user/index.php?course=$course_code",
             'icon' => 'fa-users',
             'level' => 'primary-label')
       ));
+$tool_content .= $action_bar;
 
 $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
 <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -483,7 +480,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                         </div>
                     </div>";
             }
-            
+
     $tool_content .= "<input type='hidden' name='group_id' value=$group_id></input>
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center'>

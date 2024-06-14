@@ -95,15 +95,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 load_js('datatables');
 load_js('trunk8');
 
-$data['action_bar'] = action_bar([
-    ['title' => $langBack,
-        'url' => $urlAppend,
-        'icon' => 'fa-reply',
-        'level' => 'primary',
-        'button-class' => 'btn-secondary']
-],false);
-
-
 $head_content .= "
 <script type='text/javascript'>
     $(document).ready(function() {
@@ -173,6 +164,6 @@ if(isset($_GET['more']) and $_GET['more'] == 'yes'){
    }
    view('modules.announcements.more_announce',$data);
 }else{
-   view('modules.announcements.myann_index', $data); 
+   view('modules.announcements.myann_index', $data);
 }
 

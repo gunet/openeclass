@@ -105,7 +105,7 @@ if (!isset($_GET['showQuota'])) {
         }
     } else {
         if ($course_id != 0) {
-            $tool_content .= action_bar(array(
+            $action_bar = action_bar(array(
                                 array('title'   => $langNewCourseMessage,
                                       'url'     => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
                                       'icon'    => 'fa-file-pen',
@@ -121,7 +121,7 @@ if (!isset($_GET['showQuota'])) {
                                       'icon'    => 'fa-xmark')
                             ));
         } else {
-            $tool_content .= action_bar(array(
+            $action_bar = action_bar(array(
                                 array('title'   => $langNewCourseMessage,
                                       'url'     => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
                                       'icon'    => 'fa-file-pen',
@@ -139,6 +139,7 @@ if (!isset($_GET['showQuota'])) {
                                       'class' => 'delete_all_in')
                             ));
         }
+        $tool_content .= $action_bar;
     }
 }
 
@@ -175,8 +176,6 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
 
     $backPath = "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : "");
     $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released, $backPath);
-
-    //draw($tool_content, 2);
     exit;
 }
 

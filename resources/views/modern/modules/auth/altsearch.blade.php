@@ -14,7 +14,7 @@
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
             <div class='col-12'>
-                <h1>{!! $toolName !!}</h1>
+                <h3>{!! $toolName !!}</h3>
             </div>
 
             @if(Session::has('message'))

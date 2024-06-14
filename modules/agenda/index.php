@@ -893,7 +893,7 @@ if ($is_editor) {
      * ------------------------------------------- */
 // display action bar
 if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
             array('title' => $langAddEvent,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
                   'icon' => 'fa-plus-circle',
@@ -912,6 +912,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'url' => "icalendar.php?c=$course_id",
                   'icon' => 'fa-calendar')
         ));
+    $tool_content .= $action_bar;
     if (isset($_GET['id'])) {
        $cal_content_list = event_list_view($id);
     } else {

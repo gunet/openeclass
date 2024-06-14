@@ -36,13 +36,6 @@ $pageName = q($group_name) . ' - ' . $langAddManyUsers;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => $group_name);
 
-$tool_content .= action_bar([
-    [ 'title' => $langBack,
-      'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
-      'icon' => 'fa-reply',
-      'level' => 'primary' ]
-]);
-
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 

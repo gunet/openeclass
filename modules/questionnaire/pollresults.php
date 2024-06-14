@@ -128,15 +128,16 @@ if (!$total_participants) {
 if (isset($_REQUEST['unit_id'])) {
     $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
 } else {
-    $back_link = "index.php?course=$course_code";
+    $back_link = '';
 }
 
-$tool_content .= action_bar(array(
+$action_bar = action_bar(array(
                     array(
                         'title' => $langBack,
-                        'url' => $back_link,
+                        'url' => "$back_link",
                         'icon' => 'fa-reply',
-                        'level' => 'primary'
+                        'level' => 'primary',
+                        'show' => isset($_REQUEST['unit_id'])
                     ),
                     array('title' => $langPollPercentResults,
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid",
@@ -149,6 +150,8 @@ $tool_content .= action_bar(array(
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer)
                 ));
+$tool_content .= $action_bar;
+
 $tool_content .= "<div class='col-12'>
 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>

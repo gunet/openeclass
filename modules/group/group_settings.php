@@ -32,13 +32,6 @@ $toolName = $langGroups;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroups);
 $pageName = $langCourseInfo;
 
-$tool_content .= action_bar(array(
-    array(  'title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
-    ));
-
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 $student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
 
@@ -70,7 +63,6 @@ if (isset($_POST['submit'])) {
         setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, 0, $course_id);
 
     }
-    //Session::Messages($langGlossaryUpdated, "alert-success");
     Session::flash('message',$langGlossaryUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
@@ -125,8 +117,6 @@ if (isset($_POST['submit'])) {
                                     )
                                 ))
                                 ."
-                             
-                              
                            
                         </div>
                     </div>

@@ -384,11 +384,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'level' => 'primary',
-              'url' => $link_back,
-              'icon' => 'fa-reply')));
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
@@ -710,14 +706,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $action_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid".(isset($_GET['modifyQuestion']) ? "&amp;modifyQuestion=$question->pqid" : "&amp;newQuestion=yes");
     $action_url .= isset($_GET['questionType']) ?  '&amp;questionType=label' : '';
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'url' => "admin.php?course=$course_code&amp;pid=$pid",
-            'icon' => 'fa-reply'
-        )
-    ));
+
     $questionName = Session::has('questionName') ? Session::get('questionName') : (isset($question) ? $question->question_text : '');
     $questionNameError = Session::getError('questionName');
     $questionNameErrorClass = ($questionNameError) ? "has-error" : "";
@@ -938,17 +927,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-        'level' => 'primary',
-        'url' => "index.php?course=$course_code",
-        'icon' => 'fa-reply'),
+    $action_bar = action_bar(array(
         array('title' => $langSee,
             'level' => 'primary-label',
             'button-class' => 'btn-danger',
             'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid",
             'icon' => 'fa-play-circle')
         ));
+    $tool_content .= $action_bar;
 
     $tool_content .= "
     <div class='col-12 mb-4'>

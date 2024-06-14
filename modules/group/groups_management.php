@@ -21,7 +21,7 @@
 
 /**
  *
- * @file groups_managment.php
+ * @file groups_management.php
  * @brief Page in order to manage groups
  */
 
@@ -82,13 +82,6 @@ $tool_content = '';
 $selectedCategory = '';
 $selectedCategory2 = '';
 $selectedCategory3 = '';
-
-$tool_content .= action_bar(array(
-    array(  'title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
-    ));
 
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
@@ -277,7 +270,7 @@ if(isset($_POST['group_id'])){
         Session::flash('alert-class', 'alert-warning');
     }
 
-    redirect_to_home_page("modules/group/groups_managment.php?course=$course_code");
+    redirect_to_home_page("modules/group/groups_management.php?course=$course_code");
 
 }
 
@@ -368,7 +361,7 @@ $tool_content .= "<div class='col-12'>
                                                                                         <div class='col-12 form-group'>
                                                                                             <label class='control-label-notes mb-1'>$langGroupTutor</label>
                                                                                             <select name='tutor_$gr->id[]' multiple id='select-tutor_$gr->id' class='form-select'>\n";
-                                                                                            
+
 
                                                                                                 $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                                                                                                                             user.id IN (SELECT user_id FROM group_members

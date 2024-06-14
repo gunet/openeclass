@@ -32,13 +32,14 @@ $urlback = "../../main/portfolio.php";
 if ($is_admin) {
     $urlback = "../admin/listusers.php";
 }
-$tool_content .= action_bar(array(
+$action_bar = action_bar(array(
     array('title' => $langDurationVisitsPerCourse,
         'url' => "$_SERVER[SCRIPT_NAME]?t=u$add_link&amp;per_course_dur=TRUE",
         'icon' => 'fa-solid fa-timeline',
         'level' => 'primary'
     )
 ),false);
+$tool_content .= $action_bar;
 
 if ($is_admin) {
     $pageName = "$langUserStats: " . q(uid_to_name($statsuser)) . " (" . q(uid_to_name($statsuser, 'username')) . ")";

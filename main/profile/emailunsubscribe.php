@@ -86,15 +86,6 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page("main/profile/display_profile.php");
 } else {
     $data['uid'] = $uid;
-    $data['action_bar'] = action_bar(
-        [
-            [
-                'title' => $langBack,
-                'url' => 'display_profile.php',
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            ]
-        ]);
 
     if (get_config('email_verification_required') or get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
@@ -109,5 +100,4 @@ if (isset($_POST['submit'])) {
     }
 }
 
-$data['menuTypeID'] = 1;
 view('main.profile.subscribe', $data);

@@ -133,7 +133,7 @@ if (isset($_GET['per_course_dur'])) {
         $pageName = "$langUserStats: " . q(uid_to_name($uid_stats))." (".q(uid_to_name($uid_stats, 'username')).")";
         $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
         $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                 'url' => '../admin/listusers.php',
                 'icon' => 'fa-reply',
@@ -144,12 +144,9 @@ if (isset($_GET['per_course_dur'])) {
                 'level' => 'primary-label')
 
         ),false);
+        $tool_content .= $action_bar;
     } else {
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "../../main/portfolio.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
+        $action_bar = action_bar(array(
             array('title' => $langPersonalStats,
                 'url' => "../usage/index.php?t=u",
                 'icon' => 'fa-solid fa-timeline',
@@ -157,6 +154,7 @@ if (isset($_GET['per_course_dur'])) {
 
         ),false);
     }
+    $tool_content .= $action_bar;
     $tool_content .= user_duration_per_course($uid_stats);
     $tool_content .= user_last_logins($uid_stats);
 } else {

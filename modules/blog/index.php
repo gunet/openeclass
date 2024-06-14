@@ -134,13 +134,14 @@ if ($blog_type == 'course_blog' && $is_editor) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langEditChange;
     }
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
                          array('title' => $langBack,
                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
                                'icon' => 'fa-reply',
                                'level' => 'primary',
                                'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
     ));
+    $tool_content .= $action_bar;
     if ($action == "settings") {
 
         if (isset($_POST['submitSettings'])) {
@@ -150,7 +151,6 @@ if ($blog_type == 'course_blog' && $is_editor) {
 		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
 		    }
-            //Session::Messages($langRegDone, 'alert-success');
             Session::flash('message',$langRegDone);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/blog/index.php?course='.$course_code);
@@ -351,23 +351,19 @@ if ($action == "delPost") {
         }
         if ($allow_to_edit) {
             if($post->delete()) {
-                //Session::Messages($langBlogPostDelSucc, 'alert-success');
                 Session::flash('message',$langBlogPostDelSucc);
                 Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::DELPOST);
                 triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
-                //Session::Messages($langBlogPostDelFail);
                 Session::flash('message',$langBlogPostDelFail);
                 Session::flash('alert-class', 'alert-danger');
             }
         } else {
-            //Session::Messages($langBlogPostNotAllowedDel);
             Session::flash('message',$langBlogPostNotAllowedDel);
             Session::flash('alert-class', 'alert-danger');
         }
     } else {
-        //Session::Messages($langBlogPostNotFound);
         Session::flash('message',$langBlogPostNotFound);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -482,7 +478,6 @@ if ($action == "createPost") {
         ";
 
     } else {
-        //Session::Messages($langBlogPostNotAllowedCreate);
         Session::flash('message',$langBlogPostNotAllowedCreate);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?$url_params");
@@ -513,7 +508,6 @@ if ($action == "editPost") {
                     $checkCommentDis = 'checked';
                 }
                 $commenting_setting = "
-
                                         <div class='form-group mt-4'>
                                               <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
 
@@ -571,10 +565,7 @@ if ($action == "editPost") {
                         </div>
                         $commenting_setting
 
-
-
                         <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-
 
 
                                 ".
@@ -613,13 +604,11 @@ if ($action == "editPost") {
 
 
         } else {
-            //Session::Messages($langBlogPostNotAllowedEdit);
             Session::flash('message',$langBlogPostNotAllowedEdit);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
         }
     } else {
-        //Session::Messages($langBlogPostNotFound);
         Session::flash('message',$langBlogPostNotFound);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
@@ -644,18 +633,15 @@ if ($action == "savePost") {
                 $commenting = NULL;
             }
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
-                //Session::Messages($langBlogPostSaveSucc, 'alert-success');
                 Session::flash('message',$langBlogPostSaveSucc);
                 Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::NEWPOST);
                 triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
-                //Session::Messages($langBlogPostSaveFail);
                 Session::flash('message',$langBlogPostSaveFail);
                 Session::flash('alert-class', 'alert-danger');
             }
         } else {
-            //Session::Messages($langBlogPostNotAllowedCreate);
             Session::flash('message',$langBlogPostNotAllowedCreate);
             Session::flash('alert-class', 'alert-danger');
         }
@@ -675,21 +661,17 @@ if ($action == "savePost") {
                     $commenting = NULL;
                 }
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']), $commenting)) {
-                    //Session::Messages($langBlogPostSaveSucc, 'alert-success');
                     Session::flash('message',$langBlogPostSaveSucc);
                     Session::flash('alert-class', 'alert-success');
                 } else {
-                    //Session::Messages($langBlogPostSaveFail);
                     Session::flash('message',$langBlogPostSaveFail);
                     Session::flash('alert-class', 'alert-danger');
                 }
             } else {
-                //Session::Messages($langBlogPostNotAllowedEdit);
                 Session::flash('message',$langBlogPostNotAllowedEdit);
                 Session::flash('alert-class', 'alert-danger');
             }
         } else {
-            //Session::Messages($langBlogPostNotFound);
             Session::flash('message',$langBlogPostNotFound);
             Session::flash('alert-class', 'alert-danger');
         }
@@ -703,12 +685,14 @@ if (isset($message) && $message) {
 
 //show blog post
 if ($action == "showPost") {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
             array('title' => $langBack,
                     'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog",
                     'icon' => 'fa-reply',
                     'level' => 'primary')
     ));
+    $tool_content .= $action_bar;
+
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         if ($blog_type == 'course_blog') {
@@ -739,42 +723,34 @@ if ($action == "showPost") {
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
+                                <h3>
+                                    ".q($post->getTitle())."
+                                </h3>
 
-
-
-                                            <h3>
-                                                ".q($post->getTitle())."
-                                            </h3>
-
-                                            <div>
-                                                ". action_button(array(
-                                                    array(
-                                                        'title' => $langEditChange,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
-                                                        'icon' => 'fa-edit',
-                                                        'show' => $allow_to_edit
-                                                    ),
-                                                    array(
-                                                        'title' => $langDelete,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
-                                                        'icon' => 'fa-xmark',
-                                                        'class' => 'delete',
-                                                        'confirm' => $langSureToDelBlogPost,
-                                                        'show' => $allow_to_edit
-                                                    ),
-                                                    array(
-                                                        'title' => $langAddResePortfolio,
-                                                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
-                                                        'icon' => 'fa-star',
-                                                        'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
-                                                    ),
-                                                ))."
-                                            </div>
-
-
-
-
-
+                                <div>
+                                    ". action_button(array(
+                                        array(
+                                            'title' => $langEditChange,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
+                                            'icon' => 'fa-edit',
+                                            'show' => $allow_to_edit
+                                        ),
+                                        array(
+                                            'title' => $langDelete,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
+                                            'icon' => 'fa-xmark',
+                                            'class' => 'delete',
+                                            'confirm' => $langSureToDelBlogPost,
+                                            'show' => $allow_to_edit
+                                        ),
+                                        array(
+                                            'title' => $langAddResePortfolio,
+                                            'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                            'icon' => 'fa-star',
+                                            'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
+                                        ),
+                                    ))."
+                                </div>
 
                             </div>
                             <div class='card-body'>" . format_locale_date(strtotime($post->getTime())). "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
@@ -804,7 +780,6 @@ if ($action == "showPost") {
         }
 
     } else {
-        //Session::Messages($langBlogPostNotFound);
         Session::flash('message',$langBlogPostNotFound);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
@@ -819,7 +794,7 @@ if ($action == "showBlog") {
     } elseif ($blog_type == 'perso_blog') {
         $allow_to_create = $is_blog_editor;
     }
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
                         array('title' => $langBlogAddPost,
                               'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=createPost",
                               'icon' => 'fa-plus-circle',
@@ -832,7 +807,7 @@ if ($action == "showBlog") {
                               'level' => 'primary',
                               'show' => ($blog_type == 'course_blog') && $is_editor && $blog->permCreate($is_editor, $stud_allow_create, $uid))
                      ));
-
+    $tool_content .= $action_bar;
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
         $tool_content .= "

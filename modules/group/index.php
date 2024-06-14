@@ -443,7 +443,7 @@ if ($is_editor) {
 
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $num_of_groups = count($groupSelect);
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
                 array('title' => $langCreateOneGroup,
                       'url' => "group_creation.php?course=$course_code",
                       'icon' => 'fa-solid fa-user-group',
@@ -455,7 +455,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
                 array('title' => $langGroupsManagment,
-                      'url' => "groups_managment.php?course=$course_code",
+                      'url' => "groups_management.php?course=$course_code",
                       'icon' => "fa-tasks",
                       'level' => 'primary-label',
                       'button-class' => "btn-primary"),
@@ -483,6 +483,7 @@ if ($is_editor) {
                       'confirm_title' => $langEmptyGroupsAll,
                       'show' => $num_of_groups > 0)
                 ));
+    $tool_content .= $action_bar;
 
     $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     $num_of_groups = count($groupSelect);

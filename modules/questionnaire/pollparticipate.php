@@ -174,15 +174,6 @@ function printPollForm() {
             $back_link = "index.php?course=$course_code";
         }
 
-        $tool_content .= action_bar(array(
-            array(
-                'title' => $langBack,
-                'url' => "$back_link",
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            )
-        ));
-
         if ($thePoll->description) {
             $tool_content .= "<div class='col-12 mb-4'>
                                 <div class='card panelCard px-lg-4 py-lg-3 mb-4'>

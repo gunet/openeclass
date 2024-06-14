@@ -236,10 +236,6 @@ if(isset($_GET['term'])){
 }
 
 $data['action_bar']  = action_bar([
-    [ 'title' => $langBack,
-      'icon' => 'fa-reply',
-      'level' => 'primary',
-      'url' => 'portfolio.php' ],
     [ 'title' => $langRegCourses,
       'url' => $urlAppend . 'modules/auth/courses.php',
       'icon' => 'fa-pen-to-square',

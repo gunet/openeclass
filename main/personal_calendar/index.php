@@ -225,11 +225,9 @@ if (isset($_POST['newTitle'])) {
             }
         }
         if ($resp['success']) {
-            //Session::Messages($langEventModify, 'alert-success');
             Session::flash('message', $langEventModify);
             Session::flash('alert-class', 'alert-success');
         } else {
-            //Session::Messages($resp['message']);
             Session::flash('message', $resp['message']);
             Session::flash('alert-class', 'alert-warning');
         }
@@ -241,11 +239,9 @@ if (isset($_POST['newTitle'])) {
         }
         $resp = Calendar_Events::add_event($newTitle, $newContent, $start, $enddateEvent, $duration, $recursion, $refobjid, $visibility);
         if ($resp['success']) {
-            //Session::Messages($langEventAdd, 'alert-success');
             Session::flash('message', $langEventAdd);
             Session::flash('alert-class', 'alert-success');
         } else {
-            //Session::Messages($resp['message']);
             Session::flash('message', $resp['message']);
             Session::flash('alert-class', 'alert-warning');
         }
@@ -262,11 +258,9 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
         $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
     }
     if ($resp['success']) {
-        //Session::Messages($langEventDel, 'alert-success');
         Session::flash('message', $langEventDel);
         Session::flash('alert-class', 'alert-success');
     } else {
-        //Session::Messages($resp['message']);
         Session::flash('message', $resp['message']);
         Session::flash('alert-class', 'alert-warning');
     }
@@ -334,11 +328,6 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
     } else {
         $pageName = $langAddEvent;
     }
-    $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "index.php",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary')));
 
     $navigation[] = array('url' => "index.php", 'name' => $langMyAgenda);
 
@@ -364,7 +353,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 
     if(isset($_GET['modify'])){
-     
+
                     ///////////////////////////////Edit event in fullCalendar/////////////////////////////
 
                     $showEventUser = '';
@@ -379,7 +368,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         $startDateEvent = Database::get()->querySingle("SELECT start FROM personal_calendar WHERE id = ?d",$eventID)->start;
                         $startDateEvent = date('Y-m-d',strtotime($startDateEvent));
                     }
-                    
+
 
                     $tool_content .= "
                         <div class='col-12 calendar-events-container'>
@@ -523,7 +512,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                                 </div>
                                                             </div>";
                                                     }
-                                                   
+
                                 $tool_content .= "</div>
                                             </div>
                                         
@@ -1064,7 +1053,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 } else {
     /* display actions toolbar */
-    $tool_content .=
+    $action_bar =
                 action_bar(array(
                     array('title' => $langAddEvent,
                         'url' => "$_SERVER[SCRIPT_NAME]?addEvent=1",
@@ -1082,7 +1071,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         'icon' => 'fa-calendar',
                         'level' => 'primary'),
                 ));
-
+    $tool_content .= $action_bar;
     if (isset($_GET['id'])) {
         require_once 'modules/agenda/course_calendar.inc.php';
         $id = intval($_GET['id']);

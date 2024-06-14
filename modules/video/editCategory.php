@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // setup
@@ -53,8 +53,7 @@ if (isset($_GET['id'])) {
 // handle submitted data
 if (isset($_POST['submitCategory'])) {
     submit_video_category($course_id, $course_code);
-    //Session::Messages($langCatVideoDirectoryCreated, "alert-success");
-    Session::flash('message',$langCatVideoDirectoryCreated); 
+    Session::flash('message',$langCatVideoDirectoryCreated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }

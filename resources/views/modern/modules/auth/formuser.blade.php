@@ -7,7 +7,7 @@
             <div class="row m-auto">
 
                 <div class='col-12'>
-                    <h1>{!! $toolName !!}</h1>
+                    <h3>{!! $toolName !!}</h3>
                 </div>
 
                 @if(Session::has('message'))
@@ -101,7 +101,7 @@
                                                 </div>
 
 
-                                                
+
                                                 <div class='col-12'>
                                                     <div class='form-group mt-4'>
                                                         <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
@@ -110,7 +110,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
 
 
                                                 <div class='col-12 d-flex justify-content-end mt-4'>
@@ -118,7 +118,7 @@
                                                         <input class='btn submitAdminBtn secodandary-submit' type='submit' name='submit' value='{{ trans('langSubmitNew') }}'>
                                                     </div>
                                                 </div>
-                                                
+
 
                                             </form>
                                         </div>
