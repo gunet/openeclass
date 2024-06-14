@@ -1202,7 +1202,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
            $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, 
-           $langCompletedSession, $langNotCompletedSession;
+           $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel, 
+           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1231,6 +1232,7 @@ function display_session_activities($element, $id, $session_id = 0) {
         );
 
     $active_completion_without_resource = 'opacity-help pe-none';
+    $activity_off = 'opacity-help pe-none';
     if ($session_id) {
         // Check the time that session starts
         $started = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$session_id,$course_id);
@@ -1271,6 +1273,25 @@ function display_session_activities($element, $id, $session_id = 0) {
             }else{
                 $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
             }
+
+            $checkActivityType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE badge = ?d",$badge_id);
+            if($checkActivityType && ($checkActivityType->activity_type == 'document' or $checkActivityType->activity_type == 'assignment-submit')){
+                $activity_off = '';
+                $active_completion_without_resource = 'opacity-help pe-none';
+            }elseif($checkActivityType && $checkActivityType->activity_type == 'noactivity'){
+                $activity_off = 'opacity-help pe-none';
+                $active_completion_without_resource = '';
+                if($started && (date('Y-m-d H:i:s') < $started->start)){
+                    $active_completion_without_resource = 'opacity-help pe-none';
+                }
+            }elseif(!$checkActivityType){
+                $activity_off = '';
+                $active_completion_without_resource = '';
+                if($started && (date('Y-m-d H:i:s') < $started->start)){
+                    $active_completion_without_resource = 'opacity-help pe-none';
+                }
+            }
+
         }
         
     } else {
@@ -1281,18 +1302,19 @@ function display_session_activities($element, $id, $session_id = 0) {
     $tool_content .= display_session_settings($element, $id, $session_id);
     $addActivityBtn = action_button(array(
         array('title' => $langWithoutCompletedResource,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withoutCompletedResource",
-            'class' => $active_completion_without_resource,
+            'url' => "#",
+            'icon-class' => $active_completion_without_resource,
+            'icon-extra' => "data-id='{$session_id}' data-bs-toggle='modal' data-bs-target='#CompletionWithoutActivities{$session_id}'",
             'icon' => 'fa fa-trophy'
         ),
-        array('title' => $langOfAssignment,
+        array('title' => $langOfSubmitAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
-            'class' => ''),
-        array('title' => $langDocumentAsModuleLabel,
+            'icon-class' => $activity_off),
+        array('title' => $langOfSubmitDocument,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
             'icon' => 'fa fa-folder-open fa-fw',
-            'class' => ''),
+            'icon-class' => $activity_off),
         // array('title' => $langOfPoll,
         //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
         //     'icon' => 'fa fa-question-circle fa-fw',
@@ -1460,6 +1482,31 @@ function display_session_activities($element, $id, $session_id = 0) {
                         </div>";
 
     }
+
+
+    $tool_content .= "<div class='modal fade' id='CompletionWithoutActivities{$session_id}' tabindex='-1' aria-labelledby='CompletionWithoutActivitiesLabel' aria-hidden='true'>
+                            <form method='post' action='$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withoutCompletedResource'
+                                <div class='modal-dialog modal-md modal-success'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <div class='modal-title'>
+                                                <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
+                                                <h3 class='modal-title-default text-center mb-0 mt-2' id='CompletionWithoutActivitiesLabel'>$langSessionCompletion</h3>
+                                            </div>
+                                        </div>
+                                        <div class='modal-body text-center'>
+                                            $langContinueToCompletetionWithoutAct
+                                        </div>
+                                        <div class='modal-footer d-flex justify-content-center align-items-center'>
+                                            <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
+                                            <button type='submit' class='btn submitAdminBtnDefault'>$langSubmit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>";
+
+
 }
 
 /**
@@ -1839,10 +1886,11 @@ function display_session_available_documents($element, $element_id, $session_id 
  */
 function session_completion_without_resources($element, $element_id, $session_id = 0, $session_resource_id = 0){
 
-    global $course_code, $course_id, $langSessionHasCompleted, $langSessionCompletedNotContinue;
+    global $course_code, $course_id, $langSessionHasCompleted, $langSessionCompletedNotContinue, $langSessionCompletedIsActivated;
 
     if($session_id){
         // Initially we should check if a session has completed prequisite session
+        $check_completion_badge = false;
         $has_completed_prerequisite_session = false;
         $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
                                                     WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
@@ -1864,6 +1912,19 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                  AND $element = ?d",'noactivity',$element_id);
             if($res){
                 $has_completed_prerequisite_session = false;
+            }
+        }
+
+        // Check if session has badge with no activities in order to not insert new records in db
+        if(!$check_completion_badge){
+            $badge_res = Database::get()->querySingle("SELECT id FROM {$element} WHERE session_id = ?d",$session_id);
+            $new_res = Database::get()->querySingle("SELECT activity_type FROM {$element}_criterion WHERE badge = ?d",$badge_res->id);
+            if($new_res->activity_type == 'noactivity'){
+                $check_completion_badge = true;
+                $has_completed_prerequisite_session = false;
+                Session::flash('message',$langSessionCompletedIsActivated);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
             }
         }
         

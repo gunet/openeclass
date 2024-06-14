@@ -1482,3 +1482,7 @@ $langNotCompletedSession = "Μη ολοκληρωμένη συνεδρία";
 
 $langResponsibleOfSession = "Εγγεγραμμένοι σύμβουλοι - Υπευθύνος συνεδρίας";
 $langSessionParticipants = "Εγγεγραμμένοι ωφελούμενοι/μέλοι - Συμμετέχοντες";
+$langContinueToCompletetionWithoutAct = "Θέλετε να προχωρήσετε στην ολοκλήρωση της συνεδρίας χωρίς την υποβολή κάποιων δραστηριοτήτων - πόρων;";
+$langOfSubmitAssignment = "Με υποβολή εργασίας";
+$langOfSubmitDocument = "Με προβολή εγγράφου";
+$langSessionCompletedIsActivated = "Η ολοκλήρωση συνεδρίας χωρίς την υποβολή δραστηριοτήτων είναι ήδη ενεργοποιημένη";

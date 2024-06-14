@@ -1544,3 +1544,7 @@ $langCompletedSessions = "Completed session";
 $langNotCompletedSession = "Incomplete session";
 $langResponsibleOfSession = "Registered Counselors - Session Manager";
 $langSessionParticipants = "Registered beneficiaries/members - Participants";
+$langContinueToCompletetionWithoutAct = "Do you want to proceed to complete the session without submitting any activities - resources?";
+$langOfSubmitAssignment = "By submitting work";
+$langOfSubmitDocument = "By submitting document";
+$langSessionCompletedIsActivated = "Session completion without submitting activities is already enabled";
