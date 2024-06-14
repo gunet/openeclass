@@ -113,6 +113,7 @@ if($is_tutor_course or $is_consultant){
     }
 
     if(count($data['individuals_group_sessions']) > 0){
+        $participants = array();
         foreach ($data['individuals_group_sessions'] as $s) {
             $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
             $per = $has_badge = 0;
@@ -127,7 +128,7 @@ if($is_tutor_course or $is_consultant){
                 }
 
             }
-            $s->percentage = $per/count($participants);
+            $s->percentage = (count($participants) > 0) ? $per/count($participants) : $per;
             $s->has_badge = $has_badge;
         }
     }
