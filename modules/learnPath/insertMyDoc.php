@@ -53,14 +53,7 @@ $baseWorkDir = $webDir . $courseDir;
 $InfoBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearnPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
-$toolName = $langInsertMyDocToolName;
-
-$tool_content .=
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary'))) ;
+$toolName = $langInsert;
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 // 1)  We select first the modules that must not be displayed because
@@ -160,11 +153,9 @@ if (isset($_POST['submitInsertedDocument'])) {
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                             VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
 
-                    //Session::Messages($langInsertedAsModule, 'alert-info');
                     Session::flash('message',$langInsertedAsModule);
                     Session::flash('alert-class', 'alert-info');
                 } else {
-                    //Session::Messages($langAlreadyUsed, 'alert-warning');
                     Session::flash('message',$langAlreadyUsed);
                     Session::flash('alert-class', 'alert-warning');
                 }
@@ -218,6 +209,6 @@ foreach ($result as $row) {
 
 
 // display list of available documents
-$tool_content .= display_my_documents($dialogBox, $style);
+$tool_content .= display_my_documents();
 
 draw($tool_content, 2, null, $head_content);

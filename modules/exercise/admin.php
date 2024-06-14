@@ -149,14 +149,13 @@ if ($is_editor) {
         );
         include 'imsqti.inc.php';
     } elseif (isset($_GET['importAiken'])) {
-        $pageName = $langNewQu;
         $navigation[] = array(
             'url' => (isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code&exerciseId=0"),
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
         );
         include 'import_aiken.php';
     } elseif (isset($_GET['preview'])) { // exercise preview
-            $pageName = $langSee;
+            $toolName = $langSee;
             display_exercise($exerciseId);
     } else {
         if (isset($_GET['NewExercise'])) {
@@ -165,10 +164,11 @@ if ($is_editor) {
             $pageName = $langInfoExercise;
             $navigation[] = array('url' => "admin.php?course=$course_code&exerciseId=$exerciseId", 'name' => $langExerciseManagement);
         } else {
-            $pageName = $langExerciseManagement;
+            $pageName = $langExercise;
         }
         include 'exercise_admin.inc.php';
         if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
+            $pageName = $langQuestions;
             include 'question_list_admin.inc.php';
         }
     }

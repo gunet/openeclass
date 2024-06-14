@@ -41,8 +41,6 @@ ModalBoxHelper::loadModalBox();
 
 $toolName = $langForums;
 
-
-
 load_js('tools.js');
 $head_content .= "
     <script type='text/javascript'>
@@ -68,14 +66,7 @@ if ($is_editor) { // delete post confirmation
     $head_content .= "
         $('.delete-btn').click(function(e) {
             var link = $(this).attr('href');
-            e.preventDefault();
-
-            // bootbox.confirm('" . js_escape($langConfirmDelete) . "', function(result) {
-            //     if (result) {
-            //         document.location.href = link;
-            //     }
-            // });
-
+            e.preventDefault();            
             bootbox.confirm({ 
                 closeButton: false,
                 title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
@@ -118,13 +109,12 @@ if (isset($_GET['all'])) {
     $paging = true;
 }
 
-$unit = isset($_GET['unit'])? $_GET['unit']: null;
+$unit = $_GET['unit'] ?? null;
 $res_type = isset($_GET['res_type']);
 
 // get attached forum topic file (if any)
 if (isset($_GET['get'])) {
     if (!send_forum_post_file($_GET['get'])) {
-        //Session::Messages($langFileNotFound, 'alert-danger');
         Session::flash('message',$langFileNotFound);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -296,15 +286,14 @@ if ($topic_locked == 1) {
         $back_url = "viewforum.php?course=$course_code&forum=$forum";
         $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum";
     }
-    $tool_content .=
-            action_bar(array(
+    $action_bar = action_bar(array(
                 array('title' => $langReply,
                     'url' => "$reply_url",
                     'icon' => 'fa-reply-all',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')
-
                 ));
+    $tool_content .= $action_bar;
     // forum posts view selection
     $selected_view_0 = $selected_view_1 = $selected_view_2 = 0;
     if ($view == POSTS_PAGINATION_VIEW_ASC) {
@@ -580,7 +569,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     global $langForumPostParentDel, $langMsgRe, $course_id, $langReply, $langAttachedFile, $unit, $res_type, $langFrom2,
            $langMessages, $course_code, $is_editor, $topic, $forum, $uid, $langMessage, $head_content,
-           $langModify, $langDelete, $langSent, $dateTimeFormatShort, $webDir, $langForumPostParent;
+           $langModify, $langDelete, $langSent, $webDir, $langForumPostParent;
 
     $content = '';
     if (!isset($user_stats[$myrow->poster_id])) {
@@ -684,8 +673,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         }else{
             $content .= "<div class='card-body'>";
         }
-        $content .= "        
-            
+        $content .= "
                 <div class='col-12 d-flex justify-content-start align-items-start gap-2 flex-wrap'>
                     <div>" .
                         profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'rounded-circle margin-bottom-thin') . "
@@ -732,8 +720,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
             </div>
         </div>";
     }
-    $content .= "
-    </div>";
+    $content .= "</div>";
 
     return $content;
 }

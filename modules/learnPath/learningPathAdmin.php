@@ -370,17 +370,7 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
-$tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'
-            )
-        ),false);
-
-
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
-//$tool_content .= "<div class='card-body'>";
 
 if ($cmd == "updateName") {
     $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));

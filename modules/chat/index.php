@@ -75,13 +75,9 @@ if ($is_editor) {
     if (isset($_GET['add_conference'])) {
         $display = FALSE;
         $pageName = $langAdd;
-        $textarea = rich_text_editor('description', 4, 20, '');
+        $navigation[] = ['url' => "{$urlServer}modules/chat/index.php?course=$course_code", 'name' => $langChat];
 
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
+        $textarea = rich_text_editor('description', 4, 20, '');
 
         $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
@@ -142,7 +138,10 @@ if ($is_editor) {
                 </div>
             </div>";
 
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2 mt-1'>
+                        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'>
+                        <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
+                        </div>";
         $tool_content .= "</form></div></div><div class='d-none d-lg-block'>
                                 <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                             </div>
@@ -157,8 +156,7 @@ if ($is_editor) {
         $id = $_GET['delete_conference'];
         $conf_title = Database::get()->querySingle("SELECT conf_title FROM conference WHERE conf_id = ?d", $id)->conf_title;
         Database::get()->querySingle("DELETE FROM conference WHERE conf_id=?d", $id);
-        Log::record($course_id, MODULE_ID_CHAT, LOG_DELETE, array('id' => $id,
-                                                                                      'title' => $conf_title));
+        Log::record($course_id, MODULE_ID_CHAT, LOG_DELETE, array('id' => $id, 'title' => $conf_title));
         $fileChatName = $coursePath . $course_code . '/'.$id.'_chat.txt';
         $tmpArchiveFile = $coursePath . $course_code . '/'.$id.'_tmpChatArchive.txt';
 
@@ -244,12 +242,8 @@ if ($is_editor) {
 } elseif (isset($_GET['edit_conference'])) {
         $display = FALSE;
         $pageName = $langEdit;
+        $navigation[] = ['url' => "{$urlServer}modules/chat/index.php?course=$course_code", 'name' => $langChat];
         $conf_id = $_GET['edit_conference'];
-        $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary')));
 
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
@@ -341,7 +335,10 @@ if ($is_editor) {
         }
 
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2 mt-2'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                            <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
+                        </div>";
         $tool_content .= "</fieldset></form></div></div><div class='d-none d-lg-block'>
                                 <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
                             </div>
@@ -356,12 +353,13 @@ if ($is_editor) {
 if ($display) {
     $q = array();
     if ($is_editor) {
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langAdd,
                 'url' => "index.php?add_conference&amp;course=$course_code",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')));
+        $tool_content .= $action_bar;
 
         $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
     } else {

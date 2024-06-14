@@ -42,7 +42,7 @@ require_once 'modules/group/group_functions.php';
 load_js('tools.js');
 
 if ($is_editor) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
                 array('title' => $langCategoryAdd,
                     'url' => "forum_admin.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
@@ -54,6 +54,7 @@ if ($is_editor) {
                     'level' => 'primary',
                     'button-class' => 'btn-secondary')
             ));
+    $tool_content .= $action_bar;
 }
 
 

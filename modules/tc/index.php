@@ -150,32 +150,26 @@ $head_content .= "<script type='text/javascript'>
 if ($is_editor) {
     if (isset($_GET['new'])) {
         $pageName = $langChooseTCServer;
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
+        $tool_content .= $action_bar;
     } elseif (isset($_GET['add']) or isset($_GET['choice'])) {
         if (isset($_GET['add'])) {
             $pageName = $langNewBBBSession;
         } elseif ((isset($_GET['choice'])) and $_GET['choice'] == 'edit') {
             $pageName = $langModify;
         }
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
     } else {
-        if (
-            isset($_GET['id'])
-            || isset($_GET['zoom_not_registered'])
-        ) {
-            $tool_content .= action_bar(array(
+        if (isset($_GET['id']) || isset($_GET['zoom_not_registered'])) {
+             $action_bar = action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary')));
+             $tool_content .= $action_bar;
         } else {
             /* find enabled tc servers */
             $servers = [];
@@ -190,7 +184,7 @@ if ($is_editor) {
                 $tc_server_type = '';
             }
 
-            $tool_content .= action_bar([
+            $action_bar = action_bar([
                 [ 'title' => $langNewBBBSession,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
                   'icon' => 'fa-plus-circle',
@@ -218,15 +212,17 @@ if ($is_editor) {
                     'icon' => 'fa-clock',
                     'level' => 'primary-label' ],
             ]);
+            $tool_content .= $action_bar;
         }
     }
 } else {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
                 array('title' => $langParticipate,
                           'url' => "tcuserduration.php?course=$course_code&amp;u=$_SESSION[uid]",
                           'icon' => 'fa-clock',
                           'level' => 'primary-label')
                 ));
+    $tool_content .= $action_bar;
 }
 
 if (isset($_GET['add'])) {

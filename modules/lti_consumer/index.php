@@ -55,20 +55,15 @@ if ($is_editor) {
         } elseif ((isset($_GET['choice'])) and $_GET['choice'] == 'edit') {
             $pageName = $langModify;
         }
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "../course_tools/index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
     } else {
         if (isset($_GET['id'])) {
-            $tool_content .= action_bar(array(
+            $action_bar = action_bar(array(
                 array('title' => $langBack,
                       'url' => "../course_tools/index.php?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary')));
         } else {
-            $tool_content .= action_bar(array(
+            $action_bar = action_bar(array(
                 array('title' => $langNewLTITool,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
                       'icon' => 'fa-plus-circle',
@@ -76,6 +71,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'show' => 1)));
         }
+        $tool_content .= $action_bar;
     }
 }
 

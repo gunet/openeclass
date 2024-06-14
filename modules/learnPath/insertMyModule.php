@@ -68,12 +68,6 @@ EOF;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearnPath);
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
 $toolName = $langInsertMyModulesTitle;
-$tool_content .=
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary'))) ;
 
 if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
     // select all 'addable' modules of this course for this learning path
@@ -97,8 +91,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
             $nb++;
         }
     }
-    //Session::Messages($langInsertedAsModule, 'alert-info');
-    Session::flash('message',$langInsertedAsModule); 
+    Session::flash('message',$langInsertedAsModule);
     Session::flash('alert-class', 'alert-info');
     redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 } //end if ADD command
@@ -134,18 +127,17 @@ foreach ($result as $list) {
 
     $contentType_alt = selectAlt($list->contentType);
 
-    $tool_content .= '<tr>' . "\n"
-            . '<td align="left">' . "\n"
-            . '<label for="check_' . $list->module_id . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list->name . '</b></label>' . "\n";
+    $tool_content .= '<tr>'
+            . '<td align="left">'
+            . '<label for="check_' . $list->module_id . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list->name . '</b></label>';
 
     // COMMENT
     if ($list->comment != null) {
-        $tool_content .= '<br /> <br />' . "\n"
-                . '<em>' . $langComments . '</em>: <br />' . $list->comment . '' . "\n";
+        $tool_content .= '<br><br><em>' . $langComments . '</em>: <br />' . $list->comment;
     }
     $tool_content .= '</td>'
             . '<td align="center">'
-            . '<label class="label-container"><input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">' . "\n"
+            . '<label class="label-container"><input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">'
             . '<span class="checkmark"></span></label></td>'
             . '</tr>';
 
@@ -153,24 +145,25 @@ foreach ($result as $list) {
 }//end while another module to display
 
 if (!$atleastOne) {
-    $tool_content .= '<tr>'
-            . '<td colspan="2" align="center">'
-            . $langNoMoreModuleToAdd
-            . '</td>'
-            . '</tr>';
+    $tool_content .= "<div class='alert alert-warning'>
+                        <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                        <span>$langNoMoreModuleToAdd</span>
+                    </div>";
 }
 
 // Display button to add selected modules
+$tool_content .= "</table>";
+
 if ($atleastOne) {
-    $tool_content .= '<tr>'
-            . '<th colspan="2"><div>' . "\n"
-            . '<button class="btn submitAdminBtnDefault" value="' . $langAddOneModuleButton . '" />'.$langAddOneModuleButton.'</button>' . "\n"
-            . '<input type="hidden" name="cmdglobal" value="add"></div>' . ""
-            . '</th>'
-            . '</tr>';
+    $tool_content .= "<div class='form-group'>
+                    <div class='col-12 d-inline-flex justify-content-end gap-2 mt-4'> 
+                    <button class='btn submitAdminBtnDefault' value='$langAddOneModuleButton'>$langAdd</button>
+                    <a href='learningPathAdmin.php?course=$course_code&amp;path_id=$_SESSION[path_id]' class='btn cancelAdminBtn'>$langCancel</a>
+                    <input type='hidden' name='cmdglobal' value='add'></div>";
+
 }
 
-$tool_content .= "</table></form>";
+$tool_content .= "</form>";
 
 draw($tool_content, 2, null, $head_content);
 

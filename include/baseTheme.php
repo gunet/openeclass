@@ -29,7 +29,7 @@
  */
 use Jenssegers\Blade\Blade;
 $navigation = array();
-$action_bar = array();
+$action_bar = '';
 $sectionName = '';
 $pageName = '';
 $toolName = '';

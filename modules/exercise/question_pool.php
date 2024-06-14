@@ -26,6 +26,9 @@ include 'answer.class.php';
 
 $require_editor = TRUE;
 $require_current_course = TRUE;
+$require_help = true;
+$helpTopic = 'exercises';
+$helpSubTopic = 'question_bank';
 
 include '../../include/baseTheme.php';
 require_once 'imsqtilib.php';
@@ -270,6 +273,7 @@ if ($fromExercise) {
     ];
 }
 
+$action_bar = action_bar($action_bar_options);
 $tool_content .= action_bar($action_bar_options);
 
 if ($fromExercise) {

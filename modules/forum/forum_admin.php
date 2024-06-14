@@ -84,13 +84,6 @@ if (isset($_GET['forumtopicedit'])) {
 if (isset($_GET['settings'])) {
     $pageName = $langConfig;
 }
-$tool_content .= "<div id='operations_container'>".
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'))) .
-"</div>";
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 // forum go
@@ -231,7 +224,6 @@ elseif (isset($_GET['forumcatsave'])) {
 
     Database::get()->query("UPDATE forum_category SET cat_title = ?s
                                         WHERE id = ?d AND course_id = ?d", $_POST['cat_title'], $cat_id, $course_id);
-    //Session::Messages($langNameCatMod, 'alert-success');
     Session::flash('message',$langNameCatMod);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
@@ -253,7 +245,6 @@ elseif (isset($_GET['forumcatadd'])) {
     Database::get()->query("INSERT INTO forum_category
                         SET cat_title = ?s,
                         course_id = ?d", $_POST['categories'], $course_id);
-    //Session::Messages($langCatAdded, 'alert-success');
     Session::flash('message',$langCatAdded);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
@@ -328,7 +319,6 @@ elseif (isset($_GET['forumgoadd'])) {
         }
     }
     // end of notification
-    //Session::Messages($langForumCategoryAdded, 'alert-success');
     Session::flash('message',$langForumCategoryAdded);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
@@ -387,7 +377,7 @@ elseif (isset($_GET['forumcatdel'])) {
     Database::get()->query("DELETE FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_category WHERE id = ?d AND course_id = ?d", $cat_id, $course_id);
-    //Session::Messages($langCatForumDelete, 'alert-success');
+
     Session::flash('message',$langCatForumDelete);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
@@ -447,7 +437,7 @@ elseif (isset($_GET['forumgodel'])) {
     Database::get()->query("UPDATE `group` SET forum_id = 0
                     WHERE forum_id = ?d
                     AND course_id = ?d", $forum_id, $course_id);
-    //Session::Messages($langForumDelete, 'alert-success');
+
     Session::flash('message',$langForumDelete);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");

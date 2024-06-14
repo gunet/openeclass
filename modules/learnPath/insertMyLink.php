@@ -107,7 +107,6 @@ while ($iterator <= $_POST['maxLinkForm']) {
             Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
-            //Session::Messages($langInsertedAsModule, 'alert-info');
             Session::flash('message',$langInsertedAsModule);
             Session::flash('alert-class', 'alert-info');
             redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
@@ -150,13 +149,6 @@ if ($iterator > 1) {
     redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
 }
 
-
-$tool_content .=
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary'))) ;
 $tool_content .= showlinks();
 
 draw($tool_content, 2, null, $head_content);
@@ -166,7 +158,7 @@ draw($tool_content, 2, null, $head_content);
  * @return string
  */
 function showlinks() {
-    global $langName, $langSelection, $langAddModulesButton, $course_id, $course_code, $langNoLinksExist;
+    global $langName, $langSelection, $langAdd, $langCancel, $course_id, $course_code, $langNoLinksExist;
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
@@ -185,8 +177,7 @@ function showlinks() {
         $output .= "<tr><td>$langNoLinksExist</td><td></td></tr>";
     } else {
         foreach ($result as $myrow) {
-            $output .= "
-            <tr>                
+            $output .= "<tr>
             <td>";
             if (empty($myrow->title)) {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($myrow->url) . "</a>";
@@ -199,18 +190,14 @@ function showlinks() {
             $i++;
         }
     }
-    $output .= "</tbody>
-        <tfooter>
-        <tr>
-            <th colspan='2'>
-                <div>
-                    <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
-                    <input class='btn submitAdminBtn' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
-                </div>
-            </th>
-        </tr>
-        </tfooter>        
-        </table></div>
-        </form>";
+    $output .= "</tbody></table></div>";
+    $output .= "<input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "'>";
+    $output .= "<div class='form-group'>";
+    $output .= "<div class='col-12 d-inline-flex justify-content-end gap-2 mt-4'>";
+    $output .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedLink' value='$langAdd'/>";
+    $output .= "<a href='learningPathAdmin.php?course=$course_code&amp;path_id=$_SESSION[path_id]' class='btn cancelAdminBtn'>$langCancel</a>";
+    $output .= "</div></div>";
+    $output .= "</form>";
+
     return $output;
 }

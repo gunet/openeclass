@@ -37,12 +37,6 @@ $dialogBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearnPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $toolName = $langInsertMyMediaToolName;
-$tool_content .=
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary'))) ;
 
 ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
@@ -94,19 +88,16 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
                 //reuse_module($thisLinkModule->module_id);
-                //Session::Messages($langInsertedAsModule, 'alert-info');
-                Session::flash('message',$langInsertedAsModule); 
+                Session::flash('message',$langInsertedAsModule);
                 Session::flash('alert-class', 'alert-info');
 
             } else {
-                //Session::Messages($langAlreadyUsed, 'alert-warning');
-                Session::flash('message',$langAlreadyUsed); 
+                Session::flash('message',$langAlreadyUsed);
                 Session::flash('alert-class', 'alert-warning');
             }
         } else {
             create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
-            //Session::Messages($langInsertedAsModule, 'alert-info');
-            Session::flash('message',$langInsertedAsModule); 
+            Session::flash('message',$langInsertedAsModule);
             Session::flash('alert-class', 'alert-info');
         }
     }
@@ -140,20 +131,17 @@ while ($iterator <= $_POST['maxMediaForm']) {
                 //reuse_module($thisLinkModule->module_id);
                 // TODO ---- needs improvement //
                 create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
-                //Session::Messages($langInsertedAsModule, 'alert-info');
-                Session::flash('message',$langInsertedAsModule); 
+                Session::flash('message',$langInsertedAsModule);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
-                //Session::Messages($langAlreadyUsed);
-                Session::flash('message',$langAlreadyUsed); 
+                Session::flash('message',$langAlreadyUsed);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         } else {
             create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
-            //Session::Messages($langInsertedAsModule, 'alert-info');
-            Session::flash('message',$langInsertedAsModule); 
+            Session::flash('message',$langInsertedAsModule);
             Session::flash('alert-class', 'alert-info');
             redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         }
@@ -166,23 +154,19 @@ draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief display multimedia files
- * @global type $langName
- * @global type $langSelection
- * @global type $langAddModulesButton
- * @global type $course_code
  * @return string
  */
 function showmedia() {
-    global $langName, $langSelection, $langAddModulesButton, $course_code, $course_id, $langNoVideo;
+    global $langName, $langSelection, $langAdd, $langCancel, $course_code, $course_id, $langNoVideo;
 
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                <div class='table-responsive'>
                <table class='table-default'>
                <thead>
-               <tr class='list-header'>
-               <th>$langName</th>
-               <th>$langSelection</th>
-               </tr>
+                   <tr class='list-header'>
+                       <th>$langName</th>
+                       <th>$langSelection</th>
+                   </tr>
                </thead>
                <tbody>";
 
@@ -220,20 +204,16 @@ function showmedia() {
         $j++;
     }
 
-    $output .= "
-                </tbody>
-                <tfooter>
-                <tr>
-                <th colspan='3'>
-                <div>
-                  <input type='hidden' name='maxMediaForm' value ='" . ($i + $j - 2) . "' />
-                  <input class='btn submitAdminBtn' type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
-                </div></th>
-                </tr>
-                </tfooter>
+    $output .= "</tbody>           
                 </table>
-                </div>
-                </form>";
+                </div>";
+    $output .= "<input type='hidden' name='maxMediaForm' value ='" . ($i + $j - 2) . "'>";
+    $output .= "<div class='form-group'>";
+    $output .= "<div class='col-12 d-inline-flex justify-content-end gap-2 mt-4'>";
+    $output .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedMedia' value='$langAdd'>";
+    $output .= "<a href='learningPathAdmin.php?course=$course_code&amp;path_id=$_SESSION[path_id]' class='btn cancelAdminBtn'>$langCancel</a>";
+    $output .= "</div></div>";
+    $output .= "</form>";
     return $output;
 }
 

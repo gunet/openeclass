@@ -197,15 +197,8 @@ if ($is_editor) {
                     } else {
                         $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
                         $pageName = $langCreateNewLearningPath;
-                        $dialogBox = action_bar(array(
-                            array('title' => $langBack,
-                                'url' => "index.php?course=$course_code",
-                                'icon' => 'fa-reply',
-                                'level' => 'primary'
-                            )
-                        ));
                         // display error message
-                        $dialogBox .= "
+                        $dialogBox = "
                         <div class='col-12 mt-3'>
                            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langErrorNameAlreadyExists</span></div>
                         </div>";
@@ -256,20 +249,10 @@ if ($is_editor) {
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
                     $pageName = $langCreateNewLearningPath;
-                    $dialogBox = action_bar(array(
-                        array('title' => $langBack,
-                            'url' => "index.php?course=$course_code",
-                            'icon' => 'fa-reply',
-                            'level' => 'primary'
-                        )
-                    ));
-                    $dialogBox .= "
-                    
-                    <div class='d-lg-flex gap-4 mt-4'>
-                    <div class='flex-grow-1'>
+                    $dialogBox = "<div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
 
-                            <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        
+                            <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>                        
                            
                                 <div class='form-group'>
                                     <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
@@ -291,8 +274,7 @@ if ($is_editor) {
 
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    <input type='hidden' name='cmd' value='create'>
-                                    
+                                    <input type='hidden' name='cmd' value='create'>                                    
                                         "
                                             .
                                                 form_buttons(array(
@@ -307,15 +289,14 @@ if ($is_editor) {
                                                     )
                                                 ))
                                                 .
-                                        "
-                                    
+                                        "                                    
                                     
                                     </div>
                                 </div>
                             </form>
-                    </div></div><div class='d-none d-lg-block'>
-                        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
-                    </div>
+                        </div></div><div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                        </div>
                     </div>";
                 }
                 break;
@@ -382,10 +363,7 @@ if ($is_editor) {
         draw($tool_content, 2, null, $head_content);
         exit;
     } else {
-        $tool_content .= "
-            <div class='col-sm-12'>
-                <div id='operations_container'>" .
-                action_bar(array(
+        $action_bar = action_bar(array(
                     array('title' => $langCreate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
                         'icon' => 'fa-plus-circle',
@@ -407,16 +385,11 @@ if ($is_editor) {
                     array('title' => $langLearningObjectsInUse_sort,
                         'url' => "modules_pool.php?course=$course_code",
                         'icon' => 'fa-book',
-                        'level' => 'secondary'))) .
-                "</div>
-            </div>";
+                        'level' => 'secondary')));
+        $tool_content .= $action_bar;
     }
 } else if ($is_course_reviewer) {
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div id='operations_container'>" .
-                    action_bar(array(
+    $action_bar = action_bar(array(
                         array('title' => $langTrackAllPathExplanation,
                             'url' => "detailsAll.php?course=$course_code",
                             'icon' => 'fa-line-chart',
@@ -427,10 +400,8 @@ if ($is_editor) {
                             'icon' => 'fa-line-chart',
                             'level' => 'primary-label',
                             'button-class' => 'btn-success')
-                    )) .
-            "</div>
-        </div>
-    </div>";
+                    ));
+    $tool_content .= $action_bar;
 }
 
 // check if there are learning paths available

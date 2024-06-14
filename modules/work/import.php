@@ -1,5 +1,7 @@
 <?php
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 $require_current_course = true;
 $require_editor = true;
 
@@ -14,7 +16,7 @@ $id = $_GET['id'];
 $assignment = Database::get()->querySingle('SELECT * FROM assignment WHERE id = ?d', $id);
 
 if (isset($_FILES['userfile'])) {
-    $file = \PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES['userfile']['tmp_name']);
+    $file = IOFactory::load($_FILES['userfile']['tmp_name']);
     $sheet = $file->getActiveSheet();
     $gradeComments = $userGrades = $errorLines = $invalidUsers = $extraUsers = [];
     foreach ($sheet->getRowIterator() as $row) {
@@ -72,8 +74,8 @@ if (isset($_FILES['userfile'])) {
             triggerGame($course_id, $user_id, $id);
             update_gradebook_book($user_id, $id, $grade / $assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
         }
-       // Session::Messages($langGradesImported, 'alert-success');
-        Session::flash('message',$langGradesImported); 
+
+        Session::flash('message',$langGradesImported);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
@@ -100,8 +102,8 @@ if (isset($_FILES['userfile'])) {
                         <tbody>$errorText</tbody>
                     </table></p>";
         }
-     //   Session::Messages($message, 'alert-danger');
-        Session::flash('message',$message); 
+
+        Session::flash('message',$message);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/work/import.php?course=$course_code&id=$id");
     }
@@ -111,12 +113,6 @@ $pageName = $langImportGrades;
 
 $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langWorks];
 $navigation[] = ['url' => "index.php?course=$course_code&amp;id=$id", 'name' => q($assignment->title)];
-
-$tool_content .= action_bar([
-    [ 'title' => $langBack,
-      'level' => 'primary',
-      'url' => "index.php?course=$course_code&amp;id=$id",
-      'icon' => 'fa-reply']]);
 
 enableCheckFileSize();
 $tool_content .= "
@@ -143,7 +139,9 @@ $tool_content .= "
                                                 'name' => 'new_assign',
                                                 'value' => $langUpload,
                                                 'javascript' => '' ],
-                                              [ 'class' => 'cancelAdminBtn', 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code" ]]) . "
+                                              [ 'class' => 'cancelAdminBtn',
+                                                  'href' => "index.php?course=$course_code&id=$id" ]
+                                            ]) . "
                             </div>
                         </div>
                     </fieldset>

@@ -270,7 +270,8 @@ if ($is_editor) {
         $tool_content .= "</ul>";
         $tool_content .= "</span></div>";
     }
-    $tool_content .= action_bar(array(
+
+    $action_bar = action_bar(array(
         array('title' => $langNewEx,
             'url' => "admin.php?course=$course_code&amp;NewExercise=Yes",
             'icon' => 'fa-plus-circle',
@@ -286,9 +287,8 @@ if ($is_editor) {
             'icon' => 'fa-cubes'
         )
     ), false);
+    $tool_content .= $action_bar;
 
-} else {
-    $tool_content .= "";
 }
 
 if (!$nbrExercises) {

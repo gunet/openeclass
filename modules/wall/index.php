@@ -19,7 +19,8 @@
 * ======================================================================== */
 
 $require_current_course = TRUE;
-
+$require_help = true;
+$helpTopic = 'wall';
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_wrapper.php';
 

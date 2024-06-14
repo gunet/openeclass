@@ -691,9 +691,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     }
     $moduleTag = new ModuleElement($exerciseId);
 
-
-    $tool_content .= "<div class='col-12 d-flex justify-content-between align-items-start flex-wrap gap-3 mt-5'>";
-    $tool_content .="<h2>$langAboutExercise</h2>";
     $tool_content .= "<div>";
     $tool_content .= action_bar([
         [ 'title' => $langBack,
@@ -710,7 +707,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
           'icon' => 'fa-edit',
           'button-class' => 'btn btn-success' ]
     ]);
-    $tool_content .= "</div>";
     $tool_content .= "</div>";
 
     $exerciseDescription = trim($exerciseDescription);

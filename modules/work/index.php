@@ -71,7 +71,6 @@ if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
 }
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
-// $works_url = array('url' => "{$urlServer}modules/work/?course=$course_code", 'name' => $langWorks);
 $works_url = array('url' => "{$urlServer}modules/work/index.php?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
 
@@ -3180,11 +3179,7 @@ function show_edit_assignment($id) {
     $enableWorkFeedbackRelease = Session::has('enableWorkFeedbackRelease') ? Session::get('enableWorkFeedbackRelease') : ($WorkFeedbackRelease ? 1 : 0);
     $checked = $row->notification ? 'checked' : '';
     $comments = trim($row->comments);
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'level' => 'primary',
-              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-              'icon' => 'fa-reply')));
+
 
     //Get possible validation errors
     $title_error = Session::getError('title');
@@ -5738,7 +5733,7 @@ function show_student_assignments() {
  */
 function show_assignments() {
     global $tool_content, $head_content, $m, $langEditChange, $langDelete, $langNoAssign,
-        $langNewAssign, $course_code, $course_id, $langWorksDelConfirm, $is_editor,
+        $langNewAssign, $course_code, $course_id, $langWorksDelConfirm, $is_editor, $action_bar,
         $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions, $langNoDeadline,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics, $langWillStartAt,
         $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission, $langAssignemtTypeTurnitinInfo,
@@ -5778,7 +5773,7 @@ function show_assignments() {
                 LIMIT 10000
             )", $course_id, $course_id, $course_id);
 
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
                   'button-class' => 'btn-success',
@@ -5791,6 +5786,8 @@ function show_assignments() {
                   'url' => "rubrics.php?course=$course_code",
                   'icon' => 'fa-brands fa-readme'),
             ),false);
+    $tool_content .= $action_bar;
+
     if (count($result) > 0) {
 
         $tool_content .= "

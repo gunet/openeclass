@@ -337,7 +337,7 @@ switch ($action) {
                 $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$message</span></div>";
             }
             if ($is_editor) {
-                $tool_content .= action_bar(array(
+                $action_bar = action_bar(array(
                         array('title' => $langWikiCreateWiki,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;action=rqEdit",
                               'icon' => 'fa-plus-circle',
@@ -345,6 +345,7 @@ switch ($action) {
                               'button-class' => 'btn-success',
                               'show' => !isset($_GET['action']))
                         ),false);
+                $tool_content .= $action_bar;
             }
 
             // wiki list not empty

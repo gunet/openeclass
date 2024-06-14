@@ -42,7 +42,6 @@ if (!add_units_navigation(true)) {
 if ($is_editor) {
     load_js('tools.js');
 }
-$toolName = $langForums;
 
 $next = 0;
 if (isset($_GET['forum'])) {
@@ -79,7 +78,7 @@ if ($can_post) {
     } else if ($res_type) {
         $newtopicUrl = "view.php?course=$course_code&amp;res_type=forum_new_topic&amp;forum=$forum_id";
     }
-    $tool_content .=
+    $action_bar =
             action_bar(array(
                 array('title' => $langNewTopic,
                     'url' => $newtopicUrl,
@@ -87,6 +86,7 @@ if ($can_post) {
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')
                 ));
+    $tool_content .= $action_bar;
 }
 
 /*
@@ -151,23 +151,22 @@ if ($total_topics > TOPICS_PER_PAGE) { // navigation
     }
 
     $tool_content .= "
-    <nav class='clearfix'>
-      <ul class='pagination float-end'>
-        <li $privurlclass>
-            <a href='$prevurl' aria-label='Previous'>
-                <span aria-hidden='true'>&laquo;</span>
-            </a>
-        </li>
-        ".implode($paging)."
-        <li $nexturlclass>
-          <a href='$nexturl' aria-label='Next'>
-            <span aria-hidden='true'>&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+        <nav class='clearfix'>
+          <ul class='pagination float-end'>
+            <li $privurlclass>
+                <a href='$prevurl' aria-label='Previous'>
+                    <span aria-hidden='true'>&laquo;</span>
+                </a>
+            </li>
+            ".implode($paging)."
+            <li $nexturlclass>
+              <a href='$nexturl' aria-label='Next'>
+                <span aria-hidden='true'>&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
     ";
-
 }
 
 // delete topic

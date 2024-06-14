@@ -760,7 +760,7 @@ function get_learnPath_combined_progress($lpid, $lpUid): float {
  */
 function display_my_exercises($dialogBox, $style) {
 
-    global $langAddModulesButton, $langExercise, $langNoExercises, $langSelection, $course_code, $course_id, $urlServer;
+    global $langAdd, $langExercise, $langNoExercises, $langSelection, $course_code, $course_id, $urlServer, $langCancel;
 
     $output = "";
     /* --------------------------------------
@@ -803,7 +803,11 @@ function display_my_exercises($dialogBox, $style) {
                         . '</td></tr>';
             }
         $output .= "</table></div>";
-        $output .= "<div class='mt-4'><input class='btn submitAdminBtn c' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
+        $output .= "<div class='form-group'>";
+        $output .= "<div class='col-12 d-inline-flex justify-content-end gap-2 mt-4'>";
+        $output .= "<input class='btn submitAdminBtn c' type='submit' name='insertExercise' value='$langAdd'>";
+        $output .= "<a href='learningPathAdmin.php?course=$course_code&amp;path_id=$_SESSION[path_id]' class='btn cancelAdminBtn'>$langCancel</a>";
+        $output .= "</div></div>";
         $output .= "</form>";
     } else {
         $output .= "<div class='alert alert-warning'>
@@ -819,10 +823,10 @@ function display_my_exercises($dialogBox, $style) {
  * based in function list_docs() in 'modules/units/insert_doc.php'
  */
 
-function display_my_documents($dialogBox, $style)
+function display_my_documents()
 {
-    global $langUp, $langName, $langSize, $langDate, $langAddModulesButton,
-           $fileinfo, $langChoice,$langDirectory,
+    global $langUp, $langName, $langSize, $langDate, $langAdd,
+           $fileinfo, $langChoice,$langDirectory,  $langCancel,
            $course_code, $group_sql, $urlbase, $path;
 
 
@@ -909,9 +913,11 @@ function display_my_documents($dialogBox, $style)
         }
     }
     $content .= "</table></div>";
-    $content .= "<div class='mt-4'>";
-    $content .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
-    $content .= "</div>";
+    $content .= "<div class='form-group'>";
+    $content .= "<div class='col-12 d-inline-flex justify-content-end gap-2 mt-4'>";
+    $content .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedDocument' value='$langAdd'>";
+    $content .= "<a href='learningPathAdmin.php?course=$course_code&amp;path_id=$_SESSION[path_id]' class='btn cancelAdminBtn'>$langCancel</a>";
+    $content .= "</div></div>";
 
     return $content;
 }

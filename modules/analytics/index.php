@@ -36,7 +36,6 @@ if (isset($_POST['insert_analytics'])) {
 
         $analytics_id = insert_analytics($_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date, $created);
 
-        //Session::Messages($langAnalyticsInsertSuccess, 'alert-success');
         Session::flash('message',$langAnalyticsInsertSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
@@ -80,22 +79,22 @@ if (isset($_POST['insert_analytics'])) {
 } else if (isset($_REQUEST['edit_analytics'])) {
     if (isset($_REQUEST['analytics_id'])) {
         $analytics_id = $_REQUEST['analytics_id'];
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                     'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                     'icon' => 'fa fa-reply',
                     'level' => 'primary')
             ));
-
+        $tool_content .= $action_bar;
         edit_analytics_settings ($analytics_id);
     } else {
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                     'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa fa-reply',
                     'level' => 'primary')
             ));
-
+        $tool_content .= $action_bar;
         edit_analytics_settings ();
     }
 // Delete analytics
@@ -128,13 +127,13 @@ if (isset($_POST['insert_analytics'])) {
     redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements");
 } else if (isset($_REQUEST['edit_analytics_element'])){
     $analytics_id = $_REQUEST['analytics_id'];
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langBack,
                 'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements",
                 'icon' => 'fa fa-reply',
                 'level' => 'primary')
         ));
-
+    $tool_content .= $action_bar;
     if (isset($_REQUEST['analytics_element_id'])) {
         // Update analytics element
         $analytics_element_id = $_REQUEST['analytics_element_id'];
@@ -186,7 +185,6 @@ if (isset($_POST['insert_analytics'])) {
     if($v->validate()) {
         insert_analytics_element($_POST['analytics_id'], $_POST['resource'], $_POST['module_id'], $_POST['min_value'], $_POST['max_value'], $_POST['lower_threshold'], $_POST['upper_threshold'], $_POST['weight'], $_POST['analytics_element_id']);
 
-        //Session::Messages($langAnalyticsElementInsertSuccess, 'alert-success');
         Session::flash('message',$langAnalyticsElementInsertSuccess);
         Session::flash('alert-class', 'alert-success');
 
@@ -257,7 +255,7 @@ if (isset($_POST['insert_analytics'])) {
     if ($mode == 'perUser') {
         if(isset($_REQUEST['user_id'])) {
             $user_id = $_REQUEST['user_id'];
-            $tool_content .= action_bar(
+            $action_bar = action_bar(
                 array(
                     array('title' => $langBack,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
@@ -265,7 +263,7 @@ if (isset($_POST['insert_analytics'])) {
                         'level' => 'primary')
                 )
             );
-
+            $tool_content .= $action_bar;
             display_user_info($user_id);
             display_analytics_user($user_id, $analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next);
         } else {
@@ -289,12 +287,8 @@ if (isset($_POST['insert_analytics'])) {
                 $reverse_op = 'false';
             }
 
-            $tool_content .= action_bar(
+            $action_bar = action_bar(
                 array(
-                    array('title' => $langBack,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary'),
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                         'icon' => 'fa-bar-chart',
@@ -306,15 +300,12 @@ if (isset($_POST['insert_analytics'])) {
 
                 )
             );
+            $tool_content .= $action_bar;
             display_analytics_peruser($analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next, $orderby, $reverse, $period, $download);
         }
     } else if ( $mode == 'courseStatistics') {
-        $tool_content .= action_bar(
+        $action_bar = action_bar(
             array(
-                array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary'),
                 array('title' => $langAnalyticsViewPerUserGeneral,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
                     'icon' => 'fa-users',
@@ -322,31 +313,15 @@ if (isset($_POST['insert_analytics'])) {
 
             )
         );
+        $tool_content .= $action_bar;
         display_analytics_information($analytics_id);
         display_general_lists($analytics_id);
     } else if ($mode == 'showElements'){
-        $tool_content .= action_bar(
-            array(
-                array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
-            )
-        );
         display_analytics_elements($analytics_id);
     } else {
         //Should never get here
     }
 } else { // Display all learning analytics
-    $tool_content .= action_bar(
-        array(
-            array('title' => $langBack,
-                'url' => "{$urlServer}courses/$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
-        )
-    );
-
     display_learning_analytics();
 }
 

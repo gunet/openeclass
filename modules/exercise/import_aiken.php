@@ -18,8 +18,9 @@ $helpSubTopic = 'import_aiken';
 
 use Aiken\Parser\AikenParser;
 
-$pageName = $langImportAiken;
-$tool_content .= action_bar([
+$toolName = $langImportAiken;
+
+$action_bar = action_bar([
                     [
                         'title' => $langBack,
                         'url' => "question_pool.php?course=$course_code&amp;exerciseId=0",
@@ -27,6 +28,7 @@ $tool_content .= action_bar([
                         'level' => 'primary-label'
                     ]
                 ]);
+$tool_content .= $action_bar;
 
 $html = $quiz = '';
 $weight = 1;

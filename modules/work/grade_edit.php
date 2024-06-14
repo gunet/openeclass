@@ -37,14 +37,7 @@ $head_content .= '
         $(function () {
             $(document).on("click", ".linkdelete", function(e) {
                 var link = $(this).attr("href");
-                e.preventDefault();
-
-                // bootbox.confirm("'.$langConfirmDeleteStudentReview.'", function(result) {
-                //     if (result) {
-                //         document.location.href = link;
-                //     }
-                // });
-
+                e.preventDefault();               
                 bootbox.confirm({
                     closeButton: false,
                     title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
@@ -77,11 +70,9 @@ if (isset($_GET['ass_id']) ) { // delete student review
     $id = intval($_GET['id']);
     $a_id = intval($_GET['a_id']);
     if (delete_review($ass_id)) {
-        //Session::Messages($langStudentReviewDeleted, 'alert-success');
         Session::flash('message',$langStudentReviewDeleted);
         Session::flash('alert-class', 'alert-success');
     } else {
-        //Session::Messages($langDelError, 'alert-danger');
         Session::flash('message',$langDelError);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -126,19 +117,6 @@ function delete_review($id) {
 
 /**
  * @brief Show to professor details of a student's submission and allow editing of fields
- * @global type $langNoAssignmentsForReview
- * @global type $langGradeOk
- * @global string $tool_content
- * @global type $course_code
- * @global type $langCancel
- * @global type $langBack
- * @global type $assign
- * @global type $langWorkOnlineText
- * @global type $course_id
- * @global type $langCommentsFile
- * @global type $langGradebookGrade
- * @global type $langDeleteSubmission
- * @global type $pageName
  * @param type $id
  * @param type $sid
  * @param type $assign (contains an array with the assignment's details)
@@ -423,14 +401,7 @@ function show_edit_form($id, $sid, $assign) {
 							  . "</div>";
 
 			}
-			$tool_content .= action_bar(array(
-					array(
-						'title' => $langBack,
-						'url' => "index.php?course=$course_code&id=$sub->assignment_id",
-						'icon' => "fa-reply",
-						'level' => 'primary'
-					)
-				))."
+			$tool_content .= "
                 <div class='d-lg-flex gap-4 mt-4'>
                 <div class='flex-grow-1'>
 			<div class='form-wrapper form-edit rounded'>

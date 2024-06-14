@@ -424,14 +424,6 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 }
 
 
-
-
-
-
-$tool_content .= "<div class='col-12 d-flex justify-content-between align-items-start gap-3 flex-wrap mt-5'>";
-
-$tool_content .= "<h2>$langEditQuestions</h2>";
-
 $tool_content .= "<div>";
     $tool_content .= action_bar(array(
         array('title' => $langNewQu,
@@ -455,7 +447,6 @@ $tool_content .= "<div>";
             'level' => 'primary-label',
             'icon' => 'fa-bank')),
         false);
-$tool_content .= "</div>";
 $tool_content .= "</div>";
 
 if ($nbrQuestions) {

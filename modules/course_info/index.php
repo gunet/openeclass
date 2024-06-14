@@ -230,10 +230,6 @@ if (isset($_POST['submit'])) {
     warnCourseInvalidDepartment();
 
     $data['action_bar'] = action_bar([
-        ['title' => $langBack,
-            'url' => "{$urlServer}courses/$course_code/index.php",
-            'icon' => 'fa-reply'
-        ],
         ['title' => $langCourseDescription,
             'url' => "../course_description/index.php?course=$course_code&" . generate_csrf_token_link_parameter(),
             'icon' => 'fa-info-circle'],
@@ -311,7 +307,7 @@ if (isset($_POST['submit'])) {
     }else{
         $data['course_type_sessions'] = '';
     }
-    
+
 
     $course_license = $c->course_license;
     if ($course_license > 0 and $course_license < 10) {

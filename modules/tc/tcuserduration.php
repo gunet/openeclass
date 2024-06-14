@@ -45,7 +45,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 if (isset($_GET['id'])) {
     $meetingid = get_tc_meeting_id($_GET['id']);
     if (!isset($_GET['pdf']) and !isset($_GET['xls'])) {
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langDumpPDF,
                 'url' => "tcuserduration.php?course=$course_code&amp;id=$_GET[id]&amp;pdf=true",
                 'icon' => 'fa-file-pdf',
@@ -55,12 +55,9 @@ if (isset($_GET['id'])) {
                 'url' => "tcuserduration.php?course=$course_code&amp;id=$_GET[id]&amp;xls=true",
                 'icon' => 'fa-file-excel',
                 'level' => 'primary-label',
-                'show' => $is_course_reviewer),
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
+                'show' => $is_course_reviewer)
         ));
+        $tool_content .= $action_bar;
     }
 } else {
     if (!isset($_GET['pdf']) and !isset($_GET['xls'])) {
@@ -77,7 +74,7 @@ if (isset($_GET['id'])) {
             $xls_url = "tcuserduration.php?course=$course_code&xls=true";
             $back_url = "index.php?course=$course_code";
         }
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langDumpPDF,
                 'url' => "$url",
                 'icon' => 'fa-file-pdf',
@@ -87,12 +84,9 @@ if (isset($_GET['id'])) {
                 'url' => "$xls_url",
                 'icon' => 'fa-file-excel',
                 'level' => 'primary-label',
-                'show' => $is_course_reviewer),
-            array('title' => $langBack,
-                'url' => "$back_url",
-                'icon' => 'fa-reply',
-                'level' => 'primary')
+                'show' => $is_course_reviewer)
         ));
+        $tool_content .= $action_bar;
     }
 }
 

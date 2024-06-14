@@ -250,11 +250,12 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
  * @brief exercise teacher view
  * @param type $exercise_id
  */
-function display_exercise($exercise_id) {
+function display_exercise($exercise_id): void
+{
 
     global $tool_content, $head_content, $is_editor, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langTotalScore, $langQuestionsManagement,
-           $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
+           $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2, $action_bar,
            $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions, $langQuestionFeedback,
            $langUsedInSeveralExercises, $langModifyInAllExercises, $langModifyInThisExercise;
 
@@ -292,7 +293,7 @@ function display_exercise($exercise_id) {
     $question_list = $exercise->selectQuestionList();
     $totalWeighting = $exercise->selectTotalWeighting();
 
-    $tool_content .= action_bar([
+    $action_bar = action_bar([
         ['title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
@@ -313,6 +314,7 @@ function display_exercise($exercise_id) {
         ]
     ]);
 
+    $tool_content .= $action_bar;
     $tool_content .= "
     <div class='col-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>

@@ -65,12 +65,6 @@ $messBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearnPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']), 'name' => $langAdm);
 $toolName = $langInsertMyExerciseToolName;
-$tool_content .=
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary'))) ;
 
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
 foreach ($resultex as $listex) {
@@ -93,8 +87,7 @@ foreach ($resultex as $listex) {
             }
         }
         if ($incompatible) {
-            //Session::Messages(q($listex->title) . ": " . $langExIncompatibleWithLP, 'alert-warning');
-            Session::flash('message',q($listex->title) . ": " . $langExIncompatibleWithLP); 
+            Session::flash('message',q($listex->title) . ": " . $langExIncompatibleWithLP);
             Session::flash('alert-class', 'alert-warning');
             continue;
         }
@@ -131,8 +124,7 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
-            //Session::Messages($langInsertedAsModule, 'alert-info');
-            Session::flash('message',$langInsertedAsModule); 
+            Session::flash('message',$langInsertedAsModule);
             Session::flash('alert-class', 'alert-info');
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
@@ -150,12 +142,10 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-                //Session::Messages($langInsertedAsModule, 'alert-info');
-                Session::flash('message',$langInsertedAsModule); 
+                Session::flash('message',$langInsertedAsModule);
                 Session::flash('alert-class', 'alert-info');
             } else {
-                //Session::Messages($langAlreadyUsed, 'alert-warning');
-                Session::flash('message',$langAlreadyUsed); 
+                Session::flash('message',$langAlreadyUsed);
                 Session::flash('alert-class', 'alert-warning');
             }
         }
