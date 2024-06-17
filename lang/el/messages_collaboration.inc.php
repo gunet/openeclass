@@ -1474,7 +1474,7 @@ $langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρ�
 $langCompletedSession = "Ολοκληρωμένη";
 $langCompletedConsulting = "Ολοκλήρωση συμβουλευτικής";
 $langAddSessionConsultingCompleted = "Η καταχώριση των συνεδριών για την ολοκλήρωση συμβουλευτικής ολοκληρώθηκε.";
-$langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλες οι διαθέσιμες συνεδρίες για την συγκεκριμένη συνεργασία. </br>
+$langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλες οι συνεδρίες οι οποίες έχουν ενεργοποιημένη την ολοκλήρωση συνεδρίας στην συγκεκριμένη συνεργασία. </br>
                                 Επιλέξτε ποιες από αυτές θα αφορούν την ολοκλήρωση συμβουλευτικής ενός χρήστη.";
 $langTableCompletedConsulting = "Λίστα συνεδριών ολοκλήρωσης συμβουλευτικής";
 $langCompletedSessions = "Ολοκληρωμένη συνεδρία";

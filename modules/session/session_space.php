@@ -195,6 +195,17 @@ if($is_tutor_course or $is_consultant){
                                                                 WHERE participants = ?d)
                                                     ORDER BY start ASC",1,$course_id,$uid); 
 
+    $visible_sessions_id = array();
+    $visible_user_sessions = findUserVisibleSessions($uid, $data['all_session']);
+    foreach ($visible_user_sessions as $d) {
+        $visible_sessions_id[] = $d->id;
+    }
+    if(!in_array($sessionID, $visible_sessions_id)){
+        Session::flash('message',$langSessionNotCompleted);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/index.php?course=".$course_code);
+    }
+
     $data['action_bar'] = action_bar([
         [ 'title' => $langBack,
           'url' => $urlAppend . 'modules/session/index.php?course=' . $course_code,
