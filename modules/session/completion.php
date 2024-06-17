@@ -31,7 +31,7 @@ if(isset($_GET['addSessions'])){
   $require_consultant = true;
 }
 $require_help = TRUE;
-$helpTopic = 'course_sessions';
+$helpTopic = 'completion_consulting';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';

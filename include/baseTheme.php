@@ -2497,6 +2497,9 @@ function view($view_file, $view_data = array()) {
                 .label-container > input[type='checkbox'] {
                     background-color: $theme_options_styles[BgCheckboxes];
                 }
+                #display_sessions_switcher{
+                    background-color: $theme_options_styles[BgCheckboxes];
+                }
             ";
         }
 
@@ -2511,6 +2514,9 @@ function view($view_file, $view_data = array()) {
                 .label-container > input[type='checkbox'] {
                     border: 1px solid $theme_options_styles[BgBorderCheckboxes];
                 }
+                #display_sessions_switcher{
+                    border: 1px solid $theme_options_styles[BgBorderCheckboxes];
+                }
             ";
         }
 
@@ -2523,6 +2529,9 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['ClCheckboxes'])){
             $styles_str .= "
                 .label-container {
+                    color: $theme_options_styles[ClCheckboxes];
+                }
+                #display_sessions_switcher{
                     color: $theme_options_styles[ClCheckboxes];
                 }
             ";
@@ -2543,6 +2552,10 @@ function view($view_file, $view_data = array()) {
                 .label-container > input[type='checkbox']:active {
                     border: 1px solid $theme_options_styles[BgActiveCheckboxes];
                 }
+                #display_sessions_switcher:checked{
+                    border: 1px solid $theme_options_styles[BgActiveCheckboxes];
+                    background-color: $theme_options_styles[BgActiveCheckboxes];
+                }
             ";
         }
 
@@ -2556,6 +2569,9 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .label-container:has(input[type='checkbox']:checked),
                 .label-container:has(input[type='checkbox']:checked) .fa{
+                    color: $theme_options_styles[ClActiveCheckboxes];
+                }
+                #display_sessions_switcher:checked{
                     color: $theme_options_styles[ClActiveCheckboxes];
                 }
             ";
@@ -2584,6 +2600,9 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['ClInactiveCheckboxes'])){
             $styles_str .= "
                 .label-container:has(input[type='checkbox']:disabled){
+                    color: $theme_options_styles[ClInactiveCheckboxes];
+                }
+                #display_sessions_switcher:disabled{
                     color: $theme_options_styles[ClInactiveCheckboxes];
                 }
             ";

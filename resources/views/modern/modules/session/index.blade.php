@@ -3,38 +3,14 @@
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
-            $('#table_sessions').DataTable({
-                'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,
-                'searchDelay': 1000,
-                'aoColumns': [
-                    {'bSortable' : false },
-                    {'bSortable' : false },
-                    {'bSortable' : false },
-                    {'bSortable' : false },
-                ],
-                'order' : [],
-                'oLanguage': {
-                    'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
-                    'sZeroRecords': '{{ trans('langNoResult') }}',
-                    'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                    'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
-                    'sInfoFiltered': '',
-                    'sInfoPostFix': '',
-                    'sSearch': '',
-                    'sUrl': '',
-                    'oPaginate': {
-                        'sFirst': '&laquo;',
-                        'sPrevious': '&lsaquo;',
-                        'sNext': '&rsaquo;',
-                        'sLast': '&raquo;'
-                    }
+            $('#display_sessions_switcher').on('click', function(e){
+                if($("#display_sessions_switcher").prop('checked') == true){
+                    document.getElementById("show_remote").value = 1;
+                }else{
+                    document.getElementById("show_remote").value = 0;
                 }
-            });
-            $('.dataTables_filter input').attr({
-                class: 'form-control input-sm ms-0 mb-3',
-                placeholder: '{{ trans('langSearch') }}...'
-            });
+                document.getElementById("showSessions").submit();
+            })
         });
 
     </script>
@@ -117,134 +93,23 @@
                     </div>
                     @endif
 
+                    <div class='col-12 d-flex justify-content-start mb-4'>
+                        <div>
+                            <div class='display_sessions_switcher_labels d-flex justify-content-between align-items-center'>
+                                <p class=' mb-1'>{{ trans('langNotRemote') }}</p>
+                                <p class=' mb-1'>{{ trans('langRemote') }}</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <form id='showSessions' method="post" action="{{ $SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
+                                    <input type='hidden' name='show_remote' id='show_remote'>
+                                    <input class="form-check-input" type="checkbox" id="display_sessions_switcher" {!! $remoteType==1 ? 'checked' : '' !!}>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class='col-12'>
                         @if(count($individuals_group_sessions) > 0)
-
-                        {{--
-                            <table class='table-default' id='table_sessions'>
-                                <thead>
-                                    <tr>
-                                        <th class='px-2'>{{ trans('langTitle') }}</th>
-                                        <th class='px-2'>{{ trans('langStart') }}</th>
-                                        <th class='px-2'>{{ trans('langFinish') }}</th>
-                                        <th class='px-2'></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($individuals_group_sessions as $s)
-                                        <tr>
-                                            <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
-                                                <a class="link-color @if(!$is_tutor_course && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
-                                                    href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
-                                                    {{ $s->title }}
-                                                </a>
-                                            </td>
-                                            <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
-                                                {{ format_locale_date(strtotime($s->start), 'short') }}
-                                            </td>
-                                            <td class='@if($s->finish < $current_time or !$s->visible) opacity-help @endif'>
-                                                {{ format_locale_date(strtotime($s->finish), 'short') }}
-                                            </td>
-                                            <td class='text-end'>
-                                                {!! action_button(array(
-                                                    array('title' => trans('langMoreCourseInfo'),
-                                                            'url' => "#",
-                                                            'icon-class' => "more-info-session",
-                                                            'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#MoreSessionInfo{$s->id}'",
-                                                            'icon' => 'fa-solid fa-circle-info'),
-                                                    array('title' => trans('langEdit'),
-                                                            'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
-                                                            'icon-class' => "edit-session",
-                                                            'icon' => 'fa-edit',
-                                                            'show' => ($is_tutor_course or $is_consultant)),
-                                                    array('title' => trans('langDelete'),
-                                                            'url' => "#",
-                                                            'icon-class' => "delete-session",
-                                                            'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
-                                                            'icon' => 'fa-xmark',
-                                                            'show' => ($is_tutor_course or $is_consultant))
-                                                    )
-                                                ) !!}
-                                            </td>
-                                        </tr>
-
-                                        <div class="modal fade" id="MoreSessionInfo{{ $s->id }}" tabindex="-1" aria-labelledby="MoreSessionInfoLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-md modal-success">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <div class='modal-title'>
-                                                            <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                                            <h3 class='modal-title-default text-center mb-0 mt-2' id="MoreSessionInfoLabel">{!! trans('langMoreCourseInfo') !!}</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-body text-center">
-                                                        <ul class='list-group lisy-group-flush'>
-                                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                                <p>{{ trans('langSSession') }}</p>
-                                                                <p>
-                                                                    @if($s->type=='one')
-                                                                        {{ trans('langIndividualS') }}
-                                                                    @else
-                                                                        {{ trans('langGroupS') }}
-                                                                    @endif
-                                                                </p>
-                                                            </li>
-                                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                                <p>{{ trans('langTypeRemote') }}</p>
-                                                                <p>
-                                                                    @if($s->type_remote)
-                                                                        {{ trans('langRemote') }}
-                                                                    @else
-                                                                        {{ trans('langNotRemote') }}
-                                                                    @endif
-                                                                </p>
-                                                            </li>
-                                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                                <p>{{ trans('langStatement') }}</p>
-                                                                <p>
-                                                                    @if($s->start < $current_time && $current_time < $s->finish)
-                                                                        {{ trans('langInProgress') }}
-                                                                    @elseif($current_time < $s->start)
-                                                                        {{ trans('langSessionHasNotStarted') }}
-                                                                    @else
-                                                                        <span class='text-danger TextBold'>{{ trans('langSessionHasExpired') }}</span>
-                                                                    @endif
-                                                                </p>
-                                                            </li>
-                                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                                <p>{{ trans('langVisible') }}</p>
-                                                                <p>
-                                                                    @if(!$s->visible)
-                                                                        {{ trans('langNo')}}
-                                                                    @else
-                                                                        {{ trans('langYes')}}
-                                                                    @endif
-                                                                </p>
-                                                            </li>
-                                                            @if(!$is_tutor_course && !$is_consultant)
-                                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                                <p>{{ trans('langCompletedSession') }}</p>
-                                                                <p>
-                                                                    {!! $s->icon !!}
-                                                                </p>
-                                                            </li>
-                                                            @endif
-                                                        </ul>
-                                                    </div>
-                                                    <div class="modal-footer d-flex justify-content-center align-items-center">
-                                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langClose') }}</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                        --}}
-
-
-
                             <div class='row row-cols-1 m-auto'>
                                 @foreach($individuals_group_sessions as $s)
                                     <div class='col px-0 mb-4'>

@@ -28,7 +28,7 @@
 $require_login = true;
 $require_current_course = true;
 $require_help = TRUE;
-$helpTopic = 'course_sessions';
+$helpTopic = 'session_space';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
@@ -58,6 +58,7 @@ session_exists($sessionID);
 
 $pageName = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
+$toolName = $langSession;
 
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
@@ -206,13 +207,6 @@ if($is_tutor_course or $is_consultant){
         redirect_to_home_page("modules/session/index.php?course=".$course_code);
     }
 
-    $data['action_bar'] = action_bar([
-        [ 'title' => $langBack,
-          'url' => $urlAppend . 'modules/session/index.php?course=' . $course_code,
-          'icon' => 'fa-reply',
-          'button-class' => 'btn-success',
-          'level' => 'primary-label' ]
-    ], false);
 }
 
 $data['participants'] = Database::get()->queryArray("SELECT participants FROM mod_session_users 

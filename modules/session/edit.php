@@ -29,7 +29,7 @@ $require_login = true;
 $require_current_course = true;
 $require_consultant = true;
 $require_help = TRUE;
-$helpTopic = 'course_sessions';
+$helpTopic = 'edit_session';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';

@@ -1491,7 +1491,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                                                                                 WHERE id = ?d", $session_prerequisite_id->prerequisite_session)->title;
 
                                         $tool_content .= "
-                                        <div class='table-responsive'>
+                                        <div class='table-responsive mt-0'>
                                             <table class='table-default'>
                                                 <tr>
                                                     <td><p class='text-start'>$prereq_session_title</p></td>

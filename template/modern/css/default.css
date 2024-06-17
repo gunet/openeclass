@@ -5234,3 +5234,24 @@ body:has(.fixed-announcement) .btn-quick-note{
 .translate-middle.badge{
   color: #ffffff;
 }
+
+
+.display_sessions_switcher_labels{
+  width: 250px;
+}
+#display_sessions_switcher{
+  width: 250px;
+  height: 15px;
+  -webkit-transition: all .2s ease;
+  -moz-transition: all .2s ease;
+  -o-transition: all .2s ease;
+  -ms-transition: all .2s ease;
+  transition: all .2s ease;
+}
+#display_sessions_switcher:hover{
+  cursor:  url(../images/pointer.png), auto;
+}
+#display_sessions_switcher:focus{
+  outline: 0;
+  box-shadow: none;
+}

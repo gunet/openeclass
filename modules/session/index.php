@@ -50,6 +50,15 @@ $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 student_view_is_active();
 
+// Show remote or not sessions
+$remoteType = 1;
+$sql_remote = "AND type_remote = 1";
+if(isset($_POST['show_remote']) and $_POST['show_remote'] == 0){
+    $sql_remote = "AND type_remote = 0";
+    $remoteType = 0;
+}
+$data['remoteType'] = $remoteType;
+
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
     $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $_POST['session_id']);
@@ -109,12 +118,14 @@ if($is_tutor_course or $is_consultant){
     if($is_tutor_course){ // is tutor course
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                         WHERE course_id = ?d
+                                                                        $sql_remote
                                                                         ORDER BY start ASC",$course_id); 
                                                                         
     }elseif($is_consultant){// is consultant user
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                     WHERE course_id = ?d
                                                                     AND creator = ?d
+                                                                    $sql_remote
                                                                     ORDER BY start ASC",$course_id,$uid); 
     }
 
@@ -142,15 +153,11 @@ if($is_tutor_course or $is_consultant){
 }else{// is simple user
 
     $data['action_bar'] = action_bar([
-        [ 'title' => $langBack,
-          'url' => $urlAppend . 'courses/' . $course_code . '/',
-          'icon' => 'fa-reply',
-          'button-class' => 'btn-success',
-          'level' => 'primary-label' ],
         [
             'title' => $langTableCompletedConsulting,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
             'icon' => 'fa-solid fa-list',
+            'level' => 'primary',
             'button-class' => 'btn-success'
         ],
     ], false);
@@ -158,6 +165,7 @@ if($is_tutor_course or $is_consultant){
     $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                             WHERE visible = ?d
                                             AND course_id = ?d
+                                            $sql_remote
                                             AND id IN (SELECT session_id FROM mod_session_users
                                                         WHERE participants = ?d)
                                             ORDER BY start ASC",1,$course_id,$uid); 
