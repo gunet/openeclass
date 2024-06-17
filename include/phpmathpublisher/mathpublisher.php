@@ -1006,6 +1006,9 @@ $blanc=ImageColorAllocate($result,255,255,255);
 $blanc=imagecolortransparent($result,$blanc);
 ImageFilledRectangle($result,0,0,$largeur-1,$hauteur-1,$blanc);
 $pos = 0;
+if (!isset($img)) {
+    $img = [];
+}
 for($i = 0; $i < count($img); $i++)
 	{
 	if(isset($img[$i]))
