@@ -63,6 +63,11 @@ if(isset($_POST['delete_session'])){
         Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
     }
     Database::get()->query("DELETE FROM session_prerequisite WHERE session_id = ?d OR prerequisite_session = ?d",$_POST['session_id'],$_POST['session_id']);
+    $dirname = "$webDir/courses/$course_code/session/session_" . $_POST['session_id'];
+    if (file_exists($dirname)) {
+        array_map('unlink', glob("$dirname/*.*"));
+        rmdir($dirname);
+    }
     Database::get()->query("DELETE FROM mod_session WHERE id = ?d",$_POST['session_id']);
     Session::flash('message',$langDelSessionSuccess);
     Session::flash('alert-class', 'alert-success');

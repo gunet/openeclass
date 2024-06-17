@@ -101,9 +101,24 @@ if(isset($_GET['addSessions'])){
   $pageName = $langTableCompletedConsulting;
   $res = Database::get()->queryArray("SELECT session_id FROM mod_session_completion WHERE course_id = ?d",$course_id);
   $completedSessionByUsers = array();
+  $visible_sessions_id = array();
   if(isset($_GET['showCompletedConsulting']) && count($res) > 0){// for user-consultant or tutor
     if(count($res) > 0){
+      if(!$is_tutor_course && !$is_consultant){
+        $all_user_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                          WHERE visible = ?d
+                                                          AND course_id = ?d
+                                                          AND id IN (SELECT session_id FROM mod_session_users
+                                                                      WHERE participants = ?d)
+                                                          ORDER BY start ASC",1,$course_id,$uid); 
+
+        $visible_user_sessions = findUserVisibleSessions($uid, $all_user_sessions);
+        foreach ($visible_user_sessions as $d) {
+            $visible_sessions_id[] = $d->id;
+        }
+      }
       foreach($res as $r){
+        $hadIncompletedPrereq = 0;
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$r->session_id);
         if($is_tutor_course or $is_consultant){
           if($is_consultant && !$is_tutor_course){
@@ -142,6 +157,9 @@ if(isset($_GET['addSessions'])){
             if(!is_session_visible($course_id,$r->session_id)){
               continue;
             }
+            if(!in_array($r->session_id, $visible_sessions_id)){
+              $hadIncompletedPrereq = 1;
+            }
             $badge_id = $badge->id;
             $per = get_cert_percentage_completion_by_user('badge',$badge_id,$uid);
             if ($per == 100) {
@@ -153,7 +171,8 @@ if(isset($_GET['addSessions'])){
               'user' => participant_name($uid),
               'session_id' => $r->session_id,
               'icon' => $icon,
-              'info' => ($per == 100) ? $langCompletedSessions : $langNotCompletedSession
+              'info' => ($per == 100) ? $langCompletedSessions : $langNotCompletedSession,
+              'hasIncompletePrereq' => $hadIncompletedPrereq
             ];
             $completedSessionByUsers[$r->session_id] = $userParticipant;
           }

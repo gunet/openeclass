@@ -355,6 +355,8 @@
                                                             </div>
                                                         @elseif($s->has_badge == -1)
                                                             <div class='secondary-text'>{{ trans('langSessionNotStarted') }}</div>
+                                                        @elseif($s->has_badge == -2)
+                                                            <div class='secondary-text'>{{ trans('langSessionNotCompleted') }}</div>
                                                         @else
                                                             <div class='secondary-text'>{{ trans('langSessionHasNotBadge') }}</div>
                                                         @endif

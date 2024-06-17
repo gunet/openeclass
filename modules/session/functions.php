@@ -2156,7 +2156,7 @@ function delete_session_prerequisite($session_id) {
 /**
  * @global type $course_id
  * @param int $uid
- * @param type $all_units
+ * @param type $all_sessions
  * @return array
  */
 function findUserVisibleSessions($uid, $all_sessions) {
