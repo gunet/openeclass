@@ -51,13 +51,27 @@ $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 student_view_is_active();
 
 // Show remote or not sessions
-$remoteType = 1;
-$sql_remote = "AND type_remote = 1";
-if(isset($_POST['show_remote']) and $_POST['show_remote'] == 0){
+$remoteType = -1;
+$sql_remote = '';
+if(isset($_POST['remoteType']) and $_POST['remoteType'] == 1){
+    $sql_remote = "AND type_remote = 1";
+    $remoteType = 1;
+}elseif(isset($_POST['remoteType']) and $_POST['remoteType'] == 0){
     $sql_remote = "AND type_remote = 0";
     $remoteType = 0;
 }
 $data['remoteType'] = $remoteType;
+
+$sessionType = '';
+$sql_session = '';
+if(isset($_POST['sessionType']) and $_POST['sessionType'] == 'one'){
+    $sql_session = "AND type = 'one'";
+    $sessionType = 'one';
+}elseif(isset($_POST['sessionType']) and $_POST['sessionType'] == 'group'){
+    $sql_session = "AND type = 'group'";
+    $sessionType = 'group';
+}
+$data['sessionType'] = $sessionType;
 
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
@@ -119,6 +133,7 @@ if($is_tutor_course or $is_consultant){
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                         WHERE course_id = ?d
                                                                         $sql_remote
+                                                                        $sql_session
                                                                         ORDER BY start ASC",$course_id); 
                                                                         
     }elseif($is_consultant){// is consultant user
@@ -126,6 +141,7 @@ if($is_tutor_course or $is_consultant){
                                                                     WHERE course_id = ?d
                                                                     AND creator = ?d
                                                                     $sql_remote
+                                                                    $sql_session
                                                                     ORDER BY start ASC",$course_id,$uid); 
     }
 
@@ -166,6 +182,7 @@ if($is_tutor_course or $is_consultant){
                                             WHERE visible = ?d
                                             AND course_id = ?d
                                             $sql_remote
+                                            $sql_session
                                             AND id IN (SELECT session_id FROM mod_session_users
                                                         WHERE participants = ?d)
                                             ORDER BY start ASC",1,$course_id,$uid); 

@@ -1,20 +1,6 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-    <script type='text/javascript'>
-        $(document).ready(function() {
-            $('#display_sessions_switcher').on('click', function(e){
-                if($("#display_sessions_switcher").prop('checked') == true){
-                    document.getElementById("show_remote").value = 1;
-                }else{
-                    document.getElementById("show_remote").value = 0;
-                }
-                document.getElementById("showSessions").submit();
-            })
-        });
-
-    </script>
-
     <!-- About deletion -->
     <script>
         $(function() {
@@ -93,18 +79,22 @@
                     </div>
                     @endif
 
-                    <div class='col-12 d-flex justify-content-start mb-4'>
-                        <div>
-                            <div class='display_sessions_switcher_labels d-flex justify-content-between align-items-center'>
-                                <p class=' mb-1'>{{ trans('langNotRemote') }}</p>
-                                <p class=' mb-1'>{{ trans('langRemote') }}</p>
-                            </div>
-                            <div class="form-check form-switch">
-                                <form id='showSessions' method="post" action="{{ $SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
-                                    <input type='hidden' name='show_remote' id='show_remote'>
-                                    <input class="form-check-input" type="checkbox" id="display_sessions_switcher" {!! $remoteType==1 ? 'checked' : '' !!}>
-                                </form>
-                            </div>
+                    <div class='col-12 d-flex justify-content-between align-items-lg-center align-items-start gap-3 flex-wrap mb-4'>
+                        <div class='control-label-notes mt-lg-0 mt-2'>{{ trans('langSearch') }}:</div>
+                        <div class='flex-fill'>
+                            <form class='d-flex gap-3 flex-wrap flex-lg-nowrap' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
+                                <select class='form-select mb-0 mt-0' name='remoteType'>
+                                    <option value='-1'>{{ trans('langSelect') }}</option>
+                                    <option value='0' {!! $remoteType==0 ? 'selected' : '' !!}>{{ trans('langNotRemote') }}</option>
+                                    <option value='1' {!! $remoteType==1 ? 'selected' : '' !!}>{{ trans('langRemote') }}</option>
+                                </select>
+                                <select class='form-select mb-0 mt-0' name='sessionType'>
+                                    <option value='other'>{{ trans('langSelect') }}</option>
+                                    <option value='one' {!! $sessionType=='one' ? 'selected' : '' !!}>{{ trans('langIndividualS') }}</option>
+                                    <option value='group' {!! $sessionType=='group' ? 'selected' : '' !!}>{{ trans('langGroupS') }}</option>
+                                </select>
+                                <button class='w-50 mt-0 gap-1' type='submit'><i class="fa-solid fa-magnifying-glass"></i>{{ trans('langSearch') }}</button>
+                            </form>
                         </div>
                     </div>
 
