@@ -27,16 +27,8 @@ $helpTopic = 'course_users';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
-$toolName = $langUsers;
-$pageName = $langAddManyUsers;
+$toolName = $langAddManyUsers;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langUsers);
-
-$tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'
-                 )));
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -160,5 +152,5 @@ function adduser($userid, $cid) {
                                                              'right' => '+5'));
         return true;
     }
-    
+
 }

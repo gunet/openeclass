@@ -205,13 +205,6 @@ $pageName = $langOldStats;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 $navigation[] = array('url' => 'index.php?course=' . $course_code .'&gc_stats=true', 'name' => $langPlatformGenStats);
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "index.php?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
-            ),false);
-
 /****   C3 plot   ****/
 $tool_content .= "<div class='col-12 plotscontainer mt-4'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";

@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
                     <div class='col-12 mb-4'>
-                        <h1>{{ trans('langPlatformIdentity') }}</h1>
+                        <h2>{{ $toolName }}</h2>
                     </div>
 
                     <div class='col-12'>
@@ -70,9 +70,9 @@
                             </div>
                         </div>
                     </div>
-                    
 
-                    
+
+
                     <div class='col-12 mt-5'>
                         <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
                             <div class='col'>
@@ -118,7 +118,7 @@
                         </div>
                     </div>
 
-                
+
         </div>
     </div>
 </div>

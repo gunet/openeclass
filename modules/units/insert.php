@@ -46,37 +46,31 @@ if ($id != -1) {
         draw('', 2, null, $head_content);
         exit;
     }
-    $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", "name" => $q->title);
+    $navigation[] = array('url' => "index.php?course=$course_code&id=$id", "name" => $q->title);
     $backURL = "index.php?course=$course_code&amp;id=$id";
 } else {
     // id=-1 means we came from common documents insert button
     $backURL = $urlAppend . "modules/document/index.php?course=$course_code&amp;openDir=" . $_GET['dir'];
 }
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => $backURL,
-                      'icon' => 'fa-reply',
-                      'level' => 'primary')));
-
 $fc_type = $act_name ="";
 
 
 if(isset($_GET['fc_type'])){
-    
+
     $fc_type = $_GET['fc_type'];
     $_SESSION['fc_type'] =$fc_type ;
-    
+
 }
 if(isset($_GET['act_name'])){
     $act_name = $_GET['act_name'];
     $_SESSION['act_name'] =$act_name;
-    
+
 }
 if(isset($_GET['act_id'])){
     $act_id = $_GET['act_id'];
     $_SESSION['act_id'] =$act_id;
-    
+
 }
 
 
@@ -484,7 +478,7 @@ function insert_exercise($id) {
                 $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='exercise', title = ?s,
                                     comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                             $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
-            }                
+            }
             $uresId = $q->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
         }
@@ -594,7 +588,7 @@ function insert_poll($id) {
 function insert_wiki($id) {
     global $course_code, $course_id;
     if(isset($_POST['wiki'])){
-        
+
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['wiki'] as $wiki_id) {
             $order++;

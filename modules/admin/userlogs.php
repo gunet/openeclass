@@ -118,11 +118,7 @@ $u_module_id = isset($_GET['u_module_id']) ? intval($_GET['u_module_id']) : '-1'
 if (isDepartmentAdmin()) {
     validateUserNodes(intval($u), true);
 }
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "listusers.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary')),false);
+
 $log = new Log();
 
 // display logs

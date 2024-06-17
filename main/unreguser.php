@@ -31,11 +31,6 @@ $navigation[] = array('url' => 'profile/profile.php', 'name' => $langModifyProfi
 if (!isset($_POST['doit'])) {
     // admin cannot be deleted
     if ($is_admin) {
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "profile/display_profile.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
         $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langAdminNo</span></div></div>";
         draw($tool_content, 1);
         exit;
@@ -72,11 +67,6 @@ if (!isset($_POST['doit'])) {
                 </form>
               </div></div>";
         } else {
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "profile/profile.php",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')));
             $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNote:</br>$langExplain</span></div></div>";
         }
     }  //endif is admin
@@ -96,11 +86,12 @@ if (!isset($_POST['doit'])) {
         session_destroy();
         $uid = 0;
 
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langLogout,
                 'url' => "../index.php?logout=yes",
                 'icon' => 'fa-sign-out',
                 'level' => 'primary-label')));
+        $tool_content .= $action_bar;
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langDelSuccess</br>$langThanks</span></div></div>";
     }
 }

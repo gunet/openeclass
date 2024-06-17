@@ -12,12 +12,6 @@ require_once 'modules/admin/modalconfirmation.php';
 
 /**
  * @brief  Process resource actions
- * @global type $tool_content
- * @global type $id
- * @global type $langResourceCourseUnitDeleted
- * @global type $langResourceUnitModified
- * @global type $course_id
- * @global type $course_code
  * @return string
  */
 function process_actions() {
@@ -34,13 +28,8 @@ function process_actions() {
         if (check_admin_unit_resource($res_id)) {
             $q = Database::get()->querySingle("SELECT title FROM course_units
                 WHERE id = ?d AND course_id = ?d", $id, $course_id);
-            $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", 'name' => $q->title);
+            $navigation[] = array('url' => "index.php?course=$course_code&id=$id", 'name' => $q->title);
             $pageName = $langEditChange;
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "{$urlAppend}modules/units/index.php?course=$course_code&amp;id=$id",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary')));
             $tool_content .= edit_res($res_id);
             draw($tool_content, 2, null, $head_content);
             exit;
@@ -74,7 +63,6 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-           // Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
             Session::flash('message',$langResourceCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);

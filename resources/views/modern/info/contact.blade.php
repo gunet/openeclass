@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
             <div class='col-12 mb-4'>
-                <h1>{{ trans('langContact') }}</h1>
+                <h2>{{ $toolName }}</h2>
             </div>
 
             <div class='col-12'>
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
 
                     <div class='col'>
                         <div class='card panelCard px-lg-4 py-lg-3 w-100'>
@@ -57,8 +57,8 @@
                             </div>
                         </div>
                     </div>
-                
-                
+
+
                     <div class='col'>
                         <div class='card panelCard px-lg-4 py-lg-3 w-100'>
                             <div class='card-body'>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
         </div>
     </div>

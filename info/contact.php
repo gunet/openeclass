@@ -45,6 +45,5 @@ $data['action_bar'] = action_bar(
                                             'button-class' => 'btn-secondary'
                                         ]
                                     ], false);
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
 
 view('info.contact', $data);

@@ -1176,6 +1176,7 @@ $langUserDel = "Πρόκειται να διαγράψετε όλους τους
 $langRefreshCourse = "Ανανέωση $langsOfCourse";
 $langRefreshInfo = "Προκειμένου να προετοιμάσετε το $langsCourse για μια νέα ομάδα " . $langsOfStudents . " μπορείτε να διαγράψετε το παλιό περιεχόμενο.";
 $langRefreshInfo_A = "Επιλέξτε ποιες ενέργειες θέλετε να πραγματοποιηθούν.";
+$langUserDelCourseInfo = "Τσεκάρετε τα κριτήρια βάση των οποίων οι χρήστες θα απεγγραφούν από το $langsCourse.";
 $langUserDelCourse = "Διαγραφή χρηστών από το $langsCourse";
 $langUserDelNotice = "Σημ.: Οι χρήστες δεν θα διαγραφούν από άλλα $langsCourses";
 $langAnnouncesDel = "Διαγραφή ανακοινώσεων του $langsOfCourse";

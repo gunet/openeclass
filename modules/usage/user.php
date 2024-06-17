@@ -35,7 +35,7 @@ if ($is_admin) {
 $action_bar = action_bar(array(
     array('title' => $langDurationVisitsPerCourse,
         'url' => "$_SERVER[SCRIPT_NAME]?t=u$add_link&amp;per_course_dur=TRUE",
-        'icon' => 'fa-solid fa-timeline',
+        'icon' => 'fa-solid fa-chart-line',
         'level' => 'primary'
     )
 ),false);

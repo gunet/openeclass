@@ -31,7 +31,7 @@ if (get_config('dont_display_about_menu')) {
     redirect_to_home_page();
 }
 
-$toolName = $langInfo;
+$toolName = $langPlatformIdentity;
 
 $data['course_inactive'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d AND is_collaborative = ?d", COURSE_INACTIVE, $collaboration_value)->count;
 $data['course_open'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d AND is_collaborative = ?d", COURSE_OPEN, $collaboration_value)->count;
@@ -65,6 +65,5 @@ $data['action_bar'] = action_bar(
                                         'button-class' => 'btn-secondary'
                                     ]
                                 ], false);
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
 
 view('info.about', $data);

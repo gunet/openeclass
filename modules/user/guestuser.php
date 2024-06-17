@@ -22,7 +22,7 @@
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
-$helpTopic = 'Guest';
+$helpTopic = 'course_users';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
@@ -73,12 +73,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php?course=$course_code",
-        'icon' => 'fa-reply',
-        'level' => 'primary'
-    )));
 $data['guest_info'] = $guest_info;
 $data['submit_label'] = $submit_label;
 

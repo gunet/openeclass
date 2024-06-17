@@ -51,14 +51,6 @@ if (!$from_user) {
     $url .= "&from_user=true";
 }
 
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "$url",
-        'class' => 'back_btn',
-        'icon' => 'fa-reply',
-        'level' => 'primary'
-    )));
-
 
 if (isset($_POST['reg_flag'])) {
     $reg_flag = $_POST['reg_flag'];
@@ -104,7 +96,6 @@ if (isset($_POST['submit'])) {
     if (($count_events = count($output)) > 0) {
         $data['count_events'] = $count_events;
         $data['output'] = $output;
-        $data['menuTypeID'] = 2;
         view('modules.course_info.refresh_course_results', $data);
     }
 } else { // display form
@@ -123,7 +114,6 @@ if (isset($_POST['submit'])) {
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
     $data['form_url_from_user'] = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;from_user=true";
 
-    $data['menuTypeID'] = 2;
     view('modules.course_info.refresh_course', $data);
 }
 

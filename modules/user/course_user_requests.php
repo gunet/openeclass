@@ -29,7 +29,7 @@ require_once 'include/sendMail.inc.php';
 $toolName = $langUserRequests;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
 
-$tool_content .= action_bar(array(
+$action_bar = action_bar(array(
         array('title' => "$langUsers",
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-users',
@@ -40,6 +40,7 @@ $tool_content .= action_bar(array(
             'level' => 'primary-label',
             'show' => isset($_GET['rid']))
         ));
+$tool_content .= $action_bar;
 
 if (isset($_POST['rejected_req_id'])) { // do reject course user request
     $from_name = q(uid_to_name($uid, 'fullname'));

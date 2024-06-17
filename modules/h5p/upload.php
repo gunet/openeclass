@@ -24,13 +24,6 @@ require_once '../../include/baseTheme.php';
 
 $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
 
-$tool_content .= action_bar([[
-    'title' => $langBack,
-    'url' => $backUrl,
-    'icon' => 'fa-reply',
-    'level' => 'primary'
-]], false);
-
 $can_upload = TRUE;
 $upload_target_url = 'courses/temp/h5p';
 

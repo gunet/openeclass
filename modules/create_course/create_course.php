@@ -87,13 +87,6 @@ if (!isset($_POST['create_course'])) {
         }
         $data['license_0'] = $license[0]['title'];
         $data['license_10'] = $license[10]['title'];
-        $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-default')
-                            ),false);
 
         $data['icon_course_open'] = course_access_icon(COURSE_OPEN);
         $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);

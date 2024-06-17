@@ -97,9 +97,9 @@ if ($access) {
 }
 
 if ($is_editor) {
-    $data['editUrl'] = "info.php?course=$course_code&amp;edit=$id&amp;next=1";
-    $data['manageUrl'] = "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$id";
-    $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+    $data['editUrl'] = "info.php?course=$course_code&edit=$id&next=1";
+    $data['manageUrl'] = "manage.php?course=$course_code&manage=1&unit_id=$id";
+    $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&id=$id&type=";
     $visibility_check = $check_start_week = '';
     $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
         . "WHERE course_id = ?d ";
@@ -191,7 +191,7 @@ $data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM 
                    $visibility_check $check_start_week
              ORDER BY `order`", $course_id);
 
-$data['base_url'] = $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+$data['base_url'] = $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&id=$id&type=";
 
 if($is_editor) {
     $data['q_in_class'] = Database::get()->queryArray("SELECT ID, activity_id, visible FROM course_units_activities

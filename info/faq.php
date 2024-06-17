@@ -21,55 +21,8 @@
 
 
 require_once '../include/baseTheme.php';
-$pageName = $langFaq;
-
-// $head_content .= "<script type='text/javascript'>
-//     $(document).ready(function() {
-//       $(document).on('click', '.expand:not(.revert)', function(e) {
-//         e.preventDefault();
-//         $('.faq-section .panel-collapse').addClass('show');
-//         $('.faq-section .accordion-btn').addClass('showAll');
-//         $(this).toggleClass('revert');
-//         $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
-//         $(this).children().eq(1).html('$langFaqCloseAll');
-//       });
-//       $(document).on('click', '.expand.revert', function(e) {
-//         e.preventDefault();
-//         $('.faq-section .panel-collapse').removeClass('show');
-//         $('.faq-section .accordion-btn').removeClass('showAll');
-//         $('.faq-section .panel-collapse').addClass('hide');
-//         $(this).toggleClass('revert');
-//         $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
-//         $(this).children().eq(1).html('$langFaqExpandAll');
-//       });
-//     });
-//   </script>";
+$toolName = $langFaq;
 
 $data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
-
-// $data['action_bar'] = action_bar(array(
-                                
-//                                 array('title' => $langBack,
-//                                       'url' => $urlServer,
-//                                       'icon' => 'fa-reply',
-//                                       'level' => 'primary',
-//                                       'button-class' => 'btn-primary'),
-//                                   array('title' => $langFaqExpandAll,
-//                                       'url' => "#",
-//                                       'class' => 'expand',
-//                                       'icon' => 'fa-plus-circle',
-//                                       'level' => 'primary-label')
-//                             ),false);
-
-$data['action_bar'] = action_bar(array(
-                                
-  array('title' => $langBack,
-        'url' => $urlServer,
-        'icon' => 'fa-reply',
-        'level' => 'primary',
-        'button-class' => 'btn-primary')
-),false);
-
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
 view('info.faq', $data);

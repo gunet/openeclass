@@ -144,7 +144,6 @@ if (isset($_GET['per_course_dur'])) {
                 'level' => 'primary-label')
 
         ),false);
-        $tool_content .= $action_bar;
     } else {
         $action_bar = action_bar(array(
             array('title' => $langPersonalStats,

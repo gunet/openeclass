@@ -31,7 +31,7 @@ $head_content .=
     </script>";
 
 
-$tool_content .= action_bar(array(
+$action_bar = action_bar(array(
     array('title' => $langUsersLog,
         'url' => "displaylog.php?course=$course_code",
         'icon' => 'fa-user',
@@ -44,13 +44,13 @@ $tool_content .= action_bar(array(
         'icon' => 'fa-address-card')
     ), false);
 
+$tool_content .= $action_bar;
 /**** Summary info    ****/
 $hits = course_hits($course_id);
 $tool_content .= "
     <div class='col-12'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langUsage</h3>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>            
             </div>
             <div class='card-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>

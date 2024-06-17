@@ -35,14 +35,6 @@ if (!in_array($language, array('el', 'en'))) {
     $addon = " ($langOnlyInEnglish)";
 }
 
-$data['action_bar'] = action_bar([[
-    'title' => $langBack,
-    'url' => $urlServer,
-    'icon' => 'fa-reply',
-    'level' => 'primary',
-    'button-class' => 'btn-secondary'
-]], false);
-
 $data['general_tutorials'] = [
     'title' => $langGeneralTutorials . $addon,
     'links' =>
@@ -134,8 +126,5 @@ $data['student_tutorials'] = [
                 ]
         ]
 ];
-
-
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
 view('info.manual', $data);

@@ -30,13 +30,6 @@ require_once 'classes/H5PFactory.php';
 
 $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => $backUrl,
-        'icon' => 'fa-reply',
-        'level' => 'primary')
-), false);
-
 $toolName = $langCreate;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 

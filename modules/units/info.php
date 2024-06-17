@@ -37,15 +37,15 @@ load_js('bootstrap-datepicker');
 
 $data['start_week'] = $data['finish_week'] = '';
 if (isset($_GET['edit'])) {
+    $id = intval($_GET['edit']);
     $pageName = $langEditUnit;
-    $id = $_GET['edit'];
     $cu = Database::get()->querySingle("SELECT id, title, comments, 
                                         start_week, finish_week
                                     FROM course_units WHERE id = ?d AND course_id = ?d",
                                         $id, $course_id);
+    $navigation[] = [ 'name' => $cu->title, 'url' => "index.php?course=$course_code&id=$id"];
     if (!$cu) {
-        //Session::Messages($langUnknownResType);
-        Session::flash('message',$langUnknownResType); 
+        Session::flash('message',$langUnknownResType);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
     }
@@ -71,4 +71,3 @@ $data['descriptionEditor'] = rich_text_editor('unitdescr', 10, 20, $unitDescr);
 $data['tagInput'] = $data['unitId']? eClassTag::tagInput($data['unitId']): eClassTag::tagInput();
 
 view('modules.units.info', $data);
-

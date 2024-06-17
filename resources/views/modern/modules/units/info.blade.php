@@ -10,17 +10,17 @@
     <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
     <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
     <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
-    
+
     <script type='text/javascript'>
             $(function() {
                 $('#unitdurationfrom, #unitdurationto').datepicker({
                     format: 'dd-mm-yyyy',
                     pickerPosition: 'bottom-right',
                     language: '{{ $language }}',
-                    autoclose: true    
+                    autoclose: true
                 });
             });
-    </script>            
+    </script>
 @endpush
 
 @section('content')
@@ -29,7 +29,7 @@
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
@@ -37,11 +37,10 @@
 
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                         <div class="offcanvas-header">
@@ -52,18 +51,12 @@
                         </div>
                     </div>
 
-
                     @include('layouts.partials.legend_view')
 
-
-
-
-                    <?php $url = $urlServer.'courses/'.$course_code.'/index.php';?>
-                    
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -75,7 +68,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -85,26 +78,17 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
 
-
-                    {!! action_bar(array(
-                                        array('title' => trans('langBack'),
-                                            'button-class' => 'btn-secondary',
-                                            'url' => $url,
-                                            'icon' => 'fa-reply',
-                                            'level' => 'primary')), false) 
-                                !!}
-
-                        <div class='d-lg-flex gap-4 mt-4'>
+                    <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
-                                
+
                                 <form class='form-horizontal' action='{{ $postUrl }}' method='post' onsubmit="return checkrequired(this, 'unittitle')">
                                     @if ($unitId)
                                         <input type='hidden' name='unit_id' value='{{ $unitId }}'>
@@ -123,7 +107,7 @@
                                             {!! $descriptionEditor !!}
                                         </div>
                                     </div>
-                                    
+
                                     <div class='row form-group mt-4'>
                                         <label for='unitduration' class='col-12 control-label-notes mb-1'>{{ trans('langDuration') }}
                                             <span class='help-block'>{{ trans('langOptional') }}:</span>
@@ -143,15 +127,15 @@
                                                         <input type="text" class="form-control mt-0 border-start-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
                                                     </div>
                                                 </div>
-                                            </div>    
-                                        </div>                 
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="mt-4"></div>
-                                    
+
                                     {!! $tagInput !!}
 
-                                    
+
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                            <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
@@ -164,12 +148,12 @@
                         </div><div class='d-none d-lg-block'>
                             <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
                         </div>
-                        </div>
-                    
+                    </div>
+
                 </div>
             </div>
         </div>
-    
+
 </div>
 </div>
 @endsection

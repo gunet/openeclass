@@ -68,11 +68,11 @@
                     @endif
 
                     <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
-                        <h1>{{ trans('langCourses') }}</h1>
+                        <h2>{{ $toolName }}</h2>
                     </div>
 
                     <div class='col-12 mt-4'>
-                        
+
                         @if (isset($buildRoots))
                             {!! $buildRoots !!}
                         @endif
@@ -85,7 +85,7 @@
                                 {!! $childHTML !!}
                             </ul>
                         </div>
-                        
+
                     </div>
 
                     @if (count($courses) > 0)
@@ -113,7 +113,7 @@
                                                     @else
                                                         <span class='TextBold'>{!! $mycourse->i !!}</span>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @endif
-    
+
 
                                                     @if(!get_config('show_modal_openCourses'))
                                                         <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}" aria-label="{{ trans('langPreview') }}">

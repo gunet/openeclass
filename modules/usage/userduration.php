@@ -119,7 +119,7 @@ if (isset($_GET['u'])) { //  stats per user
                 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
                 $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
             }
-            $tool_content .= action_bar(array(
+            $action_bar = action_bar(array(
                 array('title' => $langBack,
                     'url' => "$back_url",
                     'icon' => 'fa-reply',
@@ -132,8 +132,8 @@ if (isset($_GET['u'])) { //  stats per user
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
                     'icon' => 'fa-file-excel',
                     'level' => 'primary-label')
-
             ), false);
+            $tool_content .= $action_bar;
             $tool_content .= "<p class='Neutral-900-cl TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
             if($_GET['u'] > 0){
@@ -250,12 +250,8 @@ if (isset($_GET['u'])) { //  stats per user
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUserS";
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-            $navigation[] = array('url' => '$_SERVER[SCRIPT_NAME]?course=' . $course_code, 'name' => $langUserDuration);
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "index.php?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary'),
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langUserDuration);
+            $action_bar = action_bar(array(
                 array('title' => $langDumpPDF,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=pdf",
                     'icon' => 'fa-file-pdf',
@@ -266,6 +262,7 @@ if (isset($_GET['u'])) { //  stats per user
                     'level' => 'primary-label')
 
             ), false);
+            $tool_content .= $action_bar;
             $tool_content .= selection_course_modules();
             $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . which_module($module) . "</span></div></div>";
         } else {
@@ -325,11 +322,7 @@ if (isset($_GET['u'])) { //  stats per user
         if (!isset($_GET['format'])) {
             $toolName = $langUserDuration;
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-            $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "index.php?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary'),
+            $action_bar = action_bar(array(
                 array('title' => $langLearningPaths,
                     'url' => "../learnPath/detailsAll.php?course=$course_code",
                     'icon' => 'fa-address-card',
@@ -347,8 +340,8 @@ if (isset($_GET['u'])) { //  stats per user
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=xls",
                     'icon' => 'fa-file-excel',
                     'level' => 'primary-label')
-
             ), false);
+            $tool_content .= $action_bar;
 
             $tool_content .= selection_course_modules();
         }

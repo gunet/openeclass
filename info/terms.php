@@ -31,17 +31,10 @@ foreach (array($language, 'en', 'el') as $l) {
         break;
     }
 }
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-          'url' => $urlServer,
-          'icon' => 'fa-reply',
-          'level' => 'primary',
-          'button-class' => 'btn-secondary')
-                            ),false);
+
 $data['terms'] = str_replace(
     array('{%INSTITUTION%}', '{%EMAIL_HELPDESK%}'),
     array(q(get_config('institution')), "<a href='mailto:$email'>$email</a>"),
     file_get_contents($terms_file));
-$data['menuTypeID'] = isset($_SESSION['uid']) ? 1 : 0;
 
 view('info.terms', $data);

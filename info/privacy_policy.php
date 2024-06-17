@@ -20,14 +20,7 @@ if (!$policy) {
         }
     }
 }
-$data['menuTypeID'] = $uid? 1: 0;
+
 $data['policy'] = $policy;
-$data['action_bar'] = action_bar([
-    [ 'title' => trans('langBack'),
-      'url' => $urlAppend,
-      'icon' => 'fa-reply',
-      'level' => 'primary',
-      'button-class' => 'btn-secondary' ]
-  ], false);
 
 view('info.privacy_policy', $data);
