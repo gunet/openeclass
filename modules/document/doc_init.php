@@ -28,7 +28,8 @@ function doc_init() {
     global $urlAppend, $course_id, $course_code, $webDir, $can_upload, $group_name, 
         $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id, $secret_directory,
         $group_id, $groupset, $base_url, $group_name, $upload_target_url, $group_sql, $is_member,
-        $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName, $sessionID, $is_session_doc;
+        $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName, $sessionID, 
+        $is_session_doc, $is_consultant, $uploaded_docs_by_users, $user_uploader;
 
     $can_upload = $is_editor || $is_admin;
     if (defined('GROUP_DOCUMENTS')) {
@@ -124,8 +125,15 @@ function doc_init() {
             $upload_target_url = $urlAppend . 'modules/session/resourse.php?course=' . $course_code . '&amp;session=' . $sessionID;
             $subsystem_id = $sessionID;
             $group_sql = "course_id = $course_id AND subsystem = $subsystem";
-            $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID;
-        }else{
+            $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID;            
+        }else if (isset($uploaded_docs_by_users) and $uploaded_docs_by_users) {
+            $subsystem = MYSESSIONS;
+            $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;session=' . $sessionID;
+            $upload_target_url = $urlAppend . 'modules/session/resourse.php?course=' . $course_code . '&amp;session=' . $sessionID;
+            $subsystem_id = $sessionID;
+            $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
+            $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID . '/' . $user_uploader;
+        } else{
             $subsystem = MAIN;
             $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;';
             $upload_target_url = 'index.php?course=' . $course_code;

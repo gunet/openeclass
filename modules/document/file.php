@@ -87,6 +87,10 @@ if ($cinfo_components[0] == 'common') {
 } elseif ($cinfo_components[0] == 'session'){
     $require_current_course = true;
     $_SESSION['fileSessionId'] = $cinfo_components[1];
+} elseif ($cinfo_components[0] == 'uploaded_doc'){
+    $require_current_course = true;
+    $_SESSION['CurrentSessionId'] = $cinfo_components[1];
+    $_SESSION['userId_uploader'] = $cinfo_components[2];
 } else {
     $require_current_course = true;
     $_SESSION['dbname'] = $cinfo_components[0];

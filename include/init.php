@@ -349,6 +349,20 @@ if(isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($re
     unset($_SESSION['fileSessionId']);
 }
 
+// Regarding uploaded docs by users in a session completion
+$user_uploader = 0;
+$uploaded_docs_by_users = false;
+if(isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isset($require_current_course) && $require_current_course){
+    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['CurrentSessionId']);
+    $course_id = $q->course_id;
+    $_SESSION['dbname'] = course_id_to_code($course_id);
+    $sessionID = $_SESSION['CurrentSessionId'];
+    $uploaded_docs_by_users = true;
+    $user_uploader = $_SESSION['userId_uploader'];
+    unset($_SESSION['CurrentSessionId']);
+    unset($_SESSION['userId_uploader']);
+}
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 $is_editor = false;

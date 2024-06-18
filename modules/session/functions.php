@@ -488,11 +488,23 @@ function show_sessionResource($info) {
  */
 function show_session_doc($title, $comments, $resource_id, $file_id) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID, $is_consultant;
+           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID, 
+           $is_consultant, $uid, $is_course_admin;
 
     $can_upload = $can_upload || $is_consultant;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
+    // We get only the files which belong to user consultant or tutor in order to show them to simple users.
+    $ids_simple_users = array();
+    $idsNotConsultant = Database::get()->queryArray("SELECT user_id FROM course_user 
+                                                        WHERE course_id = ?d AND status = ?d AND tutor = ?d 
+                                                        AND editor = ?d AND course_reviewer = ?d AND reviewer = ?d", $course_id, USER_STUDENT, 0, 0, 0, 0);
+    foreach($idsNotConsultant as $u){
+        $ids_simple_users[] = $u->user_id;
+    }
+    if(in_array($file->lock_user_id,$ids_simple_users)){
+        return;
+    }
 
     $res_prereq_icon = '';
     if (!$file) {
@@ -533,7 +545,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
             }else{// These files are regarded with session documents
                 $file->title = $title;
                 $image = choose_image('.' . $file->format);
-                $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
+                $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
                 $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                     "<input type='hidden' value='$download_url'>" : '';
                 $file_obj = MediaResourceFactory::initFromDocument($file);
@@ -941,7 +953,7 @@ function session_exists($sid){
 function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
-            $langUploadDocCompleted, $sessionID, $langFileExists;
+            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -982,12 +994,28 @@ function upload_session_doc($sid){
             $session_filename = add_ext_on_mime($session_filename);
             // File name used in file system and path field
             $safe_session_filename = safe_filename(get_file_extension($session_filename));
-            $session_dir = "$webDir/courses/$course_code/session/session_$sid/";
-            if (!file_exists($session_dir)) {
-                mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
+            if($is_consultant){
+                $session_dir = "$webDir/courses/$course_code/session/session_$sid/";
+            }else{// personal files from simple user
+                $session_dir = "$webDir/courses/$course_code/session/session_$sid/$uid/";
             }
-            if (move_uploaded_file($_FILES['file-upload']['tmp_name'], "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename")) {
-                @chmod("$webDir/courses/$course_code/session/session_$sid/$safe_session_filename", 0644);
+
+            if (!file_exists($session_dir)) {
+                if($is_consultant){
+                    mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
+                }else{
+                    mkdir("$webDir/courses/$course_code/session/session_$sid/$uid/", 0755, true);
+                }
+                
+            }
+            if($is_consultant){
+                $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
+            }else{
+                $spathfile = "$webDir/courses/$course_code/session/session_$sid/$uid/$safe_session_filename";
+            }
+            
+            if (move_uploaded_file($_FILES['file-upload']['tmp_name'], $spathfile)) {
+                @chmod($spathfile, 0644);
                 $session_real_filename = $_FILES['file-upload']['name'];
                 $session_filepath = '/' . $safe_session_filename;
             }
@@ -1853,7 +1881,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                 } else {
                     $image = choose_image('.' . $entry['format']);
                     if($entry['subsystem'] == MYSESSIONS){
-                        $file_url = session_file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
+                        $file_url = session_file_url($entry['path'], $entry['name']);
                     }else{
                         $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
                     }
@@ -1862,7 +1890,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                     $dObj = $entry['object'];
                     $dObj->setAccessURL($file_url);
                     if($entry['subsystem'] == MYSESSIONS){
-                        $dObj->setPlayURL(session_file_playurl($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code));
+                        $dObj->setPlayURL(session_file_playurl($entry['path'], $entry['name']));
                     }else{
                         $dObj->setPlayURL(file_playurl($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code));
                     }

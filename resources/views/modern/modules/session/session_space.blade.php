@@ -112,6 +112,11 @@
                                 'confirm_button' => trans('langSubmit'),
                                 'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID))
                             ),
+                            array('title' => trans('langDocSender'),
+                                  'url' => $urlAppend . 'modules/session/doc_uploaded.php?course=' . $course_code . '&session=' . $sessionID,
+                                  'class' => 'session-uploaded-docs',
+                                  'level' => 'secondary',
+                                  'icon' => 'fa-solid fa-file')
                         ))
                     !!}
 

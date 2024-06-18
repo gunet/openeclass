@@ -199,20 +199,39 @@ function file_url($path, $filename = null, $courseCode = null) {
 
 /**
  * @brief Generate download URL for documents
- * @global type $course_code
  * @global type $urlServer
  * @param type $path
  * @param type $filename
  * @param type $courseCode
  * @return type
  */
-function session_file_url($path, $filename = null, $courseCode = null) {
-    global $course_code, $urlServer, $sessionID;
-    $courseCode = ($courseCode == null) ? $course_code : $courseCode;
+function session_file_url($path, $filename = null) {
+    global $urlServer, $sessionID;
 
     // For session docs without constant
     $courseCode = 'session';
     $gid = ",$sessionID";
+
+    return htmlspecialchars($urlServer .
+            "modules/document/file.php?$courseCode$gid" .
+            public_file_path($path, $filename), ENT_QUOTES);
+    
+}
+
+/**
+ * @brief Generate download URL for documents
+ * @global type $urlServer
+ * @param type $path
+ * @param type $filename
+ * @param type $courseCode
+ * @return type
+ */
+function session_file_uploaded_url($path, $filename = null, $userId = 0) {
+    global $urlServer, $sessionID;
+
+    // For session docs without constant
+    $courseCode = 'uploaded_doc';
+    $gid = ",$sessionID,$userId";
 
     return htmlspecialchars($urlServer .
             "modules/document/file.php?$courseCode$gid" .
@@ -250,22 +269,38 @@ function file_playurl($path, $filename = null, $courseCode = null) {
 }
 
 /**
- * @global type $course_code
  * @global type $urlServer
- * @global type $group_id
- * @global type $ebook_id
  * @param type $path
  * @param type $filename
  * @param type $courseCode
  * @return type
  */
-function session_file_playurl($path, $filename = null, $courseCode = null) {
-    global $course_code, $urlServer, $sessionID;
-    $courseCode = ($courseCode == null) ? $course_code : $courseCode;
+function session_file_playurl($path, $filename = null) {
+    global $urlServer, $sessionID;
 
     // For session docs without constant
     $courseCode = 'session';
     $gid = ",$sessionID";
+
+    return htmlspecialchars($urlServer .
+            "modules/document/play.php?$courseCode$gid" .
+            public_file_path($path, $filename), ENT_QUOTES);
+    
+}
+
+/**
+ * @global type $urlServer
+ * @param type $path
+ * @param type $filename
+ * @param type $courseCode
+ * @return type
+ */
+function session_file_uploaded_playurl($path, $filename = null, $userId = 0) {
+    global $urlServer, $sessionID;
+
+    // For session docs without constant
+    $courseCode = 'uploaded_doc';
+    $gid = ",$sessionID,$userId";
 
     return htmlspecialchars($urlServer .
             "modules/document/play.php?$courseCode$gid" .
