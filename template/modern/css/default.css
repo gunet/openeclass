@@ -952,7 +952,7 @@ b a {
 }
 
 .btn-mobile-quick-search{
-  height:38px !important; 
+  height:38px !important;
   margin-top:1px;
 }
 
@@ -4729,6 +4729,7 @@ body .delThemeBtn{
   color: #2B3944;
   font-weight: 700;
   color: #0073E6;
+  text-align: center;
 }
 
 .quickLink:hover{
