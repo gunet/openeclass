@@ -75,9 +75,9 @@ if(isset($_GET['del'])){
     $file = Database::get()->queryArray("SELECT filename,path,lock_user_id FROM document WHERE id = ?d",$_GET['del']);
 
     if(count($file) > 0){
-        $user_doc = $file->lock_user_id;
-        $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/$user_doc/";
         foreach($file as $f){
+            $user_doc = $f->lock_user_id;
+            $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/$user_doc/";
             unlink($target_dir.$f->path);
         }
     }
