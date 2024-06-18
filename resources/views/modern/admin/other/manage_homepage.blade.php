@@ -88,6 +88,7 @@
                                         <input class='form-control' type='number' name='total_courses' value="{{ get_config('total_courses') }}"/>
                                     </div>
                                 </div>
+
                                 <div class='form-group mt-4'>
                                     <label for='answer' class='col-sm-12 control-label-notes'>{{trans('langUserLogins')}}/{{trans('langWeek')}}</label>
                                     <div class='col-sm-12'>
@@ -95,6 +96,12 @@
                                     </div>
                                 </div>
 
+                                <div class='form-group mt-4'>
+                                    <label for='answer' class='col-sm-12 control-label-notes'>{{ trans('langRegisteredUsers') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='users_registered' value="{{ get_config('users_registered') }}"/>
+                                    </div>
+                                </div>
 
                                 <div class='form-group mt-4'>
                                     <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>

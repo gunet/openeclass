@@ -541,9 +541,9 @@
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>
                                                                         <i class="fa-solid fa-user fa-xl mt-4 pt-1" role="presentation"></i>
-                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ getOnlineUsers() }}</div>
+                                                                        <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('users_registered') }}</div>
                                                                     </div>
-                                                                    <p class='form-label text-center'>{{trans('langOnlineUsers')}}</p>
+                                                                    <p class='form-label text-center'>{{ trans('langRegisteredUsers') }}</p>
                                                                 </div>
                                                             </div>
                                                         </div>

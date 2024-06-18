@@ -6831,3 +6831,4 @@ $langAddTcSession = "Δημιουργία συνδέσμου τηλεδιάσκ�
 $langPercentageSessionCompletion = "Ποσοστό ολοκλήρωσης συνεδρίας";
 $langAllSessions = "Όλες οι συνεδρίες";
 $langSessionHasNotBadge = "Η συνεδρία δεν διαθέτει πόρους ολοκλήρωσης.";
+$langRegisteredUsers = "Εγγεγραμένοι χρήστες";

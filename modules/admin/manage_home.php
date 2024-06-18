@@ -37,6 +37,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 if(isset($_POST['submit'])){
     set_config('total_courses',$_POST['total_courses']);
     set_config('visits_per_week',$_POST['visits_per_week']);
+    set_config('users_registered',$_POST['users_registered']);
     set_config('homepage_title',$_POST['homepage_title']);
     set_config('homepage_name',$_POST['homepage_name']);
     set_config('homepage_intro', purify($_POST['homepage_intro']));
