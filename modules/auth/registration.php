@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,20 +33,10 @@ $data['auth'] = get_auth_active_methods();
 $data['provider'] = $provider = '';
 $data['provider_user_data'] = $provider_user_data = '';
 
-$data['action_bar'] = action_bar(
-                                [[
-                                    'title' => $langBack,
-                                    'url' => $urlServer,
-                                    'icon' => 'fa-reply',
-                                    'level' => 'primary',
-                                    'button-class' => 'btn-default'
-                                ]], false);
+//HybridAuth checks, authentication and user profile info.
+$user_data = '';
+if(!empty($_GET['provider'])) {
+    $data['provider'] = $provider = $_GET['provider'];
+}
 
-    //HybridAuth checks, authentication and user profile info.
-    $user_data = '';
-    if(!empty($_GET['provider'])) {
-        $data['provider'] = $provider = $_GET['provider'];
-    }
-
-$data['menuTypeID'] = 0;
 view('modules.auth.registration', $data);
