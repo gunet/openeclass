@@ -93,7 +93,7 @@ $showScore = $displayScore == 1
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
 
-    $tool_content .= action_bar([
+    $action_bar = action_bar([
         [
             'title' => $langCheckGrades,
             'icon' => 'fa-bar-chart',
@@ -101,12 +101,6 @@ $showScore = $displayScore == 1
             'modal-class' => 'check-grades',
             'button-class' => 'btn-success',
             'show' => $is_editor
-        ],
-        [
-            'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary'
         ],
         [
             'title' => "$langResults ($langDumpUser)",
@@ -123,6 +117,7 @@ $showScore = $displayScore == 1
             'show' => $is_course_reviewer
         ]
     ]);
+    $tool_content .= $action_bar;
 
 $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>

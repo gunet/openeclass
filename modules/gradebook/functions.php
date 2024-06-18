@@ -666,7 +666,7 @@ function display_all_users_grades($gradebook_id) {
  */
 function student_view_gradebook($gradebook_id, $uid) {
 
-    global $tool_content, $course_code, $is_editor,
+    global $tool_content, $course_code, $is_editor, $action_bar,
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade, $langGradebookSum,
            $langTitle, $langGradebookActivityDate2, $langGradebookNoTitle, $langType,
            $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack,
@@ -688,12 +688,13 @@ function student_view_gradebook($gradebook_id, $uid) {
 
     $back_link = ($is_editor)? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=". getIndirectReference($gradebook_id) . "&amp;gradebookBook=1" : "$_SERVER[SCRIPT_NAME]?course=$course_code";
 
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array(  'title' => $langBack,
                 'url' => "$back_link",
                 'icon' => 'fa-reply',
                 'level' => 'primary'),
     ));
+    $tool_content .= $action_bar;
     if (!$checkForRecords) {
         $tool_content .="<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookTotalGradeNoInput</span></div>";
     }
@@ -778,7 +779,7 @@ function student_view_gradebook($gradebook_id, $uid) {
 function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
-           $langTitle, $langViewShow, $langScore, $langAdd, $langHere,
+           $langTitle, $langViewShow, $langScore, $langAdd, $langHere, $action_bar,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType,
            $langGradebookAutoGrade, $langGradebookNoAutoGrade, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
@@ -790,7 +791,7 @@ function display_gradebook($gradebook) {
 
     $gradebook_id = getIndirectReference($gradebook->id);
     if ($is_editor) {
-        $tool_content .= action_bar(
+        $action_bar = action_bar(
             array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -851,13 +852,7 @@ function display_gradebook($gradebook) {
                 ),
                 true
             );
-    } else if ($is_course_reviewer) {
-        $tool_content .= action_bar(
-            array(
-                array('title' => $langBack,
-                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                     'icon' => 'fa-reply',
-                     'level' => 'primary-label')));
+        $tool_content .= $action_bar;
     }
 
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count

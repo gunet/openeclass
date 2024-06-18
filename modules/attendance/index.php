@@ -350,25 +350,13 @@ if ($is_editor) {
     if (isset($_GET['editUsers']) or isset($_GET['Book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langAttendanceManagement;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif(isset($_GET['editSettings'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langConfig;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif (isset($_GET['attendanceBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langAttendanceActiveUsers;
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply',
@@ -377,26 +365,14 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1",
                   'icon' => 'fa-users',
                   'level' => 'primary-label')
-
             ));
+        $tool_content .= $action_bar;
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langEditChange;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langAttendanceBook;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary')
-            ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp']) or isset($_GET['addActivityTc'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         if (isset($_GET['addActivityAs'])) {
@@ -410,16 +386,10 @@ if ($is_editor) {
         } else {
             $pageName = $langGradebookAddActivity;
         }
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
-                  'icon' => 'fa fa-reply',
-                  'level' => 'primary')
-            ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langAttendanceBook;
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
@@ -429,27 +399,22 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
-
             ));
-
+    $tool_content .= $action_bar;
     } elseif (isset($_GET['new'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $pageName = $langNewAttendance;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
     } elseif (isset($_GET['attendance_id']) && $is_editor) {
         $pageName = get_attendance_title($attendance_id);
     }  elseif (!isset($_GET['attendance_id'])) {
-        $tool_content .= action_bar(
+        $action_bar= action_bar(
             array(
                 array('title' => $langNewAttendance,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
                       'icon' => 'fa-solid fa-circle-plus',
                       'level' => 'primary-label',
                       'button-class' => 'btn-success')));
+        $tool_content .= $action_bar;
     }
     $tool_content .= "</div>";
 
@@ -476,7 +441,6 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
             $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-            //Session::Messages($langGradebookEdit,"alert-success");
             Session::flash('message',$langGradebookEdit);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");

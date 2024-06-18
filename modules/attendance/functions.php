@@ -229,7 +229,7 @@ function register_user_presences($attendance_id, $actID) {
 function display_attendance_activities($attendance_id) {
 
     global $tool_content, $course_code, $attendance, $langAttendanceInsMan,
-           $langAttendanceActList, $langTitle, $langType, $langDate,
+           $langAttendanceActList, $langTitle, $langType, $langDate, $action_bar,
            $langGradebookNoTitle, $langAssignment,$langAttendanceInsAut,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1,
            $langHere, $langAttendanceNoActMessage3, $langAttendanceActivity,
@@ -239,7 +239,7 @@ function display_attendance_activities($attendance_id) {
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
-        $tool_content .= action_bar(
+        $action_bar = action_bar(
             array(
                 array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -296,16 +296,8 @@ function display_attendance_activities($attendance_id) {
             ),
             true
         );
-    } else if ($is_course_reviewer) {
-        $tool_content .= action_bar(
-            array(
-                array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+        $tool_content .= $action_bar;
     }
-
-
 
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
                                             FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
@@ -1306,12 +1298,7 @@ function student_view_attendance($attendance_id) {
                                         WHERE attendance_book.attendance_activity_id = attendance_activities.id
                                             AND uid = ?d
                                             AND attendance_activities.attendance_id = ?d", $uid, $attendance_id)->count;
-    $tool_content .= action_bar(array(
-        array(  'title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
-    ));
+
     if (!$checkForRecords) {
         $tool_content .="
         <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceStudentFailure</span></div></div>";
