@@ -28,12 +28,13 @@ if (get_config('dont_display_manual_menu')) {
 $toolName = $langManuals;
 
 $addon = '';
-$url = 'https://docs.openeclass.org/' . preg_replace('/^(\d\.\d+).*$/', '\1', ECLASS_VERSION);
 
 if (!in_array($language, array('el', 'en'))) {
     $language = 'en';
     $addon = " ($langOnlyInEnglish)";
 }
+
+$url = 'https://docs.openeclass.org/' . $language . '/' . preg_replace('/^(\d\.\d+).*$/', '\1', ECLASS_VERSION);
 
 $data['general_tutorials'] = [
     'title' => $langGeneralTutorials . $addon,
@@ -42,22 +43,22 @@ $data['general_tutorials'] = [
             'detail_descr' =>
                 [
                     'desc' => $langFinalDesc,
-                    'url' => "$url/$language:detail_description"
+                    'url' => "$url:detail_description"
                 ],
             'short_descr' =>
                 [
                     'desc' => $langShortDesc,
-                    'url' => "$url/$language:short_description"
+                    'url' => "$url:short_description"
                 ],
             'mant' =>
                 [
                     'desc' => $langManT,
-                    'url' => "$url/$language:teacher"
+                    'url' => "$url:teacher"
                 ],
             'mans' =>
                 [
                     'desc' => $langManS,
-                    'url' => "$url/$language:student"
+                    'url' => "$url:student"
                 ]
         ]
 ];
@@ -69,32 +70,32 @@ $data['teacher_tutorials'] = [
             'create_account' =>
                 [
                     'desc' => $langCreateAccount,
-                    'url' => "$url/$language:wizards"
+                    'url' => "$url:wizards"
                 ],
             'create_course' =>
                 [
                     'desc' => $langCourseCreate,
-                    'url' => "$url/$language:wizards"
+                    'url' => "$url:wizards"
                 ],
             'portfolio_management' =>
                 [
                     'desc' => $langUserPortfolio,
-                    'url' => "$url/$language:wizards"
+                    'url' => "$url:wizards"
                 ],
             'course_management' =>
                 [
                     'desc' => $langAdministratorCourse,
-                    'url' => "$url/$language:wizards"
+                    'url' => "$url:wizards"
                 ],
             'forum_management' =>
                 [
                     'desc' => $langAdministratorForum,
-                    'url' => "$url/$language:wizards"
+                    'url' => "$url:wizards"
                 ],
             'group_management' =>
                 [
                     'desc' => $langAdministratorGroup,
-                    'url' => "$url/$language:wizards"
+                    'url' => "$url:wizards"
                 ]
         ]
 ];
@@ -107,22 +108,22 @@ $data['student_tutorials'] = [
             'register_course' =>
                 [
                     'desc' => $langRegCourses,
-                    'url' => "$url/$language:register_course"
+                    'url' => "$url:register_course"
                 ],
             'personal_portfolio' =>
                 [
                     'desc' => $langUserPortfolio,
-                    'url' => "$url/$language:personal_portfolio"
+                    'url' => "$url:personal_portfolio"
                 ],
             'ecourse' =>
                 [
                     'desc' => $langIntroToCourse,
-                    'url' => "$url/$language:ecourse"
+                    'url' => "$url:ecourse"
                 ],
             'forum' =>
                 [
                     'desc' => $langForumParticipation,
-                    'url' => "$url/$language:forum"
+                    'url' => "$url:forum"
                 ]
         ]
 ];
