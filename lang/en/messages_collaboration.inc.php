@@ -1548,3 +1548,5 @@ $langContinueToCompletetionWithoutAct = "Do you want to proceed to complete the 
 $langOfSubmitAssignment = "By submitting work";
 $langOfSubmitDocument = "By submitting document";
 $langSessionCompletedIsActivated = "Session completion without submitting activities is already enabled";
+$langDocSender = "Deliverable";
+$langPreviousDocDeleted = "The previous document was deleted.";

@@ -1056,18 +1056,48 @@ function upload_session_doc($sid){
             $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
             $order = $order+1;
 
-            $q = Database::get()->query("INSERT INTO session_resources SET
-                                    session_id = ?d,
-                                    type = 'doc',
-                                    title = ?s,
-                                    comments = ?s,
-                                    visible = 1,
-                                    `order` = ?d,
-                                    `date` = " . DBHelper::timeAfter() . ",
-                                    res_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID);
+            $doc_id = isset($_POST['refers_to_resource']) ? $_POST['refers_to_resource'] : 0;
+            $uUserId = isset($_POST['fromUser']) ? $_POST['fromUser'] : 0;
+            // if exists then update uploaded file else upload it.
+            $checkExist = Database::get()->querySingle("SELECT * FROM session_resources
+                                                            WHERE session_id = ?d 
+                                                            AND type = ?s 
+                                                            AND doc_id = ?d
+                                                            AND from_user = ?d", $sid, 'doc', $doc_id, $uUserId);
 
+            if($checkExist){
+                $checker = 1;
+                $q = Database::get()->query("UPDATE session_resources SET
+                                            session_id = ?d,
+                                            type = 'doc',
+                                            title = ?s,
+                                            comments = ?s,
+                                            visible = 1,
+                                            `order` = ?d,
+                                            `date` = " . DBHelper::timeAfter() . ",
+                                            res_id = ?d,
+                                            doc_id = ?d,
+                                            from_user = ?d
+                                            WHERE doc_id = ?d
+                                            AND from_user = ?d
+                                            AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, $doc_id, $uUserId, $sid);
+            }else{
+                $checker = 0;
+                $q = Database::get()->query("INSERT INTO session_resources SET
+                                                session_id = ?d,
+                                                type = 'doc',
+                                                title = ?s,
+                                                comments = ?s,
+                                                visible = 1,
+                                                `order` = ?d,
+                                                `date` = " . DBHelper::timeAfter() . ",
+                                                res_id = ?d,
+                                                doc_id = ?d,
+                                                from_user = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId);
+            }
 
-            Session::flash('message',$langUploadDocCompleted);
+            $msg = ($checker == 1) ? $langUploadDocCompleted . '</br>' . $langPreviousDocDeleted : $langUploadDocCompleted;
+            Session::flash('message',$msg);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
             
@@ -1790,15 +1820,19 @@ function display_session_available_documents($element, $element_id, $session_id 
                                             FROM document, session_resources
                                             WHERE document.id = session_resources.res_id
                                                 AND session_id = ?d
-                                                AND session_resources.id = ?d"
-                                            , $session_id, $session_resource_id);
+                                                AND session_resources.id = ?d
+                                                AND session_resources.doc_id = ?d
+                                                AND session_resources.from_user = ?d"
+                                            , $session_id, $session_resource_id,0,0);
         } else {
             $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
                                             FROM document, session_resources
                                             WHERE document.id = session_resources.res_id
                                                 AND session_id = ?d
                                                 AND session_resources.type = 'doc'
-                                                AND session_resources.visible = 1", $session_id);
+                                                AND session_resources.visible = 1
+                                                AND session_resources.doc_id = ?d
+                                                AND session_resources.from_user = ?d", $session_id,0,0);
         }
 
     } 

@@ -1487,3 +1487,4 @@ $langOfSubmitAssignment = "Με υποβολή εργασίας στο εργα�
 $langOfSubmitDocument = "Με προβολή εγγράφου";
 $langSessionCompletedIsActivated = "Η ολοκλήρωση συνεδρίας χωρίς την υποβολή δραστηριοτήτων είναι ήδη ενεργοποιημένη";
 $langDocSender = "Παραδοτέα";
+$langPreviousDocDeleted = "Διαγράφηκε το προηγούμενο έγγραφο.";

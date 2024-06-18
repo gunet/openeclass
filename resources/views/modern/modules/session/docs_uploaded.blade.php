@@ -72,7 +72,8 @@
                                     <thead>
                                         <tr>
                                             <th>{{ trans('langName') }}</th>
-                                            <th>{{ trans('langCreator') }}</th>
+                                            <th>{{ trans('langFrom') }}</th>
+                                            <th>{{ trans('langReferencedObject') }}</th>
                                             <th>{{ trans('langType') }}</th>
                                             <th>{{ trans('langDate') }}</th>
                                             <th></th>
@@ -83,9 +84,10 @@
                                             <tr>
                                                 <td>{!! $doc->link !!}</td>
                                                 <td>{{ $doc->creator }}</td>
+                                                <td>{{ $doc->refers_to }}</td>
                                                 <td>{{ $doc->format }}</td>
                                                 <td>{{ format_locale_date(strtotime($doc->date), 'short') }}</td>
-                                                <th class='text-end'>
+                                                <td class='text-end'>
                                                 {!! 
                                                     action_button(array(
                                                         array(
@@ -102,7 +104,7 @@
                                                             'icon-class' => 'doc-delete')
                                                     ))
                                                 !!}
-                                                </th>
+                                                </td>
                                             </tr>
 
 

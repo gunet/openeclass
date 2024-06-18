@@ -114,6 +114,10 @@ if(count($docs) > 0){
         $file->image = $image;
         $file->link = $link;
         $file->download_url = $download_url;
+        
+        $refers_temp = Database::get()->querySingle("SELECT doc_id FROM session_resources WHERE res_id = ?d AND session_id = ?d",$file->id,$sessionID);
+        $refers = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d AND session_id = ?d",$refers_temp->doc_id,$sessionID);
+        $file->refers_to = $refers->title;
     }
 }
 $data['docs'] = $docs;

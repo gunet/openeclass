@@ -170,7 +170,19 @@ function list_documents($sid, $cid) {
 
 
 function upload_file($sid){
-    global $webDir, $tool_content, $course_code, $langTitle, $langComments, $langSubmit, $langDownloadFile;
+    global $webDir, $tool_content, $course_code, $langTitle, $langComments, 
+           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, $uid;
+
+        if(!$is_consultant){
+            $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$sid,$course_id);
+            if($badge){
+                $badge_id = $badge->id;
+                $resources = Database::get()->queryArray("SELECT * FROM session_resources
+                                                            WHERE res_id IN (SELECT resource FROM badge_criterion WHERE badge = ?d)
+                                                            AND doc_id = ?d
+                                                            AND session_id = ?d",$badge_id,0,$sid);
+            }
+        }
 
         $tool_content .= "  
                             <div class='d-lg-flex gap-4 mt-4'>
@@ -199,9 +211,25 @@ function upload_file($sid){
                                                 <div class='form-group mt-4'>
                                                     <label for='comments' class='col-12 control-label-notes'>$langComments</label>
                                                     " . rich_text_editor('comments', 5, 40, '') . "
-                                                </div>
+                                                </div>";
 
-                                                <div class='form-group mt-5'>
+                                                if(!$is_consultant){
+                                                    $tool_content .= "
+                                                        <div class='form-group mt-4'>
+                                                            <label for='refers_to_resource' class='col-12 control-label-notes'>$langReferencedObject</label>
+                                                            <select class='form-select' name='refers_to_resource' id='refers_to_resource'>";
+                                                                foreach($resources as $r){
+                                                                    $tool_content .= "
+                                                                    <option value='$r->res_id'>$r->title</option>";
+                                                                }
+                                        $tool_content .= "  </select>
+                                                        </div>
+                                                        <input type='hidden' name='fromUser' value='$uid' />
+                                                    ";
+                                                }
+
+
+                              $tool_content .= "<div class='form-group mt-5'>
                                                     <div class='col-12 d-flex justify-content-end aling-items-center'>
                                                         <input class='btn submitAdminBtn' type='submit' name='submit_upload' value='$langSubmit'>
                                                     </div>

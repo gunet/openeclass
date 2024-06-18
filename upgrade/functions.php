@@ -3101,6 +3101,13 @@ function upgrade_to_4_0($tbl_options): void {
               FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('session_resources', 'doc_id')) {
+        Database::get()->query("ALTER TABLE session_resources ADD `doc_id` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('session_resources', 'from_user')) {
+        Database::get()->query("ALTER TABLE session_resources ADD `from_user` int(11) NOT NULL DEFAULT 0");
+    }
 }
 
 
