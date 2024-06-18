@@ -32,15 +32,8 @@ $announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `b
 	        WHERE `visible` = 1 AND lang = ?s ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
 
 $numOfAnnouncements = count($announceArr);
-$tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-secondary')
-                            ),false);
+
 if ($numOfAnnouncements > 0) {
-    
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
         $tool_content .= "
                     <div class='col-12 mt-4'>
@@ -59,6 +52,5 @@ if ($numOfAnnouncements > 0) {
                         </div>
                     </div>";
     }
-   
 }
 draw($tool_content, 0);

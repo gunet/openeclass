@@ -28,7 +28,7 @@
         <div class="row m-auto">
 
             <div class='col-12 mb-4'>
-                <h1>{{ trans('lang_remind_pass') }}</h1>
+                <h2>{{ trans('lang_remind_pass') }}</h2>
             </div>
 
             @if(Session::has('message'))
@@ -60,7 +60,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
-                
+
             @endif
 
             @if(isset($_REQUEST['u']) and isset($_REQUEST['h']))
@@ -73,7 +73,7 @@
                                         <h3>{{ trans('langNewPass1') }} </h3>
                                     </div>
                                     <div class='card-body'>
-                                        
+
                                             <form role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                                 <input type='hidden' name='u' value='{{ $userUID }}'>
                                                 <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
@@ -95,7 +95,7 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
                                 <h3>{{ trans('langUserData') }} </h3>
                             </div>
                             <div class='card-body'>
-                                
+
                                     <form role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='form-group'>
                                             <div class='col-12'>
@@ -138,7 +138,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                
+
                             </div>
                         </div>
                     </div>
