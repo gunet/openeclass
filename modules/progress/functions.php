@@ -272,7 +272,7 @@ function display_course_completion(): void
  */
 function display_activities($element, $id, $unit_id = 0) {
 
-    global $tool_content, $course_code, $is_editor,
+    global $tool_content, $course_code, $is_editor, $action_bar,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
@@ -294,7 +294,7 @@ function display_activities($element, $id, $unit_id = 0) {
         }
     }
 
-    $tool_content .= action_bar(
+    $action_bar = action_bar(
             array(
                 array('title' => $langBack,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -309,6 +309,7 @@ function display_activities($element, $id, $unit_id = 0) {
             ),
             false
         );
+    $tool_content .= $action_bar;
 
     if ($unit_id) {
         // check if unit completion is enabled
