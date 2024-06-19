@@ -70,10 +70,69 @@ $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 student_view_is_active();
 
 
+// ---------------------------
+// download directory or file
+// ---------------------------
+if (isset($_GET['download'])) {
+    $downloadDir = getDirectReference($_GET['download']);
+
+    if ($downloadDir == '/') {
+        $format = '.dir';
+        $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $public_code);
+    } else {
+        $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
+                        WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND
+                        path = ?s", $course_id, MYSESSIONS, $sessionID, $downloadDir);
+                        
+        
+        if (!$q) {
+            not_found($downloadDir);
+        }
+        $real_filename = $q->filename;
+        $format = $q->format;
+        $visible = $q->visible;
+        $extra_path = $q->extra_path;
+        $public = $q->public;
+        if (!(resource_access($visible, $public) or (isset($status) and $status == USER_TEACHER))) {
+            not_found($downloadDir);
+        }
+    }
+    // Allow unlimited time for creating the archive
+    set_time_limit(0);
+
+    if ($format == '.dir') {
+        if (!$uid) {
+            forbidden($downloadDir);
+        }
+        $real_filename = $real_filename . '.zip';
+        $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
+        zip_documents_directory($dload_filename, $downloadDir, $can_upload);
+        $delete = true;
+    } elseif ($extra_path) {
+        if ($real_path = common_doc_path($extra_path, true)) {
+            // Common document
+            if (!$common_doc_visible) {
+                forbidden($downloadDir);
+            }
+            $dload_filename = $real_path;
+            $delete = false;
+        } else {
+            // External document - redirect to URL
+            redirect($extra_path);
+        }
+    } else {
+        $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID . '/' . $_GET['userID'];
+        $dload_filename = $basedir . $downloadDir;
+        $delete = false;
+    }
+
+    send_file_to_client($dload_filename, $real_filename, null, true, $delete);
+    exit;
+}
+
+
 if(isset($_GET['del'])){
-
     $file = Database::get()->queryArray("SELECT filename,path,lock_user_id FROM document WHERE id = ?d",$_GET['del']);
-
     if(count($file) > 0){
         foreach($file as $f){
             $user_doc = $f->lock_user_id;
@@ -85,9 +144,7 @@ if(isset($_GET['del'])){
     Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_GET['del']);
     Session::flash('message',$langSessionResourseDeleted);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID);
-    
-    
+    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID);  
 }
 
 // An consultant can create a session
@@ -106,7 +163,7 @@ $docs = Database::get()->queryArray("SELECT * FROM document
 if(count($docs) > 0){
     foreach($docs as $file){
         $image = choose_image('.' . $file->format);
-        $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
+        $download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path) . "&userID=" .$file->lock_user_id;
         $file_obj = MediaResourceFactory::initFromDocument($file);
         $file_obj->setAccessURL(session_file_uploaded_url($file->path, $file->filename, $file->lock_user_id));
         $file_obj->setPlayURL(session_file_uploaded_playurl($file->path, $file->filename, $file->lock_user_id));
@@ -121,7 +178,6 @@ if(count($docs) > 0){
     }
 }
 $data['docs'] = $docs;
-//print_a($docs);
 
 $data['action_bar'] = action_bar([
     [

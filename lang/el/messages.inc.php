@@ -6832,3 +6832,9 @@ $langPercentageSessionCompletion = "Ποσοστό ολοκλήρωσης συν
 $langAllSessions = "Όλες οι συνεδρίες";
 $langSessionHasNotBadge = "Η συνεδρία δεν διαθέτει πόρους ολοκλήρωσης.";
 $langRegisteredUsers = "Εγγεγραμένοι χρήστες";
+$langDoNotChooseResource = "Το αρχείο σας θα πρέπει να αντιστοιχεί σε κάποια δραστηριότητα ολοκλήρωσης.</br>
+                            Αν το πεδίο <<Αφορά>> είναι κενό τότε δεν υπάρχουν πόροι ολοκλήρωσης της συνεδρίας
+                            και δεν μπορείτε να ανεβάσετε κάποιο αρχείο.";
+$langWithSubmittedUploadedFile = "Με υποβολή παραδοτέου";
+$langSubmittedUploadedFile = "Υποβολή παραδοτέου";
+$langMyUploadedFiles = "Τα παραδοτέα μου";

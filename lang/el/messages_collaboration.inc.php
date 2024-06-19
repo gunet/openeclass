@@ -1486,5 +1486,5 @@ $langContinueToCompletetionWithoutAct = "Θέλετε να προχωρήσετ�
 $langOfSubmitAssignment = "Με υποβολή εργασίας στο εργαλείο <Εργασίες>";
 $langOfSubmitDocument = "Με προβολή εγγράφου";
 $langSessionCompletedIsActivated = "Η ολοκλήρωση συνεδρίας χωρίς την υποβολή δραστηριοτήτων είναι ήδη ενεργοποιημένη";
-$langDocSender = "Παραδοτέα";
+$langDocSender = "Παραδοτέα χρηστών";
 $langPreviousDocDeleted = "Διαγράφηκε το προηγούμενο έγγραφο.";

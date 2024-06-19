@@ -64,14 +64,6 @@
 
                     {!! 
                         action_bar(array(
-                            array(
-                                'title' => trans('langBack'),
-                                'url' => $urlAppend . 'modules/session/index.php?course=' . $course_code,
-                                'icon' => 'fa-reply',
-                                'button-class' => 'btn-success',
-                                'level' => 'primary-label'
-                                
-                            ),
                             array('title' => trans('langEditUnitSection'),
                                 'url' => $urlAppend . 'modules/session/edit.php?course=' . $course_code . '&session=' . $sessionID,
                                 'icon' => 'fa fa-edit',
@@ -81,13 +73,13 @@
                             ),
                             array('title' => trans('langCompleteSession'),
                                 'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID . '&manage=1',
-                                'icon' => 'fa fa-gear',
+                                'icon' => 'fa fa-trophy',
                                 'button-class' => 'btn-success',
                                 'show' => $is_consultant
                             ),
                             array('title' => trans('langDownloadFile'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
-                                'icon' => 'fa-solid fa-file',
+                                'icon' => 'fa-solid fa-file-arrow-up',
                                 'level' => 'secondary'
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertDoc'),
@@ -112,11 +104,11 @@
                                 'confirm_button' => trans('langSubmit'),
                                 'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID))
                             ),
-                            array('title' => trans('langDocSender'),
+                            array('title' => $is_consultant ? trans('langDocSender') : trans('langMyUploadedFiles'),
                                   'url' => $urlAppend . 'modules/session/doc_uploaded.php?course=' . $course_code . '&session=' . $sessionID,
                                   'class' => 'session-uploaded-docs',
                                   'level' => 'secondary',
-                                  'icon' => 'fa-solid fa-file')
+                                  'icon' => 'fa-solid fa-cloud-arrow-up')
                         ))
                     !!}
 

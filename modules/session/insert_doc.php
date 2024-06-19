@@ -178,9 +178,9 @@ function upload_file($sid){
             if($badge){
                 $badge_id = $badge->id;
                 $resources = Database::get()->queryArray("SELECT * FROM session_resources
-                                                            WHERE res_id IN (SELECT resource FROM badge_criterion WHERE badge = ?d)
+                                                            WHERE res_id IN (SELECT resource FROM badge_criterion WHERE badge = ?d AND activity_type = ?s)
                                                             AND doc_id = ?d
-                                                            AND session_id = ?d",$badge_id,0,$sid);
+                                                            AND session_id = ?d",$badge_id,'document-submit',0,$sid);
             }
         }
 

@@ -163,6 +163,11 @@ if ($is_consultant) {
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
+    } elseif(isset($_POST['add_submited_document'])){
+        add_submitted_document_to_certificate($element, $element_id);
+        Session::flash('message',"$langQuotaSuccess");
+        Session::flash('alert-class', 'alert-success');
+        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
     } elseif (isset($_POST['add_poll'])) { // add poll activity in certificate
         add_poll_to_certificate($element, $element_id);
         Session::flash('message',"$langQuotaSuccess");

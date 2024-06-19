@@ -1072,7 +1072,7 @@ function get_resource_details($element, $resource_id) {
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
-            $langAttendance, $langCompletedSessionWithoutActivity;
+            $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
@@ -1229,6 +1229,19 @@ function get_resource_details($element, $resource_id) {
             break;
         case 'noactivity':
             $title = "$langCompletedSessionWithoutActivity";
+            break;
+        case 'document-submit':
+            $q = Database::get()->querySingle("SELECT title,filename FROM document WHERE document.course_id = ?d AND document.id = ?d", $course_id, $resource);
+            if ($q) {
+                if(!empty($q->title)){
+                    $title = $q->title;
+                }else{
+                    $title = $q->filename;
+                }
+            }else{
+                $title = "$langFileName";
+            }
+            $type = "$langSubmittedUploadedFile";
             break;
         default:
             $title = "$langAllActivities";

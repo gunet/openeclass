@@ -6369,3 +6369,9 @@ $langPercentageSessionCompletion = "Session completion rate";
 $langAllSessions = "All sessions";
 $langSessionHasNotBadge = "The session has no completion resources.";
 $langRegisteredUsers = "Registered users";
+$langDoNotChooseResource = "Your file should correspond to some integration activity.</br>
+ If the <<About>> field is empty then there are no session completion resources
+ and you cannot upload a file.";
+$langWithSubmittedUploadedFile = "By submitting a deliverable";
+$langSubmittedUploadedFile = "Submit deliverable";
+$langMyUploadedFiles = "My deliverables";

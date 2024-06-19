@@ -953,7 +953,7 @@ function session_exists($sid){
 function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
-            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant;
+            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, $langDoNotChooseResource;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -1056,14 +1056,22 @@ function upload_session_doc($sid){
             $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
             $order = $order+1;
 
+            // doc_id and uUserId refer to resources for session completion
             $doc_id = isset($_POST['refers_to_resource']) ? $_POST['refers_to_resource'] : 0;
             $uUserId = isset($_POST['fromUser']) ? $_POST['fromUser'] : 0;
-            // if exists then update uploaded file else upload it.
+            if($uUserId > 0 && $doc_id == 0){
+                Session::flash('message',$langDoNotChooseResource);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+            }
+            // if exists then update uploaded file else upload it for simple user.
             $checkExist = Database::get()->querySingle("SELECT * FROM session_resources
                                                             WHERE session_id = ?d 
                                                             AND type = ?s 
                                                             AND doc_id = ?d
-                                                            AND from_user = ?d", $sid, 'doc', $doc_id, $uUserId);
+                                                            AND from_user = ?d
+                                                            AND doc_id <> ?d
+                                                            AND from_user <> ?d", $sid, 'doc', $doc_id, $uUserId, 0, 0);
 
             if($checkExist){
                 $checker = 1;
@@ -1094,6 +1102,27 @@ function upload_session_doc($sid){
                                                 res_id = ?d,
                                                 doc_id = ?d,
                                                 from_user = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId);
+            }
+
+            
+            if(!$is_consultant){
+                // Initially get badge
+                $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$sid);
+                if($badge && $doc_id > 0 && $uUserId > 0){
+                    $badge_id = $badge->id;
+                    $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                                                                        WHERE badge = ?d
+                                                                        AND activity_type = ?s
+                                                                        AND resource = ?d",$badge_id,'document-submit',$doc_id);
+                    if($badge_criterion){
+                        $badge_criterion_id = $badge_criterion->id;
+                        Database::get()->query("INSERT INTO user_badge_criterion SET 
+                                                user = ?d,
+                                                created = " . DBHelper::timeAfter() . ",
+                                                badge_criterion = ?d",$uid,$badge_criterion_id);
+                    }
+                }
+                
             }
 
             $msg = ($checker == 1) ? $langUploadDocCompleted . '</br>' . $langPreviousDocDeleted : $langUploadDocCompleted;
@@ -1288,7 +1317,7 @@ function display_session_activities($element, $id, $session_id = 0) {
            $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
            $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, 
            $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel, 
-           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument;
+           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, $langWithSubmittedUploadedFile;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1360,21 +1389,23 @@ function display_session_activities($element, $id, $session_id = 0) {
             }
 
             $checkActivityType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE badge = ?d",$badge_id);
-            if($checkActivityType && ($checkActivityType->activity_type == 'document' or $checkActivityType->activity_type == 'assignment-submit')){
-                $activity_off = '';
-                $active_completion_without_resource = 'opacity-help pe-none';
+            if($checkActivityType && ($checkActivityType->activity_type == 'document' or 
+                $checkActivityType->activity_type == 'assignment-submit' or 
+                $checkActivityType->activity_type == 'document-submit')){
+                    $activity_off = '';
+                    $active_completion_without_resource = 'opacity-help pe-none';
             }elseif($checkActivityType && $checkActivityType->activity_type == 'noactivity'){
-                $activity_off = 'opacity-help pe-none';
-                $active_completion_without_resource = '';
-                if($started && (date('Y-m-d H:i:s') < $started->start)){
-                    $active_completion_without_resource = 'opacity-help pe-none';
-                }
+                    $activity_off = 'opacity-help pe-none';
+                    $active_completion_without_resource = '';
+                    if($started && (date('Y-m-d H:i:s') < $started->start)){
+                        $active_completion_without_resource = 'opacity-help pe-none';
+                    }
             }elseif(!$checkActivityType){
-                $activity_off = '';
-                $active_completion_without_resource = '';
-                if($started && (date('Y-m-d H:i:s') < $started->start)){
-                    $active_completion_without_resource = 'opacity-help pe-none';
-                }
+                    $activity_off = '';
+                    $active_completion_without_resource = '';
+                    if($started && (date('Y-m-d H:i:s') < $started->start)){
+                        $active_completion_without_resource = 'opacity-help pe-none';
+                    }
             }
 
         }
@@ -1392,14 +1423,18 @@ function display_session_activities($element, $id, $session_id = 0) {
             'icon-extra' => "data-id='{$session_id}' data-bs-toggle='modal' data-bs-target='#CompletionWithoutActivities{$session_id}'",
             'icon' => 'fa fa-trophy'
         ),
+        array('title' => $langWithSubmittedUploadedFile,
+              'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=submitFile",
+              'icon' => 'fa-upload',
+              'icon-class' => $activity_off),
         array('title' => $langOfSubmitAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
             'icon-class' => $activity_off),
-        array('title' => $langOfSubmitDocument,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
-            'icon' => 'fa fa-folder-open fa-fw',
-            'icon-class' => $activity_off),
+        // array('title' => $langOfSubmitDocument,
+        //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
+        //     'icon' => 'fa fa-folder-open fa-fw',
+        //     'icon-class' => $activity_off),
         // array('title' => $langOfPoll,
         //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
         //     'icon' => 'fa fa-question-circle fa-fw',
@@ -1678,6 +1713,7 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
             break;
         case 'document':
         case 'doc':
+        case 'submitFile':
             display_session_available_documents($element, $element_id, $session_id, $session_resource_id);
             break;
         case 'poll':
@@ -1815,6 +1851,11 @@ function display_session_available_documents($element, $element_id, $session_id 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
     if ($session_id) {
+        $sql_only_not_selected_resources = '';
+        if(isset($_GET['act']) && $_GET['act'] == 'submitFile'){
+            $sql_query = "SELECT resource FROM badge_criterion WHERE activity_type = 'document-submit'";
+            $sql_only_not_selected_resources = "AND session_resources.res_id NOT IN ($sql_query)";
+        }
         if ($session_resource_id) {
             $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
                                             FROM document, session_resources
@@ -1822,7 +1863,8 @@ function display_session_available_documents($element, $element_id, $session_id 
                                                 AND session_id = ?d
                                                 AND session_resources.id = ?d
                                                 AND session_resources.doc_id = ?d
-                                                AND session_resources.from_user = ?d"
+                                                AND session_resources.from_user = ?d
+                                                $sql_only_not_selected_resources"
                                             , $session_id, $session_resource_id,0,0);
         } else {
             $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
@@ -1832,7 +1874,8 @@ function display_session_available_documents($element, $element_id, $session_id 
                                                 AND session_resources.type = 'doc'
                                                 AND session_resources.visible = 1
                                                 AND session_resources.doc_id = ?d
-                                                AND session_resources.from_user = ?d", $session_id,0,0);
+                                                AND session_resources.from_user = ?d
+                                                $sql_only_not_selected_resources", $session_id,0,0);
         }
 
     } 
@@ -1962,7 +2005,12 @@ function display_session_available_documents($element, $element_id, $session_id 
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
+        if(isset($_GET['act']) && $_GET['act'] == 'submitFile'){
+            $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_submited_document' value='$langAddModulesButton' /></div>$dir_html</form>";
+        }else{
+            $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
+        }
+        
     }
 }
 
@@ -2434,4 +2482,27 @@ function session_tc_creation($sid,$cid,$tc_type,$token){
     }else{
         return false;
     }
+}
+
+
+
+/**
+ * @brief add submitted document db entries in certificate criterion
+ * @param type $element
+ * @param type $element_id
+ * @return type
+ */
+function add_submitted_document_to_certificate($element, $element_id) {
+
+    if (isset($_POST['document'])) {
+        foreach ($_POST['document'] as $data) {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                            SET $element = ?d,
+                                module= " . MODULE_ID_DOCS . ",
+                                resource = ?d,
+                                activity_type = 'document-submit'",
+                $element_id, $data);
+        }
+    }
+    return;
 }
