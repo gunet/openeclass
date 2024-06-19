@@ -47,6 +47,7 @@
                     });
                     $('#portfolio_collaborations_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
                 },
+                "dom": @if(get_config('show_always_collaboration')) "<'all_courses float-end px-0'>frtip" @else "" @endif,
                 "oLanguage": {
                     "sLengthMenu": "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
                     "sZeroRecords": "{{ trans('langNoResult') }}",
@@ -557,14 +558,12 @@
 
                         <div class='col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4'>
                             <div>
-                                @if((!get_config('show_collaboration') && !get_config('show_always_collaboration')) 
-                                   or (get_config('show_collaboration') && !get_config('show_always_collaboration')))
+                                @if(!get_config('show_always_collaboration'))
                                 <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
                                     <div>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
                                 </h5>
                                 @endif
-                                @if((get_config('show_collaboration') && get_config('show_always_collaboration')) 
-                                   or (get_config('show_collaboration') && !get_config('show_always_collaboration')))
+                                @if(get_config('show_collaboration'))
                                 <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
                                     <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
                                 </h5>
@@ -664,6 +663,7 @@
                                             {!! $perso_tool_content['lessons_content'] !!}
                                         </div>
 
+                                    
                                         <div id="cources-pics">
 
                                             <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
@@ -732,16 +732,7 @@
                                                                     </div>
 
                                                                     <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
-                                                                    @if(get_config('show_collaboration') && !get_config('show_always_collaboration'))
-                                                                        <div class="vsmall-text Neutral-900-cl TextRegular mt-1">
-                                                                            {{ trans('langType') }}:&nbsp;
-                                                                            @if($course->is_collaborative)
-                                                                                {{ trans('langTypeCollaboration')}}
-                                                                            @else
-                                                                                {{ trans('langCourse')}}
-                                                                            @endif
-                                                                        </div>
-                                                                    @endif
+                                                                    
                                                                 </div>
 
                                                                 <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
@@ -870,6 +861,7 @@
                                             </div>
 
                                         </div>
+
 
                                         @if($portfolio_page_main_widgets)
                                             <div class='col-12 mt-4'>

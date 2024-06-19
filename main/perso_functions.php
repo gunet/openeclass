@@ -40,183 +40,174 @@ function getUserCourseInfo($uid): string
            $langWelcomeSelect, $langPreview, $langOfCourse,
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist, $langListOfCollaboration,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
-           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty;
+           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty, $mine_courses, $mine_collaborations;
 
     $lesson_content = '';
-    $lesson_ids = array();
-    $collaboration_ids = array();
+    $lesson_ids = [];
+    $collaboration_ids = [];
     $courses = [];
-    $myCourses = getUserCourses($uid);
+    $myCollaborations = [];
 
-    $myCollaborations = array();
+    if(!get_config('show_always_collaboration')){
+        $myCourses = $mine_courses = getUserCourses($uid);
+    }
+
     if(get_config('show_collaboration')){
-        $myCollaborations = getUserCollaborations($uid);
+        $myCollaborations = $mine_collaborations = getUserCollaborations($uid);
     }
     
-    if ($myCourses) {
-        $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
-        $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
-        foreach ($myCourses as $data) {
+    if(!get_config('show_always_collaboration')){
+        if ($myCourses) {
+            $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
+            $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+            foreach ($myCourses as $data) {
+                
+                $courses[$data->code] = $data->status;
+                $_SESSION['courses'] = $courses;
+                $lesson_ids[] = $data->course_id;
+                $visclass = '';
 
-            // Don't display specific courses
-            if(get_config('show_collaboration') && get_config('show_always_collaboration') && !$data->is_collaborative){
-                continue;
-            }elseif(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $data->is_collaborative){
-                continue;
-            }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration') && $data->is_collaborative){
-                continue;
-            }
-            
-            $courses[$data->code] = $data->status;
-            $_SESSION['courses'] = $courses;
-            $lesson_ids[] = (!$data->is_collaborative) ? $data->course_id : '';
-            $collaboration_ids[] = ($data->is_collaborative) ? $data->course_id : '';
-            $visclass = '';
+                //Get syllabus for course
+                $syllabus = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
+                                        LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
+                                        WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
 
-            //Get syllabus for course
-            $syllabus = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
-                                    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
-                                    WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
-
-            if ($data->visible == COURSE_INACTIVE) {
-                $visclass = "not_visible";
-            }
-            if (isset($data->favorite)) {
-                $favorite_icon = 'fa-star Primary-500-cl';
-                $fav_status = 0;
-                $fav_message = '';
-            } else {
-                $favorite_icon = 'fa-regular fa-star';
-                $fav_status = 1;
-                $fav_message = $langFavorite;
-            }
-            $license = '';
-            if($data->course_license > 0){
-                $license = copyright_info($data->course_id);
-            }
-            $lesson_content .= "
-                <tr class='$visclass row-course'>
-                    <td class='border-top-0 border-start-0 border-end-0'>
-                        <div class='d-flex gap-3 flex-wrap'>
-                            <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
-                                &nbsp;(" . q($data->public_code) . ")
-                            </a>
-                            <a id='btnNotification_{$data->course_id}' class='btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
-                                            role='button' aria-expanded='false' aria-controls='notification{$data->course_id}'>
-                                <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
-                            </a>
-                        </div>
-                        <div>
-                            <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
-                        </div>
-                        <div class='collapse' id='notification{$data->course_id}'>                
-                            <div class='d-flex align-items-start lesson-notifications' data-id='{$data->course_id}'></div>                                
-                        </div>
-                    </td>";
-
-            $lesson_content .= "
-                    <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
-                        <div class='col-12 portfolio-tools'>
-                            <div class='d-inline-flex'>";
-
-            $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse'>
-                                <i class='fa-solid fa-display'></i>
-                            </a>
-
-                            <div id='PortfolioModal{$data->code}' class='modal'>
-
-                                <div class='modal-content modal-content-opencourses px-lg-5 py-lg-5'>
-                                    <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
-                                        <div>
-                                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                <h2 class='mb-0'>". q($data->title) . "</h2>
-                                                " . course_access_icon($data->visible) . "
-                                                $license
-                                            </div>  
-                                            <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
-                                        </div>
-                                        <div>
-                                            <button aria-label='Close' type='button' class='close'></button>
-                                        </div>
-
-                                    </div>
-                                    <div class='course-content mt-4'>
-                                        <div class='col-12 d-flex justify-content-center align-items-start'>";
-            if($data->course_image == NULL) {
-                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' />";
-            } else {
-                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' />";
-            }
-            $lesson_content .= "</div>
-                    <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
-            if(empty($data->description)) {
-                if($data->is_collaborative){
-                    $lesson_content .= "<p class='text-center'>$langThisCollabDescriptionIsEmpty</p>";
-                }else{
-                    $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                if ($data->visible == COURSE_INACTIVE) {
+                    $visclass = "not_visible";
                 }
-            } else {
-                $lesson_content .= "{$data->description}";
-            }
-            $lesson_content .= "</div>";
-                if(count($syllabus) > 0) {
-                    $lesson_content .= "<div class='col-12 mt-4'>
-                                            <div class='row m-auto'>
-                                                <div class='panel px-0'>
-                                                    <div class='panel-group group-section mt-2 px-0' id='accordionCourseSyllabus{$data->course_id}'>
-                                                        <ul class='list-group list-group-flush'>
-                                                            <li class='list-group-item px-0 mb-4 bg-transparent'>
-    
-                                                                <div class='d-flex justify-content-between border-bottom-default'>
-                                                                    <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#courseSyllabus{$data->course_id}' aria-expanded='true' aria-controls='courseSyllabus{$data->course_id}'>
-                                                                        <i class='fa-solid fa-chevron-down settings-icon'></i>
-                                                                        $langSyllabus
-                                                                    </a>
-                                                                </div>
-                                                                <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='courseSyllabus{$data->course_id}' data-bs-parent='#accordionCourseSyllabus{$data->course_id}'>";
-                                                                foreach ($syllabus as $row) {
-                                                                    $lesson_content .= "<div class='col-12 mb-4'>
-                                                                        <p class='form-label text-start'>" .q($row->title) ."</p>
-                                                                        " . standard_text_escape($row->comments) . "
-                                                                    </div>";
-                                                                }
-                                        $lesson_content .= "    </div>
-                                                            </li>
-                                                        </ul>
+                if (isset($data->favorite)) {
+                    $favorite_icon = 'fa-star Primary-500-cl';
+                    $fav_status = 0;
+                    $fav_message = '';
+                } else {
+                    $favorite_icon = 'fa-regular fa-star';
+                    $fav_status = 1;
+                    $fav_message = $langFavorite;
+                }
+                $license = '';
+                if($data->course_license > 0){
+                    $license = copyright_info($data->course_id);
+                }
+                $lesson_content .= "
+                    <tr class='$visclass row-course'>
+                        <td class='border-top-0 border-start-0 border-end-0'>
+                            <div class='d-flex gap-3 flex-wrap'>
+                                <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
+                                    &nbsp;(" . q($data->public_code) . ")
+                                </a>
+                                <a id='btnNotification_{$data->course_id}' class='btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
+                                                role='button' aria-expanded='false' aria-controls='notification{$data->course_id}'>
+                                    <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
+                                </a>
+                            </div>
+                            <div>
+                                <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
+                            </div>
+                            <div class='collapse' id='notification{$data->course_id}'>                
+                                <div class='d-flex align-items-start lesson-notifications' data-id='{$data->course_id}'></div>                                
+                            </div>
+                        </td>";
+
+                $lesson_content .= "
+                        <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
+                            <div class='col-12 portfolio-tools'>
+                                <div class='d-inline-flex'>";
+
+                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse'>
+                                    <i class='fa-solid fa-display'></i>
+                                </a>
+
+                                <div id='PortfolioModal{$data->code}' class='modal'>
+
+                                    <div class='modal-content modal-content-opencourses px-lg-5 py-lg-5'>
+                                        <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
+                                            <div>
+                                                <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                    <h2 class='mb-0'>". q($data->title) . "</h2>
+                                                    " . course_access_icon($data->visible) . "
+                                                    $license
+                                                </div>  
+                                                <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
+                                            </div>
+                                            <div>
+                                                <button aria-label='Close' type='button' class='close'></button>
+                                            </div>
+
+                                        </div>
+                                        <div class='course-content mt-4'>
+                                            <div class='col-12 d-flex justify-content-center align-items-start'>";
+                if($data->course_image == NULL) {
+                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' />";
+                } else {
+                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' />";
+                }
+                $lesson_content .= "</div>
+                        <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
+                if(empty($data->description)) {
+                    $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                } else {
+                    $lesson_content .= "{$data->description}";
+                }
+                $lesson_content .= "</div>";
+                    if(count($syllabus) > 0) {
+                        $lesson_content .= "<div class='col-12 mt-4'>
+                                                <div class='row m-auto'>
+                                                    <div class='panel px-0'>
+                                                        <div class='panel-group group-section mt-2 px-0' id='accordionCourseSyllabus{$data->course_id}'>
+                                                            <ul class='list-group list-group-flush'>
+                                                                <li class='list-group-item px-0 mb-4 bg-transparent'>
+        
+                                                                    <div class='d-flex justify-content-between border-bottom-default'>
+                                                                        <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#courseSyllabus{$data->course_id}' aria-expanded='true' aria-controls='courseSyllabus{$data->course_id}'>
+                                                                            <i class='fa-solid fa-chevron-down settings-icon'></i>
+                                                                            $langSyllabus
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='courseSyllabus{$data->course_id}' data-bs-parent='#accordionCourseSyllabus{$data->course_id}'>";
+                                                                    foreach ($syllabus as $row) {
+                                                                        $lesson_content .= "<div class='col-12 mb-4'>
+                                                                            <p class='form-label text-start'>" .q($row->title) ."</p>
+                                                                            " . standard_text_escape($row->comments) . "
+                                                                        </div>";
+                                                                    }
+                                            $lesson_content .= "    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>";
+                                            </div>";
+                        }
+
+                    $lesson_content .= "</div>";
+
+                $lesson_content .= "</div>
+                                </div>";
+
+                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+                if ($data->status == USER_STUDENT) {
+                    if (get_config('disable_student_unregister_cours') == 0) {
+                        $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                     }
-
-                $lesson_content .= "</div>";
-
-            $lesson_content .= "</div>
-                            </div>";
-
-            $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-            if ($data->status == USER_STUDENT) {
-                if (get_config('disable_student_unregister_cours') == 0) {
-                    $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                } elseif ($data->status == USER_TEACHER) {
+                    $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
                 }
-            } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                $lesson_content .= "</div>
+                            </div>
+                        </td>
+                    </tr>
+                ";
+                
             }
-            $lesson_content .= "</div>
-                        </div>
-                    </td>
-                </tr>
-            ";
-            
-        }
-        $lesson_content .= "</tbody></table>";
+            $lesson_content .= "</tbody></table>";
 
-    } else { // if we are not registered to courses
-        $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToLessons!</span></div></div>";
-        if ($session->status == USER_TEACHER) {
-            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeProfPerso</span></div></div>";
-        } else {
-            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeStudPerso</span></div></div>";
+        } else { // if we are not registered to courses
+            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToLessons!</span></div></div>";
+            if ($session->status == USER_TEACHER) {
+                $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeProfPerso</span></div></div>";
+            } else {
+                $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeStudPerso</span></div></div>";
+            }
         }
     }
     
@@ -225,10 +216,11 @@ function getUserCourseInfo($uid): string
 
 
     // Create ui for collabations which a user is participated in.
-    if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
-        $lesson_content .= "<div class='col-12 mt-5'>
+    if(get_config('show_collaboration')){
+        if(!get_config('show_always_collaboration')){
+        $lesson_content .= "<div class='col-12 mt-5 mb-4'>
                 <h2>$langMyCollaborations&nbsp;&nbsp;(" . count($myCollaborations) . ")</h2>
-            </div>";
+            </div>";}
         if($myCollaborations){
                 $lesson_content .= "<table id='portfolio_collaborations' class='table portfolio-collaborations-table'>";
                 $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
@@ -316,11 +308,8 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "</div>
                             <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
                     if(empty($data->description)) {
-                        if($data->is_collaborative){
-                            $lesson_content .= "<p class='text-center'>$langThisCollabDescriptionIsEmpty</p>";
-                        }else{        
-                            $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
-                        }
+                        $lesson_content .= "<p class='text-center'>$langThisCollabDescriptionIsEmpty</p>";
+                        
                     } else {
                         $lesson_content .= "{$data->description}";
                     }
@@ -602,14 +591,14 @@ function getUserCourses($uid)
                              course.description description,
                              course.course_image course_image,
                              course.popular_course popular_course,
-                             course.is_collaborative is_collaborative,
                              course_user.status status,
                              course_user.favorite favorite
                         FROM course JOIN course_user
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
                             AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+                            AND course.is_collaborative = ?d
+                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, 0);
 
     return $myCourses;
 }

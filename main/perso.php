@@ -41,16 +41,18 @@ $user_announcements = '';
 //  Get user's course info
 $user_lesson_info = getUserCourseInfo($uid);
 //if user is registered to at least one lesson
-if (count($lesson_ids) > 0) {
-    // get user announcements
-    $user_announcements = getUserAnnouncements($lesson_ids);
+if(!get_config('show_collaboration')){
+    if (count($lesson_ids) > 0) {
+        // get user announcements for courses
+        $user_announcements = getUserAnnouncements($lesson_ids);
+    }
 }
-
 // Main platform and Collaboration platform are always enabled
 if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
-    if(count($collaboration_ids) > 0){
-        $lesson_collaboration_ids = array_merge($collaboration_ids,$lesson_ids);
-        $user_announcements = getUserAnnouncements($lesson_collaboration_ids);
+    if(count($collaboration_ids) > 0 || count($lesson_ids) > 0){
+        // get user announcements for courses and collaborations
+        $courses_collaboration_ids = array_merge($collaboration_ids,$lesson_ids);
+        $user_announcements = getUserAnnouncements($courses_collaboration_ids);
     }
 }
 // Main platform and Collaboration platform are always enabled

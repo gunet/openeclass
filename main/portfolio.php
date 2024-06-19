@@ -108,12 +108,16 @@ $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, regis
                                         WHERE id = ?d", $uid);
 
 if ($_SESSION['status'] == USER_TEACHER) {
-    $data['num_of_courses'] = CountTeacherCourses($uid);
+    if(!get_config('show_always_collaboration')){
+        $data['num_of_courses'] = CountTeacherCourses($uid);
+    }
     if(get_config('show_collaboration')){
         $data['num_of_collaborations'] = CountTeacherCollaborations($uid);
     }
 } else {
-    $data['num_of_courses'] = CountStudentCourses($uid);
+    if(!get_config('show_always_collaboration')){
+        $data['num_of_courses'] = CountStudentCourses($uid);
+    }
     if(get_config('show_collaboration')){
         $data['num_of_collaborations'] = CountStudentCollaborations($uid);
     }
@@ -121,25 +125,28 @@ if ($_SESSION['status'] == USER_TEACHER) {
 
 $data['user_messages'] = $user_messages;
 
+
 // For pagination pictures of user-courses
-$courses = getUserCourses($uid);
-$data['courses'] = $courses;
-
-$collaborations = getUserCollaborations($uid);
-$data['collaborations'] = $collaborations;
-
-if(get_config('show_collaboration') and get_config('show_always_collaboration')){
-    $courses = getUserCollaborations($uid);
-    $data['courses'] = $courses;
+if(!get_config('show_always_collaboration')){
+    $data['courses'] = $mine_courses;
+}
+if(get_config('show_collaboration')){
+    $data['collaborations'] = $mine_collaborations;
+    if(get_config('show_always_collaboration')){
+        $data['courses'] = $mine_collaborations;
+    }
 }
 
-$items_per_page = 4;
-$data['items_per_page'] = $items_per_page;
 
-$course_pages = ceil(count($courses)/$items_per_page);
-$data['course_pages'] = $course_pages;
+$data['items_per_page'] = $items_per_page = 4;
 
-$collaboration_pages = ceil(count($collaborations)/$items_per_page);
-$data['collaboration_pages'] = $collaboration_pages;
+if(!get_config('show_always_collaboration')){
+    $data['course_pages'] = ceil(count($mine_courses)/$items_per_page);
+}
+
+if(get_config('show_collaboration')){
+    $data['collaboration_pages'] = ceil(count($mine_collaborations)/$items_per_page);
+}
+
 
 view('portfolio.index', $data);
