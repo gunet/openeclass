@@ -197,7 +197,7 @@ if (file_exists($disk_path)) {
             exit();
         }
         triggerGame($file_info->id);
-        send_file_to_client($disk_path, $file_info->filename);
+        send_file_to_client($disk_path, $file_info->filename, 'inline', true);
     } else {
         require_once 'include/lib/fileDisplayLib.inc.php';
         require_once 'include/lib/multimediahelper.class.php';

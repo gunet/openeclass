@@ -71,7 +71,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
             $filename = '"' . $filename . '"';
         }
         $filenameattr = '; filename=' . $filename;
-        if (!isset($disposition)) {
+        if (!$disposition) {
             $disposition = 'attachment';
         }
     } else {
