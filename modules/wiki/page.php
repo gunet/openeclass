@@ -512,7 +512,7 @@ if (!$is_allowedToRead) {
 
 if ($action != "edit" && $action != "history" && $action != "diff") {
 // Wiki navigation bar
-$tool_content .= action_bar(array(
+$action_bar = action_bar(array(
     array(
         'title' => $langWikiMainPage,
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=show&amp;title=__MainPage__",
@@ -544,19 +544,8 @@ $tool_content .= action_bar(array(
         'level' => 'primary'
     )
 ));
-}
 
-
-if ($action == "edit" || $action == "diff" || $action == "history" || $action == "conflict") {
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=show&amp;title=". rawurlencode($wiki_title)
-        )
-    ));
-
+$tool_content .= $action_bar;
 }
 
 
@@ -737,20 +726,20 @@ switch ($action) {
                      $wikiPage->loadPage($wiki_title);
                      if ($wikiPage->delete()) {
                          //Session::Messages($langWikiPageDeleted, 'alert-success');
-                         Session::flash('message',$langWikiPageDeleted); 
+                         Session::flash('message',$langWikiPageDeleted);
                          Session::flash('alert-class', 'alert-success');
                          triggerGame($course_id, $uid, WikiEvent::DELPAGE);
                          triggerAnalytics($course_id, $uid, WikiAnalyticsEvent::WIKIEVENT);
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                      } else {
                          //Session::Messages($langWikiDeletePageError, 'alert-danger');
-                         Session::flash('message',$langWikiDeletePageError); 
+                         Session::flash('message',$langWikiDeletePageError);
                          Session::flash('alert-class', 'alert-danger');
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&action=show&title=".rawurlencode($wiki_title)."&wikiId=$wikiId");
                      }
                  } else {
                     //Session::Messages($langWikiPageNotFound);
-                    Session::flash('message',$langWikiPageNotFound); 
+                    Session::flash('message',$langWikiPageNotFound);
                     Session::flash('alert-class', 'alert-warning');
                     redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                  }

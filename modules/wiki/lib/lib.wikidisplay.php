@@ -157,15 +157,16 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
-    $out = "<br>
-            <div><form method='POST' action='$script' name='previewform' id='previewform'>
+    $out = "<div>
+            <form method='POST' action='$script' name='previewform' id='previewform'>
              <input type='hidden' name='wiki_content' value='". q($content) . "'>
              <input type='hidden' name='changelog' value='". q($changelog) . "'>
              <input type='hidden' name='title' value='". q($title) ."'>
              <input type='hidden' name='wikiId' value='$wikiId'>
-             <input class='btn submitAdminBtn' type='submit' name='action[save]' value='$langSave'>
-             <input class='btn submitAdminBtn' type='submit' name='action[edit]' value='$langEdit'>
-            ";
+             <div class='form-group mt-4'>
+                 <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                     <input class='btn submitAdminBtn' type='submit' name='action[save]' value='$langSave'>
+                     <input class='btn submitAdminBtn' type='submit' name='action[edit]' value='$langEdit'>";
 
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "title", $title);
@@ -173,7 +174,9 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
 
     $out .= "<a class='btn cancelAdminBtn' href='$location'>$langCancel</a>";
 
-    $out .= "</form></div>";
+    $out .= "</div></div>";
+    $out .= "</form>";
+    $out .= "</div>";
 
     return $out;
 }
@@ -217,14 +220,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
-    $form = action_bar(array(
-        array('title' => $langBack,
-              'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary',)
-    ));
-
-    $form .= "<div class='d-lg-flex gap-4 mt-4'>
+    $form = "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
                     <fieldset>

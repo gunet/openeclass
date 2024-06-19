@@ -113,7 +113,6 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_link();
         $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
-       // Session::Messages($message, 'alert-success');
         Session::flash('message',$message);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/link/index.php?course=$course_code");
@@ -122,7 +121,6 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
-        //Session::Messages($messsage, 'alert-success');
         Session::flash('message',$message);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/link/index.php?course=$course_code");
@@ -131,7 +129,6 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['settings_radio'])) {
             setting_set(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, intval($_POST['settings_radio']));
-            //Session::Messages($langLinkSettingsSucc, 'alert-success');
             Session::flash('message',$langLinkSettingsSucc);
             Session::flash('alert-class', 'alert-success');
         }
@@ -151,13 +148,11 @@ if ($is_editor) {
     switch ($action) {
         case 'deletelink':
             delete_link($id);
-            //Session::Messages($langLinkDeleted, 'alert-success');
             Session::flash('message',$langLinkDeleted);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/link/index.php?course=$course_code");
         case 'deletecategory':
             delete_category($id);
-            //Session::Messages($langCategoryDeleted, 'alert-success');
             Session::flash('message',$langCategoryDeleted);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/link/index.php?course=$course_code");
@@ -165,32 +160,24 @@ if ($is_editor) {
 
 
     if (!$is_in_tinymce) {
-        if (isset($_GET['action'])) {
-            $tool_content .= $data['action_bar'] = action_bar(array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary',
-                      'show' => $is_editor)));
-
-        } else {
-            $ext = (isset($category)? "&amp;category=$category": '') .
-                   (isset($urlview)? "&amp;urlview=$urlview": '');
+        if (!isset($_GET['action'])) {
+            $ext = (isset($category) ? "&amp;category=$category" : '') .
+                (isset($urlview) ? "&amp;urlview=$urlview" : '');
             $tool_content .= $data['action_bar'] = action_bar(array(
                 array('title' => $langLinkAdd,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
-                      'icon' => 'fa-plus-circle',
-                      'button-class' => 'btn-success',
-                      'level' => 'primary-label'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
+                    'icon' => 'fa-plus-circle',
+                    'button-class' => 'btn-success',
+                    'level' => 'primary-label'),
                 array('title' => $langCategoryAdd,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory$ext",
-                      'icon' => 'fa-plus-circle',
-                      'button-class' => 'btn-success',
-                      'level' => 'primary-label'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory$ext",
+                    'icon' => 'fa-plus-circle',
+                    'button-class' => 'btn-success',
+                    'level' => 'primary-label'),
                 array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings",
-                      'icon' => 'fa-gear',
-                      'level' => 'primary')));
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings",
+                    'icon' => 'fa-gear',
+                    'level' => 'primary')));
         }
     }
 
@@ -238,14 +225,12 @@ if ($is_editor) {
         if ($result->c > 0) {
             if (isset($_POST['submitLink'])) {
                 if (isset($_POST['id']) && !is_link_creator(getDirectReference($_POST['id']))) {
-                    //Session::Messages($langLinkNotOwner, 'alert-error');
                     Session::flash('message',$langLinkNotOwner);
                     Session::flash('alert-class', 'alert-success');
                 } else {
                     $_POST['selectcategory'] = getIndirectReference(-2); //ensure that simple users cannot change category
                     submit_link();
                     $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
-                    //Session::Messages($message, 'alert-success');
                     Session::flash('message',$message);
                     Session::flash('alert-class', 'alert-success');
                 }
@@ -255,11 +240,9 @@ if ($is_editor) {
                 case 'deletelink':
                     if (is_link_creator($id)) {
                         delete_link($id);
-                        //Session::Messages($langLinkDeleted, 'alert-success');
                         Session::flash('message',$langLinkDeleted);
                         Session::flash('alert-class', 'alert-success');
                     } else {
-                        //Session::Messages($langLinkNotOwner, 'alert-danger');
                         Session::flash('message',$langLinkNotOwner);
                         Session::flash('alert-class', 'alert-danger');
                     }

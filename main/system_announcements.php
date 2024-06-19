@@ -19,23 +19,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**
- * @file about.php
- * @brief Displays general platform information.
- * @author original developed by Ophelia Neofytou.
- */
-
 require_once '../include/baseTheme.php';
 $pageName = $langAdminAn;
-
-
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
     $keyword = '%' . $_GET['sSearch'] . '%';
-
 
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement");
     $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement WHERE title LIKE ?s", $keyword);
@@ -97,22 +88,12 @@ if (isset($_GET['an_id'])) {
     $data['date'] = format_locale_date(strtotime($row->date));
     $data['body'] = standard_text_escape($row->body);
 
-    $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
-
     view('info.single_system_announcement', $data);
 } else {
     // display admin announcements
 
     load_js('datatables');
     load_js('trunk8');
-
-    $data['action_bar'] = action_bar([
-        ['title' => $langBack,
-            'url' => $urlServer,
-            'icon' => 'fa-reply',
-            'level' => 'primary',
-            'button-class' => 'btn-secondary']
-    ],false);
 
     $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
@@ -163,7 +144,5 @@ if (isset($_GET['an_id'])) {
         });
         </script>";
 
-    $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
-
-    view('info.system_announcements', $data);
+    view('info.system_announcements');
 }
