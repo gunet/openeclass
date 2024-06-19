@@ -99,7 +99,7 @@
                                 <div class='form-group mt-4'>
                                     <label for='answer' class='col-sm-12 control-label-notes'>{{ trans('langRegisteredUsers') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='users_registered' value="{{ get_config('users_registered') }}"/>
+                                        <input class='form-control' type='text' name='users_registered' value="{!! !empty(get_config('users_registered')) ? get_config('users_registered') : 0 !!}"/>
                                     </div>
                                 </div>
 
