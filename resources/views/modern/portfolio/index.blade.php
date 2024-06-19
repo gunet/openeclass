@@ -689,12 +689,7 @@
                                                 @foreach($courses as $course)
                                                     
                                                         @php 
-                                                            if(!get_config('show_collaboration') && !get_config('show_always_collaboration') && $course->is_collaborative){
-                                                                continue;
-                                                            }else{
-                                                                $temp_pages++; 
-                                                            }
-
+                                                            $temp_pages++; 
                                                             if (isset($course->favorite)) {
                                                                 $favorite_icon = 'fa-star Primary-500-cl';
                                                                 $fav_status = 0;
