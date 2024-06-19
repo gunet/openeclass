@@ -35,7 +35,7 @@
                     @endif
 
                     @if (count($fileInfo) or $curDirName)
-                       
+
                             <div class='col-md-12'>
                                 <div class='panel'>
                                     <div class='panel-body'>
@@ -55,9 +55,9 @@
                                     </div>
                                 </div>
                             </div>
-                    
 
-               
+
+
                             <div class='col-md-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
@@ -70,7 +70,7 @@
                                         </tr></thead>
 
                                         @forelse ($fileInfo as $file)
-                                        
+
                                             <tr class='{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}'>
                                                 <td><span class='fa {{ $file->icon }}'></span></td>
                                                 <td>
@@ -137,14 +137,14 @@
                                     </table>
                                 </div>
                             </div>
-                        
+
                     @else
                         <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoDocuments') }}</span></div>
                     @endif
                 </div>
             </div>
         </div>
-    
+
 </div>
 </div>
 
@@ -191,4 +191,3 @@
     </script>
 
 @endsection
-

@@ -317,13 +317,13 @@
 
                                                     @if($file->visible == 1)
                                                         @if ($file->is_dir)
-                                                            <span class='visibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
+                                                            <span class='visibleFile pe-2'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
                                                         @else
                                                             <span class='visibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
                                                         @endif
                                                     @else
                                                         @if ($file->is_dir)
-                                                            <span class='invisibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
+                                                            <span class='invisibleFile pe-2'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
                                                         @else
                                                             <span class='invisibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
                                                        @endif
@@ -453,7 +453,7 @@
     {
         e.preventDefault();
         var fileURL = $(this).attr('href');
-        var downloadURL = $(this).prev('input').val();
+        var downloadURL = $(this).siblings('input').val();
         var fileTitle = $(this).attr('title');
 
         // BUTTONS declare
@@ -462,7 +462,11 @@
                 label: '<i class="fa fa-download"></i> {{ trans('langDownload') }}',
                 className: 'submitAdminBtn gap-1',
                 callback: function (d) {
-                    window.location = downloadURL;
+                    var anchor = document.createElement('a');
+                    anchor.href = downloadURL;
+                    anchor.target = '_blank';
+                    anchor.download = fileTitle;
+                    anchor.click();
                 }
             },
             print: {
