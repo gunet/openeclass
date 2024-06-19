@@ -736,9 +736,9 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 
 
 /**
- * @brief checks if a unit resource belongs to unit prerequisites
- * @param $unit_id
- * @param $unit_resource_id
+ * @brief checks if a session resource belongs to session prerequisites
+ * @param $session_id
+ * @param $session_resource_id
  * @return boolean
  */
 function resource_belongs_to_session_completion($session_id, $session_resource_id) {
@@ -1695,8 +1695,8 @@ function display_session_modification_activity($element, $element_id, $activity_
  * @param type $element_id
  * @param type $element
  * @param type $activity
- * @param type $unit_id
- * @param type $unit_resource_id
+ * @param type $session_id
+ * @param type $session_resource_id
  */
 function insert_session_activity($element, $element_id, $activity, $session_id = 0, $session_resource_id = 0) {
 
@@ -1732,8 +1732,8 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
  * @brief assignments display form
  * @param type $element
  * @param type $element_id
- * @param int $unit_id
- * @param int $unit_resource_id
+ * @param int $session_id
+ * @param int $session_resource_id
  */
 function display_session_available_assignments($element, $element_id, $activity_type, $session_id = 0, $session_resource_id = 0) {
 
@@ -1819,7 +1819,8 @@ function display_session_available_assignments($element, $element_id, $activity_
  * @brief document display form
  * @param type $element
  * @param type $element_id
- * @param int $unit_id
+ * @param int $session_id
+ * @param int $session_resource_id
  */
 function display_session_available_documents($element, $element_id, $session_id = 0, $session_resource_id = 0) {
 
@@ -2187,8 +2188,8 @@ function prereq_session_has_completion_enabled($prereq_session_id) {
 }
 
 /**
- * @param int $unit_id
- * @param int $prereq_unit_id
+ * @param int $session_id
+ * @param int $prereq_session_id
  */
 function insert_session_prerequisite_unit($session_id, $prereq_session_id) {
 

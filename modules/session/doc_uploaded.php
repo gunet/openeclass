@@ -132,6 +132,26 @@ if (isset($_GET['download'])) {
 
 
 if(isset($_GET['del'])){
+    $r = Database::get()->querySingle("SELECT doc_id,from_user FROM session_resources 
+                                                    WHERE res_id = ?d AND session_id = ?d",$_GET['del'],$sessionID);
+    if($r){
+        $resource_id = $r->doc_id;
+        $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$sessionID,$course_id);
+        if($badge){
+            $badge_id = $badge->id;
+            $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion
+                                                              WHERE badge = ?d
+                                                              AND resource = ?d
+                                                              AND activity_type = ?s",$badge_id,$resource_id,'document-submit');
+            if($badge_criterion){
+                $badge_criterion_id = $badge_criterion->id;
+                Database::get()->query("DELETE FROM user_badge_criterion 
+                                            WHERE user = ?d AND badge_criterion = ?d",$r->from_user,$badge_criterion_id);
+            }
+        }
+        
+    }
+
     $file = Database::get()->queryArray("SELECT filename,path,lock_user_id FROM document WHERE id = ?d",$_GET['del']);
     if(count($file) > 0){
         foreach($file as $f){
