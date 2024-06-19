@@ -79,7 +79,6 @@ if ($is_editor) {
                     $delete_ok = true;
                     if ($r) {
                         if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-                            //Session::Messages($langResourceBelongsToCert, "alert-warning");
                             Session::flash('message', $langResourceBelongsToCert);
                             Session::flash('alert-class', 'alert-warning');
                         } else {
@@ -89,7 +88,6 @@ if ($is_editor) {
                                 function ($r2) {
                                     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
-                                        //Session::Messages($langResourceBelongsToCert, "alert-warning");
                                         Session::flash('message', $langResourceBelongsToCert);
                                         Session::flash('alert-class', 'alert-warning');
                                     }
@@ -110,11 +108,9 @@ if ($is_editor) {
                                 Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
                             }
                             if ($delete_ok) {
-                                //Session::Messages($langDocDeleted, 'alert-success');
                                 Session::flash('message', $langDocDeleted);
                                 Session::flash('alert-class', 'alert-success');
                             } else {
-                                //Session::Messages($langGeneralError, 'alert-danger');
                                 Session::flash('message', $langGeneralError);
                                 Session::flash('alert-class', 'alert-danger');
                             }
@@ -1284,7 +1280,7 @@ if ($can_upload or $user_upload) {
 
 // Set current directory
 if (!isset($curDirPath)) {
-    $curDirPath = isset($_GET['openDir'])? $_GET['openDir']: '';
+    $curDirPath = $_GET['openDir'] ?? '';
     if ($curDirPath == '/' or $curDirPath == '\\') {
         $curDirPath = '';
     }

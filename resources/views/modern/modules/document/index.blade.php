@@ -208,7 +208,7 @@
                                                 &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
                                             @endif
                                             @if ($curDirName and $dirComment)
-                                                {{ $dirComment }}
+                                                <small>&nbsp;&nbsp;{{ $dirComment }}</small>
                                             @endif
                                         </div>
                                         <div>
@@ -333,7 +333,7 @@
                                                         @if($file->visible == 1)
                                                             <a href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @else
-                                                            <a class="opacity-50 pe-none" href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                            <a class="opacity-50" href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @endif
                                                     @else
                                                         {!! $file->link !!}
