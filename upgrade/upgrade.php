@@ -439,36 +439,38 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         }
 
         setGlobalContactInfo();
+
+        $theme_id = get_config('theme_options_id') ?? 0;
+        $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
+        foreach ($all_themes as $row) {
+            $themes_arr[$row->id] = $row->name;
+            if($row->id == $theme_id){
+                $active_theme = $row->id;
+            }
+        }
+        // Get all images from dir screenshots
+        $dir_screens = getcwd();
+        $dir_screens = $dir_screens . '/template/modern/images/screenshots';
+        $dir_themes_images = scandir($dir_screens);
+
         $tool_content .= "
 
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langUpgContact</h2>
+                            <h3>$langThemeSettings</h2>
                         </div>
                         <div class='card-body'>
                             <fieldset>
                                 <div class='form-group'>
-                                    <label class='col-sm-12 control-label-notes' for='id_Institution'>$langInstituteShortName:</label>
-                                    <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
-                                    </div>
+                                    <label class='col-sm-12 control-label-notes' for='id_Institution'>$langHomePageIntroText:</label>
+                                    <div class='col-sm-12'>" . rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro')) . "</div>
                                 </div>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes' for='id_postaddress'>$langUpgAddress</label>
                                     <div class='col-sm-12'>
-                                        <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
-                                    </div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes' for='id_telephone'>$langUpgTel</label>
-                                    <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
-                                    </div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes' for='id_fax'>Fax:</label>
-                                    <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
+                                        <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>$langViewScreensThemes</a>
+                                        <p class='mb-3'><span class='control-label-notes'>$langActiveTheme:&nbsp;</span>" . $themes_arr[$active_theme] . "</p>
+                                        <label for='themeSelection' class='control-label-notes'>$langAvailableThemes:</label>
+                                        ".  selection($themes_arr, 'theme_selection', $theme_id, 'class="form-select" id="themeSelection"')."
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
@@ -485,6 +487,38 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         <div class='col d-none d-lg-block text-end'>
             <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
         </div>
+    </div>
+    
+    <div class='modal fade' id='view_themes_screens' tabindex='-1' aria-labelledby='view_themes_screensLabel' aria-hidden='true'>
+        <div class='modal-dialog modal-fullscreen' style='margin-top:0px;'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <div class='modal-title' id='view_themes_screensLabel'>$langAvailableThemes</div>
+                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <div class='row row-cols-1 g-4'>";
+                            foreach($dir_themes_images as $image) {
+                                $extension = pathinfo($image, PATHINFO_EXTENSION);
+                                $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
+                                if(in_array($extension, $imgExtArr)){
+                                    $tool_content .= "
+                                        <div class='col-lg-8 col-md-10 m-auto py-4'>
+                                            <div class='card panelCard h-100'>
+                                                <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
+                                                <div class='card-footer'>
+                                                    <p> " . strtok($image, '.') . " </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
+                            }
+    $tool_content .= "
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>";
 
 } else {
@@ -492,10 +526,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     // Main part of upgrade starts here
     set_config('upgrade_begin', time());
     setGlobalContactInfo();
-    $_POST['Institution'] = $Institution;
-    $_POST['postaddress'] = $postaddress;
-    $_POST['telephone'] = $telephone;
-    $_POST['fax'] = $fax;
+    // $_POST['Institution'] = $Institution;
+    // $_POST['postaddress'] = $postaddress;
+    // $_POST['telephone'] = $telephone;
+    // $_POST['fax'] = $fax;
+
     if (!isset($_SERVER['SERVER_NAME'])) {
         $_SERVER['SERVER_NAME'] = parse_url($urlServer, PHP_URL_HOST);
     }
@@ -504,10 +539,20 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         store_mail_config();
     }
 
-    set_config('institution', $_POST['Institution']);
-    set_config('postaddress', $_POST['postaddress']);
-    set_config('phone', $_POST['telephone']);
-    set_config('fax', $_POST['fax']);
+    // set_config('institution', $_POST['Institution']);
+    // set_config('postaddress', $_POST['postaddress']);
+    // set_config('phone', $_POST['telephone']);
+    // set_config('fax', $_POST['fax']);
+
+    set_config('homepage_intro', $_POST['homepage_intro']);
+    set_config('theme_options_id', $_POST['theme_selection']);
+    set_config('dont_display_statistics',1);
+    set_config('dont_display_popular_courses',1);
+    set_config('dont_display_testimonials',1);
+    set_config('dont_display_texts',1);
+    set_config('dont_display_open_courses',1);
+    set_config('dont_display_login_form',0);
+    Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title <> 'announcements'");
 
     unset($_SESSION['upgrade_step']);
     unset($_SESSION['upgrade_tag']);

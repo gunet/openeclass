@@ -6375,3 +6375,4 @@ $langDoNotChooseResource = "Your file should correspond to some integration acti
 $langWithSubmittedUploadedFile = "By submitting a deliverable";
 $langSubmittedUploadedFile = "Submit deliverable";
 $langMyUploadedFiles = "My deliverables";
+$langViewScreensThemes = "View themes";

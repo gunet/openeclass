@@ -6835,3 +6835,4 @@ $langDoNotChooseResource = "Το αρχείο σας θα πρέπει να αν
 $langWithSubmittedUploadedFile = "Με υποβολή παραδοτέου";
 $langSubmittedUploadedFile = "Υποβολή παραδοτέου";
 $langMyUploadedFiles = "Τα παραδοτέα μου";
+$langViewScreensThemes = "Προβολή θεμάτων";

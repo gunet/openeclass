@@ -3654,10 +3654,11 @@ body .delThemeBtn{
   height: 100%;
   max-height: 420px;
   object-fit: cover;
+  object-position:50% 50%;
   border-radius: 4px;
 }
 .jumbotron-image-auth-default{
-  max-height: 700px;
+  max-height: 470px;
 }
 
 .user-icon {
