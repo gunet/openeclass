@@ -25,7 +25,7 @@
 
 $langSiteUrl = "URL of collaboration platform";
 $langInstall = "Installation of collaboration platform";
- 
+
 $langEclass = "Collaboration platform";
 
 $langTeacher = "Coordinator";
@@ -772,10 +772,6 @@ by clicking";
 $m['here'] = " here.";
 $m['unsub'] = "$langsCourse is closed and you will not be able to re-enroll.";
 
-/* * ******************************************************************
- * perso.php
- * ******************************************************************* */
-
 $langNotEnrolledToLessons = "You are not subscribed to $langsCourses";
 
 /* * *********************************************************
@@ -1367,7 +1363,7 @@ $langOpenCoursesShort = "Open collaborations";
 
 
 
- 
+
 $langNewEclassVersion = 'New collaboration platform version';
 $langNewEclassVersionInfo = 'A new version of the collaboration platform, %s,
 she is available. Please visit the %s website for information

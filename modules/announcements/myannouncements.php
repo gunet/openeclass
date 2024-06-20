@@ -23,7 +23,7 @@ define('INDEX_START', 1);
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'main/perso.php';
+require_once 'main/portfolio_functions.php';
 
 $require_help = true;
 $helpTopic = 'portfolio';
@@ -42,12 +42,13 @@ if(get_config('show_collaboration') && !get_config('show_always_collaboration'))
         $lesson_ids = $collaboration_ids;
     }
 }
-
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-
+    foreach ($_SESSION['courses'] as $user_course_code => $user_course_status) {
+        $lesson_ids[] = course_code_to_id($user_course_code);
+    }
     $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
     $data['iTotalDisplayRecords'] =  count($announcements);
     if (!isset($_GET['sSearch']) or $_GET['sSearch'] === '') {
@@ -62,20 +63,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     $data['aaData'] = array();
     foreach ($announcements as $myrow) {
-
         if ($myrow->code != '') {
-
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
                             <a href='" . $urlAppend . "modules/announcements/index.php?course=" . $myrow->code . "&an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
-                        <small class='text-grey'>".q(ellipsize($myrow->course_title, 80))."</small>
-                        <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
+                        <small class='text-grey'>" . q(ellipsize($myrow->course_title, 80)) . "</small>
+                        <div class='table_td_body' data-id='$myrow->id' data-course-code='$myrow->code'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
                 '1' => format_locale_date(strtotime($myrow->an_date))
             );
-        } elseif ($myrow->code == '') {
+        } else {
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
@@ -115,7 +114,7 @@ $head_content .= "
                 $('.table_td_body').each(function() {
                     $(this).trunk8({
                         lines: '3',
-                        fill: '&hellip;<div class=\"clearfix\"></div><a class=\"float-end\" href=\"$_SERVER[SCRIPT_NAME]?more=yes&an_id='+$(this).data('id')+'\">$langMore...</div>'
+                        fill: '&hellip;<div class=\"clearfix\"></div><a class=\"float-end\" href=\"$_SERVER[SCRIPT_NAME]?more=yes&course='+$(this).data('course-code')+'&an_id='+$(this).data('id')+'\">$langMore...</div>'
                     })
                 });
                 $('#ann_table_admin_logout_filter label input').attr({
@@ -146,9 +145,7 @@ $head_content .= "
     </script>
 ";
 
-$data['menuTypeID'] = 1;
-
-if(isset($_GET['more']) and $_GET['more'] == 'yes'){
+if (isset($_GET['more']) and $_GET['more'] == 'yes') {
     $data['action_bar'] = action_bar([
         ['title' => $langBack,
             'url' => $_SERVER['SCRIPT_NAME'],
@@ -156,7 +153,9 @@ if(isset($_GET['more']) and $_GET['more'] == 'yes'){
             'level' => 'primary',
             'button-class' => 'btn-secondary']
     ],false);
-   $all_announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
+
+   $lesson_ids[] = course_code_to_id($_GET['course']);
+   $all_announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax');
    foreach($all_announcements as $myann){
         if($myann->id == $_GET['an_id']){
             $data['announcement'] = $myann;
@@ -164,6 +163,5 @@ if(isset($_GET['more']) and $_GET['more'] == 'yes'){
    }
    view('modules.announcements.more_announce',$data);
 }else{
-   view('modules.announcements.myann_index', $data);
+   view('modules.announcements.myann_index');
 }
-

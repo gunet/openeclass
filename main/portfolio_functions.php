@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- * @file perso_functions.php
+ * @file portfolio_functions.php
  * @brief user course and course activity functions
  */
 require_once 'include/lib/mediaresource.factory.php';
@@ -35,18 +35,14 @@ require_once 'modules/message/class.msg.php';
 function getUserCourseInfo($uid): string
 {
     global $langCourse, $langActions,
-           $session, $lesson_ids, $collaboration_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
+           $session, $lesson_ids, $collaboration_ids, $courses, $urlServer, $lesson_content,
+           $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
-           $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist, $langListOfCollaboration,
+           $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty, $mine_courses, $mine_collaborations;
 
-    $lesson_content = '';
-    $lesson_ids = [];
-    $collaboration_ids = [];
-    $courses = [];
-    $myCollaborations = [];
 
     if(!get_config('show_always_collaboration')){
         $myCourses = $mine_courses = getUserCourses($uid);
@@ -55,13 +51,13 @@ function getUserCourseInfo($uid): string
     if(get_config('show_collaboration')){
         $myCollaborations = $mine_collaborations = getUserCollaborations($uid);
     }
-    
+
     if(!get_config('show_always_collaboration')){
         if ($myCourses) {
             $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
             $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
             foreach ($myCourses as $data) {
-                
+
                 $courses[$data->code] = $data->status;
                 $_SESSION['courses'] = $courses;
                 $lesson_ids[] = $data->course_id;
@@ -197,7 +193,7 @@ function getUserCourseInfo($uid): string
                         </td>
                     </tr>
                 ";
-                
+
             }
             $lesson_content .= "</tbody></table>";
 
@@ -210,7 +206,7 @@ function getUserCourseInfo($uid): string
             }
         }
     }
-    
+
 
 
 
@@ -225,7 +221,7 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "<table id='portfolio_collaborations' class='table portfolio-collaborations-table'>";
                 $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
                 foreach ($myCollaborations as $data) {
-                    
+
                     $collaborations[$data->code] = $data->status;
                     $_SESSION['collaborations'] = $collaborations;
                     $collaboration_ids[] = $data->course_id;
@@ -309,7 +305,7 @@ function getUserCourseInfo($uid): string
                             <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
                     if(empty($data->description)) {
                         $lesson_content .= "<p class='text-center'>$langThisCollabDescriptionIsEmpty</p>";
-                        
+
                     } else {
                         $lesson_content .= "{$data->description}";
                     }
@@ -362,10 +358,10 @@ function getUserCourseInfo($uid): string
                             </td>
                         </tr>
                     ";
-                    
+
                 }
                 $lesson_content .= "</tbody></table>";
-            
+
         }else{
             $lesson_content .= "<div class='col-sm-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToCollaborations!</span></div></div>";
             if ($session->status == USER_TEACHER) {
@@ -491,7 +487,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
             }
             $counterAn++;
         }
-        if($q){
+        if ($q) {
             $ann_content .= "</ul>";
         }
         return $ann_content;

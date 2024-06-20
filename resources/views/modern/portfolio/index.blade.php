@@ -590,7 +590,7 @@
                                     </a>
                             @endif
                         </div>
-                   
+
                 </div>
             </div>
         </div>
@@ -606,13 +606,13 @@
                             <div class='flex-grow-1'>
                                 <div class='card card-transparent border-0 bg-transparent'>
                                     <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp; 
+                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp;
                                             @if(!get_config('show_always_collaboration'))
                                             ({{ $num_of_courses }})
                                             @else
                                             ({{ $num_of_collaborations }})
                                             @endif
-                                        
+
                                         </h2>
                                         <div class='d-flex mt-md-0 mt-3'>
                                             <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
@@ -663,7 +663,7 @@
                                             {!! $perso_tool_content['lessons_content'] !!}
                                         </div>
 
-                                    
+
                                         <div id="cources-pics">
 
                                             <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
@@ -687,9 +687,9 @@
                                                 @endphp
 
                                                 @foreach($courses as $course)
-                                                    
-                                                        @php 
-                                                            $temp_pages++; 
+
+                                                        @php
+                                                            $temp_pages++;
                                                             if (isset($course->favorite)) {
                                                                 $favorite_icon = 'fa-star Primary-500-cl';
                                                                 $fav_status = 0;
@@ -727,7 +727,7 @@
                                                                     </div>
 
                                                                     <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
-                                                                    
+
                                                                 </div>
 
                                                                 <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
@@ -786,7 +786,7 @@
                                                             $countCards++;
                                                             $allCourses++;
                                                         @endphp
-                                                    
+
                                                 @endforeach
 
                                             </div>

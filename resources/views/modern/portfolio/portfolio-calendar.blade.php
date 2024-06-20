@@ -1,12 +1,3 @@
-<?php
-    $today = getdate();
-    $day = $today['mday']; $month = $today['mon']; $year = $today['year'];
-    if (isset($uid)) {
-        Calendar_Events::get_calendar_settings();
-    }
-    $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
-?>
-
 <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-4'>
     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
         <h3 class='mb-0'>

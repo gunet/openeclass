@@ -29,7 +29,7 @@ $require_help = true;
 $helpTopic = 'portfolio';
 $helpSubTopic = 'my_courses';
 include '../include/baseTheme.php';
-require_once 'perso_functions.php';
+require_once 'portfolio_functions.php';
 
 $toolName = $langMyCourses;
 
