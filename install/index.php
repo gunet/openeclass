@@ -122,6 +122,7 @@ if (file_exists('config/config.php')) {
 // Input fields that have already been included in the form, either as hidden or as normal inputs
 $input_fields = array();
 $phpSysInfoURL = '../admin/sysinfo/';
+$availableThemes = array('Default','Crimson','Emerald','Dark','Wood','Neutral','Soft_light');
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
     // Get DB credentians from environment for Docker image or automated installation
@@ -183,6 +184,8 @@ if (isset($_POST['welcomeScreen'])) {
         'smtp_encryption' => true,
         'smtp_username' => true,
         'smtp_password' => true,
+        'theme_selection' => true,
+        'homepage_intro' => true,
         'sendmail_command' => true));
 }
 
@@ -221,7 +224,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'institutionUrlForm', 'faxForm', 'postaddressForm',
     'dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
     'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
-    'smtp_username', 'smtp_password', 'sendmail_command');
+    'smtp_username', 'smtp_password', 'sendmail_command', 'theme_selection', 'homepage_intro');
 
 // Check for db connection after settings submission
 $GLOBALS['mysqlServer'] = $dbHostForm;
@@ -277,7 +280,7 @@ if (isset($_POST['install4'])) {
 // step 2 license
 if (isset($_POST['install2'])) {
     $langStepTitle = $langLicense;
-    $langStep = sprintf($langStep1, 2, 7);
+    $langStep = sprintf($langStep1, 2, 8);
     $_SESSION['step'] = 2;
     $gpl_link = '../info/license/gpl_print.txt';
     $tool_content .= "
@@ -312,7 +315,7 @@ if (isset($_POST['install2'])) {
 // step 3 mysql database settings
 elseif (isset($_POST['install3'])) {
     $langStepTitle = $langDBSetting;
-    $langStep = sprintf($langStep1, 3, 7);
+    $langStep = sprintf($langStep1, 3, 8);
     $_SESSION['step'] = 3;
     $tool_content .= "
     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWillWrite $langDBSettingIntro</span></div>
@@ -379,7 +382,7 @@ elseif (isset($_POST['install3'])) {
 // step 4 basic config settings
 elseif (isset($_POST['install4'])) {
     $langStepTitle = $langBasicCfgSetting;
-    $langStep = sprintf($langStep1, 4, 7);
+    $langStep = sprintf($langStep1, 4, 8);
     $_SESSION['step'] = 4;
     if (empty($helpdeskmail)) {
         $helpdeskmail = '';
@@ -432,11 +435,91 @@ elseif (isset($_POST['install4'])) {
     draw($tool_content);
 }
 
-// step 5 email settings
-elseif (isset($_POST['install5'])) {
+// step 5 basic ui
+elseif(isset($_POST['install5'])){
+  $langStepTitle = $langThemeSettings;
+  $langStep = sprintf($langStep1, 5, 8);
+  $_SESSION['step'] = 5;
+
+  // Get all images from dir screenshots
+  $dir_screens = getcwd();
+  $dir_screens = $dir_screens . '/template/modern/images/screenshots';
+  $dir_themes_images = scandir($dir_screens);
+
+  $tool_content .= "
+          <div class='col-12'>
+            <div class='form-wrapper form-edit p-3 rounded'>
+              <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                  <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                      <h3>$langThemeSettings</h2>
+                  </div>
+                  <div class='card-body'>
+                      <fieldset>
+                          <div class='form-group'>
+                              " . form_entry('homepage_intro', textarea_input('homepage_intro', 3, 40), $langHomePageIntroText) . "
+                          </div>
+                          <div class='form-group mt-4'>
+                              <div class='col-sm-12'>
+                                  <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>$langViewScreensThemes</a></br></br>
+                                  <label for='themeSelection' class='control-label-notes'>$langAvailableThemes:</label>
+                                  ".  selection_input($availableThemes, 'theme_selection')."
+                              </div>
+                          </div>
+                          <div class='form-group mt-4'>
+                              <div class='col-12 d-flex justify-content-between'>
+                                  <input class='btn btn-primary' name='install4' value='&laquo; $langBack' type='submit'>
+                                  <input class='btn btn-primary' name='install6' value='$langContinue &raquo;' type='submit'>
+                              </div>
+                          </div>
+                      </fieldset>
+                  </div>
+                </div>
+                " . hidden_vars($all_vars) . "
+              </form>
+            </div>
+          </div>
+          
+          
+          <div class='modal fade' id='view_themes_screens' tabindex='-1' aria-labelledby='view_themes_screensLabel' aria-hidden='true'>
+              <div class='modal-dialog modal-fullscreen' style='margin-top:0px;'>
+                  <div class='modal-content'>
+                      <div class='modal-header'>
+                          <div class='modal-title' id='view_themes_screensLabel'>$langAvailableThemes</div>
+                          <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                      </div>
+                      <div class='modal-body'>
+                          <div class='row row-cols-1 g-4'>";
+                                  foreach($dir_themes_images as $image) {
+                                      $extension = pathinfo($image, PATHINFO_EXTENSION);
+                                      $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
+                                      if(in_array($extension, $imgExtArr)){
+                                          $tool_content .= "
+                                              <div class='col-lg-8 col-md-10 m-auto py-4'>
+                                                  <div class='card panelCard h-100'>
+                                                      <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='../template/modern/images/screenshots/$image' alt='Image for current theme'/>
+                                                      <div class='card-footer'>
+                                                          <p> " . strtok($image, '.') . " </p>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          ";
+                                      }
+                                  }
+          $tool_content .= "
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>";
+          draw($tool_content);
+}
+
+// step 6 email settings
+elseif (isset($_POST['install6'])) {
     $langStepTitle = $langEmailSettings;
-    $langStep = sprintf($langStep1, 5, 7);
-    $_SESSION['step'] = 5;
+    $langStep = sprintf($langStep1, 6, 8);
+    $_SESSION['step'] = 6;
     foreach (array('dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
                    'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
                    'smtp_username', 'smtp_password', 'sendmail_command') as $name) {
@@ -451,10 +534,10 @@ elseif (isset($_POST['install5'])) {
              <div class='col-12'>
                <div class='row'>
                 <div class='col-lg-6 col-12'>
-                  <input type='submit' class='btn cancelAdminBtn w-100' name='install4' value='&laquo; $langPreviousStep'>
+                  <input type='submit' class='btn cancelAdminBtn w-100' name='install5' value='&laquo; $langPreviousStep'>
                 </div>
                 <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                  <input type='submit' class='btn w-100' name='install6' value='$langNextStep &raquo;'>
+                  <input type='submit' class='btn w-100' name='install7' value='$langNextStep &raquo;'>
                 </div>
               </div>
              </div>
@@ -466,11 +549,11 @@ elseif (isset($_POST['install5'])) {
     draw($tool_content);
 }
 
-// step 6 last check before install
-elseif (isset($_POST['install6'])) {
+// step 7 last check before install
+elseif (isset($_POST['install7'])) {
     $langStepTitle = $langLastCheck;
-    $langStep = sprintf($langStep1, 6, 7);
-    $_SESSION['step'] = 6;
+    $langStep = sprintf($langStep1, 7, 8);
+    $_SESSION['step'] = 7;
 
     switch ($eclass_stud_reg) {
         case '0': $disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
@@ -524,15 +607,17 @@ elseif (isset($_POST['install6'])) {
            display_entry(q($institutionUrlForm), $langInstituteName) .
            display_entry(q($disable_eclass_stud_reg_info), $langDisableEclassStudRegType) .
            display_entry(q($disable_eclass_prof_reg_info), $langDisableEclassProfRegType) .
-           display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) . "
+           display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) . 
+           display_entry(q($homepage_intro), $langHomePageIntroText) .
+           display_entry(q($availableThemes[$theme_selection]), $langActiveTheme) ."
            <div class='form-group mt-5'>
              <div class='col-12'>
               <div class='row'>
                 <div class='col-lg-5 col-12'>
-                  <input type='submit' class='btn cancelAdminBtn w-100' name='install5' value='&laquo; $langPreviousStep'>
+                  <input type='submit' class='btn cancelAdminBtn w-100' name='install6' value='&laquo; $langPreviousStep'>
                 </div>
                 <div class='col-lg-7 col-12 mt-lg-0 mt-3'>
-                 <input type='submit' class='btn w-100' name='install7' id='install7' value='$langInstall &raquo;'>
+                 <input type='submit' class='btn w-100' name='install8' id='install8' value='$langInstall &raquo;'>
                 </div>
               </div>
              </div>                        
@@ -542,12 +627,12 @@ elseif (isset($_POST['install6'])) {
     draw($tool_content, null, $head_content);
 }
 
-// step 6 installation successful
-elseif (isset($_POST['install7'])) {
+// step 8 installation successful
+elseif (isset($_POST['install8'])) {
     // database creation
     $langStepTitle = $langInstallEnd;
-    $langStep = sprintf($langStep1, 7, 7);
-    $_SESSION['step'] = 7;
+    $langStep = sprintf($langStep1, 8, 8);
+    $_SESSION['step'] = 8;
     $mysqlMainDb = $dbNameForm;
     $active_ui_languages = 'el en';
 
@@ -559,6 +644,16 @@ elseif (isset($_POST['install7'])) {
     set_config('dont_display_testimonials', 1);
     set_config('dont_display_popular_courses', 1);
     set_config('dont_display_open_courses', 1);
+    set_config('dont_display_texts', 1);
+    set_config('dont_display_login_form', 0);
+    $selectedTheme = Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s',$availableThemes[$_POST['theme_selection']]);
+    if($selectedTheme){
+      $selectedThemeId = $selectedTheme->id;
+    }else{
+      $selectedThemeId = 0;
+    }
+    set_config('theme_options_id', $selectedThemeId);
+    set_config('homepage_intro', $_POST['homepage_intro']);
 
     // update departments info
     update_minedu_deps();

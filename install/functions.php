@@ -124,7 +124,7 @@ function draw($toolContent, $options=null, $head_content ='') {
 function installerMenu() {
     global $langRequirements, $langLicense, $langDBSetting,
         $langBasicCfgSetting, $langLastCheck, $langInstallEnd,
-        $langEmailSettings;
+        $langEmailSettings, $langThemeSettings;
 
     $sideMenuGroup = array();
 
@@ -134,10 +134,10 @@ function installerMenu() {
     $sideMenuImg = array();
 
     $stepTitles = array($langRequirements, $langLicense, $langDBSetting,
-        $langBasicCfgSetting, $langEmailSettings, $langLastCheck,
+        $langBasicCfgSetting, $langThemeSettings, $langEmailSettings, $langLastCheck,
         $langInstallEnd);
 
-	for($i = 0; $i < 7; $i++) {
+	for($i = 0; $i < 8; $i++) {
 		if ($i < $_SESSION['step'] - 1) {
 			$currentStep[$i] = false;
 			$stepImg[$i] = "fa-check";
