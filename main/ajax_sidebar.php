@@ -26,7 +26,7 @@
 $require_login = true;
 
 require_once '../include/baseTheme.php';
-require_once 'perso_functions.php';
+require_once 'portfolio_functions.php';
 require_once 'template/template.inc.php';
 require_once 'main/notifications/notifications.inc.php';
 
