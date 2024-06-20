@@ -953,7 +953,8 @@ function session_exists($sid){
 function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
-            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, $langDoNotChooseResource;
+            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, 
+            $langDoNotChooseResource, $langPreviousDocDeleted;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -1089,6 +1090,16 @@ function upload_session_doc($sid){
                                             WHERE doc_id = ?d
                                             AND from_user = ?d
                                             AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, $doc_id, $uUserId, $sid);
+
+                // Now we must delete the resource file from document table in db.
+                if($q){
+                    Database::get()->query("DELETE FROM document 
+                                            WHERE id = ?d 
+                                            AND course_id = ?d
+                                            AND subsystem = ?d
+                                            AND subsystem_id = ?d
+                                            AND lock_user_id = ?d",$checkExist->res_id, $course_id, MYSESSIONS, $sid, $uUserId);
+                }
             }else{
                 $checker = 0;
                 $q = Database::get()->query("INSERT INTO session_resources SET
@@ -1106,7 +1117,7 @@ function upload_session_doc($sid){
 
             
             if(!$is_consultant){
-                // Initially get badge
+                // Insert uploaded document as activity in user_badge_criterion
                 $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$sid);
                 if($badge && $doc_id > 0 && $uUserId > 0){
                     $badge_id = $badge->id;
@@ -1125,7 +1136,7 @@ function upload_session_doc($sid){
                 
             }
 
-            $msg = ($checker == 1) ? $langUploadDocCompleted . '</br>' . $langPreviousDocDeleted : $langUploadDocCompleted;
+            $msg = ($checker == 1) ? "$langUploadDocCompleted" . "</br>" . "$langPreviousDocDeleted" : "$langUploadDocCompleted";
             Session::flash('message',$msg);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
@@ -1439,10 +1450,6 @@ function display_session_activities($element, $id, $session_id = 0) {
         //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
         //     'icon' => 'fa fa-question-circle fa-fw',
         //     'class' => ''),
-        // array('title' => $langOfCourseCompletion,
-        //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
-        //     'icon' => 'fa fa-trophy',
-        //     'show' => $cc_enable && !$cc_is_current)
         ),
         array(
             'secondary_title' => $langAdd,
@@ -1701,12 +1708,6 @@ function display_session_modification_activity($element, $element_id, $activity_
 function insert_session_activity($element, $element_id, $activity, $session_id = 0, $session_resource_id = 0) {
 
     switch ($activity) {
-        // case 'coursecompletion':
-        //     add_course_completion_to_certificate($element_id);
-        //     break;
-        // case 'unitcompletion':
-        //     add_unit_completion_to_certificate($element_id, $session_id);
-        //     break;
         case AssignmentEvent::ACTIVITY:
         case 'work':
             display_session_available_assignments($element, $element_id, AssignmentSubmitEvent::ACTIVITY, $session_id, $session_resource_id);
@@ -1719,9 +1720,6 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
         case 'poll':
             display_session_available_polls($element, $element_id, $session_id, $session_resource_id);
             break;
-        // case CourseCompletionEvent::ACTIVITY:
-        //     display_available_coursecompletiongrade($element, $element_id, $unit_id);
-        //     break;
         case 'withoutCompletedResource':
             session_completion_without_resources($element, $element_id, $session_id, $session_resource_id);
         default: break;
