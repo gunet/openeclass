@@ -442,6 +442,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
 
         $theme_id = get_config('theme_options_id') ?? 0;
         $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
+        $themes_arr[0] = 'Default';
         foreach ($all_themes as $row) {
             $themes_arr[$row->id] = $row->name;
             if($row->id == $theme_id){
