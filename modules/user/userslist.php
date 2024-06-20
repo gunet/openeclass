@@ -146,12 +146,6 @@ $head_content .= "
 
 $limit_sql = '';
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "../../courses/$course_code/",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary')));
-
 $tool_content .= "
     <table id='users_table{$course_id}' cellspacing = '0' class='table-default'>
         <thead>
