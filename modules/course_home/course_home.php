@@ -416,7 +416,6 @@ $data['action_bar'] = action_bar([
     ]
 ]);
 
-
 if ($uid) {
     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
@@ -935,7 +934,7 @@ if ($uid) {
                                         AND user_id = ?d", function ($course) use (&$myCourses) {
                                             $myCourses[$course->course_id] = $course;
                                         }, $uid);
-    if (!in_array($course_id, array_keys($myCourses))) {
+    if (!$is_editor && !in_array($course_id, array_keys($myCourses))) {
         $data['action_bar'] = action_bar([[
             'title' => trans('langRegister'),
             'url' => $urlAppend . "modules/course_home/register.php?course=$course_code",
