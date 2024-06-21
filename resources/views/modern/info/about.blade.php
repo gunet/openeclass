@@ -19,7 +19,7 @@
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center mb-0'>
-                                            <strong class='form-label'>{{ trans('langInstituteShortName') }}:</strong>
+                                            <strong class='form-label'>{{ trans('langInstituteShortNameSecondary') }}</strong>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center'>
                                             <a href='{{ $institution_url }}' target='_blank' class='mainpage' aria-label='{{ $institution }}'>{{ $institution }}</a>
@@ -34,7 +34,7 @@
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center mb-0'>
-                                            <strong class='form-label'>{{ trans('langCampusName') }}:</strong>
+                                            <strong class='form-label'>{{ trans('langCampusName') }}</strong>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center'>{{ $siteName }}</div>
                                     </div>
@@ -47,7 +47,7 @@
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center mb-0'>
-                                            <strong class='form-label'>{{ trans('langVersion') }}:</strong>
+                                            <strong class='form-label'>{{ trans('langVersion') }}</strong>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center'>
                                             <a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' aria-label='{{ $eclass_version }}'>{{ $eclass_version }}</a>
@@ -62,7 +62,7 @@
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center mb-0'>
-                                            <strong class='form-label'>{{ trans('langSupportUser') }}:</strong>
+                                            <strong class='form-label'>{{ trans('langSupportUser') }}</strong>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center'>{{ $admin_name }}</div>
                                     </div>

@@ -968,6 +968,7 @@ $langHelpDeskFax = "Benutzerberatung Fax-Nummer";
 $langHelpDeskEmail = "Email der Benutzerberatung";
 $langCampusName = "Name der Plattform (Universität)";
 $langInstituteShortName = "Name der Institution - Organisation";
+$langInstituteShortNameSecondary = "Institution - Organisation";
 $langInstituteName = "URL dieser Institution";
 $langInstitutePostAddress = "Postadresse der Institution";
 $langWarnHelpDesk = "Vorsicht: Die email Adresse von \"Email Helpdesk\"gibt an, wohin die Anträge von Dozenten bzgl neuer Benutzerkonten der Plattform gesendet werden";

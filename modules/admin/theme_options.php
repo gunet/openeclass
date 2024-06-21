@@ -1420,7 +1420,7 @@ $tool_content .= "
 
             <div role='tabpanel' class='tab-pane fade' id='navsettingsLoginHomepage'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langLoginConfiguration</h3>
+                    <h3 class='theme_options_legend text-decoration-underline'>$langBasicOptions</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient (jumbotron):</label>
                         <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
@@ -1428,7 +1428,7 @@ $tool_content .= "
                         <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginImg (jumbotron):</label>
+                        <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langBgImg (jumbotron):</label>
                         <div class='col-sm-12'>
                         $login_image_field
                         </div>

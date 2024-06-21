@@ -300,13 +300,8 @@
                                     </div>
 
                                     @if(!get_config('show_only_loginScreen'))
-                                        <div class='col d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
-                                            <div class='card h-100 border-0 p-0'>
-                                                <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                                    <img class='jumbotron-image-default @if($auth_enabled_method == 1 && count($authLinks) > 1) jumbotron-image-auth-default @endif' src='{{ $loginIMG }}' alt="{{ trans('langLogin') }}" />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif" 
+                                                style="background: url({{ $loginIMG }});"></div>
                                     @endif
                                 </div>
                             </div>

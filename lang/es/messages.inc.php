@@ -993,6 +993,7 @@ $langHelpDeskFax = "Número de fax de la oficina de ayuda";
 $langHelpDeskEmail = "Correo electrónico de la oficina de ayuda";
 $langCampusName = "Nombre de la Universidad";
 $langInstituteShortName = "Acrónimo de la Institución";
+$langInstituteShortNameSecondary = "Institution - Organisation";
 $langInstituteName = "URL de la institución";
 $langInstitutePostAddress = "Dirección postal de la Institución";
 $langWarnHelpDesk = "Aviso: En la dirección de correo electrónico\"Correo electrónico de la oficina de ayuda\"el campo, los requerimientos de los profesores son sometidos";

@@ -22,7 +22,7 @@
                                     </div>
                                 </div>
                                 <div class='col-12 d-flex justify-content-center mb-0'>
-                                    <strong>{!! trans('langInstitutePostAddress') !!}:</strong>
+                                    <strong>{!! trans('langInstitutePostAddress') !!}</strong>
                                 </div>
                                 <div class='col-12 d-flex justify-content-center'>
                                     @if(!empty($postaddress))
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                                 <div class='col-12 d-flex justify-content-center mb-0'>
-                                    <strong>{!! trans('langPhone') !!}:</strong>
+                                    <strong>{!! trans('langPhone') !!}</strong>
                                 </div>
                                 <div class='col-12 d-flex justify-content-center'>
                                     @if(!empty($phone))
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                                 <div class='col-12 d-flex justify-content-center mb-0'>
-                                    <strong>{!! trans('langEmail') !!}:</strong>
+                                    <strong>{!! trans('langEmail') !!}</strong>
                                 </div>
                                 <div class='col-12 d-flex justify-content-center'>
                                     @if(!empty($emailhelpdesk))

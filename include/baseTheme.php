@@ -436,7 +436,8 @@ function view($view_file, $view_data = array()) {
                         background: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
                         border:0px; 
                         background-size: 100% 100%;
-                        background-attachment: fixed;
+                        background-repeat: no-repeat;
+                        background-position: 50% 50%;
                     }
                 ";
 

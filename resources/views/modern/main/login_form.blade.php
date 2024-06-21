@@ -167,13 +167,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class='col d-none {!! $PositionForm !!}'>
-                            <div class='card h-100 border-0 p-0'>
-                                <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                    <img class='jumbotron-image-default {!! $class_login_img !!}' src='{!! $login_img !!}' alt='{{ trans('langLogin') }}'>
-                                </div>
-                            </div>
-                        </div>
+                        <div class='col card-login-img d-none {!! $PositionForm !!}' style="background: url({{ $login_img }});"></div>
                     </div>
                 </div>
             </div>

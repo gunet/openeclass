@@ -1071,6 +1071,7 @@ $langHelpDeskFax = "Numéro de fax de Helpdesk";
 $langHelpDeskEmail = "E-mail de Helpdesk";
 $langCampusName = "Nom de la plateforme";
 $langInstituteShortName = "Nom de l'Institution/Organisme";
+$langInstituteShortNameSecondary = "Institution - Organisme";
 $langInstituteName = "URL de l'Institution/Organisme";
 $langInstitutePostAddress = "Adresse postale de l'Institution/Organisme";
 $langWarnHelpDesk = "Attention : c'est à l'adresse \"Email Helpdesk\" que sont envoyées les demandes des enseignants pour créer un compte sur la plateforme"

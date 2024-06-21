@@ -1080,6 +1080,7 @@ $langHelpDeskFax = "Helpdesk fax number";
 $langHelpDeskEmail = "Email Helpdesk";
 $langCampusName = "University name";
 $langInstituteShortName = "Institution short name";
+$langInstituteShortNameSecondary = "Institution - Organisation";
 $langInstituteName = "URL of this institution";
 $langInstitutePostAddress = "Institution postal address";
 $langWarnHelpDesk = "Warning: Professors account requests are submitted in the email address of \"Email Helpdesk\" field";
