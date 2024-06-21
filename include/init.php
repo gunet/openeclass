@@ -69,12 +69,7 @@ add_nosniff_headers();
 if (file_exists('config/config.php')) { // read config file
     include_once 'config/config.php';
 } else {
-    include_once 'include/not_installed.php';
-    $error_msg_en = "<p>There might be a problem with platform config file.</p>
-            <p>If you are accessing the platform <strong>for the first time</strong>, please use the <a href='install/?lang=en'><b>Installation Wizard</b></a> to begin installation.</p>";
-    $error_msg_el = "<p>Πιθανό πρόβλημα με το αρχείο ρυθμίσεων της πλατφόρμας.</p>
-            <p>Σε περίπτωση που χρησιμοποιείτε την πλατφόρμα <strong>για πρώτη</strong> φορά, επιλέξτε τον <a href='install/'><b>Οδηγό Εγκατάστασης</b></a> για να ξεκινήσετε το πρόγραμμα εγκατάστασης.</p>";
-    installation_error($error_msg_en, $error_msg_el);
+    redirect('include/not_installed.php?err_config=true');
 }
 
 // appended to JS and CSS links to break caching - changes per second in debug mode
@@ -89,15 +84,12 @@ require_once 'modules/db/database.php';
 try {
     Database::get();
 } catch (Exception $ex) { // db credentials are wrong
-    include_once 'include/not_installed.php';
-    $error_msg_en = "<p>Database is not running or credentials are wrong.</p>";
-    $error_msg_el = "<p>Η βάση δεδομένων δεν λειτουργεί ή τα στοιχεία σύνδεσης δεν είναι σωστά.</p>";
-    installation_error($error_msg_en, $error_msg_el);
+    redirect('include/not_installed.php?err_db=true');
 }
 
 require_once 'modules/admin/extconfig/externals.php';
 $connector = WafApp::getWaf();
-if ($connector->isEnabled() == true ){
+if ($connector->isEnabled()){
     $output = $connector->check();
     if ($output->status == $output::STATUS_BLOCKED){
         WafApp::block($output->output);
