@@ -141,9 +141,9 @@ if ($course->visible == COURSE_CLOSED) {
     if ($course->password) {
         $registerLink = "
             <div class='form-group mt-4'>
-                <label class='col-sm-12 control-label-notes' for='pass'>$langPassword</label>
+                <label class='col-sm-12 control-label-notes' for='password-field'>$langPassword</label>
                 <div class='col-lg-6 col-sm-12'>
-                    <input class='form-control' type='password' name='pass' id='pass' autocomplete='off'>
+                    <input class='form-control' type='password' name='password' id='password-field' autocomplete='off'>
                 </div>
             </div>" . $registerLink;
     }
