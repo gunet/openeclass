@@ -1475,7 +1475,6 @@ $langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλε
 $langTableCompletedConsulting = "Λίστα συνεδριών ολοκλήρωσης συμβουλευτικής";
 $langCompletedSessions = "Ολοκληρωμένη συνεδρία";
 $langNotCompletedSession = "Μη ολοκληρωμένη συνεδρία";
-
 $langResponsibleOfSession = "Εγγεγραμμένοι σύμβουλοι - Υπευθύνος συνεδρίας";
 $langSessionParticipants = "Εγγεγραμμένοι ωφελούμενοι/μέλοι - Συμμετέχοντες";
 $langContinueToCompletetionWithoutAct = "Θέλετε να προχωρήσετε στην ολοκλήρωση της συνεδρίας χωρίς την υποβολή κάποιων δραστηριοτήτων - πόρων;";
@@ -1484,3 +1483,8 @@ $langOfSubmitDocument = "Με προβολή εγγράφου";
 $langSessionCompletedIsActivated = "Η ολοκλήρωση συνεδρίας χωρίς την υποβολή δραστηριοτήτων είναι ήδη ενεργοποιημένη";
 $langDocSender = "Παραδοτέα χρηστών";
 $langPreviousDocDeleted = "Διαγράφηκε το προηγούμενο έγγραφο.";
+$langWithTCComplited = "Με την ολοκλήρωση τηλεδιάσκεψης";
+$langTCComplited = "Ολοκλήρωση τηλεδιάσκεψης";
+$langContinueToCompletetionWithCompletedTC = "Θέλετε να προχωρήσετε στην ολοκλήρωση της συνεδρίας μόλις ολοκληρωθεί η απομακρυσμένη τηλεδιάσκεψη;";
+$langResourceAddedWithSuccess = "Ο πόρος προστέθηκε επιτυχώς.";
+$langResourceExists = "Ο πόρος υπάρχει ήδη.";

@@ -189,6 +189,9 @@ if($is_tutor_course or $is_consultant){
 
 
     foreach ($data['individuals_group_sessions'] as $s) {
+        // This refers to session completion with completed tc.
+        check_session_completion_by_tc_completed($s->id,$uid);
+        // This refers to session completion for other activities.
         check_session_progress($s->id);  // check session completion - call to Game.php
     }
 

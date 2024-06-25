@@ -1328,7 +1328,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
            $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, 
            $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel, 
-           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, $langWithSubmittedUploadedFile;
+           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, 
+           $langWithSubmittedUploadedFile, $langWithTCComplited, $langContinueToCompletetionWithCompletedTC;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1358,12 +1359,14 @@ function display_session_activities($element, $id, $session_id = 0) {
 
     $active_completion_without_resource = 'opacity-help pe-none';
     $activity_off = 'opacity-help pe-none';
+    $is_remote_session = 0;
     if ($session_id) {
         // Check the time that session starts
-        $started = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$session_id,$course_id);
+        $started = Database::get()->querySingle("SELECT start,type_remote FROM mod_session WHERE id = ?d AND course_id = ?d",$session_id,$course_id);
         if($started && (date('Y-m-d H:i:s') >= $started->start)){
             $active_completion_without_resource = '';
         }
+        $is_remote_session = $started->type_remote;
 
         // check if session completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
@@ -1402,7 +1405,8 @@ function display_session_activities($element, $id, $session_id = 0) {
             $checkActivityType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE badge = ?d",$badge_id);
             if($checkActivityType && ($checkActivityType->activity_type == 'document' or 
                 $checkActivityType->activity_type == 'assignment-submit' or 
-                $checkActivityType->activity_type == 'document-submit')){
+                $checkActivityType->activity_type == 'document-submit') or
+                $checkActivityType->activity_type == 'tc-completed'){
                     $activity_off = '';
                     $active_completion_without_resource = 'opacity-help pe-none';
             }elseif($checkActivityType && $checkActivityType->activity_type == 'noactivity'){
@@ -1429,19 +1433,28 @@ function display_session_activities($element, $id, $session_id = 0) {
     $tool_content .= display_session_settings($element, $id, $session_id);
     $addActivityBtn = action_button(array(
         array('title' => $langWithoutCompletedResource,
-            'url' => "#",
-            'icon-class' => $active_completion_without_resource,
-            'icon-extra' => "data-id='{$session_id}' data-bs-toggle='modal' data-bs-target='#CompletionWithoutActivities{$session_id}'",
-            'icon' => 'fa fa-trophy'
+              'url' => "#",
+              'icon-class' => $active_completion_without_resource,
+              'icon-extra' => "data-id='{$session_id}' data-bs-toggle='modal' data-bs-target='#CompletionWithoutActivities{$session_id}'",
+              'icon' => 'fa fa-trophy'
         ),
         array('title' => $langWithSubmittedUploadedFile,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=submitFile",
               'icon' => 'fa-upload',
-              'icon-class' => $activity_off),
+              'icon-class' => $activity_off
+        ),
         array('title' => $langOfSubmitAssignment,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
-            'icon' => 'fa fa-flask space-after-icon',
-            'icon-class' => $activity_off),
+              'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
+              'icon' => 'fa fa-flask space-after-icon',
+              'icon-class' => $activity_off
+        ),
+        array('title' => $langWithTCComplited,
+              'url' => "#",
+              'icon-extra' => "data-id='{$session_id}' data-bs-toggle='modal' data-bs-target='#WithCompletedTc{$session_id}'",
+              'icon' => 'fa-solid fa-users-rectangle',
+              'icon-class' => $activity_off,
+              'show' => $is_remote_session
+        ),
         // array('title' => $langOfSubmitDocument,
         //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
         //     'icon' => 'fa fa-folder-open fa-fw',
@@ -1612,7 +1625,7 @@ function display_session_activities($element, $id, $session_id = 0) {
 
 
     $tool_content .= "<div class='modal fade' id='CompletionWithoutActivities{$session_id}' tabindex='-1' aria-labelledby='CompletionWithoutActivitiesLabel' aria-hidden='true'>
-                            <form method='post' action='$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withoutCompletedResource'
+                            <form method='post' action='$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withoutCompletedResource'>
                                 <div class='modal-dialog modal-md modal-success'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
@@ -1632,6 +1645,28 @@ function display_session_activities($element, $id, $session_id = 0) {
                                 </div>
                             </form>
                         </div>";
+
+    $tool_content .= "<div class='modal fade' id='WithCompletedTc{$session_id}' tabindex='-1' aria-labelledby='WithCompletedTcLabel' aria-hidden='true'>
+                        <form method='post' action='$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withCompletedTCResource'>
+                            <div class='modal-dialog modal-md modal-success'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <div class='modal-title'>
+                                            <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
+                                            <h3 class='modal-title-default text-center mb-0 mt-2' id='WithCompletedTcLabel'>$langSessionCompletion</h3>
+                                        </div>
+                                    </div>
+                                    <div class='modal-body text-center'>
+                                        $langContinueToCompletetionWithCompletedTC
+                                    </div>
+                                    <div class='modal-footer d-flex justify-content-center align-items-center'>
+                                        <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
+                                        <button type='submit' class='btn submitAdminBtnDefault'>$langSubmit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>";
 
 
 }
@@ -1722,6 +1757,8 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
             break;
         case 'withoutCompletedResource':
             session_completion_without_resources($element, $element_id, $session_id, $session_resource_id);
+        case 'withCompletedTCResource':
+            session_completion_with_tc_completed($element, $element_id, $session_id, $session_resource_id);
         default: break;
         }
 }
@@ -2096,6 +2133,95 @@ function session_completion_without_resources($element, $element_id, $session_id
         }
     }else{
         redirect_to_home_page("courses/$course_code/");
+    }
+}
+
+
+/**
+ * @brief session completion with tc resource
+ * @param type $element
+ * @param type $element_id
+ * @param int $session_id
+ * @param int $session_resource_id
+ */
+function session_completion_with_tc_completed($element, $element_id, $session_id = 0, $session_resource_id = 0){
+
+    global $course_code, $langResourceAddedWithSuccess, $course_id, $langResourceExists;
+
+    if($session_id){
+        $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE course_id = ?d AND type_remote = ?d AND id = ?d", $course_id, 1, $session_id);
+        $tc = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND start_date = ?t AND end_date = ?t",$course_id, $res->start, $res->finish);
+        //check if exists
+        $ch = Database::get()->querySingle("SELECT id FROM {$element}_criterion 
+                                            WHERE badge = ?d AND activity_type = ?s AND module = ?d AND resource = ?d",$element_id,'tc-completed',MODULE_ID_TC,$tc->id);
+        if($tc && !$ch){
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d,
+                                    module= " . MODULE_ID_TC . ",
+                                    resource = ?d,
+                                    activity_type = 'tc-completed'",$element_id, $tc->id);
+            
+            Session::flash('message',$langResourceAddedWithSuccess);
+            Session::flash('alert-class', 'alert-success');
+        }else{
+            Session::flash('message',$langResourceExists);
+            Session::flash('alert-class', 'alert-danger');
+        }
+        redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);                     
+        
+    }else{
+        redirect_to_home_page("courses/$course_code/");
+    }
+
+}
+
+/**
+ * @brief session completion checker for tc type
+ * @param int $sid
+ * @param int $forUid
+ */
+function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
+    global $course_id;
+
+    if($session_id){
+        $badge_criterion = Database::get()->queryArray("SELECT * FROM badge_criterion
+                                                            WHERE badge IN (SELECT id FROM badge 
+                                                                            WHERE course_id = ?d 
+                                                                            AND session_id = ?d)
+                                                            AND activity_type = ?s",$course_id, $session_id,'tc-completed');
+
+        $badge_id = 0;
+        $badge_criterion_id = 0;
+        $tc_id = 0;
+        if(count($badge_criterion) > 0){
+            foreach($badge_criterion as $b){
+                if($b->activity_type == 'tc-completed'){
+                    $badge_id = $b->badge;
+                    $badge_criterion_id = $b->id;
+                    $tc_id = $b->resource;
+                    break;
+                }
+            }
+            
+            if($badge_criterion_id > 0){
+                $res = Database::get()->querySingle("SELECT * FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$forUid,$badge_criterion_id);
+                if(!$res){
+                    // When tc has expired then update db
+                    $check_tc = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE id = ?d AND course_id = ?d",$tc_id,$course_id);
+                    if($check_tc->end_date < date("Y-m-d H:i:s") && $check_tc->start_date < date("Y-m-d H:i:s")){
+                        Database::get()->query("INSERT INTO user_badge_criterion 
+                                                SET user = ?d,
+                                                created = " . DBHelper::timeAfter() . ",
+                                                badge_criterion = ?d",$forUid,$badge_criterion_id);
+
+                        Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria + 1,
+                                                updated = " . DBHelper::timeAfter() . ",
+                                                assigned = " . DBHelper::timeAfter() . " 
+                                                WHERE user = ?d AND badge = ?d",$forUid,$badge_id);
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -60,6 +60,13 @@ if(isset($_POST['modify_resource'])){
                                     comments = ?s
                                     WHERE id = ?d",q($_POST['title']),purify($_POST['comments']),$_POST['resourceId']);
 
+        $typeRes = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d",$_POST['resourceId']);
+        if($typeRes && $typeRes->type == 'tc'){
+            Database::get()->query("UPDATE tc_session SET
+                                    title = ?s
+                                    WHERE id = ?d AND course_id = ?d",q($_POST['title']),$typeRes->res_id,$course_id);
+        }
+
         Session::flash('message',$langResourceCompleted);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
