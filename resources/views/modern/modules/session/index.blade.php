@@ -224,6 +224,9 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                            <div class='card-footer border-0 text-end'>
+                                                <p class='TextBold'>{{ trans('langConsultant') }}:&nbsp;<span>{{ $s->consultant }}</span></p>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

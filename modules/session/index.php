@@ -164,8 +164,10 @@ if($is_tutor_course or $is_consultant){
                 }
 
             }
-            $s->percentage = (count($participants) > 0) ? $per/count($participants) : $per;
+            $number_percentage = (count($participants) > 0) ? $per/count($participants) : $per;
+            $s->percentage = round($number_percentage);
             $s->has_badge = $has_badge;
+            $s->consultant = participant_name($s->creator);
         }
     }
 
@@ -234,8 +236,9 @@ if($is_tutor_course or $is_consultant){
         }
         $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
         $cu->icon = $icon ?? '';
-        $cu->percentage = $per;
+        $cu->percentage = round($per);
         $cu->has_badge = $has_badge;
+        $cu->consultant = participant_name($cu->creator);
     }
 
 }
