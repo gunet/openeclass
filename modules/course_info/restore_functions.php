@@ -323,7 +323,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $langBack, $course_code, $urlAppend;
+    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -347,14 +347,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     if (isset($GLOBALS['course_code'])) {
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
-    return action_bar(array(
-        array('title' => $langBack,
-              'url' => "index.php?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary'))) . "
-
-
-    <div class='d-lg-flex gap-4 mt-5'>
+    return "<div class='d-lg-flex gap-4 mt-5'>
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
@@ -483,7 +476,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $course_desc, $departments, $course_vis, $course_prof);
         if (!$new_course_code) {
-            //Session::Messages($GLOBALS['langGeneralError'], 'alert-danger');
             Session::flash('message',$GLOBALS['langGeneralError']);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/course_info/restore_course.php');
