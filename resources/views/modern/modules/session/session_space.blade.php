@@ -88,12 +88,6 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
-                            array('title' => trans('langSelect') . ' ' . trans('langInsertWork'),
-                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=work',
-                                'icon' => 'fa fa-upload',
-                                'level' => 'secondary',
-                                'show' => (!is_module_disable(MODULE_ID_ASSIGN) && $is_consultant)
-                            ),
                             array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc' . '&token=' . $_SESSION['csrf_token'],
                                 'class' => "add-session",

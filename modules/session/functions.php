@@ -322,6 +322,57 @@ function insert_session_work($sid) {
     exit;
 }
 
+// delete all files and sub-folders from a folder
+function deleteAll($dir) {
+    foreach(glob($dir . '/*') as $file) {
+        if(is_dir($file)){
+            deleteAll($file);
+        }else{
+            unlink($file);
+        }
+    }
+    rmdir($dir);
+}
+
+/**
+ * @brief delete session from database
+ * @param integer $sid
+ */
+function delete_session($sid = 0){
+
+    global $course_code, $webDir, $course_id;
+
+    if($sid){
+        $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sid);
+        if($sqlbadge){
+            $badge_id = $sqlbadge->id;
+            $res = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d",$badge_id);
+            if(count($res) > 0){
+                foreach($res as $r){
+                    Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$r->id);
+                }
+            }
+            Database::get()->query("DELETE FROM user_badge WHERE badge = ?d",$badge_id);
+            Database::get()->query("DELETE FROM badge_criterion WHERE badge = ?d",$badge_id);
+            Database::get()->query("DELETE FROM badge WHERE id = ?d AND session_id = ?d",$badge_id,$sid);
+        }
+        Database::get()->query("DELETE FROM session_prerequisite WHERE session_id = ?d OR prerequisite_session = ?d",$sid,$sid);
+        $dirname = "$webDir/courses/$course_code/session/session_" . $sid;
+        if (file_exists($dirname)) {
+            deleteAll($dirname);
+        }
+        Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d",$course_id,MYSESSIONS,$sid);
+        $tc_res = Database::get()->querySingle("SELECT res_id FROM session_resources WHERE session_id = ?d AND type = ?s",$sid,'tc');
+        if($tc_res){
+            Database::get()->query("DELETE FROM tc_session WHERE id = ?d",$tc_res->res_id);
+        }
+        Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d",$sid);
+        Database::get()->query("DELETE FROM mod_session WHERE id = ?d",$sid);
+    }else{
+        redirect_to_home_page("modules/$course_code/");
+    }
+
+}
 
 
 /**
@@ -1443,11 +1494,11 @@ function display_session_activities($element, $id, $session_id = 0) {
               'icon' => 'fa-upload',
               'icon-class' => $activity_off
         ),
-        array('title' => $langOfSubmitAssignment,
-              'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
-              'icon' => 'fa fa-flask space-after-icon',
-              'icon-class' => $activity_off
-        ),
+        // array('title' => $langOfSubmitAssignment,
+        //       'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
+        //       'icon' => 'fa fa-flask space-after-icon',
+        //       'icon-class' => $activity_off
+        // ),
         array('title' => $langWithTCComplited,
               'url' => "#",
               'icon-extra' => "data-id='{$session_id}' data-bs-toggle='modal' data-bs-target='#WithCompletedTc{$session_id}'",

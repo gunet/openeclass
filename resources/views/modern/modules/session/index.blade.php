@@ -84,12 +84,12 @@
                         <div class='flex-fill'>
                             <form class='d-flex gap-3 flex-wrap flex-lg-nowrap' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
                                 <select class='form-select mb-0 mt-0' name='remoteType'>
-                                    <option value='-1'>{{ trans('langSelect') }}</option>
+                                    <option value='-1'>{{ trans('langALLSessions') }}</option>
                                     <option value='0' {!! $remoteType==0 ? 'selected' : '' !!}>{{ trans('langNotRemote') }}</option>
                                     <option value='1' {!! $remoteType==1 ? 'selected' : '' !!}>{{ trans('langRemote') }}</option>
                                 </select>
                                 <select class='form-select mb-0 mt-0' name='sessionType'>
-                                    <option value='other'>{{ trans('langSelect') }}</option>
+                                    <option value='other'>{{ trans('langALLSessions') }}</option>
                                     <option value='one' {!! $sessionType=='one' ? 'selected' : '' !!}>{{ trans('langIndividualS') }}</option>
                                     <option value='group' {!! $sessionType=='group' ? 'selected' : '' !!}>{{ trans('langGroupS') }}</option>
                                 </select>

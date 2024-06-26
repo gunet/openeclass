@@ -75,24 +75,19 @@ $data['sessionType'] = $sessionType;
 
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
-    $sqlbadge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $_POST['session_id']);
-    if($sqlbadge){
-        $badge_id = $sqlbadge->id;
-        $res = Database::get()->querySingle("SELECT id FROM badge_criterion WHERE badge = ?d",$badge_id);
-        $badge_criterion_id = $res->id;
-        Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$badge_criterion_id);
-        Database::get()->query("DELETE FROM user_badge WHERE badge = ?d",$badge_id);
-        Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d",$badge_criterion_id);
-        Database::get()->query("DELETE FROM badge WHERE id = ?d",$badge_id);
-    }
-    Database::get()->query("DELETE FROM session_prerequisite WHERE session_id = ?d OR prerequisite_session = ?d",$_POST['session_id'],$_POST['session_id']);
-    $dirname = "$webDir/courses/$course_code/session/session_" . $_POST['session_id'];
-    if (file_exists($dirname)) {
-        array_map('unlink', glob("$dirname/*.*"));
-        rmdir($dirname);
-    }
-    Database::get()->query("DELETE FROM mod_session WHERE id = ?d",$_POST['session_id']);
+    delete_session($_POST['session_id']);
     Session::flash('message',$langDelSessionSuccess);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/index.php?course=".$course_code);
+}
+
+// Delete all sessions from course tutor
+if(isset($_GET['delete_all_sessions'])){
+    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session");
+    foreach($session_ids as $s){
+        delete_session($s->id);
+    }
+    Session::flash('message',$langDelAllSessionSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
 }
@@ -126,6 +121,14 @@ if($is_tutor_course or $is_consultant){
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
             'icon' => 'fa-solid fa-list',
             'button-class' => 'btn-success'
+        ],
+        [
+            'title' => $langDelAllSessions,
+            'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&delete_all_sessions=true',
+            'class' => "delete",
+            'confirm' => $langContinueToDelAllSessions,
+            'icon' => 'fa-xmark',
+            'show' => $is_tutor_course
         ],
     ], false);
 
