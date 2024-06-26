@@ -167,6 +167,38 @@ if(isset($_GET['del'])){
     redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID);  
 }
 
+
+// uploaded doc completion by consultant
+if(isset($_POST['userBadgeCriterionId'])){
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    $exists_criterio = Database::get()->querySingle("SELECT id FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$_POST['userSender'],$_POST['userBadgeCriterionId']);
+    if(!$exists_criterio){
+        Database::get()->query("INSERT INTO user_badge_criterion SET 
+                            user = ?d,
+                            created = " . DBHelper::timeAfter() . ",
+                            badge_criterion = ?d",$_POST['userSender'],$_POST['userBadgeCriterionId']);
+
+        Database::get()->query("UPDATE session_resources SET
+                                is_completed = ?d
+                                WHERE session_id = ?d AND res_id = ?d AND type = ?s AND from_user = ?d",1,$sessionID,$_POST['document_id'],'doc',$_POST['userSender']);
+
+        Session::flash('message',$langDocCompletionSuccess);
+        Session::flash('alert-class', 'alert-success');
+    }else{
+        Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$_POST['userSender'],$_POST['userBadgeCriterionId']);
+
+        Database::get()->query("UPDATE session_resources SET
+                                    is_completed = ?d
+                                    WHERE session_id = ?d AND res_id = ?d AND type = ?s AND from_user = ?d",0,$sessionID,$_POST['document_id'],'doc',$_POST['userSender']);
+
+        Session::flash('message',$langDocCompletionNoSuccess);
+        Session::flash('alert-class', 'alert-warning');
+    }
+    
+    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID);  
+} 
+
 // An consultant can create a session
 if($is_tutor_course or $is_consultant){
     $sql = "AND lock_user_id != $uid";
@@ -181,6 +213,13 @@ $docs = Database::get()->queryArray("SELECT * FROM document
                                             AND subsystem_id = ?d", $course_id, MYSESSIONS, $sessionID);
 
 if(count($docs) > 0){
+    $badge_id = 0;
+    if($is_consultant){
+        $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id,$sessionID);
+        if($badge){
+            $badge_id = $badge->id;
+        }
+    }
     foreach($docs as $file){
         $image = choose_image('.' . $file->format);
         $download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path) . "&userID=" .$file->lock_user_id;
@@ -192,9 +231,19 @@ if(count($docs) > 0){
         $file->link = $link;
         $file->download_url = $download_url;
         
-        $refers_temp = Database::get()->querySingle("SELECT doc_id FROM session_resources WHERE res_id = ?d AND session_id = ?d",$file->id,$sessionID);
+        $refers_temp = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources WHERE res_id = ?d AND session_id = ?d",$file->id,$sessionID);
         $refers = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d AND session_id = ?d",$refers_temp->doc_id,$sessionID);
         $file->refers_to = $refers->title;
+        if($is_consultant && $badge_id > 0){
+            $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                                                                    WHERE resource = ?d 
+                                                                    AND activity_type = ?s 
+                                                                    AND badge = ?d",$refers_temp->doc_id,'document-submit',$badge_id);
+
+            $file->user_badge_criterion_id = $user_badge_criterion->id;     
+            $file->user_sender = $refers_temp->from_user;
+            $file->completed = $refers_temp->is_completed;                                          
+        }
     }
 }
 $data['docs'] = $docs;

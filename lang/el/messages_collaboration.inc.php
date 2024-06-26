@@ -1492,3 +1492,10 @@ $langDelAllSessions = "Διαγραφή όλων των συνεδριών";
 $langContinueToDelAllSessions = "Θέλετε να προχωρήσετε στην διαγραφή όλων των συνεδριών;";
 $langDelAllSessionSuccess = "Οι συνεδρίες διαγράφηκαν επιτυχώς.";
 $langALLSessions = "Όλες";
+$langSubmitCompletion = "Υποβολή ολοκλήρωσης";
+$langContinueToUserAwarded = "Η ενέργεια αυτή σχετίζεται με την ολοκλήρωση παραδοτέου του χρήστη και αφορά την δραστηριότητα που αναγράφεται στην στήλη <<Αφορά>> του πίνακα.</br>
+                              Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια;";
+$langDocCompletionSuccess = "Η ενέργεια ολοκληρώθηκε επιτυχώς.";
+$langNoSubmitCompletion = "Ακύρωση ολοκλήρωσης";
+$langContinueToNoSubmiCompletion = "Θέλετε να προχωρήσετε στην ακύρωση ολοκλήρωσης";
+$langDocCompletionNoSuccess = "Ακυρώσατε την ολοκλήρωση του εγγράφου.";

@@ -1555,3 +1555,10 @@ $langDelAllSessions = "Delete all sessions";
 $langContinueToDelAllSessions = "Do you want to proceed to delete all sessions?";
 $langDelAllSessionSuccess = "Sessions deleted successfully.";
 $langALLSessions = "All";
+$langSubmitCompletion = "Submit completion";
+$langContinueToUserAwarded = "This action is related to the completion of the user's deliverable and concerns the activity listed in the <<About>> column of the table.</br>
+ Do you want to proceed with this action?";
+$langDocCompletionSuccess = "The action completed successfully.";
+$langNoSubmitCompletion = "Cancel completion";
+$langContinueToNoSubmiCompletion = "You want to proceed to cancel checkout";
+$langDocCompletionNoSuccess = "You have canceled the completion of the document.";

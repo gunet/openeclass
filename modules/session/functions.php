@@ -1167,25 +1167,25 @@ function upload_session_doc($sid){
             }
 
             
-            if(!$is_consultant){
-                // Insert uploaded document as activity in user_badge_criterion
-                $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$sid);
-                if($badge && $doc_id > 0 && $uUserId > 0){
-                    $badge_id = $badge->id;
-                    $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
-                                                                        WHERE badge = ?d
-                                                                        AND activity_type = ?s
-                                                                        AND resource = ?d",$badge_id,'document-submit',$doc_id);
-                    if($badge_criterion){
-                        $badge_criterion_id = $badge_criterion->id;
-                        Database::get()->query("INSERT INTO user_badge_criterion SET 
-                                                user = ?d,
-                                                created = " . DBHelper::timeAfter() . ",
-                                                badge_criterion = ?d",$uid,$badge_criterion_id);
-                    }
-                }
+            // if(!$is_consultant){
+            //     // Insert uploaded document as activity in user_badge_criterion
+            //     $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$sid);
+            //     if($badge && $doc_id > 0 && $uUserId > 0){
+            //         $badge_id = $badge->id;
+            //         $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+            //                                                             WHERE badge = ?d
+            //                                                             AND activity_type = ?s
+            //                                                             AND resource = ?d",$badge_id,'document-submit',$doc_id);
+            //         if($badge_criterion){
+            //             $badge_criterion_id = $badge_criterion->id;
+            //             Database::get()->query("INSERT INTO user_badge_criterion SET 
+            //                                     user = ?d,
+            //                                     created = " . DBHelper::timeAfter() . ",
+            //                                     badge_criterion = ?d",$uid,$badge_criterion_id);
+            //         }
+            //     }
                 
-            }
+            // }
 
             $msg = ($checker == 1) ? "$langUploadDocCompleted" . "</br>" . "$langPreviousDocDeleted" : "$langUploadDocCompleted";
             Session::flash('message',$msg);

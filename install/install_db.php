@@ -2532,6 +2532,7 @@ $db->query("CREATE TABLE `session_resources` (
                             `order` INT(11) NOT NULL DEFAULT 0,
                             `date` DATETIME NOT NULL,
                             `doc_id` INT(11) NOT NULL DEFAULT 0,
+                            `is_completed` INT(11) NOT NULL DEFAULT 0,
                             `from_user` INT(11) NOT NULL DEFAULT 0,
                             PRIMARY KEY(id),
                             FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
