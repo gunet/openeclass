@@ -87,6 +87,7 @@ try {
     redirect('include/not_installed.php?err_db=true');
 }
 
+require_once 'modules/admin/extconfig/externals.php';
 
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
