@@ -372,6 +372,8 @@ if (!file_exists($videoDir)) {
     fatal_error($langUpgNoVideoDir2);
 }
 
+mkdir_or_error('storage');
+mkdir_or_error('storage/views');
 mkdir_or_error('courses/temp');
 touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/temp/pdf');

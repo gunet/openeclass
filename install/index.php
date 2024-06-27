@@ -125,7 +125,7 @@ $phpSysInfoURL = '../admin/sysinfo/';
 $availableThemes = array('Default','Crimson','Emerald','Dark','Wood','Neutral','Soft_light');
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
-    // Get DB credentians from environment for Docker image or automated installation
+    // Get DB credentials from environment for Docker image or automated installation
     $dbHostForm = getenv_default('MYSQL_LOCATION', 'localhost');
     $dbUsernameForm = getenv_default('MYSQL_ROOT_USER', 'root');
     $dbPassForm = getenv_default('MYSQL_ROOT_PASSWORD', '');
@@ -146,10 +146,9 @@ if (isset($_POST['welcomeScreen'])) {
     $helpdeskForm = '+30 2xx xxxx xxx';
     $institutionForm = $langDefaultInstitutionName;
     $institutionUrlForm = 'https://www.gunet.gr/';
-    $helpdeskmail = $faxForm = $postaddressForm = '';
+    $helpdeskmail = $postaddressForm = '';
 
     $eclass_stud_reg = 2;
-    $eclass_prof_reg = 1;
 
 } else {
     register_posted_variables(array(
@@ -166,10 +165,8 @@ if (isset($_POST['welcomeScreen'])) {
         'campusForm' => true,
         'helpdeskForm' => true,
         'helpdeskmail' => true,
-        'faxForm' => true,
         'postaddressForm' => true,
         'eclass_stud_reg' => true,
-        'eclass_prof_reg' => true,
         'emailForm' => true,
         'lang' => true,
         'institutionForm' => true,
@@ -220,8 +217,8 @@ function selection_input($entries, $name) {
 $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'dbPassForm', 'urlForm', 'nameForm', 'emailForm', 'loginForm', 'lang',
     'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
-    'eclass_stud_reg', 'eclass_prof_reg', 'institutionForm',
-    'institutionUrlForm', 'faxForm', 'postaddressForm',
+    'eclass_stud_reg', 'institutionForm',
+    'institutionUrlForm', 'postaddressForm',
     'dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
     'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
     'smtp_username', 'smtp_password', 'sendmail_command', 'theme_selection', 'homepage_intro');
@@ -397,7 +394,6 @@ elseif (isset($_POST['install4'])) {
            form_entry('passForm', text_input('passForm', 40), "$langAdminPass (*)") .
            form_entry('campusForm', text_input('campusForm', 40), $langCampusName) .
            form_entry('helpdeskForm', text_input('helpdeskForm', 40), $langHelpDeskPhone) .
-           form_entry('faxForm', text_input('faxForm', 40), $langHelpDeskFax) .
            form_entry('helpdeskmail', text_input('helpdeskmail', 40), "$langHelpDeskEmail (**)") .
            form_entry('institutionForm', text_input('institutionForm', 40), $langInstituteShortName) .
            form_entry('institutionUrlForm', text_input('institutionUrlForm', 40), $langInstituteName) .
@@ -407,12 +403,7 @@ elseif (isset($_POST['install4'])) {
                                             '1' => $langReqRegUser,
                                             '0' => $langDisableEclassStudReg),
                                           'eclass_stud_reg'),
-                      "$langUserAccount") .
-           form_entry('eclass_prof_reg',
-                          selection_input(array('1' => $langReqRegProf,
-                                                '0' => $langDisableEclassProfReg),
-                                              'eclass_prof_reg'),
-                          "$langProfAccount $langViaeClass") . "           
+                      "$langUsersAccount") . "
            <div class='form-group mt-5'>
             <div class='col-12'>
               <div class='row'>
@@ -457,7 +448,7 @@ elseif(isset($_POST['install5'])){
                   <div class='card-body'>
                       <fieldset>
                           <div class='form-group'>
-                              " . form_entry('homepage_intro', textarea_input('homepage_intro', 3, 40), $langHomePageIntroText) . "
+                              " . form_entry('homepage_intro', textarea_input('homepage_intro', 3, 40), $langHomePageIntroTextHelp) . "
                           </div>
                           <div class='form-group mt-4'>
                               <div class='col-sm-12'>
@@ -563,11 +554,6 @@ elseif (isset($_POST['install7'])) {
         case '2': $disable_eclass_stud_reg_info = $langDisableEclassStudRegNo;
                     break;
     }
-    if (!$eclass_prof_reg) {
-        $disable_eclass_prof_reg_info = $langDisableEclassProfRegYes;
-    } else {
-        $disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
-    }
 
     $head_content = "
     <script type='text/javascript'>
@@ -594,7 +580,6 @@ elseif (isset($_POST['install7'])) {
            display_entry(q($dbHostForm), $langdbhost) .
            display_entry(q($dbUsernameForm), $langDBLogin) .
            display_entry(q($dbNameForm), $langMainDB) .
-           display_entry(q($dbMyAdmin), 'PHPMyAdmin URL') .
            display_entry(q($urlForm), $langSiteUrl) .
            display_entry(q($emailForm), $langAdminEmail) .
            display_entry(q($nameForm), $langAdminName) .
@@ -606,9 +591,8 @@ elseif (isset($_POST['install7'])) {
            display_entry(q($institutionForm), $langInstituteShortName) .
            display_entry(q($institutionUrlForm), $langInstituteName) .
            display_entry(q($disable_eclass_stud_reg_info), $langDisableEclassStudRegType) .
-           display_entry(q($disable_eclass_prof_reg_info), $langDisableEclassProfRegType) .
-           display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) . 
-           display_entry(q($homepage_intro), $langHomePageIntroText) .
+           display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) .
+           display_entry(q($homepage_intro), $langHomePageIntroTextHelp) .
            display_entry(q($availableThemes[$theme_selection]), $langActiveTheme) ."
            <div class='form-group mt-5'>
              <div class='col-12'>
@@ -837,6 +821,8 @@ function get_base_path() {
 function create_directories() {
     mkdir_try('config');
     touch_try('config/index.php');
+    mkdir_try('storage');
+    mkdir_try('storage/views');
     mkdir_try('courses');
     touch_try('courses/index.php');
     mkdir_try('courses/temp');

@@ -3,6 +3,9 @@ require '../vendor/autoload.php';
 
 $viewsDir = '../resources/views/modern/install';
 $cacheDir = '../storage/views/';
+if (!is_dir($cacheDir)) {
+    mkdir($cacheDir, 0755, true);
+}
 
 use Jenssegers\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);

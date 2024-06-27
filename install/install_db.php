@@ -1562,7 +1562,6 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
     $tbl_options");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
-$eclass_prof_reg = intval($eclass_prof_reg);
 
 $db->query("CREATE TABLE `config` (
     `key` VARCHAR(32) NOT NULL,
@@ -1606,7 +1605,7 @@ $default_config = array(
     'alt_auth_stud_reg', 2,
     'alt_auth_prof_reg', 2,
     'eclass_stud_reg', $eclass_stud_reg,
-    'eclass_prof_reg', $eclass_prof_reg,
+    'eclass_prof_reg', 1,
     'course_multidep', 0,
     'user_multidep', 0,
     'restrict_owndep', 0,
@@ -1619,7 +1618,6 @@ $default_config = array(
     'email_helpdesk', $helpdeskmail,
     'site_name', $campusForm,
     'phone', $helpdeskForm,
-    'fax', $faxForm,
     'postaddress', $postaddressForm,
     'institution', $institutionForm,
     'institution_url', $institutionUrlForm,
@@ -2549,8 +2547,6 @@ $db->query("CREATE TABLE `mod_session_completion` (
 $_SESSION['theme'] = 'modern';
 
 importThemes();
-
-set_config('theme_options_id', $db->querySingle('SELECT id FROM theme_options WHERE name = ?s', '---- Open eClass Default ----')->id);
 
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");

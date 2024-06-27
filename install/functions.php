@@ -27,11 +27,6 @@ require_once 'template/template.inc.php';
 
 /**
  * draws installation screens
- * @global type $urlServer
- * @global type $langStep
- * @global type $langStepTitle
- * @global type $langTitleInstall
- * @global type $langInstallProgress
  * @param type $toolContent
  */
 function draw($toolContent, $options=null, $head_content ='') {
@@ -113,12 +108,6 @@ function draw($toolContent, $options=null, $head_content ='') {
 
 /**
  * @brief installation right menu
- * @global type $langRequirements
- * @global type $langLicense
- * @global type $langDBSetting
- * @global type $langBasicCfgSetting
- * @global type $langLastCheck
- * @global type $langInstallEnd
  * @return array
  */
 function installerMenu() {
@@ -149,15 +138,15 @@ function installerMenu() {
 			}
             $stepImg[$i] = "fa-angle-double-right";
 		}
-        array_push($sideMenuText, $stepTitles[$i]);
-        array_push($sideMenuLink, $currentStep[$i]);
-        array_push($sideMenuImg, $stepImg[$i]);
+        $sideMenuText[] = $stepTitles[$i];
+        $sideMenuLink[] = $currentStep[$i];
+        $sideMenuImg[] = $stepImg[$i];
 	}
 
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
+	$sideMenuSubGroup[] = $sideMenuText;
+	$sideMenuSubGroup[] = $sideMenuLink;
+	$sideMenuSubGroup[] = $sideMenuImg;
+	$sideMenuGroup[] = $sideMenuSubGroup;
 
 	return $sideMenuGroup;
 }
@@ -213,9 +202,19 @@ function form_entry($name, $input, $label) {
 }
 
 function display_entry($input, $label) {
-    return "
-    <div class='form-group mt-3'>
-      <label class='col-sm-12 control-label-notes'>" . q($label) . "</label>
-      <div class='col-sm-12'><p class='form-control-static'>$input</p></div>
-    </div>";
+
+    $content = '';
+
+    if ($input) {
+        $content = "
+            <div class='form-group mt-3'>
+              <label class='col-sm-12 control-label-notes'>" . q($label) . "</label>
+              <div class='col-sm-12'>
+                <p class='form-control-static'>
+                    $input
+                </p>
+              </div>
+            </div>";
+    }
+    return $content;
 }
