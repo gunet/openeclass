@@ -549,7 +549,9 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
     $ids_simple_users = array();
     $idsNotConsultant = Database::get()->queryArray("SELECT user_id FROM course_user 
                                                         WHERE course_id = ?d AND status = ?d AND tutor = ?d 
-                                                        AND editor = ?d AND course_reviewer = ?d AND reviewer = ?d", $course_id, USER_STUDENT, 0, 0, 0, 0);
+                                                        AND editor = ?d AND course_reviewer = ?d AND reviewer = ?d
+                                                        AND user_id IN (SELECT participants FROM mod_session_users 
+                                                                        WHERE session_id = ?d)", $course_id, USER_STUDENT, 0, 0, 0, 0, $sessionID);
     foreach($idsNotConsultant as $u){
         $ids_simple_users[] = $u->user_id;
     }

@@ -69,6 +69,10 @@ $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 student_view_is_active();
 
+// Show users who are participated in session
+if(isset($_GET['show_users_docs'])){
+    redirect_to_home_page("modules/session/users_deliverable.php?course=".$course_code."&session=".$sessionID);  
+}
 
 // ---------------------------
 // download directory or file
@@ -196,12 +200,13 @@ if(isset($_POST['userBadgeCriterionId'])){
         Session::flash('alert-class', 'alert-warning');
     }
     
-    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID);  
+    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID.'&docs_by_user='.$_POST['userSender']);  
 } 
 
-// An consultant can create a session
+// A consultant can create a session
 if($is_tutor_course or $is_consultant){
-    $sql = "AND lock_user_id != $uid";
+    $user_docs = $_GET['docs_by_user'] ?? 0;
+    $sql = "AND lock_user_id = $user_docs";
 }else{// is simple user
     $sql = "AND lock_user_id = $uid";
 }

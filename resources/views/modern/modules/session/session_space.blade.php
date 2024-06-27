@@ -99,7 +99,7 @@
                                 'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID))
                             ),
                             array('title' => $is_consultant ? trans('langDocSender') : trans('langMyUploadedFiles'),
-                                  'url' => $urlAppend . 'modules/session/doc_uploaded.php?course=' . $course_code . '&session=' . $sessionID,
+                                  'url' => $url_user_docs,
                                   'class' => 'session-uploaded-docs',
                                   'level' => 'secondary',
                                   'icon' => 'fa-solid fa-cloud-arrow-up')
