@@ -5601,10 +5601,9 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[BgPanels];
                 }
 
-                .admin-nav{
-                    background: $theme_options_styles[BgPanels] !important;
+                .card-affixed{
+                    background-color: $theme_options_styles[BgPanels] !important;
                 }
-               
                 
             ";
         }
@@ -5680,6 +5679,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .panel-default:not(:has(.panel-heading)){
+                    border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                .card-affixed{
                     border: solid 1px $theme_options_styles[clBorderPanels];
                 }
 

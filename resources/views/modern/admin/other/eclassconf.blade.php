@@ -105,7 +105,7 @@
 
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-                                <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
+                                <div data-bs-spy="scroll" data-bs-target="#navbar-card-affixed" data-bs-offset="0" tabindex="0">
                                     <div class='card panelCard px-lg-4 py-lg-3' id='one'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langBasicCfgSetting') }}</h3>
@@ -1323,7 +1323,7 @@
                         <div class='col-xl-3 col-lg-4 col-md-0 col-sm-0 col-0 d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block float-end hidden-xs' id='affixedSideNav'>
 
 
-                            <nav id="navbar-example3" class="navbar navbar-light bg-transparent flex-column align-items-stretch p-3 sticky-top BorderSolidDes Borders admin-nav" style="z-index:0;">
+                            <div id="navbar-card-affixed" class="card-affixed flex-column align-items-stretch p-3 sticky-top " style="z-index:0;">
                                 <nav class="nav nav-pills flex-column">
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#two">{{ trans('langUpgReg') }}</a>
@@ -1344,7 +1344,7 @@
 
                                     <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#fourteen">{{ trans('langMaintenance') }}</a>
                                 </nav>
-                            </nav>
+                            </div>
                         </div>
 
 
