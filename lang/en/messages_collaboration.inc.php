@@ -141,6 +141,13 @@ $langInCoursesL = "in $langsCourse";
 
 // For the logged-out user:
 $langUserWithRights = "User with rights to create collaborations";
+$langUserWithNoRights = "User without partnership creation rights";
+$langUsersWithTeacherRights = "Users with permissions to create collaborations";
+$langUsersWithNoTeacherRights = "Users without partnership creation rights";
+$langWithRights = "with the right to create collaborations";
+$langWithCourseCreationRights = "creating collaborations";
+$langWithNoCourseCreationRights = "not creating collaborations";
+$langInfoEnableCourseRegistration = "User can subscribe to $langsCourses";
 
 
 /* * ******************************************

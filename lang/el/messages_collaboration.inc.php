@@ -99,6 +99,13 @@ $langInCoursesL = "στην $langsCourse";
 
 // For the logged-out user:
 $langUserWithRights = "Χρήστη με δικαιώματα δημιουργίας συνεργασιών";
+$langUserWithNoRights = "Χρήστη χωρίς δικαιώματα δημιουργίας συνεργασιών";
+$langUsersWithTeacherRights = "Χρήστες με δικαιώματα δημιουργίας συνεργασιών";
+$langUsersWithNoTeacherRights = "Χρήστες χωρίς δικαιώματα δημιουργίας συνεργασιών";
+$langWithRights = "με δικαίωμα δημιουργίας συνεργασιών";
+$langWithCourseCreationRights = "δημιουργίας συνεργασιών";
+$langWithNoCourseCreationRights = "όχι δημιουργίας συνεργασιών";
+$langInfoEnableCourseRegistration = "Ο χρήστης μπορεί να εγγραφεί σε $langsCourses";
 
 
 /* * ******************************************
