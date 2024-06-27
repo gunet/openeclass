@@ -52,11 +52,11 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 @if(get_config('enable_mobileapi'))
                                                     <div class='d-flex gap-3 pe-3'>
-                                                        <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
-                                                            <img style='width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
+                                                        <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
+                                                            <img style='width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
                                                         </a>
-                                                        <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target='_blank' aria-label='Play Store'>
-                                                            <img style='width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
+                                                        <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
+                                                            <img style='width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Download on the App Store'>
                                                         </a>
                                                     </div>
                                                 @endif
@@ -300,7 +300,7 @@
                                     </div>
 
                                     @if(!get_config('show_only_loginScreen'))
-                                        <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif" 
+                                        <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif"
                                                 style="background: url({{ $loginIMG }});"></div>
                                     @endif
                                 </div>
