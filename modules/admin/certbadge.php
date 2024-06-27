@@ -324,10 +324,10 @@ if (isset($_GET['action'])) {
                                 </div>
                             </div>
                   
-                            <div class='form-group' id='courses-list'>
-                                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:&nbsp;&nbsp;
-                                <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span></label>
-                                <div class='col-sm-10'>
+                            <div class='form-group mt-4' id='courses-list'>
+                                <label class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:&nbsp;&nbsp;
+                                <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langToAllCoursesInfo'></span></label>
+                                <div class='col-sm-12'>
                                 <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_certificate_template)                                                                    
