@@ -718,7 +718,8 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
  */
 function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
     global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id, 
-            $urlServer, $course_code, $langTcNotStartedYet, $langHasExpired, $langInProgress;
+            $urlServer, $course_code, $langTcNotStartedYet, $langHasExpired, 
+            $langInProgress, $langResourceBelongsToSessionPrereq;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
 
@@ -738,6 +739,14 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
         if (!$is_consultant and !$tc->active) {
             return '';
         }
+
+        $res_prereq_icon = '';
+        if ($is_consultant) {
+            if (resource_belongs_to_session_completion($_GET['session'], $tc_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);
+            }
+        }
+
         $resourse_info = Database::get()->querySingle("SELECT title,comments FROM session_resources WHERE id = ?d",$resource_id);
         $new_title = $resourse_info->title;
         $new_meeting_id = $tc->meeting_id;
@@ -779,7 +788,7 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td>$tclink $comment_box $help_info $has_expired $langProgress</td>
+          <td>$tclink $res_prereq_icon $comment_box $help_info $has_expired $langProgress</td>
           <td></td>" .
         session_actions('tc', $resource_id, $visibility) . '
         </tr>';
