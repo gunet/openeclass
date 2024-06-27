@@ -30,7 +30,7 @@ class ExtAppManager {
     public static $AppNames = ['H5PApp', 'BBBApp', 'GoogleMeetApp', 'JitsiApp', 'ZoomApp', 'MicrosoftTeamsApp',
         'APITokenApp', 'WebexApp', 'TurnitinApp', 'LtiPublishApp', 'UnPlagApp', 'OpenDelosApp', 'GoogleDriveApp',
         'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp',
-        'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+        'AutojudgeApp', 'AntivirusApp', 'secondfaApp',
         'AnalyticsApp', 'UserWayApp', 'LimesurveyApp', 'ColmoocApp'];
 
     private static $APPS = null;

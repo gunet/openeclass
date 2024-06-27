@@ -87,14 +87,6 @@ try {
     redirect('include/not_installed.php?err_db=true');
 }
 
-require_once 'modules/admin/extconfig/externals.php';
-$connector = WafApp::getWaf();
-if ($connector->isEnabled()){
-    $output = $connector->check();
-    if ($output->status == $output::STATUS_BLOCKED){
-        WafApp::block($output->output);
-    }
-}
 
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
