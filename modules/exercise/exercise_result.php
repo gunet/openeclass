@@ -223,7 +223,7 @@ $toolName = $langExercicesResult;
 
 if (!isset($_GET['pdf'])) {
     if ($unit) {
-        $tool_content .= action_bar([
+        $action_bar = action_bar([
             [
                 'title' => $langBack,
                 'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
@@ -239,7 +239,7 @@ if (!isset($_GET['pdf'])) {
             ]
         ]);
     } else {
-        $tool_content .= action_bar([
+        $action_bar = action_bar([
             [
                 'title' => $langBack,
                 'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
@@ -256,6 +256,7 @@ if (!isset($_GET['pdf'])) {
 
         ]);
     }
+    $tool_content .= $action_bar;
 }
 
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";

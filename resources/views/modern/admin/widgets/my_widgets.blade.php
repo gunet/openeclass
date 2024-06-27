@@ -11,12 +11,10 @@
 
                     @include('layouts.partials.legend_view')
 
-                    {!! $action_bar !!}
-
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -28,7 +26,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -38,13 +36,13 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
-                   
+
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                             <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
                             <hr>
@@ -104,10 +102,10 @@
                                 @include('admin.widgets.common.portfolioMain',['final_data_portfolioPageMain_widget' => $final_data_portfolioPageMain_widget])
                                 @include('admin.widgets.common.portfolioSide',['final_data_portfolioSide_widget' => $final_data_portfolioSide_widget])
                         </div>
-                   
-               
+
+
         </div>
-   
+
 </div>
 </div>
 

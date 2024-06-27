@@ -30,7 +30,7 @@ $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();
 $found = $objExercise->read($exerciseId);
 if (!$found) { // exercise not found
-    Session::flash('message',$langExerciseNotFound); 
+    Session::flash('message',$langExerciseNotFound);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
@@ -38,15 +38,6 @@ if (!$found) { // exercise not found
 $toolName = $langUsage;
 $pageName = $objExercise->selectTitle();
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
-
-$tool_content .= action_bar(array(
-    array(
-        'title' => $langBack,
-        'level' => 'primary',
-        'icon' => 'fa-reply',
-        'url' => "index.php?course=$course_code"
-    ),
-));
 
 $completedAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_COMPLETED)->count;
 $pausedAttempts = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d", $exerciseId, ATTEMPT_PAUSED)->count;
@@ -209,7 +200,7 @@ foreach($questionList as $id) {
         //                   ".$objQuestionTmp->successRate($exerciseId)."%
         //                 </div>
         //             </div>
-        //         </td>                   
+        //         </td>
         //     </tr>";
 
         $tool_content .= "

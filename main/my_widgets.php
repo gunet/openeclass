@@ -19,10 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
-
 require_once '../include/baseTheme.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -63,7 +59,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` - 1 WHERE `position` <= ?d AND `position` > ?d AND `widget_area_id` = ?d", $newPos, $oldPos, $widget_area_id);
         }
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = ?d WHERE id = ?d", $newPos, $widget_widget_area_id);
-        
+
     } elseif ($_POST['action'] == 'getForm') {
         $widget_id = $_POST['widget_id'];
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -77,10 +73,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($options as $option) {
             $option_data[$option['name']] = purify($option['value']);
         }
-        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);     
+        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);
     }
     echo json_encode($data);
-    exit;    
+    exit;
 }
 
 load_js('sortable');
@@ -93,7 +89,7 @@ if (isset($_POST['widgetAction'])) {
     }
     redirect_to_home_page('modules/admin/widgets.php');
 }
-$head_content .= 
+$head_content .=
         "
         <script type='text/javascript'>
             $(function() {
@@ -322,12 +318,12 @@ $head_content .=
 
         </script>
         ";
-        
+
 $installed_widgets = Database::get()->queryArray("SELECT id, class FROM widget");
 $installed_widgets_arr = [];
 foreach ($installed_widgets as $installed_widget) {
     $installed_widgets_arr[$installed_widget->id] = $installed_widget->class;
-}    
+}
 
 $view_data['portfolio_main_area'] = new Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
 $view_data['portfolio_main_area_widgets'] = $view_data['portfolio_main_area']->getUserAndAdminWidgets($uid);
@@ -345,19 +341,12 @@ $pageName = $langMyWidgets;
 $view_data['final_data_portfolioSide_widget'] = tinymce_widget(PORTFOLIO_PAGE_SIDEBAR);
 $view_data['final_data_portfolioPageMain_widget'] = tinymce_widget(PORTFOLIO_PAGE_MAIN);
 
-
-$view_data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-          'url' => $urlServer,
-          'icon' => 'fa-reply',
-          'level' => 'primary',
-          'button-class' => 'btn-secondary')), false);
 view('admin.widgets.my_widgets', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {
     global $installed_widgets_arr;
     if (!isset($view_data['installed_widgets'])) $view_data['installed_widgets'] = [];
-    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];    
+    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];
     $files = new \DirectoryIterator ( $directory );
     foreach ($files as $file) {
         if ($file->isFile ()) {

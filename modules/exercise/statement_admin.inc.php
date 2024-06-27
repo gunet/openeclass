@@ -180,13 +180,15 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
         $link_back = "admin.php?course=$course_code".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$_GET[modifyQuestion]";
     }
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langBack,
             'url' => $link_back,
             'icon' => 'fa-reply',
             'level' => 'primary'
         )
     ));
+
+    $tool_content .= $action_bar;
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
 
     if (Session::has('questionName')) {

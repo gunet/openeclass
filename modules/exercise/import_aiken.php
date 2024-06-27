@@ -20,16 +20,6 @@ use Aiken\Parser\AikenParser;
 
 $toolName = $langImportAiken;
 
-$action_bar = action_bar([
-                    [
-                        'title' => $langBack,
-                        'url' => "question_pool.php?course=$course_code&amp;exerciseId=0",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary-label'
-                    ]
-                ]);
-$tool_content .= $action_bar;
-
 $html = $quiz = '';
 $weight = 1;
 if (isset($_POST['validate'])) {
