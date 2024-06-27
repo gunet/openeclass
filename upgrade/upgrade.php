@@ -139,6 +139,16 @@ function break_on_step() {
     }
 }
 
+if(isset($_POST['action']) and $_POST['action'] == 'preview_theme'){
+    if(get_config('theme_options_id') != $_POST['selected_theme_id']){
+        set_config('theme_options_id',$_POST['selected_theme_id']);
+        echo 1;
+    }else{
+        echo 0;
+    }
+    exit();
+}
+
 if ($command_line and isset($argv[1])) {
     $logfile_path = $argv[1];
 } else {
@@ -523,6 +533,31 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
             </div>
         </div>
     </div>";
+
+
+    $head_content .= "
+        <script type='text/javascript'>
+            $(document).ready(function() {
+                $('#themeSelection').on('click',function(e){
+                    e.preventDefault();
+                    var selectedThemeId = $(this).val();
+                    $.ajax({
+                        url: '$_SERVER[SCRIPT_NAME]',
+                        data: 'action=preview_theme&selected_theme_id='+selectedThemeId+'&token=$_SESSION[csrf_token]',
+                        type: 'POST',
+                        success: function(response) {
+                            if(response == 1){
+                                window.location.href = '$_SERVER[SCRIPT_NAME]';
+                            }
+                        },
+                        error:function(error){
+                            console.log(error)
+                        },
+                    });
+                })  
+            });
+        </script>
+    ";
 
 } else {
 
