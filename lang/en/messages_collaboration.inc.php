@@ -1569,3 +1569,4 @@ $langDocCompletionSuccess = "The action completed successfully.";
 $langNoSubmitCompletion = "Cancel completion";
 $langContinueToNoSubmiCompletion = "You want to proceed to cancel checkout";
 $langDocCompletionNoSuccess = "You have canceled the completion of the document.";
+$langExistsTc = "The current video teleconference already exists.";

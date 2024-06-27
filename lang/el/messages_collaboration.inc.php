@@ -1506,3 +1506,4 @@ $langDocCompletionSuccess = "Η ενέργεια ολοκληρώθηκε επι
 $langNoSubmitCompletion = "Ακύρωση ολοκλήρωσης";
 $langContinueToNoSubmiCompletion = "Θέλετε να προχωρήσετε στην ακύρωση ολοκλήρωσης";
 $langDocCompletionNoSuccess = "Ακυρώσατε την ολοκλήρωση του εγγράφου.";
+$langExistsTc = "Η συγκεκριμένη τηλεδιάσκεψη υπάρχει ήδη.";

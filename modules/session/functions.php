@@ -2537,11 +2537,18 @@ function get_cert_percentage_completion_by_user($element, $element_id, $userId) 
  */
 function session_tc_creation($sid,$cid,$tc_type,$token){
 
-    global $course_code, $langRemoteConference;
+    global $course_code, $langRemoteConference, $langExistsTc;
 
     if ($tc_type == 'bbb') {
 
         if (!isset($token) || !validate_csrf_token($token)) csrf_token_error();
+
+        $exists_resource = Database::get()->querySingle("SELECT id FROM session_resources WHERE session_id = ?d AND type = ?s",$sid,'tc');
+        if($exists_resource){
+            Session::flash('message',$langExistsTc);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page('modules/session/session_space.php?course=' . $course_code . '&session=' . $sid);
+        }
 
         $t_title = Database::get()->querySingle("SELECT title FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid)->title;
         $title = $langRemoteConference . '-' . $t_title;
