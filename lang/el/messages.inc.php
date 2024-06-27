@@ -6746,11 +6746,14 @@ if (file_exists('config/config.php')) {
         $langListOfCollaboration = "Παρακάτω εμφανίζεται η λίστα με τις συνεργασίες στις οποίες συμμετέχετε.";
         $langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
         $langDefaultModulesCollaborationHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ ορισμού στις νέες συνεργασίες της πλατφόρμας κατά τη δημιουργία τους.";
-        $langNotEnrolledToCollaborations = "Δεν έχετε εγγραφεί σε συνεργασίες";
-        $langWelcomeStudCollab = "«<strong>Μαθήματα</strong>» και την κατηγορία που περιλαμβάνει τις διαθέσιμες ηλεκτρονικές συνεργασίες.";
-        $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» και τον τύπο «<strong>Συνεργασία</strong>» για να δημιουργήσετε τις ηλεκτρονικές σας συνεργασίες.";
+    }
+    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+        $langCourseCreate = "Δημιουργία συνεργασίας";
     }
 }
+$langWelcomeStudCollab = "«<strong>Συνεργασίες</strong>» και την κατηγορία που περιλαμβάνει τις διαθέσιμες ηλεκτρονικές συνεργασίες.";
+$langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» και την μορφή «<strong>συνεδρίας</strong>» για να δημιουργήσετε τις ηλεκτρονικές σας συνεργασίες.";
+$langNotEnrolledToCollaborations = "Δεν έχετε εγγραφεί σε συνεργασίες";
 $langSumCollaborationEnrolled = "Συνεργασίες που συμμετέχω";
 $langWikiEditionNoSucceed = "Ένα ή περισσότερα υποσυστήματα πρέπει να είναι ενεργοποιημένα εξ ορισμού.";
 $m['password_collab'] = "Συνθηματικό συνεργασίας";

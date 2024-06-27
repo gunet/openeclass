@@ -6268,11 +6268,14 @@ if (file_exists('config/config.php')) {
         $langListOfCollaboration = "Below is the list of partnerships you are involved in.";
         $langDisableCollaborationModulesHelp = "You can choose which of the following subsystems you wish to disable from all platform partnerships.";
         $langDefaultModulesCollaborationHelp = "The following subsystems are enabled by default in new platform partnerships when they are created.";
-        $langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
-        $langWelcomeStudCollab = "«<strong>Courses</strong>» and the category that includes the available online collaborations.";
-        $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» and the type «<strong>Collaboration</strong>» to create your online collaborations.";
+    }
+    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+        $langCourseCreate = "Δημιουργία συνεργασίας";
     }
 }
+$langWelcomeStudCollab = "«<strong>Courses</strong>» and the category that includes the available online collaborations.";
+$langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» and the type «<strong>Collaboration</strong>» to create your online collaborations.";
+$langNotEnrolledToCollaborations = "You are not subscribed to partnerships";
 $langSumCollaborationEnrolled = "Collaborations I participate in";
 $langWikiEditionNoSucceed = "One or more subsystems must be enabled by default.";
 $m['password_collab'] = "Password for collaboration";
