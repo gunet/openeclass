@@ -5261,3 +5261,9 @@ body:has(.fixed-announcement) .btn-quick-note{
   outline: 0;
   box-shadow: none;
 }
+
+@media(max-width:767px){
+  .session-info{
+    width: 100%;
+  }
+}

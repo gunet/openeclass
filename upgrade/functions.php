@@ -3112,6 +3112,10 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('session_resources', 'is_completed')) {
         Database::get()->query("ALTER TABLE session_resources ADD `is_completed` int(11) NOT NULL DEFAULT 0");
     }
+
+    if (!DBHelper::fieldExists('tc_session', 'id_session')) {
+        Database::get()->query("ALTER TABLE tc_session ADD `id_session` int(11) NOT NULL DEFAULT 0");
+    }
 }
 
 

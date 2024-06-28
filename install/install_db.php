@@ -1747,6 +1747,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `record` enum('true','false') DEFAULT 'false',
     `sessionUsers` int(11) DEFAULT 0,
     `options` text DEFAULT NULL,
+    `id_session` int(11) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)) $tbl_options");
 
 // tc_servers table

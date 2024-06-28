@@ -138,7 +138,12 @@ if(isset($_GET['addSessions'])){
                 if ($per == 100) {
                     $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
                 } else {
-                    $icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+                    //$icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+                    $icon = "
+                      <div class='progress' style='width:150px;'>
+                        <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
+                      </div>
+                    ";
                 }
                 $userParticipant[$p] = [
                   'user' => participant_name($p),
@@ -165,7 +170,12 @@ if(isset($_GET['addSessions'])){
             if ($per == 100) {
                 $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
             } else {
-                $icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+                //$icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
+                $icon = "
+                          <div class='progress' style='width:150px;'>
+                            <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
+                          </div>
+                        ";
             }
             $userParticipant[$uid] = [
               'user' => participant_name($uid),

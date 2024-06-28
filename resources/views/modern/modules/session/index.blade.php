@@ -125,7 +125,7 @@
                                             </div>
                                             <div class='card-body'>
                                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                    <div>
+                                                    <div class='session-info'>
                                                         <ul class='list-group list-group-flush'>
                                                             <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                 <div>{{ trans('langStart') }}:</div>
@@ -137,7 +137,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div>
+                                                    <div class='session-info'>
                                                         <ul class='list-group list-group-flush'>
                                                             <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                 <div>{{ trans('langSSession') }}:</div>
@@ -161,7 +161,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div>
+                                                    <div class='session-info'>
                                                         <ul class='list-group list-group-flush'>
                                                             <li class='list-group-item list-group-item-action secondary d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                 <div>{{ trans('langStatement') }}:</div>
@@ -231,16 +231,6 @@
                                     </div>
                                 @endforeach
                             </div>
-
-
-
-
-
-
-
-
-
-
                         @else
                             <div class='alert alert-warning'>
                                 <i class='fa-solid fa-triangle-exclamation fa-lg'></i>

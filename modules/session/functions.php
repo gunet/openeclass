@@ -364,7 +364,7 @@ function delete_session($sid = 0){
         Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d",$course_id,MYSESSIONS,$sid);
         $tc_res = Database::get()->querySingle("SELECT res_id FROM session_resources WHERE session_id = ?d AND type = ?s",$sid,'tc');
         if($tc_res){
-            Database::get()->query("DELETE FROM tc_session WHERE id = ?d",$tc_res->res_id);
+            Database::get()->query("DELETE FROM tc_session WHERE id = ?d AND id_session = ?d",$tc_res->res_id,$sid);
         }
         Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d",$sid);
         Database::get()->query("DELETE FROM mod_session WHERE id = ?d",$sid);
@@ -2630,10 +2630,11 @@ function session_tc_creation($sid,$cid,$tc_type,$token){
                                                         participants = ?s,
                                                         record = ?s,
                                                         sessionUsers = ?s,
-                                                        options = ?s",
+                                                        options = ?s,
+                                                        id_session = ?d",
             $cid, $title, $desc, $start, $end, $status, $server_id,
             generateRandomString(), generateRandomString(), generateRandomString(),
-            $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+            $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $sid);
 
             //insert tc in session resourses
             if($q){

@@ -99,6 +99,17 @@ if(isset($_POST['modify'])){
     $visible_session = (isset($_POST['session_visible']) and $_POST['session_visible']=='on') ? 1 : 0;
     $type_remote = $_POST['type_remote'];
 
+    // Update dates on video teleconference
+    $tc_exists = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND id_session = ?d",$course_id,$_GET['session']);
+    if($tc_exists){
+      Database::get()->querySingle("UPDATE tc_session SET 
+                                    start_date = ?t,
+                                    end_date = ?t
+                                    WHERE course_id = ?d
+                                    AND id_session = ?d", $start_session, $end_session, $course_id, $_GET['session']);
+    }
+    
+
     $insert = Database::get()->query("UPDATE mod_session SET
                                         creator = ?d,
                                         title = ?s,
