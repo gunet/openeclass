@@ -157,7 +157,7 @@ if(isset($_GET['del'])){
             Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,MYSESSIONS);
         }
         if($q->type == 'tc'){
-            Database::get()->query("DELETE FROM tc_session WHERE id = ?d AND course_id = ?d",$q->res_id,$course_id);
+            Database::get()->query("DELETE FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$q->res_id,$course_id,$sessionID);
         }
         Database::get()->query("DELETE FROM session_resources WHERE id = ?d",$_GET['del']);
         Session::flash('message',$langSessionResourseDeleted);

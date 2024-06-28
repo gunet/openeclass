@@ -2192,7 +2192,7 @@ function session_completion_with_tc_completed($element, $element_id, $session_id
 
     if($session_id){
         $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE course_id = ?d AND type_remote = ?d AND id = ?d", $course_id, 1, $session_id);
-        $tc = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND start_date = ?t AND end_date = ?t",$course_id, $res->start, $res->finish);
+        $tc = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND start_date = ?t AND end_date = ?t AND id_session = ?d",$course_id, $res->start, $res->finish, $session_id);
         //check if exists
         $ch = Database::get()->querySingle("SELECT id FROM {$element}_criterion 
                                             WHERE badge = ?d AND activity_type = ?s AND module = ?d AND resource = ?d",$element_id,'tc-completed',MODULE_ID_TC,$tc->id);
@@ -2249,7 +2249,7 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
                 $res = Database::get()->querySingle("SELECT * FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$forUid,$badge_criterion_id);
                 if(!$res){
                     // When tc has expired then update db
-                    $check_tc = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE id = ?d AND course_id = ?d",$tc_id,$course_id);
+                    $check_tc = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$tc_id,$course_id,$session_id);
                     if($check_tc->end_date < date("Y-m-d H:i:s") && $check_tc->start_date < date("Y-m-d H:i:s")){
                         Database::get()->query("INSERT INTO user_badge_criterion 
                                                 SET user = ?d,
@@ -2257,6 +2257,19 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
                                                 badge_criterion = ?d",$forUid,$badge_criterion_id);
 
                         Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria + 1,
+                                                updated = " . DBHelper::timeAfter() . ",
+                                                assigned = " . DBHelper::timeAfter() . " 
+                                                WHERE user = ?d AND badge = ?d",$forUid,$badge_id);
+                    }
+                }elseif($res){
+                    $check_tc = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$tc_id,$course_id,$session_id);
+                    // tc not completed
+                    if($check_tc->end_date > date("Y-m-d H:i:s")){
+                        Database::get()->query("DELETE FROM user_badge_criterion 
+                                                WHERE user = ?d
+                                                AND badge_criterion = ?d",$forUid,$badge_criterion_id);
+
+                        Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria - 1,
                                                 updated = " . DBHelper::timeAfter() . ",
                                                 assigned = " . DBHelper::timeAfter() . " 
                                                 WHERE user = ?d AND badge = ?d",$forUid,$badge_id);

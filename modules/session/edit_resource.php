@@ -64,7 +64,7 @@ if(isset($_POST['modify_resource'])){
         if($typeRes && $typeRes->type == 'tc'){
             Database::get()->query("UPDATE tc_session SET
                                     title = ?s
-                                    WHERE id = ?d AND course_id = ?d",q($_POST['title']),$typeRes->res_id,$course_id);
+                                    WHERE id = ?d AND course_id = ?d AND id_session = ?d",q($_POST['title']),$typeRes->res_id,$course_id,$sessionID);
         }
 
         Session::flash('message',$langResourceCompleted);
