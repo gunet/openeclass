@@ -71,10 +71,10 @@ Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, docume
                                 ORDER BY user.surname, user.givenname",
     function ($item) use (&$deliverable_info,&$user_ids) {
         $user_ids[]= $item->id;
-        $indexes = array_keys($user_ids, $item->id); 
+        $indexes = array_keys($user_ids, $item->id);
         if(count($indexes) > 1){
             foreach($deliverable_info as $i => $val){
-                if($val['user_id'] == $item->id && $val['user_total_docs'] == 1){
+                if($val['user_id'] == $item->id && $val['user_total_docs'] < count($indexes)){
                     unset($deliverable_info[$i]);
                 }
             }

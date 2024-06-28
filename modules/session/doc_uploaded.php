@@ -173,7 +173,12 @@ if(isset($_GET['del'])){
     Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_GET['del']);
     Session::flash('message',$langSessionResourseDeleted);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID);  
+    if(isset($_GET['docs_by_user'])){
+        redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID."&docs_by_user=".$_GET['docs_by_user']); 
+    }else{
+        redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID); 
+    }
+     
 }
 
 
@@ -212,8 +217,10 @@ if(isset($_POST['userBadgeCriterionId'])){
 if($is_tutor_course or $is_consultant){
     $user_docs = $_GET['docs_by_user'] ?? 0;
     $sql = "AND lock_user_id = $user_docs";
+    $data['redirect_option'] = "docs_by_user=$user_docs";
 }else{// is simple user
     $sql = "AND lock_user_id = $uid";
+    $data['redirect_option'] = "";
 }
 
 $docs = Database::get()->queryArray("SELECT * FROM document

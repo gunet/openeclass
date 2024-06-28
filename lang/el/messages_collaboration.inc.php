@@ -1508,3 +1508,4 @@ $langContinueToNoSubmiCompletion = "Θέλετε να προχωρήσετε σ�
 $langDocCompletionNoSuccess = "Ακυρώσατε την ολοκλήρωση του εγγράφου.";
 $langExistsTc = "Η συγκεκριμένη τηλεδιάσκεψη υπάρχει ήδη.";
 $langViewDeliverable = "Προβολή παραδοτέων";
+$langExistResourcesForCompletion = "Υπάρχουν πόροι προς ολοκλήρωση. Η απενεργοποίηση δεν ολοκληρώθηκε.";

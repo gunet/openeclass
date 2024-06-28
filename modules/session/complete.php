@@ -192,9 +192,17 @@ if ($is_consultant) {
             Session::flash('message',"$langGlossaryDeleted");
             Session::flash('alert-class', 'alert-success');
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sessionID);
-            if (purge_certificate('badge', $badge->id, 0, $sessionID)) {
-                Session::flash('message',"$langGlossaryDeleted");
-                Session::flash('alert-class', 'alert-success');
+            if($badge){
+                $exists_criterion = Database::get()->querySingle("SELECT * FROM badge_criterion WHERE badge = ?d",$badge->id);
+                if(!$exists_criterion){
+                    if (purge_certificate('badge', $badge->id, 0, $sessionID)) {
+                        Session::flash('message',"$langGlossaryDeleted");
+                        Session::flash('alert-class', 'alert-success');
+                    }
+                }else{
+                    Session::flash('message',"$langExistResourcesForCompletion");
+                    Session::flash('alert-class', 'alert-danger');
+                }
             }
             redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
         } elseif ( isset($_GET['add']) and isset($_GET['act']) ) {

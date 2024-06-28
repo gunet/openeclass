@@ -1486,13 +1486,13 @@ function check_unit_progress($unit_id) {
  * @param $session_id
  * @return bool
  */
-function check_session_progress($session_id) {
-    global $uid, $course_id;
+function check_session_progress($session_id = 0, $forUser = 0) {
+    global $course_id;
 
     require_once 'Game.php';
 
     // check for completeness in order to refresh user data
-    Game::checkCompleteness($uid, $course_id, 0, $session_id);
+    Game::checkCompleteness($forUser, $course_id, 0, $session_id);
 
     return true;
 }

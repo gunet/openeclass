@@ -190,7 +190,7 @@
 
 
                                             <div class='modal fade' id='docDelete{{ $doc->id }}' tabindex='-1' aria-labelledby='docDeleteLabel{{ $doc->id }}' aria-hidden='true'>
-                                                <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&del={{ $doc->id }}">
+                                                <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&del={{ $doc->id }}&{{ $redirect_option }}">
                                                     <div class='modal-dialog modal-md'>
                                                         <div class='modal-content'>
                                                             <div class='modal-header'>

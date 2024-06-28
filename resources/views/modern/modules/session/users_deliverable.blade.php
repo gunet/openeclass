@@ -68,19 +68,23 @@
                                 <table class='table-default'>
                                     <thead>
                                         <tr>
-                                            <th>{{ trans('langName') }}</th>
+                                            <th style='width:30%;'>#</th>
                                             <th class='text-center'>{{ trans('langDocSender')}}</th>
-                                            <th></th>
+                                            <th class='text-center'>{{ trans('langFrom') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($deliverable_info as $d)
                                             <tr>
-                                                <td>{!! display_user($d['user_id'], false, false) !!}</td>
+                                                <td>
+                                                    <a class='btn submitAdminBtnDefault d-inline-flex'
+                                                        href="{{ $urlAppend }}modules/session/doc_uploaded.php?course={{ $course_code }}&session={{ $sessionID }}&docs_by_user={{ $d['user_id'] }}">
+                                                        {{ trans('langViewDeliverable')}}
+                                                    </a>
+                                                </td>
                                                 <td class='text-center'>{{ $d['user_total_docs'] }}</td>
-                                                <td class='text-end'>
-                                                    <a class='btn submitAdminBtn d-inline-flex'
-                                                        href="{{ $urlAppend }}modules/session/doc_uploaded.php?course={{ $course_code }}&session={{ $sessionID }}&docs_by_user={{ $d['user_id'] }}">{{ trans('langViewDeliverable')}}</a>
+                                                <td class='text-center'>
+                                                    {!! display_user($d['user_id'], false, false) !!}
                                                 </td>
                                             </tr>
                                         @endforeach

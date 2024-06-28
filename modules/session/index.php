@@ -151,6 +151,15 @@ if($is_tutor_course or $is_consultant){
     if(count($data['individuals_group_sessions']) > 0){
         $participants = array();
         foreach ($data['individuals_group_sessions'] as $s) {
+
+            $all_participants_ids = session_participants_ids($s->id);
+            foreach($all_participants_ids as $p){
+                // This refers to session completion with completed tc.
+                check_session_completion_by_tc_completed($s->id,$p);
+                // This refers to session completion for other activities.
+                check_session_progress($s->id,$p);  // check session completion - call to Game.php
+            }
+
             $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
             $per = $has_badge = 0;
             if ($sql_badge) {
@@ -197,7 +206,7 @@ if($is_tutor_course or $is_consultant){
         // This refers to session completion with completed tc.
         check_session_completion_by_tc_completed($s->id,$uid);
         // This refers to session completion for other activities.
-        check_session_progress($s->id);  // check session completion - call to Game.php
+        check_session_progress($s->id,$uid);  // check session completion - call to Game.php
     }
 
     $visible_sessions_id = [];
