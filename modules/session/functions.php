@@ -1035,6 +1035,12 @@ function upload_session_doc($sid){
             redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
         }
 
+        if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) > 0){
+            Session::flash('message',$langDoNotChooseResource);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        }
+
         //if file exists
         $path_exists = Database::get()->queryArray("SELECT * FROM document
                                             WHERE course_id = ?d 
@@ -1122,11 +1128,6 @@ function upload_session_doc($sid){
             // doc_id and uUserId refer to resources for session completion
             $doc_id = isset($_POST['refers_to_resource']) ? $_POST['refers_to_resource'] : 0;
             $uUserId = isset($_POST['fromUser']) ? $_POST['fromUser'] : 0;
-            if($uUserId > 0 && $doc_id == 0){
-                Session::flash('message',$langDoNotChooseResource);
-                Session::flash('alert-class', 'alert-danger');
-                redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
-            }
             // if exists then update uploaded file else upload it for simple user.
             $checkExist = Database::get()->querySingle("SELECT * FROM session_resources
                                                             WHERE session_id = ?d 
@@ -1176,27 +1177,6 @@ function upload_session_doc($sid){
                                                 doc_id = ?d,
                                                 from_user = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId);
             }
-
-            
-            // if(!$is_consultant){
-            //     // Insert uploaded document as activity in user_badge_criterion
-            //     $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$sid);
-            //     if($badge && $doc_id > 0 && $uUserId > 0){
-            //         $badge_id = $badge->id;
-            //         $badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
-            //                                                             WHERE badge = ?d
-            //                                                             AND activity_type = ?s
-            //                                                             AND resource = ?d",$badge_id,'document-submit',$doc_id);
-            //         if($badge_criterion){
-            //             $badge_criterion_id = $badge_criterion->id;
-            //             Database::get()->query("INSERT INTO user_badge_criterion SET 
-            //                                     user = ?d,
-            //                                     created = " . DBHelper::timeAfter() . ",
-            //                                     badge_criterion = ?d",$uid,$badge_criterion_id);
-            //         }
-            //     }
-                
-            // }
 
             $msg = ($checker == 1) ? "$langUploadDocCompleted" . "</br>" . "$langPreviousDocDeleted" : "$langUploadDocCompleted";
             Session::flash('message',$msg);

@@ -64,7 +64,12 @@ elseif(isset($_GET['id'])){
 session_exists($sessionID);
 
 $sessionTitle = title_session($course_id,$sessionID);
-$pageName = $langAddResource;
+
+if(isset($_GET['type']) and $_GET['type'] == 'doc_upload'){
+    $pageName = $langDownloadFile;
+}else{
+    $pageName = $langAddResource;
+}
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);

@@ -29,8 +29,6 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    
-                    {!! $action_bar !!}
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -71,13 +69,13 @@
                                 <table class='table-default'>
                                     <thead>
                                         <tr>
-                                            <th>{{ trans('langName') }}</th>
+                                            <th>{{ trans('langFileName') }}</th>
                                             <th>{{ trans('langFrom') }}</th>
                                             <th>{{ trans('langReferencedObject') }}</th>
                                             <th>{{ trans('langType') }}</th>
                                             <th>{{ trans('langDate') }}</th>
                                             @if($is_consultant)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
-                                            <th></th>
+                                            <th class='text-end'></th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -76,11 +76,11 @@
                                     <tbody>
                                         @foreach($deliverable_info as $d)
                                             <tr>
-                                                <td>{{ $d['user_givenname'] }}&nbsp;{{ $d['user_surname'] }}</td>
+                                                <td>{!! display_user($d['user_id'], false, false) !!}</td>
                                                 <td class='text-center'>{{ $d['user_total_docs'] }}</td>
                                                 <td class='text-end'>
-                                                    <a class='btn submitAdminBtnDefault d-inline-flex'
-                                                        href="{{ $urlAppend }}modules/session/doc_uploaded.php?course={{ $course_code }}&session={{ $sessionID }}&docs_by_user={{ $d['user_id'] }}">{{ trans('langDisplayAnnouncement')}}</a>
+                                                    <a class='btn submitAdminBtn d-inline-flex'
+                                                        href="{{ $urlAppend }}modules/session/doc_uploaded.php?course={{ $course_code }}&session={{ $sessionID }}&docs_by_user={{ $d['user_id'] }}">{{ trans('langViewDeliverable')}}</a>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -59,7 +59,12 @@ load_js('tools.js');
 load_js('datatables');
 
 $sessionTitle = title_session($course_id,$sessionID);
-$pageName = $langDocSender;
+if(!isset($_GET['docs_by_user'])){
+    $pageName = $langMyUploadedFiles;
+}else{
+    $pageName = $langDocSender . ' - ' . participant_name($_GET['docs_by_user']);
+}
+
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 
@@ -252,14 +257,5 @@ if(count($docs) > 0){
     }
 }
 $data['docs'] = $docs;
-
-$data['action_bar'] = action_bar([
-    [
-        'title' => $langTableCompletedConsulting,
-        'url' => $urlAppend . "modules/session/session_space.php?course=" . $course_code . "&session=" . $sessionID,
-        'icon' => 'fa-solid fa-list',
-        'button-class' => 'btn-success'
-    ],
-], false);
 
 view('modules.session.docs_uploaded', $data);
