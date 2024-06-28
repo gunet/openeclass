@@ -199,12 +199,9 @@ function upload_file($sid){
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='title' class='col-12 control-label-notes'>$langTitle&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                                    <label for='title' class='col-12 control-label-notes'>$langTitle</label>
                                                     <div class='col-12'>
                                                         <input id='title' type='text' name='title' class='form-control'>";
-                                                        if(Session::getError('title')){
-                                         $tool_content .= "<span class='help-block Accent-200-cl'>" . Session::getError('title') . "</span> ";
-                                                        }
                                   $tool_content .= "</div>
                                                 </div>
 

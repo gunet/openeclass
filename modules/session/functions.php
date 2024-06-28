@@ -1020,126 +1020,145 @@ function upload_session_doc($sid){
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
-    $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('title'));
-    $v->labels(array(
-        'title' => "$langTheField $langTitle"
-    ));
+    if($_FILES['file-upload']['error'] > 0) { 
+        // cover_image is empty (and not an error), or no file was uploaded
+        Session::flash('message',$langEmptyUploadFile);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+    }
 
-    if($v->validate()) {
+    if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) > 0){
+        Session::flash('message',$langDoNotChooseResource);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+    }
 
-        if($_FILES['file-upload']['error'] > 0) { 
-            // cover_image is empty (and not an error), or no file was uploaded
-            Session::flash('message',$langEmptyUploadFile);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+    //if file exists
+    $path_exists = Database::get()->queryArray("SELECT * FROM document
+                                        WHERE course_id = ?d 
+                                        AND subsystem = ?d 
+                                        AND subsystem_id = ?d 
+                                        AND filename = ?s 
+                                        AND lock_user_id = ?d",
+                                        $course_id, MYSESSIONS, $sid, $_FILES['file-upload']['name'], $uid);
+
+    if (count($path_exists) > 0) {
+        Session::flash('message',$langFileExists);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+    }
+
+    // upload attached file
+    if (isset($_FILES['file-upload']) and is_uploaded_file($_FILES['file-upload']['tmp_name'])) { // upload comments file
+        $session_filename = $_FILES['file-upload']['name'];
+        validateUploadedFile($session_filename); // check file type
+        $session_filename = add_ext_on_mime($session_filename);
+        // File name used in file system and path field
+        $safe_session_filename = safe_filename(get_file_extension($session_filename));
+        if($is_consultant){
+            $session_dir = "$webDir/courses/$course_code/session/session_$sid/";
+        }else{// personal files from simple user
+            $session_dir = "$webDir/courses/$course_code/session/session_$sid/$uid/";
         }
 
-        if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) > 0){
-            Session::flash('message',$langDoNotChooseResource);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
-        }
-
-        //if file exists
-        $path_exists = Database::get()->queryArray("SELECT * FROM document
-                                            WHERE course_id = ?d 
-                                            AND subsystem = ?d 
-                                            AND subsystem_id = ?d 
-                                            AND filename = ?s 
-                                            AND lock_user_id = ?d",
-                                            $course_id, MYSESSIONS, $sid, $_FILES['file-upload']['name'], $uid);
-
-        if (count($path_exists) > 0) {
-            Session::flash('message',$langFileExists);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
-        }
-
-        // upload attached file
-        if (isset($_FILES['file-upload']) and is_uploaded_file($_FILES['file-upload']['tmp_name'])) { // upload comments file
-            $session_filename = $_FILES['file-upload']['name'];
-            validateUploadedFile($session_filename); // check file type
-            $session_filename = add_ext_on_mime($session_filename);
-            // File name used in file system and path field
-            $safe_session_filename = safe_filename(get_file_extension($session_filename));
+        if (!file_exists($session_dir)) {
             if($is_consultant){
-                $session_dir = "$webDir/courses/$course_code/session/session_$sid/";
-            }else{// personal files from simple user
-                $session_dir = "$webDir/courses/$course_code/session/session_$sid/$uid/";
-            }
-
-            if (!file_exists($session_dir)) {
-                if($is_consultant){
-                    mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
-                }else{
-                    mkdir("$webDir/courses/$course_code/session/session_$sid/$uid/", 0755, true);
-                }
-                
-            }
-            if($is_consultant){
-                $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
+                mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
             }else{
-                $spathfile = "$webDir/courses/$course_code/session/session_$sid/$uid/$safe_session_filename";
+                mkdir("$webDir/courses/$course_code/session/session_$sid/$uid/", 0755, true);
             }
             
-            if (move_uploaded_file($_FILES['file-upload']['tmp_name'], $spathfile)) {
-                @chmod($spathfile, 0644);
-                $session_real_filename = $_FILES['file-upload']['name'];
-                $session_filepath = '/' . $safe_session_filename;
+        }
+        if($is_consultant){
+            $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
+        }else{
+            $spathfile = "$webDir/courses/$course_code/session/session_$sid/$uid/$safe_session_filename";
+        }
+        
+        if (move_uploaded_file($_FILES['file-upload']['tmp_name'], $spathfile)) {
+            @chmod($spathfile, 0644);
+            $session_real_filename = $_FILES['file-upload']['name'];
+            $session_filepath = '/' . $safe_session_filename;
+        }
+
+        $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        $file_date = date('Y-m-d G:i:s');
+
+        $info_file = pathinfo($session_filename);
+        $title = !empty($_POST['title']) ? q($_POST['title']) : $info_file['filename'];
+        $comments = !empty($_POST['comments']) ? purify($_POST['comments']) : null;
+
+        $doc_inserted = Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = ?s,
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0,
+            lock_user_id = ?d",
+                $course_id, MYSESSIONS, $sid, $session_filepath,
+                $session_real_filename, $comments, $title, $file_creator,
+                $file_date, $file_date, $file_creator, get_file_extension($session_filename),
+                $language, $uid);
+
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
+        $order = $order+1;
+
+        // doc_id and uUserId refer to resources for session completion
+        $doc_id = isset($_POST['refers_to_resource']) ? $_POST['refers_to_resource'] : 0;
+        $uUserId = isset($_POST['fromUser']) ? $_POST['fromUser'] : 0;
+        // if exists then update uploaded file else upload it for simple user.
+        $checkExist = Database::get()->querySingle("SELECT * FROM session_resources
+                                                        WHERE session_id = ?d 
+                                                        AND type = ?s 
+                                                        AND doc_id = ?d
+                                                        AND from_user = ?d
+                                                        AND doc_id <> ?d
+                                                        AND from_user <> ?d", $sid, 'doc', $doc_id, $uUserId, 0, 0);
+
+        if($checkExist){
+            $checker = 1;
+            $q = Database::get()->query("UPDATE session_resources SET
+                                        session_id = ?d,
+                                        type = 'doc',
+                                        title = ?s,
+                                        comments = ?s,
+                                        visible = 1,
+                                        `order` = ?d,
+                                        `date` = " . DBHelper::timeAfter() . ",
+                                        res_id = ?d,
+                                        doc_id = ?d,
+                                        from_user = ?d
+                                        WHERE doc_id = ?d
+                                        AND from_user = ?d
+                                        AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, $doc_id, $uUserId, $sid);
+
+            // Now we must delete the resource file from document table in db.
+            if($q){
+                Database::get()->query("DELETE FROM document 
+                                        WHERE id = ?d 
+                                        AND course_id = ?d
+                                        AND subsystem = ?d
+                                        AND subsystem_id = ?d
+                                        AND lock_user_id = ?d",$checkExist->res_id, $course_id, MYSESSIONS, $sid, $uUserId);
             }
-
-            $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-            $file_date = date('Y-m-d G:i:s');
-
-            $title = isset($_POST['title']) ? q($_POST['title']) : '';
-            $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
-    
-            $doc_inserted = Database::get()->query("INSERT INTO document SET
-                course_id = ?d,
-                subsystem = ?d,
-                subsystem_id = ?d,
-                path = ?s,
-                extra_path = '',
-                filename = ?s,
-                visible = 1,
-                comment = ?s,
-                category = 0,
-                title = ?s,
-                creator = ?s,
-                date = ?s,
-                date_modified = ?s,
-                subject = '',
-                description = '',
-                author = ?s,
-                format = ?s,
-                language = ?s,
-                copyrighted = 0,
-                editable = 0,
-                lock_user_id = ?d",
-                    $course_id, MYSESSIONS, $sid, $session_filepath,
-                    $session_real_filename, $comments, $title, $file_creator,
-                    $file_date, $file_date, $file_creator, get_file_extension($session_filename),
-                    $language, $uid);
-    
-            $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
-            $order = $order+1;
-
-            // doc_id and uUserId refer to resources for session completion
-            $doc_id = isset($_POST['refers_to_resource']) ? $_POST['refers_to_resource'] : 0;
-            $uUserId = isset($_POST['fromUser']) ? $_POST['fromUser'] : 0;
-            // if exists then update uploaded file else upload it for simple user.
-            $checkExist = Database::get()->querySingle("SELECT * FROM session_resources
-                                                            WHERE session_id = ?d 
-                                                            AND type = ?s 
-                                                            AND doc_id = ?d
-                                                            AND from_user = ?d
-                                                            AND doc_id <> ?d
-                                                            AND from_user <> ?d", $sid, 'doc', $doc_id, $uUserId, 0, 0);
-
-            if($checkExist){
-                $checker = 1;
-                $q = Database::get()->query("UPDATE session_resources SET
+        }else{
+            $checker = 0;
+            $q = Database::get()->query("INSERT INTO session_resources SET
                                             session_id = ?d,
                                             type = 'doc',
                                             title = ?s,
@@ -1149,45 +1168,16 @@ function upload_session_doc($sid){
                                             `date` = " . DBHelper::timeAfter() . ",
                                             res_id = ?d,
                                             doc_id = ?d,
-                                            from_user = ?d
-                                            WHERE doc_id = ?d
-                                            AND from_user = ?d
-                                            AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, $doc_id, $uUserId, $sid);
+                                            from_user = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId);
+        }
 
-                // Now we must delete the resource file from document table in db.
-                if($q){
-                    Database::get()->query("DELETE FROM document 
-                                            WHERE id = ?d 
-                                            AND course_id = ?d
-                                            AND subsystem = ?d
-                                            AND subsystem_id = ?d
-                                            AND lock_user_id = ?d",$checkExist->res_id, $course_id, MYSESSIONS, $sid, $uUserId);
-                }
-            }else{
-                $checker = 0;
-                $q = Database::get()->query("INSERT INTO session_resources SET
-                                                session_id = ?d,
-                                                type = 'doc',
-                                                title = ?s,
-                                                comments = ?s,
-                                                visible = 1,
-                                                `order` = ?d,
-                                                `date` = " . DBHelper::timeAfter() . ",
-                                                res_id = ?d,
-                                                doc_id = ?d,
-                                                from_user = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId);
-            }
-
-            $msg = ($checker == 1) ? "$langUploadDocCompleted" . "</br>" . "$langPreviousDocDeleted" : "$langUploadDocCompleted";
-            Session::flash('message',$msg);
-            Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
-            
-        } 
-    }else{
-        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
-    }
+        $msg = ($checker == 1) ? "$langUploadDocCompleted" . "</br>" . "$langPreviousDocDeleted" : "$langUploadDocCompleted";
+        Session::flash('message',$msg);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
+        
+    } 
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
