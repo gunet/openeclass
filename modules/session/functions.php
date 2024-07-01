@@ -1036,7 +1036,7 @@ function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
             $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, 
-            $langDoNotChooseResource, $langPreviousDocDeleted;
+            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -1066,6 +1066,22 @@ function upload_session_doc($sid){
         Session::flash('message',$langFileExists);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+    }
+
+    // if exists file with same name in a session
+    $checkFilename = Database::get()->queryArray("SELECT filename FROM document
+                                                    WHERE course_id = ?d 
+                                                    AND subsystem = ?d 
+                                                    AND subsystem_id = ?d",$course_id,MYSESSIONS,$sid);
+
+    if(count($checkFilename) > 0){
+        foreach($checkFilename as $f){
+            if($f->filename == $_FILES['file-upload']['name']){
+                Session::flash('message',$langFileExistsWithSameName);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+            }
+        }
     }
 
     // upload attached file

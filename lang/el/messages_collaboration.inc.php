@@ -1512,3 +1512,4 @@ $langExistResourcesForCompletion = "Υπάρχουν πόροι προς ολο�
 $langExistsInCompletedPrerequisite = "Υπάρχει προαπαιτούμενη συνεδρία που δεν έχει ολοκληρωθεί.";
 $langInfoForUploadedDeliverable = "Μπορείτε να διαγράψετε το παραδοτέο σας εφόσον δεν έχει ελεγχθεί από τον σύμβουλο.";
 $langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον ωφελούμενο.";
+$langFileExistsWithSameName = "Υπάρχει αρχείο με το ίδιο όνομα. Το ανέβασμα δεν ολοκληρώθηκε.";
