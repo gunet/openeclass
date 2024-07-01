@@ -1572,3 +1572,4 @@ $langDocCompletionNoSuccess = "You have canceled the completion of the document.
 $langExistsTc = "The current video teleconference already exists.";
 $langViewDeliverable = "View deliverable";
 $langExistResourcesForCompletion = "There are resources to complete. Deactivation is not complete.";
+$langExistsInCompletedPrerequisite = "There is a prerequisite session that has not been completed.";

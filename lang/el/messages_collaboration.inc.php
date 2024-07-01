@@ -1509,3 +1509,4 @@ $langDocCompletionNoSuccess = "Ακυρώσατε την ολοκλήρωση τ
 $langExistsTc = "Η συγκεκριμένη τηλεδιάσκεψη υπάρχει ήδη.";
 $langViewDeliverable = "Προβολή παραδοτέων";
 $langExistResourcesForCompletion = "Υπάρχουν πόροι προς ολοκλήρωση. Η απενεργοποίηση δεν ολοκληρώθηκε.";
+$langExistsInCompletedPrerequisite = "Υπάρχει προαπαιτούμενη συνεδρία που δεν έχει ολοκληρωθεί.";

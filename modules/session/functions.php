@@ -110,6 +110,16 @@ function session_not_started($cid,$sid){
     }
 }
 
+function session_has_expired($cid,$sid){
+    $res = Database::get()->querySingle("SELECT finish FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+
+    if(date('Y-m-d H:i:s') > $res->finish){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function is_remote_session($cid,$sid){
     $res = Database::get()->querySingle("SELECT type_remote FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
 

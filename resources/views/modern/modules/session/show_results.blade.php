@@ -80,9 +80,8 @@
                                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                         <a class="link-color normal-text TextBold
-                                                                    @if(!$is_consultant && !session_activation($course_id,$c)) opacity-help @endif
-                                                                    @if(!$is_consultant && session_not_started($course_id,$c)) pe-none @endif
-                                                                    @if(!$is_consultant && $hasIncompletedPrereq) pe-none @endif" 
+                                                                    @if(!$is_consultant && session_not_started($course_id,$c)) pe-none opacity-help @endif
+                                                                    @if(!$is_consultant && $hasIncompletedPrereq) pe-none opacity-help @endif" 
                                                             href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $c }}">
                                                             {!! title_session($course_id,$c) !!}
                                                         </a>
@@ -100,6 +99,19 @@
                                                                 </li>
                                                             @endforeach
                                                         </ul>
+                                                    </div>
+                                                    <div class='card-footer border-0'>
+                                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                                            @if(session_has_expired($course_id,$c))
+                                                                <span class='badge Accent-200-bg small-text text-wrap text-start'>{{ trans('langHasExpired') }}</span>
+                                                            @endif
+                                                            @if(!$is_consultant && $hasIncompletedPrereq) 
+                                                                <span class='badge Warning-200-bg small-text text-wrap text-start'>{{ trans('langExistsInCompletedPrerequisite') }}</span>
+                                                            @endif
+                                                            @if(session_not_started($course_id,$c)) 
+                                                                <span class='badge Neutral-900-bg small-text text-wrap text-start'>{{ trans('langSessionNotStarted') }}</span>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
