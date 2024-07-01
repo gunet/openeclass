@@ -105,6 +105,9 @@
                                                             @if(session_has_expired($course_id,$c))
                                                                 <span class='badge Accent-200-bg small-text text-wrap text-start'>{{ trans('langHasExpired') }}</span>
                                                             @endif
+                                                            @if(session_is_running($course_id,$c))
+                                                                <span class='badge Success-200-bg small-text text-wrap text-start'>{{ trans('langInProgress') }}</span>
+                                                            @endif
                                                             @if(!$is_consultant && $hasIncompletedPrereq) 
                                                                 <span class='badge Warning-200-bg small-text text-wrap text-start'>{{ trans('langExistsInCompletedPrerequisite') }}</span>
                                                             @endif

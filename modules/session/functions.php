@@ -100,6 +100,16 @@ function session_activation($cid,$sid){
     }
 }
 
+function session_is_running($cid,$sid){
+    $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
+
+    if(date('Y-m-d H:i:s') > $res->start && date('Y-m-d H:i:s') < $res->finish){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function session_not_started($cid,$sid){
     $res = Database::get()->querySingle("SELECT start FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
 
