@@ -141,10 +141,15 @@ if (isset($_GET['download'])) {
 
 
 if(isset($_GET['del'])){
-    $r = Database::get()->querySingle("SELECT doc_id,from_user FROM session_resources 
+    $r = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources 
                                                     WHERE res_id = ?d AND session_id = ?d",$_GET['del'],$sessionID);
     if($r){
         $resource_id = $r->doc_id;
+        if(!$is_consultant && $r->is_completed){
+            Session::flash('message',$langForbidden);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID); 
+        }
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$sessionID,$course_id);
         if($badge){
             $badge_id = $badge->id;
@@ -259,7 +264,16 @@ if(count($docs) > 0){
 
             $file->user_badge_criterion_id = $user_badge_criterion->id;     
             $file->user_sender = $refers_temp->from_user;
-            $file->completed = $refers_temp->is_completed;                                          
+            $file->completed = $refers_temp->is_completed;
+            $file->can_delete_file = 1;                            
+        }
+        if(!$is_consultant){
+            if(!$refers_temp->is_completed){
+                $can_delete = 1;
+            }else{
+                $can_delete = 0;
+            }
+            $file->can_delete_file = $can_delete;
         }
     }
 }

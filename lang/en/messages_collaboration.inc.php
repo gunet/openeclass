@@ -1573,3 +1573,5 @@ $langExistsTc = "The current video teleconference already exists.";
 $langViewDeliverable = "View deliverable";
 $langExistResourcesForCompletion = "There are resources to complete. Deactivation is not complete.";
 $langExistsInCompletedPrerequisite = "There is a prerequisite session that has not been completed.";
+$langInfoForUploadedDeliverable = "You can delete your deliverable as long as it has not been checked by the consultant.";
+$langUsedCertRes = "The activity has already been used by a user.";

@@ -1457,8 +1457,8 @@ function display_session_activities($element, $id, $session_id = 0) {
             $checkActivityType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE badge = ?d",$badge_id);
             if($checkActivityType && ($checkActivityType->activity_type == 'document' or 
                 $checkActivityType->activity_type == 'assignment-submit' or 
-                $checkActivityType->activity_type == 'document-submit') or
-                $checkActivityType->activity_type == 'tc-completed'){
+                $checkActivityType->activity_type == 'document-submit' or
+                $checkActivityType->activity_type == 'tc-completed')){
                     $activity_off = '';
                     $active_completion_without_resource = 'opacity-help pe-none';
             }elseif($checkActivityType && $checkActivityType->activity_type == 'noactivity'){

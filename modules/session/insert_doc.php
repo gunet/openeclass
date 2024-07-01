@@ -173,6 +173,7 @@ function upload_file($sid){
     global $webDir, $tool_content, $course_code, $langTitle, $langComments, 
            $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, $uid;
 
+        $resources = array();
         if(!$is_consultant){
             $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$sid,$course_id);
             if($badge){

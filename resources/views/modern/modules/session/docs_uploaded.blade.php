@@ -64,6 +64,12 @@
 
 
                     <div class='col-12'>
+                        @if(!$is_consultant)
+                            <div class='alert alert-info'>
+                                <i class='fa-solid fa-circle-info fa-lg'></i>
+                                <span>{{ trans('langInfoForUploadedDeliverable')}}</span>
+                            </div>
+                        @endif
                         @if(count($docs) > 0)
                             <div class='table-responsive'>
                                 <table class='table-default'>
@@ -125,7 +131,8 @@
                                                             'url' => '#',
                                                             'icon' => 'fa-xmark',
                                                             'icon-extra' => "data-bs-toggle='modal' data-bs-target='#docDelete{$doc->id}'",
-                                                            'icon-class' => 'doc-delete')
+                                                            'icon-class' => 'doc-delete',
+                                                            'show' => $doc->can_delete_file)
                                                     ))
                                                 !!}
                                                 </td>
