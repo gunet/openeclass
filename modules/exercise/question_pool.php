@@ -414,7 +414,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         $exercises_used_in = '';
         foreach ($exercise_ids as $ex_id) {
             $q = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $ex_id);
-            $exercises_used_in .= "<span class='help-block' style='margin-bottom: 0px;'>" . q($q->title) . "</span>";
+            $exercises_used_in .= "<h6 class='fw-lighter'>" . q($q->title) . "</h6>";
         }
         if ($fromExercise or !is_object(@$objExercise) or !$objExercise->isInList($row->id)) {
             $tool_content .= "<tr>";
