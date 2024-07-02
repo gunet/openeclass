@@ -181,11 +181,6 @@ function lessonToolsMenu(bool $rich=true): array
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
 
-            // hide groups for unregistered users
-            if ($mid == MODULE_ID_GROUPS and !$courses[$course_code]) {
-                continue;
-            }
-
             // hide teleconference when no tc servers are enabled
             if ($mid == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
                 continue;

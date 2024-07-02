@@ -67,11 +67,8 @@ function view($view_file, $view_data = array()) {
             $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course, $is_consultant, $require_consultant;
 
-    if (!isset($course_id) or !$course_id) {
+    if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
-    } else if ($course_id < 1) { // negative course_id might be set in common documents
-        unset($course_id);
-        unset($course_code);
     }
 
     $pageTitle = $siteName;
