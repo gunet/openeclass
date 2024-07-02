@@ -91,7 +91,7 @@
                                                         <ul class='list-group list-group-flush'>
                                                             @foreach($key as $k)
                                                                 <li class='list-group-item element'>
-                                                                    <div class='d-flex justify-content-between align-items-center'>
+                                                                    <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                         <span class='TextBold'>{!! $k['user'] !!}</span>
                                                                         {!! $k['icon'] !!}
                                                                     </div>

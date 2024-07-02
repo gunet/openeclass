@@ -68,24 +68,24 @@
                                 <table class='table-default'>
                                     <thead>
                                         <tr>
-                                            <th style='width:30%;'>#</th>
-                                            <th class='text-center'>{{ trans('langDocSender')}}</th>
+                                            <th style='width:30%;'>{{ trans('langQuestionView')}}</th>
                                             <th class='text-center'>{{ trans('langFrom') }}</th>
+                                            <th class='text-center'>{{ trans('langTotalDeliverable')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($deliverable_info as $d)
                                             <tr>
                                                 <td>
-                                                    <a class='btn submitAdminBtnDefault d-inline-flex'
+                                                    <a class='link-color'
                                                         href="{{ $urlAppend }}modules/session/doc_uploaded.php?course={{ $course_code }}&session={{ $sessionID }}&docs_by_user={{ $d['user_id'] }}">
-                                                        {{ trans('langViewDeliverable')}}
+                                                        {{ trans('langUserDeliverable')}}
                                                     </a>
                                                 </td>
-                                                <td class='text-center'>{{ $d['user_total_docs'] }}</td>
                                                 <td class='text-center'>
                                                     {!! display_user($d['user_id'], false, false) !!}
                                                 </td>
+                                                <td class='text-center'>{{ $d['user_total_docs'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

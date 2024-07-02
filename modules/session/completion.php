@@ -30,15 +30,16 @@ $require_current_course = true;
 if(isset($_GET['addSessions'])){
   $require_consultant = true;
 }
-$require_help = TRUE;
-$helpTopic = 'completion_consulting';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
 
-$pageName = $langCompletedConsulting;
+$pageName = $is_consultant ? $langPercentageCompletedConsultingByUser : $langPercentageCompletedConsulting;
+if(isset($_GET['addSessions'])){
+  $pageName = $langCompletedConsulting;
+}
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
@@ -98,7 +99,6 @@ if(isset($_GET['addSessions'])){
   $data['session_ids'] = $session_ids;
   view('modules.session.completion', $data);
 }else{
-  $pageName = $langTableCompletedConsulting;
   $res = Database::get()->queryArray("SELECT session_id FROM mod_session_completion WHERE course_id = ?d",$course_id);
   $completedSessionByUsers = array();
   $visible_sessions_id = array();
@@ -135,16 +135,12 @@ if(isset($_GET['addSessions'])){
               if($badge){
                 $badge_id = $badge->id;
                 $per = get_cert_percentage_completion_by_user('badge',$badge_id,$p);
-                if ($per == 100) {
-                    $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
-                } else {
-                    //$icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
-                    $icon = "
-                      <div class='progress' style='width:150px;'>
-                        <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
-                      </div>
-                    ";
-                }
+                $icon = "
+                  <div class='progress' style='width:150px;'>
+                    <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
+                  </div>
+                ";
+                
                 $userParticipant[$p] = [
                   'user' => participant_name($p),
                   'session_id' => $r->session_id,
@@ -167,16 +163,12 @@ if(isset($_GET['addSessions'])){
             }
             $badge_id = $badge->id;
             $per = get_cert_percentage_completion_by_user('badge',$badge_id,$uid);
-            if ($per == 100) {
-                $icon = icon('fa-check-circle fa-lg Success-200-cl', $langInstallEnd);
-            } else {
-                //$icon = icon('fa-hourglass-2 fa-lg Primary-600-cl', $per . "%");
-                $icon = "
-                          <div class='progress' style='width:150px;'>
-                            <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
-                          </div>
-                        ";
-            }
+            $icon = "
+                      <div class='progress' style='width:150px;'>
+                        <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
+                      </div>
+                    ";
+
             $userParticipant[$uid] = [
               'user' => participant_name($uid),
               'session_id' => $r->session_id,

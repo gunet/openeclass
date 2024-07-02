@@ -878,7 +878,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
             $activity_result = session_resource_completion($_GET['session'], $resource_id);
             switch ($activity_result) {
                 case 1: $content = "<td class='text-end pe-3' style='padding: 10px 0; width: 85px;'>
-                                        <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
+                                        <span class='fa-solid fa-check fa-lg Success-200-cl' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
                                     </td>";
                     break;
                 case 0:
@@ -1397,7 +1397,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, 
            $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel, 
            $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, 
-           $langWithSubmittedUploadedFile, $langWithTCComplited, $langContinueToCompletetionWithCompletedTC;
+           $langWithSubmittedUploadedFile, $langWithTCComplited, 
+           $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1533,7 +1534,7 @@ function display_session_activities($element, $id, $session_id = 0) {
         //     'class' => ''),
         ),
         array(
-            'secondary_title' => $langAdd,
+            'secondary_title' => $langAddCompletionCriteria,
             'secondary_icon' => 'fa-plus',
             'secondary_btn_class' => 'submitAdminBtn'
         ));

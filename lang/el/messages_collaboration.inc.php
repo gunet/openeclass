@@ -1477,10 +1477,11 @@ $langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρ�
 $langCompletedSession = "Ολοκληρωμένη";
 $langCompletedConsulting = "Ολοκλήρωση συμβουλευτικής";
 $langAddSessionConsultingCompleted = "Η καταχώριση των συνεδριών για την ολοκλήρωση συμβουλευτικής ολοκληρώθηκε.";
-$langCompletedConsultingInfo = "Παρακάτω εμφανίζονται όλες οι συνεδρίες οι οποίες έχουν ενεργοποιημένη την ολοκλήρωση συνεδρίας στην συγκεκριμένη συνεργασία. </br>
-                                Επιλέξτε ποιες από αυτές θα αφορούν την ολοκλήρωση συμβουλευτικής ενός χρήστη.";
-$langTableCompletedConsulting = "Λίστα συνεδριών ολοκλήρωσης συμβουλευτικής";
-$langCompletedSessions = "Ολοκληρωμένη συνεδρία";
+$langCompletedConsultingInfo = "Εδώ θα βρείτε όσες συνεδρίες έχουν ενεργοποιημένη την <strong>ολοκλήρωση συνεδρίας</strong> σύμφωνα με κάποια κριτήρια ολοκλήρωσης. </br>
+                                Επιλέξτε ποιες από αυτές θα αντιστοιχούν στην ολοκλήρωση της συμβουλευτικής ενός χρήστη.";
+$langPercentageCompletedConsultingByUser = "Ποσοστό ολοκλήρωσης συνεδριών ανά χρήστη";
+$langPercentageCompletedConsulting = "Ποσοστό ολοκλήρωσης συνεδριών";
+$langCompletedSessions = "Ολοκληρωμένη συνεδρία <i class='fa-solid fa-check fa-lg Success-200-cl ps-2'></i>";
 $langNotCompletedSession = "Μη ολοκληρωμένη συνεδρία";
 $langResponsibleOfSession = "Εγγεγραμμένοι σύμβουλοι - Υπευθύνος συνεδρίας";
 $langSessionParticipants = "Εγγεγραμμένοι ωφελούμενοι/μέλοι - Συμμετέχοντες";
@@ -1513,3 +1514,6 @@ $langExistsInCompletedPrerequisite = "Υπάρχει προαπαιτούμεν�
 $langInfoForUploadedDeliverable = "Μπορείτε να διαγράψετε το παραδοτέο σας εφόσον δεν έχει ελεγχθεί από τον σύμβουλο.";
 $langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον ωφελούμενο.";
 $langFileExistsWithSameName = "Υπάρχει αρχείο με το ίδιο όνομα. Το ανέβασμα δεν ολοκληρώθηκε.";
+$langAddCompletionCriteria = "Προσθήκη κριτηρίων";
+$langUserDeliverable = "Παραδοτέα χρήστη";
+$langTotalDeliverable = "Σύνολο παραδοτέων";

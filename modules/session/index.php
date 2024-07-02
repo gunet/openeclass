@@ -104,22 +104,23 @@ if(isset($_POST['leave_session'])){
 if($is_tutor_course or $is_consultant){
 
     $data['action_bar'] = action_bar([
-        [ 'title' => $langAddSession,
-          'url' => 'new.php?course=' . $course_code,
-          'icon' => 'fa-plus-circle',
-          'button-class' => 'btn-success',
-          'level' => 'primary-label' ],
+        [ 
+            'title' => $langAddSession,
+            'url' => 'new.php?course=' . $course_code,
+            'icon' => 'fa-plus-circle',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label' 
+        ],
         [
             'title' => $langCompletedConsulting,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&addSessions=true",
             'icon' => 'fa-solid fa-medal',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label'
+            'button-class' => 'btn-success'
         ],
         [
-            'title' => $langTableCompletedConsulting,
+            'title' => $langPercentageCompletedConsultingByUser,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
-            'icon' => 'fa-solid fa-list',
+            'icon' => 'fa-solid fa-percent',
             'button-class' => 'btn-success'
         ],
         [
@@ -184,9 +185,9 @@ if($is_tutor_course or $is_consultant){
 
     $data['action_bar'] = action_bar([
         [
-            'title' => $langTableCompletedConsulting,
+            'title' => $langPercentageCompletedConsulting,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
-            'icon' => 'fa-solid fa-list',
+            'icon' => 'fa-solid fa-percent',
             'level' => 'primary',
             'button-class' => 'btn-success'
         ],

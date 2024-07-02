@@ -1540,10 +1540,10 @@ $langSessionCompletedNotContinue = "Ending the session is not allowed.</br>
 $langCompletedSession = "Completed";
 $langCompletedConsulting = "Complete counseling";
 $langAddSessionConsultingCompleted = "Registration of counseling completion sessions is complete.";
-$langCompletedConsultingInfo = "All available sessions for this collaboration are shown below. </br>
- Choose which of these will concern the completion of a user's consultation.";
+$langCompletedConsultingInfo = "Here you will find all sessions that have <strong>session completion</strong> enabled according to some completion criteria. </br>
+ Choose which of these will correspond to the completion of a user's consultation.";
 $langTableCompletedConsulting = "List of counseling completion sessions";
-$langCompletedSessions = "Completed session";
+$langCompletedSessions = "Completed session <i class='fa-solid fa-check fa-lg Success-200-cl ps-2'></i>";
 $langNotCompletedSession = "Incomplete session";
 $langResponsibleOfSession = "Registered Counselors - Session Manager";
 $langSessionParticipants = "Registered beneficiaries/members - Participants";
@@ -1576,3 +1576,8 @@ $langExistsInCompletedPrerequisite = "There is a prerequisite session that has n
 $langInfoForUploadedDeliverable = "You can delete your deliverable as long as it has not been checked by the consultant.";
 $langUsedCertRes = "The activity has already been used by a user.";
 $langFileExistsWithSameName = "A file with the same name exists. The upload was not completed.";
+$langPercentageCompletedConsultingByUser = "Session completion rate per user";
+$langPercentageCompletedConsulting = "Session completion rate";
+$langAddCompletionCriteria = "Add criteria";
+$langUserDeliverable = "User deliverables";
+$langTotalDeliverable = "Total deliverables";
