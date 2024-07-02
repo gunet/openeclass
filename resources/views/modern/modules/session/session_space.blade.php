@@ -80,7 +80,8 @@
                             array('title' => trans('langDownloadFile'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
                                 'icon' => 'fa-solid fa-file-arrow-up',
-                                'level' => 'secondary'
+                                'level' => 'secondary',
+                                'show' => $is_consultant
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertDoc'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc',
@@ -97,12 +98,7 @@
                                 'confirm_title' => trans('langAddTcSession'),
                                 'confirm_button' => trans('langSubmit'),
                                 'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID))
-                            ),
-                            array('title' => $is_consultant ? trans('langDocSender') : trans('langMyUploadedFiles'),
-                                  'url' => $url_user_docs,
-                                  'class' => 'session-uploaded-docs',
-                                  'level' => 'secondary',
-                                  'icon' => 'fa-solid fa-cloud-arrow-up')
+                            )
                         ))
                     !!}
 

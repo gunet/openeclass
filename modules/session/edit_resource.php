@@ -63,8 +63,15 @@ if(isset($_POST['modify_resource'])){
         $typeRes = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d",$_POST['resourceId']);
         if($typeRes && $typeRes->type == 'tc'){
             Database::get()->query("UPDATE tc_session SET
-                                    title = ?s
-                                    WHERE id = ?d AND course_id = ?d AND id_session = ?d",q($_POST['title']),$typeRes->res_id,$course_id,$sessionID);
+                                    title = ?s,
+                                    description = ?s
+                                    WHERE id = ?d AND course_id = ?d AND id_session = ?d",q($_POST['title']),purify($_POST['comments']),$typeRes->res_id,$course_id,$sessionID);
+        }
+        if($typeRes && $typeRes->type == 'doc'){
+            Database::get()->query("UPDATE document SET
+                                    title = ?s,
+                                    comment = ?s
+                                    WHERE id = ?d AND course_id = ?d",q($_POST['title']),purify($_POST['comments']),$typeRes->res_id,$course_id,$sessionID);
         }
 
         Session::flash('message',$langResourceCompleted);

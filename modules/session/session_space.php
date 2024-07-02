@@ -133,8 +133,8 @@ if (isset($_GET['download'])) {
 }
 
 if(isset($_GET['editResource'])){
-    $resourse_id = $_GET['editResource'];
-    redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$sessionID."&resource_id=".$resourse_id);
+    $resource_id = $_GET['editResource'];
+    redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$sessionID."&resource_id=".$resource_id);
 }
 
 if(isset($_GET['del'])){
@@ -184,8 +184,6 @@ if($is_tutor_course or $is_consultant){
                                     ORDER BY start ASC",$course_id,$uid);
     }
 
-    $data['url_user_docs'] = $urlAppend . 'modules/session/doc_uploaded.php?course=' . $course_code . '&session=' . $sessionID . '&show_users_docs=true';
-
 }else{// is simple user
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$sessionID);
@@ -210,7 +208,6 @@ if($is_tutor_course or $is_consultant){
         redirect_to_home_page("modules/session/index.php?course=".$course_code);
     }
 
-    $data['url_user_docs'] = $urlAppend . 'modules/session/doc_uploaded.php?course=' . $course_code . '&session=' . $sessionID;
 }
 
 $data['participants'] = Database::get()->queryArray("SELECT participants FROM mod_session_users 

@@ -21,14 +21,12 @@
 
 
 /**
- * @file doc_uploaded.php
- * @brief Display uploaded docs by users
+ * @file index.php
+ * @brief Sessions display module
  */
 
 $require_login = true;
 $require_current_course = true;
-$require_help = TRUE;
-$helpTopic = 'course_sessions_uploaded_docs';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
@@ -38,45 +36,46 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'modules/progress/process_functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
 
+load_js('tools.js');
+load_js('screenfull/screenfull.min.js');
+ModalBoxHelper::loadModalBox(true);
+
 if(isset($_GET['session'])){
     $data['sessionID'] = $sessionID = $_GET['session'];
-}
-elseif(isset($_GET['id'])){
+}elseif(isset($_GET['id'])){
     $data['sessionID'] = $sessionID = $_GET['id'];
+}
+
+if(isset($_GET['resource_id'])){
+    $data['resource_id'] = $resource_id = $_GET['resource_id'];
+}
+
+if(isset($_GET['file_id'])){
+    $data['file_id'] = $file_id = $_GET['file_id'];
 }
 
 doc_init();
 
 session_exists($sessionID);
 
-load_js('tools.js');
-load_js('datatables');
-
 $sessionTitle = title_session($course_id,$sessionID);
-if(!isset($_GET['docs_by_user'])){
-    $pageName = $langMyUploadedFiles;
-}else{
-    $pageName = $langDocSender . ' - ' . participant_name($_GET['docs_by_user']);
-}
-
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
-
 
 $data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 student_view_is_active();
 
-// Show users who are participated in session
-if(isset($_GET['show_users_docs'])){
-    redirect_to_home_page("modules/session/users_deliverable.php?course=".$course_code."&session=".$sessionID);  
+if(!$is_consultant){
+    $pageName = $langDownloadFile;
+}else{
+    $pageName = $langDocSender;
 }
 
 // ---------------------------
@@ -139,6 +138,9 @@ if (isset($_GET['download'])) {
     exit;
 }
 
+// ---------------------------
+// Delete deliverable
+// ---------------------------
 
 if(isset($_GET['del'])){
     $r = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources 
@@ -178,16 +180,23 @@ if(isset($_GET['del'])){
     Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_GET['del']);
     Session::flash('message',$langSessionResourseDeleted);
     Session::flash('alert-class', 'alert-success');
-    if(isset($_GET['docs_by_user'])){
-        redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID."&docs_by_user=".$_GET['docs_by_user']); 
-    }else{
-        redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID); 
-    }
-     
+    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
 }
 
 
+// ---------------------------
+// Upload a deliverable for a user from consultant
+// ---------------------------
+
+$upload_for_user = false;
+if(isset($_GET['upload_for_user'])){
+    $upload_for_user = true;
+}
+$data['upload_doc_for_user'] = $upload_for_user;
+
+// ---------------------------
 // uploaded doc completion by consultant
+// ---------------------------
 if(isset($_POST['userBadgeCriterionId'])){
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -214,25 +223,78 @@ if(isset($_POST['userBadgeCriterionId'])){
         Session::flash('message',$langDocCompletionNoSuccess);
         Session::flash('alert-class', 'alert-warning');
     }
-    
-    redirect_to_home_page("modules/session/doc_uploaded.php?course=".$course_code."&session=".$sessionID.'&docs_by_user='.$_POST['userSender']);  
+     
+    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
 } 
 
-// A consultant can create a session
-if($is_tutor_course or $is_consultant){
-    $user_docs = $_GET['docs_by_user'] ?? 0;
-    $sql = "AND lock_user_id = $user_docs";
-    $data['redirect_option'] = "docs_by_user=$user_docs";
-}else{// is simple user
-    $sql = "AND lock_user_id = $uid";
-    $data['redirect_option'] = "";
+
+// ---------------------------
+// Get information about resource and creation downloadable link
+// ---------------------------
+
+$link = '';
+$download_hidden_link = '';
+$resource_info = session_resource_info($resource_id,$sessionID);
+$file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
+if($file){
+    if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
+        $image = choose_image('.' . $file->format);
+        $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getInDirectReference($file->path);
+        $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
+            "<input type='hidden' value='$download_url'>" : '';
+        $file_obj = MediaResourceFactory::initFromDocument($file);
+        $file_obj->setAccessURL(file_url($file->path, $file->filename));
+        $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+        $link = MultimediaHelper::chooseMediaAhref($file_obj);
+    }else{// These files are regarded with session documents
+        $image = choose_image('.' . $file->format);
+        $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
+        $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
+            "<input type='hidden' value='$download_url'>" : '';
+        $file_obj = MediaResourceFactory::initFromDocument($file);
+        $file_obj->setAccessURL(session_file_url($file->path, $file->filename));
+        $file_obj->setPlayURL(session_file_playurl($file->path, $file->filename));
+        $link = MultimediaHelper::chooseMediaAhref($file_obj);
+    }
+}else{
+    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
 }
+$data['resource_info'] = $resource_info;
+$data['file'] = $file;
+$data['link'] = $link;
+$data['download_hidden_link'] = $download_hidden_link;
+
+
+// ---------------------------
+// Get resources which are selected as criteria for session completion
+// ---------------------------
+
+$resources = array();
+$badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$sessionID,$course_id);
+if($badge){
+    $badge_id = $badge->id;
+    $resources = Database::get()->queryArray("SELECT * FROM session_resources
+                                                WHERE res_id IN (SELECT resource FROM badge_criterion WHERE badge = ?d AND activity_type = ?s)
+                                                AND doc_id = ?d
+                                                AND session_id = ?d",$badge_id,'document-submit',0,$sessionID);
+}
+$data['resources'] = $resources;
+
+
+
+// An consultant can create a session
+if($is_tutor_course or $is_consultant){
+    $sql = "AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id AND from_user > 0)";
+}else{// is simple user
+    $sql = "AND lock_user_id = $uid AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id)";
+}
+
 
 $docs = Database::get()->queryArray("SELECT * FROM document
                                             WHERE course_id = ?d
                                             AND subsystem = ?d
-                                            $sql
-                                            AND subsystem_id = ?d", $course_id, MYSESSIONS, $sessionID);
+                                            AND subsystem_id = ?d
+                                            $sql", $course_id, MYSESSIONS, $sessionID);
 
 if(count($docs) > 0){
     $badge_id = 0;
@@ -262,7 +324,9 @@ if(count($docs) > 0){
                                                                     AND activity_type = ?s 
                                                                     AND badge = ?d",$refers_temp->doc_id,'document-submit',$badge_id);
 
-            $file->user_badge_criterion_id = $user_badge_criterion->id;     
+            if($user_badge_criterion){
+                $file->user_badge_criterion_id = $user_badge_criterion->id; 
+            }
             $file->user_sender = $refers_temp->from_user;
             $file->completed = $refers_temp->is_completed;
             $file->can_delete_file = 1;                            
@@ -279,4 +343,11 @@ if(count($docs) > 0){
 }
 $data['docs'] = $docs;
 
-view('modules.session.docs_uploaded', $data);
+$data['users_participants'] = session_participants_ids($sessionID);
+
+$data['is_criterion_completion'] = false;
+if (resource_belongs_to_session_completion($sessionID, $file_id)) {
+    $data['is_criterion_completion'] = true;
+}
+
+view('modules.session.resource_space', $data);

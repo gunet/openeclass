@@ -162,6 +162,12 @@ function is_admin_of_session(){
     }
 }
 
+function session_resource_info($rid,$sid){
+    $resource = array();
+    $resource = Database::get()->queryArray("SELECT * FROM session_resources WHERE id = ?d AND session_id = ?d",$rid,$sid);
+    return $resource;
+}
+
 /**
  * @brief fills an array with user groups (group_id => group_name)
  * passing $as_id will give back only the groups that have been given the specific assignment
@@ -605,27 +611,30 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
             $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=$_GET[session]'>" .
                 q($title) . "</a>";
         } else {
-            if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
-                $file->title = $title;
-                $image = choose_image('.' . $file->format);
-                $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getInDirectReference($file->path);
-                $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
-                    "<input type='hidden' value='$download_url'>" : '';
-                $file_obj = MediaResourceFactory::initFromDocument($file);
-                $file_obj->setAccessURL(file_url($file->path, $file->filename));
-                $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
-                $link = MultimediaHelper::chooseMediaAhref($file_obj);
-            }else{// These files are regarded with session documents
-                $file->title = $title;
-                $image = choose_image('.' . $file->format);
-                $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
-                $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
-                    "<input type='hidden' value='$download_url'>" : '';
-                $file_obj = MediaResourceFactory::initFromDocument($file);
-                $file_obj->setAccessURL(session_file_url($file->path, $file->filename));
-                $file_obj->setPlayURL(session_file_playurl($file->path, $file->filename));
-                $link = MultimediaHelper::chooseMediaAhref($file_obj);
-            }
+            // if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
+            //     $file->title = $title;
+            //     $image = choose_image('.' . $file->format);
+            //     $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getInDirectReference($file->path);
+            //     $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
+            //         "<input type='hidden' value='$download_url'>" : '';
+            //     $file_obj = MediaResourceFactory::initFromDocument($file);
+            //     $file_obj->setAccessURL(file_url($file->path, $file->filename));
+            //     $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+            //     $link = MultimediaHelper::chooseMediaAhref($file_obj);
+            // }else{// These files are regarded with session documents
+            //     $file->title = $title;
+            //     $image = choose_image('.' . $file->format);
+            //     $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
+            //     $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
+            //         "<input type='hidden' value='$download_url'>" : '';
+            //     $file_obj = MediaResourceFactory::initFromDocument($file);
+            //     $file_obj->setAccessURL(session_file_url($file->path, $file->filename));
+            //     $file_obj->setPlayURL(session_file_playurl($file->path, $file->filename));
+            //     $link = MultimediaHelper::chooseMediaAhref($file_obj);
+            // }
+            $image = choose_image('.' . $file->format);
+            $download_hidden_link = '';
+            $link = "<a class='link-color' href='{$urlServer}modules/session/resource_space.php?course=$course_code&session=$sessionID&resource_id=$resource_id&file_id=$file_id'>$title</a>";
         }
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
@@ -1044,13 +1053,17 @@ function upload_session_doc($sid){
         // cover_image is empty (and not an error), or no file was uploaded
         Session::flash('message',$langEmptyUploadFile);
         Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
+            redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+        }else{
+            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        }
     }
 
     if(!$is_consultant && !isset($_POST['refers_to_resource']) && isset($_POST['fromUser']) > 0){
         Session::flash('message',$langDoNotChooseResource);
         Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
     }
 
     //if file exists
@@ -1065,7 +1078,11 @@ function upload_session_doc($sid){
     if (count($path_exists) > 0) {
         Session::flash('message',$langFileExists);
         Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
+            redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+        }else{
+            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+        }
     }
 
     // if exists file with same name in a session
@@ -1079,7 +1096,11 @@ function upload_session_doc($sid){
             if($f->filename == $_FILES['file-upload']['name']){
                 Session::flash('message',$langFileExistsWithSameName);
                 Session::flash('alert-class', 'alert-danger');
-                redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+                if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
+                    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+                }else{
+                    redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
+                }
             }
         }
     }
@@ -1091,22 +1112,31 @@ function upload_session_doc($sid){
         $session_filename = add_ext_on_mime($session_filename);
         // File name used in file system and path field
         $safe_session_filename = safe_filename(get_file_extension($session_filename));
-        if($is_consultant){
+        if($is_consultant && !isset($_POST['onBehalfOfUserID'])){
             $session_dir = "$webDir/courses/$course_code/session/session_$sid/";
+        }elseif($is_consultant && isset($_POST['onBehalfOfUserID'])){
+            $theUSER = $_POST['fromUser'] ?? 0;
+            $session_dir = "$webDir/courses/$course_code/session/session_$sid/$theUSER/";
         }else{// personal files from simple user
             $session_dir = "$webDir/courses/$course_code/session/session_$sid/$uid/";
         }
 
         if (!file_exists($session_dir)) {
-            if($is_consultant){
+            if($is_consultant && !isset($_POST['onBehalfOfUserID'])){
                 mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
+            }elseif($is_consultant && isset($_POST['onBehalfOfUserID'])){
+                $theUSER = $_POST['fromUser'] ?? 0;
+                mkdir("$webDir/courses/$course_code/session/session_$sid/$theUSER/", 0755, true);
             }else{
                 mkdir("$webDir/courses/$course_code/session/session_$sid/$uid/", 0755, true);
             }
             
         }
-        if($is_consultant){
+        if($is_consultant && !isset($_POST['onBehalfOfUserID'])){
             $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
+        }elseif($is_consultant && isset($_POST['onBehalfOfUserID'])){
+            $theUSER = $_POST['fromUser'] ?? 0;
+            $spathfile = "$webDir/courses/$course_code/session/session_$sid/$theUSER/$safe_session_filename";
         }else{
             $spathfile = "$webDir/courses/$course_code/session/session_$sid/$uid/$safe_session_filename";
         }
@@ -1118,11 +1148,21 @@ function upload_session_doc($sid){
         }
 
         $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        if($is_consultant && isset($_POST['onBehalfOfUserID'])){
+            if(isset($_POST['fromUser']) && $_POST['fromUser'] > 0){
+                $file_creator = participant_name($_POST['fromUser']);
+            }
+        }
+
         $file_date = date('Y-m-d G:i:s');
 
         $info_file = pathinfo($session_filename);
         $title = !empty($_POST['title']) ? q($_POST['title']) : $info_file['filename'];
         $comments = !empty($_POST['comments']) ? purify($_POST['comments']) : null;
+        $User_ID = $uid;
+        if($is_consultant && isset($_POST['onBehalfOfUserID'])){
+            $User_ID = $_POST['fromUser'] ?? 0;
+        }
 
         $doc_inserted = Database::get()->query("INSERT INTO document SET
             course_id = ?d,
@@ -1149,7 +1189,7 @@ function upload_session_doc($sid){
                 $course_id, MYSESSIONS, $sid, $session_filepath,
                 $session_real_filename, $comments, $title, $file_creator,
                 $file_date, $file_date, $file_creator, get_file_extension($session_filename),
-                $language, $uid);
+                $language, $User_ID);
 
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
         $order = $order+1;
@@ -1210,7 +1250,14 @@ function upload_session_doc($sid){
         $msg = ($checker == 1) ? "$langUploadDocCompleted" . "</br>" . "$langPreviousDocDeleted" : "$langUploadDocCompleted";
         Session::flash('message',$msg);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
+
+        // for uploading of deliverable
+        if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
+            redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+        }else{ // for not deliverable
+            redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
+        }
+        
         
     } 
     
