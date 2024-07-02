@@ -68,7 +68,7 @@
                                     </div>
                                     @if(get_config('eportfolio_enable'))
                                         <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate("eportfolio" . $id) }}'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?id={{ $id }}&token={{ token_generate("eportfolio" . $id) }}'>
                                                 {{ trans('langMyePortfolio') }}
                                             </a>
                                         </p>
@@ -76,7 +76,7 @@
 
                                     @if(get_config('personal_blog'))
                                         <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate("personal_blog" . $id) }}'>
+                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate("personal_blog" . $id) }}'>
                                                 {{ trans('langUserBlog') }}
                                             </a>
                                         </p>

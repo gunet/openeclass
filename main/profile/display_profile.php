@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
- 
+
 $require_login = true;
 $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
@@ -113,7 +113,7 @@ if ($data['userdata']) {
                 ));
 
         $data['action_bar_unreg'] = 1;
-        
+
     } else {
         if (get_config('dropbox_allow_personal_messages')) {
             $data['action_bar'] =
@@ -135,7 +135,7 @@ if ($data['userdata']) {
     }
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile');
-    
+
 
     $data['cert_completed'] = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "
                                         . "FROM certified_users "
@@ -155,7 +155,6 @@ if ($data['userdata']) {
 
 }
 
-$data['menuTypeID'] = 1;
 view('main.profile.index', $data);
 
 /**

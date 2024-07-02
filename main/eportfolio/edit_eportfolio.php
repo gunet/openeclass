@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,12 +28,10 @@ require_once 'main/eportfolio/eportfolio_functions.php';
 check_uid();
 check_guest();
 
-$toolName = $langMyePortfolio;
-$pageName = $langEditResume;
+$toolName = $langEditChange;
 $token = token_generate('eportfolio' . $uid);
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
 $navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
-
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
@@ -102,38 +100,13 @@ $head_content .= "
         </script>
     ";
 
-$head_content .= "
-        <script>
-        
-                $(function() {
-                    // $('#floatMenu').affix({
-                    //     offset: {
-                    //         top: 230,
-                    //         bottom: function () {
-                    //         return (this.bottom = $('.footer').outerHeight(true))
-                    //         }
-                    //     }
-                    // })
-                });
-        
-        </script>";
-
 $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
 
 $tool_content .=
-        action_bar(array(
-            array('title' => $langBack,
-                'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
-                'icon' => 'fa-reply'
-                )));
-
-        $tool_content .=
-            "<div class='row mt-4'>
-                <div class='col-sm-9'>
-                    <form class='form-horizontal' role='form' action='$sec' method='post'>
-                    <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
-
-
+    "<div class='row mt-4'>
+        <div class='col-sm-9'>
+            <form class='form-horizontal' role='form' action='$sec' method='post'>
+            <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
 
 //add custom profile fields
 $ret_str = render_eportfolio_fields_form();

@@ -40,24 +40,26 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
-    $toolName = $langUserePortfolio;
+    $navigation_msg = $langUserePortfolio;
 } else {
     if ($session->status == 0) {
         redirect_to_home_page();
         exit;
     } else {
         $id = $uid;
-        $toolName = $langMyePortfolio;
+        $navigation_msg = $langMyePortfolio;
     }
 }
 
-$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
+$toolName = $langResourcesCollection;
 
 if (!token_validate('eportfolio' . $id, $_GET['token'])) {
     redirect_to_home_page();
 }
 
 $token = token_generate('eportfolio' . $id);
+$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
+$navigation[] = array("url" => "{$urlAppend}main/eportfolio/index.php?id=$id&token=$token", "name" => $navigation_msg);
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
@@ -104,7 +106,7 @@ if ($userdata) {
                               </script>";
         }
 
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
                 'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
                 'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
@@ -117,12 +119,7 @@ if ($userdata) {
             array('title' => $langUploadBio,
                 'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
                 'icon' => 'fa-upload'),
-            array('title' => $langResume,
-                'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                'icon' => 'fa-solid fa-book-open-reader',
-                'level' => 'primary',
-                'button-class' => 'btn-primary'),
-            array('title' => $langEditResume,
+            array('title' => $langEditChange,
                 'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                 'icon' => 'fa-edit' ),
             array('title' => $langResourcesCollection,
@@ -131,6 +128,7 @@ if ($userdata) {
                 'level' => 'primary'
             )
         ));
+        $tool_content .= $action_bar;
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
@@ -309,20 +307,14 @@ if ($userdata) {
             exit;
         }
 
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
                 array('title' => $langBio,
                       'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
-                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
-                array('title' => $langResume,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                      'level' => 'primary-label'),
-                array('title' => $langResourcesCollection,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-primary'),
+                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf"))
             ));
+        $tool_content .= $action_bar;
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'get') {

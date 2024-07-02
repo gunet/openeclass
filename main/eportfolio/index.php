@@ -127,12 +127,7 @@ if ($userdata) {
                                         array('title' => $langUploadBio,
                                             'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
                                             'icon' => 'fa-upload'),
-                                        array('title' => $langResume,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                                            'icon' => 'fa-solid fa-book-open-reader',
-                                            'level' => 'primary',
-                                            'button-class' => 'btn-primary'),
-                                        array('title' => $langEditResume,
+                                        array('title' => $langEditChange,
                                             'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                                             'icon' => 'fa-edit' ),
                                         array('title' => $langResourcesCollection,
@@ -152,22 +147,19 @@ if ($userdata) {
             exit;
         }
 
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
                                         array('title' => $langBio,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
                                             'icon' => 'fa-solid fa-book-open',
                                             'level' => 'primary-label',
                                             'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
-                                        array('title' => $langResume,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                                            'level' => 'primary-label',
-                                            'icon' => 'fa-solid fa-book-open-reader',
-                                            'button-class' => 'btn-primary'),
                                         array('title' => $langResourcesCollection,
                                               'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                                               'icon' => 'fa-solid fa-award',
                                               'level' => 'primary-label'),
                                     ));
+
+        $tool_content .= $action_bar;
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'get_bio') {
