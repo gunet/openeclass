@@ -227,6 +227,21 @@ if(isset($_POST['userBadgeCriterionId'])){
     redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
 } 
 
+// ---------------------------
+// add comment to deliverable by consultant
+// ---------------------------
+if(isset($_POST['add_comment'])){
+    Database::get()->query("UPDATE session_resources SET
+                                    deliverable_comments = ?s
+                                    WHERE session_id = ?d 
+                                    AND doc_id = ?d 
+                                    AND from_user = ?d",purify($_POST['add_comment']), $sessionID, $_POST['for_resource_id'], $_POST['for_user_id']);
+
+    Session::flash('message',$langAddCommentsSuccess);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
+}
+
 
 // ---------------------------
 // Get information about resource and creation downloadable link
@@ -283,12 +298,18 @@ $data['resources'] = $resources;
 
 
 // An consultant can create a session
+$total_deliverables = 0;
 if($is_tutor_course or $is_consultant){
     $sql = "AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id AND from_user > 0)";
+    $total_info = Database::get()->querySingle("SELECT COUNT(*) as total FROM session_resources
+                                                WHERE session_id = ?d AND doc_id = ?d AND from_user > 0",$sessionID,$file_id);
+    if($total_info){
+        $total_deliverables = $total_info->total;
+    }
 }else{// is simple user
     $sql = "AND lock_user_id = $uid AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id)";
 }
-
+$data['total_deliverables'] = $total_deliverables;
 
 $docs = Database::get()->queryArray("SELECT * FROM document
                                             WHERE course_id = ?d
@@ -314,10 +335,12 @@ if(count($docs) > 0){
         $file->image = $image;
         $file->link = $link;
         $file->download_url = $download_url;
+        $file->fileTitle = $file->title ?? $file->filename;
         
-        $refers_temp = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources WHERE res_id = ?d AND session_id = ?d",$file->id,$sessionID);
+        $refers_temp = Database::get()->querySingle("SELECT doc_id,from_user,is_completed,deliverable_comments FROM session_resources WHERE res_id = ?d AND session_id = ?d",$file->id,$sessionID);
         $refers = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d AND session_id = ?d",$refers_temp->doc_id,$sessionID);
         $file->refers_to = $refers->title;
+        $file->deliverable_comment = $refers_temp->deliverable_comments;
         if($is_consultant && $badge_id > 0){
             $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
                                                                     WHERE resource = ?d 

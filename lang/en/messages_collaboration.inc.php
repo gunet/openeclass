@@ -1586,3 +1586,7 @@ $langResourceDateCreated = "Created";
 $langUploadOnBehalfOf = "Uploading a file on behalf of a user";
 $langOnBehalfOfUser = "On behalf of the user";
 $langResourceΝοBelongsToSessionPrereq = "The activity does <strong> NOT </strong> participate in session completion";
+$langNotExistDeliverables = "There are no deliverables";
+$langTypeOutComment = "Type your comment...";
+$langAddCommentsSuccess = "Your comment has been successfully added.";
+$langCommentsByConsultant = "Comments by consultant";

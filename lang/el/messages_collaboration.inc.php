@@ -1522,3 +1522,7 @@ $langResourceDateCreated = "Δημιουργήθηκε";
 $langUploadOnBehalfOf = "Ανέβασμα αρχείου εκ μέρους κάποιου ωφελούμενου";
 $langOnBehalfOfUser = "Εκ μέρους του χρήστη";
 $langResourceΝοBelongsToSessionPrereq = "Η δραστηριότητα <strong> ΔΕΝ </strong> συμμετέχει στην ολοκλήρωση της συνεδρίας";
+$langNotExistDeliverables = "Δεν υπάρχουν παραδοτέα";
+$langTypeOutComment = "Πληκτρολογήστε το σχόλιο σας...";
+$langAddCommentsSuccess = "Το σχόλιο σας προστέθηκε με επιτυχία.";
+$langCommentsByConsultant = "Σχόλια συμβούλου";

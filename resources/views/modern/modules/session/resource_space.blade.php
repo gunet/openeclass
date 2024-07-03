@@ -139,6 +139,18 @@
                                                 </div>
                                             </div>
                                         </li>
+                                        @if($is_consultant)
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='title-default'>{{ trans('langDocSender') }}</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    {{ $total_deliverables }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @endif
                                         @if($is_criterion_completion)
                                             @if($is_consultant && !$upload_doc_for_user)
                                             <li class='list-group-item element'>
@@ -185,7 +197,7 @@
                                 @endif
                                 @if(count($docs) > 0)
                                     <div class='table-responsive mt-0'>
-                                        <table class='table-default'>
+                                        <table class='table-default table-deliverable-comments'>
                                             <thead>
                                                 <tr>
                                                     <th>{{ trans('langFileName') }}</th>
@@ -196,10 +208,11 @@
                                                     @if($is_consultant)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
                                                     <th class='text-end'></th>
                                                 </tr>
+                                                <tr></tr>
                                             </thead>
                                             <tbody>
                                                 @foreach($docs as $doc)
-                                                    <tr>
+                                                    <tr class='tr-deliverable'>
                                                         <td>{!! $doc->link !!}</td>
                                                         <td>{{ $doc->creator }}</td>
                                                         <td>{{ $doc->refers_to }}</td>
@@ -234,6 +247,14 @@
                                                                     'show' => ($is_consultant && $doc->completed)
                                                                 ),
                                                                 array(
+                                                                    'title' => trans('langAddComment'),
+                                                                    'url' => "#",
+                                                                    'icon' => 'fa-solid fa-comments',
+                                                                    'icon-class' => "add-comments",
+                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments{$doc->id}'",
+                                                                    'show' => $is_consultant
+                                                                ),
+                                                                array(
                                                                     'title' => trans('langDownload'),
                                                                     'url' => $doc->download_url,
                                                                     'icon' => 'fa-download',
@@ -248,6 +269,18 @@
                                                                     'show' => $doc->can_delete_file)
                                                             ))
                                                         !!}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <div class='d-flex justify-content-start align-items-start gap-3 flex-wrap'>
+                                                                <p class='control-label-notes mt-1'>{{ trans('langCommentsByConsultant') }}:</p>
+                                                                @if(!empty($doc->deliverable_comment))
+                                                                    {!! $doc->deliverable_comment !!}
+                                                                @else
+                                                                    {{ trans('langNoInfoAvailable') }}
+                                                                @endif
+                                                            </div>
                                                         </td>
                                                     </tr>
 
@@ -308,6 +341,41 @@
                                                     </div>
 
 
+                                                    <div class='modal fade' id='doComments{{ $doc->id }}' tabindex='-1' aria-labelledby='doCommentsLabel{{ $doc->id }}' aria-hidden='true'>
+                                                        <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
+                                                            <div class='modal-dialog modal-md'>
+                                                                <div class='modal-content'>
+                                                                    <div class='modal-header'>
+                                                                        <div class='modal-title'>
+                                                                            <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
+                                                                            <h3 class="modal-title-default text-center mb-0 mt-2" id="doCommentsLabel{{ $doc->id }}">{!! trans('langAddComment') !!}</h3>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='modal-body text-start'>
+
+                                                                        <p class='control-label-notes'>{{ trans('langFileName') }}:&nbsp;<span>{{ $doc->fileTitle }}</span></p>
+                                                                        <p class='control-label-notes'>{{ trans('langUser') }}:&nbsp;<span>{{ $doc->creator }}</span></p>
+
+                                                                        <label for='comment_deliverable_{{ $doc->id }}' class='control-label-notes mt-4'>{{ trans('langComment') }}</label>
+                                                                        <textarea id='comment_deliverable_{{ $doc->id }}' name='add_comment' placeholder="{{ trans('langTypeOutComment') }}"></textarea>
+
+                                                                        <input type='hidden' name='for_resource_id' value='{{ $file_id }}'>
+                                                                        <input type='hidden' name='for_user_id' value='{{ $doc->user_sender }}'>
+                                                                        <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
+                                                                        
+                                                                    </div>
+                                                                    <div class='modal-footer d-flex justify-content-center align-items-center'>
+                                                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                        <button type='submit' class="btn submitAdminBtn">
+                                                                            {{ trans('langSubmit') }}
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
+
                                                     <div class='modal fade' id='docDelete{{ $doc->id }}' tabindex='-1' aria-labelledby='docDeleteLabel{{ $doc->id }}' aria-hidden='true'>
                                                         <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&del={{ $doc->id }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
                                                             <div class='modal-dialog modal-md'>
@@ -339,7 +407,7 @@
                                 @else
                                     <div class='alert alert-warning'>
                                         <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                                        <span>{{ trans('langNoInfoAvailable') }}</span>
+                                        <span>{{ trans('langNotExistDeliverables') }}</span>
                                     </div>
                                 @endif
                             </div>

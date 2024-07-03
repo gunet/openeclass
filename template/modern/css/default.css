@@ -5267,3 +5267,7 @@ body:has(.fixed-announcement) .btn-quick-note{
     width: 100%;
   }
 }
+
+.table-deliverable-comments .tr-deliverable{
+  border: 0 !important;
+}
