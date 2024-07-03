@@ -97,7 +97,7 @@ if (!isset($_POST['create_course'])) {
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-control"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         generate_csrf_token_form_field();
-        $data['menuTypeID'] = 1;
+
         // course image
         $image_content = '';
         $dir_images = scandir($webDir . '/template/modern/images/courses_images');

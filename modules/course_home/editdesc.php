@@ -29,11 +29,9 @@ $require_login = true;
 $require_editor = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'modules/units/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-$toolName = $langEditCourseProgram;
-$pageName = $langCourseProgram;
+$toolName = $langCourseProgram;
 
 $course = Database::get()->querySingle('SELECT description, home_layout, course_image FROM course WHERE id = ?d', $course_id);
 
@@ -94,143 +92,32 @@ if (isset($_GET['delete_image'])) {
     header("Location: {$urlAppend}courses/$course_code/");
     exit;
 }
-$head_content .= "
-    <script>
-        $(function(){
-            $('select[name=layout]').change(function ()
-            {
-                if($(this).val() == 1) {
-                    $('#image_field').removeClass('hidden');
-                } else {
-                    $('#image_field').addClass('hidden');
-                }
-            });
-            $('.chooseCourseImage').on('click',function(){
-                var id_img = this.id;
-                alert('"  . $langImageSelected . "!');
-                document.getElementById('choose_from_list').value = id_img;
-                $('#CoursesImagesModal').modal('hide');
-                document.getElementById('selectedImage').value = '$langSelect:'+id_img;
+$data['enableCheckFileSize'] = enableCheckFileSize();
+$data['fileSizeHidenInput'] = fileSizeHidenInput();
+$data['course_image'] = $course_image = $course->course_image;
+$data['layout'] = $layout = $course->home_layout;
+$data['selection'] = selection(array(1 => $langCourseLayout1, 3 => $langCourseLayout3), 'layout', $layout, 'class="form-control"');
+$data['rich_text_editor'] = rich_text_editor('description', 8, 20, $course->description);
 
-            });
-        });
-    </script>";
-$layouts = array(1 => $langCourseLayout1, 3 => $langCourseLayout3);
-$description = $course->description;
-$layout = $course->home_layout;
-
-
-if (isset($course->course_image)) {
-    $course_image = "
-        <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-            <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;' alt='Course image'>
-            <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
-        </div>
-        <input type='hidden' name='course_image' value='".q($course->course_image)."'>
-    ";
-} else {
-    enableCheckFileSize();
-    $course_image = fileSizeHidenInput() . "
-            <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
-                <li class='nav-item' role='presentation'>
-                    <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'>$langUpload</button>
-                </li>
-                <li class='nav-item' role='presentation'>
-                    <button class='nav-link' id='tabs-selectImage-tab' data-bs-toggle='tab' data-bs-target='#tabs-selectImage' type='button' role='tab' aria-controls='tabs-selectImage' aria-selected='false'>$langAddPicture</button>
-                </li>
-            </ul>
-            <div class='tab-content mt-3' id='tabs-tabContent'>
-                <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
-                     <input type='file' name='course_image' id='course_image'>
-                </div>
-                <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
-                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#CoursesImagesModal'>
-                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
-                    </button>
-                    <input type='hidden' id='choose_from_list' name='choose_from_list'>
-                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
+// Get all images from dir courses_images
+$image_content = '';
+$dir_images = scandir($webDir . '/template/modern/images/courses_images');
+foreach($dir_images as $image) {
+    $extension = pathinfo($image, PATHINFO_EXTENSION);
+    $imgExtArr = ['jpg', 'jpeg', 'png'];
+    if (in_array($extension, $imgExtArr)) {
+        $image_content .= "
+            <div class='col'>
+                <div class='card panelCard h-100'>
+                    <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
+                    <div class='card-body'>                                
+                        <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
+                    </div>
                 </div>
             </div>
         ";
+    }
 }
+$data['image_content'] = $image_content;
 
-
-// Get all images from dir courses_images
-$dirname = getcwd();
-$dirname = $dirname . '/template/modern/images/courses_images';
-$dir_images = scandir($dirname);
-
-
-$tool_content = "
-    <div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'>
-            <div class='form-wrapper form-edit rounded'>
-                <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
-                    <fieldset>
-                        <div class='row form-group'>
-                            <label for='description' class='col-12 control-label-notes'>$langCourseLayout</label>
-                            <div class='col-12'>
-                                ".  selection($layouts, 'layout', $layout, 'class="form-control"')."
-                            </div>
-                        </div>
-                        <div id='image_field' class='row form-group".(($layout == 1)?"":" hidden")." mt-4'>
-                            <label for='course_image' class='col-12 control-label-notes'>$langCourseImage</label>
-                            <div class='col-12'>
-                                $course_image
-                            </div>
-                        </div>
-                        <div class='row form-group mt-4'>
-                            <label for='description' class='col-12 control-label-notes'>$langDescription</label>
-                            <div class='col-12'>
-                                " . rich_text_editor('description', 8, 20, $description) . "
-                            </div>
-                        </div>
-                        <div class='row form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                                    <a href='{$urlAppend}courses/$course_code' class='btn cancelAdminBtn'>$langCancel</a>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <div class='modal fade' id='CoursesImagesModal' tabindex='-1' aria-labelledby='CoursesImagesModalLabel' aria-hidden='true'>
-                        <div class='modal-dialog modal-lg'>
-                            <div class='modal-content'>
-                                <div class='modal-header'>
-                                    <div class='modal-title' id='CoursesImagesModalLabel'>$langCourseImage</div>
-                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                </div>
-                                <div class='modal-body'>
-                                    <div class='row row-cols-1 row-cols-md-2 g-4'>";
-                                        foreach($dir_images as $image) {
-                                            $extension = pathinfo($image, PATHINFO_EXTENSION);
-                                            $imgExtArr = ['jpg', 'jpeg', 'png'];
-                                            if(in_array($extension, $imgExtArr)){
-                                                $tool_content .= "
-                                                    <div class='col'>
-                                                        <div class='card panelCard h-100'>
-                                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                                                            <div class='card-body'>                                                                
-                                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ";
-                                            }
-                                        }
-                $tool_content .= "
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>" .
-                    generate_csrf_token_form_field() . "
-                </form>
-            </div>
-        </div>
-        <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
-        </div>
-    </div>";
-
-draw($tool_content, 2, null, $head_content);
+view('modules.course_home.editdesc', $data);

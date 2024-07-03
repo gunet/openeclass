@@ -164,7 +164,7 @@
                             </div>
                         </div>
 
-                        <div id='image_field' class='row form-group".(($layout == 1)?"":" hidden")." mt-4'>
+                        <div id='image_field' class='row form-group mt-4'>
                             <label for='course_image' class='col-12 control-label-notes'>{{ trans('langCourseImage') }}</label>
                             <div class='col-12'>
                                 {!! fileSizeHidenInput() !!}
@@ -362,10 +362,7 @@
               <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                 <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
               </div>
-
-
         </div>
-
-</div>
+    </div>
 </div>
 @endsection
