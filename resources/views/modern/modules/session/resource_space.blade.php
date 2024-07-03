@@ -251,7 +251,7 @@
                                                                     'url' => "#",
                                                                     'icon' => 'fa-solid fa-comments',
                                                                     'icon-class' => "add-comments",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments' data-id='{$doc->id}' data-fileTitle='{$doc->fileTitle}' data-fileCreator='{$doc->creator}' data-forUserId='{$doc->user_sender}'",
+                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments' data-id='{$doc->id}' data-fileTitle='{$doc->fileTitle}' data-fileCreator='{$doc->creator}' data-forUserId='{$doc->user_sender}' data-commentDoc='{$doc->deliverable_comment}'",
                                                                     'show' => $is_consultant
                                                                 ),
                                                                 array(
@@ -456,6 +456,10 @@
                     <input type='hidden' name='for_resource_id' value='{{ $file_id }}'>
                     <input type='hidden' name='for_user_id' id='forUserId'>
                     <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
+                    <div class='alert alert-info'>
+                        <i class='fa-solid fa-circle-info fa-lg'></i>
+                        <span>{{ trans('langSendEmailWithComments') }}</span>
+                    </div>
                 </div>
                 <div class='modal-footer d-flex justify-content-center align-items-center'>
                     <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
@@ -519,9 +523,11 @@
             var file_title = $(this).attr('data-fileTitle');
             var file_creator = $(this).attr('data-fileCreator');
             var user_sender = $(this).attr('data-forUserId');
+            var comment_doc = $(this).attr('data-commentDoc');
             document.getElementById("fileTitle").innerHTML = file_title;
             document.getElementById("fileCreator").innerHTML = file_creator;
             document.getElementById("forUserId").value = user_sender;
+            document.getElementById("comment_deliverable").value = comment_doc;
         });
         $(document).on('click', '.doc-delete', function(e){
             e.preventDefault();

@@ -256,7 +256,7 @@
                                         <div class="form-group">
                                             <label for='creators' class='control-label-notes'>{{ trans('langResponsibleOfSession') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
                                             <select class='form-select' name='creators' id='creators'>
-                                                @if($is_tutor_course)
+                                                @if($is_coordinator)
                                                     <option value=''>
                                                         {{ trans('langSelectConsultant') }}
                                                     </option>

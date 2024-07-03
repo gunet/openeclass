@@ -89,6 +89,12 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
+                            array('title' => trans('langInsertPassage'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=passage',
+                                'icon' => 'fa-regular fa-keyboard',
+                                'level' => 'secondary',
+                                'show' => $is_consultant
+                            ),
                             array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=add_tc' . '&token=' . $_SESSION['csrf_token'],
                                 'class' => "add-session",

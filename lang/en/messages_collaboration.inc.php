@@ -1590,3 +1590,6 @@ $langNotExistDeliverables = "There are no deliverables";
 $langTypeOutComment = "Type your comment...";
 $langAddCommentsSuccess = "Your comment has been successfully added.";
 $langCommentsByConsultant = "Comments by consultant";
+$langInsertPassage = "Add text";
+$langSomeComments = "Update on your deliverable";
+$langSendEmailWithComments = "Upon submission of your comments, an informative email will be sent to the user about them.";

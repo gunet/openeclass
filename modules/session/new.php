@@ -37,8 +37,6 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
-student_view_is_active();
-is_admin_of_session();
 
 $pageName = $langAddSession;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
@@ -184,8 +182,8 @@ if(isset($_POST['submit'])){
 
 }
 
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
-if($is_tutor_course){// is the tutor course
+
+if($is_coordinator){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
                                                     WHERE course_user.status = ?d

@@ -112,13 +112,13 @@
                                                                 'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
                                                                 'icon-class' => "edit-session",
                                                                 'icon' => 'fa-edit',
-                                                                'show' => ($is_tutor_course or $is_consultant)),
+                                                                'show' => ($is_coordinator or $is_consultant)),
                                                         array('title' => trans('langDelete'),
                                                                 'url' => "#",
                                                                 'icon-class' => "delete-session",
                                                                 'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
                                                                 'icon' => 'fa-xmark',
-                                                                'show' => ($is_tutor_course or $is_consultant))
+                                                                'show' => ($is_coordinator or $is_consultant))
                                                         )
                                                     ) !!}
                                                 </div>
@@ -218,7 +218,7 @@
                                                     </div>
                                                     
                                                     <a class="btn successAdminBtn 
-                                                                @if(!$is_tutor_course && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
+                                                                @if(!$is_coordinator && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
                                                         href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                         {{ trans('langEnter') }}
                                                     </a>

@@ -37,8 +37,6 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
-student_view_is_active();
-is_admin_of_session();
 
 $sessionTitle = title_session($course_id,$_GET['session']);
 $pageName = $langEditSession;
@@ -209,7 +207,6 @@ if(isset($_POST['modify'])){
 }
 
 $data['sessionID'] = $_GET['session'];
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 $data['session_info'] = $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$_GET['session']);
 $data['title'] = $session_info->title;
 $data['creator'] = $session_info->creator;
@@ -232,7 +229,7 @@ if(count($users_participants) > 0){
 }
 $data['participants_arr'] = $participants_arr;               
 
-if($is_tutor_course){// is the tutor course
+if($is_coordinator){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
                                                     WHERE course_user.editor = ?d

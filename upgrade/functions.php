@@ -3120,6 +3120,10 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('session_resources', 'deliverable_comments')) {
         Database::get()->query("ALTER TABLE session_resources ADD `deliverable_comments` TEXT DEFAULT NULL");
     }
+
+    if (!DBHelper::fieldExists('session_resources', 'passage')) {
+        Database::get()->query("ALTER TABLE session_resources ADD `passage` TEXT DEFAULT NULL");
+    }
 }
 
 

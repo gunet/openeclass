@@ -29,6 +29,7 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
@@ -67,10 +68,7 @@ $sessionTitle = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
-$data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
-student_view_is_active();
 
 if(!$is_consultant){
     $pageName = $langDownloadFile;
@@ -231,11 +229,53 @@ if(isset($_POST['userBadgeCriterionId'])){
 // add comment to deliverable by consultant
 // ---------------------------
 if(isset($_POST['add_comment'])){
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
     Database::get()->query("UPDATE session_resources SET
                                     deliverable_comments = ?s
                                     WHERE session_id = ?d 
                                     AND doc_id = ?d 
-                                    AND from_user = ?d",purify($_POST['add_comment']), $sessionID, $_POST['for_resource_id'], $_POST['for_user_id']);
+                                    AND from_user = ?d",q($_POST['add_comment']), $sessionID, $_POST['for_resource_id'], $_POST['for_user_id']);
+
+    
+    // Send email to user
+    $sessionName =  title_session($course_id,$sessionID);
+    $nameUser = participant_name($_POST['for_user_id']);
+    $emailHeader = "
+      <!-- Header Section -->
+              <div id='mail-header'>
+                  <br>
+                  <div>
+                      <div id='header-title'>$sessionName</div>
+                  </div>
+              </div>";
+
+      $emailMain = "
+      <!-- Body Section -->
+          <div id='mail-body'>
+              <br>
+              <div><strong>$langSomeComments</strong></div>
+              <div id='mail-body-inner'>
+                  <p>" . purify($_POST['add_comment']) . "</p>
+              </div>
+              <div>
+                  <br>
+                  <p>$langProblem</p><br>" . get_config('admin_name') . "
+                  <ul id='forum-category'>
+                      <li>$langManager: $siteName</li>
+                      <li>$langTel: -</li>
+                      <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                  </ul>
+              </div>
+          </div>";
+
+    $emailsubject = $siteName.':'.$langSomeComments;
+
+    $emailbody = $emailHeader.$emailMain;
+
+    $emailPlainBody = html2text($emailbody);
+    $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['for_user_id'])->email;
+    send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
 
     Session::flash('message',$langAddCommentsSuccess);
     Session::flash('alert-class', 'alert-success');
@@ -299,7 +339,7 @@ $data['resources'] = $resources;
 
 // An consultant can create a session
 $total_deliverables = 0;
-if($is_tutor_course or $is_consultant){
+if($is_coordinator or $is_consultant){
     $sql = "AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id AND from_user > 0)";
     $total_info = Database::get()->querySingle("SELECT COUNT(*) as total FROM session_resources
                                                 WHERE session_id = ?d AND doc_id = ?d AND from_user > 0",$sessionID,$file_id);

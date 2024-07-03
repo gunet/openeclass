@@ -27,7 +27,7 @@
 
 $require_login = true;
 $require_current_course = true;
-if(isset($_GET['addSessions'])){
+if(isset($_GET['addSessions']) or !isset($_GET['showCompletedConsulting'])){
   $require_consultant = true;
 }
 
@@ -40,13 +40,8 @@ $pageName = $is_consultant ? $langPercentageCompletedConsultingByUser : $langPer
 if(isset($_GET['addSessions'])){
   $pageName = $langCompletedConsulting;
 }
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
-$data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
+
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
-student_view_is_active();
-if(!isset($_GET['showCompletedConsulting'])){
-  is_admin_of_session();
-}
 
 if(isset($_POST['submit'])){
   if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -75,7 +70,7 @@ $data['action_bar'] = action_bar([
   ], false);
 
 if(isset($_GET['addSessions'])){
-  if($is_tutor_course){
+  if($is_coordinator){
       $data['all_sessions'] = $all_sessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                                       WHERE id IN (SELECT session_id FROM badge WHERE course_id = ?d)
                                                                       ORDER BY start ASC",$course_id);
@@ -104,7 +99,7 @@ if(isset($_GET['addSessions'])){
   $visible_sessions_id = array();
   if(isset($_GET['showCompletedConsulting']) && count($res) > 0){// for user-consultant or tutor
     if(count($res) > 0){
-      if(!$is_tutor_course && !$is_consultant){
+      if(!$is_coordinator && !$is_consultant){
         $all_user_sessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                           WHERE visible = ?d
                                                           AND course_id = ?d
@@ -120,8 +115,8 @@ if(isset($_GET['addSessions'])){
       foreach($res as $r){
         $hadIncompletedPrereq = 0;
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d",$r->session_id);
-        if($is_tutor_course or $is_consultant){
-          if($is_consultant && !$is_tutor_course){
+        if($is_coordinator or $is_consultant){
+          if($is_consultant && !$is_coordinator){
             // check if consultant is participated in current session as creator
             if(!is_session_consultant($r->session_id,$course_id)){
               continue;

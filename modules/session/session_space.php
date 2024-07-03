@@ -60,10 +60,7 @@ $pageName = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $toolName = $langSession;
 
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
-$data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
-student_view_is_active();
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {
@@ -136,6 +133,10 @@ if(isset($_GET['editResource'])){
     $resource_id = $_GET['editResource'];
     redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$sessionID."&resource_id=".$resource_id);
 }
+if(isset($_GET['show_passage'])){
+    $resource_id = $_GET['show_passage'];
+    redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$sessionID."&resource_id=".$resource_id."&passage_resource=true");
+}
 
 if(isset($_GET['del'])){
 
@@ -173,8 +174,8 @@ if(isset($_GET['del'])){
 $data['tool_content_sessions'] = show_session_resources($sessionID);
 
 // An consultant can create a session
-if($is_tutor_course or $is_consultant){
-    if($is_tutor_course){
+if($is_coordinator or $is_consultant){
+    if($is_coordinator){
         $data['all_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
                                                 WHERE course_id = ?d
                                                 ORDER BY start ASC",$course_id);

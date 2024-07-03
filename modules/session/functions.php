@@ -20,36 +20,6 @@
  * ========================================================================
  */
 
- 
-function is_tutor_course($cid,$userId){
-    global $is_admin, $is_departmentmanage_user, $is_power_user, $atleastone;
-
-    $result = Database::get()->querySingle("SELECT * FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
-    if($is_admin or $is_power_user){
-        return 1;
-    }elseif($is_departmentmanage_user and $atleastone){
-        return 1;
-    }elseif($result->status == USER_TEACHER && $result->tutor){
-        return 1;
-    }else{
-        return 0;
-    }
-    
-}
-
-function is_consultant($cid,$userId){
-    global $is_editor;
-
-    $result = Database::get()->querySingle("SELECT * FROM course_user WHERE course_id = ?d AND user_id = ?d",$cid,$userId);
-    if($result->status == USER_STUDENT && $result->tutor && !$result->editor && !$result->course_reviewer && !$result->reviewer){
-        return 1;
-    }elseif($is_editor){
-        return 1;
-    }else{
-        return 0;
-    }
-    
-}
 
 function is_session_consultant($sid,$cid){
     global $uid;
@@ -144,22 +114,6 @@ function participant_name($userId){
     $name = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$userId);
     $surname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$userId);
     return $name->givenname . ' ' . $surname->surname;
-}
-
-function student_view_is_active(){
-    global $is_tutor_course, $is_consultant;
-
-    if (isset($_SESSION['student_view'])) {
-        $is_tutor_course = $is_consultant = false;
-    }
-}
-
-function is_admin_of_session(){
-    global $is_tutor_course, $is_consultant, $course_code;
-
-    if(!$is_tutor_course && !$is_consultant){
-        redirect_to_home_page("modules/session/index.php?course=$course_code");
-    }
 }
 
 function session_resource_info($rid,$sid){
@@ -551,6 +505,9 @@ function show_sessionResource($info) {
         case 'tc':
             $html .= show_session_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
+        case 'passage':
+                $html .= show_session_passage($info->title, $info->id, $info->passage, $info->visible);
+                break;
         default:
             $html .= $langUnknownResType;
     }
@@ -827,6 +784,28 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 
 
 /**
+ * @brief display passage resource
+ * @param $title
+ * @param $resource_id
+ * @param $passage
+ * @param $visibility
+ * @return string
+ */
+function show_session_passage($title, $resource_id, $passage, $visibility){
+    global  $is_consultant, $course_id, $urlServer, $course_code;
+
+    $image = icon('fa-solid fa-keyboard');
+    return "
+        <tr data-id='$resource_id'>
+            <td width='1'>$image</td>
+            <td>$passage</td>
+            <td></td>" .
+            session_actions('passage', $resource_id, $visibility) . '
+        </tr>';
+}
+
+
+/**
  * @brief checks if a session resource belongs to session prerequisites
  * @param $session_id
  * @param $session_resource_id
@@ -861,7 +840,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
     $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload, $sessionID;
 
-    $res_types_sessions_completion = ['work', 'doc', 'poll'];
+    $res_types_sessions_completion = ['work', 'doc', 'poll', 'tc'];
     if (in_array($res_type, $res_types_sessions_completion)) {
         $res_type_to_session_compl = true;
     } else {
@@ -947,7 +926,11 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
         } else {
             $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
             $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
-            $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;editResource=$resource_id";
+            if($res_type == 'passage'){
+                $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;show_passage=$resource_id";
+            }else{
+                $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;editResource=$resource_id";
+            }
         }
 
         $content = "<td>
@@ -1094,7 +1077,7 @@ function upload_session_doc($sid){
     if(count($checkFilename) > 0){
         foreach($checkFilename as $f){
             if($f->filename == $_FILES['file-upload']['name']){
-                Session::flash('message',$langFileExistsWithSameName);
+                Session::flash('message',$langFileExists);
                 Session::flash('alert-class', 'alert-danger');
                 if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
                     redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
@@ -2767,4 +2750,73 @@ function add_submitted_document_to_certificate($element, $element_id) {
         }
     }
     return;
+}
+
+
+/**
+ * @brief Add a passage to session space
+ * @param $sid
+ */
+function passage_insertion($sid){
+    global $course_code, $course_id, $tool_content, $langInsertPassage, $langSubmit;
+
+    $tool_content .= "  
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded'>
+                <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code&session=$sid' method='post'>
+                    <fieldset>
+
+                        <div class='form-group'>
+                            <label for='add_passage' class='col-12 control-label-notes'>$langInsertPassage</label>
+                            " . rich_text_editor('add_passage', 5, 40, '') . "
+                        </div>";
+
+
+      $tool_content .= "<div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-end aling-items-center'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit_passage' value='$langSubmit'>
+                            </div>
+                        </div>
+
+                        " . generate_csrf_token_form_field() . "    
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
+        </div>
+    </div>";
+
+    return $tool_content;
+}
+
+
+
+/**
+ * @brief insert passage resource in course session resources
+ * @param integer $sid
+ */
+function insert_session_passage($sid) {
+    global $course_code, $course_id, $langText;
+
+    
+    if($sid){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
+        $order++;
+        $q =  Database::get()->query("INSERT INTO session_resources SET 
+                                        session_id = ?d, 
+                                        type = 'passage', 
+                                        title = '$langText', 
+                                        visible = 1, 
+                                        `order` = ?d, 
+                                        `date` = " . DBHelper::timeAfter() . ", passage = ?s", $sid, $order, $_POST['add_passage']);
+        
+
+    }
+
+    header('Location: session_space.php?course=' . $course_code . '&session=' . $sid);
+    exit;
 }

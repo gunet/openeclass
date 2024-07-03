@@ -352,6 +352,8 @@ if(isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isse
 // Read properties of current course
 $is_editor = false;
 $is_course_reviewer = false;
+$is_coordinator = false;
+$is_consultant = false;
 if (isset($require_current_course) and $require_current_course) {
     if (!isset($_SESSION['dbname'])) {
         $toolContent_ErrorExists = $langSessionIsLost;
@@ -405,11 +407,10 @@ if (isset($require_current_course) and $require_current_course) {
 
         // Check for course visibility by current user
         $status = 0;
-        $is_consultant = 0;
         // The admin and power users can see all courses as adminOfCourse
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
-            $is_consultant = 1;
+            $is_coordinator = $is_consultant = true;
         } elseif ($uid) {
             $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user
                                                            WHERE user_id = ?d AND
@@ -418,9 +419,11 @@ if (isset($require_current_course) and $require_current_course) {
                 $status = $stat->status;
                 $is_editor = $stat->editor;
                 $is_course_reviewer = $stat->course_reviewer;
-                if(($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer)
-                    or ($is_editor) or ($stat->status == USER_TEACHER && $stat->tutor)){
-                    $is_consultant = 1;
+                if($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer){
+                    $is_consultant = true;
+                    $is_coordinator = false;
+                }elseif($stat->status == USER_TEACHER or $is_editor){
+                    $is_coordinator = $is_consultant = true;
                 }
             }
             if ($is_departmentmanage_user and isset($course_code)) {
@@ -447,7 +450,7 @@ if (isset($require_current_course) and $require_current_course) {
                     $status = USER_TEACHER;
                     $is_editor = $is_course_admin = $is_course_reviewer = true;
                     $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
-                    $is_consultant = 1;
+                    $is_coordinator = $is_consultant = true;
                 }
             }
         }
@@ -735,7 +738,7 @@ if (isset($_SESSION['student_view'])) {
     if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
         $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
         $saved_is_editor = $is_editor;
-        $is_admin = $is_editor = $is_course_admin = $is_course_reviewer = false;
+        $is_admin = $is_editor = $is_course_admin = $is_course_reviewer = $is_coordinator = $is_consultant = false;
     } else {
         unset($_SESSION['student_view']);
     }

@@ -1526,3 +1526,6 @@ $langNotExistDeliverables = "Δεν υπάρχουν παραδοτέα";
 $langTypeOutComment = "Πληκτρολογήστε το σχόλιο σας...";
 $langAddCommentsSuccess = "Το σχόλιο σας προστέθηκε με επιτυχία.";
 $langCommentsByConsultant = "Σχόλια συμβούλου";
+$langInsertPassage = "Προσθήκη κειμένου";
+$langSomeComments = "Ενημέρωση σχετικά με το παραδοτέο σας";
+$langSendEmailWithComments = "Με την υποβολή των σχόλιων σας, θα σταλεί ενημερωτικό email στον χρήστη σχετικά με αυτά.";

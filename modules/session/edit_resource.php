@@ -55,10 +55,14 @@ if(isset($_POST['modify_resource'])){
     ));
   
     if($v->validate()) {
+        $new_title = q($_POST['title']) ?? '';
+        $new_passage = purify($_POST['add_new_passage']) ?? '';
+        $new_comments = purify($_POST['comments']) ?? '';
         Database::get()->query("UPDATE session_resources SET
                                     title = ?s,
-                                    comments = ?s
-                                    WHERE id = ?d",q($_POST['title']),purify($_POST['comments']),$_POST['resourceId']);
+                                    comments = ?s,
+                                    passage = ?s
+                                    WHERE id = ?d",$new_title,$new_comments,$new_passage,$_POST['resourceId']);
 
         $typeRes = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d",$_POST['resourceId']);
         if($typeRes && $typeRes->type == 'tc'){
@@ -80,10 +84,14 @@ if(isset($_POST['modify_resource'])){
     }
 }
 
-$resource_info = Database::get()->querySingle("SELECT title,comments FROM session_resources WHERE id = ?d",$_GET['resource_id']);
+$resource_info = Database::get()->querySingle("SELECT title,comments,passage FROM session_resources WHERE id = ?d",$_GET['resource_id']);
 $data['resource_id'] = $_GET['resource_id'];
 $data['title'] = $resource_info->title;
-$data['comments'] = rich_text_editor('comments', 5, 40, $resource_info->comments );
+if(isset($_GET['passage_resource'])){
+    $data['comments'] = rich_text_editor('add_new_passage', 5, 40, $resource_info->passage );
+}else{
+    $data['comments'] = rich_text_editor('comments', 5, 40, $resource_info->comments );
+}
 
 $data['action_bar'] = action_bar([
     [ 'title' => $langBack,

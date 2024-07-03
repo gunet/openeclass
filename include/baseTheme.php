@@ -65,7 +65,8 @@ function view($view_file, $view_data = array()) {
             $require_editor, $langHomePage, $is_in_tinymce, $action_bar,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
-            $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course, $is_consultant, $require_consultant;
+            $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course, 
+            $is_consultant, $require_consultant, $is_coordinator;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
@@ -6189,7 +6190,7 @@ function view($view_file, $view_data = array()) {
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
             'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
-            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant');
+            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();

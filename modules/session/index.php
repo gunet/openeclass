@@ -45,10 +45,7 @@ load_js('tools.js');
 load_js('datatables');
 
 $pageName = $langSession;
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
-$data['is_consultant'] = $is_consultant = is_consultant($course_id,$uid);
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
-student_view_is_active();
 
 // Show remote or not sessions
 $remoteType = -1;
@@ -101,7 +98,7 @@ if(isset($_POST['leave_session'])){
 }
 
 // An consultant can create a session
-if($is_tutor_course or $is_consultant){
+if($is_coordinator or $is_consultant){
 
     $data['action_bar'] = action_bar([
         [ 
@@ -129,11 +126,11 @@ if($is_tutor_course or $is_consultant){
             'class' => "delete",
             'confirm' => $langContinueToDelAllSessions,
             'icon' => 'fa-xmark',
-            'show' => $is_tutor_course
+            'show' => $is_coordinator
         ],
     ], false);
 
-    if($is_tutor_course){ // is tutor course
+    if($is_coordinator){ // is tutor course
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                         WHERE course_id = ?d
                                                                         $sql_remote

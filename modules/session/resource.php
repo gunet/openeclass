@@ -47,10 +47,6 @@ require_once 'insert_tc.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
-student_view_is_active();
-if(isset($_GET['type']) && $_GET['type'] != 'doc_upload'){
-    is_admin_of_session();
-}
 
 load_js('tools.js');
 
@@ -72,7 +68,6 @@ if(isset($_GET['type']) and $_GET['type'] == 'doc_upload'){
 }
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
-$data['is_tutor_course'] = $is_tutor_course = is_tutor_course($course_id,$uid);
 
 if(isset($_POST['submit_doc'])){
     insert_session_docs($sessionID);
@@ -82,6 +77,8 @@ if(isset($_POST['submit_doc'])){
     insert_session_work($sessionID);
 }elseif(isset($_POST['submit_upload'])){
     upload_session_doc($sessionID);
+}elseif(isset($_POST['submit_passage'])){
+    insert_session_passage($sessionID);
 }
 
 $type_resource = '';
@@ -105,6 +102,8 @@ if(isset($_GET['type'])){
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sessionID");
         }
+    }elseif($_GET['type'] == 'passage'){
+        $type_resource = passage_insertion($sessionID);
     }
 }
 $data['type_resource'] = $type_resource;

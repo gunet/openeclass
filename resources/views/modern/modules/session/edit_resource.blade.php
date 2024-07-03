@@ -82,7 +82,7 @@
                                         </div>
 
                                         <div class='form-group mt-4'>
-                                            <label for='comments' class='col-12 control-label-notes'>{{ trans('langComments')}}</label>
+                                            <label for='comments' class='col-12 control-label-notes'>{{ trans('langDescription')}}</label>
                                             {!! $comments !!}
                                         </div>
 

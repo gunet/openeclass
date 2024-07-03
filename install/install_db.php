@@ -2534,6 +2534,7 @@ $db->query("CREATE TABLE `session_resources` (
                             `is_completed` INT(11) NOT NULL DEFAULT 0,
                             `from_user` INT(11) NOT NULL DEFAULT 0,
                             `deliverable_comments` TEXT DEFAULT NULL,
+                            `passage` TEXT DEFAULT NULL,
                             PRIMARY KEY(id),
                             FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
 
