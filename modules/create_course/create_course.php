@@ -33,12 +33,12 @@ require_once 'include/log.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'functions.php';
 
 $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
-
 $toolName = $langCourseCreate;
 
 register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
@@ -98,6 +98,26 @@ if (!isset($_POST['create_course'])) {
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         generate_csrf_token_form_field();
         $data['menuTypeID'] = 1;
+        // course image
+        $image_content = '';
+        $dir_images = scandir($webDir . '/template/modern/images/courses_images');
+        foreach($dir_images as $image) {
+            $extension = pathinfo($image, PATHINFO_EXTENSION);
+            $imgExtArr = ['jpg', 'jpeg', 'png'];
+            if (in_array($extension, $imgExtArr)) {
+                $image_content .= "
+                    <div class='col'>
+                        <div class='card panelCard h-100'>
+                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
+                            <div class='card-body'>                                
+                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+        $data['image_content'] = $image_content;
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {
@@ -207,6 +227,39 @@ if (!isset($_POST['create_course'])) {
     }
     $description = purify($_POST['description']);
 
+    $course_image = '';
+
+    if (isset($_FILES['course_image']) && is_uploaded_file($_FILES['course_image']['tmp_name'])) {
+        $file_name = $_FILES['course_image']['name'];
+        validateUploadedFile($file_name, 2);
+        move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$code/image/$file_name");
+        require_once 'modules/admin/extconfig/externals.php';
+        $connector = AntivirusApp::getAntivirus();
+        if($connector->isEnabled()){
+            $output=$connector->check("$webDir/courses/$course_code/image/$file_name");
+            if($output->status==$output::STATUS_INFECTED){
+                AntivirusApp::block($output->output);
+            }
+        }
+        $course_image = $file_name;
+    }
+
+    if(!empty($_POST['choose_from_list'])) {
+        $imageName = $_POST['choose_from_list'];
+        $imagePath = "$webDir/template/modern/images/courses_images/$imageName";
+        $newPath = "$webDir/courses/$code/image/";
+        $name = pathinfo($imageName, PATHINFO_FILENAME);
+        $ext =  get_file_extension($imageName);
+        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+        $newName  = $newPath.$image_without_ext.".".$ext;
+        $copied = copy($imagePath , $newName);
+        if ((!$copied)) {
+            echo "Error : Not Copied";
+        } else {
+            $course_image = $image_without_ext.".".$ext;
+        }
+    }
+
     $typeCourse = 0;
     if(isset($view_type) && $view_type == 'sessions'){
         $typeCourse = 1;
@@ -233,11 +286,12 @@ if (!isset($_POST['create_course'])) {
                         glossary_expand = 0,
                         glossary_index = 1,
                         is_collaborative = ?d,
-                        description = ?s",
+                        description = ?s,
+                        course_image = ?s",
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description, $course_image);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::flash('message',$langGeneralError);
@@ -283,6 +337,5 @@ if (!isset($_POST['create_course'])) {
                                                'language' => $language,
                                                'visible' => $_POST['formvisible']));
     $data['title'] = $title;
-    $data['menuTypeID'] = 1;
     view('modules.create_course.create_course', $data);
 } // end of submit

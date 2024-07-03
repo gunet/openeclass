@@ -59,7 +59,7 @@ if (isset($_GET['delete_image'])) {
         move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$course_code/image/$file_name");
         require_once 'modules/admin/extconfig/externals.php';
         $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled() == true ){
+        if($connector->isEnabled()){
             $output=$connector->check("$webDir/courses/$course_code/image/$file_name");
             if($output->status==$output::STATUS_INFECTED){
                 AntivirusApp::block($output->output);
@@ -69,8 +69,7 @@ if (isset($_GET['delete_image'])) {
         $db_vars[] = $file_name;
     }
 
-
-    if(isset($_POST['choose_from_list']) && !empty($_POST['choose_from_list'])){
+    if(!empty($_POST['choose_from_list'])) {
         $imageName = $_POST['choose_from_list'];
         $imagePath = "$webDir/template/modern/images/courses_images/$imageName";
         $newPath = "$webDir/courses/$course_code/image/";
@@ -81,15 +80,13 @@ if (isset($_GET['delete_image'])) {
         $copied = copy($imagePath , $newName);
         if ((!$copied)) {
             echo "Error : Not Copied";
-        }
-        else{
+        } else {
             $extra_sql = ", course_image = ?s";
             $db_vars[] = $image_without_ext.".".$ext;
         }
     }
 
-
-    array_push($db_vars, $course_id);
+    $db_vars[] = $course_id;
     Database::get()->query("UPDATE course SET description = ?s, home_layout = ?d$extra_sql WHERE id = ?d", $db_vars);
     // update index
     require_once 'modules/search/indexer.class.php';
@@ -110,7 +107,7 @@ $head_content .= "
             });
             $('.chooseCourseImage').on('click',function(){
                 var id_img = this.id;
-                alert('Selected image: '+id_img);
+                alert('"  . $langImageSelected . "!');
                 document.getElementById('choose_from_list').value = id_img;
                 $('#CoursesImagesModal').modal('hide');
                 document.getElementById('selectedImage').value = '$langSelect:'+id_img;
@@ -213,9 +210,7 @@ $tool_content = "
                                                     <div class='col'>
                                                         <div class='card panelCard h-100'>
                                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                                                            <div class='card-body'>
-                                                                <p>$image</p>
-
+                                                            <div class='card-body'>                                                                
                                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
                                                             </div>
                                                         </div>

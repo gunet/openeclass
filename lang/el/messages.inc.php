@@ -1127,6 +1127,7 @@ $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσ
 $langOfNotifications = "ειδοποιήσεων";
 $langSyllabus = "Περίγραμμα";
 $langNoSyllabus = "Δεν υπάρχει περίγραμμα";
+$langImageSelected = "Η εικόνα επιλέχτηκε";
 
 
 /* * *******************************************

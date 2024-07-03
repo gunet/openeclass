@@ -71,6 +71,14 @@
                 hideCCFields();
             }
         }).change();
+
+        $('.chooseCourseImage').on('click',function(){
+            var id_img = this.id;
+            alert('{{ js_escape(trans('langImageSelected')) }}!');
+            document.getElementById('choose_from_list').value = id_img;
+            $('#CoursesImagesModal').modal('hide');
+            document.getElementById('selectedImage').value = '{{ trans('langSelect') }}:'+id_img;
+        });
     });
 
 </script>
@@ -92,7 +100,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -104,7 +112,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -114,16 +122,16 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
-                 
+
                   <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit border-0 px-0'>
-                      <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
+                      <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" enctype="multipart/form-data" onsubmit=\"return validateNodePickerForm();\">
 
                         <div class='form-group'>
                             <h3 for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }}</h3>
@@ -156,6 +164,33 @@
                             </div>
                         </div>
 
+                        <div id='image_field' class='row form-group".(($layout == 1)?"":" hidden")." mt-4'>
+                            <label for='course_image' class='col-12 control-label-notes'>{{ trans('langCourseImage') }}</label>
+                            <div class='col-12'>
+                                {!! fileSizeHidenInput() !!}
+                                <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
+                                    <li class='nav-item' role='presentation'>
+                                        <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'> {{ trans('langUpload') }}</button>
+                                    </li>
+                                    <li class='nav-item' role='presentation'>
+                                        <button class='nav-link' id='tabs-selectImage-tab' data-bs-toggle='tab' data-bs-target='#tabs-selectImage' type='button' role='tab' aria-controls='tabs-selectImage' aria-selected='false'>{{ trans('langAddPicture') }}</button>
+                                    </li>
+                                </ul>
+                                <div class='tab-content mt-3' id='tabs-tabContent'>
+                                    <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
+                                        <input type='file' name='course_image' id='course_image'>
+                                    </div>
+                                    <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
+                                        <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#CoursesImagesModal'>
+                                            <i class='fa-solid fa-image settings-icons'></i>&nbsp;{{ trans('langSelect') }}
+                                        </button>
+                                        <input type='hidden' id='choose_from_list' name='choose_from_list'>
+                                        <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class='form-group mt-4'>
                             <label for='description' class='col-sm-12 control-label-notes'>{{trans('langDescrInfo')}} <small>{{trans('langOptional')}}</small></label>
                             <div class='col-sm-12'>
@@ -167,7 +202,7 @@
                             <div class='form-group mt-4'>
                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</label>
 
-                               
+
                                 <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) pe-none opacity-help @endif">
                                   <label>
                                       <input type='radio' name='view_type' value='simple' id='simple'>
@@ -198,7 +233,7 @@
                                         {{ trans('langFlippedClassroom') }}
                                     </label>
                                 </div>
-                               
+
                                 <div class="radio @if(!get_config('show_collaboration') and !get_config('show_always_collaboration')) d-none @endif">
                                     <label>
                                         <input type='radio' name='view_type' value='sessions' id='sessions' @if(get_config('show_collaboration') and get_config('show_always_collaboration')) checked @endif>
@@ -291,19 +326,34 @@
                                     <div class='col-sm-12' text-center padding-thin>
                                         <span id='result'></span>
                                     </div>
-
                               </div>
-                              
-                              <div class='text-start mt-4 fw-bold'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
+
+                              <div class='text-start mt-4 fw-bold'>
+                                  <small>
+                                      {{ trans('langFieldsOptionalNote') }}
+                                  </small>
+                              </div>
 
                               <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
-
                                   <input class='btn submitAdminBtn' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
                                   <a href='{{ $cancel_link }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
-
                               </div>
 
-                        
+                            <div class='modal fade' id='CoursesImagesModal' tabindex='-1' aria-labelledby='CoursesImagesModalLabel' aria-hidden='true'>
+                                <div class='modal-dialog modal-lg'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <div class='modal-title' id='CoursesImagesModalLabel'>{{ trans('langCourseImage') }}</div>
+                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                                {!! $image_content !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                     {!! generate_csrf_token_form_field() !!}
                   </form>
@@ -312,10 +362,10 @@
               <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                 <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
               </div>
-              
-              
+
+
         </div>
-    
+
 </div>
 </div>
 @endsection
