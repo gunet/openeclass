@@ -142,9 +142,9 @@ if (isset($_GET['download'])) {
 // Delete deliverable
 // ---------------------------
 
-if(isset($_GET['del'])){
+if(isset($_POST['delete_resource'])){
     $r = Database::get()->querySingle("SELECT doc_id,from_user,is_completed FROM session_resources 
-                                                    WHERE res_id = ?d AND session_id = ?d",$_GET['del'],$sessionID);
+                                                    WHERE res_id = ?d AND session_id = ?d",$_POST['delete_resource'],$sessionID);
     if($r){
         $resource_id = $r->doc_id;
         if(!$is_consultant && $r->is_completed){
@@ -168,7 +168,7 @@ if(isset($_GET['del'])){
         
     }
 
-    $file = Database::get()->queryArray("SELECT filename,path,lock_user_id FROM document WHERE id = ?d",$_GET['del']);
+    $file = Database::get()->queryArray("SELECT filename,path,lock_user_id FROM document WHERE id = ?d",$_POST['delete_resource']);
     if(count($file) > 0){
         foreach($file as $f){
             $user_doc = $f->lock_user_id;
@@ -176,8 +176,8 @@ if(isset($_GET['del'])){
             unlink($target_dir.$f->path);
         }
     }
-    Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$_GET['del'],MYSESSIONS);
-    Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_GET['del']);
+    Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$_POST['delete_resource'],MYSESSIONS);
+    Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_POST['delete_resource']);
     Session::flash('message',$langSessionResourseDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 

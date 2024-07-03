@@ -139,7 +139,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        @if($is_consultant)
+                                        @if($is_consultant && $is_criterion_completion)
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
@@ -235,7 +235,7 @@
                                                                     'url' => "#",
                                                                     'icon' => 'fa-solid fa-award',
                                                                     'icon-class' => "add-award",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doUserAward{$doc->id}'",
+                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
                                                                     'show' => ($is_consultant && !$doc->completed)
                                                                 ),
                                                                 array(
@@ -243,7 +243,7 @@
                                                                     'url' => "#",
                                                                     'icon' => 'fa-solid fa-ban',
                                                                     'icon-class' => "remove-award",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#noUserAward{$doc->id}'",
+                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#noUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
                                                                     'show' => ($is_consultant && $doc->completed)
                                                                 ),
                                                                 array(
@@ -251,7 +251,7 @@
                                                                     'url' => "#",
                                                                     'icon' => 'fa-solid fa-comments',
                                                                     'icon-class' => "add-comments",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments{$doc->id}'",
+                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments' data-id='{$doc->id}' data-fileTitle='{$doc->fileTitle}' data-fileCreator='{$doc->creator}' data-forUserId='{$doc->user_sender}'",
                                                                     'show' => $is_consultant
                                                                 ),
                                                                 array(
@@ -264,7 +264,7 @@
                                                                     'title' => trans('langDelete'),
                                                                     'url' => '#',
                                                                     'icon' => 'fa-xmark',
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#docDelete{$doc->id}'",
+                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#docDelete' data-id='{$doc->id}'",
                                                                     'icon-class' => 'doc-delete',
                                                                     'show' => $doc->can_delete_file)
                                                             ))
@@ -283,123 +283,6 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-
-                                                    <div class='modal fade' id='doUserAward{{ $doc->id }}' tabindex='-1' aria-labelledby='doUserAwardLabel{{ $doc->id }}' aria-hidden='true'>
-                                                        <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
-                                                            <div class='modal-dialog modal-md'>
-                                                                <div class='modal-content'>
-                                                                    <div class='modal-header'>
-                                                                        <div class='modal-title'>
-                                                                            <div class='icon-modal-default'><i class='fa-solid fa-award fa-xl Neutral-500-cl'></i></div>
-                                                                            <h3 class="modal-title-default text-center mb-0 mt-2" id="doUserAwardLabel{{ $doc->id }}">{!! trans('langSubmitCompletion') !!}</h3>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='modal-body text-center'>
-                                                                        <input type='hidden' name='document_id' value='{{ $doc->id }}'>
-                                                                        <input type='hidden' name='userBadgeCriterionId' value='{{ $doc->user_badge_criterion_id }}'>
-                                                                        <input type='hidden' name='userSender' value='{{ $doc->user_sender }}'>
-                                                                        <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
-                                                                        {!! trans('langContinueToUserAwarded') !!}
-                                                                    </div>
-                                                                    <div class='modal-footer d-flex justify-content-center align-items-center'>
-                                                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                        <button type='submit' class="btn submitAdminBtn">
-                                                                            {{ trans('langInstallEnd') }}
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-
-                                                    <div class='modal fade' id='noUserAward{{ $doc->id }}' tabindex='-1' aria-labelledby='noUserAwardLabel{{ $doc->id }}' aria-hidden='true'>
-                                                        <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
-                                                            <div class='modal-dialog modal-md'>
-                                                                <div class='modal-content'>
-                                                                    <div class='modal-header'>
-                                                                        <div class='modal-title'>
-                                                                            <div class='icon-modal-default'><i class='fa-solid fa-award fa-xl Neutral-500-cl'></i></div>
-                                                                            <h3 class="modal-title-default text-center mb-0 mt-2" id="noUserAwardLabel{{ $doc->id }}">{!! trans('langNoSubmitCompletion') !!}</h3>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='modal-body text-center'>
-                                                                        <input type='hidden' name='document_id' value='{{ $doc->id }}'>
-                                                                        <input type='hidden' name='userBadgeCriterionId' value='{{ $doc->user_badge_criterion_id }}'>
-                                                                        <input type='hidden' name='userSender' value='{{ $doc->user_sender }}'>
-                                                                        <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
-                                                                        {!! trans('langContinueToNoSubmiCompletion') !!}
-                                                                    </div>
-                                                                    <div class='modal-footer d-flex justify-content-center align-items-center'>
-                                                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                        <button type='submit' class="btn submitAdminBtn">
-                                                                            {{ trans('langInstallEnd') }}
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-
-
-                                                    <div class='modal fade' id='doComments{{ $doc->id }}' tabindex='-1' aria-labelledby='doCommentsLabel{{ $doc->id }}' aria-hidden='true'>
-                                                        <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
-                                                            <div class='modal-dialog modal-md'>
-                                                                <div class='modal-content'>
-                                                                    <div class='modal-header'>
-                                                                        <div class='modal-title'>
-                                                                            <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
-                                                                            <h3 class="modal-title-default text-center mb-0 mt-2" id="doCommentsLabel{{ $doc->id }}">{!! trans('langAddComment') !!}</h3>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='modal-body text-start'>
-
-                                                                        <p class='control-label-notes'>{{ trans('langFileName') }}:&nbsp;<span>{{ $doc->fileTitle }}</span></p>
-                                                                        <p class='control-label-notes'>{{ trans('langUser') }}:&nbsp;<span>{{ $doc->creator }}</span></p>
-
-                                                                        <label for='comment_deliverable_{{ $doc->id }}' class='control-label-notes mt-4'>{{ trans('langComment') }}</label>
-                                                                        <textarea id='comment_deliverable_{{ $doc->id }}' name='add_comment' placeholder="{{ trans('langTypeOutComment') }}"></textarea>
-
-                                                                        <input type='hidden' name='for_resource_id' value='{{ $file_id }}'>
-                                                                        <input type='hidden' name='for_user_id' value='{{ $doc->user_sender }}'>
-                                                                        <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
-                                                                        
-                                                                    </div>
-                                                                    <div class='modal-footer d-flex justify-content-center align-items-center'>
-                                                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                        <button type='submit' class="btn submitAdminBtn">
-                                                                            {{ trans('langSubmit') }}
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-
-
-                                                    <div class='modal fade' id='docDelete{{ $doc->id }}' tabindex='-1' aria-labelledby='docDeleteLabel{{ $doc->id }}' aria-hidden='true'>
-                                                        <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&del={{ $doc->id }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
-                                                            <div class='modal-dialog modal-md'>
-                                                                <div class='modal-content'>
-                                                                    <div class='modal-header'>
-                                                                        <div class='modal-title'>
-                                                                            <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                                                                            <h3 class="modal-title-default text-center mb-0 mt-2" id="docDeleteLabel{{ $doc->id }}">{!! trans('langDelete') !!}</h3>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class='modal-body text-center'>
-                                                                        {{ trans('langContinueToDelSession') }}
-                                                                    </div>
-                                                                    <div class='modal-footer d-flex justify-content-center align-items-center'>
-                                                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                        <button type='submit' class="btn deleteAdminBtn">
-                                                                            {{ trans('langDelete') }}
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -499,10 +382,158 @@
     </div>
 </div>
 
+<div class='modal fade' id='doUserAward' tabindex='-1' aria-labelledby='doUserAwardLabel' aria-hidden='true'>
+    <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
+        <div class='modal-dialog modal-md'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <div class='modal-title'>
+                        <div class='icon-modal-default'><i class='fa-solid fa-award fa-xl Neutral-500-cl'></i></div>
+                        <h3 class="modal-title-default text-center mb-0 mt-2" id="doUserAwardLabel">{!! trans('langSubmitCompletion') !!}</h3>
+                    </div>
+                </div>
+                <div class='modal-body text-center'>
+                    <input type='hidden' name='document_id' id='document_id_yesAward'>
+                    <input type='hidden' name='userBadgeCriterionId' id='userBadgeCriterionId_yesAward'>
+                    <input type='hidden' name='userSender' id='userSender_yesAward'>
+                    <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
+                    {!! trans('langContinueToUserAwarded') !!}
+                </div>
+                <div class='modal-footer d-flex justify-content-center align-items-center'>
+                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                    <button type='submit' class="btn submitAdminBtn">
+                        {{ trans('langInstallEnd') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class='modal fade' id='noUserAward' tabindex='-1' aria-labelledby='noUserAwardLabel' aria-hidden='true'>
+    <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
+        <div class='modal-dialog modal-md'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <div class='modal-title'>
+                        <div class='icon-modal-default'><i class='fa-solid fa-award fa-xl Neutral-500-cl'></i></div>
+                        <h3 class="modal-title-default text-center mb-0 mt-2" id="noUserAwardLabel">{!! trans('langNoSubmitCompletion') !!}</h3>
+                    </div>
+                </div>
+                <div class='modal-body text-center'>
+                    <input type='hidden' name='document_id' id='document_id_noAward'>
+                    <input type='hidden' name='userBadgeCriterionId' id='userBadgeCriterionId_noAward'>
+                    <input type='hidden' name='userSender' id='userSender_noAward'>
+                    <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
+                    {!! trans('langContinueToNoSubmiCompletion') !!}
+                </div>
+                <div class='modal-footer d-flex justify-content-center align-items-center'>
+                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                    <button type='submit' class="btn submitAdminBtn">
+                        {{ trans('langSubmit') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class='modal fade' id='doComments' tabindex='-1' aria-labelledby='doCommentsLabel' aria-hidden='true'>
+    <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
+        <div class='modal-dialog modal-md'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <div class='modal-title'>
+                        <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
+                        <h3 class="modal-title-default text-center mb-0 mt-2" id="doCommentsLabel">{!! trans('langAddComment') !!}</h3>
+                    </div>
+                </div>
+                <div class='modal-body text-start'>
+                    <p class='control-label-notes'>{{ trans('langFileName') }}:&nbsp;<span id='fileTitle'></span></p>
+                    <p class='control-label-notes'>{{ trans('langUser') }}:&nbsp;<span id='fileCreator'></span></p>
+                    <label for='comment_deliverable' class='control-label-notes mt-4'>{{ trans('langComment') }}</label>
+                    <textarea id='comment_deliverable' name='add_comment' placeholder="{{ trans('langTypeOutComment') }}"></textarea>
+                    <input type='hidden' name='for_resource_id' value='{{ $file_id }}'>
+                    <input type='hidden' name='for_user_id' id='forUserId'>
+                    <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
+                </div>
+                <div class='modal-footer d-flex justify-content-center align-items-center'>
+                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                    <button type='submit' class="btn submitAdminBtn">
+                        {{ trans('langSubmit') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class='modal fade' id='docDelete' tabindex='-1' aria-labelledby='docDeleteLabel' aria-hidden='true'>
+    <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">
+        <div class='modal-dialog modal-md'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <div class='modal-title'>
+                        <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
+                        <h3 class="modal-title-default text-center mb-0 mt-2" id="docDeleteLabel">{!! trans('langDelete') !!}</h3>
+                    </div>
+                </div>
+                <div class='modal-body text-center'>
+                    <input type='hidden' name='delete_resource' id='deleteResource'>
+                    {{ trans('langContinueToDelSession') }}
+                </div>
+                <div class='modal-footer d-flex justify-content-center align-items-center'>
+                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                    <button type='submit' class="btn deleteAdminBtn">
+                        {{ trans('langDelete') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 <script>
-    $('.fileModal').click(function (e)
-    {
+    $(function() {
+        $(document).on('click', '.add-award', function(e){
+            e.preventDefault();
+            var doc_id = $(this).attr('data-id');
+            var user_badge_criterion_id = $(this).attr('data-userBadgeCriterionId');
+            var user_sender = $(this).attr('data-userSender');
+            document.getElementById("document_id_yesAward").value = doc_id;
+            document.getElementById("userBadgeCriterionId_yesAward").value = user_badge_criterion_id;
+            document.getElementById("userSender_yesAward").value = user_sender;
+        });
+        $(document).on('click', '.remove-award', function(e){
+            e.preventDefault();
+            var doc_id = $(this).attr('data-id');
+            var user_badge_criterion_id = $(this).attr('data-userBadgeCriterionId');
+            var user_sender = $(this).attr('data-userSender');
+            document.getElementById("document_id_noAward").value = doc_id;
+            document.getElementById("userBadgeCriterionId_noAward").value = user_badge_criterion_id;
+            document.getElementById("userSender_noAward").value = user_sender;
+        });
+        $(document).on('click', '.add-comments', function(e){
+            e.preventDefault();
+            var doc_id = $(this).attr('data-id');
+            var file_title = $(this).attr('data-fileTitle');
+            var file_creator = $(this).attr('data-fileCreator');
+            var user_sender = $(this).attr('data-forUserId');
+            document.getElementById("fileTitle").innerHTML = file_title;
+            document.getElementById("fileCreator").innerHTML = file_creator;
+            document.getElementById("forUserId").value = user_sender;
+        });
+        $(document).on('click', '.doc-delete', function(e){
+            e.preventDefault();
+            var doc_id = $(this).attr('data-id');
+            document.getElementById("deleteResource").value = doc_id;
+        });
+    });
+</script>
+
+
+<script>
+    $('.fileModal').click(function (e){
         e.preventDefault();
         var fileURL = $(this).attr('href');
         var downloadURL = $(this).prev('input').val();
