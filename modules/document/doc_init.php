@@ -131,7 +131,7 @@ function doc_init() {
             $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;session=' . $sessionID;
             $upload_target_url = $urlAppend . 'modules/session/resourse.php?course=' . $course_code . '&amp;session=' . $sessionID;
             $subsystem_id = $sessionID;
-            $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
+            $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id AND lock_user_id = $user_uploader";
             $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID . '/' . $user_uploader;
         } else{
             $subsystem = MAIN;

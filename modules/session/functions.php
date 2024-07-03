@@ -1049,44 +1049,23 @@ function upload_session_doc($sid){
         redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
     }
 
-    //if file exists
-    $path_exists = Database::get()->queryArray("SELECT * FROM document
-                                        WHERE course_id = ?d 
-                                        AND subsystem = ?d 
-                                        AND subsystem_id = ?d 
-                                        AND filename = ?s 
-                                        AND lock_user_id = ?d",
-                                        $course_id, MYSESSIONS, $sid, $_FILES['file-upload']['name'], $uid);
+    // If uploaded file exists do not continue. 
+    // This uploaded file does not refer to deliverable but refers to resource of a session.
+    if($is_consultant && !isset($_POST['for_deliverable']) && !isset($_POST['for_file'])){
+        $path_exists = Database::get()->queryArray("SELECT * FROM document
+                                                    WHERE course_id = ?d 
+                                                    AND subsystem = ?d 
+                                                    AND subsystem_id = ?d 
+                                                    AND filename = ?s",
+                                                    $course_id, MYSESSIONS, $sid, $_FILES['file-upload']['name']);
 
-    if (count($path_exists) > 0) {
-        Session::flash('message',$langFileExists);
-        Session::flash('alert-class', 'alert-danger');
-        if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
-            redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
-        }else{
+        if (count($path_exists) > 0) {
+            Session::flash('message',$langFileExists);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
         }
     }
 
-    // if exists file with same name in a session
-    $checkFilename = Database::get()->queryArray("SELECT filename FROM document
-                                                    WHERE course_id = ?d 
-                                                    AND subsystem = ?d 
-                                                    AND subsystem_id = ?d",$course_id,MYSESSIONS,$sid);
-
-    if(count($checkFilename) > 0){
-        foreach($checkFilename as $f){
-            if($f->filename == $_FILES['file-upload']['name']){
-                Session::flash('message',$langFileExists);
-                Session::flash('alert-class', 'alert-danger');
-                if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
-                    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
-                }else{
-                    redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_upload");
-                }
-            }
-        }
-    }
 
     // upload attached file
     if (isset($_FILES['file-upload']) and is_uploaded_file($_FILES['file-upload']['tmp_name'])) { // upload comments file
