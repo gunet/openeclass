@@ -65,7 +65,7 @@ function view($view_file, $view_data = array()) {
             $require_editor, $langHomePage, $is_in_tinymce, $action_bar,
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
-            $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course, 
+            $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
             $is_consultant, $require_consultant, $is_coordinator;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
@@ -310,12 +310,12 @@ function view($view_file, $view_data = array()) {
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 
-        $styles_str .= " 
+        $styles_str .= "
 
             #submitSearch{
                 gap: 8px;
             }
-            #search_terms{ 
+            #search_terms{
                 border-color: transparent;
                 background-color: transparent;
             }
@@ -335,7 +335,7 @@ function view($view_file, $view_data = array()) {
             .calendarViewDatesTutorGroup .fc-list-table .fc-list-heading .fc-widget-header {
                 background: transparent;
             }
-        
+
         ";
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -431,8 +431,8 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['loginImg'])){
                 $styles_str .= "
                     .jumbotron.jumbotron-login{
-                        background: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
-                        border:0px; 
+                        background: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str;
+                        border:0px;
                         background-size: 100% 100%;
                         background-repeat: no-repeat;
                         background-position: 50% 50%;
@@ -533,17 +533,17 @@ function view($view_file, $view_data = array()) {
             $middleWidthFormImg = ($middleWidthFormImg - 350)/2;
             $middleWidthFormImg = $middleWidthFormImg ."px";
             $styles_str .= "
-            
+
                 @media(min-width:992px){
                     .main-section:has(.course-wrapper) .form-image-modules{
                         max-width: $middleWidthFormImg;
                         float:right;
                     }
                 }
-                
+
                 .main-section:not(:has(.course-wrapper)) .form-image-modules{
                     width:100%;
-                } 
+                }
             ";
         }
 
@@ -571,7 +571,7 @@ function view($view_file, $view_data = array()) {
                 p,strong,.li-indented,li,small,
                 .Neutral-900-cl,
                 .agenda-comment,
-                .form-label, 
+                .form-label,
                 .default-value,
                 label,
                 th,
@@ -590,10 +590,10 @@ function view($view_file, $view_data = array()) {
                 }
 
 
-                .dataTables_wrapper .dataTables_length, 
-                .dataTables_wrapper .dataTables_filter, 
-                .dataTables_wrapper .dataTables_info, 
-                .dataTables_wrapper .dataTables_processing, 
+                .dataTables_wrapper .dataTables_length,
+                .dataTables_wrapper .dataTables_filter,
+                .dataTables_wrapper .dataTables_info,
+                .dataTables_wrapper .dataTables_processing,
                 .dataTables_wrapper .dataTables_paginate {
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
@@ -612,12 +612,12 @@ function view($view_file, $view_data = array()) {
                     color: #2B3944;
                 }
 
-                .panel-default .panel-heading .panel-title, 
+                .panel-default .panel-heading .panel-title,
                 .panel-action-btn-default .panel-heading .panel-title {
                     color:$theme_options_styles[ColorHyperTexts] ;
                 }
 
-                .panel-default .panel-heading, 
+                .panel-default .panel-heading,
                 .panel-action-btn-default .panel-heading {
                     color:$theme_options_styles[ColorHyperTexts] ;
                 }
@@ -634,7 +634,7 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['BgColorWrapperHeader'])) {
             $styles_str .= "
 
-                #bgr-cheat-header{ 
+                #bgr-cheat-header{
                     background-color: $theme_options_styles[BgColorWrapperHeader];
                 }
 
@@ -795,7 +795,7 @@ function view($view_file, $view_data = array()) {
                 .header-mobile-link:focus{
                     color:$theme_options_styles[linkHoverColorHeader];
                 }
-                
+
             ";
         }
 
@@ -813,7 +813,7 @@ function view($view_file, $view_data = array()) {
                 .container-items .menu-item.active2:hover,
                 .container-items .menu-item.active2:focus{
                     color: $theme_options_styles[HoveredActiveLinkColorHeader];
-                } 
+                }
             ";
         }
 
@@ -824,11 +824,11 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
 
         if (isset($theme_options_styles['shadowHeader'])){
-            $styles_str .= " 
+            $styles_str .= "
                 #bgr-cheat-header{ box-shadow: none; }
             ";
         }else{
-            $styles_str .= " 
+            $styles_str .= "
                 #bgr-cheat-header{ box-shadow: 1px 2px 6px rgba(43,57,68,0.04); }
             ";
         }
@@ -846,8 +846,8 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColorFooter];
                 }
 
-                .copyright, 
-                .social-icon-tool, 
+                .copyright,
+                .social-icon-tool,
                 .a_tools_site_footer {
                     color:$theme_options_styles[linkColorFooter];
                 }
@@ -883,7 +883,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColorFooter];
                 }
 
-                
+
             ";
         }
 
@@ -985,7 +985,7 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['clActiveAccordions'])){
             $styles_str .= "
-                .group-section .list-group-item .accordion-btn[aria-expanded='true'], 
+                .group-section .list-group-item .accordion-btn[aria-expanded='true'],
                 .group-section .list-group-item .accordion-btn.showAll{
                     color: $theme_options_styles[clActiveAccordions];
                 }
@@ -1010,7 +1010,7 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.element{
                     background-color: $theme_options_styles[bgLists];
                 }
-                
+
             ";
         }
 
@@ -1031,7 +1031,7 @@ function view($view_file, $view_data = array()) {
                 .profile-pers-info-row{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
                 }
-                
+
             ";
         }
 
@@ -1053,7 +1053,7 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.element a span{
                     color: $theme_options_styles[clLists];
                 }
-                
+
             ";
         }
 
@@ -1075,7 +1075,7 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.element a span:hover{
                     color: $theme_options_styles[clHoveredLists];
                 }
-                
+
             ";
         }
 
@@ -1086,7 +1086,7 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
 
         if (isset($theme_options_styles['AddPaddingListGroup'])){
-            $styles_str .= " 
+            $styles_str .= "
                 .list-group-item.list-group-item-action,
                 .list-group-item.element{
                     padding-left: 15px;
@@ -1099,7 +1099,7 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }else{
-            $styles_str .= " 
+            $styles_str .= "
                 .list-group-item.list-group-item-action,
                 .list-group-item.element{
                     padding-left: 0px;
@@ -1116,13 +1116,13 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['bgWhiteButtonColor'])) {
             $styles_str .= "
-                .submitAdminBtn, 
+                .submitAdminBtn,
                 .cancelAdminBtn,
                 .opencourses_btn {
                     background-color: $theme_options_styles[bgWhiteButtonColor];
                 }
 
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
                     background-color: $theme_options_styles[bgWhiteButtonColor] !important;
                 }
@@ -1186,13 +1186,13 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn, 
+                .submitAdminBtn,
                 .cancelAdminBtn,
                 .opencourses_btn {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
                     color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
@@ -1201,7 +1201,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
-                .submitAdminBtn .fa-solid::before, 
+                .submitAdminBtn .fa-solid::before,
                 .submitAdminBtn .fa-regular::before,
                 .submitAdminBtn .fa-brands::before,
                 .submitAdminBtn span.fa::before{
@@ -1254,13 +1254,13 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonBorderTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn, 
+                .submitAdminBtn,
                 .cancelAdminBtn,
                 .opencourses_btn {
                     border-color: $theme_options_styles[whiteButtonBorderTextColor];
                 }
 
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
                     border-color: $theme_options_styles[whiteButtonBorderTextColor] !important;
                 }
@@ -1307,16 +1307,16 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonHoveredTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn:hover, 
+                .submitAdminBtn:hover,
                 .cancelAdminBtn:hover,
                 .opencourses_btn:hover,
-                .submitAdminBtn:focus, 
+                .submitAdminBtn:focus,
                 .cancelAdminBtn:focus,
                 .opencourses_btn:focus {
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover {
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
@@ -1326,7 +1326,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
-                .submitAdminBtn .fa-solid::before:hover, 
+                .submitAdminBtn .fa-solid::before:hover,
                 .submitAdminBtn .fa-regular::before:hover,
                 .submitAdminBtn .fa-brands::before:hover,
                 .submitAdminBtn span.fa::before:hover{
@@ -1390,16 +1390,16 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonHoveredBorderTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn:hover, 
+                .submitAdminBtn:hover,
                 .cancelAdminBtn:hover,
                 .opencourses_btn:hover,
-                .submitAdminBtn:focus, 
+                .submitAdminBtn:focus,
                 .cancelAdminBtn:focus,
                 .opencourses_btn:focus {
                     border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
                 }
 
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover {
                     border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
@@ -1454,10 +1454,10 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonHoveredBgColor'])) {
             $styles_str .= "
-                .submitAdminBtn:hover, 
+                .submitAdminBtn:hover,
                 .cancelAdminBtn:hover,
                 .opencourses_btn:hover,
-                .submitAdminBtn:focus, 
+                .submitAdminBtn:focus,
                 .cancelAdminBtn:focus,
                 .opencourses_btn:focus {
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
@@ -1532,8 +1532,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                 }
 
-                .submitAdminBtnDefault, 
-                input[type=submit], 
+                .submitAdminBtnDefault,
+                input[type=submit],
                 button[type=submit]{
                     border-color: $theme_options_styles[buttonBgColor];
                     background-color: $theme_options_styles[buttonBgColor];
@@ -1549,7 +1549,7 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonBgColor] ;
                     background-color: $theme_options_styles[buttonBgColor] ;
                 }
-               
+
 
                 .carousel-indicators>button.active {
                     border-color: tranparent;
@@ -1561,8 +1561,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                     border-color: $theme_options_styles[buttonBgColor];
                 }
-               
-                .bootbox.show .modal-footer .submitAdminBtn, 
+
+                .bootbox.show .modal-footer .submitAdminBtn,
                 .modal.show .modal-footer .submitAdminBtn {
                     border-color: $theme_options_styles[buttonBgColor];
                     background-color: $theme_options_styles[buttonBgColor];
@@ -1577,7 +1577,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                 }
 
-                
+
                 .searchGroupBtn{
                     background-color: $theme_options_styles[buttonBgColor];
                 }
@@ -1606,7 +1606,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor] !important;
                     border-color: $theme_options_styles[buttonBgColor] !important;
                 }
-                  
+
 
             ";
 
@@ -1658,38 +1658,38 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['buttonHoverBgColor'])) {
             $styles_str .= "
-                
+
                 submitAdminBtn.active:hover{
                 border-color: $theme_options_styles[buttonHoverBgColor];
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
-                
+
                 .login-form-submit:hover {
                     border-color: $theme_options_styles[buttonHoverBgColor];
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
-                
+
                 .submitAdminBtnDefault:hover,
                 input[type=submit]:hover,
                 button[type=submit]:hover{
                     border-color: $theme_options_styles[buttonHoverBgColor];
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
-                
-                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover, 
+
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
                     border-color: $theme_options_styles[buttonHoverBgColor] ;
                     background-color: $theme_options_styles[buttonHoverBgColor] ;
                 }
-                
+
                 .pagination-glossary .page-item.active .page-link:hover {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                     border-color: $theme_options_styles[buttonHoverBgColor];
                 }
-            
-                
-                
-                .bootbox.show .modal-footer .submitAdminBtn:hover, 
+
+
+
+                .bootbox.show .modal-footer .submitAdminBtn:hover,
                 .modal.show .modal-footer .submitAdminBtn:hover {
                     border-color: $theme_options_styles[buttonHoverBgColor];
                     background-color: $theme_options_styles[buttonHoverBgColor];
@@ -1758,22 +1758,22 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['buttonTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn.active, 
+                .submitAdminBtn.active,
                 .submitAdminBtn.active:hover{
                     color: $theme_options_styles[buttonTextColor];
                 }
 
-                .submitAdminBtnDefault, 
+                .submitAdminBtnDefault,
                 .submitAdminBtnDefault:hover{
                     color: $theme_options_styles[buttonTextColor];
                 }
 
-                .login-form-submit, 
+                .login-form-submit,
                 .login-form-submit:hover{
                     color: $theme_options_styles[buttonTextColor];
                 }
-                
-                input[type=submit], 
+
+                input[type=submit],
                 input[type=submit]:hover,
                 button[type=submit],
                 button[type=submit]:hover{
@@ -1785,7 +1785,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
-                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover, 
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn,
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
                     color: $theme_options_styles[buttonTextColor];
@@ -1804,8 +1804,8 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
 
-                .bootbox.show .modal-footer .submitAdminBtn, 
-                .bootbox.show .modal-footer .submitAdminBtn:hover, 
+                .bootbox.show .modal-footer .submitAdminBtn,
+                .bootbox.show .modal-footer .submitAdminBtn:hover,
                 .modal.show .modal-footer .submitAdminBtn,
                 .modal.show .modal-footer .submitAdminBtn:hover {
                     color: $theme_options_styles[buttonTextColor] ;
@@ -1825,7 +1825,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[buttonTextColor] ;
                 }
 
-                .submitAdminBtnDefault .fa-solid::before, 
+                .submitAdminBtnDefault .fa-solid::before,
                 .submitAdminBtnDefault .fa-solid::before:hover,
                 .submitAdminBtnDefault .fa-regular::before,
                 .submitAdminBtnDefault .fa-regular::before:hover,
@@ -1848,7 +1848,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[buttonTextColor] ;
                 }
 
-                
+
                 .showCoursesBars.active,
                 .showCoursesBars.active:hover,
                 .showCoursesBars.active:focus,
@@ -1862,7 +1862,7 @@ function view($view_file, $view_data = array()) {
                 .mce-btn i{
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
-                
+
                 .personal-calendar-header .btn-group .btn.active{
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
@@ -1885,7 +1885,7 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['bgDeleteButtonColor'])) {
             $styles_str .= "
-                .deleteAdminBtn, 
+                .deleteAdminBtn,
                 button[type=submit].deleteAdminBtn,
                 input[type=submit].deleteAdminBtn {
                     border-color: $theme_options_styles[bgDeleteButtonColor];
@@ -1893,7 +1893,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .btn.btn-danger,
-                .delete.confirmAction, 
+                .delete.confirmAction,
                 .delete.delete_btn{
                     border-color: $theme_options_styles[bgDeleteButtonColor];
                     background-color: $theme_options_styles[bgDeleteButtonColor];
@@ -1909,25 +1909,25 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['clDeleteButtonColor'])) {
             $styles_str .= "
-                .deleteAdminBtn, 
+                .deleteAdminBtn,
                 button[type=submit].deleteAdminBtn,
                 input[type=submit].deleteAdminBtn {
                     color: $theme_options_styles[clDeleteButtonColor];
                 }
 
                 .btn.btn-danger,
-                .delete.confirmAction, 
+                .delete.confirmAction,
                 .delete.delete_btn{
                     color: $theme_options_styles[clDeleteButtonColor];
                 }
 
-                .deleteAdminBtn .fa-solid::before, 
-                .deleteAdminBtn .fa-regular::before, 
-                .deleteAdminBtn .fa-brands::before, 
+                .deleteAdminBtn .fa-solid::before,
+                .deleteAdminBtn .fa-regular::before,
+                .deleteAdminBtn .fa-brands::before,
                 .deleteAdminBtn .fa::before{
                     color: $theme_options_styles[clDeleteButtonColor] !important;
                 }
-                  
+
             ";
         }
 
@@ -1947,12 +1947,12 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .btn.btn-danger:hover,
-                .delete.confirmAction:hover, 
+                .delete.confirmAction:hover,
                 .delete.delete_btn:hover{
                     border-color: $theme_options_styles[bgHoveredDeleteButtonColor];
                     background-color: $theme_options_styles[bgHoveredDeleteButtonColor];
                 }
-                  
+
             ";
         }
 
@@ -1971,18 +1971,18 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .btn.btn-danger:hover,
-                .delete.confirmAction:hover, 
+                .delete.confirmAction:hover,
                 .delete.delete_btn:hover{
                     color: $theme_options_styles[clHoveredDeleteButtonColor];
                 }
 
-                .deleteAdminBtn:hover .fa-solid::before, 
-                .deleteAdminBtn:hover .fa-regular::before, 
-                .deleteAdminBtn:hover .fa-brands::before, 
+                .deleteAdminBtn:hover .fa-solid::before,
+                .deleteAdminBtn:hover .fa-regular::before,
+                .deleteAdminBtn:hover .fa-brands::before,
                 .deleteAdminBtn:hover .fa::before{
                     color: $theme_options_styles[clHoveredDeleteButtonColor] !important;
                 }
-                  
+
             ";
         }
 
@@ -1994,7 +1994,7 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['bgSuccessButtonColor'])) {
             $styles_str .= "
-                .successAdminBtn, 
+                .successAdminBtn,
                 button[type=submit].successAdminBtn,
                 input[type=submit].successAdminBtn {
                     border-color: $theme_options_styles[bgSuccessButtonColor];
@@ -2016,7 +2016,7 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['clSuccessButtonColor'])) {
             $styles_str .= "
-                .successAdminBtn, 
+                .successAdminBtn,
                 button[type=submit].successAdminBtn,
                 input[type=submit].successAdminBtn {
                     color: $theme_options_styles[clSuccessButtonColor];
@@ -2026,13 +2026,13 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clSuccessButtonColor];
                 }
 
-                .successAdminBtn .fa-solid::before, 
-                .successAdminBtn .fa-regular::before, 
-                .successAdminBtn .fa-brands::before, 
+                .successAdminBtn .fa-solid::before,
+                .successAdminBtn .fa-regular::before,
+                .successAdminBtn .fa-brands::before,
                 .successAdminBtn .fa::before{
                     color: $theme_options_styles[clSuccessButtonColor] !important;
                 }
-                  
+
             ";
         }
 
@@ -2055,7 +2055,7 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[bgHoveredSuccessButtonColor];
                     background-color: $theme_options_styles[bgHoveredSuccessButtonColor];
                 }
-                  
+
             ";
         }
 
@@ -2077,13 +2077,13 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clHoveredSuccessButtonColor];
                 }
 
-                .successAdminBtn:hover .fa-solid::before, 
-                .successAdminBtn:hover .fa-regular::before, 
-                .successAdminBtn:hover .fa-brands::before, 
+                .successAdminBtn:hover .fa-solid::before,
+                .successAdminBtn:hover .fa-regular::before,
+                .successAdminBtn:hover .fa-brands::before,
                 .successAdminBtn:hover .fa::before{
                     color: $theme_options_styles[clHoveredSuccessButtonColor] !important;
                 }
-                  
+
             ";
         }
 
@@ -2114,12 +2114,12 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clHelpButtonColor];
                 }
 
-                .helpAdminBtn .fa-solid::before, 
-                .helpAdminBtn .fa-regular::before, 
-                .helpAdminBtn .fa-brands::before, 
+                .helpAdminBtn .fa-solid::before,
+                .helpAdminBtn .fa-regular::before,
+                .helpAdminBtn .fa-brands::before,
                 .helpAdminBtn .fa::before{
                     color: $theme_options_styles[clHelpButtonColor] !important;
-                }  
+                }
             ";
         }
 
@@ -2134,7 +2134,7 @@ function view($view_file, $view_data = array()) {
                 .helpAdminBtn:hover {
                     border-color: $theme_options_styles[bgHoveredHelpButtonColor];
                     background-color: $theme_options_styles[bgHoveredHelpButtonColor];
-                } 
+                }
             ";
         }
 
@@ -2150,20 +2150,20 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clHoveredHelpButtonColor];
                 }
 
-                .helpAdminBtn:hover .fa-solid::before, 
-                .helpAdminBtn:hover .fa-regular::before, 
-                .helpAdminBtn:hover .fa-brands::before, 
+                .helpAdminBtn:hover .fa-solid::before,
+                .helpAdminBtn:hover .fa-regular::before,
+                .helpAdminBtn:hover .fa-brands::before,
                 .helpAdminBtn:hover .fa::before{
                     color: $theme_options_styles[clHoveredHelpButtonColor] !important;
                 }
-                  
+
             ";
         }
 
         // Override button with white background if needed
         if (empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
                     background-color:#ffffff;
                     border-color: #0073E6;
@@ -2173,7 +2173,7 @@ function view($view_file, $view_data = array()) {
         }
         if (empty($theme_options_styles['whiteButtonHoveredTextColor'])) {
             $styles_str .= "
-                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover, 
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover {
                     background-color:#ffffff;
                     border-color: #0073E6;
@@ -2246,7 +2246,7 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu input[type='submit']{
                     background-color: $theme_options_styles[bgColorListMenu];
                 }
- 
+
             ";
         }
 
@@ -2263,7 +2263,7 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu input[type='submit']{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomListMenu];
                 }
- 
+
             ";
         }
 
@@ -2284,7 +2284,7 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu .list-group-item .settings-icons::before{
                     color: $theme_options_styles[clListMenu];
                 }
- 
+
             ";
         }
 
@@ -2301,7 +2301,7 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu input[type='submit']:hover{
                     background-color: $theme_options_styles[bgHoveredListMenu];
                 }
- 
+
             ";
         }
 
@@ -2321,7 +2321,7 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu .list-group-item:hover .settings-icons::before{
                     color: $theme_options_styles[clHoveredListMenu];
                 }
- 
+
             ";
         }
 
@@ -2336,8 +2336,8 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu-user .username-text,
                 .contextual-menu-user .username-paragraph{
                     color:$theme_options_styles[clListMenuUsername];
-                } 
- 
+                }
+
             ";
         }
 
@@ -2351,8 +2351,8 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .contextual-menu-user .logout-list-item *{
                     color:$theme_options_styles[clListMenuLogout];
-                } 
- 
+                }
+
             ";
         }
 
@@ -2374,7 +2374,7 @@ function view($view_file, $view_data = array()) {
                 .contextual-menu .list-group-item:has(.fa-times) .fa::before{
                     color: $theme_options_styles[clListMenuDeletion] !important;
                 }
- 
+
             ";
         }
 
@@ -2415,9 +2415,9 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['ClRadios'])){
             $styles_str .= "
-                .radio label{ 
+                .radio label{
                     color: $theme_options_styles[ClRadios];
-                } 
+                }
 
                 input[type='radio']{
                     color:  $theme_options_styles[ClRadios];
@@ -2437,7 +2437,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgClRadios'])){
             $styles_str .= "
-                input[type='radio']:checked { 
+                input[type='radio']:checked {
                     border: solid 6px $theme_options_styles[BgClRadios];
                 }
                 .input-StatusCourse:checked{
@@ -2448,7 +2448,7 @@ function view($view_file, $view_data = array()) {
                 .form-wrapper.form-edit label:has(input[type='radio']:checked){
                     color: $theme_options_styles[BgClRadios];
                 }
-                
+
                 .radio label:has(input[type='radio']:checked),
                 .radio:has(input[type='radio']:checked) .help-block{
                     color: $theme_options_styles[BgClRadios];
@@ -2619,20 +2619,20 @@ function view($view_file, $view_data = array()) {
                 .form-control,
                 .login-input,
                 .login-input::placeholder,
-                input[type='text'], 
-                input[type='password'], 
+                input[type='text'],
+                input[type='password'],
                 input[type='number'],
                 input[type='search'],
                 input[type='url'],
                 input[type='email']{
                     background-color: $theme_options_styles[BgInput];
                 }
-                
+
                 textarea,
                 textarea.form-control{
                     background-color: $theme_options_styles[BgInput];
                 }
-                
+
                 input[type='text']:focus,
                 input[type='datetime']:focus,
                 input[type='datetime-local']:focus,
@@ -2649,7 +2649,7 @@ function view($view_file, $view_data = array()) {
                 .form-control:focus,
                 .uneditable-input:focus,
                 textarea:focus,
-                .login-input:focus {   
+                .login-input:focus {
                     background-color: $theme_options_styles[BgInput];
                 }
 
@@ -2661,14 +2661,14 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper input[type='search']{
                     background-color: $theme_options_styles[BgInput] !important;
                 }
-                
+
                 .dataTables_wrapper input[type='text']:focus,
                 .dataTables_wrapper input[type='number']:focus,
                 .dataTables_wrapper input[type='email']:focus,
                 .dataTables_wrapper input[type='url']:focus,
                 .dataTables_wrapper input[type='search']:focus,
                 .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {   
+                .dataTables_wrapper .uneditable-input:focus {
                     background-color: $theme_options_styles[BgInput] !important;
                 }
 
@@ -2686,16 +2686,16 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgInput];
                 }
 
-                input:-webkit-autofill, 
-                input:-webkit-autofill:hover, 
-                input:-webkit-autofill:focus, 
-                textarea:-webkit-autofill, 
-                textarea:-webkit-autofill:hover, 
+                input:-webkit-autofill,
+                input:-webkit-autofill:hover,
+                input:-webkit-autofill:focus,
+                textarea:-webkit-autofill,
+                textarea:-webkit-autofill:hover,
                 textarea:-webkit-autofill:focus {
                     background-color: $theme_options_styles[BgInput];
                     -webkit-box-shadow: 0 0 0 30px $theme_options_styles[BgInput] inset !important;
                 }
-                
+
 
             ";
         }
@@ -2712,20 +2712,20 @@ function view($view_file, $view_data = array()) {
                 .form-control,
                 .login-input,
                 .login-input::placeholder,
-                input[type='text'], 
-                input[type='password'], 
+                input[type='text'],
+                input[type='password'],
                 input[type='number'],
                 input[type='search'],
                 input[type='url'],
                 input[type='email']{
                     border-color: $theme_options_styles[clBorderInput];
                 }
-                
+
                 textarea,
                 textarea.form-control{
                     border-color: $theme_options_styles[clBorderInput];
                 }
-                
+
                 input[type='text']:focus,
                 input[type='datetime']:focus,
                 input[type='datetime-local']:focus,
@@ -2742,15 +2742,15 @@ function view($view_file, $view_data = array()) {
                 .form-control:focus,
                 .uneditable-input:focus,
                 textarea:focus,
-                .login-input:focus {   
+                .login-input:focus {
                     border-color: $theme_options_styles[clBorderInput];
                 }
 
-                input:-webkit-autofill, 
-                input:-webkit-autofill:hover, 
-                input:-webkit-autofill:focus, 
-                textarea:-webkit-autofill, 
-                textarea:-webkit-autofill:hover, 
+                input:-webkit-autofill,
+                input:-webkit-autofill:hover,
+                input:-webkit-autofill:focus,
+                textarea:-webkit-autofill,
+                textarea:-webkit-autofill:hover,
                 textarea:-webkit-autofill:focus {
                     border: 1px solid $theme_options_styles[clBorderInput];
                 }
@@ -2771,7 +2771,7 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper input[type='url']:focus,
                 .dataTables_wrapper input[type='search']:focus,
                 .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {   
+                .dataTables_wrapper .uneditable-input:focus {
                     border-color: $theme_options_styles[clBorderInput] !important;
                 }
 
@@ -2782,7 +2782,7 @@ function view($view_file, $view_data = array()) {
                 .form-control:disabled {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
-                
+
 
                 .wallWrapper textarea:focus{
                     border-color: $theme_options_styles[clBorderInput] ;
@@ -2804,21 +2804,21 @@ function view($view_file, $view_data = array()) {
                 .form-control::placeholder,
                 .login-input::placeholder,
                 .login-input,
-                input[type='text'], 
-                input[type='password'], 
+                input[type='text'],
+                input[type='password'],
                 input[type='number'],
                 input[type='search'],
                 input[type='url'],
                 input[type='email']{
                     color: $theme_options_styles[clInputText];
                 }
-                
+
                 textarea,
                 textarea::placeholder,
                 textarea.form-control{
                     color: $theme_options_styles[clInputText];
                 }
-                
+
                 input[type='text']:focus,
                 input[type='datetime']:focus,
                 input[type='datetime-local']:focus,
@@ -2835,15 +2835,15 @@ function view($view_file, $view_data = array()) {
                 .form-control:focus,
                 .uneditable-input:focus,
                 textarea:focus,
-                .login-input:focus {   
+                .login-input:focus {
                     color: $theme_options_styles[clInputText];
                 }
 
-                input:-webkit-autofill, 
-                input:-webkit-autofill:hover, 
-                input:-webkit-autofill:focus, 
-                textarea:-webkit-autofill, 
-                textarea:-webkit-autofill:hover, 
+                input:-webkit-autofill,
+                input:-webkit-autofill:hover,
+                input:-webkit-autofill:focus,
+                textarea:-webkit-autofill,
+                textarea:-webkit-autofill:hover,
                 textarea:-webkit-autofill:focus {
                     -webkit-text-fill-color: $theme_options_styles[clInputText];
                 }
@@ -2853,7 +2853,7 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper input::placeholder{
                     color: $theme_options_styles[clInputText] !important;
                 }
-                  
+
                 .dataTables_wrapper input[type='text'],
                 .dataTables_wrapper input[type='password'],
                 .dataTables_wrapper input[type='email'],
@@ -2862,14 +2862,14 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper input[type='search']{
                     color: $theme_options_styles[clInputText] !important;
                 }
-                
+
                 .dataTables_wrapper input[type='text']:focus,
                 .dataTables_wrapper input[type='number']:focus,
                 .dataTables_wrapper input[type='email']:focus,
                 .dataTables_wrapper input[type='url']:focus,
                 .dataTables_wrapper input[type='search']:focus,
                 .dataTables_wrapper .form-control:focus,
-                .dataTables_wrapper .uneditable-input:focus {   
+                .dataTables_wrapper .uneditable-input:focus {
                     color: $theme_options_styles[clInputText] !important;
                 }
 
@@ -2892,7 +2892,7 @@ function view($view_file, $view_data = array()) {
                 select.form-select {
                     background-color: $theme_options_styles[BgSelect];
                 }
-              
+
                 select.form-select:focus {
                     background-color: $theme_options_styles[BgSelect];
                 }
@@ -2906,7 +2906,7 @@ function view($view_file, $view_data = array()) {
                 }
 
 
-                .select2-selection.select2-selection--multiple{ 
+                .select2-selection.select2-selection--multiple{
                     background-color: $theme_options_styles[BgSelect] !important;
                 }
 
@@ -2937,7 +2937,7 @@ function view($view_file, $view_data = array()) {
                 select.form-select {
                     border-color: $theme_options_styles[clBorderSelect];
                 }
-              
+
                 select.form-select:focus {
                     border-color: $theme_options_styles[clBorderSelect];
                 }
@@ -2950,7 +2950,7 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
-                .select2-selection.select2-selection--multiple{ 
+                .select2-selection.select2-selection--multiple{
                     border-color: $theme_options_styles[clBorderSelect] !important;
                 }
 
@@ -2958,7 +2958,7 @@ function view($view_file, $view_data = array()) {
                     border: 1px solid $theme_options_styles[clBorderSelect] !important;
                 }
 
-                select:-webkit-autofill:hover, 
+                select:-webkit-autofill:hover,
                 select:-webkit-autofill:focus {
                     border: 1px solid $theme_options_styles[clBorderSelect];
                 }
@@ -2992,7 +2992,7 @@ function view($view_file, $view_data = array()) {
                     -moz-appearance: none;
                     appearance: none;
                 }
-              
+
                 select.form-select:focus {
                     color: $theme_options_styles[clOptionSelect];
                 }
@@ -3013,7 +3013,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
-                .select2-selection.select2-selection--multiple{ 
+                .select2-selection.select2-selection--multiple{
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
@@ -3025,7 +3025,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
-                select:-webkit-autofill:hover, 
+                select:-webkit-autofill:hover,
                 select:-webkit-autofill:focus {
                     -webkit-text-fill-color: $theme_options_styles[clOptionSelect];
                 }
@@ -3074,7 +3074,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
-                
+
 
             ";
         }
@@ -3141,8 +3141,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover, 
-                .mce-menu-item.mce-selected, 
+                .mce-menu-item:hover,
+                .mce-menu-item.mce-selected,
                 .mce-menu-item:focus {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
@@ -3176,8 +3176,8 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover, 
-                .mce-menu-item.mce-selected, 
+                .mce-menu-item:hover,
+                .mce-menu-item.mce-selected,
                 .mce-menu-item:focus {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
@@ -3186,7 +3186,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover .mce-text, 
+                .mce-menu-item:hover .mce-text,
                 .mce-menu-item.mce-selected .mce-text {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
@@ -3204,7 +3204,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgForms'])){
             $styles_str .= "
-                .form-wrapper.form-edit { 
+                .form-wrapper.form-edit {
                     background-color: $theme_options_styles[BgForms];
                 }
             ";
@@ -3218,7 +3218,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgBorderForms'])){
             $styles_str .= "
-                .form-wrapper.form-edit { 
+                .form-wrapper.form-edit {
                     border: solid 1px $theme_options_styles[BgBorderForms] !important;
                 }
             ";
@@ -3234,7 +3234,7 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .form-wrapper.form-edit{
                     padding: 16px 24px 16px 24px !important;
-                }  
+                }
             ";
         }
 
@@ -3252,7 +3252,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .form-wrapper.form-edit .control-label-notes,
-                .form-group .control-label-notes{ 
+                .form-group .control-label-notes{
                     color:$theme_options_styles[clLabelForms];
                 }
             ";
@@ -3313,7 +3313,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clTextModal'])){
             $styles_str .= "
-                .bootbox.show .modal-header .modal-title, 
+                .bootbox.show .modal-header .modal-title,
                 .modal.show .modal-header .modal-title {
                     color:  $theme_options_styles[clTextModal];
                 }
@@ -3335,7 +3335,7 @@ function view($view_file, $view_data = array()) {
                     color:  $theme_options_styles[clTextModal];
                 }
 
-                .bootbox.show .bootbox-body, 
+                .bootbox.show .bootbox-body,
                 .modal.show .modal-body{
                     color: $theme_options_styles[clTextModal];
                 }
@@ -3391,7 +3391,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgAgenda];
                 }
 
-                
+
 
                 .myPersonalCalendar .cal-row-fluid.cal-row-head {
                     background: $theme_options_styles[bgAgenda];
@@ -3402,53 +3402,53 @@ function view($view_file, $view_data = array()) {
 
 
                 .datepicker-centuries .table-condensed,
-                .datepicker-centuries .table-condensed .dow{ 
+                .datepicker-centuries .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datepicker-decades .table-condensed,
-                .datepicker-decades .table-condensed .dow{ 
+                .datepicker-decades .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datepicker-years .table-condensed,
-                .datepicker-years .table-condensed .dow{ 
+                .datepicker-years .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datepicker-months .table-condensed,
-                .datepicker-months .table-condensed .dow{ 
+                .datepicker-months .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datepicker-days .table-condensed,
-                .datepicker-days .table-condensed .dow{ 
+                .datepicker-days .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
-                
+
 
 
 
 
                 .datetimepicker-years .table-condensed,
-                .datetimepicker-years .table-condensed .dow{ 
+                .datetimepicker-years .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datetimepicker-months .table-condensed,
-                .datetimepicker-months .table-condensed .dow{ 
+                .datetimepicker-months .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datetimepicker-days .table-condensed,
-                .datetimepicker-days .table-condensed .dow{ 
+                .datetimepicker-days .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datetimepicker-hours .table-condensed,
-                .datetimepicker-hours .table-condensed .dow{ 
+                .datetimepicker-hours .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .datetimepicker-minutes .table-condensed,
-                .datetimepicker-minutes .table-condensed .dow{ 
+                .datetimepicker-minutes .table-condensed .dow{
                     background-color: $theme_options_styles[bgAgenda];
                 }
-                
 
-                
+
+
                 .cal-day-today {
                     background-color: $theme_options_styles[bgAgenda] !important;
                 }
@@ -3460,7 +3460,7 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker.datetimepicker-dropdown-bottom-right.dropdown-menu {
                     background-color: $theme_options_styles[bgAgenda];
                 }
-                 
+
 
 
                 #cal-slide-content {
@@ -3489,7 +3489,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgColorHeaderAgenda'])){
             $styles_str .= "
-                .panel-admin-calendar .panel-heading, 
+                .panel-admin-calendar .panel-heading,
                 #cal-header {
                     background: $theme_options_styles[BgColorHeaderAgenda];
                 }
@@ -3505,7 +3505,7 @@ function view($view_file, $view_data = array()) {
                 .datepicker-centuries .table-condensed thead .datepicker-switch,
                 .datepicker-centuries .table-condensed thead .prev:hover,
                 .datepicker-centuries .table-condensed thead .next:hover,
-                .datepicker-centuries .table-condensed thead .datepicker-switch:hover{ 
+                .datepicker-centuries .table-condensed thead .datepicker-switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-decades .table-condensed thead .prev,
@@ -3513,7 +3513,7 @@ function view($view_file, $view_data = array()) {
                 .datepicker-decades .table-condensed thead .datepicker-switch,
                 .datepicker-decades .table-condensed thead .prev:hover,
                 .datepicker-decades .table-condensed thead .next:hover,
-                .datepicker-decades .table-condensed thead .datepicker-switch:hover{ 
+                .datepicker-decades .table-condensed thead .datepicker-switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-years .table-condensed thead .prev,
@@ -3521,7 +3521,7 @@ function view($view_file, $view_data = array()) {
                 .datepicker-years .table-condensed thead .datepicker-switch,
                 .datepicker-years .table-condensed thead .prev:hover,
                 .datepicker-years .table-condensed thead .next:hover,
-                .datepicker-years .table-condensed thead .datepicker-switch:hover{ 
+                .datepicker-years .table-condensed thead .datepicker-switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-months .table-condensed thead .prev,
@@ -3529,7 +3529,7 @@ function view($view_file, $view_data = array()) {
                 .datepicker-months .table-condensed thead .datepicker-switch,
                 .datepicker-months .table-condensed thead .prev:hover,
                 .datepicker-months .table-condensed thead .next:hover,
-                .datepicker-months .table-condensed thead .datepicker-switch:hover{ 
+                .datepicker-months .table-condensed thead .datepicker-switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-days .table-condensed thead .prev,
@@ -3537,10 +3537,10 @@ function view($view_file, $view_data = array()) {
                 .datepicker-days .table-condensed thead .datepicker-switch,
                 .datepicker-days .table-condensed thead .prev:hover,
                 .datepicker-days .table-condensed thead .next:hover,
-                .datepicker-days .table-condensed thead .datepicker-switch:hover{ 
+                .datepicker-days .table-condensed thead .datepicker-switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
-                
+
 
 
 
@@ -3549,7 +3549,7 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-years .table-condensed thead .switch,
                 .datetimepicker-years .table-condensed thead .prev:hover,
                 .datetimepicker-years .table-condensed thead .next:hover,
-                .datetimepicker-years .table-condensed thead .switch:hover{ 
+                .datetimepicker-years .table-condensed thead .switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-months .table-condensed thead .prev,
@@ -3557,7 +3557,7 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-months .table-condensed thead .switch,
                 .datetimepicker-months .table-condensed thead .prev:hover,
                 .datetimepicker-months .table-condensed thead .next:hover,
-                .datetimepicker-months .table-condensed thead .switch:hover{ 
+                .datetimepicker-months .table-condensed thead .switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-days .table-condensed thead .prev,
@@ -3565,7 +3565,7 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-days .table-condensed thead .switch,
                 .datetimepicker-days .table-condensed thead .prev:hover,
                 .datetimepicker-days .table-condensed thead .next:hover,
-                .datetimepicker-days .table-condensed thead .switch:hover{ 
+                .datetimepicker-days .table-condensed thead .switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-hours .table-condensed thead .prev,
@@ -3573,7 +3573,7 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-hours .table-condensed thead .switch,
                 .datetimepicker-hours .table-condensed thead .prev:hover,
                 .datetimepicker-hours .table-condensed thead .next:hover,
-                .datetimepicker-hours .table-condensed thead .switch:hover{ 
+                .datetimepicker-hours .table-condensed thead .switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-minutes .table-condensed thead .prev,
@@ -3581,7 +3581,7 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-minutes .table-condensed thead .switch,
                 .datetimepicker-minutes .table-condensed thead .prev:hover,
                 .datetimepicker-minutes .table-condensed thead .next:hover,
-                .datetimepicker-minutes .table-condensed thead .switch:hover{ 
+                .datetimepicker-minutes .table-condensed thead .switch:hover{
                     background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
 
@@ -3590,7 +3590,7 @@ function view($view_file, $view_data = array()) {
                 }
 
 
-                
+
             ";
         }
 
@@ -3617,9 +3617,9 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
 
-     
 
-            
+
+
 
 
 
@@ -3627,21 +3627,21 @@ function view($view_file, $view_data = array()) {
                 .datepicker-decades .table-condensed thead tr th.next::after,
                 .datepicker-years .table-condensed thead tr th.next::after,
                 .datepicker-months .table-condensed thead tr th.next::after,
-                .datepicker-days .table-condensed thead tr th.next::after{ 
+                .datepicker-days .table-condensed thead tr th.next::after{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
                 .datepicker-centuries .table-condensed thead tr th.datepicker-switch,
                 .datepicker-decades .table-condensed thead tr th.datepicker-switch,
                 .datepicker-years .table-condensed thead tr th.datepicker-switch,
                 .datepicker-months .table-condensed thead tr th.datepicker-switch,
-                .datepicker-days .table-condensed thead tr th.datepicker-switch{ 
+                .datepicker-days .table-condensed thead tr th.datepicker-switch{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
                 .datepicker-centuries .table-condensed thead tr th.prev::before,
                 .datepicker-decades .table-condensed thead tr th.prev::before,
                 .datepicker-years .table-condensed thead tr th.prev::before,
                 .datepicker-months .table-condensed thead tr th.prev::before,
-                .datepicker-days .table-condensed thead tr th.prev::before{ 
+                .datepicker-days .table-condensed thead tr th.prev::before{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
 
@@ -3650,31 +3650,31 @@ function view($view_file, $view_data = array()) {
 
                 .datetimepicker-years .table-condensed thead .prev::before,
                 .datetimepicker-years .table-condensed thead .next::after,
-                .datetimepicker-years .table-condensed thead .switch{ 
+                .datetimepicker-years .table-condensed thead .switch{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
                 .datetimepicker-months .table-condensed thead .prev::before,
                 .datetimepicker-months .table-condensed thead .next::after,
-                .datetimepicker-months .table-condensed thead .switch{ 
+                .datetimepicker-months .table-condensed thead .switch{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
                 .datetimepicker-days .table-condensed thead .prev::before,
                 .datetimepicker-days .table-condensed thead .next::after,
-                .datetimepicker-days .table-condensed thead .switch{ 
+                .datetimepicker-days .table-condensed thead .switch{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
                 .datetimepicker-hours .table-condensed thead .prev::before,
                 .datetimepicker-hours .table-condensed thead .next::after,
-                .datetimepicker-hours .table-condensed thead .switch{ 
+                .datetimepicker-hours .table-condensed thead .switch{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
                 .datetimepicker-minutes .table-condensed thead .prev::before,
                 .datetimepicker-minutes .table-condensed thead .next::after,
-                .datetimepicker-minutes .table-condensed thead .switch{ 
+                .datetimepicker-minutes .table-condensed thead .switch{
                     color: $theme_options_styles[clColorHeaderAgenda] !important;
                 }
 
-     
+
             ";
         }
 
@@ -3686,7 +3686,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clColorBodyAgenda'])){
             $styles_str .= "
-            
+
                 .cal-row-fluid.cal-row-head .cal-cell1,
                 .number-day-cal {
                     color: $theme_options_styles[clColorBodyAgenda];
@@ -3702,24 +3702,24 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clColorBodyAgenda];
                 }
 
-        
+
 
 
                 .datepicker-centuries .table-condensed thead tr th.dow,
                 .datepicker-decades .table-condensed thead tr th.dow,
                 .datepicker-years .table-condensed thead tr th.dow,
                 .datepicker-months .table-condensed thead tr th.dow,
-                .datepicker-days .table-condensed thead tr th.dow{ 
+                .datepicker-days .table-condensed thead tr th.dow{
                     color: $theme_options_styles[clColorBodyAgenda] !important;
                 }
                 .datepicker-centuries .table-condensed tbody tr td,
                 .datepicker-decades .table-condensed tbody tr td,
                 .datepicker-years .table-condensed tbody tr td,
                 .datepicker-months .table-condensed tbody tr td,
-                .datepicker-days .table-condensed tbody tr td{ 
+                .datepicker-days .table-condensed tbody tr td{
                     color: $theme_options_styles[clColorBodyAgenda] !important;
                 }
-                
+
 
 
 
@@ -3728,14 +3728,14 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-months .table-condensed thead tr th.dow,
                 .datetimepicker-days .table-condensed thead tr th.dow,
                 .datetimepicker-hours .table-condensed thead tr th.dow,
-                .datetimepicker-minutes .table-condensed thead tr th.dow{ 
+                .datetimepicker-minutes .table-condensed thead tr th.dow{
                     color: $theme_options_styles[clColorBodyAgenda] !important;
                 }
                 .datetimepicker-years .table-condensed tbody tr td,
                 .datetimepicker-months .table-condensed tbody tr td,
                 .datetimepicker-days .table-condensed tbody tr td,
                 .datetimepicker-hours .table-condensed tbody tr td,
-                .datetimepicker-minutes .table-condensed tbody tr td{ 
+                .datetimepicker-minutes .table-condensed tbody tr td{
                     color: $theme_options_styles[clColorBodyAgenda] !important;
                 }
 
@@ -3769,17 +3769,17 @@ function view($view_file, $view_data = array()) {
                 #calendar_wrapper{
                     border: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
-                
 
-                .fc-unthemed .fc-content, 
-                .fc-unthemed .fc-divider, 
-                .fc-unthemed .fc-list-heading td, 
-                .fc-unthemed .fc-list-view, 
-                .fc-unthemed .fc-popover, 
-                .fc-unthemed .fc-row, 
-                .fc-unthemed tbody, 
-                .fc-unthemed td, 
-                .fc-unthemed th, 
+
+                .fc-unthemed .fc-content,
+                .fc-unthemed .fc-divider,
+                .fc-unthemed .fc-list-heading td,
+                .fc-unthemed .fc-list-view,
+                .fc-unthemed .fc-popover,
+                .fc-unthemed .fc-row,
+                .fc-unthemed tbody,
+                .fc-unthemed td,
+                .fc-unthemed th,
                 .fc-unthemed thead {
                     border-color: $theme_options_styles[BgBorderColorAgenda];
                 }
@@ -3852,7 +3852,7 @@ function view($view_file, $view_data = array()) {
                 .calendarAddDaysCl .fc-body table tbody tr td{
                     border:solid 1px $theme_options_styles[BgBorderColorAgendaEvent] !important;
                 }
-                
+
                 .myCalendarEvents .fc-body table tbody tr td.fc-axis,
                 .myCalendarEvents .fc-body table tbody tr td{
                     border:solid 1px $theme_options_styles[BgBorderColorAgendaEvent] !important;
@@ -3888,14 +3888,14 @@ function view($view_file, $view_data = array()) {
                 .datepicker-decades .table-condensed thead tr th:hover,
                 .datepicker-years .table-condensed thead tr th:hover,
                 .datepicker-months .table-condensed thead tr th:hover,
-                .datepicker-days .table-condensed thead tr th:hover{ 
+                .datepicker-days .table-condensed thead tr th:hover{
                     background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
                 }
                 .datepicker-centuries .table-condensed tbody tr td .century:hover,
                 .datepicker-decades .table-condensed tbody tr td .decade:hover,
                 .datepicker-years .table-condensed tbody tr td .year:hover,
                 .datepicker-months .table-condensed tbody tr td .month:hover,
-                .datepicker-days .table-condensed tbody tr td:hover{ 
+                .datepicker-days .table-condensed tbody tr td:hover{
                     background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
                 }
 
@@ -3963,14 +3963,14 @@ function view($view_file, $view_data = array()) {
                 .datepicker-decades .table-condensed thead tr th:hover,
                 .datepicker-years .table-condensed thead tr th:hover,
                 .datepicker-months .table-condensed thead tr th:hover,
-                .datepicker-days .table-condensed thead tr th:hover{ 
+                .datepicker-days .table-condensed thead tr th:hover{
                     color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
                 }
                 .datepicker-centuries .table-condensed tbody tr td .century:hover,
                 .datepicker-decades .table-condensed tbody tr td .decade:hover,
                 .datepicker-years .table-condensed tbody tr td .year:hover,
                 .datepicker-months .table-condensed tbody tr td .month:hover,
-                .datepicker-days .table-condensed tbody tr td:hover{ 
+                .datepicker-days .table-condensed tbody tr td:hover{
                     color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
                 }
 
@@ -3978,7 +3978,7 @@ function view($view_file, $view_data = array()) {
                 .panel-body-calendar .cal-row-head .cal-cell1:hover,
                 .panel-body-calendar .cal-month-box .cal-cell1:hover div{
                     color: $theme_options_styles[clColorHoveredBodyAgenda] !important;
-                }  
+                }
 
 
                 .myPersonalCalendar .cal-cell1:hover div,
@@ -3998,45 +3998,45 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['bgColorActiveDateTime'])){
             $styles_str .= "
-                .datetimepicker table tr td span.active:active, 
-                .datetimepicker table tr td span.active:hover:active, 
-                .datetimepicker table tr td span.active.disabled:active, 
-                .datetimepicker table tr td span.active.disabled:hover:active, 
-                .datetimepicker table tr td span.active.active, 
-                .datetimepicker table tr td span.active:hover.active, 
-                .datetimepicker table tr td span.active.disabled.active, 
+                .datetimepicker table tr td span.active:active,
+                .datetimepicker table tr td span.active:hover:active,
+                .datetimepicker table tr td span.active.disabled:active,
+                .datetimepicker table tr td span.active.disabled:hover:active,
+                .datetimepicker table tr td span.active.active,
+                .datetimepicker table tr td span.active:hover.active,
+                .datetimepicker table tr td span.active.disabled.active,
                 .datetimepicker table tr td span.active.disabled:hover.active{
                     background-image: none !important;
                     background-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
-                .datepicker table tr td.active:active, 
-                .datepicker table tr td.active.highlighted:active, 
-                .datepicker table tr td.active.active, 
+                .datepicker table tr td.active:active,
+                .datepicker table tr td.active.highlighted:active,
+                .datepicker table tr td.active.active,
                 .datepicker table tr td.active.highlighted.active{
                     background-image: none !important;
                     background-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
-                .datetimepicker table tr td.active:active, 
-                .datetimepicker table tr td.active:hover:active, 
-                .datetimepicker table tr td.active.disabled:active, 
-                .datetimepicker table tr td.active.disabled:hover:active, 
-                .datetimepicker table tr td.active.active, 
-                .datetimepicker table tr td.active:hover.active, 
-                .datetimepicker table tr td.active.disabled.active, 
+                .datetimepicker table tr td.active:active,
+                .datetimepicker table tr td.active:hover:active,
+                .datetimepicker table tr td.active.disabled:active,
+                .datetimepicker table tr td.active.disabled:hover:active,
+                .datetimepicker table tr td.active.active,
+                .datetimepicker table tr td.active:hover.active,
+                .datetimepicker table tr td.active.disabled.active,
                 .datetimepicker table tr td.active.disabled:hover.active{
                     background-image: none !important;
                     background-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
-                .datepicker table tr td span.active:active, 
-                .datepicker table tr td span.active:hover:active, 
-                .datepicker table tr td span.active.disabled:active, 
-                .datepicker table tr td span.active.disabled:hover:active, 
-                .datepicker table tr td span.active.active, 
-                .datepicker table tr td span.active:hover.active, 
-                .datepicker table tr td span.active.disabled.active, 
+                .datepicker table tr td span.active:active,
+                .datepicker table tr td span.active:hover:active,
+                .datepicker table tr td span.active.disabled:active,
+                .datepicker table tr td span.active.disabled:hover:active,
+                .datepicker table tr td span.active.active,
+                .datepicker table tr td span.active:hover.active,
+                .datepicker table tr td span.active.disabled.active,
                 .datepicker table tr td span.active.disabled:hover.active {
                     color: #fff;
                     background-color: $theme_options_styles[bgColorActiveDateTime] !important;
@@ -4062,50 +4062,50 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['TextColorActiveDateTime'])){
             $styles_str .= "
-                .datetimepicker table tr td span.active:active, 
-                .datetimepicker table tr td span.active:hover:active, 
-                .datetimepicker table tr td span.active.disabled:active, 
-                .datetimepicker table tr td span.active.disabled:hover:active, 
-                .datetimepicker table tr td span.active.active, 
-                .datetimepicker table tr td span.active:hover.active, 
-                .datetimepicker table tr td span.active.disabled.active, 
+                .datetimepicker table tr td span.active:active,
+                .datetimepicker table tr td span.active:hover:active,
+                .datetimepicker table tr td span.active.disabled:active,
+                .datetimepicker table tr td span.active.disabled:hover:active,
+                .datetimepicker table tr td span.active.active,
+                .datetimepicker table tr td span.active:hover.active,
+                .datetimepicker table tr td span.active.disabled.active,
                 .datetimepicker table tr td span.active.disabled:hover.active{
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
-                .datepicker table tr td.active:active, 
-                .datepicker table tr td.active.highlighted:active, 
-                .datepicker table tr td.active.active, 
+                .datepicker table tr td.active:active,
+                .datepicker table tr td.active.highlighted:active,
+                .datepicker table tr td.active.active,
                 .datepicker table tr td.active.highlighted.active{
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
-                .datetimepicker table tr td.active:active, 
-                .datetimepicker table tr td.active:hover:active, 
-                .datetimepicker table tr td.active.disabled:active, 
-                .datetimepicker table tr td.active.disabled:hover:active, 
-                .datetimepicker table tr td.active.active, 
-                .datetimepicker table tr td.active:hover.active, 
-                .datetimepicker table tr td.active.disabled.active, 
+                .datetimepicker table tr td.active:active,
+                .datetimepicker table tr td.active:hover:active,
+                .datetimepicker table tr td.active.disabled:active,
+                .datetimepicker table tr td.active.disabled:hover:active,
+                .datetimepicker table tr td.active.active,
+                .datetimepicker table tr td.active:hover.active,
+                .datetimepicker table tr td.active.disabled.active,
                 .datetimepicker table tr td.active.disabled:hover.active{
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
-                .datepicker table tr td span.active:active, 
-                .datepicker table tr td span.active:hover:active, 
-                .datepicker table tr td span.active.disabled:active, 
-                .datepicker table tr td span.active.disabled:hover:active, 
-                .datepicker table tr td span.active.active, 
-                .datepicker table tr td span.active:hover.active, 
-                .datepicker table tr td span.active.disabled.active, 
+                .datepicker table tr td span.active:active,
+                .datepicker table tr td span.active:hover:active,
+                .datepicker table tr td span.active.disabled:active,
+                .datepicker table tr td span.active.disabled:hover:active,
+                .datepicker table tr td span.active.active,
+                .datepicker table tr td span.active:hover.active,
+                .datepicker table tr td span.active.disabled.active,
                 .datepicker table tr td span.active.disabled:hover.active {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
-                .datepicker table tr td span.focused:active, 
-                .datepicker table tr td span.focused:hover:active, 
-                .datepicker table tr td span.focused.disabled:active, 
-                .datepicker table tr td span.focused.disabled:hover:active, 
+                .datepicker table tr td span.focused:active,
+                .datepicker table tr td span.focused:hover:active,
+                .datepicker table tr td span.focused.disabled:active,
+                .datepicker table tr td span.focused.disabled:hover:active,
                 .datepicker table tr td span.focused {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
@@ -4140,7 +4140,7 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
-            $styles_str .= " 
+            $styles_str .= "
 
                 .ContentLeftNav, #collapseTools{
                     background: $theme_options_styles[leftNavBgColor];
@@ -4157,7 +4157,7 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['leftNavBgColorSmallScreen'])) {
 
-            $styles_str .= " 
+            $styles_str .= "
 
                 @media(max-width:991px){
                     .ContentLeftNav, #collapseTools{
@@ -4184,11 +4184,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgTables];
                 }
 
-                .table-default tbody tr td, 
-                .announcements_table tbody tr td, 
-                table.dataTable tbody tr td, 
-                .table-default tbody tr th, 
-                .announcements_table tbody tr th, 
+                .table-default tbody tr td,
+                .announcements_table tbody tr td,
+                table.dataTable tbody tr td,
+                .table-default tbody tr th,
+                .announcements_table tbody tr th,
                 table.dataTable tbody tr th {
                     background-color: $theme_options_styles[BgTables];
                 }
@@ -4202,10 +4202,10 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgTables];
                 }
 
-                table.dataTable.display tbody tr.odd, 
-                table.dataTable.display tbody tr.odd > .sorting_1, 
-                table.dataTable.order-column.stripe tbody tr.odd > .sorting_1, 
-                table.dataTable.display tbody tr.even > .sorting_1, 
+                table.dataTable.display tbody tr.odd,
+                table.dataTable.display tbody tr.odd > .sorting_1,
+                table.dataTable.order-column.stripe tbody tr.odd > .sorting_1,
+                table.dataTable.display tbody tr.even > .sorting_1,
                 table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
                     background-color: $theme_options_styles[BgTables] !important;
                 }
@@ -4248,7 +4248,7 @@ function view($view_file, $view_data = array()) {
                 }
                 table.dataTable.no-footer {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
-                }  
+                }
                 .dataTables_wrapper.no-footer .dataTables_scrollBody {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
@@ -4266,7 +4266,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgBorderBottomHeadTables'])){
             $styles_str .= "
-                thead, 
+                thead,
                 tbody .list-header,
                 tbody tr.header-pollAnswers,
                 .border-bottom-table-head,
@@ -4275,7 +4275,7 @@ function view($view_file, $view_data = array()) {
                 tbody tr.list-header th {
                     border-bottom: solid 2px $theme_options_styles[BgBorderBottomHeadTables] !important;
                 }
-                table.dataTable thead th, 
+                table.dataTable thead th,
                 table.dataTable thead td {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomHeadTables] !important;
                 }
@@ -4290,7 +4290,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgMenuPopover'])){
             $styles_str .= "
-                .menu-popover.fade.show{ 
+                .menu-popover.fade.show{
                     background: $theme_options_styles[BgMenuPopover];
                 }
             ";
@@ -4304,7 +4304,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgBorderMenuPopover'])){
             $styles_str .= "
-                .menu-popover.fade.show{ 
+                .menu-popover.fade.show{
                     border: solid 1px $theme_options_styles[BgBorderMenuPopover];
                 }
             ";
@@ -4318,7 +4318,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgMenuPopoverOption'])){
             $styles_str .= "
-                .menu-popover .list-group-item{ 
+                .menu-popover .list-group-item{
                     background-color: $theme_options_styles[BgMenuPopoverOption];
                 }
             ";
@@ -4332,7 +4332,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clMenuPopoverOption'])){
             $styles_str .= "
-                .menu-popover .list-group-item{ 
+                .menu-popover .list-group-item{
                     color: $theme_options_styles[clMenuPopoverOption];
                 }
             ";
@@ -4346,7 +4346,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBorderBottomMenuPopoverOption'])){
             $styles_str .= "
-                .menu-popover .list-group-item{ 
+                .menu-popover .list-group-item{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomMenuPopoverOption];
                 }
             ";
@@ -4360,7 +4360,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgHoveredMenuPopoverOption'])){
             $styles_str .= "
-                .menu-popover .list-group-item:hover{ 
+                .menu-popover .list-group-item:hover{
                     background-color: $theme_options_styles[BgHoveredMenuPopoverOption];
                 }
             ";
@@ -4374,7 +4374,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clHoveredMenuPopoverOption'])){
             $styles_str .= "
-                .menu-popover .list-group-item:hover{ 
+                .menu-popover .list-group-item:hover{
                     color: $theme_options_styles[clHoveredMenuPopoverOption];
                 }
             ";
@@ -4410,9 +4410,9 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgTextEditor'])){
             $styles_str .= "
-                .mce-container, 
-                .mce-widget, 
-                .mce-widget *, 
+                .mce-container,
+                .mce-widget,
+                .mce-widget *,
                 .mce-reset {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
@@ -4462,7 +4462,7 @@ function view($view_file, $view_data = array()) {
                 .mce-toolbar .mce-btn i {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
-                
+
                 .mce-menubtn span {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
@@ -4481,7 +4481,7 @@ function view($view_file, $view_data = array()) {
                 .mce-toolbar .mce-btn i.mce-i-none{
                     background: $SVGtools2 !important;
                 }
-                
+
             ";
 
         }
@@ -4517,7 +4517,7 @@ function view($view_file, $view_data = array()) {
               .panel-body::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
-              
+
               .table-responsive::-webkit-scrollbar-track,
               .dataTables_wrapper::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
@@ -4530,7 +4530,7 @@ function view($view_file, $view_data = array()) {
               .jsmind-inner::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
-              
+
               .bodyChat::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
@@ -4560,11 +4560,11 @@ function view($view_file, $view_data = array()) {
               .container-items-footer::-webkit-scrollbar-thumb{
                 background: $theme_options_styles[BgColorScrollBar];
               }
-            
+
               .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
-              
+
               .contextual-menu::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
@@ -4572,16 +4572,16 @@ function view($view_file, $view_data = array()) {
               .course-content::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
- 
+
               .panel-body::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
-             
+
               .table-responsive::-webkit-scrollbar-thumb,
               .dataTables_wrapper::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
-              
+
               .chat-iframe::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
@@ -4600,8 +4600,8 @@ function view($view_file, $view_data = array()) {
               .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb {
                  background-color: $theme_options_styles[BgColorScrollBar];
               }
-            
-              
+
+
             ";
         }
 
@@ -4621,11 +4621,11 @@ function view($view_file, $view_data = array()) {
               .container-items-footer::-webkit-scrollbar-thumb:hover{
                 background: $theme_options_styles[BgHoveredColorScrollBar];
               }
-            
+
               .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
-              
+
               .contextual-menu::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
@@ -4633,16 +4633,16 @@ function view($view_file, $view_data = array()) {
               .course-content::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
- 
+
               .panel-body::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
-             
+
               .table-responsive::-webkit-scrollbar-thumb:hover,
               .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
-              
+
               .chat-iframe::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
@@ -4654,7 +4654,7 @@ function view($view_file, $view_data = array()) {
               .bodyChat::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
-              
+
 
               .calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
               .calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
@@ -4689,7 +4689,7 @@ function view($view_file, $view_data = array()) {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    background: 
+                    background:
                         radial-gradient(closest-side, $theme_options_styles[BackProgressBar] 80%, transparent 0 99.9%, $theme_options_styles[BackProgressBar] 0),
                         conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0)
                         ;
@@ -4759,8 +4759,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['bgAlertInfo'])){
             $styles_str .= "
-                .alert-info { 
-                    background-color:$theme_options_styles[bgAlertInfo]; 
+                .alert-info {
+                    background-color:$theme_options_styles[bgAlertInfo];
                 }
             ";
         }
@@ -4783,7 +4783,7 @@ function view($view_file, $view_data = array()) {
                 .alert-info strong,
                 .alert-info li,
                 .alert-info label{
-                    color: $theme_options_styles[clAlertInfo] !important; 
+                    color: $theme_options_styles[clAlertInfo] !important;
                 }
 
                 .alert-info .btn-close{
@@ -4800,8 +4800,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['bgAlertWarning'])){
             $styles_str .= "
-                .alert-warning { 
-                    background-color:$theme_options_styles[bgAlertWarning]; 
+                .alert-warning {
+                    background-color:$theme_options_styles[bgAlertWarning];
                 }
             ";
         }
@@ -4824,7 +4824,7 @@ function view($view_file, $view_data = array()) {
                 .alert-warning strong,
                 .alert-warning li,
                 .alert-warning label{
-                    color: $theme_options_styles[clAlertWarning] !important; 
+                    color: $theme_options_styles[clAlertWarning] !important;
                 }
 
                 .alert-warning .btn-close{
@@ -4841,8 +4841,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['bgAlertSuccess'])){
             $styles_str .= "
-                .alert-success { 
-                    background-color:$theme_options_styles[bgAlertSuccess]; 
+                .alert-success {
+                    background-color:$theme_options_styles[bgAlertSuccess];
                 }
             ";
         }
@@ -4865,7 +4865,7 @@ function view($view_file, $view_data = array()) {
                 .alert-success strong,
                 .alert-success li,
                 .alert-success label{
-                    color: $theme_options_styles[clAlertSuccess] !important; 
+                    color: $theme_options_styles[clAlertSuccess] !important;
                 }
 
                 .alert-success .btn-close{
@@ -4882,8 +4882,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['bgAlertDanger'])){
             $styles_str .= "
-                .alert-danger { 
-                    background-color:$theme_options_styles[bgAlertDanger]; 
+                .alert-danger {
+                    background-color:$theme_options_styles[bgAlertDanger];
                 }
             ";
         }
@@ -4906,7 +4906,7 @@ function view($view_file, $view_data = array()) {
                 .alert-danger strong,
                 .alert-danger li,
                 .alert-danger label{
-                    color: $theme_options_styles[clAlertDanger] !important; 
+                    color: $theme_options_styles[clAlertDanger] !important;
                 }
 
                 .alert-danger .btn-close{
@@ -4953,7 +4953,7 @@ function view($view_file, $view_data = array()) {
                 .menu-item.active2{
                     color:  $theme_options_styles[linkColor];
                 }
-                  
+
                 .portfolio-tools a{
                     color: $theme_options_styles[linkColor];
                 }
@@ -4965,20 +4965,20 @@ function view($view_file, $view_data = array()) {
                 #cal-slide-content a.event-item{
                     color: $theme_options_styles[linkColor] !important;
                 }
-                
-                .dataTables_paginate.paging_simple_numbers span .paginate_button, 
+
+                .dataTables_paginate.paging_simple_numbers span .paginate_button,
                 .dataTables_paginate.paging_full_numbers span .paginate_button{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.current,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
                     color: $theme_options_styles[linkColor] !important;
-                    background: transparent !important; 
+                    background: transparent !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
                     color: $theme_options_styles[linkColor] !important;
                 }
@@ -4991,33 +4991,33 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
                     background: transparent !important;
                 }
-                  
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next:hover, 
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.next:hover,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.last:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
-                  
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled:hover, 
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled:hover,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.last.disabled:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
-                  
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover, 
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.first:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
-                  
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled:hover, 
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled:hover,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.first.disabled:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
-                  
-                .dataTables_wrapper .dataTables_paginate .paginate_button.previous, 
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.first {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .dataTables_wrapper .dataTables_paginate .paginate_button.next, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.next,
                 .dataTables_wrapper .dataTables_paginate .paginate_button.last{
                     color: $theme_options_styles[linkColor] !important;
                 }
@@ -5029,12 +5029,12 @@ function view($view_file, $view_data = array()) {
                 .mycourses-pagination .page-item{
                     background-color: transparent !important;
                 }
-                
+
                 .mycourses-pagination .page-item .page-link{
                     color: $theme_options_styles[linkColor] !important;
                     background-color: transparent !important;
                 }
-                
+
                 .mycourses-pagination .page-item .page-link:hover{
                     background-color: transparent !important;
                     color: $theme_options_styles[linkColor] !important;
@@ -5047,7 +5047,7 @@ function view($view_file, $view_data = array()) {
                     background-color: transparent !important;
                     color: $theme_options_styles[linkColor] !important;
                 }
-                
+
                 .mycourses-pagination .page-item-pages{
                     background-color: transparent !important;
                 }
@@ -5109,7 +5109,7 @@ function view($view_file, $view_data = array()) {
                 .link-color{
                     color: $theme_options_styles[linkColor];
                 }
-            
+
             ";
         }
 
@@ -5123,7 +5123,7 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 a:hover, a:focus{
                     color: $theme_options_styles[linkHoverColor];
-                } 
+                }
 
                 #btn-search:hover, #btn-search:focus{
                     color: $theme_options_styles[linkHoverColor];
@@ -5267,11 +5267,11 @@ function view($view_file, $view_data = array()) {
                 #leftnav .panel a.parent-menu .Tools-active-deactive{
                     color: $theme_options_styles[leftMenuFontColor];
                 }
-                
+
                 #collapse-left-menu-icon path{
                     fill: $theme_options_styles[leftMenuFontColor] !important;
                 }
-                
+
             ";
         }
 
@@ -5360,7 +5360,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container{
                     background-color: $theme_options_styles[BgColorAnnouncementHomepage];
                 }
-                
+
             ";
         }
 
@@ -5375,7 +5375,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container .list-group-item.element{
                     background-color: $theme_options_styles[BgColorAnnouncementHomepageLink];
                 }
-                
+
             ";
         }
 
@@ -5394,7 +5394,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container .list-group-item.element:last-child{
                     border-bottom: none;
                 }
-                
+
             ";
         }
 
@@ -5410,7 +5410,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container .list-group-item.element a{
                     color:  $theme_options_styles[clColorAnnouncementHomepageLinkElement];
                 }
-                
+
             ";
         }
 
@@ -5428,7 +5428,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container .list-group-item.element a:focus{
                     color:  $theme_options_styles[clHoveredColorAnnouncementHomepageLinkElement];
                 }
-                
+
             ";
         }
 
@@ -5444,7 +5444,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container .card .text-content{
                     color: $theme_options_styles[TextColorAnnouncementHomepage];
                 }
-                
+
             ";
         }
 
@@ -5459,7 +5459,7 @@ function view($view_file, $view_data = array()) {
                 .homepage-annnouncements-container .list-group-item.element{
                     padding-left: 15px;
                     padding-right: 15px;
-                }  
+                }
             ";
         }
 
@@ -5594,7 +5594,7 @@ function view($view_file, $view_data = array()) {
                     background-color: transparent ;
                 }
 
-                .panel-default .panel-heading, 
+                .panel-default .panel-heading,
                 .panel-action-btn-default .panel-heading {
                     background: $theme_options_styles[BgPanels];
                 }
@@ -5602,7 +5602,7 @@ function view($view_file, $view_data = array()) {
                 .card-affixed{
                     background-color: $theme_options_styles[BgPanels] !important;
                 }
-                
+
             ";
         }
 
@@ -5667,7 +5667,7 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
                 }
 
-                .panel-default .panel-heading, 
+                .panel-default .panel-heading,
                 .panel-action-btn-default .panel-heading {
                     border: none;
                 }
@@ -5783,7 +5783,7 @@ function view($view_file, $view_data = array()) {
                     background: none;
                     background-color: $theme_options_styles[AboutChatContainer];
                 }
-            
+
             ";
         }
 
@@ -5798,7 +5798,7 @@ function view($view_file, $view_data = array()) {
                 .embed-responsive-item{
                     border: solid 1px $theme_options_styles[AboutBorderChatContainer];
                 }
-            
+
             ";
         }
 
@@ -5813,7 +5813,7 @@ function view($view_file, $view_data = array()) {
                 .card-course-info{
                     background-color: $theme_options_styles[AboutCourseInfoContainer];
                 }
-            
+
             ";
         }
 
@@ -5828,7 +5828,7 @@ function view($view_file, $view_data = array()) {
                 .card-course-info{
                     border: solid 1px $theme_options_styles[AboutBorderCourseInfoContainer];
                 }
-            
+
             ";
         }
 
@@ -5843,7 +5843,7 @@ function view($view_file, $view_data = array()) {
                 .card-units{
                     background-color: $theme_options_styles[AboutUnitsContainer];
                 }
-            
+
             ";
         }
 
@@ -5858,7 +5858,7 @@ function view($view_file, $view_data = array()) {
                 .card-units{
                     border: solid 1px $theme_options_styles[AboutBorderUnitsContainer];
                 }
-            
+
             ";
         }
 
@@ -5873,7 +5873,7 @@ function view($view_file, $view_data = array()) {
                 .notification-top-bar{
                     background: $theme_options_styles[bgContainerImportantAnnouncement];
                 }
-            
+
             ";
         }
 
@@ -5889,7 +5889,7 @@ function view($view_file, $view_data = array()) {
                 .notification-top-bar i.fa-bell{
                     color: $theme_options_styles[clContainerImportantAnnouncement];
                 }
-            
+
             ";
         }
 
@@ -5904,7 +5904,7 @@ function view($view_file, $view_data = array()) {
                 .notification-top-bar a{
                     color: $theme_options_styles[clLinkImportantAnnouncement];
                 }
-            
+
             ";
         }
 
@@ -5919,7 +5919,7 @@ function view($view_file, $view_data = array()) {
                 .notification-top-bar a:hover{
                     color: $theme_options_styles[clHoveredLinkImportantAnnouncement];
                 }
-            
+
             ";
         }
 
@@ -6097,7 +6097,7 @@ function view($view_file, $view_data = array()) {
                         max-width: $maxWidthPlatform ;
                     }
 
-                    #bgr-cheat-header.fixed, 
+                    #bgr-cheat-header.fixed,
                     #bgr-cheat-header-mentoring.fixed {
                         margin-left: auto;
                         margin-right: auto;
@@ -6177,7 +6177,9 @@ function view($view_file, $view_data = array()) {
     $cache = $webDir . '/storage/views/' . get_config('theme');
     $blade = new Blade($views, $cache);
 
-    $global_data = compact('is_editor', 'is_course_reviewer', 'course_code', 'course_id', 'language',
+    $cache_suffix = CACHE_SUFFIX;
+
+    $global_data = compact('is_editor', 'is_course_reviewer', 'course_code', 'course_id', 'language', 'cache_suffix',
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 'action_bar',
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
@@ -6346,7 +6348,7 @@ function lang_selections_Desktop($idLanguage) {
                         <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="'.$idLanguage.'" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Link to language">
                             <span class="d-none d-lg-block">'. $Selected_Language .'</span>
                             <span class="fa-solid fa-earth-europe d-block d-lg-none"></span>
-                            <i class="fa-solid fa-chevron-down" role="presentation"></i> 
+                            <i class="fa-solid fa-chevron-down" role="presentation"></i>
                         </a>
                         <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3" role="menu" aria-labelledby="'.$idLanguage.'">
                             <ul class="list-group list-group-flush">';

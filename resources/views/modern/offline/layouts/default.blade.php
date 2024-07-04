@@ -27,7 +27,7 @@
     <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
 
     <!-- fullcalendar v3.10.2-->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
 
     <!-- DataTables 1.10.19 version -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>

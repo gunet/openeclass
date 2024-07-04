@@ -16,32 +16,31 @@
     <link rel="icon" type="image/png" href="{{ $favicon_img }}" />
 
     <!-- Bootstrap v5 -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?v={{ $cache_suffix }}"/>
 
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
-    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css?v=4.0-dev" rel="stylesheet"/>
+    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css?v={{ $cache_suffix }}" rel="stylesheet"/>
 
-    
     <!-- Font Manrope -->
-    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css?v=4.0-dev" rel="stylesheet"/>
+    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css?v={{ $cache_suffix }}" rel="stylesheet"/>
 
     <!-- fullcalendar v3.10.2-->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v={{ $cache_suffix }}"/>
 
     <!-- DataTables 1.10.19 version -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css?v=4.0-dev"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css?v={{ $cache_suffix }}"/>
 
     <!-- Owl-carousel -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css?v=4.0-dev"/>
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css?v=4.0-dev"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css?v={{ $cache_suffix }}"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css?v={{ $cache_suffix }}"/>
 
     <!-- Our css modern if we need it -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css?v=4.0-dev"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css?v=4.0-dev"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css?<?php echo time(); ?>"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?<?php echo time(); ?>"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?<?php echo time(); ?>"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css?v={{ $cache_suffix }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css?v={{ $cache_suffix }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css?v={{ $cache_suffix }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ $cache_suffix }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?v={{ $cache_suffix }}"/>
 
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)
@@ -56,14 +55,13 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
 
     <!-- Bootstrap v5 js -->
-    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>
 
     <!-- DataTables v1.10.19 and Checkitor v11.0.1 js-->
     <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
     <!-- Bootbox -->
-    <!-- <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script> -->
     <script src="{{ $urlAppend }}js/bootbox/bootboxV6.min.js"></script>
     <!-- SlimScroll -->
     <script src="{{ $urlAppend }}js/jquery.slimscroll.min.js"></script>
@@ -101,10 +99,10 @@
 
     <!-- Our js modern -->
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/custom.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?<?php echo time(); ?>"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/notification_bar.js?<?php echo time(); ?>"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/custom.js?v={{ $cache_suffix }}"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js?v={{ $cache_suffix }}"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?v={{ $cache_suffix }}"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/notification_bar.js?v={{ $cache_suffix }}"></script>
 
     {!! $head_content !!}
 
@@ -125,7 +123,7 @@
 </head>
 
 <body>
-  
+
     <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0 && !isset($_COOKIE['CookieNotification'])) fixed-announcement @endif">
 
         <!-- important announcement -->
@@ -147,7 +145,7 @@
                 </div>
             @endif
         @endif
-        
+
         <!-- Header -->
         @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
 
@@ -162,7 +160,7 @@
     @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
         <!-- Quick note -->
         <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote">
-            <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip' 
+            <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
                     data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
         </a>
 

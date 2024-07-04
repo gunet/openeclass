@@ -209,16 +209,16 @@ echo "<!DOCTYPE HTML>
     <script src='{$urlAppend}js/jquery.dataTables.min.js'></script>
 
     <!-- Latest compiled and minified css -->
-    <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".ECLASS_VERSION."'>
+    <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".CACHE_SUFFIX."'>
 
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
 
-    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css?".time()."'>
-    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css?".time()."'>
-    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".time()."'>";
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css?".CACHE_SUFFIX."'>
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css?".CACHE_SUFFIX."'>
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".CACHE_SUFFIX."'>";
     if($theme_id > 0){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".CACHE_SUFFIX."'/>";
     }
 
     echo " <script type='text/javascript'>
@@ -252,7 +252,7 @@ echo "<!DOCTYPE HTML>
                 $.cookie('leftTOChiddenStatus', 0, { path: '/' });
             }
         });
-        
+
         $('#close-btn-a').on('click', function(e) {
             let api = window.parent.api;
             if (typeof api !== 'undefined') {
@@ -303,4 +303,3 @@ echo "<!DOCTYPE HTML>
    </nav>
 </body>
 </html>";
-
