@@ -45,7 +45,6 @@ require 'modules/admin/custom_profile_fields_functions.php';
         $data = '';
     }
     $registration = intval($_POST['registration']);
-    $user_type = intval($_POST['user_type']);
     $visibility = intval($_POST['visibility']);
 
     if (isset($_POST['field_id'])) { //save edited field
@@ -68,10 +67,10 @@ require 'modules/admin/custom_profile_fields_functions.php';
                                     datatype = ?d,
                                     required = ?d,
                                     visibility = ?d,
-                                    user_type = ?d,
+                                    user_type = 10,
                                     registration = ?d,
                                     data = ?s
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $data, $fieldid);
+                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $data, $fieldid);
             //Session::Messages($langCPFFieldEditSuccess, 'alert-success');
             Session::flash('message',$langCPFFieldEditSuccess);
             Session::flash('alert-class', 'alert-success');
@@ -98,13 +97,11 @@ require 'modules/admin/custom_profile_fields_functions.php';
             }
 
             Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration, data)
-                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, $user_type, $registration, $data);
-            //Session::Messages($langCPFFieldAddSuccess, 'alert-success');
+                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, 10, $registration, $data);
             Session::flash('message',$langCPFFieldAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else { //shortname is not unique, abort
-            //Session::Messages($langCPFCreateUniqueShortnameError, 'alert-danger');
             Session::flash('message',$langCPFCreateUniqueShortnameError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -224,7 +221,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         CPF_TEXTAREA => $langCPFTextarea,
         CPF_DATE => $langCPFDate,
         CPF_MENU => $langCPFMenu,
-        CPF_LINK =>$langCPFLink
+        CPF_LINK => $langLink
     ];
 
 
@@ -245,7 +242,6 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
 
     $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
-    $data['user_type'] = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
 
     $data['datatype'] = intval($_POST['datatype']);
     $data['fielddescr_rich_text'] = rich_text_editor('fielddescr', 8, 20, '');
@@ -264,7 +260,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $data['fieldid'] = intval(getDirectReference($_GET['edit_field']));
 
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $data['fieldid']);
-    if ($result != 0) {
+    if ($result) {
 
         $data['name'] = $name = q($result->name);
         $data['shortname'] = $shortname = q($result->shortname);
@@ -272,7 +268,6 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         $data['datatype'] = $datatype = $result->datatype;
         $data['required'] = $result->required;
         $data['vis'] = $vis = $result->visibility;
-        $data['utype'] = $utype = $result->user_type;
         $data['registration'] = $registration = $result->registration;
         $custom_profile_fields_data = $result->data;
 
@@ -288,11 +283,9 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         load_js('validation.js');
         $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, standard_text_escape($result->description));
 
-        $data['field_types'] = $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langCPFLink);
+        $data['field_types'] = $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langLink);
         $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
         $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
-        $data['user_type'] = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
-
     }
 
     $view = 'admin.users.custom_profile_fields.createStep2';
@@ -315,10 +308,9 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
               'button-class' => 'btn-success')
         ));
 
-    $data['field_types'] = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langLink);
+    $data['field_types'] = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK => $langLink);
     $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
-    $data['user_type'] = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
 
     $data['result'] = $result = Database::get()->queryArray("SELECT * FROM custom_profile_fields_category ORDER BY sortorder DESC");
 

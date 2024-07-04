@@ -19,7 +19,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -31,7 +31,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -41,18 +41,18 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
-                    
+
 
                     @if ($result)
                         <!--container for sorting-->
                         <div class='col-12' id='multi'>
-                        
+
                         @foreach ($result as $res)
                             <div id='cat_{{ getIndirectReference($res->id) }}' class='table-responsive'>
                                 <table class='table-default table-custom-profile'>
@@ -78,9 +78,9 @@
                                                     'confirm' => trans('langCPFConfirmCatDelete')
                                             )
                                         )) !!}
-                            
+
                                     </div>
-                                </caption>            
+                                </caption>
                                 <thead>
                                     <tr class='list-header'>
                                         <td class='bg-header-table TextBold'>{{ trans('langName') }}</td>
@@ -94,8 +94,8 @@
                                         <td class='bg-header-table TextBold'>{!! icon('fa-gears') !!}</td>
                                     </tr>
                                 </thead>
-                            
-                                @if (count($form_data_array[$res->id]))                
+
+                                @if (count($form_data_array[$res->id]))
                                     <tbody class='tile__list'>
                                     @foreach ($form_data_array[$res->id] as $f)
                                         <tr id='field_{{ getIndirectReference($f->id) }}'>
@@ -105,7 +105,6 @@
                                             <td>{{ $field_types[$f->datatype] }}</td>
                                             <td>{{ $yes_no[$f->required] }}</td>
                                             <td>{{ $yes_no[$f->registration] }}</td>
-                                            <td>{{ $user_type[$f->user_type] }}</td>
                                             <td>{{ $visibility[$f->visibility] }}</td>
                                             <td>
                                                 {!! action_button(array(
@@ -131,9 +130,9 @@
                                                 <span class='not_visible'>{{ trans('langCPFNoFieldinCat') }}</span>
                                             </td>
                                         </tr>
-                                    </tbody>           
+                                    </tbody>
                                 @endif
-                            
+
                                 </table>
                             </div>
                         @endforeach
@@ -143,9 +142,9 @@
                         </form>
                         <script src='custom_profile_fields.js'></script>
                     @else
-                        <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langCPFNoCats') }}</span></div></div> 
+                        <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langCPFNoCats') }}</span></div></div>
                     @endif
-               
+
         </div>
 </div>
 </div>
