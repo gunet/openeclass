@@ -55,16 +55,10 @@ if(isset($_POST['modify'])){
   $v->rule('required', array('title'));
   $v->rule('required', array('start_session'));
   $v->rule('required', array('end_session'));
-  if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
-    $v->rule('required', array('one_participant'));
-  }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
-    $v->rule('required', array('many_participants'));
-  }
+
   $v->labels(array(
       'title' => "$langTheField $langTitle",
       'creators' => "$langTheField $langCreator",
-      'one_participant' => "$langTheField $langParticipants",
-      'many_participants' => "$langTheField $langParticipants",
       'start_session' => "$langTheField $langDate",
       'end_session' => "$langTheField $langDate"
   ));
@@ -122,19 +116,23 @@ if(isset($_POST['modify'])){
 
     if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
       Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
-      $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                participants = ?d,
-                                                session_id = ?d", $_POST['one_participant'], $_GET['session']);
+      if(isset($_POST['one_participant']) && $_POST['one_participant'] > 0){
+        $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
+                                                  participants = ?d,
+                                                  session_id = ?d", $_POST['one_participant'], $_GET['session']);
+      }
     }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
       Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
-      foreach($_POST['many_participants'] as $m){
-        $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                  session_id = ?d,
-                                                  participants = ?d", $_GET['session'], $m);
+      if(isset($_POST['many_participants'])){
+        foreach($_POST['many_participants'] as $m){
+          $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
+                                                    session_id = ?d,
+                                                    participants = ?d", $_GET['session'], $m);
+        }
       }
     }
 
-    if($insert_users){
+    if($insert){
 
       // Send notification - email to the user - participant
       $creatorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$creator)->givenname;

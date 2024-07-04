@@ -32,6 +32,15 @@ function is_session_consultant($sid,$cid){
     }
 }
 
+function get_session_consultant($sid,$cid){
+    $result = Database::get()->querySingle("SELECT creator FROM mod_session WHERE course_id = ?d AND id = ?d",$cid,$sid);
+    if($result){
+        return $result->creator;
+    }else{
+        return 0;
+    }
+}
+
 function title_session($cid,$sid){
     $result = Database::get()->querySingle("SELECT title FROM mod_session WHERE id = ?d AND course_id = ?d",$sid,$cid);
     return $result->title;

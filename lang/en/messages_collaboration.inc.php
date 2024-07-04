@@ -1596,3 +1596,12 @@ $langSendEmailWithComments = "Upon submission of your comments, an informative e
 $langNoExistsTClink = "Video conference link not found in session resources.";
 $langNotFolders = "To complete the session by submitting a deliverable, compressed folders cannot be selected.</br>
  It will be ignored if any folder is selected as deliverable.";
+ $langSessionAcceptance = "You have been selected to join the current session.
+ To complete the process you should click on the link below.
+ The link will redirect you to the session page after first logging into the platform.
+ To proceed with the registration press submit.";
+$langQuestionAcceptanceSession = "Do you accept your registration for this session?</br>
+ The Advisor will be notified by email about the selection.";
+$langUserHasAcceptedSession = "User session registration ACCEPTED:";
+$langUserHasNotAcceptedSession = "The session registration was NOT accepted by the user:";
+$langProcessCompleted = "You have successfully completed the process.";

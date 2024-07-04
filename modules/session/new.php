@@ -68,8 +68,6 @@ if(isset($_POST['submit'])){
   ));
 
   if($v->validate()) {
-    // $start_session = !empty($_POST['start_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session'])->format('Y-m-d H:i:s') : null;
-    // $end_session = !empty($_POST['end_session']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['end_session'])->format('Y-m-d H:i:s') : null;
     $start_session = !empty($_POST['start_session']) ? $_POST['start_session'] : null;
     $end_session = !empty($_POST['end_session']) ? $_POST['end_session'] : null;
     if(!is_null($start_session) && !is_null($end_session) && $end_session < $start_session){
@@ -95,32 +93,36 @@ if(isset($_POST['submit'])){
                                         course_id = ?d,
                                         type_remote = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $course_id, $type_remote);
 
-    if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
-      $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                session_id = ?d,
-                                                participants = ?d", $insert->lastInsertID, $_POST['one_participant']);
-    }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
-      foreach($_POST['many_participants'] as $m){
-        $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                  session_id = ?d,
-                                                  participants = ?d", $insert->lastInsertID, $m);
-      }
-    }
+    // if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
+    //   $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
+    //                                             session_id = ?d,
+    //                                             participants = ?d", $insert->lastInsertID, $_POST['one_participant']);
+    // }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
+    //   foreach($_POST['many_participants'] as $m){
+    //     $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
+    //                                               session_id = ?d,
+    //                                               participants = ?d", $insert->lastInsertID, $m);
+    //   }
+    // }
 
-    if($insert_users){
+    if($insert){
 
       // Send notification - email to the user - participant
+      $course_title = course_id_to_title($course_id);
       $creatorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$creator)->givenname;
       $creatorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$creator)->surname;
-      $dateFrom = $start_session;
-      $dateEnd = $end_session;
+      $dateFrom = format_locale_date(strtotime($start_session), 'short');
+      $dateEnd = format_locale_date(strtotime($end_session), 'short');
+      $is_remote_session = (isset($type_remote) && $type_remote) ? "$langRemote" : "$langNotRemote";
+      $session_id = $insert->lastInsertID;
+      $link_acceptance = $urlServer . "modules/session/session_acceptance.php?course=$course_code&session=$session_id";
 
       $emailHeader = "
       <!-- Header Section -->
               <div id='mail-header'>
                   <br>
                   <div>
-                      <div id='header-title'>$langAvailableSession</div>
+                      <div id='header-title'>$langAvailableSession&nbsp;&nbsp;<span>($course_title)</span></div>
                   </div>
               </div>";
 
@@ -130,10 +132,31 @@ if(isset($_POST['submit'])){
               <br>
               <div>$langDetailsSession</div>
               <div id='mail-body-inner'>
+                  <div class='mb-4'>
+                    <p>$langSessionAcceptance</p>
+                    <a href='$link_acceptance' target='_blank'>$link_acceptance</a>
+                  </div>
                   <ul id='forum-category'>
-                      <li><span><b>$langTitle: </b></span> <span>$title</span></li>
-                      <li><span><b>$langConsultant: </b></span> <span>$creatorName $creatorSurname</span></li>
-                      <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
+                      <li>
+                        <span><b>$langTitle: </b></span> 
+                        <span>$title</span>
+                      </li>
+                      <li>
+                        <span><b>$langConsultant: </b></span> 
+                        <span>$creatorName $creatorSurname</span>
+                      </li>
+                      <li>
+                        <span><b>$langStartDate: </b></span>
+                        <span>$dateFrom</span>
+                      </li>
+                      <li>
+                        <span><b>$langEndDate: </b></span>
+                        <span>$dateEnd</span>
+                      </li>
+                      <li>
+                        <span><b>$langTypeRemote: </b></span>
+                        <span>$is_remote_session</span>
+                      </li>
                   </ul>
               </div>
               <div>
