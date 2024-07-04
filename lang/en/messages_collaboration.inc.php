@@ -1593,3 +1593,6 @@ $langCommentsByConsultant = "Comments by consultant";
 $langInsertPassage = "Add text";
 $langSomeComments = "Update on your deliverable";
 $langSendEmailWithComments = "Upon submission of your comments, an informative email will be sent to the user about them.";
+$langNoExistsTClink = "Video conference link not found in session resources.";
+$langNotFolders = "To complete the session by submitting a deliverable, compressed folders cannot be selected.</br>
+ It will be ignored if any folder is selected as deliverable.";

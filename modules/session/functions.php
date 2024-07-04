@@ -190,33 +190,6 @@ function insert_session_docs($sid) {
     global $webDir, $course_id, $course_code, $group_sql, $subsystem, $subsystem_id, $basedir;
 
     if(isset($_POST['document'])){
-        if ($sid == -1) { // Insert common documents into main documents
-            $target_dir = '';
-            if (isset($_POST['dir']) and !empty($_POST['dir'])) {
-                // Make sure specified target dir exists in course
-                $target_dir = Database::get()->querySingle("SELECT path FROM document
-                                            WHERE course_id = ?d AND
-                                                  subsystem = " . MAIN . " AND
-                                                  path = ?s", $course_id, $_POST['dir']->path);
-            }
-
-            foreach ($_POST['document'] as $file_id) {
-                $file = Database::get()->querySingle("SELECT * FROM document
-                                            WHERE course_id = -1
-                                            AND subsystem = " . COMMON . "
-                                            AND id = ?d", $file_id);
-                if ($file) {
-                    $subsystem = MAIN;
-                    $subsystem_id = 'NULL';
-                    $group_sql = "course_id = $course_id AND subsystem = " . MAIN;
-                    $basedir = $webDir . '/courses/' . $course_code . '/document';
-                    insert_common_docs($file, $target_dir);
-                }
-            }
-            header('Location: ../document/index.php?course=' . $course_code . '&openDir=' . $target_dir);
-            exit;
-        }
-
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
         foreach ($_POST['document'] as $file_id) {
             $order++;
@@ -235,7 +208,6 @@ function insert_session_docs($sid) {
                                             `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                         $sid, $title, $comment, $order, $file->id);
         }
-
     }
 
     header('Location: session_space.php?course=' . $course_code . '&session=' . $sid);
@@ -363,6 +335,7 @@ function delete_session($sid = 0){
  */
 function show_session_resources($sid)
 {
+
     global $max_resource_id,
            $head_content, $langDownload, $langPrint, $langCancel,
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code, $langNoAvailableSessionRecourses;
@@ -568,27 +541,6 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
             $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=$_GET[session]'>" .
                 q($title) . "</a>";
         } else {
-            // if($file->subsystem != MYSESSIONS){// These files are regarded with course documents
-            //     $file->title = $title;
-            //     $image = choose_image('.' . $file->format);
-            //     $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getInDirectReference($file->path);
-            //     $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
-            //         "<input type='hidden' value='$download_url'>" : '';
-            //     $file_obj = MediaResourceFactory::initFromDocument($file);
-            //     $file_obj->setAccessURL(file_url($file->path, $file->filename));
-            //     $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
-            //     $link = MultimediaHelper::chooseMediaAhref($file_obj);
-            // }else{// These files are regarded with session documents
-            //     $file->title = $title;
-            //     $image = choose_image('.' . $file->format);
-            //     $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
-            //     $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
-            //         "<input type='hidden' value='$download_url'>" : '';
-            //     $file_obj = MediaResourceFactory::initFromDocument($file);
-            //     $file_obj->setAccessURL(session_file_url($file->path, $file->filename));
-            //     $file_obj->setPlayURL(session_file_playurl($file->path, $file->filename));
-            //     $link = MultimediaHelper::chooseMediaAhref($file_obj);
-            // }
             $image = choose_image('.' . $file->format);
             $download_hidden_link = '';
             $link = "<a class='link-color' href='{$urlServer}modules/session/resource_space.php?course=$course_code&session=$sessionID&resource_id=$resource_id&file_id=$file_id'>$title</a>";
@@ -940,32 +892,20 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                             </div>";
 
                     $content .= action_button(array(
-                            array('title' => $langEditChange,
-                                'url' => $edit_link,
-                                'icon' => 'fa-edit',
-                                'show' => $status != 'del'),
-                            // array('title' => $showorhide,
-                            //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
-                            //       'icon' => $icon_vis,
-                            //       'show' => $status != 'del' and (in_array($res_type, array('text', 'video', 'forum', 'topic')) or $q->flipped_flag==2)),
-                            // array('title' => $langAddToCourseHome,
-                            //       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
-                            //       'icon' => $icon_vis,
-                            //       'show' => $status != 'del' and in_array($res_type, array('description'))),
-                            // array('title' => $langAddToUnitCompletion,
-                            //        'url' => "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$_GET[id]&amp;badge=1&add=true&amp;act=$res_type&amp;unit_res_id=$resource_id",
-                            //        'icon' => 'fa-star',
-                            //        'show' => prereq_unit_has_completion_enabled($_GET['id']) && $res_type_to_session_compl),
-                            array('title' => $langDownload,
-                                'url' => "$download_url",
-                                'icon' => 'fa-download',
-                                'show' => $res_type == 'doc'),
-                            array('title' => $langDelete,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
-                                'icon' => 'fa-xmark',
-                                'confirm' => $langConfirmDelete,
-                                'class' => 'delete')
-                        ));
+                                    array('title' => $langEditChange,
+                                        'url' => $edit_link,
+                                        'icon' => 'fa-edit',
+                                        'show' => $status != 'del'),
+                                    array('title' => $langDownload,
+                                        'url' => "$download_url",
+                                        'icon' => 'fa-download',
+                                        'show' => $res_type == 'doc'),
+                                    array('title' => $langDelete,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
+                                        'icon' => 'fa-xmark',
+                                        'confirm' => $langConfirmDelete,
+                                        'class' => 'delete')
+                                ));
         $content .= "   <div>
                     </td>";
     }
@@ -1224,18 +1164,6 @@ function upload_session_doc($sid){
     } 
     
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// REGARGIND SESSION COMPLETION
 
 /**
  * @return string
@@ -1835,8 +1763,10 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
             break;
         case 'withoutCompletedResource':
             session_completion_without_resources($element, $element_id, $session_id, $session_resource_id);
+            break;
         case 'withCompletedTCResource':
             session_completion_with_tc_completed($element, $element_id, $session_id, $session_resource_id);
+            break;
         default: break;
         }
 }
@@ -1940,7 +1870,7 @@ function display_session_available_documents($element, $element_id, $session_id 
     global $webDir, $tool_content,
             $langDirectory, $langUp, $langName, $langSize,
             $langDate, $langAddModulesButton, $langChoice,
-            $langNoDocuments, $course_code, $group_sql;
+            $langNoDocuments, $course_code, $group_sql, $langNotFolders , $course_id;
 
     require_once 'modules/document/doc_init.php';
     require_once 'include/lib/mediaresource.factory.php';
@@ -1967,7 +1897,12 @@ function display_session_available_documents($element, $element_id, $session_id 
     if ($session_id) {
         $sql_only_not_selected_resources = '';
         if(isset($_GET['act']) && $_GET['act'] == 'submitFile'){
-            $sql_query = "SELECT resource FROM badge_criterion WHERE activity_type = 'document-submit'";
+            if(isset($_GET['badge_id'])){
+                $badge_id = $_GET['badge_id'];
+            }else{
+                $badge_id = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$session_id,$course_id)->id;
+            }
+            $sql_query = "SELECT resource FROM badge_criterion WHERE activity_type = 'document-submit' AND badge = $badge_id";
             $sql_only_not_selected_resources = "AND session_resources.res_id NOT IN ($sql_query)";
         }
         if ($session_resource_id) {
@@ -2041,6 +1976,13 @@ function display_session_available_documents($element, $element_id, $session_id 
         } else {
             $action = "index.php?course=$course_code";
         }
+
+
+        $tool_content .= "<div class='alert alert-info'>
+                                <i class='fa-solid fa-circle-info fa-lg'></i>
+                                <span>$langNotFolders</span>
+                            </div>";
+        
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>";
@@ -2224,7 +2166,7 @@ function session_completion_without_resources($element, $element_id, $session_id
  */
 function session_completion_with_tc_completed($element, $element_id, $session_id = 0, $session_resource_id = 0){
 
-    global $course_code, $langResourceAddedWithSuccess, $course_id, $langResourceExists;
+    global $course_code, $langResourceAddedWithSuccess, $course_id, $langResourceExists, $langNoExistsTClink;
 
     if($session_id){
         $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE course_id = ?d AND type_remote = ?d AND id = ?d", $course_id, 1, $session_id);
@@ -2242,8 +2184,14 @@ function session_completion_with_tc_completed($element, $element_id, $session_id
             Session::flash('message',$langResourceAddedWithSuccess);
             Session::flash('alert-class', 'alert-success');
         }else{
-            Session::flash('message',$langResourceExists);
-            Session::flash('alert-class', 'alert-danger');
+            if(!$tc){
+                Session::flash('message',$langNoExistsTClink);
+                Session::flash('alert-class', 'alert-warning');
+            }else{
+                Session::flash('message',$langResourceExists);
+                Session::flash('alert-class', 'alert-danger');
+            }
+
         }
         redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);                     
         
@@ -2393,8 +2341,6 @@ function display_session_available_polls($element, $element_id, $session_id = 0,
  */
 function prereq_session_has_completion_enabled($prereq_session_id) {
     // This is for session completion enabled when session contains any resource
-    //$query = "SELECT bc.id FROM badge_criterion bc WHERE bc.badge IN (SELECT b.id FROM badge b WHERE b.session_id = ?d)";
-    //$exists = Database::get()->querySingle($query, $prereq_session_id);
     $exists = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d", $prereq_session_id);
     if ($exists) {
         return true;
@@ -2640,9 +2586,6 @@ function session_tc_creation($sid,$cid,$tc_type,$token){
             $options = NULL;
         }
         $record = 'false';
-        // if (isset($_POST['record'])) {
-        //     $record = $_POST['record'];
-        // }
 
         $t = Database::get()->querySingle("SELECT tc_servers.id FROM tc_servers JOIN course_external_server
                                                     ON tc_servers.id = external_server
@@ -2720,12 +2663,14 @@ function add_submitted_document_to_certificate($element, $element_id) {
 
     if (isset($_POST['document'])) {
         foreach ($_POST['document'] as $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
-                            SET $element = ?d,
-                                module= " . MODULE_ID_DOCS . ",
-                                resource = ?d,
-                                activity_type = 'document-submit'",
-                $element_id, $data);
+            $is_dir_or_zip = Database::get()->querySingle("SELECT format FROM document WHERE id = ?d",$data);
+            if($is_dir_or_zip->format != '.dir' && $is_dir_or_zip->format != 'zip'){
+                Database::get()->query("INSERT INTO {$element}_criterion
+                                        SET $element = ?d,
+                                        module= " . MODULE_ID_DOCS . ",
+                                        resource = ?d,
+                                        activity_type = 'document-submit'", $element_id, $data);
+            }
         }
     }
     return;

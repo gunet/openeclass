@@ -49,10 +49,17 @@ function list_documents($sid, $cid) {
         $common_docs = false;
         $visible_sql = '';
     }
+
+    // Do not show the same files if these are uploaded as resource in a session.
+    $session_sql = '';
+    if($sid){
+        $session_sql = "AND id NOT IN (SELECT res_id FROM session_resources WHERE session_id = $sid AND doc_id = 0 AND from_user = 0 AND type = 'doc')";
+    }
+
     $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                                 WHERE $group_sql AND $visible_sql
                                       path LIKE ?s AND
-                                      path NOT LIKE ?s
+                                      path NOT LIKE ?s $session_sql
                                 ORDER BY sort_key COLLATE utf8mb4_unicode_ci",
                                 "$path/%", "$path/%/%");
 
