@@ -20,8 +20,8 @@
  * ======================================================================== */
 
 /**
- *  @file manage.php
- *  @brief manage unit completion and/or add unit prerequisites
+ *  @file complete.php
+ *  @brief manage session completion and/or add session prerequisites
  */
 
 $require_current_course = true;

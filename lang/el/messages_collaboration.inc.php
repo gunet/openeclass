@@ -1541,3 +1541,4 @@ $langQuestionAcceptanceSession = "Αποδέχεστε την εγγραφή σ�
 $langUserHasAcceptedSession = "ΕΓΙΝΕ αποδοχή της εγγραφής στην συνεδρία από τον χρήστη:";
 $langUserHasNotAcceptedSession = "ΔΕΝ έγινε αποδοχή της εγγραφής στην συνεδρία από τον χρήστη:";
 $langProcessCompleted = "Ολοκληρώσατε με επιτυχία την διαδικασία.";
+$langAnnouncedExistingSession = "Οι χρήστες που θα επιλεχθούν θα ενημερωθούν με σχετικό email για να εγγραφούν στην συνεδρία.";

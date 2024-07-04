@@ -21,7 +21,7 @@
 
 
 /**
- * @file index.php
+ * @file session_acceptance.php
  * @brief Accept participation in current session
  */
 

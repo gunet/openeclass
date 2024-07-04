@@ -330,6 +330,7 @@
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('many_participants') !!}</span>
                                                 @endif
                                             </div>
+                                            <small>{{ trans('langAnnouncedExistingSession') }}</small>
                                         </div>
 
                                         <div class='form-group mt-4'>

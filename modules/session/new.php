@@ -21,8 +21,8 @@
 
 
 /**
- * @file index.php
- * @brief Sessions display module
+ * @file new.php
+ * @brief Session creation
  */
 
 $require_login = true;

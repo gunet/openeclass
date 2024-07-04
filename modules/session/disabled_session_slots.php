@@ -21,8 +21,8 @@
 
 
 /**
- * @file index.php
- * @brief Sessions display module
+ * @file disabled_session_slots.php
+ * @brief Disable sessions
  */
 
 $require_login = true;
