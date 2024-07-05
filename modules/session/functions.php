@@ -977,9 +977,15 @@ function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
             $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, 
-            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName;
+            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName, $langNotExistUsers;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    if($is_consultant && !isset($_POST['fromUser']) && isset($_POST['onBehalfOfUserID'])){
+        Session::flash('message',$langNotExistUsers);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']."&upload_for_user=true");
+    }
 
     if($_FILES['file-upload']['error'] > 0) { 
         // cover_image is empty (and not an error), or no file was uploaded
@@ -1410,7 +1416,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                     $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
                 }
             }
-            if( $per/count($participants) == 100 ){
+            if( count($participants) > 0 && $per/count($participants) == 100 ){
                  $is_session_completed = true;
                  $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
             }else{

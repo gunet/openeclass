@@ -1606,3 +1606,4 @@ $langUserHasAcceptedSession = "User session registration ACCEPTED:";
 $langUserHasNotAcceptedSession = "The session registration was NOT accepted by the user:";
 $langProcessCompleted = "You have successfully completed the process.";
 $langAnnouncedExistingSession = "Selected users will be notified by email to register for the session.";
+$langNotExistUsers = "There are no users";

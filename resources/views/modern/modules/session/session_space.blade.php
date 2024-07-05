@@ -103,7 +103,7 @@
                                 'icon' => 'fa-solid fa-users-rectangle',
                                 'confirm_title' => trans('langAddTcSession'),
                                 'confirm_button' => trans('langSubmit'),
-                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID))
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0)
                             )
                         ))
                     !!}
