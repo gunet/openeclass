@@ -2094,9 +2094,18 @@ function display_session_available_documents($element, $element_id, $session_id 
  */
 function session_completion_without_resources($element, $element_id, $session_id = 0, $session_resource_id = 0){
 
-    global $course_code, $course_id, $langSessionHasCompleted, $langSessionCompletedNotContinue, $langSessionCompletedIsActivated;
+    global $course_code, $course_id, $langForbidden, $langSessionHasCompleted, $langSessionCompletedNotContinue, $langSessionCompletedIsActivated, $langNotExistUsers;
 
     if($session_id){
+
+        $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users 
+                                                     WHERE session_id = ?d",$session_id);
+        if(count($participants) == 0){
+            Session::flash('message',$langForbidden.'</br>'.$langNotExistUsers);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/complete.php?course=$course_code&manage=1&session=$session_id");
+        }
+
         // Initially we should check if a session has completed prequisite session
         $check_completion_badge = false;
         $has_completed_prerequisite_session = false;
