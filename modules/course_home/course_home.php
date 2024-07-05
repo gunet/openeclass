@@ -347,6 +347,8 @@ if ($is_course_admin) {
                 WHERE `user`.`id` = `course_user`.`user_id`
                 AND user.expires_at > " . DBHelper::timeAfter() . "
                 AND `course_user`.`course_id` = ?d", $course_id)->numUsers;
+} else {
+    $data['numUsers'] = $numUsers = '';
 }
 
 $data['lessonStatus'] = course_access_icon($visible);

@@ -24,8 +24,7 @@ $require_login = TRUE;
 include '../include/baseTheme.php';
 require_once 'include/log.class.php';
 
-$pageName = $langUnregCourse;
-
+$toolName = $langUnregCourse;
 
 if (get_config('disable_student_unregister_cours')) {
     redirect_to_home_page();
@@ -40,25 +39,10 @@ if (!isset($_GET['cid'])) {
 }
 
 if (!isset($_POST['doit'])) {
-    $tool_content .= "
-    <div class='col-12 mt-4'>
-      <h3>$pageName</h3>
-      <div class='form-wrapper form-edit rounded mt-4 p-0 border-0'>
-        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid'>
-          <div class='form-group'>
-            <div class='col-sm-12 form-label'>
-              $langConfirmUnregCours: <b>" . q(course_id_to_title($cid)) . "</b>
-            </div>
-          </div>
-          <div class='form-group mt-4 d-flex justify-content-start align-items-center gap-2'>
-            <button class='btn deleteAdminBtn' name='doit'> $langUnCourse</button>
-            <a href='{$urlAppend}main/portfolio.php' class='btn cancelAdminBtn'> $langCancel</a>
-          </div>
-        </form>
-      </div>
-    </div>";
-} else {
-    if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
+    $data['cid'] = $cid;
+    $data['course_title'] = course_id_to_title($cid);
+    view("main.profile.unregcourse", $data);
+} else if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
         $q = Database::get()->query("DELETE from course_user
                                     WHERE course_id = ?d
                                     AND user_id = ?d", $cid, $_GET['u']);
@@ -85,24 +69,16 @@ if (!isset($_POST['doit'])) {
             unset($_SESSION['dbname']);
             unset($_SESSION['cid_tmp']);
             unset($_SESSION['courses'][$code]);
-            //Session::Messages($langCoursDelSuccess, 'alert-success');
-            Session::flash('message',$langCoursDelSuccess);
+            Session::flash('message', $langCoursDelSuccess);
             Session::flash('alert-class', 'alert-success');
-            if(isset($_POST['fromMyCoursesPage']) and $_POST['fromMyCoursesPage'] == 1){
+            if (isset($_POST['fromMyCoursesPage']) and $_POST['fromMyCoursesPage'] == 1) {
                 redirect_to_home_page('main/my_courses.php');
-            }else{
+            } else {
                 redirect_to_home_page('main/portfolio.php');
             }
-          
         } else {
-            $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langCoursError</span></div></div>";
+            Session::flash('message', $langCoursError);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('main/portfolio.php');
         }
-    }
-    $tool_content .= "<br><br><div class='text-end'><a href='../index.php' class=mainpage>$langBack</a></div>";
-}
-
-if (isset($_SESSION['uid'])) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
 }

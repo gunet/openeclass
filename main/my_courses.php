@@ -165,7 +165,7 @@ if(isset($_GET['term'])){
                                         <i class='fa-solid fa-gear settings-icons'></i>
                                         $langAdm
                                     </a>";
-                                }else{
+                                } else {
                                     if (get_config('disable_student_unregister_cours') == 0){
                                         $html .= "<button class='btn deleteAdminBtn w-100 gap-1' data-bs-toggle='modal' data-bs-target='#exampleModal{$course->course_id}'>
                                             <i class='fa-solid fa-circle-xmark settings-icons'></i>
@@ -194,9 +194,7 @@ if(isset($_GET['term'])){
                                     </div>
                                     <div class='modal-footer d-flex justify-content-center align-items-center'>
                                         <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
-
-                                        <button type='submit' class='btn deleteAdminBtn' name='doit'>$langDelete</a>
-
+                                        <button type='submit' class='btn deleteAdminBtn' name='doit'>$langUnCourse</a>
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +208,6 @@ if(isset($_GET['term'])){
                     }
                     $countCards++;
                     $allCourses++;
-
 
                   }
 
@@ -253,7 +250,6 @@ $data['action_bar']  = action_bar([
 $data['menuTypeID'] = 1;
 
 view('main.my_courses.index', $data);
-
 
 
 function GroupCardsPagination($allCourses,$pagesPag){
