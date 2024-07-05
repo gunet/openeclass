@@ -19,7 +19,7 @@
     <!-- Font Awesome - A font of icons -->
     {{--<link href="{{ $template_base }}/css/font-awesome/css/font-awesome.css" rel="stylesheet">--}}
     {{--Template modification between default and 3.6--}}
-    <link href="{{ $template_base }}/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ $template_base }}/css/font-awesome-6.4.0/css/font-awesome.css" rel="stylesheet">
 
     @if (isset($styles_str) && $styles_str)
         <style>
