@@ -292,4 +292,24 @@
         </div>
     </div>
 </div>
+
+@if ($is_admin)
+    <script>
+        var csrf_token = '{{ $_SESSION['csrf_token'] }}';
+        $(function() {
+            $(document).on('click', '.change-user-link', function (e) {
+                e.preventDefault();
+                $('<form>', {
+                    'action': $(this).attr('href'),
+                    'method': 'post'
+                }).append($('<input>', {
+                    'type': 'hidden',
+                    'name': 'token',
+                    'value': csrf_token
+                })).appendTo(document.body).submit();
+            });
+        });
+    </script>
+@endif
+
 @endsection
