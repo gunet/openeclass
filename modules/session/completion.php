@@ -104,8 +104,8 @@ if(isset($_GET['addSessions'])){
                                                           WHERE visible = ?d
                                                           AND course_id = ?d
                                                           AND id IN (SELECT session_id FROM mod_session_users
-                                                                      WHERE participants = ?d)
-                                                          ORDER BY start ASC",1,$course_id,$uid); 
+                                                                      WHERE participants = ?d AND is_accepted = ?d)
+                                                          ORDER BY start ASC",1,$course_id,$uid,1); 
 
         $visible_user_sessions = findUserVisibleSessions($uid, $all_user_sessions);
         foreach ($visible_user_sessions as $d) {

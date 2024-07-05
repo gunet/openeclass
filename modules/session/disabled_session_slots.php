@@ -91,7 +91,8 @@ function getTitleSession($sid,$cid){
 
     $participants_info = Database::get()->queryArray("SELECT mod_session_users.session_id,mod_session_users.participants,user.id,user.givenname,user.surname FROM mod_session_users
                                                         LEFT JOIN user ON mod_session_users.participants=user.id
-                                                        WHERE mod_session_users.session_id=?d",$sid);
+                                                        WHERE mod_session_users.session_id=?d
+                                                        AND mod_session_users.is_accepted=?d",$sid,1);
          
     if(count($participants_info)>0){
         $html_participant .= "<ul class='list-group list-group-flush'>";

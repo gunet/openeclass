@@ -392,6 +392,19 @@
                                             </div>
                                         </div>
 
+                                        <div class='form-group mt-4'>
+                                            <div class='col-12'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container'>
+                                                        <input type='checkbox' name='with_consent' {!! $withConsent==1 ? 'checked' : '' !!}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langWithConsent')}}
+                                                    </label>
+                                                </div>
+                                                <small>{{ trans('langInfoWithConsent') }}</small>
+                                            </div>
+                                        </div>
+
                                         {!! generate_csrf_token_form_field() !!}    
 
                                         <div class='form-group mt-5'>

@@ -166,7 +166,7 @@ function user_group_session_info($uid, $course_id, $as_id = NULL) {
  */
 function session_participants_ids($sid){
     $partipants_ids = array();
-    $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$sid);
+    $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sid,1);
     if(count($res) > 0){
         foreach($res as $r){
             $partipants_ids[] = $r->participants;
@@ -176,13 +176,28 @@ function session_participants_ids($sid){
 }
 
 /**
+ * @brief all participants ids in session where not accepted yet
+ * @param integer $sid
+ */
+function session_edit_participants_ids($sid){
+    $users = array();
+    $res = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$sid);
+    if(count($res) > 0){
+        foreach($res as $r){
+            $users[] = $r->participants;
+        }
+    }
+    return $users;
+}
+
+/**
  * @brief check if a user participates in a session
  * @param integer $sid
  */
 function participation_in_session($sid){
     global $uid;
     
-    $res = Database::get()->queryArray("SELECT * FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$sid,$uid);
+    $res = Database::get()->queryArray("SELECT * FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$sid,$uid,1);
     if(count($res) > 0){
         return true;
     }else{
@@ -516,7 +531,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
                                                         WHERE course_id = ?d AND status = ?d AND tutor = ?d 
                                                         AND editor = ?d AND course_reviewer = ?d AND reviewer = ?d
                                                         AND user_id IN (SELECT participants FROM mod_session_users 
-                                                                        WHERE session_id = ?d)", $course_id, USER_STUDENT, 0, 0, 0, 0, $sessionID);
+                                                                        WHERE session_id = ?d AND is_accepted = ?d)", $course_id, USER_STUDENT, 0, 0, 0, 0, $sessionID, 1);
     foreach($idsNotConsultant as $u){
         $ids_simple_users[] = $u->user_id;
     }
@@ -1410,7 +1425,7 @@ function display_session_activities($element, $id, $session_id = 0) {
         if ($sql_badge) {
             $per = 0;
             $badge_id = $sql_badge->id;
-            $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$session_id);
+            $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$session_id,1);
             if(count($participants) > 0){
                 foreach($participants as $p){
                     $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
@@ -2099,7 +2114,7 @@ function session_completion_without_resources($element, $element_id, $session_id
     if($session_id){
 
         $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users 
-                                                     WHERE session_id = ?d",$session_id);
+                                                     WHERE session_id = ?d AND is_accepted = ?d",$session_id,1);
         if(count($participants) == 0){
             Session::flash('message',$langForbidden.'</br>'.$langNotExistUsers);
             Session::flash('alert-class', 'alert-danger');
@@ -2148,7 +2163,7 @@ function session_completion_without_resources($element, $element_id, $session_id
         if($has_completed_prerequisite_session){
             $crit = Database::get()->query("INSERT INTO {$element}_criterion SET $element = ?d, activity_type = ?s",$element_id,'noactivity');
             $par = Database::get()->queryArray("SELECT participants FROM mod_session_users
-                                                        WHERE session_id = ?d",$session_id);
+                                                        WHERE session_id = ?d AND is_accepted = ?d",$session_id,1);
     
             if($crit && count($par) > 0){
                 foreach ($par as $p) {
@@ -2572,7 +2587,7 @@ function session_tc_creation($sid,$cid,$tc_type,$token){
         $minutes_before = "10";
         $external_users = NULL;
         $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
-        $sessionUsers = Database::get()->querySingle("SELECT COUNT(*) AS count FROM mod_session_users WHERE session_id = ?d",$sid)->count;
+        $sessionUsers = Database::get()->querySingle("SELECT COUNT(*) AS count FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sid,1)->count;
         if (!empty($bbb_max_part_per_room) and ($sessionUsers > $bbb_max_part_per_room)) {
             $sessionUsers = $bbb_max_part_per_room;
         }
@@ -2624,7 +2639,7 @@ function session_tc_creation($sid,$cid,$tc_type,$token){
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = ?s and enabled = 'true' ORDER BY weight ASC", $tc_type)->id;
         }
 
-        $participants_users = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$sid);
+        $participants_users = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sid,1);
         $r_group = '';
         foreach ($participants_users as $group) {
             $r_group .= $group->participants .',';

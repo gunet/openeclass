@@ -55,10 +55,17 @@ if(isset($_POST['modify'])){
   $v->rule('required', array('title'));
   $v->rule('required', array('start_session'));
   $v->rule('required', array('end_session'));
+  if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
+    $v->rule('required', array('one_participant'));
+  }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
+    $v->rule('required', array('many_participants'));
+  }
 
   $v->labels(array(
       'title' => "$langTheField $langTitle",
       'creators' => "$langTheField $langCreator",
+      'one_participant' => "$langTheField $langParticipants",
+      'many_participants' => "$langTheField $langParticipants",
       'start_session' => "$langTheField $langDate",
       'end_session' => "$langTheField $langDate"
   ));
@@ -90,6 +97,8 @@ if(isset($_POST['modify'])){
     $type_session = $_POST['session_type'];
     $visible_session = (isset($_POST['session_visible']) and $_POST['session_visible']=='on') ? 1 : 0;
     $type_remote = $_POST['type_remote'];
+    $consent = (isset($_POST['with_consent']) and $_POST['with_consent']=='on') ? 1 : 0;
+    $is_user_accepted = (isset($_POST['with_consent']) and $_POST['with_consent']=='on') ? 0 : 1;
 
     // Update dates on video teleconference
     $tc_exists = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND id_session = ?d",$course_id,$_GET['session']);
@@ -110,42 +119,75 @@ if(isset($_POST['modify'])){
                                         start = ?t,
                                         finish = ?t,
                                         visible = ?d,
-                                        type_remote = ?d
+                                        type_remote = ?d,
+                                        consent = ?d
                                         WHERE course_id = ?d
-                                        AND id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $type_remote, $course_id, $_GET['session']);
+                                        AND id = ?d",$creator, $title, $comments, $type_session, $start_session, $end_session, $visible_session, $type_remote, $consent, $course_id, $_GET['session']);
 
+
+    $old_users_ids = session_edit_participants_ids($_GET['session']);
+    $willSendEmail = array();
     if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
-      Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
-      if(isset($_POST['one_participant']) && $_POST['one_participant'] > 0){
-        $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                  participants = ?d,
-                                                  session_id = ?d", $_POST['one_participant'], $_GET['session']);
+      if(count($old_users_ids) == 1){
+        $old_user = 0;
+        foreach($old_users_ids as $old){
+          $old_user = $old;
+        }
+        if(!in_array($_POST['one_participant'],$old_users_ids)){
+          if(isset($consent) && $consent){
+            $willSendEmail[] = $_POST['one_participant'];
+          }
+          Database::get()->query("UPDATE mod_session_users SET 
+                                    session_id = ?d,
+                                    participants = ?d,
+                                    is_accepted = ?d
+                                    WHERE session_id = ?d 
+                                    AND participants = ?d", $_GET['session'], $_POST['one_participant'], $is_user_accepted, $_GET['session'], $old_user);
+        }
+      }elseif(count($old_users_ids) > 1){
+        Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
+        $willSendEmail[] = $_POST['one_participant'];
+        Database::get()->query("INSERT INTO mod_session_users SET 
+                                            participants = ?d,
+                                            session_id = ?d,
+                                            is_accepted = ?d", $_POST['one_participant'], $_GET['session'],$is_user_accepted);
       }
     }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
-      Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
-      if(isset($_POST['many_participants'])){
-        foreach($_POST['many_participants'] as $m){
-          $insert_users = Database::get()->query("INSERT INTO mod_session_users SET 
-                                                    session_id = ?d,
-                                                    participants = ?d", $_GET['session'], $m);
+      $deleted_users = array_diff($old_users_ids,$_POST['many_participants']);
+      foreach($deleted_users as $del_u){
+        Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_GET['session'],$del_u);
+      }
+      $new_users_ids = session_edit_participants_ids($_GET['session']);
+      foreach($_POST['many_participants'] as $m){
+        if(!in_array($m,$new_users_ids)){
+          if(isset($consent) && $consent){
+            $willSendEmail[] = $m;
+          }
+          Database::get()->query("INSERT INTO mod_session_users SET
+                                  session_id = ?d,
+                                  participants = ?d,
+                                  is_accepted = ?d", $_GET['session'], $m, $is_user_accepted);
         }
       }
     }
 
-    if($insert){
-
-      // Send notification - email to the user - participant
+    // Send notification - email to the user - participant
+    if(isset($consent) && $consent){
+      $course_title = course_id_to_title($course_id);
       $creatorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$creator)->givenname;
       $creatorSurname = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$creator)->surname;
-      $dateFrom = $start_session;
-      $dateEnd = $end_session;
+      $dateFrom = format_locale_date(strtotime($start_session), 'short');
+      $dateEnd = format_locale_date(strtotime($end_session), 'short');
+      $is_remote_session = (isset($type_remote) && $type_remote) ? "$langRemote" : "$langNotRemote";
+      $sid = $_GET['session'];
+      $link_acceptance = $urlServer . "modules/session/session_acceptance.php?course=$course_code&session=$sid";
 
       $emailHeader = "
       <!-- Header Section -->
               <div id='mail-header'>
                   <br>
                   <div>
-                      <div id='header-title'>$langAvailableSession</div>
+                      <div id='header-title'>$langAvailableSession&nbsp;&nbsp;<span>($course_title)</span></div>
                   </div>
               </div>";
 
@@ -155,10 +197,31 @@ if(isset($_POST['modify'])){
               <br>
               <div>$langDetailsSession</div>
               <div id='mail-body-inner'>
+                  <div class='mb-4'>
+                    <p>$langSessionAcceptance</p>
+                    <a href='$link_acceptance' target='_blank'>$link_acceptance</a>
+                  </div>
                   <ul id='forum-category'>
-                      <li><span><b>$langTitle: </b></span> <span>$title</span></li>
-                      <li><span><b>$langConsultant: </b></span> <span>$creatorName $creatorSurname</span></li>
-                      <li><span><b>$langDate: </b></span>$dateFrom - $dateEnd<span></span></li>
+                      <li>
+                        <span><b>$langTitle: </b></span> 
+                        <span>$title</span>
+                      </li>
+                      <li>
+                        <span><b>$langConsultant: </b></span> 
+                        <span>$creatorName $creatorSurname</span>
+                      </li>
+                      <li>
+                        <span><b>$langStartDate: </b></span>
+                        <span>$dateFrom</span>
+                      </li>
+                      <li>
+                        <span><b>$langEndDate: </b></span>
+                        <span>$dateEnd</span>
+                      </li>
+                      <li>
+                        <span><b>$langTypeRemote: </b></span>
+                        <span>$is_remote_session</span>
+                      </li>
                   </ul>
               </div>
               <div>
@@ -179,23 +242,25 @@ if(isset($_POST['modify'])){
       $emailPlainBody = html2text($emailbody);
 
       if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
-        $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['one_participant'])->email;
-        send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+        if(count($willSendEmail) > 0){
+          foreach($willSendEmail as $m){
+            $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+            send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+          }
+        }
       }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
-        foreach($_POST['many_participants'] as $m){
-          $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
-          send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+        if(count($willSendEmail) > 0){
+          foreach($willSendEmail as $m){
+            $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+            send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+          }
         }
       }
-
-      Session::flash('message',$langAddSessionCompleted);
-      Session::flash('alert-class', 'alert-success');
-      redirect_to_home_page("modules/session/index.php?course=".$course_code);
-    }else{
-      Session::flash('message',$langAddSessionNotCompleted);
-      Session::flash('alert-class', 'alert-danger');
-      redirect_to_home_page("modules/session/edit.php?course=".$course_code."&session=".$_GET['session']);
     }
+
+    Session::flash('message',$langAddSessionCompleted);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/index.php?course=".$course_code);
     
   }else{
     Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -217,6 +282,7 @@ $data['finish'] = q($endDate_obj->format('d-m-Y H:i'));
 $data['finish_text'] = q($endDate_obj->format('H:i'));
 $data['visible'] = $session_info->visible;
 $data['type_remote'] = $session_info->type_remote;
+$data['withConsent'] = $session_info->consent;
 $users_participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
                                                             WHERE session_id = ?d",$_GET['session']);
 $participants_arr = [];

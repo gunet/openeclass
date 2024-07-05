@@ -71,6 +71,12 @@
                                 'button-class' => 'btn-success',
                                 'show' => $is_consultant
                             ),
+                            array('title' => trans('langUserConsent'),
+                                'url' => $urlAppend . 'modules/session/session_users.php?course=' . $course_code . '&session=' . $sessionID,
+                                'icon' => 'fa fa-users',
+                                'button-class' => 'btn-success',
+                                'show' => ($is_consultant && $is_session_consent->consent)
+                            ),
                             array('title' => trans('langCompleteSession'),
                                 'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID . '&manage=1',
                                 'icon' => 'fa fa-trophy',

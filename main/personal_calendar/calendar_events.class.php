@@ -277,7 +277,7 @@ class Calendar_Events {
                         . "FROM mod_session ms JOIN course_user cu ON ms.course_id = cu.course_id "
                         . "JOIN course c ON cu.course_id=c.id "
                         . "WHERE cu.user_id = ?d AND ms.visible = '1' AND c.visible != " . COURSE_INACTIVE . " "
-                        . "AND ((ms.creator = $uid) OR (ms.id IN (SELECT session_id FROM mod_session_users WHERE participants = $uid)))"
+                        . "AND ((ms.creator = $uid) OR (ms.id IN (SELECT session_id FROM mod_session_users WHERE participants = $uid AND is_accepted = 1)))"
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
 

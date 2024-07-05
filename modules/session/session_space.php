@@ -195,8 +195,8 @@ if($is_coordinator or $is_consultant){
                                                     WHERE visible = ?d
                                                     AND course_id = ?d
                                                     AND id IN (SELECT session_id FROM mod_session_users
-                                                                WHERE participants = ?d)
-                                                    ORDER BY start ASC",1,$course_id,$uid); 
+                                                                WHERE participants = ?d AND is_accepted = ?d)
+                                                    ORDER BY start ASC",1,$course_id,$uid,1); 
 
     $visible_sessions_id = array();
     $visible_user_sessions = findUserVisibleSessions($uid, $data['all_session']);
@@ -212,8 +212,10 @@ if($is_coordinator or $is_consultant){
 }
 
 $data['participants'] = Database::get()->queryArray("SELECT participants FROM mod_session_users 
-                                                     WHERE session_id = ?d",$sessionID);
+                                                     WHERE session_id = ?d AND is_accepted = ?d",$sessionID,1);
 
 $data['comments'] = Database::get()->querySingle("SELECT comments FROM mod_session WHERE id = ?d",$sessionID);
+
+$data['is_session_consent'] = Database::get()->querySingle("SELECT consent FROM mod_session WHERE id = ?d",$sessionID);
 
 view('modules.session.session_space', $data);

@@ -5,12 +5,19 @@
     <script>
         $(function() {
             $(document).on('click', '.delete-session', function(e){
+                e.preventDefault();
                 var sessionID = $(this).attr('data-id');
                 document.getElementById("deleteSession").value = sessionID;
             });
             $(document).on('click', '.leave-session', function(e){
+                e.preventDefault();
                 var sessionLeaveID = $(this).attr('data-id');
                 document.getElementById("leaveSession").value = sessionLeaveID;
+            });
+            $(document).on('click', '.do-acceptance', function(e){
+                e.preventDefault();
+                var session_id = $(this).attr('data-id');
+                document.getElementById("about_session").value = session_id;
             });
         });
     </script>
@@ -218,10 +225,16 @@
                                                     </div>
                                                     
                                                     <a class="btn successAdminBtn 
-                                                                @if(!$is_coordinator && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif" 
+                                                                @if(!$is_coordinator && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif
+                                                                @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user) d-none @endif" 
                                                         href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
                                                         {{ trans('langEnter') }}
                                                     </a>
+                                                    @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user)
+                                                        <a data-id='{{ $s->id }}' class="btn submitAdminBtnDefault do-acceptance" data-bs-toggle="modal" data-bs-target="#RegistrationInSession">
+                                                            {{ trans('langRegister') }}
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class='card-footer border-0 text-end'>
@@ -247,7 +260,31 @@
     </div>
 </div>
 
-
+<div class='modal fade' id='RegistrationInSession' tabindex='-1' aria-labelledby='RegistrationInSessionLabel' aria-hidden='true'>
+    <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
+        <div class='modal-dialog modal-md'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <div class='modal-title'>
+                        <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
+                        <h3 class="modal-title-default text-center mb-0 mt-2" id="RegistrationInSessionLabel">{!! trans('langRegistration') !!}</h3>
+                    </div>
+                </div>
+                <div class='modal-body text-start'>
+                    <p>{{ trans('langContinueToRegistrationSession') }}</p>
+                    <input type='hidden' name='about_session' id='about_session'>
+                    <input type='hidden' name='token' value="{{ $_SESSION['csrf_token'] }}">
+                </div>
+                <div class='modal-footer d-flex justify-content-center align-items-center'>
+                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                    <button type='submit' class="btn submitAdminBtn" name="user_registration">
+                        {{ trans('langRegister') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div class='modal fade' id='SessionDelete' tabindex='-1' aria-labelledby='SessionDeleteLabel' aria-hidden='true'>
     <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">

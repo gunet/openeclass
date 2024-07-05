@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'course_sessions';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
 require_once 'modules/progress/process_functions.php';
@@ -46,6 +47,66 @@ load_js('datatables');
 
 $pageName = $langSession;
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
+
+if(isset($_POST['user_registration'])){
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    Database::get()->query("UPDATE mod_session_users SET
+                            is_accepted = ?d
+                            WHERE session_id = ?d
+                            AND participants = ?d",1,$_POST['about_session'],$uid);
+
+    if(participation_in_session($_POST['about_session'])){
+
+        $message = "$langUserHasAcceptedSession" . "&nbsp;" . participant_name($uid);
+        $session_title = title_session($course_id,$_POST['about_session']);
+        $course_title = course_id_to_title($course_id);
+        $consultant_id = get_session_consultant($_POST['about_session'],$course_id);
+        $emailConsultant = uid_to_email($consultant_id);
+        $emailHeader = "
+        <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>$session_title&nbsp;&nbsp;<span>($course_title)</span></div>
+                    </div>
+                </div>";
+  
+        $emailMain = "
+        <!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>
+                   <p>$message</p>
+                </div>
+                <div>
+                    <br>
+                    <p>$langProblem</p><br>" . get_config('admin_name') . "
+                    <ul id='forum-category'>
+                        <li>$langManager: $siteName</li>
+                        <li>$langTel: -</li>
+                        <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                    </ul>
+                </div>
+            </div>";
+  
+        $emailsubject = $siteName;
+  
+        $emailbody = $emailHeader.$emailMain;
+  
+        $emailPlainBody = html2text($emailbody);
+  
+        send_mail_multipart('', '', '', $emailConsultant, $emailsubject, $emailPlainBody, $emailbody);
+
+        Session::flash('message',$langCompleteRegistration);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=".$_POST['about_session']);
+    }else{
+        Session::flash('message',$langForbidden);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+}
 
 // Show remote or not sessions
 $remoteType = -1;
@@ -91,7 +152,7 @@ if(isset($_GET['delete_all_sessions'])){
 
 // Leave session from simple
 if(isset($_POST['leave_session'])){
-    Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_POST['session_leave_id'],$uid);
+    Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$_POST['session_leave_id'],$uid,1);
     Session::flash('message',$langLeaveSessionSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
@@ -163,7 +224,7 @@ if($is_coordinator or $is_consultant){
             if ($sql_badge) {
                 $badge_id = $sql_badge->id;
                 $has_badge = $badge_id;
-                $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d",$s->id);
+                $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$s->id,1);
                 if(count($participants) > 0){
                     foreach($participants as $p){
                         $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
@@ -197,7 +258,7 @@ if($is_coordinator or $is_consultant){
                                             $sql_session
                                             AND id IN (SELECT session_id FROM mod_session_users
                                                         WHERE participants = ?d)
-                                            ORDER BY start ASC",1,$course_id,$uid); 
+                                            ORDER BY start ASC",1,$course_id,$uid);
 
 
     foreach ($data['individuals_group_sessions'] as $s) {
@@ -218,25 +279,27 @@ if($is_coordinator or $is_consultant){
         $vis = $cu->visible;
         $per = 0;
         $has_badge = 0;
-        if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
-            $not_shown = true;
-            $icon = icon('fa-clock fa-md', $langSessionNotStarted);
-            $has_badge = -1;
-        } else if (!in_array($cu->id, $visible_sessions_id)) {
-            $not_shown = true;
-            $icon = icon('fa-minus-circle fa-md', $langSessionNotCompleted);
-            $has_badge = -2;
-        } else {
-            if (in_array($cu->id, $visible_sessions_id)) {
-                $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
-                if ($sql_badge) {
-                    $badge_id = $sql_badge->id;
-                    $has_badge = $badge_id;
-                    $per = get_cert_percentage_completion('badge', $badge_id);
-                    if ($per == 100) {
-                        $icon = icon('fa-check-circle fa-md', $langInstallEnd);
-                    } else {
-                        $icon = icon('fa-hourglass-2 fa-md', $per . "%");
+        if(participation_in_session($cu->id)){
+            if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
+                $not_shown = true;
+                $icon = icon('fa-clock fa-md', $langSessionNotStarted);
+                $has_badge = -1;
+            } else if (!in_array($cu->id, $visible_sessions_id)) {
+                $not_shown = true;
+                $icon = icon('fa-minus-circle fa-md', $langSessionNotCompleted);
+                $has_badge = -2;
+            } else {
+                if (in_array($cu->id, $visible_sessions_id)) {
+                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
+                    if ($sql_badge) {
+                        $badge_id = $sql_badge->id;
+                        $has_badge = $badge_id;
+                        $per = get_cert_percentage_completion('badge', $badge_id);
+                        if ($per == 100) {
+                            $icon = icon('fa-check-circle fa-md', $langInstallEnd);
+                        } else {
+                            $icon = icon('fa-hourglass-2 fa-md', $per . "%");
+                        }
                     }
                 }
             }
@@ -246,7 +309,9 @@ if($is_coordinator or $is_consultant){
         $cu->percentage = round($per);
         $cu->has_badge = $has_badge;
         $cu->consultant = participant_name($cu->creator);
+        $cu->is_accepted_user = Database::get()->querySingle("SELECT is_accepted FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$cu->id,$uid)->is_accepted;
     }
 
 }
+
 view('modules.session.index', $data);

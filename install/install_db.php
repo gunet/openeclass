@@ -2509,6 +2509,7 @@ $db->query("CREATE TABLE `mod_session` (
         `public` TINYINT(4) NOT NULL DEFAULT 1,
         `order` INT(11) NOT NULL DEFAULT 0,
         `course_id` INT(11) NOT NULL,
+        `consent` int(11) NOT NULL DEFAULT 1,
         PRIMARY KEY(id),
         FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) $tbl_options");
 
@@ -2516,6 +2517,7 @@ $db->query("CREATE TABLE `mod_session_users` (
             `id` INT(11) NOT NULL AUTO_INCREMENT,
             `session_id` INT(11) NOT NULL DEFAULT 0,
             `participants` INT(11) NOT NULL DEFAULT 0,
+            `is_accepted` int(11) NOT NULL DEFAULT 0,
             PRIMARY KEY(id),
             FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
 

@@ -330,7 +330,6 @@
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('many_participants') !!}</span>
                                                 @endif
                                             </div>
-                                            <small>{{ trans('langAnnouncedExistingSession') }}</small>
                                         </div>
 
                                         <div class='form-group mt-4'>
@@ -373,6 +372,19 @@
                                                     <span class='checkmark'></span>
                                                     {{ trans('langVisible') }}
                                                 </label>
+                                            </div>
+                                        </div>
+
+                                        <div class='form-group mt-4'>
+                                            <div class='col-12'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container'>
+                                                        <input type='checkbox' name='with_consent'>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langWithConsent')}}
+                                                    </label>
+                                                </div>
+                                                <small>{{ trans('langInfoWithConsent') }}</small>
                                             </div>
                                         </div>
 

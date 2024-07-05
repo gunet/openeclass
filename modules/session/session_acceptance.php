@@ -50,9 +50,10 @@ if(isset($_POST['submit'])){
 
   $message = "";
   if($_POST['submit'] == 'acceptance'){
-    Database::get()->query("INSERT INTO mod_session_users SET 
-                            participants = ?d,
-                            session_id = ?d", $_POST['userId'], $sessionID);
+    Database::get()->query("UPDATE mod_session_users SET 
+                            is_accepted = ?d
+                            WHERE session_id = ?d 
+                            AND participants = ?d", 1, $sessionID, $_POST['userId']);
 
     $message = "$langUserHasAcceptedSession" . "&nbsp;" . participant_name($_POST['userId']);
   }else{

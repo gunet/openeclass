@@ -3124,6 +3124,14 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('session_resources', 'passage')) {
         Database::get()->query("ALTER TABLE session_resources ADD `passage` TEXT DEFAULT NULL");
     }
+
+    if (!DBHelper::fieldExists('mod_session', 'consent')) {
+        Database::get()->query("ALTER TABLE mod_session ADD `consent` int(11) NOT NULL DEFAULT 1");
+    }
+    
+    if (!DBHelper::fieldExists('mod_session_users', 'is_accepted')) {
+        Database::get()->query("ALTER TABLE mod_session_users ADD `is_accepted` int(11) NOT NULL DEFAULT 1");
+    }
 }
 
 

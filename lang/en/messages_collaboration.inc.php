@@ -1607,3 +1607,15 @@ $langUserHasNotAcceptedSession = "The session registration was NOT accepted by t
 $langProcessCompleted = "You have successfully completed the process.";
 $langAnnouncedExistingSession = "Selected users will be notified by email to register for the session.";
 $langNotExistUsers = "There are no users";
+$langWithConsent = "User consent for session registration?";
+$langInfoWithConsent = "The user will be automatically logged into the session if user consent is not selected.";
+$langContinueToRegistrationSession = "You have chosen to subscribe to this session. Do you want to proceed?";
+$langCompleteRegistration = "Your registration has been completed successfully! You have entered your session area.";
+$langUserConsent = "About user consent";
+$langInProgressRegistration = "Pending user registration...";
+$langSubmitRegistration = "User registration";
+$langNoSubmitRegistration = "Unsubscribe";
+$langCancelSessionRegistration = "User registration is about to be cancelled. The user will be able to rejoin the session.
+ The process of completing the session by that user will not be removed.
+ To delete it permanently including its progress on completing the session, you can go to edit the session.</br></br>
+ Do you want to continue?";
