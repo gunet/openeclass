@@ -347,6 +347,7 @@
                                                     <span class='help-block Accent-200-cl'>{!! Session::getError('many_participants') !!}</span>
                                                 @endif
                                             </div>
+                                            <small>({{ trans('langInfoAboutDelUser') }})</small>
                                         </div>
 
                                         <div class='form-group mt-4'>
@@ -401,7 +402,7 @@
                                                         {{ trans('langWithConsent')}}
                                                     </label>
                                                 </div>
-                                                <small>{{ trans('langInfoWithConsent') }}</small>
+                                                <small>({{ trans('langInfoWithConsent') }})</small>
                                             </div>
                                         </div>
 

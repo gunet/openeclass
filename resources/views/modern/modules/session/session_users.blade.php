@@ -99,7 +99,7 @@
                                             <tbody>
                                                 @foreach($all_users as $u)
                                                     <tr>
-                                                        <td>{!! participant_name($u->participants) !!}</td>
+                                                        <td>{!! display_user($u->participants) !!}</td>
                                                         <td>
                                                             @if($u->is_accepted)
                                                                 <span class='badge Success-200-bg'><i class='fa-solid fa-check fa-lg'></i></span>

@@ -2313,7 +2313,7 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     content_css: [
         '{$urlAppend}template/modern/css/bootstrap.min.css',
-        '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/font-awesome.css',
+        '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css',
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',

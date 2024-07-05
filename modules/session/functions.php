@@ -2783,3 +2783,26 @@ function insert_session_passage($sid) {
     header('Location: session_space.php?course=' . $course_code . '&session=' . $sid);
     exit;
 }
+
+
+/**
+ * @brief delete the badge of user in a session
+ * @param integer $u
+ * @param integer $sid
+ */
+function user_badge_deletion($u,$sid){
+
+    global $course_id;
+
+    Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND from_user = ?d", $sid, $u);
+    
+    Database::get()->query("DELETE FROM user_badge_criterion 
+                            WHERE user = ?d 
+                            AND badge_criterion IN
+                                (SELECT id FROM badge_criterion WHERE badge IN
+                                (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d))", $u, $course_id, $sid);
+
+    Database::get()->query("DELETE FROM user_badge 
+                            WHERE user = ?d 
+                            AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d)", $u, $course_id, $sid);
+}

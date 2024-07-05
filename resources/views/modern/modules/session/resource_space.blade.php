@@ -203,7 +203,6 @@
                                                     <th>{{ trans('langFileName') }}</th>
                                                     <th>{{ trans('langFrom') }}</th>
                                                     <th>{{ trans('langReferencedObject') }}</th>
-                                                    <th>{{ trans('langType') }}</th>
                                                     <th>{{ trans('langDate') }}</th>
                                                     @if($is_consultant)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
                                                     <th class='text-end'></th>
@@ -216,7 +215,6 @@
                                                         <td>{!! $doc->link !!}</td>
                                                         <td>{{ $doc->creator }}</td>
                                                         <td>{{ $doc->refers_to }}</td>
-                                                        <td>{{ $doc->format }}</td>
                                                         <td>{{ format_locale_date(strtotime($doc->date), 'short') }}</td>
                                                         @if($is_consultant)
                                                             <td class='text-center'>

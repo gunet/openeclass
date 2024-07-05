@@ -216,6 +216,4 @@ $data['participants'] = Database::get()->queryArray("SELECT participants FROM mo
 
 $data['comments'] = Database::get()->querySingle("SELECT comments FROM mod_session WHERE id = ?d",$sessionID);
 
-$data['is_session_consent'] = Database::get()->querySingle("SELECT consent FROM mod_session WHERE id = ?d",$sessionID);
-
 view('modules.session.session_space', $data);

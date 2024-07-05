@@ -137,6 +137,7 @@ if(isset($_POST['modify'])){
           if(isset($consent) && $consent){
             $willSendEmail[] = $_POST['one_participant'];
           }
+          user_badge_deletion($old_user,$_GET['session']);
           Database::get()->query("UPDATE mod_session_users SET 
                                     session_id = ?d,
                                     participants = ?d,
@@ -145,17 +146,31 @@ if(isset($_POST['modify'])){
                                     AND participants = ?d", $_GET['session'], $_POST['one_participant'], $is_user_accepted, $_GET['session'], $old_user);
         }
       }elseif(count($old_users_ids) > 1){
-        Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d",$_GET['session']);
-        $willSendEmail[] = $_POST['one_participant'];
-        Database::get()->query("INSERT INTO mod_session_users SET 
-                                            participants = ?d,
-                                            session_id = ?d,
-                                            is_accepted = ?d", $_POST['one_participant'], $_GET['session'],$is_user_accepted);
+        if(isset($consent) && $consent){
+          $willSendEmail[] = $_POST['one_participant'];
+        }
+        $deleted_users = array_diff($old_users_ids,$willSendEmail);
+        if(count($deleted_users) > 0){
+          foreach($deleted_users as $del_u){
+            user_badge_deletion($del_u,$_GET['session']);
+            Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_GET['session'],$del_u);
+          }
+        }
+        $new_users_ids = session_edit_participants_ids($_GET['session']);
+        if(!in_array($_POST['one_participant'],$new_users_ids)){
+          Database::get()->query("INSERT INTO mod_session_users SET
+                                  session_id = ?d,
+                                  participants = ?d,
+                                  is_accepted = ?d", $_GET['session'], $_POST['one_participant'], $is_user_accepted);
+        }
       }
     }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
       $deleted_users = array_diff($old_users_ids,$_POST['many_participants']);
-      foreach($deleted_users as $del_u){
-        Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_GET['session'],$del_u);
+      if(count($deleted_users) > 0){
+        foreach($deleted_users as $del_u){
+          user_badge_deletion($del_u,$_GET['session']);
+          Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_GET['session'],$del_u);
+        }
       }
       $new_users_ids = session_edit_participants_ids($_GET['session']);
       foreach($_POST['many_participants'] as $m){
