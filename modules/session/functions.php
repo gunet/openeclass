@@ -992,9 +992,18 @@ function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
             $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, 
-            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName, $langNotExistUsers;
+            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName, 
+            $langNotExistUsers, $langResourceNoExists;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    if(!$is_consultant && isset($_POST['for_deliverable'])){
+        if(!session_resource_exists($_POST['for_deliverable'],$sid)){
+            Session::flash('message',$langResourceNoExists);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sid");
+        };
+    }
 
     if($is_consultant && !isset($_POST['fromUser']) && isset($_POST['onBehalfOfUserID'])){
         Session::flash('message',$langNotExistUsers);
@@ -1150,10 +1159,18 @@ function upload_session_doc($sid){
                                         `date` = " . DBHelper::timeAfter() . ",
                                         res_id = ?d,
                                         doc_id = ?d,
-                                        from_user = ?d
+                                        from_user = ?d,
+                                        is_completed = ?d
                                         WHERE doc_id = ?d
                                         AND from_user = ?d
-                                        AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, $doc_id, $uUserId, $sid);
+                                        AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, 0, $doc_id, $uUserId, $sid);
+
+            // Delete criterion for the user for whom the deliverable has deleted.
+            Database::get()->query("DELETE FROM user_badge_criterion 
+                                    WHERE user = ?d 
+                                    AND badge_criterion IN 
+                                    (SELECT id FROM badge_criterion WHERE activity_type = ?s AND resource = ?d 
+                                    AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d))",$uUserId,'document-submit',$doc_id,$course_id,$sid);
 
             // Now we must delete the resource file from document table in db.
             if($q){
@@ -2805,4 +2822,18 @@ function user_badge_deletion($u,$sid){
     Database::get()->query("DELETE FROM user_badge 
                             WHERE user = ?d 
                             AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d)", $u, $course_id, $sid);
+}
+
+/**
+ * @brief check out if resource exists into current session.
+ * @param integer $rid
+ * @param integer $sid
+ */
+function session_resource_exists($rid,$sid){
+    $result = Database::get()->querySingle("SELECT * session_resources WHERE id = ?d AND session_id = ?d",$rid,$sid);
+    if($result){
+        return true;
+    }else{
+        return false;
+    }
 }

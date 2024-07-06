@@ -1496,6 +1496,7 @@ $langTCComplited = "Ολοκλήρωση τηλεδιάσκεψης";
 $langContinueToCompletetionWithCompletedTC = "Θέλετε να προχωρήσετε στην ολοκλήρωση της συνεδρίας μόλις ολοκληρωθεί η απομακρυσμένη τηλεδιάσκεψη;";
 $langResourceAddedWithSuccess = "Ο πόρος προστέθηκε επιτυχώς.";
 $langResourceExists = "Ο πόρος υπάρχει ήδη.";
+$langResourceNoExists = "Ο πόρος δεν υπάρχει.";
 $langDelAllSessions = "Διαγραφή όλων των συνεδριών";
 $langContinueToDelAllSessions = "Θέλετε να προχωρήσετε στην διαγραφή όλων των συνεδριών;";
 $langDelAllSessionSuccess = "Οι συνεδρίες διαγράφηκαν επιτυχώς.";

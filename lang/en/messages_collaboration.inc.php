@@ -1558,6 +1558,7 @@ $langTCComplited = "End of conference call";
 $langContinueToCompletetionWithCompletedTC = "Do you want to proceed to end the session once the remote conference is finished?";
 $langResourceAddedWithSuccess = "Resource added successfully.";
 $langResourceExists = "The resource already exists.";
+$langResourceNoExists = "The resource does not exist.";
 $langDelAllSessions = "Delete all sessions";
 $langContinueToDelAllSessions = "Do you want to proceed to delete all sessions?";
 $langDelAllSessionSuccess = "Sessions deleted successfully.";
