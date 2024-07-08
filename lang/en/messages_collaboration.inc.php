@@ -1621,3 +1621,6 @@ $langCancelSessionRegistration = "User registration is about to be cancelled. Th
  To delete it permanently including its progress on completing the session, you can go to edit the session.</br></br>
  Do you want to continue?";
 $langInfoAboutDelUser = "Removing a user will also delete their progress on completing the session.";
+$langUserReferences = "User references";
+$langUserHasCompleted = "Has completed";
+$langNotUploadedDeliverable = "The user has not submitted any deliverables";

@@ -39,8 +39,9 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
-    if ($_SESSION['uid'] != $_GET['u'] and (!$is_course_reviewer or !$is_coordinator)) { // security check
-        Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    if ($_SESSION['uid'] != $_GET['u'] and (!$is_course_reviewer and !$is_coordinator)) { // security check
+        Session::flash('message',$langCheckCourseAdmin);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("courses/$course_code/");
     }
 

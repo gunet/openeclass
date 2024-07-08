@@ -68,7 +68,7 @@
                                 <div class='col-12'>
                                     <div class='row row-cols-1 row-cols-lg-2 g-4'>
                                         @foreach($completedSessionByUsers as $c => $key)
-                                            @if(!$is_consultant)
+                                            @if($is_simple_user)
                                                 @php $hasIncompletedPrereq = false; @endphp
                                                 @foreach($key as $q)
                                                     @if($q['hasIncompletePrereq'])
@@ -80,8 +80,8 @@
                                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                         <a class="link-color normal-text TextBold
-                                                                    @if(!$is_consultant && session_not_started($course_id,$c)) pe-none opacity-help @endif
-                                                                    @if(!$is_consultant && $hasIncompletedPrereq) pe-none opacity-help @endif" 
+                                                                    @if($is_simple_user && session_not_started($course_id,$c)) pe-none opacity-help @endif
+                                                                    @if($is_simple_user && $hasIncompletedPrereq) pe-none opacity-help @endif" 
                                                             href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $c }}">
                                                             {!! title_session($course_id,$c) !!}
                                                         </a>
@@ -108,7 +108,7 @@
                                                             @if(session_is_running($course_id,$c))
                                                                 <span class='badge Success-200-bg small-text text-wrap text-start'>{{ trans('langInProgress') }}</span>
                                                             @endif
-                                                            @if(!$is_consultant && $hasIncompletedPrereq) 
+                                                            @if($is_simple_user && $hasIncompletedPrereq) 
                                                                 <span class='badge Warning-200-bg small-text text-wrap text-start'>{{ trans('langExistsInCompletedPrerequisite') }}</span>
                                                             @endif
                                                             @if(session_not_started($course_id,$c)) 

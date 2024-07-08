@@ -110,7 +110,13 @@
                                 'confirm_title' => trans('langAddTcSession'),
                                 'confirm_button' => trans('langSubmit'),
                                 'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0)
-                            )
+                            ),
+                            array('title' => trans('langUserReferences'),
+                                'url' => $urlAppend . 'modules/session/user_report.php?course=' . $course_code . '&session=' . $sessionID,
+                                'icon' => 'fa-solid fa-address-card',
+                                'level' => 'secondary',
+                                'show' => ($is_consultant or $is_course_reviewer)
+                            ),
                         ))
                     !!}
 

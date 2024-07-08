@@ -815,7 +815,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
     $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload, 
-    $sessionID, $is_course_reviewer;
+    $sessionID, $is_course_reviewer, $is_simple_user;
 
     $res_types_sessions_completion = ['work', 'doc', 'poll', 'tc'];
     if (in_array($res_type, $res_types_sessions_completion)) {
@@ -838,7 +838,9 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
         $download_url = $urlAppend . "modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($downloadPath);
     }
 
-    if (!$is_consultant && !$is_course_reviewer) {
+    $content = "";
+
+    if ($is_simple_user) {
         if (prereq_session_has_completion_enabled($_GET['session'])) {
             $activity_result = session_resource_completion($_GET['session'], $resource_id);
             switch ($activity_result) {

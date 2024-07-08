@@ -394,13 +394,15 @@ if(count($docs) > 0){
             $file->completed = $refers_temp->is_completed;
             $file->can_delete_file = 1;                            
         }
-        if(!$is_consultant){
+        if($is_simple_user){
             if(!$refers_temp->is_completed){
                 $can_delete = 1;
             }else{
                 $can_delete = 0;
             }
             $file->can_delete_file = $can_delete;
+            $file->user_badge_criterion_id = 0;
+            $file->user_sender = 0;
         }
     }
 }
