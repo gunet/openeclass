@@ -1624,3 +1624,4 @@ $langInfoAboutDelUser = "Removing a user will also delete their progress on comp
 $langUserReferences = "User references";
 $langUserHasCompleted = "Has completed";
 $langNotUploadedDeliverable = "The user has not submitted any deliverables";
+$langNoCommentsAvailable = "There are no comments";

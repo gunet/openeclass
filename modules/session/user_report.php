@@ -20,9 +20,9 @@
  * ======================================================================== */
 
 /**
- * @file userduration.php
- * @brief Shows logins made by a user or all users of a course, during a specific period.
- * Data from table 'logins'
+ * @file user_report.php
+ * @brief Shows reports made by a user or all users of a session.
+ * Data from table 'session resources'
  */
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -270,7 +270,8 @@ if (isset($_GET['u'])) { //  stats per user
 
     global $langIndividualSession, $langGroupSession, $langNotRemote, $langRemote,
            $langDate, $langPercentageSessionCompletion, $langTools, $langRefernce, 
-           $langUserHasCompleted, $langNotUploadedDeliverable;
+           $langUserHasCompleted, $langNotUploadedDeliverable, $langCommentsByConsultant,
+           $langNoCommentsAvailable;
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE course_id = ?d AND id = ?d",$cid, $sid);
     $user_name = participant_name($u);
@@ -280,24 +281,39 @@ if (isset($_GET['u'])) { //  stats per user
     $criteria = "";
     $tools_completed = [];
     $tools_completed_msg = "";
+    $comments_by_consultant = [];
     if ($sql_badge) {
         $badge_id = $sql_badge->id;
-        $badge_criteria = Database::get()->queryArray("SELECT activity_type,resource FROM badge_criterion WHERE badge = ?d",$badge_id);
+        $badge_criteria = Database::get()->queryArray("SELECT id,activity_type,resource FROM badge_criterion WHERE badge = ?d",$badge_id);
         if(count($badge_criteria) > 0){
+            $titleCr = "";
             $criteria .= "<ul>";
             foreach($badge_criteria as $c){
                 if($c->activity_type == 'document-submit'){
                     $tDoc = Database::get()->querySingle("SELECT * FROM session_resources WHERE res_id = ?d",$c->resource);
                     if($tDoc){
                         $titleDoc = $tDoc->title ?? $langTools." : ".$titleSession;
-                        $completion = Database::get()->querySingle("SELECT is_completed FROM session_resources 
+                        $titleCr = $titleDoc;
+                        $completion = Database::get()->querySingle("SELECT is_completed,deliverable_comments FROM session_resources 
                                                                     WHERE doc_id = ?d AND from_user = ?d AND session_id = ?d",$c->resource, $u, $sid);
                         if($completion && $completion->is_completed){
-                            $tools_completed[] = $titleDoc;
+                            $commentByConsultant = (!empty($completion->deliverable_comments)) ? $completion->deliverable_comments : "$langNoCommentsAvailable";
+                            $tools_completed[] = $titleDoc . "</br><strong>" . $langCommentsByConsultant . "</strong></br>" . $commentByConsultant . "</br></br></br>";
+                        }
+                    }
+                }elseif($c->activity_type == 'tc-completed'){
+                    $tc = Database::get()->querySingle("SELECT * FROM session_resources WHERE res_id = ?d",$c->resource);
+                    if($tc){
+                        $titleTc = $tc->title ?? $langTools." : ".$titleSession;
+                        $titleCr = $titleTc;
+                        $completion = Database::get()->querySingle("SELECT id FROM user_badge_criterion 
+                                                                    WHERE user = ?d AND badge_criterion = ?d", $u, $c->id);
+                        if($completion){
+                            $tools_completed[] = $titleTc;
                         }
                     }
                 }
-                $criteria .= "<li>$titleDoc</li>";
+                $criteria .= "<li>$titleCr</li>";
             }
             $criteria .= "</ul>";
 

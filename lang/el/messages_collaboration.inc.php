@@ -1560,3 +1560,4 @@ $langInfoAboutDelUser = "Η αφαίρεση ενός χρήστη, θα δια�
 $langUserReferences = "Αναφορές χρηστών";
 $langUserHasCompleted = "Έχει ολοκληρώσει";
 $langNotUploadedDeliverable = "Ο χρήστης δεν έχει υποβάλει κάποιο παραδοτέο";
+$langNoCommentsAvailable = "Δεν υπάρχουν σχόλια";
