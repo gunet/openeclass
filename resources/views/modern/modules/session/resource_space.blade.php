@@ -177,7 +177,7 @@
 
                     <!-- show all deliverable for each user -->
                     @if($is_criterion_completion)
-                    <div class='col-12 mt-4'>
+                    <div class="col-12 mt-4 @if($is_consultant && isset($_GET['upload_for_user'])) d-none @endif">
                         <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3 class='mb-0'>
