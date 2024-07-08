@@ -39,7 +39,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
-    if ($_SESSION['uid'] != $_GET['u'] and (!$is_course_reviewer or !$is_consultant)) { // security check
+    if ($_SESSION['uid'] != $_GET['u'] and (!$is_course_reviewer or !$is_coordinator)) { // security check
         Session::Messages($langCheckCourseAdmin, 'alert-danger');
         redirect_to_home_page("courses/$course_code/");
     }
@@ -108,14 +108,14 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
 
     } else { // html + pdf output
-        if ($is_course_reviewer or $is_consultant) {
+        if ($is_course_reviewer or $is_coordinator) {
             $back_url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         } else {
             $back_url = "{$urlAppend}courses/$course_code/";
         }
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUserS";
-            if ($is_course_reviewer or $is_consultant) {
+            if ($is_course_reviewer or $is_coordinator) {
                 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
                 $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
             }
@@ -203,7 +203,7 @@ if (isset($_GET['u'])) { //  stats per user
     } else {
         draw($tool_content, 2);
     }
-} else if (($is_course_reviewer or $is_consultant) and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
+} else if (($is_course_reviewer or $is_coordinator) and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT
                             SUM(actions_daily.duration) AS duration, user_id,
@@ -304,7 +304,7 @@ if (isset($_GET['u'])) { //  stats per user
             draw($tool_content, 2);
         }
     }
-} else if ($is_course_reviewer or $is_consultant) {
+} else if ($is_course_reviewer or $is_coordinator) {
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
