@@ -27,7 +27,6 @@
 
 $require_login = true;
 $require_current_course = true;
-$require_consultant = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';

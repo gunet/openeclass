@@ -167,13 +167,15 @@ if($is_coordinator or $is_consultant){
             'url' => 'new.php?course=' . $course_code,
             'icon' => 'fa-plus-circle',
             'button-class' => 'btn-success',
-            'level' => 'primary-label' 
+            'level' => 'primary-label',
+            'show' => ($is_editor || !$is_course_reviewer)
         ],
         [
             'title' => $langCompletedConsulting,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&addSessions=true",
             'icon' => 'fa-solid fa-medal',
-            'button-class' => 'btn-success'
+            'button-class' => 'btn-success',
+            'show' => ($is_editor || !$is_course_reviewer)
         ],
         [
             'title' => $langPercentageCompletedConsultingByUser,
@@ -187,7 +189,7 @@ if($is_coordinator or $is_consultant){
             'class' => "delete",
             'confirm' => $langContinueToDelAllSessions,
             'icon' => 'fa-xmark',
-            'show' => $is_coordinator
+            'show' => ($is_coordinator && !$is_course_reviewer)
         ],
     ], false);
 

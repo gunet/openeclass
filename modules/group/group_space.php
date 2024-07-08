@@ -51,7 +51,7 @@ $user_groups = user_group_info($uid, $course_id);
 $user_visible_groups = user_visible_groups($uid, $course_id);
 
 $toolName = $langGroups;
-$pageName = $group_name;
+$pageName = q($group_name);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
@@ -108,7 +108,7 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
 
 if (isset($_GET['group_as'])) {
     $pageName = $langGroupAssignments;
-    $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => $group_name);
+    $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => q($group_name));
     $group_id = $_GET['group_id'];
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment AS a LEFT JOIN assignment_to_specific AS b ON a.id=b.assignment_id

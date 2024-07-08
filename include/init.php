@@ -354,6 +354,7 @@ $is_editor = false;
 $is_course_reviewer = false;
 $is_coordinator = false;
 $is_consultant = false;
+$is_simple_user = false;
 if (isset($require_current_course) and $require_current_course) {
     if (!isset($_SESSION['dbname'])) {
         $toolContent_ErrorExists = $langSessionIsLost;
@@ -424,6 +425,11 @@ if (isset($require_current_course) and $require_current_course) {
                     $is_coordinator = false;
                 }elseif($stat->status == USER_TEACHER or $is_editor){
                     $is_coordinator = $is_consultant = true;
+                }elseif($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer){
+                    $is_simple_user = true;
+                    $is_consultant = false;
+                    $is_coordinator = false;
+                    $is_course_reviewer = false;
                 }
             }
             if ($is_departmentmanage_user and isset($course_code)) {
@@ -727,6 +733,8 @@ if (isset($_SESSION['courses'])) {
             $is_course_admin = true;
             $is_editor = true;
             $is_course_reviewer = true;
+            $is_coordinator = true;
+            $is_consultant = true;
         }
     }
 } else {
@@ -853,6 +861,14 @@ $tool_content = $head_content = '';
 
 $tinymce_color_text = '#687DA3';
 get_tinymce_color_text();
+
+// Regarding the course reviewer in a session 
+if($is_coordinator){
+    $is_course_reviewer = false;
+}elseif($is_course_reviewer){
+    $is_consultant = false;
+    $is_coordinator = true;
+}
 
 function fix_directory_separator($path) {
     if (DIRECTORY_SEPARATOR !== '/') {

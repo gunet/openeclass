@@ -114,20 +114,22 @@
                                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                 <h3>{{ $s->title }}</h3>
                                                 <div>
-                                                    {!! action_button(array(
-                                                        array('title' => trans('langEdit'),
-                                                                'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
-                                                                'icon-class' => "edit-session",
-                                                                'icon' => 'fa-edit',
-                                                                'show' => ($is_coordinator or $is_consultant)),
-                                                        array('title' => trans('langDelete'),
-                                                                'url' => "#",
-                                                                'icon-class' => "delete-session",
-                                                                'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
-                                                                'icon' => 'fa-xmark',
-                                                                'show' => ($is_coordinator or $is_consultant))
-                                                        )
-                                                    ) !!}
+                                                    @if(!$is_simple_user)
+                                                        {!! action_button(array(
+                                                            array('title' => trans('langEdit'),
+                                                                    'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
+                                                                    'icon-class' => "edit-session",
+                                                                    'icon' => 'fa-edit',
+                                                                    'show' => ($is_editor || !$is_course_reviewer)),
+                                                            array('title' => trans('langDelete'),
+                                                                    'url' => "#",
+                                                                    'icon-class' => "delete-session",
+                                                                    'icon-extra' => "data-id='{$s->id}' data-bs-toggle='modal' data-bs-target='#SessionDelete'",
+                                                                    'icon' => 'fa-xmark',
+                                                                    'show' => ($is_editor || !$is_course_reviewer))
+                                                            )
+                                                        ) !!}
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class='card-body'>

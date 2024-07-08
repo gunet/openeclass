@@ -181,7 +181,7 @@
                         <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3 class='mb-0'>
-                                    @if($is_consultant)
+                                    @if($is_consultant or $is_course_reviewer)
                                         {{ trans('langDocSender') }}
                                     @else
                                         {{ trans('langMyUploadedFiles') }}
@@ -189,7 +189,7 @@
                                 </h3>
                             </div>
                             <div class='card-body'>
-                                @if(!$is_consultant)
+                                @if(!$is_consultant && !$is_course_reviewer)
                                     <div class='alert alert-info mt-0'>
                                         <i class='fa-solid fa-circle-info fa-lg'></i>
                                         <span>{{ trans('langInfoForUploadedDeliverable')}}</span>
@@ -204,7 +204,7 @@
                                                     <th>{{ trans('langFrom') }}</th>
                                                     <th>{{ trans('langReferencedObject') }}</th>
                                                     <th>{{ trans('langDate') }}</th>
-                                                    @if($is_consultant)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
+                                                    @if($is_consultant || $is_course_reviewer)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
                                                     <th class='text-end'></th>
                                                 </tr>
                                                 <tr></tr>
@@ -216,7 +216,7 @@
                                                         <td>{{ $doc->creator }}</td>
                                                         <td>{{ $doc->refers_to }}</td>
                                                         <td>{{ format_locale_date(strtotime($doc->date), 'short') }}</td>
-                                                        @if($is_consultant)
+                                                        @if($is_consultant || $is_course_reviewer)
                                                             <td class='text-center'>
                                                                 @if($doc->completed)
                                                                     <i class='fa-solid fa-check fa-lg text-success'></i>
@@ -226,47 +226,49 @@
                                                             </td>
                                                         @endif
                                                         <td class='text-end'>
-                                                        {!! 
-                                                            action_button(array(
-                                                                array(
-                                                                    'title' => trans('langSubmitCompletion'),
-                                                                    'url' => "#",
-                                                                    'icon' => 'fa-solid fa-award',
-                                                                    'icon-class' => "add-award",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
-                                                                    'show' => ($is_consultant && !$doc->completed)
-                                                                ),
-                                                                array(
-                                                                    'title' => trans('langNoSubmitCompletion'),
-                                                                    'url' => "#",
-                                                                    'icon' => 'fa-solid fa-ban',
-                                                                    'icon-class' => "remove-award",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#noUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
-                                                                    'show' => ($is_consultant && $doc->completed)
-                                                                ),
-                                                                array(
-                                                                    'title' => trans('langAddComment'),
-                                                                    'url' => "#",
-                                                                    'icon' => 'fa-solid fa-comments',
-                                                                    'icon-class' => "add-comments",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments' data-id='{$doc->id}' data-fileTitle='{$doc->fileTitle}' data-fileCreator='{$doc->creator}' data-forUserId='{$doc->user_sender}' data-commentDoc='{$doc->deliverable_comment}'",
-                                                                    'show' => $is_consultant
-                                                                ),
-                                                                array(
-                                                                    'title' => trans('langDownload'),
-                                                                    'url' => $doc->download_url,
-                                                                    'icon' => 'fa-download',
-                                                                    'icon-class' => 'download-doc'
-                                                                ),
-                                                                array(
-                                                                    'title' => trans('langDelete'),
-                                                                    'url' => '#',
-                                                                    'icon' => 'fa-xmark',
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#docDelete' data-id='{$doc->id}'",
-                                                                    'icon-class' => 'doc-delete',
-                                                                    'show' => $doc->can_delete_file)
-                                                            ))
-                                                        !!}
+                                                            @if($is_editor || !$is_course_reviewer)
+                                                                {!! 
+                                                                    action_button(array(
+                                                                        array(
+                                                                            'title' => trans('langSubmitCompletion'),
+                                                                            'url' => "#",
+                                                                            'icon' => 'fa-solid fa-award',
+                                                                            'icon-class' => "add-award",
+                                                                            'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
+                                                                            'show' => ($is_consultant && !$doc->completed)
+                                                                        ),
+                                                                        array(
+                                                                            'title' => trans('langNoSubmitCompletion'),
+                                                                            'url' => "#",
+                                                                            'icon' => 'fa-solid fa-ban',
+                                                                            'icon-class' => "remove-award",
+                                                                            'icon-extra' => "data-bs-toggle='modal' data-bs-target='#noUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
+                                                                            'show' => ($is_consultant && $doc->completed)
+                                                                        ),
+                                                                        array(
+                                                                            'title' => trans('langAddComment'),
+                                                                            'url' => "#",
+                                                                            'icon' => 'fa-solid fa-comments',
+                                                                            'icon-class' => "add-comments",
+                                                                            'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doComments' data-id='{$doc->id}' data-fileTitle='{$doc->fileTitle}' data-fileCreator='{$doc->creator}' data-forUserId='{$doc->user_sender}' data-commentDoc='{$doc->deliverable_comment}'",
+                                                                            'show' => $is_consultant
+                                                                        ),
+                                                                        array(
+                                                                            'title' => trans('langDownload'),
+                                                                            'url' => $doc->download_url,
+                                                                            'icon' => 'fa-download',
+                                                                            'icon-class' => 'download-doc'
+                                                                        ),
+                                                                        array(
+                                                                            'title' => trans('langDelete'),
+                                                                            'url' => '#',
+                                                                            'icon' => 'fa-xmark',
+                                                                            'icon-extra' => "data-bs-toggle='modal' data-bs-target='#docDelete' data-id='{$doc->id}'",
+                                                                            'icon-class' => 'doc-delete',
+                                                                            'show' => $doc->can_delete_file)
+                                                                    ))
+                                                                !!}
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -298,7 +300,7 @@
 
 
                     <!-- upload deliverable by simple user or upload a deliverable by consultant for a user -->
-                    @if($is_criterion_completion)
+                    @if($is_criterion_completion && !$is_course_reviewer)
                         @if(!$is_consultant or $upload_doc_for_user)
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>

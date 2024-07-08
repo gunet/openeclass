@@ -75,7 +75,7 @@
                                 'url' => $urlAppend . 'modules/session/session_users.php?course=' . $course_code . '&session=' . $sessionID,
                                 'icon' => 'fa fa-users',
                                 'button-class' => 'btn-success',
-                                'show' => $is_consultant
+                                'show' => ($is_consultant or $is_course_reviewer)
                             ),
                             array('title' => trans('langCompleteSession'),
                                 'url' => $urlAppend . 'modules/session/complete.php?course=' . $course_code . '&session=' . $sessionID . '&manage=1',

@@ -359,7 +359,7 @@ $docs = Database::get()->queryArray("SELECT * FROM document
 
 if(count($docs) > 0){
     $badge_id = 0;
-    if($is_consultant){
+    if($is_consultant || $is_course_reviewer){
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id,$sessionID);
         if($badge){
             $badge_id = $badge->id;
@@ -381,7 +381,7 @@ if(count($docs) > 0){
         $refers = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d AND session_id = ?d",$refers_temp->doc_id,$sessionID);
         $file->refers_to = $refers->title;
         $file->deliverable_comment = $refers_temp->deliverable_comments;
-        if($is_consultant && $badge_id > 0){
+        if(($is_consultant || $is_course_reviewer) && $badge_id > 0){
             $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
                                                                     WHERE resource = ?d 
                                                                     AND activity_type = ?s 

@@ -114,27 +114,29 @@
                                                             @endif
                                                         </td>
                                                         <td class='text-end'>
-                                                        {!! 
-                                                            action_button(array(
-                                                                array(
-                                                                    'title' => trans('langSubmitRegistration'),
-                                                                    'url' => "#",
-                                                                    'icon' => 'fa-solid fa-check',
-                                                                    'icon-class' => "user-register",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doRegistration' data-id='{$u->participants}'",
-                                                                    'show' => !$u->is_accepted
-                                                                ),
-                                                                array(
-                                                                    'title' => trans('langNoSubmitRegistration'),
-                                                                    'url' => "#",
-                                                                    'icon' => 'fa-xmark',
-                                                                    'icon-class' => "user-unregister",
-                                                                    'icon-extra' => "data-bs-toggle='modal' data-bs-target='#undoRegistration' data-id='{$u->participants}'",
-                                                                    'show' => $u->is_accepted
-                                                                )
+                                                            @if($is_editor || !$is_course_reviewer)
+                                                                {!! 
+                                                                    action_button(array(
+                                                                        array(
+                                                                            'title' => trans('langSubmitRegistration'),
+                                                                            'url' => "#",
+                                                                            'icon' => 'fa-solid fa-check',
+                                                                            'icon-class' => "user-register",
+                                                                            'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doRegistration' data-id='{$u->participants}'",
+                                                                            'show' => !$u->is_accepted
+                                                                        ),
+                                                                        array(
+                                                                            'title' => trans('langNoSubmitRegistration'),
+                                                                            'url' => "#",
+                                                                            'icon' => 'fa-xmark',
+                                                                            'icon-class' => "user-unregister",
+                                                                            'icon-extra' => "data-bs-toggle='modal' data-bs-target='#undoRegistration' data-id='{$u->participants}'",
+                                                                            'show' => $u->is_accepted
+                                                                        )
 
-                                                            ))
-                                                        !!}
+                                                                    ))
+                                                                !!}
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
