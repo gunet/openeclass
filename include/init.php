@@ -863,12 +863,15 @@ $tinymce_color_text = '#687DA3';
 get_tinymce_color_text();
 
 // Regarding the course reviewer in a session 
-if($is_coordinator){
-    $is_course_reviewer = false;
-}elseif($is_course_reviewer){
-    $is_consultant = false;
-    $is_coordinator = true;
+if(isset($is_collaborative_course) and $is_collaborative_course){
+    if($is_coordinator){
+        $is_course_reviewer = false;
+    }elseif($is_course_reviewer){
+        $is_consultant = false;
+        $is_coordinator = true;
+    }
 }
+
 
 function fix_directory_separator($path) {
     if (DIRECTORY_SEPARATOR !== '/') {
