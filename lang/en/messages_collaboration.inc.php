@@ -1540,8 +1540,9 @@ $langSessionCompletedNotContinue = "Ending the session is not allowed.</br>
 $langCompletedSession = "Completed";
 $langCompletedConsulting = "Complete counseling";
 $langAddSessionConsultingCompleted = "Registration of counseling completion sessions is complete.";
-$langCompletedConsultingInfo = "Here you will find all sessions that have <strong>session completion</strong> enabled according to some completion criteria. </br>
- Choose which of these will correspond to the completion of a user's consultation.";
+$langCompletedConsultingInfo = "Sessions for which <strong>session completion</strong> is enabled are shown below. </br>
+ Choose which of these will correspond to the completion of a user's consultation.</br>
+ For the selected session, each user's completion percentage will be displayed in detail.";
 $langTableCompletedConsulting = "List of counseling completion sessions";
 $langCompletedSessions = "Completed session <i class='fa-solid fa-check fa-lg Success-200-cl ps-2'></i>";
 $langNotCompletedSession = "Incomplete session";

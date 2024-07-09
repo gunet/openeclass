@@ -27,8 +27,6 @@
 
 $require_login = true;
 $require_current_course = true;
-$require_help = TRUE;
-$helpTopic = 'course_sessions';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';

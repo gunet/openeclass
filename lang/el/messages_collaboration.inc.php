@@ -1477,8 +1477,9 @@ $langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρ�
 $langCompletedSession = "Ολοκληρωμένη";
 $langCompletedConsulting = "Ολοκλήρωση συμβουλευτικής";
 $langAddSessionConsultingCompleted = "Η καταχώριση των συνεδριών για την ολοκλήρωση συμβουλευτικής ολοκληρώθηκε.";
-$langCompletedConsultingInfo = "Εδώ θα βρείτε όσες συνεδρίες έχουν ενεργοποιημένη την <strong>ολοκλήρωση συνεδρίας</strong> σύμφωνα με κάποια κριτήρια ολοκλήρωσης. </br>
-                                Επιλέξτε ποιες από αυτές θα αντιστοιχούν στην ολοκλήρωση της συμβουλευτικής ενός χρήστη.";
+$langCompletedConsultingInfo = "Παρακάτω εμφανίζονται οι συνεδρίες για τις οποίες η <strong>ολοκλήρωση συνεδρίας</strong> έχει ενεργοποιηθεί. </br>
+                                Επιλέξτε ποιες από αυτές θα αντιστοιχούν στην ολοκλήρωση της συμβουλευτικής ενός χρήστη.</br>
+                                Για την συνεδρία που θα επιλεχθεί, θα εμφανίζεται αναλυτικά το ποσοστό ολοκλήρωσης κάθε χρήστη.";
 $langPercentageCompletedConsultingByUser = "Ποσοστό ολοκλήρωσης συνεδριών ανά χρήστη";
 $langPercentageCompletedConsulting = "Ποσοστό ολοκλήρωσης συνεδριών";
 $langCompletedSessions = "Ολοκληρωμένη συνεδρία <i class='fa-solid fa-check fa-lg Success-200-cl ps-2'></i>";
@@ -1548,7 +1549,7 @@ $langWithConsent = "Να συναινέσει ο χρήστης για την ε
 $langInfoWithConsent = "Ο χρήστης θα εγγραφεί αυτόματα στην συνεδρία αν δεν επιλεχθεί η συναίνεση χρήστη.";
 $langContinueToRegistrationSession = "Έχετε επιλέξει να εγγραφείτε στην συγκεκριμένη συνεδρία. Θέλετε να προχωρήσετε?";
 $langCompleteRegistration = "Η εγγραφή σας ολοκληρώθηκε με επιτυχία! Έχετε εισέλθει στον χώρο της συνεδρίας σας.";
-$langUserConsent = "Σχετικά με την συναίνεση χρηστών";
+$langUserConsent = "Συναίνεση χρηστών";
 $langInProgressRegistration = "Εκκρεμεί η εγγραφή του χρήστη ...";
 $langSubmitRegistration = "Εγγραφή χρήστη";
 $langNoSubmitRegistration = "Απεγγραφή";

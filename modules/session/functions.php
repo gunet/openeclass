@@ -2833,7 +2833,7 @@ function user_badge_deletion($u,$sid){
  * @param integer $sid
  */
 function session_resource_exists($rid,$sid){
-    $result = Database::get()->querySingle("SELECT * session_resources WHERE id = ?d AND session_id = ?d",$rid,$sid);
+    $result = Database::get()->querySingle("SELECT * FROM session_resources WHERE id = ?d AND session_id = ?d",$rid,$sid);
     if($result){
         return true;
     }else{

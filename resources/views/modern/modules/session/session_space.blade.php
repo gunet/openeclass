@@ -218,7 +218,7 @@
                     @if(count($participants)>0)
                     <ul class='list-group list-group-flush'>
                         @foreach($participants as $p)
-                            <li class='list-group-item element'>{!! display_user($p->participants, false, false, '', $course_code) !!}</li>
+                            <li class='list-group-item element'>{!! display_user($p->participants) !!}</li>
                         @endforeach
                     </ul>
                     @else

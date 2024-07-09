@@ -92,7 +92,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>{{ trans('langUsers') }}</th>
-                                                    <th>{{ trans('langRegistered') }}</th>
+                                                    <th>{{ trans('langRegisteredUsers') }}</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -103,13 +103,13 @@
                                                         <td>
                                                             @if($u->is_accepted)
                                                                 <span class='badge Success-200-bg'><i class='fa-solid fa-check fa-lg'></i></span>
-                                                                &nbsp;<span>{{ trans('langYes')}}</span>
+                                                                &nbsp;<span>{{ trans('langUserHasConsent')}}</span>
                                                             @else
                                                                 <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
                                                                     <div class="spinner-border link-color" role="status" style="width:20px; height:20px;">
                                                                         <span class="visually-hidden"></span>
                                                                     </div>
-                                                                    <span>{{ trans('langInProgressRegistration')}}</span>
+                                                                    <span>{{ trans('langUserConsentUnknown')}}</span>
                                                                 </div>
                                                             @endif
                                                         </td>
