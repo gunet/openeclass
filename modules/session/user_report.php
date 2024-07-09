@@ -181,7 +181,7 @@ if (isset($_GET['u'])) { //  stats per user
     
 
     if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
-        pdf_session_output();
+        pdf_session_output($sessionID);
     } else {
         draw($tool_content, 2);
     }
@@ -290,7 +290,7 @@ if (isset($_GET['u'])) { //  stats per user
             $criteria .= "<ul>";
             foreach($badge_criteria as $c){
                 if($c->activity_type == 'document-submit'){
-                    $tDoc = Database::get()->querySingle("SELECT * FROM session_resources WHERE res_id = ?d",$c->resource);
+                    $tDoc = Database::get()->querySingle("SELECT * FROM session_resources WHERE res_id = ?d AND session_id = ?d",$c->resource,$sid);
                     if($tDoc){
                         $titleDoc = $tDoc->title ?? $langTools." : ".$titleSession;
                         $titleCr = $titleDoc;
@@ -298,7 +298,7 @@ if (isset($_GET['u'])) { //  stats per user
                                                                     WHERE doc_id = ?d AND from_user = ?d AND session_id = ?d",$c->resource, $u, $sid);
                         if($completion && $completion->is_completed){
                             $commentByConsultant = (!empty($completion->deliverable_comments)) ? $completion->deliverable_comments : "$langNoCommentsAvailable";
-                            $tools_completed[] = $titleDoc . "</br><strong>" . $langCommentsByConsultant . "</strong></br>" . $commentByConsultant . "</br></br></br>";
+                            $tools_completed[] = $titleDoc . "<p><strong>" . $langCommentsByConsultant . "</strong></p><p>" . $commentByConsultant . "</p><hr></br>";
                         }
                     }
                 }elseif($c->activity_type == 'tc-completed'){
@@ -357,16 +357,18 @@ if (isset($_GET['u'])) { //  stats per user
  * @return void
  * @throws \Mpdf\MpdfException
  */
-function pdf_session_output() {
+function pdf_session_output($sid) {
     global $tool_content, $langUserDuration, $currentCourseName,
            $webDir, $course_id, $course_code;
+
+    $sessionTitle = title_session($course_id,$sid);
 
     $pdf_content = "
         <!DOCTYPE html>
         <html lang='el'>
         <head>
           <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langUserDuration") . "</title>
+          <title>" . q("$currentCourseName") . "</title>
           <style>
             * { font-family: 'opensans'; }
             body { font-family: 'opensans'; font-size: 10pt; }
@@ -381,7 +383,7 @@ function pdf_session_output() {
         </head>
         <body>" . get_platform_logo() .
         "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($langUserDuration) . "</h2>";
+        <h2> " . q($sessionTitle) . "</h2>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";
