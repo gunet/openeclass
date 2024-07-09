@@ -264,6 +264,14 @@ if (!isset($_POST['create_course'])) {
     if(isset($view_type) && $view_type == 'sessions'){
         $typeCourse = 1;
     }
+    if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+        $typeCourse = 1;
+    }
+    if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
+        if (isset($_POST['is_type_collaborative']) and $_POST['is_type_collaborative'] == 'on') {
+            $typeCourse = 1;
+        }
+    }
 
     $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,

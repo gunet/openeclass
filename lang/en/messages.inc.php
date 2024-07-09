@@ -6380,3 +6380,4 @@ $langWithSubmittedUploadedFile = "By submitting a deliverable";
 $langSubmittedUploadedFile = "Submit deliverable";
 $langMyUploadedFiles = "My deliverables";
 $langViewScreensThemes = "View themes";
+$langWhatTypeOfCourse = "Would you like the course to be type <strong> Collaboration </strong>?";

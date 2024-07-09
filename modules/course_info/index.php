@@ -148,6 +148,14 @@ if (isset($_POST['submit'])) {
         if(isset($view_type) && $view_type == 'sessions'){
             $typeCourse = 1;
         }
+        if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+            $typeCourse = 1;
+        }
+        if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
+            if (isset($_POST['is_type_collaborative']) and $_POST['is_type_collaborative'] == 'on') {
+                $typeCourse = 1;
+            }
+        }
 
         $old_deps = $course->getDepartmentIds($course_id);
         $deps_changed = count(array_diff($old_deps, $departments)) +
@@ -306,6 +314,12 @@ if (isset($_POST['submit'])) {
         $data['course_type_sessions'] = 'checked';
     }else{
         $data['course_type_sessions'] = '';
+    }
+
+    if($c->is_collaborative == 1){
+        $data['is_type_collaborative'] = 'checked';
+    }else{
+        $data['is_type_collaborative'] = '';
     }
 
 

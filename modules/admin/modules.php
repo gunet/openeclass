@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
         );
 
 
-        $alwaysEnabledModulesCollaborations = array(MODULE_ID_SESSION, MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
+        $alwaysEnabledModulesCollaborations = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
         foreach ($alwaysEnabledModulesCollaborations as $alwaysEnabledModuleCollaboration) {
             unset($modules_collaborations[$alwaysEnabledModuleCollaboration]);
         }

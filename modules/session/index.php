@@ -39,6 +39,8 @@ require_once 'functions.php';
 
 check_activation_of_collaboration();
 
+is_session_type_course();
+
 $action = new action();
 $action->record(MODULE_ID_SESSION);
 

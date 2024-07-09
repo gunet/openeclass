@@ -36,6 +36,17 @@ function check_user_belongs_in_session($sid){
     }
 }
 
+function is_session_type_course(){
+    global $course_id, $course_code, $langCourseIsNotCollaborative;
+
+    $t = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d AND is_collaborative = ?d",$course_id,1);
+    if ($t->view_type != 'sessions') {
+        Session::flash('message',$langCourseIsNotCollaborative);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("courses/$course_code/");
+    }
+}
+
 function is_session_consultant($sid,$cid){
     global $uid;
 

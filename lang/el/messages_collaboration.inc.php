@@ -1551,3 +1551,4 @@ $langNotUploadedDeliverable = "Ο χρήστης δεν έχει υποβάλε�
 $langNoCommentsAvailable = "Δεν υπάρχουν σχόλια";
 $langTableCompletedConsulting = "Πίνακας ολοκλήρωσης δράσεων συμβουλευτικής";
 $langShowOnlySessionWithCompletionEnable = "Στον πίνακα χρηστών αναφέρονται όσες συνεδρίες έχουν ενεργοποιημένη την <strong>ολοκλήρωση συνεδρίας</strong>";
+$langCourseIsNotCollaborative = "Μη επιτρεπτή ενέργεια. Η συνεργασία δεν είναι σε μορφή συνεδρίας";
