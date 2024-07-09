@@ -379,19 +379,6 @@ $langUntitledChat = "Free chat $langsOfCourse";
  * copyright.php
  * **************************************************************** */
 $langCopyright = "Copyright Information";
-$langCopyrightNotice = '
-<a href="https://yppoa.cfserver3.net/" target=_blank>Ministry of Culture</a> © 2023<br>&nbsp;<br>
-The '. $siteName . ' is a complete Electronic Management System '.$langOfCourses.' and is
-the proposal of the GUnet Academic Internet to support the Service
-Asynchronous Distance Education. Developed and actively supported by the Team
-of Asynchronous Distance Education of GUnet and <a
-href="http://download.eclass.gunet.gr" target="_blank">freely distributed</a>
-as Open Source Software under the GNU General Public License
-Public License (GNU GPL).<br><br>
-The content of electronics '. $langsOfCourses . ' hosted by the platform ' . $siteName . ',
-as well as the copyright of this material, belong to their authors
-and GUnet claims no rights to it. For any use or republication of the content
-please contact the respective managers ' . $langsOfCourses;
 $langUsageTerms = 'Terms of use';
 
 /* * *****************************************************
