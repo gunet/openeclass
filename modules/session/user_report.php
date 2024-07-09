@@ -144,17 +144,6 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langPercentageSessionCompletion</div>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    " . $user_information['percentage'] . "%
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
                                                     <div class='title-default'>$langTools</div>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
@@ -170,6 +159,17 @@ if (isset($_GET['u'])) { //  stats per user
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['has_completed'] . "
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='title-default'>$langPercentageSessionCompletion</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    " . $user_information['percentage'] . "%
                                                 </div>
                                             </div>
                                         </li>
@@ -271,7 +271,7 @@ if (isset($_GET['u'])) { //  stats per user
     global $langIndividualSession, $langGroupSession, $langNotRemote, $langRemote,
            $langDate, $langPercentageSessionCompletion, $langTools, $langRefernce, 
            $langUserHasCompleted, $langNotUploadedDeliverable, $langCommentsByConsultant,
-           $langNoCommentsAvailable;
+           $langNoCommentsAvailable, $langCompletedSessionWithoutActivity;
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE course_id = ?d AND id = ?d",$cid, $sid);
     $user_name = participant_name($u);
@@ -312,6 +312,9 @@ if (isset($_GET['u'])) { //  stats per user
                             $tools_completed[] = $titleTc;
                         }
                     }
+                }elseif($c->activity_type == 'noactivity'){
+                    $titleCr = $langCompletedSessionWithoutActivity;
+                    $tools_completed[] = $titleCr;
                 }
                 $criteria .= "<li>$titleCr</li>";
             }
