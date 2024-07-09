@@ -184,6 +184,13 @@ if($is_coordinator or $is_consultant){
             'button-class' => 'btn-success'
         ],
         [
+            'title' => $langTableCompletedConsulting,
+            'url' => $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code,
+            'icon' => 'fa-solid fa-users',
+            'button-class' => 'btn-success',
+            'show' => !$is_simple_user
+        ],
+        [
             'title' => $langDelAllSessions,
             'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&delete_all_sessions=true',
             'class' => "delete",

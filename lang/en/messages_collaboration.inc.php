@@ -1626,3 +1626,5 @@ $langUserReferences = "User references";
 $langUserHasCompleted = "Has completed";
 $langNotUploadedDeliverable = "The user has not submitted any deliverables";
 $langNoCommentsAvailable = "There are no comments";
+$langTableCompletedConsulting = "Table of completion of counseling actions";
+$langShowOnlySessionWithCompletionEnable = "The user table lists all sessions that have <strong>session completion</strong> enabled";

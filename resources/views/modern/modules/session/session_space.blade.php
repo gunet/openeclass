@@ -3,15 +3,15 @@
 @section('content')
 
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+            <nav id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
-            </div>
+            </nav>
 
             <div class="col_maincontent_active">
                     
@@ -64,17 +64,23 @@
 
                     {!! 
                         action_bar(array(
+                            array('title' => trans('langUserReferences'),
+                                'url' => $urlAppend . 'modules/session/user_report.php?course=' . $course_code . '&session=' . $sessionID,
+                                'icon' => 'fa-solid fa-address-card',
+                                'level' => 'primary-label',
+                                'show' => ($is_consultant or $is_course_reviewer)
+                            ),
                             array('title' => trans('langEditUnitSection'),
                                 'url' => $urlAppend . 'modules/session/edit.php?course=' . $course_code . '&session=' . $sessionID,
                                 'icon' => 'fa fa-edit',
-                                'level' => 'primary-label',
-                                'button-class' => 'btn-success',
+                                'level' => 'secondary',
                                 'show' => $is_consultant
                             ),
                             array('title' => trans('langUserConsent'),
                                 'url' => $urlAppend . 'modules/session/session_users.php?course=' . $course_code . '&session=' . $sessionID,
                                 'icon' => 'fa fa-users',
                                 'button-class' => 'btn-success',
+                                'level' => 'secondary',
                                 'show' => ($is_consultant or $is_course_reviewer)
                             ),
                             array('title' => trans('langCompleteSession'),
@@ -110,12 +116,6 @@
                                 'confirm_title' => trans('langAddTcSession'),
                                 'confirm_button' => trans('langSubmit'),
                                 'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0)
-                            ),
-                            array('title' => trans('langUserReferences'),
-                                'url' => $urlAppend . 'modules/session/user_report.php?course=' . $course_code . '&session=' . $sessionID,
-                                'icon' => 'fa-solid fa-address-card',
-                                'level' => 'secondary',
-                                'show' => ($is_consultant or $is_course_reviewer)
                             ),
                         ))
                     !!}
@@ -204,7 +204,7 @@
         </div>
     
     </div>
-</div>
+</main>
 
 
 

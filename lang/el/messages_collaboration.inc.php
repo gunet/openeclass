@@ -1562,3 +1562,5 @@ $langUserReferences = "Αναφορές χρηστών";
 $langUserHasCompleted = "Έχει ολοκληρώσει";
 $langNotUploadedDeliverable = "Ο χρήστης δεν έχει υποβάλει κάποιο παραδοτέο";
 $langNoCommentsAvailable = "Δεν υπάρχουν σχόλια";
+$langTableCompletedConsulting = "Πίνακας ολοκλήρωσης δράσεων συμβουλευτικής";
+$langShowOnlySessionWithCompletionEnable = "Στον πίνακα χρηστών αναφέρονται όσες συνεδρίες έχουν ενεργοποιημένη την <strong>ολοκλήρωση συνεδρίας</strong>";

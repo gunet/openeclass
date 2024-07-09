@@ -2,8 +2,7 @@
 
 @section('content')
 
-
-<main id="main" id="main" class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -29,6 +28,8 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
+                    
+                    {!! $action_bar !!}
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -61,10 +62,42 @@
                     </div>
                     @endif
 
-                    <div class='col-12 mt-4'>
-                        {!! $type_resource !!}
+                    <div class='col-12'>
+                        @if(count($users_actions) > 0)
+                            <div class='alert alert-info'>
+                                <i class='fa-solid fa-circle-info fa-lg'></i>
+                                <span>{!! trans('langShowOnlySessionWithCompletionEnable') !!}</span>
+                            </div>
+                            <div class='table-responsive'>
+                                <table class='table-default'>
+                                    <tbody>
+                                        @foreach($users_actions as $key => $val)
+                                            <tr>
+                                                <td>{!! display_user($key) !!}</td>
+                                                @foreach($val as $v)
+                                                    <td>
+                                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                                            <div>
+                                                                <strong>{!! $v->title !!}</strong></br>
+                                                                {!! format_locale_date(strtotime($v->start), 'short', false) !!}</br>
+                                                                {!! $v->completion !!}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoInfoAvailable') }}</span>
+                            </div>
+                        @endif
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -72,6 +105,5 @@
     
     </div>
 </main>
-
 
 @endsection

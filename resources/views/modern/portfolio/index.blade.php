@@ -538,7 +538,7 @@
         @include('portfolio.privacy_policy_modal')
     @endif
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='row m-auto'>
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
@@ -596,325 +596,326 @@
         </div>
     </div>
 
-<div class='col-12 main-section-courses'>
-    <div class='row m-auto'>
-        <div class='col-12 portfolio-courses-container'>
-            <div class='{{ $container }} padding-default'>
-                <div class='row row-cols-1 g-4'>
-                    <div class='col portfolio-content'>
-                        <div class='d-xl-flex gap-5'>
-                            <div class='flex-grow-1'>
-                                <div class='card card-transparent border-0 bg-transparent'>
-                                    <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
-                                        <h2>{{ trans('langMyCoursesSide') }}&nbsp;
-                                            @if(!get_config('show_always_collaboration'))
-                                            ({{ $num_of_courses }})
-                                            @else
-                                            ({{ $num_of_collaborations }})
-                                            @endif
+    <div class='col-12 main-section-courses'>
+        <div class='row m-auto'>
+            <div class='col-12 portfolio-courses-container'>
+                <div class='{{ $container }} padding-default'>
+                    <div class='row row-cols-1 g-4'>
+                        <div class='col portfolio-content'>
+                            <div class='d-xl-flex gap-5'>
+                                <div class='flex-grow-1'>
+                                    <div class='card card-transparent border-0 bg-transparent'>
+                                        <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
+                                            <h2>{{ trans('langMyCoursesSide') }}&nbsp;
+                                                @if(!get_config('show_always_collaboration'))
+                                                ({{ $num_of_courses }})
+                                                @else
+                                                ({{ $num_of_collaborations }})
+                                                @endif
 
-                                        </h2>
-                                        <div class='d-flex mt-md-0 mt-3'>
-                                            <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
-                                                <i class="fa-regular fa-pen-to-square"></i>&nbsp
-                                                {{ trans('langRegister') }}
-                                            </a>
-                                            @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
-                                                <a id="btn_create_course" class="btn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
-                                                    <i class="fa-solid fa-plus"></i>&nbsp;{{ trans('langCreate') }}
+                                            </h2>
+                                            <div class='d-flex mt-md-0 mt-3'>
+                                                <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
+                                                    <i class="fa-regular fa-pen-to-square"></i>&nbsp
+                                                    {{ trans('langRegister') }}
                                                 </a>
-                                            @endif
+                                                @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
+                                                    <a id="btn_create_course" class="btn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
+                                                        <i class="fa-solid fa-plus"></i>&nbsp;{{ trans('langCreate') }}
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class='card-body px-0'>
+                                        <div class='card-body px-0'>
 
-                                        @if(Session::has('message'))
-                                            <div class='col-12 mt-3 px-0'>
-                                                <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                            @if(Session::has('message'))
+                                                <div class='col-12 mt-3 px-0'>
+                                                    <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                                        @php
+                                                            $alert_type = '';
+                                                            if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                                                $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                                            }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                                                $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                                            }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                                                $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                                            }else{
+                                                                $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                                            }
+                                                        @endphp
+
+                                                        @if(is_array(Session::get('message')))
+                                                            @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                                            {!! $alert_type !!}<span>
+                                                            @foreach($messageArray as $message)
+                                                                {!! $message !!}
+                                                            @endforeach</span>
+                                                        @else
+                                                            {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
+                                                        @endif
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+
+                                            <div id="cources-bars">
+                                                {!! $perso_tool_content['lessons_content'] !!}
+                                            </div>
+
+
+                                            <div id="cources-pics">
+
+                                                <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
+                                                    <a class="btn showCoursesBars">
+                                                        <i class="fa-solid fa-table-list"></i>
+                                                    </a>
+                                                    <a class="btn showCoursesPics">
+                                                        <i class="fa-solid fa-table-cells-large"></i>
+                                                    </a>
+                                                </div>
+
+                                                <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-3 g-4">
                                                     @php
-                                                        $alert_type = '';
-                                                        if(Session::get('alert-class', 'alert-info') == 'alert-success'){
-                                                            $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
-                                                        }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
-                                                            $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
-                                                        }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
-                                                            $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
-                                                        }else{
-                                                            $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                                        $pagesPag = 0;
+                                                        $allCourses = 0;
+                                                        $temp_pages = 0;
+                                                        $countCards = 1;
+                                                        if($countCards == 1){
+                                                            $pagesPag++;
                                                         }
                                                     @endphp
 
-                                                    @if(is_array(Session::get('message')))
-                                                        @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                                                        {!! $alert_type !!}<span>
-                                                        @foreach($messageArray as $message)
-                                                            {!! $message !!}
-                                                        @endforeach</span>
-                                                    @else
-                                                        {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
-                                                    @endif
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </div>
-                                            </div>
-                                        @endif
+                                                    @foreach($courses as $course)
 
+                                                            @php
+                                                                $temp_pages++;
+                                                                if (isset($course->favorite)) {
+                                                                    $favorite_icon = 'fa-star Primary-500-cl';
+                                                                    $fav_status = 0;
+                                                                    $fav_message = '';
+                                                                } else {
+                                                                    $favorite_icon = 'fa-regular fa-star';
+                                                                    $fav_status = 1;
+                                                                    $fav_message = trans('langFavorite');
+                                                                }
+                                                            @endphp
 
-                                        <div id="cources-bars">
-                                            {!! $perso_tool_content['lessons_content'] !!}
-                                        </div>
+                                                            <div class="col cardCourse{{ $pagesPag }}">
+                                                                <div class="card h-100 card{{ $pagesPag }} Borders border-card">
+                                                                    @php
+                                                                        $courseImage = '';
+                                                                        if(!empty($course->course_image)){
+                                                                            $courseImage = "{$urlServer}courses/$course->code/image/$course->course_image";
+                                                                        }else{
+                                                                            $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
+                                                                        }
+                                                                    @endphp
 
-
-                                        <div id="cources-pics">
-
-                                            <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
-                                                <a class="btn showCoursesBars">
-                                                    <i class="fa-solid fa-table-list"></i>
-                                                </a>
-                                                <a class="btn showCoursesPics">
-                                                    <i class="fa-solid fa-table-cells-large"></i>
-                                                </a>
-                                            </div>
-
-                                            <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-3 g-4">
-                                                @php
-                                                    $pagesPag = 0;
-                                                    $allCourses = 0;
-                                                    $temp_pages = 0;
-                                                    $countCards = 1;
-                                                    if($countCards == 1){
-                                                        $pagesPag++;
-                                                    }
-                                                @endphp
-
-                                                @foreach($courses as $course)
-
-                                                        @php
-                                                            $temp_pages++;
-                                                            if (isset($course->favorite)) {
-                                                                $favorite_icon = 'fa-star Primary-500-cl';
-                                                                $fav_status = 0;
-                                                                $fav_message = '';
-                                                            } else {
-                                                                $favorite_icon = 'fa-regular fa-star';
-                                                                $fav_status = 1;
-                                                                $fav_message = trans('langFavorite');
-                                                            }
-                                                        @endphp
-
-                                                        <div class="col cardCourse{{ $pagesPag }}">
-                                                            <div class="card h-100 card{{ $pagesPag }} Borders border-card">
-                                                                @php
-                                                                    $courseImage = '';
-                                                                    if(!empty($course->course_image)){
-                                                                        $courseImage = "{$urlServer}courses/$course->code/image/$course->course_image";
-                                                                    }else{
-                                                                        $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
-                                                                    }
-                                                                @endphp
-
-                                                                @if($course->course_image == NULL)
-                                                                    <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $course->course_image }}" />
-                                                                @else
-                                                                    <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
-                                                                @endif
-
-                                                                <div class='card-body'>
-
-                                                                    <div class="lesson-title line-height-default">
-                                                                        <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
-                                                                            {{ $course->title }}&nbsp;({{ $course->public_code }})
-                                                                        </a>
-                                                                    </div>
-
-                                                                    <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
-
-                                                                </div>
-
-                                                                <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
-                                                                    <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none'
-                                                                        data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' >
-                                                                        <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
-                                                                    </a>
-
-                                                                    <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
-                                                                        <i class='fa-solid fa-display'></i>
-                                                                    </a>
-
-                                                                    {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
-
-                                                                    @if ($course->status == USER_STUDENT)
-                                                                        @if (get_config('disable_student_unregister_cours') == 0)
-                                                                            {!! icon('fa-minus-circle', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
-
-                                                                        @endif
-                                                                    @elseif ($course->status == USER_TEACHER)
-                                                                        {!! icon('fa-wrench', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
+                                                                    @if($course->course_image == NULL)
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $course->course_image }}" />
+                                                                    @else
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
                                                                     @endif
 
+                                                                    <div class='card-body'>
 
-                                                                    <div class="modal fade" id="notificationCard{{ $course->course_id }}" tabindex="-1" aria-labelledby="notificationCardLabel" aria-hidden="true">
-                                                                        <div class="modal-dialog">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <div class='modal-title'>
-                                                                                        <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                                                                        <h3 class='modal-title-default text-center mb-0'>{{ trans('langNotesNotifications') }}</h3>
+                                                                        <div class="lesson-title line-height-default">
+                                                                            <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
+                                                                                {{ $course->title }}&nbsp;({{ $course->public_code }})
+                                                                            </a>
+                                                                        </div>
+
+                                                                        <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
+
+                                                                    </div>
+
+                                                                    <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
+                                                                        <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none'
+                                                                            data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' >
+                                                                            <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
+                                                                        </a>
+
+                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
+                                                                            <i class='fa-solid fa-display'></i>
+                                                                        </a>
+
+                                                                        {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
+
+                                                                        @if ($course->status == USER_STUDENT)
+                                                                            @if (get_config('disable_student_unregister_cours') == 0)
+                                                                                {!! icon('fa-minus-circle', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
+
+                                                                            @endif
+                                                                        @elseif ($course->status == USER_TEACHER)
+                                                                            {!! icon('fa-wrench', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
+                                                                        @endif
+
+
+                                                                        <div class="modal fade" id="notificationCard{{ $course->course_id }}" tabindex="-1" aria-labelledby="notificationCardLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <div class='modal-title'>
+                                                                                            <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                                                                            <h3 class='modal-title-default text-center mb-0'>{{ trans('langNotesNotifications') }}</h3>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <p class='text-center mb-3'>
-                                                                                        <a class='TextBold' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">
-                                                                                            {{ $course->title }}
-                                                                                        </a>
-                                                                                    </p>
-                                                                                    <div class='lesson-notifications' data-id='{{ $course->course_id }}'></div>
+                                                                                    <div class="modal-body">
+                                                                                        <p class='text-center mb-3'>
+                                                                                            <a class='TextBold' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">
+                                                                                                {{ $course->title }}
+                                                                                            </a>
+                                                                                        </p>
+                                                                                        <div class='lesson-notifications' data-id='{{ $course->course_id }}'></div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+
                                                                     </div>
 
                                                                 </div>
-
                                                             </div>
-                                                        </div>
 
-                                                        @php
-                                                            if($countCards == 6 and $temp_pages < count($courses)){
-                                                                $pagesPag++;
-                                                                $countCards = 0;
-                                                            }
-                                                            $countCards++;
-                                                            $allCourses++;
-                                                        @endphp
+                                                            @php
+                                                                if($countCards == 6 and $temp_pages < count($courses)){
+                                                                    $pagesPag++;
+                                                                    $countCards = 0;
+                                                                }
+                                                                $countCards++;
+                                                                $allCourses++;
+                                                            @endphp
 
-                                                @endforeach
+                                                    @endforeach
 
-                                            </div>
+                                                </div>
 
-                                            <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
-                                            <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
+                                                <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
+                                                <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
 
-                                            <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent solidPanel mt-4'>
-                                                <nav aria-label='Page navigation example w-100'>
-                                                    <ul class='pagination mycourses-pagination w-100 mb-0'>
-                                                        <li class='page-item page-item-previous'>
-                                                            <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
-                                                        </li>
-                                                        @if($pagesPag >=12 )
-                                                            @for($i=1; $i<=$pagesPag; $i++)
+                                                <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent solidPanel mt-4'>
+                                                    <nav aria-label='Page navigation example w-100'>
+                                                        <ul class='pagination mycourses-pagination w-100 mb-0'>
+                                                            <li class='page-item page-item-previous'>
+                                                                <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
+                                                            </li>
+                                                            @if($pagesPag >=12 )
+                                                                @for($i=1; $i<=$pagesPag; $i++)
 
-                                                                @if($i>=1 && $i<=5)
-                                                                    @if($i==1)
-                                                                        <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
-                                                                        </li>
-
-                                                                        <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
-                                                                            <a>...</a>
-                                                                        </li>
-                                                                    @else
-                                                                        @if($i<$pagesPag)
+                                                                    @if($i>=1 && $i<=5)
+                                                                        @if($i==1)
                                                                             <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
                                                                                 <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                                             </li>
+
+                                                                            <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
+                                                                                <a>...</a>
+                                                                            </li>
+                                                                        @else
+                                                                            @if($i<$pagesPag)
+                                                                                <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
+                                                                                    <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
+                                                                                </li>
+                                                                            @endif
                                                                         @endif
                                                                     @endif
-                                                                @endif
 
-                                                                @if($i>=6 && $i<=$pagesPag-1)
-                                                                    <li id='KeypageCenter{{$i}}' class='page-item page-item-pages d-none'>
-                                                                        <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
-                                                                    </li>
+                                                                    @if($i>=6 && $i<=$pagesPag-1)
+                                                                        <li id='KeypageCenter{{$i}}' class='page-item page-item-pages d-none'>
+                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
+                                                                        </li>
 
-                                                                    @if($i==$pagesPag-1)
-                                                                        <li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
-                                                                            <a>...</a>
+                                                                        @if($i==$pagesPag-1)
+                                                                            <li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
+                                                                                <a>...</a>
+                                                                            </li>
+                                                                        @endif
+                                                                    @endif
+
+                                                                    @if($i==$pagesPag)
+                                                                        <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
+                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                                         </li>
                                                                     @endif
-                                                                @endif
+                                                                @endfor
 
-                                                                @if($i==$pagesPag)
+                                                            @else
+                                                                @for($i=1; $i<=$pagesPag; $i++)
                                                                     <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
                                                                         <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                                     </li>
-                                                                @endif
-                                                            @endfor
+                                                                @endfor
+                                                            @endif
 
-                                                        @else
-                                                            @for($i=1; $i<=$pagesPag; $i++)
-                                                                <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                    <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
-                                                                </li>
-                                                            @endfor
-                                                        @endif
+                                                            <li class='page-item page-item-next'>
+                                                                <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
+                                                </div>
 
-                                                        <li class='page-item page-item-next'>
-                                                            <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
-                                                        </li>
-                                                    </ul>
-                                                </nav>
                                             </div>
+
+
+                                            @if($portfolio_page_main_widgets)
+                                                <div class='col-12 mt-4'>
+                                                    {!! html_entity_decode($portfolio_page_main_widgets) !!}
+                                                </div>
+                                            @endif
 
                                         </div>
-
-
-                                        @if($portfolio_page_main_widgets)
-                                            <div class='col-12 mt-4'>
-                                                {!! html_entity_decode($portfolio_page_main_widgets) !!}
-                                            </div>
-                                        @endif
-
                                     </div>
                                 </div>
-                            </div>
-                            <div>
+                                <div>
 
-                                @include('portfolio.portfolio-calendar')
+                                    @include('portfolio.portfolio-calendar')
 
-                                <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                        <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
-                                        <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
-                                            {{ trans('langAllAnnouncements') }}
-                                        </a>
-                                    </div>
-                                    <div class='card-body px-0'>
-                                        @if(empty($user_announcements))
-                                            <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langNoRecentAnnounce') }}</span></div>
-                                        @else
-                                            {!! $user_announcements !!}
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-
-                                        <h3 class='mb-0'>{{ trans('langMessages') }}</h3>
-                                        <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/message/index.php">
-                                            {{ trans('langAllMessages') }}
-                                        </a>
-
-                                    </div>
-                                    <div class='card-body px-0'>
-                                        @if(empty($user_messages))
-                                            <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langDropboxNoMessage') }}</span></div>
-                                        @else
-                                            {!! $user_messages !!}
-                                        @endif
-                                    </div>
-                                </div>
-
-                                @if($portfolio_page_sidebar_widgets)
                                     <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                            <h3>{{ trans('langMyWidgets') }}</h3>
+                                            <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
+                                            <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
+                                                {{ trans('langAllAnnouncements') }}
+                                            </a>
                                         </div>
                                         <div class='card-body px-0'>
-                                            {!! html_entity_decode($portfolio_page_sidebar_widgets) !!}
+                                            @if(empty($user_announcements))
+                                                <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langNoRecentAnnounce') }}</span></div>
+                                            @else
+                                                {!! $user_announcements !!}
+                                            @endif
                                         </div>
                                     </div>
-                                @endif
+
+                                    <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
+                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+
+                                            <h3 class='mb-0'>{{ trans('langMessages') }}</h3>
+                                            <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/message/index.php">
+                                                {{ trans('langAllMessages') }}
+                                            </a>
+
+                                        </div>
+                                        <div class='card-body px-0'>
+                                            @if(empty($user_messages))
+                                                <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langDropboxNoMessage') }}</span></div>
+                                            @else
+                                                {!! $user_messages !!}
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    @if($portfolio_page_sidebar_widgets)
+                                        <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
+                                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                                <h3>{{ trans('langMyWidgets') }}</h3>
+                                            </div>
+                                            <div class='card-body px-0'>
+                                                {!! html_entity_decode($portfolio_page_sidebar_widgets) !!}
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -922,6 +923,5 @@
             </div>
         </div>
     </div>
-</div>
-</div>
+</main>
 @endsection

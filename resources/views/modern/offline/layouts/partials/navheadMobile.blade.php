@@ -1,3 +1,4 @@
+<header>
 <nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass fixed-top py-0">
     <div class='container-fluid header-container py-0'>
         <div class='col-12 d-flex justify-content-center h-100'>
@@ -9,3 +10,4 @@
         </div>
     </div>
 </nav>
+</header>
