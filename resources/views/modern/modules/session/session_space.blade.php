@@ -185,6 +185,9 @@
                                         {{ trans('langParticipants') }}
                                     </a>
                                 </div>
+                                @if($prereq_session)
+                                    <p class='TextBold'>{{ trans('langSessionPrerequisites') }}:&nbsp;<span>{{ $prereq_session->title }}</span></p>
+                                @endif
                                 @if($comments)
                                     <div>{!! $comments->comments !!}</div>
                                 @endif

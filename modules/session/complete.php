@@ -228,7 +228,23 @@ if ($is_consultant) {
             }
         }
     } elseif ( isset($_GET['prereq']) ) {
-        insert_session_prerequisite_unit($sessionID, $_GET['prereq']);
+        $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sessionID,1);
+        $perc = 0;
+        if(count($participants) > 0){
+            $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id,$sessionID);
+            if($badge){
+                foreach($participants as $p){
+                    $perc = $perc + get_cert_percentage_completion_by_user('badge',$badge->id,$p->participants);
+                }
+            }
+        }
+        $npercentage = (count($participants) > 0) ? $perc/count($participants) : $perc;
+        if(round($npercentage) < 100){
+            insert_session_prerequisite_unit($sessionID, $_GET['prereq']);
+        }else{
+            Session::flash('message',$langForbidden);
+            Session::flash('alert-class', 'alert-warning');
+        }
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
     } elseif ( isset($_GET['del_un_prereq']) ) {
         delete_session_prerequisite($sessionID);

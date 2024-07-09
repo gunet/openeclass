@@ -96,7 +96,7 @@
                                                     @if(!empty($r->comments))
                                                         {!! $r->comments !!}
                                                     @else
-                                                        {{ trans('langNoInfoAvailable') }}
+                                                        {{ trans('langNoCommentsAvailable') }}
                                                     @endif
                                                 </div>
                                             </div>
@@ -278,7 +278,7 @@
                                                                 @if(!empty($doc->deliverable_comment))
                                                                     {!! $doc->deliverable_comment !!}
                                                                 @else
-                                                                    {{ trans('langNoInfoAvailable') }}
+                                                                    {{ trans('langNoCommentsAvailable') }}
                                                                 @endif
                                                             </div>
                                                         </td>

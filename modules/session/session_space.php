@@ -217,4 +217,9 @@ $data['participants'] = Database::get()->queryArray("SELECT participants FROM mo
 
 $data['comments'] = Database::get()->querySingle("SELECT comments FROM mod_session WHERE id = ?d",$sessionID);
 
+$data['prereq_session'] = Database::get()->querySingle("SELECT title FROM mod_session 
+                                                        WHERE id IN (SELECT prerequisite_session FROM session_prerequisite 
+                                                                     WHERE course_id = ?d
+                                                                     AND session_id = ?d)",$course_id,$sessionID);
+
 view('modules.session.session_space', $data);
