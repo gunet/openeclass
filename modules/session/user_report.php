@@ -44,6 +44,7 @@ if(isset($_GET['session'])){
 }
 
 session_exists($sessionID);
+check_user_belongs_in_session($sessionID);
 
 $sessionTitle = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);

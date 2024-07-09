@@ -20,6 +20,21 @@
  * ========================================================================
  */
 
+function check_user_belongs_in_session($sid){
+    global $course_id, $course_code, $is_consultant, $is_coordinator, $is_simple_user, $uid;
+
+    if($is_consultant && !$is_coordinator){
+        $check = Database::get()->querySingle("SELECT creator FROM mod_session WHERE id = ?d AND course_id = ?d",$sid, $course_id);
+        if($check && $check->creator != $uid){
+            redirect_to_home_page("modules/session/index.php?course=$course_code");
+        }
+    }elseif($is_simple_user){
+        $check = Database::get()->querySingle("SELECT id FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$sid, $uid, 1);
+        if(!$check){
+            redirect_to_home_page("modules/session/index.php?course=$course_code");
+        }
+    }
+}
 
 function is_session_consultant($sid,$cid){
     global $uid;
@@ -2525,7 +2540,7 @@ function findUserVisibleSessions($uid, $all_sessions) {
 
 
 /**
- * @brief check if unit resource has completed
+ * @brief check if session resource has completed
  * @param $session_id
  * @param $session_resource_id
  * @return integer

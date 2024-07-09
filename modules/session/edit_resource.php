@@ -36,6 +36,7 @@ check_activation_of_collaboration();
 if(isset($_GET['session'])){
     $data['sessionID'] = $sessionID = $_GET['session'];
     session_exists($sessionID);
+    check_user_belongs_in_session($sessionID);
 }
 
 $sessionTitle = title_session($course_id,$sessionID);

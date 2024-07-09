@@ -69,6 +69,7 @@ if ($is_consultant) {
         $course_code = $_GET['course'];
         $course_id = course_code_to_id($course_code);
         session_exists($sessionID);
+        check_user_belongs_in_session($sessionID);
         $sessionTitle = title_session($course_id,$sessionID);
         $pageName = $langSessionCompletion;
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);

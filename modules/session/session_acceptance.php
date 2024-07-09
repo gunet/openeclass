@@ -44,6 +44,7 @@ if(isset($_GET['session'])){
 }
 
 session_exists($sessionID);
+check_user_belongs_in_session($sessionID);
 
 if(isset($_POST['submit'])){
   if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

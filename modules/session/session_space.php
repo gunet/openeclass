@@ -55,6 +55,7 @@ elseif(isset($_GET['id'])){
 doc_init();
 
 session_exists($sessionID);
+check_user_belongs_in_session($sessionID);
 
 $pageName = title_session($course_id,$sessionID);
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);

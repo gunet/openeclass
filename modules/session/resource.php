@@ -58,6 +58,7 @@ elseif(isset($_GET['id'])){
 }
 
 session_exists($sessionID);
+check_user_belongs_in_session($sessionID);
 
 $sessionTitle = title_session($course_id,$sessionID);
 
