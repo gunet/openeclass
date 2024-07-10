@@ -80,22 +80,15 @@
             document.getElementById('selectedImage').value = '{{ trans('langSelect') }}:'+id_img;
         });
 
-        if($('#type_collab').is(":checked")){
-            document.getElementById("radio_collaborative").style.display="block";
-        }else{
-            document.getElementById("radio_collaborative").style.display="none";
-        }
         $('#type_collab').on('click',function(){
             if($('#type_collab').is(":checked")){
                 document.getElementById("radio_flippedclassroom").style.display="none";
                 document.getElementById("radio_activity").style.display="none";
                 document.getElementById("radio_wall").style.display="none";
-                document.getElementById("radio_collaborative").style.display="block";
             }else{
                 document.getElementById("radio_flippedclassroom").style.display="block";
                 document.getElementById("radio_activity").style.display="block";
                 document.getElementById("radio_wall").style.display="block";
-                document.getElementById("radio_collaborative").style.display="none";
             }
         });
         
