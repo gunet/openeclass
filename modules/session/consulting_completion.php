@@ -38,18 +38,23 @@ $pageName = $langTableCompletedConsulting;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
 $users_actions = [];
+$sql_consultant = "";
+if($is_consultant && !$is_coordinator){
+    $sql_consultant = "AND creator = $uid";
+}
 $res = Database::get()->queryFunc("SELECT user_id FROM course_user 
                                    WHERE course_id = ?d 
                                    AND status = ?d 
                                    AND tutor = ?d 
                                    AND editor = ?d 
-                                   AND course_reviewer = ?d", function($result) use(&$course_id, &$users_actions, &$langAttemptActive, &$langCompletedSession)  {
+                                   AND course_reviewer = ?d", function($result) use(&$course_id, &$users_actions, &$langAttemptActive, &$langCompletedSession, &$sql_consultant)  {
                                         $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start FROM mod_session 
                                                                                      WHERE course_id = ?d AND visible = ?d
                                                                                      AND id IN (SELECT session_id FROM mod_session_users
                                                                                                     WHERE participants = ?d 
                                                                                                     AND is_accepted = ?d)
-                                                                                     AND id IN (SELECT session_id FROM badge WHERE course_id = ?d AND session_id > 0)", $course_id, 1, $result->user_id, 1, $course_id);
+                                                                                     AND id IN (SELECT session_id FROM badge WHERE course_id = ?d AND session_id > 0)
+                                                                                     $sql_consultant", $course_id, 1, $result->user_id, 1, $course_id);
                                         if(count($user_badge_sessions)){
                                             $users_actions[$result->user_id] = $user_badge_sessions;
                                             if(count($users_actions) > 0){

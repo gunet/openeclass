@@ -64,31 +64,41 @@
 
                     <div class='col-12'>
                         @if(count($users_actions) > 0)
-                            <div class='alert alert-info'>
-                                <i class='fa-solid fa-circle-info fa-lg'></i>
-                                <span>{!! trans('langShowOnlySessionWithCompletionEnable') !!}</span>
-                            </div>
-                            <div class='table-responsive'>
-                                <table class='table-default'>
-                                    <tbody>
-                                        @foreach($users_actions as $key => $val)
-                                            <tr>
-                                                <td>{!! display_user($key) !!}</td>
-                                                @foreach($val as $v)
-                                                    <td>
-                                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
-                                                            <div>
-                                                                <strong>{!! $v->title !!}</strong></br>
-                                                                {!! format_locale_date(strtotime($v->start), 'short', false) !!}</br>
-                                                                {!! $v->completion !!}
+                            <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                    <h3 class='mb-0'>{{ trans('langSessionsTable')}}</h3>
+                                </div>
+                                <div class='card-body'>
+                                    <div class='alert alert-info'>
+                                        <i class='fa-solid fa-circle-info fa-lg'></i>
+                                        <span>{!! trans('langShowOnlySessionWithCompletionEnable') !!}</span>
+                                    </div>
+                                    <div class='table-responsive'>
+                                        <table class='table-default'>
+                                            <thead></thead>
+                                            <tbody>
+                                                @foreach($users_actions as $key => $val)
+                                                    <tr>
+                                                        <td>
+                                                            <div class='d-flex justify-content-start align-items-center gap-4'>
+                                                                <div style='width:150px;'>{!! display_user($key) !!}</div>
+                                                                <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>
+                                                                    @foreach($val as $v)
+                                                                        <div>
+                                                                            <strong>{!! $v->title !!}</strong></br>
+                                                                            {!! format_locale_date(strtotime($v->start), 'short', false) !!}</br>
+                                                                            {!! $v->completion !!}
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         @else
                             <div class='alert alert-warning'>

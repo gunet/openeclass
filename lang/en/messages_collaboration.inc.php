@@ -1616,3 +1616,4 @@ $langNoCommentsAvailable = "There are no comments";
 $langTableCompletedConsulting = "Table of completion of counseling actions";
 $langShowOnlySessionWithCompletionEnable = "The user table lists all sessions that have <strong>session completion</strong> enabled";
 $langCourseIsNotCollaborative = "Unauthorized action. Collaboration is not in the form of a session";
+$langSessionsTable = "Sessions table";

@@ -198,7 +198,7 @@ if($is_coordinator or $is_consultant){
             'class' => "delete",
             'confirm' => $langContinueToDelAllSessions,
             'icon' => 'fa-xmark',
-            'show' => ($is_coordinator && !$is_course_reviewer)
+            'show' => ($is_coordinator && $is_consultant)
         ],
     ], false);
 
