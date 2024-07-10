@@ -61,7 +61,12 @@
 
                                     <div class='col-12 mt-4 d-flex justify-content-md-end justify-content-center'>
                                         <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/index.php'>
-                                            {{ trans('langNavSettings')}}
+                                            
+                                            @if($c->is_collaborative)
+                                                {{ trans('langPageCollaboration')}}
+                                            @else
+                                                {{ trans('langNavSettings')}}
+                                            @endif
                                             <i class="fa-solid fa-circle-right"></i>
                                         </a>
                                     </div>

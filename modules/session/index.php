@@ -172,6 +172,14 @@ if($is_coordinator or $is_consultant){
             'level' => 'primary-label',
             'show' => ($is_editor || !$is_course_reviewer)
         ],
+        [
+            'title' => $langTableCompletedConsulting,
+            'url' => $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code,
+            'icon' => 'fa-solid fa-users',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label',
+            'show' => !$is_simple_user
+        ],
         [ 
             'title' => $langSummaryScheduledSessions,
             'url' => 'session_scheduled.php?course=' . $course_code,
@@ -191,13 +199,6 @@ if($is_coordinator or $is_consultant){
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
             'icon' => 'fa-solid fa-percent',
             'button-class' => 'btn-success'
-        ],
-        [
-            'title' => $langTableCompletedConsulting,
-            'url' => $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code,
-            'icon' => 'fa-solid fa-users',
-            'button-class' => 'btn-success',
-            'show' => !$is_simple_user
         ],
         [
             'title' => $langDelAllSessions,
@@ -260,19 +261,19 @@ if($is_coordinator or $is_consultant){
 }else{// is simple user
 
     $data['action_bar'] = action_bar([
+        [
+            'title' => $langPercentageCompletedConsulting,
+            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
+            'icon' => 'fa-solid fa-percent',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
+        ],
         [ 
             'title' => $langSummaryScheduledSessions,
             'url' => 'session_scheduled.php?course=' . $course_code,
             'icon' => 'fa-solid fa-list',
             'button-class' => 'btn-success',
             'level' => 'primary-label'
-        ],
-        [
-            'title' => $langPercentageCompletedConsulting,
-            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
-            'icon' => 'fa-solid fa-percent',
-            'level' => 'primary',
-            'button-class' => 'btn-success'
         ],
     ], false);
     

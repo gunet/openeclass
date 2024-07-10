@@ -6841,3 +6841,4 @@ $langSubmittedUploadedFile = "Υποβολή παραδοτέου";
 $langMyUploadedFiles = "Τα παραδοτέα μου";
 $langViewScreensThemes = "Προβολή θεμάτων";
 $langWhatTypeOfCourse = "Διαθέσιμος τύπος μαθήματος";
+$langPageCollaboration = "Σελίδα συνεργασίας";
