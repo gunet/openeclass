@@ -30,7 +30,7 @@
                     @include('layouts.partials.legend_view')
 
                     @if ($is_editor and $q->flipped_flag != 2)
-                    @if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course))
+                    
                                 {!! action_bar(array(
                                     array('title' => trans('langEditUnitSection'),
                                         'url' => $editUrl,
@@ -111,7 +111,7 @@
                                         'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
                                     ))
                                 !!}
-                    @endif
+                    
                     @endif
                     @if ($is_editor and $q->flipped_flag == 2)
                         {!! action_bar(array(
