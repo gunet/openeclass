@@ -172,6 +172,13 @@ if($is_coordinator or $is_consultant){
             'level' => 'primary-label',
             'show' => ($is_editor || !$is_course_reviewer)
         ],
+        [ 
+            'title' => $langSummaryScheduledSessions,
+            'url' => 'session_scheduled.php?course=' . $course_code,
+            'icon' => 'fa-solid fa-list',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label'
+        ],
         [
             'title' => $langCompletedConsulting,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&addSessions=true",
@@ -253,6 +260,13 @@ if($is_coordinator or $is_consultant){
 }else{// is simple user
 
     $data['action_bar'] = action_bar([
+        [ 
+            'title' => $langSummaryScheduledSessions,
+            'url' => 'session_scheduled.php?course=' . $course_code,
+            'icon' => 'fa-solid fa-list',
+            'button-class' => 'btn-success',
+            'level' => 'primary-label'
+        ],
         [
             'title' => $langPercentageCompletedConsulting,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",

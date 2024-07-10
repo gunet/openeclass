@@ -21,7 +21,7 @@
 
 
 /**
- * @file consultinh_completion.php
+ * @file consulting_completion.php
  * @brief Display a detailed table about consulting completion for each user
  */
 
