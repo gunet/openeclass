@@ -189,7 +189,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'title' => $langConsultant,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".(($myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') ? "remove" : "give")."Consultant=". getIndirectReference($myrow->id),
                 'icon' => ($myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') ? "fa-square-check" : "fa-square",
-                'show' => ($myrow->status != USER_GUEST && isset($is_collaborative_course) && $is_collaborative_course),
+                'show' => ($myrow->status != USER_GUEST && isset($is_collaborative_course) && $is_collaborative_course && !is_module_disable(MODULE_ID_SESSION)),
             ),
             array(
                 'title' => $langTeacher,
