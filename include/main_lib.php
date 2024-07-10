@@ -1184,21 +1184,26 @@ function visible_module($module_id) {
  */
 function is_module_disable($module_id) {
 
-    global $is_collaborative_course;
-
-    $table_modules = '';
-    if(isset($is_collaborative_course) and $is_collaborative_course){
-        $table_modules = 'module_disable_collaboration';
+    $is_disabled = false;
+    if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+        $q = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
+        if ($q) {
+            $is_disabled = true;
+        } 
+    }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration')){
+        $q1 = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
+        $q2 = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
+        if ($q1 or $q2) {
+            $is_disabled = true;
+        }
     }else{
-        $table_modules = 'module_disable';
+        $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
+        if ($q) {
+            $is_disabled = true;
+        } 
     }
 
-    $q = Database::get()->querySingle("SELECT * FROM $table_modules WHERE module_id = ?d", $module_id);
-    if ($q) {
-        return true;
-    } else {
-        return false;
-    }
+    return $is_disabled;
 }
 
 // Flipped Classroom

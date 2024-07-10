@@ -6840,4 +6840,4 @@ $langWithSubmittedUploadedFile = "Με υποβολή παραδοτέου";
 $langSubmittedUploadedFile = "Υποβολή παραδοτέου";
 $langMyUploadedFiles = "Τα παραδοτέα μου";
 $langViewScreensThemes = "Προβολή θεμάτων";
-$langWhatTypeOfCourse = "Επιθυμείτε το μάθημα να γίνει τύπου <strong> Συνεργασία </strong>";
+$langWhatTypeOfCourse = "Διαθέσιμος τύπος μαθήματος";

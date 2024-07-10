@@ -73,6 +73,27 @@
                 hideCCFields();
             }
         }).change();
+
+        if($('#type_collab').is(":checked")){
+            document.getElementById("radio_flippedclassroom").style.display="none";
+            document.getElementById("radio_activity").style.display="none";
+            document.getElementById("radio_wall").style.display="none";
+        }else{
+            document.getElementById("radio_flippedclassroom").style.display="block";
+            document.getElementById("radio_activity").style.display="block";
+            document.getElementById("radio_wall").style.display="block";
+        }
+        $('#type_collab').on('click',function(){
+            if($('#type_collab').is(":checked")){
+                document.getElementById("radio_flippedclassroom").style.display="none";
+                document.getElementById("radio_activity").style.display="none";
+                document.getElementById("radio_wall").style.display="none";
+            }else{
+                document.getElementById("radio_flippedclassroom").style.display="block";
+                document.getElementById("radio_activity").style.display="block";
+                document.getElementById("radio_wall").style.display="block";
+            }
+        });
     });
 
 </script>
@@ -196,11 +217,12 @@
                                     @if(get_config('show_collaboration') && !get_config('show_always_collaboration'))
                                         <div class='form-group mt-4'>
                                             <div class='col-sm-12'>
+                                                <label class='control-label-notes' for='type_collab'>{!! trans('langWhatTypeOfCourse') !!}</label>
                                                 <div class='checkbox'>
                                                     <label class='label-container'>
-                                                        <input type='checkbox' name='is_type_collaborative' {{ $is_type_collaborative }}>
+                                                        <input type='checkbox' id='type_collab' name='is_type_collaborative' {{ $is_type_collaborative }}>
                                                         <span class='checkmark'></span>
-                                                        {!! trans('langWhatTypeOfCourse') !!}
+                                                        {!! trans('langTypeCollaboration') !!}
                                                     </label>
                                                 </div>
                                             </div>
@@ -223,25 +245,30 @@
                                                 </label>
                                             </div>
                                             
-                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif">
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_activity">
                                                 <label>
                                                     <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
                                                     {{ trans('langCourseActivityFormat') }}
                                                 </label>
                                             </div>
-                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif">
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_wall">
                                                 <label>
                                                     <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
                                                     {{ trans('langCourseWallFormat') }}
                                                 </label>
                                             </div>
-                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif">
+                                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_flippedclassroom">
                                                 <label>
                                                     <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
                                                     {{ trans('langFlippedClassroom') }}
                                                 </label>
                                             </div>
-                                            <div class="radio">
+                                            <div class="radio 
+                                                        @if(!get_config('show_collaboration') and !get_config('show_always_collaboration')) 
+                                                            d-none 
+                                                        @elseif(is_module_disable(MODULE_ID_SESSION)) 
+                                                            d-none 
+                                                        @endif">
                                                 <label>
                                                     <input type='radio' name='view_type' value='sessions' id='sessions' {{ $course_type_sessions }}>
                                                     {{ trans('langSessionType') }}
