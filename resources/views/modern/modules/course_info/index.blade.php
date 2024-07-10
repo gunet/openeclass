@@ -78,20 +78,24 @@
             document.getElementById("radio_flippedclassroom").style.display="none";
             document.getElementById("radio_activity").style.display="none";
             document.getElementById("radio_wall").style.display="none";
+            document.getElementById("radio_collaborative").style.display="block";
         }else{
             document.getElementById("radio_flippedclassroom").style.display="block";
             document.getElementById("radio_activity").style.display="block";
             document.getElementById("radio_wall").style.display="block";
+            document.getElementById("radio_collaborative").style.display="none";
         }
         $('#type_collab').on('click',function(){
             if($('#type_collab').is(":checked")){
                 document.getElementById("radio_flippedclassroom").style.display="none";
                 document.getElementById("radio_activity").style.display="none";
                 document.getElementById("radio_wall").style.display="none";
+                document.getElementById("radio_collaborative").style.display="block";
             }else{
                 document.getElementById("radio_flippedclassroom").style.display="block";
                 document.getElementById("radio_activity").style.display="block";
                 document.getElementById("radio_wall").style.display="block";
+                document.getElementById("radio_collaborative").style.display="none";
             }
         });
     });
@@ -268,7 +272,7 @@
                                                             d-none 
                                                         @elseif(is_module_disable(MODULE_ID_SESSION)) 
                                                             d-none 
-                                                        @endif">
+                                                        @endif" id="radio_collaborative">
                                                 <label>
                                                     <input type='radio' name='view_type' value='sessions' id='sessions' {{ $course_type_sessions }}>
                                                     {{ trans('langSessionType') }}
