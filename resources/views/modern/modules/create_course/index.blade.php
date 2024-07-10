@@ -80,15 +80,22 @@
             document.getElementById('selectedImage').value = '{{ trans('langSelect') }}:'+id_img;
         });
 
+        if($("#radio_collaborative_helper").length > 0){
+            if(document.getElementById("radio_collaborative_helper").value == 0){
+                document.getElementById("radio_collaborative").style.display="none";
+            }
+        }
         $('#type_collab').on('click',function(){
             if($('#type_collab').is(":checked")){
                 document.getElementById("radio_flippedclassroom").style.display="none";
                 document.getElementById("radio_activity").style.display="none";
                 document.getElementById("radio_wall").style.display="none";
+                document.getElementById("radio_collaborative").style.display="block";
             }else{
                 document.getElementById("radio_flippedclassroom").style.display="block";
                 document.getElementById("radio_activity").style.display="block";
                 document.getElementById("radio_wall").style.display="block";
+                document.getElementById("radio_collaborative").style.display="none";
             }
         });
         
@@ -273,6 +280,10 @@
                                         {{ trans('langSessionType') }}
                                     </label>
                                 </div>
+
+                                @if(get_config('show_collaboration') and !get_config('show_always_collaboration')) 
+                                    <input type="hidden" id="radio_collaborative_helper" value="0">
+                                @endif
                             </div>
 
                             <div class='form-group mt-4'>
