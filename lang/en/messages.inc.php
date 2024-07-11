@@ -6031,41 +6031,42 @@ $langUnsubscribeCourse = "Disable Course Unsubscription";
  * course invitation
  * ********************************************************** */
 
- $langCourseInvitationHelp = 'If the option is active, course managers can invite external users to the platform to join their courses.';
- $langCourseUsersInvitation = "Invite users to course";
- $langcourseExternalUsersInviation = "Invite external users";
- $langCourseInviteOne = "User invitation";
- $langCourseInviteMany = "Invite users";
- $langDeleteInvitation = "Delete invitation";
- $langDeleteInvitationSuccess = "The invitation was deleted";
- $langCourseInvitationSubject = "Invitation to register on the platform";
- $langCourseInvitationBody1 = "You have received an invitation to register on the $siteName platform in order to participate in the course";
- $langCourseInvitationBody2 = "To proceed with registration, please follow the link below.";
- $langCourseInvitationSent = "The invitation has been sent!";
- $langCourseInvitationsSent = "Invitations were sent to";
- $langUserWithEmail = "The user with e-mail";
- $langAlreadyAccount = "already had an account on the platform and was added to your course.";
- $langAlreadyRegistered = "was already registered in your course.";
- $langAlreadyRegisteredUsers = "The following users already had an account on the platform and were added to the course";
- $langInvitationCustomEmail = "
+$langCourseInvitationHelp = 'If the option is active, course managers can invite external users to the platform to join their courses.';
+$langCourseUsersInvitation = "Invite users to course";
+$langcourseExternalUsersInviation = "Invite external users";
+$langCourseInviteOne = "User invitation";
+$langCourseInviteMany = "Invite users";
+$langDeleteInvitation = "Delete invitation";
+$langDeleteInvitationSuccess = "The invitation was deleted";
+$langCourseInvitationSubject = "Invitation to register on the platform";
+$langCourseInvitationBody1 = "You have received an invitation to register on the $siteName platform in order to participate in the course";
+$langCourseInvitationBody2 = "To proceed with registration, please follow the link below.";
+$langCourseInvitationSent = "The invitation has been sent!";
+$langCourseInvitationsSent = "Invitations were sent to";
+$langUserWithEmail = "The user with e-mail";
+$langAlreadyAccount = "already had an account on the platform and was added to your course.";
+$langAlreadyRegistered = "was already registered in your course.";
+$langAlreadyRegisteredUsers = "The following users already had an account on the platform and were added to the course";
+$langInvitationCustomEmail = "
  <p>Placeholder variables </p>
  <br>
  <ul><li>
   <li>[email] : E-mail address</li>
   <li>[link] : Registration link</li>
  </ul>";
- $langErrorInserting = "The following records of the file you uploaded had a problem. Either the e-mail is invalid or there were more fields than expected:";
- $langCourseInvitationUsersExcelInfo = "You can send a spreadsheet file (eg xls, xlsx, csv) with one or three columns.
+$langErrorInserting = "The following records of the file you uploaded had a problem. Either the e-mail is invalid or there were more fields than expected:";
+$langCourseInvitationUsersExcelInfo = "You can send a spreadsheet file (eg xls, xlsx, csv) with one or three columns.
  The first column must contain the e-mails of the users you wish to invite to the course.
  The second and third columns can optionally contain the last name and first name of each user.
  Note that users who are already on the platform with the e-mail will be immediately added to the course without receiving an invitation and without further notification.";
- $langSendReminder = "Send a reminder";
- $langNoLongerValid = 'The link you followed is no longer valid.';
- $langInvitationAlreadyUsed = 'You have already registered on the platform through
+$langSendReminder = "Send a reminder";
+$langNoLongerValid = 'The link you followed is no longer valid.';
+$langInvitationAlreadyUsed = 'You have already registered on the platform through
  link you followed. You can now log in with your username
  your e-mail address and the password you had chosen.';
- $langRegisterAsVisitor = 'Register as a guest';
- $langCourseInvitation = 'Invitation to register for the course';
+$langRegisterAsVisitor = 'Register as a guest';
+$langCourseInvitation = 'Invitation to register for the course';
+
 $lang_disable_name_surname_change = 'Do not allow users to modify their name and surname';
 $lang_disable_email_change = 'Do not allow users to modify their e-mail';
 $lang_disable_am_change = 'Do not allow users to modify their student ID';

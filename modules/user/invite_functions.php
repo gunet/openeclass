@@ -34,7 +34,7 @@ $default_email_body = "
         <!-- Body Section -->
         <div id='mail-body'>
             <div id='mail-body-inner'>
-                <p>" . $GLOBALS['langCourseInvitationBody1'] . "</p
+                <p>" . $GLOBALS['langCourseInvitationBody1'] . "</p>
                 <p><strong>" . q($GLOBALS['currentCourseName']) . "</strong>
                 <p>" . $GLOBALS['langCourseInvitationBody2'] . "</p>
                 <p style='text-align: center'>
