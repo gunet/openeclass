@@ -896,7 +896,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
     $action_bar = action_bar(array(
             array('title' => $langAddEvent,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
-                  'icon' => 'fa-plus-circle',
+                  'icon' => 'fa-calendar-check',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success',
                   'show' => $is_editor),
@@ -921,17 +921,16 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
     if ($view == EVENT_LIST_VIEW) {
         $tool_content .= "<div class='row'><div class='col-md-12'>$cal_content_list</div></div>";
     } else {
-        $tool_content .= ''
-                 . '
-                 <div class="col-12 overflow-auto">
-                    <div id="calendar_wrapper" class="border-card rounded-3">
+        $tool_content .= '
+        <div class="col-12 overflow-auto">
+           <div id="calendar_wrapper" class="border-card rounded-3">
 
-                            <div class="calendar-header">
+                   <div class="calendar-header">
 
-                                    <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
+                           <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
 
-                                            <div class="btn-group">
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="Previous"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                   <div class="btn-group">
+                                           <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="Previous"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
                                                     <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
                                                     <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next" aria-label="Next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                             </div>
@@ -953,7 +952,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                     </div>
                 </div>';
 
-        $tool_content .= "<script type='text/javascript'>" .
+    $tool_content .= "<script type='text/javascript'>" .
         '$(document).ready(function(){
             var calendar = $("#bootstrapcalendar").calendar(
             {
@@ -982,11 +981,11 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 calendar.view($this.data("calendar-view"));
                 $("#bootstrapcalendar").show();
             });
-    });
+        });
     });
 
     </script>';
-}
+    }
 }
 add_units_navigation(TRUE);
 
