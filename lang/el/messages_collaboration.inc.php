@@ -1555,3 +1555,4 @@ $langCourseIsNotCollaborative = "Μη επιτρεπτή ενέργεια. Η σ
 $langSessionsTable = "Πίνακας συνεδριών";
 $langSummaryScheduledSessions = "Συγκεντρωτικό πρόγραμμα συνεδριών";
 $langNoSessionsExist = "Δεν υπάρχουν συνεδρίες";
+$langSessionHasCompletionResources = "Η συνεδρία διαθέτει πόρους ολοκλήρωσης";

@@ -212,11 +212,8 @@
                                                 <div class='d-flex justify-content-between align-items-center gap-5 flex-wrap mt-4'>
                                                     
                                                     <div class='flex-fill'>
-                                                        <h5>{{ trans('langPercentageSessionCompletion') }}:</h5>
                                                         @if($s->has_badge > 0)
-                                                            <div class="progress">
-                                                                <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
-                                                            </div>
+                                                            <div class='secondary-text'>{{ trans('langSessionHasCompletionResources') }}</div>
                                                         @elseif($s->has_badge == -1)
                                                             <div class='secondary-text'>{{ trans('langSessionNotStarted') }}</div>
                                                         @elseif($s->has_badge == -2)

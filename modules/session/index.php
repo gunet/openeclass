@@ -187,13 +187,13 @@ if($is_coordinator or $is_consultant){
             'button-class' => 'btn-success',
             'level' => 'primary-label'
         ],
-        [
-            'title' => $langCompletedConsulting,
-            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&addSessions=true",
-            'icon' => 'fa-solid fa-medal',
-            'button-class' => 'btn-success',
-            'show' => ($is_editor || !$is_course_reviewer)
-        ],
+        // [
+        //     'title' => $langCompletedConsulting,
+        //     'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&addSessions=true",
+        //     'icon' => 'fa-solid fa-medal',
+        //     'button-class' => 'btn-success',
+        //     'show' => ($is_editor || !$is_course_reviewer)
+        // ],
         [
             'title' => $langPercentageCompletedConsultingByUser,
             'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",

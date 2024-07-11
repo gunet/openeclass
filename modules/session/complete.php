@@ -181,6 +181,7 @@ if ($is_consultant) {
     if ( isset($_GET['manage']) ) {
         if ( isset($_GET['newuc']) ) {
             add_certificate('badge', $langSessionCompletion, '', $langSessionCompletionMessage,'', q(get_config('institution')), 1, -1, null, 0, $sessionID);
+            Database::get()->query("INSERT INTO mod_session_completion SET course_id = ?d,session_id = ?d",$course_id,$sessionID);
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND session_id=?d", $course_id, $sessionID);
             $element_id = $badge->id;
             $display = FALSE;
@@ -203,6 +204,7 @@ if ($is_consultant) {
                     Session::flash('alert-class', 'alert-danger');
                 }
             }
+            Database::get()->query("DELETE FROM mod_session_completion WHERE course_id = ?d AND session_id = ?d",$course_id,$sessionID);
             redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");
         } elseif ( isset($_GET['add']) and isset($_GET['act']) ) {
             insert_session_activity($element, $element_id, $_GET['act'], $sessionID, $session_resource_id);

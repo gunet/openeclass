@@ -151,8 +151,8 @@
                                             </div>
                                         </li>
                                         @endif
-                                        @if($is_criterion_completion)
-                                            @if($is_consultant && !$upload_doc_for_user)
+                                        
+                                        @if($is_consultant && !$upload_doc_for_user)
                                             <li class='list-group-item element'>
                                                 <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                     <div class='col-md-3 col-12'>
@@ -165,8 +165,8 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            @endif
                                         @endif
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
 
 
                     <!-- show all deliverable for each user -->
-                    @if($is_criterion_completion)
+                   
                     <div class="col-12 mt-4 @if($is_consultant && isset($_GET['upload_for_user'])) d-none @endif">
                         <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
@@ -189,7 +189,7 @@
                                 </h3>
                             </div>
                             <div class='card-body'>
-                                @if(!$is_consultant && !$is_course_reviewer)
+                                @if(!$is_consultant && !$is_course_reviewer && $is_criterion_completion)
                                     <div class='alert alert-info mt-0'>
                                         <i class='fa-solid fa-circle-info fa-lg'></i>
                                         <span>{{ trans('langInfoForUploadedDeliverable')}}</span>
@@ -204,7 +204,7 @@
                                                     <th>{{ trans('langFrom') }}</th>
                                                     <th>{{ trans('langReferencedObject') }}</th>
                                                     <th>{{ trans('langDate') }}</th>
-                                                    @if($is_consultant || $is_course_reviewer)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
+                                                    @if(($is_consultant || $is_course_reviewer) && $is_criterion_completion)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
                                                     <th class='text-end'></th>
                                                 </tr>
                                                 <tr></tr>
@@ -216,7 +216,7 @@
                                                         <td>{{ $doc->creator }}</td>
                                                         <td>{{ $doc->refers_to }}</td>
                                                         <td>{{ format_locale_date(strtotime($doc->date), 'short') }}</td>
-                                                        @if($is_consultant || $is_course_reviewer)
+                                                        @if(($is_consultant || $is_course_reviewer) && $is_criterion_completion)
                                                             <td class='text-center'>
                                                                 @if($doc->completed)
                                                                     <i class='fa-solid fa-check fa-lg text-success'></i>
@@ -235,7 +235,7 @@
                                                                             'icon' => 'fa-solid fa-award',
                                                                             'icon-class' => "add-award",
                                                                             'icon-extra' => "data-bs-toggle='modal' data-bs-target='#doUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
-                                                                            'show' => ($is_consultant && !$doc->completed)
+                                                                            'show' => ($is_consultant && !$doc->completed && $is_criterion_completion)
                                                                         ),
                                                                         array(
                                                                             'title' => trans('langNoSubmitCompletion'),
@@ -243,7 +243,7 @@
                                                                             'icon' => 'fa-solid fa-ban',
                                                                             'icon-class' => "remove-award",
                                                                             'icon-extra' => "data-bs-toggle='modal' data-bs-target='#noUserAward' data-id='{$doc->id}' data-userBadgeCriterionId='{$doc->user_badge_criterion_id}' data-userSender='{$doc->user_sender}'",
-                                                                            'show' => ($is_consultant && $doc->completed)
+                                                                            'show' => ($is_consultant && $doc->completed && $is_criterion_completion)
                                                                         ),
                                                                         array(
                                                                             'title' => trans('langAddComment'),
@@ -296,11 +296,11 @@
                             </div>
                         </div>
                     </div>
-                    @endif
+                    
 
 
                     <!-- upload deliverable by simple user or upload a deliverable by consultant for a user -->
-                    @if($is_criterion_completion && !$is_course_reviewer)
+                    @if(!$is_course_reviewer)
                         @if(!$is_consultant or $upload_doc_for_user)
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>

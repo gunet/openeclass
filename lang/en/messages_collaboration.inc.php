@@ -1619,3 +1619,4 @@ $langCourseIsNotCollaborative = "Unauthorized action. Collaboration is not in th
 $langSessionsTable = "Sessions table";
 $langSummaryScheduledSessions = "Summary session schedule";
 $langNoSessionsExist = "There are no sessions";
+$langSessionHasCompletionResources = "The session has completion resources";
