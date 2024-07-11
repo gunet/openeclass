@@ -17,9 +17,9 @@
             @endif
             @if ($is_course_admin)
                 <li>
-                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_home/editdesc.php?course={{$coursePrivateCode}}">
+                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_description/index.php?course={{$coursePrivateCode}}">
                         <i class="fa-solid fa-pen-to-square settings-icons"></i>
-                        {{trans('langDescription')}}
+                        {{trans('langSyllabus')}}
                     </a>
                 </li>
             @endif
@@ -47,7 +47,7 @@
                     </a>
                 </li>
             @endif
-            
+
             @if ($is_course_admin)
                 <li>
                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/abuse_report/index.php?course={{$coursePrivateCode}}">
@@ -56,13 +56,13 @@
                     </a>
                 </li>
             @endif
-            
+
             @if(isset($is_collaborative_course) and !$is_collaborative_course)
                 @if ($is_course_admin)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-building-columns settings-icons"></i>
-                            {{trans('langCoursePrerequisites')}}     
+                            {{trans('langCoursePrerequisites')}}
                         </a>
                     </li>
                 @endif
@@ -76,7 +76,7 @@
                     </li>
                 @endif
 
-            
+
                 @if ($is_course_admin)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">

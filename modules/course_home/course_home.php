@@ -327,14 +327,6 @@ if (is_sharing_allowed($course_id)) {
 
 $data['course_descriptions'] = $res;
 $data['courseDescriptionVisible'] = $courseDescriptionVisible = count($res);
-$data['edit_course_desc_link'] = '';
-if ($is_editor) {
-    if ($courseDescriptionVisible > 0) {
-        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-pen-to-square settings-icon mt-2', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
-    } else {
-        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-circle-plus settings-icon mt-2', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
-    }
-}
 
 $data['departments'] = $course->getDepartmentIds($course_id);
 if ($is_course_admin) {
@@ -354,7 +346,7 @@ if ($is_course_admin) {
 $data['lessonStatus'] = course_access_icon($visible);
 
 $data['action_bar'] = action_bar([
-    [   'title' => $langEditMeta,
+    [   'title' => $langDescription,
         'url' => "{$urlAppend}modules/course_home/editdesc.php?course=$course_code",
         'icon' => 'fa-pen-to-square',
         'show' => $is_editor

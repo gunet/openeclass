@@ -339,15 +339,15 @@
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item px-0 mb-4 bg-transparent">
 
-                                                <div class='d-flex justify-content-between border-bottom-default'>
-                                                    <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                                        <i class='fa-solid fa-chevron-down settings-icon'></i>
-                                                        {{ trans('langSyllabus') }}
-                                                    </a>
-                                                    @if($is_editor)
-                                                        {!! $edit_course_desc_link !!}
-                                                    @endif
-                                                </div>
+                                                @if ($courseDescriptionVisible > 0)
+                                                    <div class='d-flex justify-content-between border-bottom-default'>
+                                                        <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                                            <i class='fa-solid fa-chevron-down settings-icon'></i>
+                                                            {{ trans('langSyllabus') }}
+                                                        </a>
+                                                    </div>
+                                                @endif
+
                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
                                                     @if(count($course_descriptions) == 0)
                                                         <div class='col-12 mb-4'>
