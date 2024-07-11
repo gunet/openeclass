@@ -50,6 +50,7 @@ require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
 require_once 'modules/wall/wall_wrapper.php';
+require_once 'modules/session/functions.php';
 
 doc_init();
 $tree = new Hierarchy();
@@ -941,6 +942,95 @@ if ($uid) {
     }
 }
 
+/////////////////////////////////////////////// Regarding course sessions ///////////////////////////////////////////////////
+
+$sql_session = "";
+if($is_consultant && !$is_coordinator){
+    $sql_session = "AND creator = $uid";
+}elseif($is_simple_user){
+    $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
+                                WHERE participants = $uid AND is_accepted = 1)";
+}
+$data['course_sessions'] = $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                        WHERE course_id = ?d
+                                                        AND visible = ?d
+                                                        $sql_session
+                                                        ORDER BY start ASC",$course_id,1);
+if(count($course_sessions) > 0){
+    if($is_coordinator || $is_consultant){
+        $participants = array();
+        foreach ($course_sessions as $s) {
+            $all_participants_ids = session_participants_ids($s->id);
+            foreach($all_participants_ids as $p){
+                check_session_completion_by_tc_completed($s->id,$p);
+                check_session_progress($s->id,$p);  // check session completion - call to Game.php
+            }
+            $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
+            $per = $has_badge = 0;
+            if ($sql_badge) {
+                $badge_id = $sql_badge->id;
+                $has_badge = $badge_id;
+                $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$s->id,1);
+                if(count($participants) > 0){
+                    foreach($participants as $p){
+                        $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
+                    }
+                }
+            }
+            $number_percentage = (count($participants) > 0) ? $per/count($participants) : $per;
+            $s->percentage = round($number_percentage);
+            $s->has_badge = $has_badge;
+            $s->consultant = participant_name($s->creator);
+        }
+    }elseif($is_simple_user){
+        foreach ($course_sessions as $s) {
+            check_session_completion_by_tc_completed($s->id,$uid);
+            check_session_progress($s->id,$uid);  // check session completion - call to Game.php
+        }
+        $visibleSessions_id = [];
+        $visible_user_session = findUserVisibleSessions($uid, $course_sessions);
+        foreach ($visible_user_session as $d) {
+            $visibleSessions_id[] = $d->id;
+        }
+
+        foreach($course_sessions as $cu){
+            $not_shown = false;
+            $vis = $cu->visible;
+            $per = 0;
+            $has_badge = 0;
+            if(participation_in_session($cu->id)){
+                if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
+                    $not_shown = true;
+                    $icon = icon('fa-clock fa-md', $langSessionNotStarted);
+                    $has_badge = -1;
+                } else if (!in_array($cu->id, $visibleSessions_id)) {
+                    $not_shown = true;
+                    $icon = icon('fa-minus-circle fa-md', $langSessionNotCompleted);
+                    $has_badge = -2;
+                } else {
+                    if (in_array($cu->id, $visibleSessions_id)) {
+                        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
+                        if ($sql_badge) {
+                            $badge_id = $sql_badge->id;
+                            $has_badge = $badge_id;
+                            $per = get_cert_percentage_completion('badge', $badge_id);
+                            if ($per == 100) {
+                                $icon = icon('fa-check-circle fa-md', $langInstallEnd);
+                            } else {
+                                $icon = icon('fa-hourglass-2 fa-md', $per . "%");
+                            }
+                        }
+                    }
+                }
+            }
+            $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+            $cu->icon = $icon ?? '';
+            $cu->percentage = round($per);
+            $cu->has_badge = $has_badge;
+            $cu->consultant = participant_name($cu->creator);
+        }
+    }
+}
 
 view('modules.course.home.index', $data);
 

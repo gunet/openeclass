@@ -372,7 +372,6 @@
 
                         @if($course_info->view_type == 'units')
                             <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
-
                                 <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>
                                         <div class='d-flex gap-2'>
@@ -424,14 +423,11 @@
                                                 </ul>
                                             </div>
                                         @endif
-
                                     </div>
                                 </div>
-
                                 <div class='card-body card-body-default px-0 pt-0' id='boxlistSort'>
                                     {!! $cunits_content !!}
                                 </div>
-
                             </div>
                         @endif
 
@@ -508,6 +504,45 @@
 
                         @if($course_info->view_type == 'wall')
                             @include('layouts.partials.course_wall_functions',['is_editor' => $is_editor])
+                        @endif
+
+                        @if($course_info->view_type == 'sessions' && count($course_sessions) > 0)
+                            <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
+                                <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
+                                    <h3>{{ trans('langSession') }}</h3>
+                                    <a class='TextRegular text-decoration-underline vsmall-text'
+                                         href="{{ $urlAppend }}modules/session/index.php?course={{ $course_code }}">
+                                         {{ trans('langAllAnnouncements') }}
+                                    </a>
+                                </div>
+                                <div class='card-body card-body-default px-0 pt-0'>
+                                    @php $counter = 0 @endphp
+                                    <ul class='list-group list-group-flush'>
+                                        @foreach($course_sessions as $s)
+                                            @if($counter < 4)
+                                                <li class='list-group-item element'>
+                                                    <div class='d-flex justify-content-between align-items-center flex-wrap gap-3'>
+                                                        <a class="link-color TextBold" href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
+                                                            {{ $s->title }}
+                                                        </a>
+                                                        <p>{!! format_locale_date(strtotime($s->start), 'short', false) !!}</p>
+                                                    </div>
+                                                    <p class='TextBold'>{{ $s->consultant }}</p>
+                                                        
+                                                    <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap mt-3'>
+                                                        {{ trans('langPercentageSessionCompletion')}}:
+                                                        <div class="progress" style='width:150px;'>
+                                                            <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </li>
+                                            @endif
+                                            @php $counter++; @endphp
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                         @endif
 
                         @if($course_home_main_area_widgets)
