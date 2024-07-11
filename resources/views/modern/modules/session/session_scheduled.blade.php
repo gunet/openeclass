@@ -143,14 +143,14 @@
                                                                     <li class='py-1'>{{ trans('langExistsInCompletedPrerequisite') }}</li>
                                                                 @endif
                                                                 @if($s->finish < $current_time)
-                                                                    <li class='py-1'><span class='badge Accent-200-bg'>{{ trans('langHasExpired') }}</span></li>
+                                                                    <li class='py-1'><span class='badge Accent-200-bg'>{{ trans('langSessionHasExpired') }}</span></li>
                                                                 @endif
                                                             </ul>
                                                         </td>
                                                     @else
                                                         <td>
                                                             @if($s->finish < $current_time)
-                                                                <span class='badge Accent-200-bg'>{{ trans('langHasExpired') }}</span>
+                                                                <span class='badge Accent-200-bg'>{{ trans('langSessionHasExpired') }}</span>
                                                             @endif
                                                         </td>
                                                     @endif

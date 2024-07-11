@@ -101,20 +101,20 @@
                                                         </ul>
                                                     </div>
                                                     <div class='card-footer border-0'>
-                                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                                        <ul class='list-group list-group-flush'>
                                                             @if(session_has_expired($course_id,$c))
-                                                                <span class='badge Accent-200-bg small-text text-wrap text-start'>{{ trans('langHasExpired') }}</span>
+                                                                <li class='list-group-item element'><span class='badge Accent-200-bg'>{{ trans('langSessionHasExpired') }}</span></li>
                                                             @endif
                                                             @if(session_is_running($course_id,$c))
-                                                                <span class='badge Success-200-bg small-text text-wrap text-start'>{{ trans('langInProgress') }}</span>
+                                                                <li class='list-group-item element'>{{ trans('langInProgress') }}</li>
                                                             @endif
                                                             @if($is_simple_user && $hasIncompletedPrereq) 
-                                                                <span class='badge Warning-200-bg small-text text-wrap text-start'>{{ trans('langExistsInCompletedPrerequisite') }}</span>
+                                                                <li class='list-group-item element'>{{ trans('langExistsInCompletedPrerequisite') }}</li>
                                                             @endif
                                                             @if(session_not_started($course_id,$c)) 
-                                                                <span class='badge Neutral-900-bg small-text text-wrap text-start'>{{ trans('langSessionNotStarted') }}</span>
+                                                                <li class='list-group-item element'>{{ trans('langSessionNotStarted') }}</li>
                                                             @endif
-                                                        </div>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>

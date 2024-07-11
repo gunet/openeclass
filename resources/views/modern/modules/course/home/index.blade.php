@@ -507,7 +507,7 @@
                         @endif
 
                         @if($course_info->view_type == 'sessions' && count($course_sessions) > 0)
-                            <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
+                            <div class='card panelCard card-transparent card-units px-lg-4 py-lg-3 p-3 mt-4 border-0 mb-5'>
                                 <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>{{ trans('langSession') }}</h3>
                                     <a class='TextRegular text-decoration-underline vsmall-text'
@@ -516,30 +516,105 @@
                                     </a>
                                 </div>
                                 <div class='card-body card-body-default px-0 pt-0'>
-                                    @php $counter = 0 @endphp
-                                    <ul class='list-group list-group-flush'>
-                                        @foreach($course_sessions as $s)
-                                            @if($counter < 4)
-                                                <li class='list-group-item element'>
-                                                    <div class='d-flex justify-content-between align-items-center flex-wrap gap-3'>
-                                                        <a class="link-color TextBold" href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
-                                                            {{ $s->title }}
-                                                        </a>
-                                                        <p>{!! format_locale_date(strtotime($s->start), 'short', false) !!}</p>
-                                                    </div>
-                                                    <p class='TextBold'>{{ $s->consultant }}</p>
-                                                        
-                                                    <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap mt-3'>
-                                                        {{ trans('langPercentageSessionCompletion')}}:
-                                                        <div class="progress" style='width:150px;'>
-                                                            <div class="progress-bar" role="progressbar" style="width: {{ $s->percentage }}%;" aria-valuenow="{{ $s->percentage }}" aria-valuemin="0" aria-valuemax="100">{{ $s->percentage }}%</div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </li>
-                                            @endif
-                                            @php $counter++; @endphp
-                                        @endforeach
+                                    <ul class="tree-units">
+                                        <li>
+                                            <details open>
+                                                <summary><strong>{{ trans('langSession') }}</strong></summary>
+                                                <ul>
+                                                    <li>
+                                                        <details open>
+                                                            <summary><strong>{{ trans('langSessionInProgress') }}</strong></summary>
+                                                            <ul>
+                                                                @php $c1 = 0; @endphp
+                                                                @foreach($course_sessions as $s)
+                                                                    @if($s->start < $current_time && $s->finish > $current_time)
+                                                                        <li>
+                                                                            <a class="link-color TextBold" 
+                                                                                href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
+                                                                                {{ $s->title }}
+                                                                            </a>
+                                                                            &nbsp;<span>({!! format_locale_date(strtotime($s->start), 'short', false) !!})</span>
+                                                                            <p>{!! participant_name($s->creator) !!}</p>
+                                                                        </li>
+                                                                        @php $c1++; @endphp
+                                                                    @endif
+                                                                @endforeach
+                                                                @if($c1 == 0)
+                                                                    <li>{{ trans('langNoSessionInProgress') }}</li>
+                                                                @endif
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li>
+                                                        <details open>
+                                                            <summary><strong>{{ trans('langNextSession') }}</strong></summary>
+                                                            <ul>
+                                                                <li>
+                                                                    @if($next_session)
+                                                                        <a class="link-color TextBold" 
+                                                                            href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $next_session->id }}">
+                                                                            {{ $next_session->title }}
+                                                                        </a>
+                                                                        &nbsp;<span>({!! format_locale_date(strtotime($next_session->start), 'short', false) !!})</span>
+                                                                        <p>{!! participant_name($next_session->creator) !!}</p>
+                                                                    @else
+                                                                        {{ trans('langNoInfoAvailable') }}
+                                                                    @endif
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li>
+                                                        <details open>
+                                                            <summary><strong>{{ trans('langSessionsNotStarted') }}</strong></summary>
+                                                            <ul>
+                                                                @php $c3 = 0; @endphp
+                                                                @foreach($course_sessions as $s)
+                                                                    @if($s->start > $current_time)
+                                                                        <li>
+                                                                            <a class="link-color TextBold" 
+                                                                                href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
+                                                                                {{ $s->title }}
+                                                                            </a>
+                                                                            &nbsp;<span>({!! format_locale_date(strtotime($s->start), 'short', false) !!})</span>
+                                                                            <p>{!! participant_name($s->creator) !!}</p>
+                                                                        </li>
+                                                                        @php $c3++; @endphp
+                                                                    @endif
+                                                                @endforeach
+                                                                @if($c3 == 0)
+                                                                    <li>{{ trans('langNoSessionsExist') }}</li>
+                                                                @endif
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li>
+                                                        <details>
+                                                            <summary><strong>{{ trans('langSessionsHasExpired') }}</strong></summary>
+                                                            <ul>
+                                                                @php $c4 = 0; @endphp
+                                                                @foreach($course_sessions as $s)
+                                                                    @if($s->finish < $current_time)
+                                                                        <li>
+                                                                            <a class="link-color TextBold" 
+                                                                                href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
+                                                                                {{ $s->title }}
+                                                                            </a>
+                                                                            &nbsp;<span>({!! format_locale_date(strtotime($s->start), 'short', false) !!})</span>
+                                                                            <p>{!! participant_name($s->creator) !!}</p>
+                                                                        </li>
+                                                                        @php $c4++; @endphp
+                                                                    @endif
+                                                                @endforeach
+                                                                @if($c4 == 0)
+                                                                    <li>{{ trans('langNoSessionsExist') }}</li>
+                                                                @endif
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                </ul>
+                                            </details>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

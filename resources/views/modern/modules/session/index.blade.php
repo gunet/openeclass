@@ -209,20 +209,8 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <div class='d-flex justify-content-between align-items-center gap-5 flex-wrap mt-4'>
-                                                    
-                                                    <div class='flex-fill'>
-                                                        @if($s->has_badge > 0)
-                                                            <div class='secondary-text'>{{ trans('langSessionHasCompletionResources') }}</div>
-                                                        @elseif($s->has_badge == -1)
-                                                            <div class='secondary-text'>{{ trans('langSessionNotStarted') }}</div>
-                                                        @elseif($s->has_badge == -2)
-                                                            <div class='secondary-text'>{{ trans('langSessionNotCompleted') }}</div>
-                                                        @else
-                                                            <div class='secondary-text'>{{ trans('langSessionHasNotBadge') }}</div>
-                                                        @endif
-                                                    </div>
-                                                    
+                                                <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap mt-4'>
+                                                    <p class='TextBold'>{{ trans('langConsultant') }}:&nbsp;<span>{{ $s->consultant }}</span></p>
                                                     <a class="btn successAdminBtn 
                                                                 @if(!$is_coordinator && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif
                                                                 @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user) d-none @endif" 
@@ -235,9 +223,6 @@
                                                         </a>
                                                     @endif
                                                 </div>
-                                            </div>
-                                            <div class='card-footer border-0 text-end'>
-                                                <p class='TextBold'>{{ trans('langConsultant') }}:&nbsp;<span>{{ $s->consultant }}</span></p>
                                             </div>
                                         </div>
                                     </div>
