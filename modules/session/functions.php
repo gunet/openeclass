@@ -1570,7 +1570,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                     <div class='card panelCard px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                             <h3>
-                                                $langSessionCompletion </br> $is_session_completed_message
+                                                $langSessionCompletion </br>
                                             </h3>
                                             <div>
                                                 $addActivityBtn

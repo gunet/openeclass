@@ -185,6 +185,7 @@
                                         {{ trans('langParticipants') }}
                                     </a>
                                 </div>
+                                <div class='mt-2'>{!! $is_session_completed_message !!}</div>
                                 @if($prereq_session)
                                     <p class='TextBold'>{{ trans('langSessionPrerequisites') }}:&nbsp;<span>{{ $prereq_session->title }}</span></p>
                                 @endif

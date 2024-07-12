@@ -39,6 +39,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/progress/process_functions.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
@@ -186,6 +187,22 @@ if($is_coordinator or $is_consultant){
                                     ORDER BY start ASC",$course_id,$uid);
     }
 
+    // calculating session completion
+    foreach ($data['all_session'] as $s) {
+        $all_participants_ids = session_participants_ids($s->id);
+        foreach($all_participants_ids as $p){
+            if(!$s->type_remote){
+                // This refers to session completion with completed meeting.
+                check_session_completion_by_meeting_completed($s->id,$p);
+            }elseif($s->type_remote){
+                // This refers to session completion with completed tc.
+                check_session_completion_by_tc_completed($s->id,$p);
+            }
+            // This refers to session completion for other activities.
+            check_session_progress($s->id,$p);  // check session completion - call to Game.php
+        }
+    }
+
 }else{// is simple user
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE id = ?d",$sessionID);
@@ -199,6 +216,18 @@ if($is_coordinator or $is_consultant){
                                                                 WHERE participants = ?d AND is_accepted = ?d)
                                                     ORDER BY start ASC",1,$course_id,$uid,1); 
 
+    foreach ($data['all_session'] as $s) {
+        if(!$s->type_remote){
+            // This refers to session completion with completed meeting.
+            check_session_completion_by_meeting_completed($s->id,$uid);
+        }elseif($s->type_remote){
+            // This refers to session completion with completed tc.
+            check_session_completion_by_tc_completed($s->id,$uid);
+        }
+        // This refers to session completion for other activities.
+        check_session_progress($s->id,$uid);  // check session completion - call to Game.php
+    }
+
     $visible_sessions_id = array();
     $visible_user_sessions = findUserVisibleSessions($uid, $data['all_session']);
     foreach ($visible_user_sessions as $d) {
@@ -211,6 +240,28 @@ if($is_coordinator or $is_consultant){
     }
 
 }
+
+// check if current session is completed by all users
+$is_session_completed = false;
+$is_session_completed_message = "";
+$sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $sessionID);
+if ($sql_badge) {
+    $per = 0;
+    $badge_id = $sql_badge->id;
+    $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sessionID,1);
+    if(count($participants) > 0){
+        foreach($participants as $p){
+            $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
+        }
+    }
+    if( count($participants) > 0 && $per/count($participants) == 100 ){
+            $is_session_completed = true;
+            $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
+    }else{
+        $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
+    }
+}
+$data['is_session_completed_message'] = $is_session_completed_message;
 
 $data['participants'] = Database::get()->queryArray("SELECT participants FROM mod_session_users 
                                                      WHERE session_id = ?d AND is_accepted = ?d",$sessionID,1);
