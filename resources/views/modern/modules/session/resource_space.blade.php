@@ -3,7 +3,7 @@
 @section('content')
 
 
-<main id="main" class="col-12 main-section">
+<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -351,7 +351,7 @@
             </div>
         </div>
     </div>
-</main>
+</div>
 
 <div class='modal fade' id='doUserAward' tabindex='-1' aria-labelledby='doUserAwardLabel' aria-hidden='true'>
     <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<main class="col-12 main-section">
+<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -150,6 +150,6 @@
             </div>
         </div>
     </div>
-</main>
+</div>
 
 @endsection

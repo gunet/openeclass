@@ -534,11 +534,11 @@
 
 @section('content')
 
-    @if ($_SESSION['status'] == USER_STUDENT and get_config('activate_privacy_policy_consent') and !isset($_SESSION['accept_policy_later']) and !user_has_accepted_policy($uid))
-        @include('portfolio.privacy_policy_modal')
-    @endif
+@if ($_SESSION['status'] == USER_STUDENT and get_config('activate_privacy_policy_consent') and !isset($_SESSION['accept_policy_later']) and !user_has_accepted_policy($uid))
+    @include('portfolio.privacy_policy_modal')
+@endif
 
-<main id="main" class="col-12 main-section">
+<div class="col-12 main-section">
     <div class='row m-auto'>
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
@@ -923,5 +923,5 @@
             </div>
         </div>
     </div>
-</main>
+</div>
 @endsection

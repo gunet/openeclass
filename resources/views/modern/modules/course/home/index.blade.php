@@ -201,7 +201,7 @@
 
 @section('content')
 
-<main id="main" class="col-12 main-section">
+<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper course-wrapper-courseHome d-lg-flex align-items-lg-strech w-100">
 
@@ -756,7 +756,7 @@
         </div>
 
     </div>
-</main>
+</div>
 
 <div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
     <div class='modal-dialog'>

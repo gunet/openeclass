@@ -2,7 +2,7 @@
 
 @section('content')
 
-<main id="main" class="col-12 main-section">
+<div class="col-12 main-section">
 
         @if($warning)
             <input id='showWarningModal' type='hidden' value='1'>
@@ -595,7 +595,7 @@
 
         </div>
 
-</main>
+</div>
 
 
 

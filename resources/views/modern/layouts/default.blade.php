@@ -150,7 +150,7 @@
         @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
 
          <!-- Main content -->
-        @yield('content')
+         <main id="main">@yield('content')</main>
 
         <!-- Footer -->
         @include('layouts.partials.footerDesktop')
