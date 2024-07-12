@@ -87,14 +87,14 @@ $sql2 = "SELECT `E`.`id` AS `exerciseId`, `M`.`name`
 $module = Database::get()->querySingle($sql2, $_SESSION['lp_module_id'], $course_id);
 
 if ($module) {
-    $tool_content .= "\n\n" . '<h4>' . $langExerciseInModule . ' :</h4>' . "\n"
-            . '<p>' . "\n"
+    $tool_content .= '<h4>' . $langExerciseInModule . ' :</h4>'
+            . '<p>'
             . htmlspecialchars($module->name)
-            . '&nbsp;' . "\n"
+            . '&nbsp;'
             . '<a href="../exercise/admin.php?course=' . $course_code . '&amp;exerciseId=' . $module->exerciseId . '">'
-            . '<img src="' . $imgRepositoryWeb . 'edit.png" border="0" alt="' . $langModify . '" title="' . $langModify . '" />'
-            . '</a>' . "\n"
-            . '</p>' . "\n";
+            . '<span class="fa-solid fa-edit" data-bs-toggle="' . $langModify . '" data-bs-original-title="' . $langModify . '"></span>'
+            . '</a>'
+            . '</p>';
 
     $tool_content .= '<hr noshade="noshade" size="1" />';
 } // else sql error, do nothing except in debug mode, where claro_sql_query_fetch_all will show the error

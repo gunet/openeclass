@@ -315,7 +315,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 if (!empty($value)) { // image already exists
                     $mime = (string) $this->getAttribute('mime');
                     $html .= "<img " . $idorclass . "='" . $fullKey . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
-                              <img " . $idorclass . "='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
+                              <i " . $idorclass . "='" . $fullKey . "_delete' class='fa-xmark fa-solid'>
                               <input " . $idorclass . "='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
                               <input " . $idorclass . "='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>
                               </span></div>
@@ -346,7 +346,8 @@ class CourseXMLElement extends SimpleXMLElement {
                                 }
                                 $html .= "<img id='" . $fullKey . $cnt . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
                                           <a id='" . $fullKey . $cnt . "_delete' href='javascript:photoDelete(\"#" . $fullKey . $cnt . "\");'>
-                                          <img src='" . $GLOBALS['themeimg'] . "/delete.png'/></a>
+                                          <span class='fa-solid fa-xmark fa-lg' style='color:red;'></span>
+                                          </a>
                                           <input id='" . $fullKey . $cnt . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
                                           <input id='" . $fullKey . $cnt . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>";
                                 $cnt++;
@@ -361,7 +362,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     $html .= "</div>"; // close container
                     // + button
                     $html .= "<div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
-                    $html .= "<a id='" . $fullKey . "_add' href='#add'><img src='" . $GLOBALS['themeimg'] . "/add.png' alt='alt'/></a>";
+                    $html .= "<a id='" . $fullKey . "_add' href='#add'><i class='fa-solid fa-plus'></i></a>";
                     $html .= "</span></div>";
                     self::$tmpData[$fullKey . '_walked'] = true;
                 }

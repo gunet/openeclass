@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,14 +17,14 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 class CourseXMLConfig {
 
     /**
      * Returns the path of a specific course's XML file.
-     * 
+     *
      * @global string $webDir
      * @param  string $courseCode
      * @return string
@@ -116,13 +116,13 @@ class CourseXMLConfig {
 
     /**
      * Injected code for HTML Form labels.
-     * 
+     *
      * @param  string $key
      * @return string
      */
     public static function getInjectValue($key) {
         $valArr = array(
-            'course_instructor_registrationCode' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add'><img src='" . $GLOBALS['themeimg'] . "/add.png' alt='alt'/></a></div></div>"
+            'course_instructor_registrationCode' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add'><i class='fa-solid fa-plus'></i></a></div></div>"
         );
 
         if (isset($valArr[$key])) {
@@ -134,7 +134,7 @@ class CourseXMLConfig {
 
     /**
      * Link value for HTML Form labels.
-     * 
+     *
      * @param  string $key
      * @return string
      */
@@ -172,8 +172,8 @@ class CourseXMLConfig {
     }
 
     /**
-     * Provide the field name for multiplicity fields. 
-     * 
+     * Provide the field name for multiplicity fields.
+     *
      * @param  string      $field
      * @return string|null
      */
@@ -192,7 +192,7 @@ class CourseXMLConfig {
 
     /**
      * XPaths to locate the parents of multiplicity fields.
-     * 
+     *
      * @param  string      $field
      * @return string|null
      */
@@ -208,10 +208,10 @@ class CourseXMLConfig {
             return null;
         }
     }
-    
+
     /**
      * Turn strings to float values, normalising separator.
-     * 
+     *
      * @param  string $str
      * @return float
      */
@@ -291,7 +291,7 @@ class CourseXMLConfig {
         'course_semester', 'course_type', 'course_institution',
         'course_thematic', 'course_subthematic'
     );
-    
+
     /**
      * Float HTML Form fields.
      * @var array
@@ -344,7 +344,7 @@ class CourseXMLConfig {
 
     /**
      * Linked HTML Form labels.
-     * @var array 
+     * @var array
      */
     public static $linkedFields = array(
         'course_title', 'course_language', 'course_keywords',
@@ -376,10 +376,10 @@ class CourseXMLConfig {
         'course_confirmCurriculum', 'course_confirmVideolectures',
         'course_language_el', 'course_language_en'
     );
-    
+
     /**
      * Special case mandatory HTML Form fields (mandatory view only).
-     * 
+     *
      * @var array
      */
     public static $asteriskedFields = array(

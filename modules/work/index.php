@@ -2707,7 +2707,7 @@ function new_assignment() {
  */
 function show_edit_assignment($id) {
 
-    global $tool_content, $m, $langBack, $course_code,
+    global $tool_content, $m, $course_code,
         $langModify, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, $langWorkMultipleFiles,
@@ -3224,8 +3224,8 @@ function show_edit_assignment($id) {
                     <label for='userfile' class='col-12 control-label-notes'>$langWorkFile</label>
                     <div class='col-12'>
                       ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
-                . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
-                                     <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
+                      . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
+                             <span class='fa-solid fa-xmark fa-lg' style='color:red;' title='$m[WorkDeleteAssignmentFile]'></span></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>";
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {

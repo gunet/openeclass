@@ -394,7 +394,7 @@ if ($display) {
                 } else {
                     $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $conf->chat_activity_id);
                     if ($colmoocUserSession && $colmoocUserSession->session_status == 1) {
-                        $conf_details .= "<br/><small>($langColMoocSessionStatusFinished <img src='$themeimg/tick.png'/>)</small>";
+                        $conf_details .= "<br/><small>($langColMoocSessionStatusFinished <i class='fa-solid fa-check'></i>)</small>";
                     }
                 }
             }

@@ -90,8 +90,8 @@ function show_assignments() {
             continue;
         }
 
-        $table_content .= "<tr><td width=\"1%\">
-			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
+        $table_content .= "<tr>
+            <td width='1'><i class='fa-solid fa-caret-right'></i></td>
 			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a></td>
 			<td align='center'>" . format_locale_date(strtotime($row->deadline), 'short');
                         if ($row->time > 0) {

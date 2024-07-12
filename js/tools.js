@@ -169,11 +169,12 @@ function course_list_handler() {
             var title_span = $('#cid'+cid);
             $('#ind' + cid).remove();
             if (result === 'registered') {
-                td.append(' <img id="res' + cid + '" src="' + themeimg + '/tick.png" alt="">');
                 title_span.html($('<a>', {
                     href: urlAppend + 'courses/' + courses[cid][0] + '/',
-                    text: title_span.text() }));
-
+                    text: title_span.text()
+                }
+                ));
+                title_span.append(' <i class="fa solid fa-check">');
             } else {
                 if (result === 'prereqsnotcomplete') {
                     alert(lang.prereqsNotComplete);

@@ -383,7 +383,7 @@ $data['action_bar'] = action_bar([
         'title' => $langUsage,
         'url' => "{$urlAppend}modules/usage/index.php?course=$course_code",
         'icon' => 'fa-chart-line',
-        'show' => ($uid && $is_course_reviewer)
+        'show' => ($uid && $is_course_reviewer && !$is_course_admin)
     ],
     [
         'title' => $langCourseParticipation,
@@ -975,6 +975,7 @@ view('modules.course.home.index', $data);
 function course_announcements() {
     global $course_id, $course_code, $langNoAnnounce, $urlAppend, $indexOfAnnounce;
 
+    $type_course = '';
     if (visible_module(MODULE_ID_ANNOUNCE)) {
         $q = Database::get()->queryArray("SELECT title, `date`, id
                             FROM announcement
@@ -985,12 +986,12 @@ function course_announcements() {
                             ORDER BY `date` DESC LIMIT 5", $course_id);
 
         $typeViewOfCourse = Database::get()->queryArray("SELECT view_type FROM course WHERE id = ?d", $course_id);
-        foreach($typeViewOfCourse as $t){
+        foreach($typeViewOfCourse as $t) {
             $type_course = $t->view_type;
         }
-        if($type_course == 'simple'){
+        if ($type_course == 'simple') {
             $indexOfAnnounce = 5;
-        }else{
+        } else {
             $indexOfAnnounce = 3;
         }
 

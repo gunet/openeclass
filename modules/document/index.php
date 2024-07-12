@@ -1666,19 +1666,11 @@ function select_proper_filters($requestDocsFilter) {
 
 /**
  * @brief Link for sortable table headings
- * @global type $sort
- * @global type $reverse
- * @global type $curDirPath
- * @global type $base_url
- * @global type $themeimg
- * @global type $langUp
- * @global type $langDown
- * @param type $label
  * @param type $this_sort
  * @return type
  */
 function headlink($label, $this_sort) {
-    global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
+    global $sort, $reverse, $curDirPath, $base_url;
 
     if (empty($curDirPath)) {
         $path = '/';
@@ -1687,24 +1679,18 @@ function headlink($label, $this_sort) {
     }
     if ($sort == $this_sort) {
         $this_reverse = !$reverse;
-        $indicator = " <img src='$themeimg/arrow_" .
-                ($reverse ? 'up' : 'down') . ".png' alt='" .
-                ($reverse ? $langUp : $langDown) . "'>";
+        $icon = ($reverse) ? 'fa-solid fa-caret-down': 'fa-solid fa-caret-up';
     } else {
         $this_reverse = $reverse;
-        $indicator = '';
+        $icon = '';
     }
-    return '<a class="Neutral-900-cl TextBold text-decoration-none" href="' . $base_url . 'openDir=' . $path .
-            '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
-            '">' . $label . $indicator . '</a>';
+    return "<a class='Neutral-900-cl TextBold text-decoration-none' href='{$base_url}openDir=$path&amp;sort=$this_sort" . ($this_reverse ? '&amp;rev=1' : '') . "'>
+                <i class='$icon'></i>  $label</a>";
 }
 
 
 /**
  * Used in documents path navigation bar
- * @global type $langRoot
- * @global type $base_url
- * @global type $group_sql
  * @param type $path
  * @return type
  */

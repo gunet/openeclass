@@ -21,21 +21,20 @@
  */
 
 function headlink($label, $this_sort) {
-    global $sort, $reverse, $course_code, $themeimg, $langUp, $langDown;
+    global $sort, $reverse, $course_code;
+
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code;
 
     if ($sort == $this_sort) {
         $this_reverse = !$reverse;
-        $indicator = " <img src='$themeimg/arrow_" .
-                ($reverse ? 'up' : 'down') . ".png' alt='" .
-                ($reverse ? $langUp : $langDown) . "'>";
+        $icon = ($reverse) ? 'fa-solid fa-caret-down': 'fa-solid fa-caret-up';
     } else {
         $this_reverse = $reverse;
-        $indicator = '';
+        $icon = '';
     }
-    return '<a class="Neutral-900-cl TextBold text-decoration-none" href="' . $base_url .
-            '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
-            '">' . $label . $indicator . '</a>';
+
+    return "<a class='Neutral-900-cl TextBold text-decoration-none' href='{$base_url}&amp;sort=$this_sort" . ($this_reverse ? '&amp;rev=1' : '') . "'>
+                <i class='$icon'></i>  $label</a>";
 }
 
 /**

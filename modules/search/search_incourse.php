@@ -299,7 +299,7 @@ if (empty($search_terms)) {
             foreach ($announces as $announce) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                                  <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                                  <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                                   <td><a href='" . $announcesUrls[$announce->id] . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
                                   <small>(" . format_locale_date(strtotime($announce->date)) . ")
                                   </small><br />" . $announce->content . "</td></tr>";
@@ -327,7 +327,7 @@ if (empty($search_terms)) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "
                   <tr class='$class'>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                     <td>";
                 $message = $langUnknown;
                 if ($agenda->duration != "") {
@@ -366,8 +366,8 @@ if (empty($search_terms)) {
             $numLine = 0;
             foreach ($documents as $document) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $search_results .= "<tr class='$class'>
-                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                $search_results .= "<tr class='$class'>                        
+                        <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . q($document->comment) . ")</span>";
                 $search_results .= "<a href='" . $docsUrls[$document->id] . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
@@ -395,7 +395,7 @@ if (empty($search_terms)) {
             foreach ($exercises as $exercise) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $desc_text = (empty($exercise->description)) ? "" : "<br /> <span class='smaller'>" . $exercise->description . "</span>";
                 $search_results .= "<a href='" . $exerciseUrls[$exercise->id] . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
@@ -423,7 +423,7 @@ if (empty($search_terms)) {
             foreach ($forums as $forum) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . q($forum->desc) . ")</span>";
                 $search_results .= "<a href='" . $forumUrls[$forum->id] . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
@@ -446,7 +446,7 @@ if (empty($search_terms)) {
             foreach ($ftopics as $ftopic) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                     <td>";
                 $search_results .= "<strong>$langSubject</strong>: <a href='" . $ftopicUrls[$ftopic->id] . "'>" . q($ftopic->title) . "</a>";
                 if (count($forumPostHits) > 0) {
@@ -481,7 +481,7 @@ if (empty($search_terms)) {
             foreach ($links as $link) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
                 $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank' aria-label='(opens in a new tab)'> " . q($link->title) . "</a> $desc_text </td></tr>";
@@ -509,7 +509,7 @@ if (empty($search_terms)) {
             foreach ($videos as $video) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                     <td>";
                 $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . q($video->description) . ")</span>";
                 $search_results .= "<a href='" . $videoUrls[$video->id] . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
@@ -534,7 +534,7 @@ if (empty($search_terms)) {
             foreach ($vlinks as $vlink) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . q($vlink->description) . ")</span>";
                 $search_results .= "<a href='" . $vlinkUrls[$vlink->id] . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
@@ -562,7 +562,7 @@ if (empty($search_terms)) {
             foreach ($units as $unit) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $comments_text = (empty($unit->comments)) ? "" : " " . $unit->comments;
                 $search_results .= "<a href='" . $unitUrls[$unit->id] . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
@@ -587,7 +587,7 @@ if (empty($search_terms)) {
             foreach ($ureses as $ures) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
-                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $comments_text = (empty($ures->comments)) ? "" : "<span class='smaller'>" . $ures->comments . "</span>";
                 $search_results .= q($ures->title) . " <a href='" . $uresUrls[$ures->id] . "'> $comments_text </a></td></tr>";

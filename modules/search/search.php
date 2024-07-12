@@ -176,7 +176,7 @@ foreach ($courses as $course) {
     $tool_content .= "<tr>";
     if ($uid > 0) {
         if (in_array($course->id, $subscribed)) {
-            $tool_content .= "<td align='center'><img src='$themeimg/tick.png' title='$langAlreadySubscribe' alt='$langAlreadySubscribe'/></td>";
+            $tool_content .= "<td align='center'><i class='fa-solid fa-check' title='$langAlreadySubscribe' alt='$langAlreadySubscribe' ></i></td>";
         } else {
             if (!empty($course->password) && ($course->visible == COURSE_REGISTRATION || $course->visible == COURSE_OPEN)) {
                 $requirepassword = "<br />$m[code]: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
