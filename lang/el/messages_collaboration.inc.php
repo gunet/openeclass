@@ -1558,6 +1558,7 @@ $langNoSessionsExist = "Δεν υπάρχουν συνεδρίες";
 $langSessionHasCompletionResources = "Η συνεδρία διαθέτει πόρους ολοκλήρωσης";
 $langSessionInProgress = "Βρίσκεται σε εξέλιξη";
 $langNextSession = "Επόμενη προγραμματισμένη συνεδρία";
+$langNoExistsNextSession = "Δεν υπάρχει προγραμματισμένη συνεδρία";
 $langSessionsNotStarted = "Δεν έχουν ξεκινήσει ακόμα";
 $langSessionsHasExpired = "Έχουν παρέλθει";
 $langNoSessionInProgress =  "Δεν υπάρχει συνεδρία σε εξέλιξη";

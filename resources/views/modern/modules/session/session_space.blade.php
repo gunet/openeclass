@@ -122,9 +122,9 @@
 
                     @if(count($all_session) > 0)
                         <div class='col-12'>
-                            <div class="card panelCard card-units px-lg-4 py-lg-3 p-3">
+                            <div class="card panelCard card-sessions px-lg-4 py-lg-3 p-3">
                                 <div class='card-body p-0'>
-                                    <ul class="tree-units">
+                                    <ul class="tree-sessions">
                                         <li>
                                             <details>
                                                 <summary>

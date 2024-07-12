@@ -5078,8 +5078,9 @@ function view($view_file, $view_data = array()) {
                 }
 
 
-                .tree-units summary::before {
-                    background: $theme_options_styles[linkColor] url(../../template/modern/img/units-expand-collapse.svg) 0 0;
+                .tree-units summary::before,
+                .tree-sessions summary::before{
+                    background: $theme_options_styles[linkColor] url($urlServer/template/modern/img/units-expand-collapse.svg) 0 0;
                 }
 
                 .prev-next-learningPath{
@@ -5840,7 +5841,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['AboutUnitsContainer'])){
             $styles_str .= "
-                .card-units{
+                .card-units,
+                .card-sessions{
                     background-color: $theme_options_styles[AboutUnitsContainer];
                 }
 
@@ -5855,7 +5857,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['AboutBorderUnitsContainer'])){
             $styles_str .= "
-                .card-units{
+                .card-units,
+                .card-sessions{
                     border: solid 1px $theme_options_styles[AboutBorderUnitsContainer];
                 }
 

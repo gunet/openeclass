@@ -4605,41 +4605,49 @@ body .delThemeBtn{
 /************************************************ COURSE UNITS ********************************************************/
 /**********************************************************************************************************************/
 
-.card-units{
+.card-units,
+.card-sessions{
   background-color: #F7F9FE;
 }
 
-.tree-units{
+.tree-units,
+.tree-sessions{
   padding-left: 0px;
   --spacing : 1.5rem;
   --radius  : 10px;
   margin-bottom: 0px;
 }
-.tree-units:hover{
+.tree-units:hover,
+.tree-sessions:hover{
   cursor: pointer;
 }
 
-.tree-units li{
+.tree-units li,
+.tree-sessions li{
   display      : block;
   position     : relative;
   padding-left : calc(2 * var(--spacing) - var(--radius) - 2px);
 }
 
-.tree-units ul{
+.tree-units ul,
+.tree-sessions ul{
   margin-left  : calc(var(--radius) - var(--spacing));
   padding-left : 0;
 }
 
-.tree-units ul li{
+.tree-units ul li,
+.tree-sessions ul li{
   border-left : 2px solid #ddd;
   margin-top: 10px;
 }
 
-.tree-units ul li:last-child{
+.tree-units ul li:last-child,
+.tree-sessions ul li:last-child{
   border-color : transparent;
 }
 
-.tree-units ul li::before{
+.tree-units ul li::before,
+.tree-sessions ul li::before{
   content      : '';
   display      : block;
   position     : absolute;
@@ -4651,26 +4659,33 @@ body .delThemeBtn{
   border-width : 0 0 2px 2px;
 }
 
-.tree-units summary{
+.tree-units summary,
+.tree-sessions summary{
   display : block;
   cursor:  url(../images/pointer.png), auto;
 }
 
 .tree-units summary::marker,
-.tree-units summary::-webkit-details-marker{
+.tree-units summary::-webkit-details-marker,
+.tree-sessions summary::marker,
+.tree-sessions summary::-webkit-details-marker{
   display : none;
 }
 
-.tree-units summary:focus{
+.tree-units summary:focus,
+.tree-sessions summary:focus{
   outline : none;
 }
 
-.tree-units summary:focus-visible{
+.tree-units summary:focus-visible,
+.tree-sessions summary:focus-visible{
   outline : 1px dotted #000;
 }
 
 .tree-units li::after,
-.tree-units summary::before{
+.tree-units summary::before,
+.tree-sessions li::after,
+.tree-sessions summary::before{
   content       : '';
   display       : block;
   position      : absolute;
@@ -4682,12 +4697,14 @@ body .delThemeBtn{
   background    : #CDD4E0;
 }
 
-.tree-units summary::before{
+.tree-units summary::before,
+.tree-sessions summary::before{
   z-index    : 1;
   background : #0073E6 url('../img/units-expand-collapse.svg') 0 0;
 }
 
-.tree-units details[open] > summary::before{
+.tree-units details[open] > summary::before,
+.tree-sessions details[open] > summary::before{
   background-position : calc(-2 * var(--radius)) 0;
 }
 

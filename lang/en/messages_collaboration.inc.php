@@ -1622,6 +1622,7 @@ $langNoSessionsExist = "There are no sessions";
 $langSessionHasCompletionResources = "The session has completion resources";
 $langSessionInProgress = "In progress";
 $langNextSession = "Next scheduled session";
+$langNoExistsNextSession = "There is not next scheduled session";
 $langSessionsNotStarted = "They have not started yet";
 $langSessionsHasExpired = "They have expired";
 $langNoSessionInProgress =  "No session in progress";

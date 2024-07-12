@@ -4873,7 +4873,8 @@ function get_theme_options() {
 
         if(!empty($theme_options_styles['AboutUnitsContainer'])){
             $styles_str .= "
-                .card-units{
+                .card-units,
+                .card-sessions{
                     background-color: $theme_options_styles[AboutUnitsContainer];
                 }
             
@@ -4888,7 +4889,8 @@ function get_theme_options() {
 
         if(!empty($theme_options_styles['AboutBorderUnitsContainer'])){
             $styles_str .= "
-                .card-units{
+                .card-units,
+                .card-sessions{
                     border: solid 1px $theme_options_styles[AboutBorderUnitsContainer];
                 }
             

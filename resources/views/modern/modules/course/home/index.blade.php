@@ -507,7 +507,7 @@
                         @endif
 
                         @if($course_info->view_type == 'sessions' && count($course_sessions) > 0)
-                            <div class='card panelCard card-transparent card-units px-lg-4 py-lg-3 p-3 mt-4 border-0 mb-5'>
+                            <div class='card panelCard card-transparent card-sessions px-lg-4 py-lg-3 p-3 mt-4 border-0 mb-5'>
                                 <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>{{ trans('langSession') }}</h3>
                                     <a class='TextRegular text-decoration-underline vsmall-text'
@@ -516,7 +516,7 @@
                                     </a>
                                 </div>
                                 <div class='card-body card-body-default px-0 pt-0'>
-                                    <ul class="tree-units">
+                                    <ul class="tree-sessions">
                                         <li>
                                             <details open>
                                                 <summary><strong>{{ trans('langSession') }}</strong></summary>
@@ -535,6 +535,18 @@
                                                                             </a>
                                                                             &nbsp;<span>({!! format_locale_date(strtotime($s->start), 'short', false) !!})</span>
                                                                             <p>{!! participant_name($s->creator) !!}</p>
+                                                                            <div class="spinner-grow text-success" role="status" style='width:15px; height:15px;'>
+                                                                                <span class="visually-hidden"></span>
+                                                                            </div>
+                                                                            <div class="spinner-grow text-danger" role="status" style='width:15px; height:15px;'>
+                                                                                <span class="visually-hidden"></span>
+                                                                            </div>
+                                                                                <div class="spinner-grow text-warning" role="status" style='width:15px; height:15px;'>
+                                                                            <span class="visually-hidden"></span>
+                                                                            </div>
+                                                                            <div class="spinner-grow text-info" role="status" style='width:15px; height:15px;'>
+                                                                                <span class="visually-hidden"></span>
+                                                                            </div>
                                                                         </li>
                                                                         @php $c1++; @endphp
                                                                     @endif
@@ -558,7 +570,7 @@
                                                                         &nbsp;<span>({!! format_locale_date(strtotime($next_session->start), 'short', false) !!})</span>
                                                                         <p>{!! participant_name($next_session->creator) !!}</p>
                                                                     @else
-                                                                        {{ trans('langNoInfoAvailable') }}
+                                                                        {{ trans('langNoExistsNextSession') }}
                                                                     @endif
                                                                 </li>
                                                             </ul>
