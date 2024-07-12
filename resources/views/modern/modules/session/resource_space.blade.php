@@ -300,7 +300,8 @@
 
 
                     <!-- upload deliverable by simple user or upload a deliverable by consultant for a user -->
-                    @if(!$is_course_reviewer)
+
+                    @if(!$is_course_reviewer or $is_consultant)
                         @if(!$is_consultant or $upload_doc_for_user)
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>

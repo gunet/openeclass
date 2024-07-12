@@ -232,8 +232,14 @@ if($is_coordinator or $is_consultant){
 
             $all_participants_ids = session_participants_ids($s->id);
             foreach($all_participants_ids as $p){
-                // This refers to session completion with completed tc.
-                check_session_completion_by_tc_completed($s->id,$p);
+                if(!$s->type_remote){
+                    // This refers to session completion with completed meeting.
+                    check_session_completion_by_meeting_completed($s->id,$p);
+                }elseif($s->type_remote){
+                    // This refers to session completion with completed tc.
+                    check_session_completion_by_tc_completed($s->id,$p);
+                }
+                
                 // This refers to session completion for other activities.
                 check_session_progress($s->id,$p);  // check session completion - call to Game.php
             }
@@ -288,8 +294,14 @@ if($is_coordinator or $is_consultant){
 
 
     foreach ($data['individuals_group_sessions'] as $s) {
-        // This refers to session completion with completed tc.
-        check_session_completion_by_tc_completed($s->id,$uid);
+        if(!$s->type_remote){
+            // This refers to session completion with completed meeting.
+            check_session_completion_by_meeting_completed($s->id,$uid);
+        }elseif($s->type_remote){
+            // This refers to session completion with completed tc.
+            check_session_completion_by_tc_completed($s->id,$uid);
+        }
+       
         // This refers to session completion for other activities.
         check_session_progress($s->id,$uid);  // check session completion - call to Game.php
     }

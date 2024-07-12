@@ -1562,3 +1562,7 @@ $langNoExistsNextSession = "Δεν υπάρχει προγραμματισμέν
 $langSessionsNotStarted = "Δεν έχουν ξεκινήσει ακόμα";
 $langSessionsHasExpired = "Έχουν παρέλθει";
 $langNoSessionInProgress =  "Δεν υπάρχει συνεδρία σε εξέλιξη";
+$langWithMeetingCompletion = "Με την ολοκλήρωση της συνάντησης δια ζώσης";
+$langContinueToCompletetionWithMeeting = "Η συνεδρία θα ολοκληρωθεί με το κριτήριο ολοκλήρωσης της προγραμματισμένης δια ζώσης συνάντησης. </br>
+                                          Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
+$langCompletedSessionWithMeeting = "Με την ολοκλήρωση της δια ζώσης συνάντησης";

@@ -245,7 +245,12 @@ if (isset($_GET['u'])) { //  stats per user
             $badge_id = $sql_badge->id;
         }
         foreach($result as $r){
-            check_session_completion_by_tc_completed($sid,$r->id);
+            if(!is_remote_session($course_id,$sid)){
+                check_session_completion_by_meeting_completed($sid,$r->id);
+            }elseif(is_remote_session($course_id,$sid)){
+                check_session_completion_by_tc_completed($sid,$r->id);
+            }
+           
             check_session_progress($sid,$r->id);
             $per = get_cert_percentage_completion_by_user('badge',$badge_id,$r->id);
             $r->percentage = "
@@ -331,8 +336,13 @@ if (isset($_GET['u'])) { //  stats per user
     }else{
         $tools_completed_msg = "$langNotUploadedDeliverable";
     }
-        
-    check_session_completion_by_tc_completed($sid,$u);
+
+    if(!is_remote_session($cid,$sid)){
+        check_session_completion_by_meeting_completed($sid,$u);
+    }elseif(is_remote_session($cid,$sid)){
+        check_session_completion_by_tc_completed($sid,$u);
+    }
+    
     check_session_progress($sid,$u);
     $per = get_cert_percentage_completion_by_user('badge',$badge_id,$u);
 

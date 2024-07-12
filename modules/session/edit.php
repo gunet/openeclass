@@ -139,6 +139,22 @@ if(isset($_POST['modify'])){
             $willSendEmail[] = $_POST['one_participant'];
           }
           user_badge_deletion($old_user,$_GET['session']);
+          $userfiles = Database::get()->queryArray("SELECT id,filename,path FROM document 
+                                                    WHERE course_id = ?d 
+                                                    AND subsystem_id = ?d 
+                                                    AND subsystem = ?d
+                                                    AND lock_user_id = ?d",$course_id,$_GET['session'],MYSESSIONS,$old_user);
+
+          if(count($userfiles) > 0){
+              foreach($userfiles as $f){
+                  $user_doc = $old_user;
+                  $sessionID = $_GET['session'];
+                  $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/$user_doc/";
+                  unlink($target_dir.$f->path);
+                  Database::get()->query("DELETE FROM document WHERE id = ?d",$f->id);
+              }
+          }
+          Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND from_user = ?d",$_GET['session'],$old_user);
           Database::get()->query("UPDATE mod_session_users SET 
                                     session_id = ?d,
                                     participants = ?d,
@@ -154,6 +170,22 @@ if(isset($_POST['modify'])){
         if(count($deleted_users) > 0){
           foreach($deleted_users as $del_u){
             user_badge_deletion($del_u,$_GET['session']);
+            $userfiles = Database::get()->queryArray("SELECT id,filename,path FROM document 
+                                                      WHERE course_id = ?d 
+                                                      AND subsystem_id = ?d 
+                                                      AND subsystem = ?d
+                                                      AND lock_user_id = ?d",$course_id,$_GET['session'],MYSESSIONS,$del_u);
+
+            if(count($userfiles) > 0){
+              foreach($userfiles as $f){
+                $user_doc = $del_u;
+                $sessionID = $_GET['session'];
+                $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/$user_doc/";
+                unlink($target_dir.$f->path);
+                Database::get()->query("DELETE FROM document WHERE id = ?d",$f->id);
+              }
+            }
+            Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND from_user = ?d",$_GET['session'],$del_u);
             Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_GET['session'],$del_u);
           }
         }
@@ -170,6 +202,22 @@ if(isset($_POST['modify'])){
       if(count($deleted_users) > 0){
         foreach($deleted_users as $del_u){
           user_badge_deletion($del_u,$_GET['session']);
+          $userfiles = Database::get()->queryArray("SELECT id,filename,path FROM document 
+                                                      WHERE course_id = ?d 
+                                                      AND subsystem_id = ?d 
+                                                      AND subsystem = ?d
+                                                      AND lock_user_id = ?d",$course_id,$_GET['session'],MYSESSIONS,$del_u);
+
+          if(count($userfiles) > 0){
+            foreach($userfiles as $f){
+              $user_doc = $del_u;
+              $sessionID = $_GET['session'];
+              $target_dir = "$webDir/courses/$course_code/session/session_$sessionID/$user_doc/";
+              unlink($target_dir.$f->path);
+              Database::get()->query("DELETE FROM document WHERE id = ?d",$f->id);
+            }
+          }
+          Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND from_user = ?d",$_GET['session'],$del_u);
           Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$_GET['session'],$del_u);
         }
       }

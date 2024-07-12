@@ -1072,7 +1072,8 @@ function get_resource_details($element, $resource_id) {
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
-            $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName, $langTCComplited;
+            $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName, $langTCComplited,
+            $langCompletedSessionWithMeeting;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
@@ -1247,6 +1248,9 @@ function get_resource_details($element, $resource_id) {
             $q = Database::get()->querySingle("SELECT title FROM tc_session WHERE tc_session.course_id = ?d AND tc_session.id = ?d", $course_id, $resource);
             $title = $q->title;
             $type = "$langTCComplited";
+            break;
+        case 'meeting-completed':
+            $title = "$langCompletedSessionWithMeeting";
             break;
         default:
             $title = "$langAllActivities";

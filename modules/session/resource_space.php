@@ -382,18 +382,24 @@ if(count($docs) > 0){
         $refers = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d AND session_id = ?d",$refers_temp->doc_id,$sessionID);
         $file->refers_to = $refers->title;
         $file->deliverable_comment = $refers_temp->deliverable_comments;
-        if(($is_consultant || $is_course_reviewer) && $badge_id > 0){
-            $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
-                                                                    WHERE resource = ?d 
-                                                                    AND activity_type = ?s 
-                                                                    AND badge = ?d",$refers_temp->doc_id,'document-submit',$badge_id);
+        if(($is_consultant || $is_course_reviewer)){
+            if($badge_id > 0){
+                $user_badge_criterion = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                                                                        WHERE resource = ?d 
+                                                                        AND activity_type = ?s 
+                                                                        AND badge = ?d",$refers_temp->doc_id,'document-submit',$badge_id);
 
-            if($user_badge_criterion){
-                $file->user_badge_criterion_id = $user_badge_criterion->id; 
+                if($user_badge_criterion){
+                    $file->user_badge_criterion_id = $user_badge_criterion->id; 
+                }else{
+                    $file->user_badge_criterion_id = 0;
+                }
+            }else{
+                $file->user_badge_criterion_id = 0;
             }
             $file->user_sender = $refers_temp->from_user;
             $file->completed = $refers_temp->is_completed;
-            $file->can_delete_file = 1;                            
+            $file->can_delete_file = 1;                 
         }
         if($is_simple_user){
             if(!$refers_temp->is_completed){

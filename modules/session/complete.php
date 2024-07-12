@@ -215,7 +215,7 @@ if ($is_consultant) {
         } elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
             // You can delete badge activity if refers to tc-completed
             $actType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE id = ?d",$_GET['del_cert_res'])->activity_type;
-            if($actType == 'tc-completed' or $actType == 'noactivity'){
+            if($actType == 'tc-completed' or $actType == 'noactivity' or $actType == 'meeting-completed'){
                 Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$_GET['del_cert_res']);
             }
             if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user

@@ -1626,3 +1626,7 @@ $langNoExistsNextSession = "There is not next scheduled session";
 $langSessionsNotStarted = "They have not started yet";
 $langSessionsHasExpired = "They have expired";
 $langNoSessionInProgress =  "No session in progress";
+$langWithMeetingCompletion = "Upon completion of the live meeting";
+$langCompletedSessionWithMeeting = "Upon completion of the live meeting";
+$langContinueToCompletetionWithMeeting = "The session will end with the completion criterion of the scheduled live meeting. </br>
+ Do you want to proceed with this action?";
