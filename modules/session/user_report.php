@@ -277,7 +277,7 @@ if (isset($_GET['u'])) { //  stats per user
     global $langIndividualSession, $langGroupSession, $langNotRemote, $langRemote,
            $langDate, $langPercentageSessionCompletion, $langTools, $langRefernce, 
            $langUserHasCompleted, $langNotUploadedDeliverable, $langCommentsByConsultant,
-           $langNoCommentsAvailable, $langCompletedSessionWithoutActivity;
+           $langNoCommentsAvailable, $langCompletedSessionWithoutActivity, $langCompletedSessionMeeting;
 
     $session_info = Database::get()->querySingle("SELECT * FROM mod_session WHERE course_id = ?d AND id = ?d",$cid, $sid);
     $user_name = participant_name($u);
@@ -320,6 +320,9 @@ if (isset($_GET['u'])) { //  stats per user
                     }
                 }elseif($c->activity_type == 'noactivity'){
                     $titleCr = $langCompletedSessionWithoutActivity;
+                    $tools_completed[] = $titleCr;
+                }elseif($c->activity_type == 'meeting-completed'){
+                    $titleCr = $langCompletedSessionMeeting;
                     $tools_completed[] = $titleCr;
                 }
                 $criteria .= "<li>$titleCr</li>";

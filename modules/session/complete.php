@@ -230,6 +230,7 @@ if ($is_consultant) {
             }
         }
     } elseif ( isset($_GET['prereq']) ) {
+        // current session
         $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sessionID,1);
         $perc = 0;
         if(count($participants) > 0){
@@ -241,10 +242,24 @@ if ($is_consultant) {
             }
         }
         $npercentage = (count($participants) > 0) ? $perc/count($participants) : $perc;
-        if(round($npercentage) < 100){
+
+        // prerequisite session
+        $participants_prereq = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$_GET['prereq'],1);
+        $perc_prereq = 0;
+        if(count($participants) > 0){
+            $badge_prereq = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id,$_GET['prereq']);
+            if($badge_prereq){
+                foreach($participants_prereq as $p){
+                    $perc_prereq = $perc_prereq + get_cert_percentage_completion_by_user('badge',$badge_prereq->id,$p->participants);
+                }
+            }
+        }
+        $npercentage_prereq = (count($participants_prereq) > 0) ? $perc_prereq/count($participants_prereq) : $perc_prereq;
+
+        if(round($npercentage) < 100 or ( round($npercentage) == 100 && round($npercentage_prereq) == 100 )){
             insert_session_prerequisite_unit($sessionID, $_GET['prereq']);
         }else{
-            Session::flash('message',$langForbidden);
+            Session::flash('message',$langInfoForbiddenAddPrereq);
             Session::flash('alert-class', 'alert-warning');
         }
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$sessionID");

@@ -2374,6 +2374,23 @@ function check_session_completion_by_meeting_completed($session_id = 0, $forUid 
         if($badge_criterion){
             $badge_id = $badge_criterion->badge;
             $badge_criterion_id = $badge_criterion->id;
+
+            // Initially we should check if a session has completed prequisite session
+            $per = 100;
+            $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
+                                                        WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
+
+            if($has_prereq){
+                $badge_prerequisite = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id,$has_prereq->prerequisite_session);
+                if($badge_prerequisite){
+                    $per = get_cert_percentage_completion_by_user('badge',$badge_prerequisite->id,$forUid);
+                }
+            }
+            
+            if($per < 100){
+                return;
+            }
+
             $res = Database::get()->querySingle("SELECT * FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$forUid,$badge_criterion_id);
             if(!$res){
                 // When meeting has expired then update db
@@ -2436,6 +2453,23 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
             }
             
             if($badge_criterion_id > 0){
+                
+                // Initially we should check if a session has completed prequisite session
+                $per = 100;
+                $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
+                                                            WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
+
+                if($has_prereq){
+                    $badge_prerequisite = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$course_id,$has_prereq->prerequisite_session);
+                    if($badge_prerequisite){
+                        $per = get_cert_percentage_completion_by_user('badge',$badge_prerequisite->id,$forUid);
+                    }
+                }
+                
+                if($per < 100){
+                    return;
+                }
+
                 $res = Database::get()->querySingle("SELECT * FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d",$forUid,$badge_criterion_id);
                 if(!$res){
                     // When tc has expired then update db

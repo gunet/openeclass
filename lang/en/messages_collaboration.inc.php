@@ -1630,3 +1630,5 @@ $langWithMeetingCompletion = "Upon completion of the live meeting";
 $langCompletedSessionWithMeeting = "Upon completion of the live meeting";
 $langContinueToCompletetionWithMeeting = "The session will end with the completion criterion of the scheduled live meeting. </br>
  Do you want to proceed with this action?";
+$langCompletedSessionMeeting = "Completion by live meeting";
+$langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed as the current session is logged out by all users.";
