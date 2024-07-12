@@ -133,12 +133,6 @@ function view($view_file, $view_data = array()) {
         }
     }
 
-    //set the appropriate search action for the searchBox form
-    if ($menuTypeID == 2) {
-        $search_action = "search_incourse.php?all=true";
-    } else {
-        $search_action = "search.php";
-    }
     // breadcrumb and page title
     $breadcrumbs = array();
     if (!$is_embedonce and !$is_mobile and $current_module_dir != '/') {
@@ -6188,7 +6182,7 @@ function view($view_file, $view_data = array()) {
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
-            'is_mobile', 'current_module_dir','search_action', 'require_current_course',
+            'is_mobile', 'current_module_dir', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',

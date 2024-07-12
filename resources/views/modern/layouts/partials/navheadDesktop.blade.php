@@ -50,16 +50,20 @@
                         @endif
                     </nav>
                     <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
-                        @if(get_config('enable_search'))
+                        @if (get_config('enable_search'))
                             <div class='h-100 d-flex justify-content-start align-items-center'>
                                 <div class='h-40px'>
-                                    <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px gap-2" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' role='search'>
-                                        <div>
-                                            <a id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
-                                                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-                                            </a>
-                                        </div>
-                                        <input id="search_terms" type="text" class="inputSearch form-control rounded-0 px-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
+                                    @if(isset($course_code) and $course_code)
+                                        <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px gap-2" action='{{ $urlAppend }}modules/search/search_incourse.php?all=true' method='post' role='search'>
+                                    @else
+                                        <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px gap-2" action='{{ $urlAppend }}modules/search/search.php' method='post' role='search'>
+                                    @endif
+                                    <div>
+                                        <a id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
+                                            <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+                                        </a>
+                                    </div>
+                                    <input id="search_terms" type="text" class="inputSearch form-control rounded-0 px-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
                                     </form>
                                 </div>
                             </div>
@@ -449,7 +453,7 @@
                                     </button>--}}
 
                                     <div class="input-group">
-                                        <input id='search-mobile' type="text" class="form-control mt-0" 
+                                        <input id='search-mobile' type="text" class="form-control mt-0"
                                                 placeholder="{{ trans('langSearch')}}..." name="search_terms" aria-label="Search terms" aria-describedby="search-btn-mobile">
                                         <button class="btn btn-primary btn-mobile-quick-search" type="submit" id="search-btn-mobile" name="quickSearch" aria-label='Quick search'>
                                             <i class="fa-solid fa-magnifying-glass-arrow-right fa-lg"></i>
