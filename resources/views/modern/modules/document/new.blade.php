@@ -7,11 +7,7 @@
         <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
 
                 @if($course_code)
-                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
-                    <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
-                        @include('layouts.partials.sidebar',['is_editor' => $is_editor])
-                    </div>
-                </div>
+                    @include('layouts.partials.left_menu')
                 @endif
 
                 @if($course_code)
