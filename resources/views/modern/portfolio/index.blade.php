@@ -549,7 +549,7 @@
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 <div>
                                     <div class='mb-0 portofolio-text-intro TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
-                                    <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
+                                    <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {!! $_SESSION['uname'] !!}
                                     </p>
                                 </div>
