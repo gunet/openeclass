@@ -10,7 +10,7 @@
 @endphp
 
 @if(!isset($_GET['fromFlipped']))
-    <h1 aria-label="@if($pageName) {{ $pageName }} @elseif($course_code) {{ $currentCourseName }} @else {{ trans('langTool') }} @endif"></h1>
+    <h1 aria-label="@if($pageName) {{ $pageName }} @elseif($course_code) {{ trans('langCourse') }} @else {{ $uname }} @endif"></h1>
     <div class='col-12 mt-4'>
         <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
             <div class='flex-grow-1'>
@@ -24,18 +24,40 @@
                     @if (!isset($action_bar) or empty($action_bar))
                         <div class='col-12 d-inline-flex'>
                             <!-- toolName -->
-                            @if(!$course_code) 
-                                <h2 aria-label="{{ trans('langTool') }}"></h2> 
+                            @if ($course_code)
+                                <p>
+                                    {{ $toolName }}
+                                    @if ($pageName and ($pageName != $toolName))
+                                        - {{ $pageName }}
+                                    @endif
+                                </p>
+                            @else
+                                <h2>
+                                    {{ $toolName }}
+                                    @if ($pageName and ($pageName != $toolName))
+                                        - {{ $pageName }}
+                                    @endif
+                                </h2>
                             @endif
-                            <h3>
-                                {{ $toolName }}
-                                @if ($pageName and ($pageName != $toolName))
-                                    - {{ $pageName }}
-                                @endif
-                            </h3>
                         </div>
                     @else
-                        <div class='col-12 d-inline-flex mb-4'></div>
+                        <div class='col-12 d-inline-flex'>
+                            @if ($course_code)
+                                <p>
+                                    {{ $toolName }}
+                                    @if ($pageName and ($pageName != $toolName))
+                                        - {{ $pageName }}
+                                    @endif
+                                </p>
+                            @else
+                                <h2>
+                                    {{ $toolName }}
+                                    @if ($pageName and ($pageName != $toolName))
+                                        - {{ $pageName }}
+                                    @endif
+                                </h2>
+                            @endif
+                        </div>
                     @endif
                 @else
                     @if ($course_code)

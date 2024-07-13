@@ -30,7 +30,7 @@
         <div class="row m-auto">
 
             <div class='col-12'>
-                <h3>{!! $toolName !!}</h3>
+                <h1>{!! $toolName !!}</h1>
             </div>
 
             @include('layouts.partials.show_alert') 

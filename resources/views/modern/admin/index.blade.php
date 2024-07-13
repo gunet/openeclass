@@ -72,12 +72,12 @@
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-            @include('layouts.partials.legend_view')
+            <div class='col-12 my-4'>
+                <h1>{{ $pageName }}</h1>
+            </div>
 
             @if(isset($action_bar))
                 {!! $action_bar !!}
-            @else
-                <div class='mt-4'></div>
             @endif
 
             @include('layouts.partials.show_alert') 

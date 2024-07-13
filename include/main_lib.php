@@ -3682,7 +3682,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $temporary_button_class = "";
 
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($pageName)."</h6>";
+        $page_title = "<div class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($pageName)."</div>";
     }
 
     foreach (array_reverse($options) as $option) {
@@ -3838,7 +3838,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $titleHeader = (!empty($pageName) ? $pageName : $toolName);
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
-                            <div class='col-lg-5 col-md-6 col-12'><h3 class='mb-0'>$titleHeader</h3></div>
+                            <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                     <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
@@ -3869,7 +3869,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             }
             $titleHeader = (!empty($pageName) ? $pageName : $toolName);
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
-                        <div class='col-lg-5 col-md-6 col-12'><h3 class='mb-0'>$titleHeader</h3></div>
+                        <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>

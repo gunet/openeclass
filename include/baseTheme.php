@@ -577,6 +577,7 @@ function view($view_file, $view_data = array()) {
                 .help-block,
                 .control-label-notes,
                 .title-default,
+                .action-bar-title,
                 .list-group-item.list-group-item-action,
                 .list-group-item.element{
                     color:$theme_options_styles[ColorHyperTexts];

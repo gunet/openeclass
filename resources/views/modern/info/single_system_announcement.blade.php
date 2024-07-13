@@ -10,11 +10,9 @@
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                     @endif
 
-                    @include('layouts.partials.legend_view')
-
-
-                    {!! $action_bar !!}
-
+                    <div class='col-12 my-4'>
+                        <h1>{{ $pageName }}</h1>
+                    </div>
                     
                     <div class="col-12">
                         <div class="card panelCard px-lg-4 py-lg-3">

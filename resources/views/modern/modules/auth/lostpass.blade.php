@@ -28,7 +28,7 @@
         <div class="row m-auto">
 
             <div class='col-12 mb-4'>
-                <h2>{{ trans('lang_remind_pass') }}</h2>
+                <h1>{{ trans('lang_remind_pass') }}</h1>
             </div>
 
             @include('layouts.partials.show_alert') 

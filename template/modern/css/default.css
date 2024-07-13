@@ -582,7 +582,8 @@ h1,h2{
 }
 
 h3,
-.portofolio-text-intro{
+.portofolio-text-intro,
+.action-bar-title{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 18px;
