@@ -38,7 +38,7 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
-                        <h2>{{ $toolName }}</h2>
+                        <h1>{{ $toolName }}</h1>
                     </div>
 
                     <div class='col-12 mt-4'>

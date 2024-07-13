@@ -10,7 +10,7 @@
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
             @endif
             <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
-                <h2>{{ $toolName }}</h2>
+                <h1>{{ $toolName }}</h1>
                 <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                     <div class='col-lg-6 col-12'>
                         <div class='panel'>

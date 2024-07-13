@@ -75,7 +75,7 @@
                 </div>
                 <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
             @endif
-            <div class='col-12 d-flex justify-content-between align-items-center'>
+            <nav class='col-12 d-flex justify-content-between align-items-center'>
                 <ul class="container-items-footer nav">
                     @if (!get_config('dont_display_about_menu'))
                         <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
@@ -99,7 +99,7 @@
                         <a class="a_tools_site_footer px-2" href="https://linkedin.com/" target="_blank" aria-label="Linkedin (opens new window)"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
                     @endif
                 </div>
-            </div>
+            </nav>
         @endif
     </div>
 

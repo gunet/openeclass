@@ -542,13 +542,13 @@
     <div class='row m-auto'>
         <div class='col-12 portfolio-profile-container'>
             <div class='{{ $container }} padding-default'>
+            <h1 aria-label="{{ trans('langPortfolio') }}"></h1>
                 <div class='row row-cols-xl-3 row-cols-md-2 row-cols-1'>
-
                         <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                                 <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 <div>
-                                    <h3 class='mb-0 portofolio-text-intro'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h3>
+                                    <div class='mb-0 portofolio-text-intro TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
                                     <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {!! $_SESSION['uname'] !!}
                                     </p>
@@ -559,14 +559,14 @@
                         <div class='col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4'>
                             <div>
                                 @if(!get_config('show_always_collaboration'))
-                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
+                                <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
                                     <div>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
-                                </h5>
+                                </div>
                                 @endif
                                 @if(get_config('show_collaboration'))
-                                <h5 class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
+                                <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
                                     <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
-                                </h5>
+                                </div>
                                 @endif
                                 <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
                                     {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
@@ -732,11 +732,12 @@
 
                                                                     <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
                                                                         <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none'
-                                                                            data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' >
+                                                                            data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' aria-label="{{ trans('langNotificationsExist') }}">
                                                                             <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
                                                                         </a>
 
-                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
+                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' 
+                                                                            title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}" aria-label="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                                             <i class='fa-solid fa-display'></i>
                                                                         </a>
 

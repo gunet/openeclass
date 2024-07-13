@@ -85,17 +85,17 @@
                                             <div class='row'>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group'>
-                                                        <label for='Name' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
+                                                        <label for='NameID' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input class='form-control' type='text' name='givenname_form' size='30' maxlength='100' value = '{{ $user_data_firstname }}'  placeholder='{{ trans('langName') }}...'>
+                                                            <input id="NameID" class='form-control' type='text' name='givenname_form' size='30' maxlength='100' value = '{{ $user_data_firstname }}'  placeholder='{{ trans('langName') }}...'>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-lg-0 mt-4'>
-                                                        <label for='SurName' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
+                                                        <label for='SurNameID' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value = '{{ $user_data_lastname }}' placeholder='{{ trans('langSurname') }}...'>
+                                                            <input id="SurNameID" class='form-control' type='text' name='surname_form' size='30' maxlength='100' value = '{{ $user_data_lastname }}' placeholder='{{ trans('langSurname') }}...'>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,17 +104,17 @@
                                             <div class='row'>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
+                                                        <label for='UserNameID' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input class='form-control' type='text' name='uname' value = '{{ $user_data_displayName }}' accept="" size='30' maxlength='100' autocomplete='off' placeholder='{{ trans('langUserNotice') }}...'>
+                                                            <input id="UserNameID" class='form-control' type='text' name='uname' value = '{{ $user_data_displayName }}' accept="" size='30' maxlength='100' autocomplete='off' placeholder='{{ trans('langUserNotice') }}...'>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='UserEmail' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
+                                                        <label for='UserEmailID' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input class='form-control' type='text' name='email' size='30' maxlength='100' value = '{{ $user_data_email }}' placeholder='{{ trans('email_message') }}...'>
+                                                            <input id="UserEmailID" class='form-control' type='text' name='email' size='30' maxlength='100' value = '{{ $user_data_email }}' placeholder='{{ trans('email_message') }}...'>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -124,18 +124,18 @@
                                                 <div class='row'>
                                                     <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='UserPass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
+                                                            <label for='UserPassID' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
                                                             <div class='col-sm-12'>
-                                                                <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='{{ trans('langUserNotice') }}...'><span id='result'></span>
+                                                                <input id="UserPassID" class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='{{ trans('langUserNotice') }}...'><span id='result'></span>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='UserPass2' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }}</label>
+                                                            <label for='UserPass2ID' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }}</label>
                                                             <div class='col-sm-12'>
-                                                                <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
+                                                                <input id="UserPass2ID" class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -146,18 +146,18 @@
 
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='UserAm' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
+                                                        <label for='UserAmID' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input class='form-control' type='text' name='am' size='20' maxlength='20' value = '{{ $user_data_am }}' placeholder='{{trans ('am_message') }}...'>
+                                                            <input id="UserAmID" class='form-control' type='text' name='am' size='20' maxlength='20' value = '{{ $user_data_am }}' placeholder='{{trans ('am_message') }}...'>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='UserPhone' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
+                                                        <label for='UserPhoneID' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
                                                         <div class='col-sm-12'>
-                                                            <input class='form-control' type='text' name='phone' size='20' maxlength='20' value = '{{ $user_data_phone }}' placeholder='{{ trans('langOptional') }}...'>
+                                                            <input id="UserPhoneID" class='form-control' type='text' name='phone' size='20' maxlength='20' value = '{{ $user_data_phone }}' placeholder='{{ trans('langOptional') }}...'>
                                                         </div>
                                                     </div>
                                                 </div>

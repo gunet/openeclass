@@ -41,7 +41,8 @@ function getUserCourseInfo($uid): string
            $langWelcomeSelect, $langPreview, $langOfCourse,
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
-           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty, $mine_courses, $mine_collaborations;
+           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty, 
+           $mine_courses, $mine_collaborations, $langNotificationsExist;
 
 
     if(!get_config('show_always_collaboration')){
@@ -92,7 +93,7 @@ function getUserCourseInfo($uid): string
                                     &nbsp;(" . q($data->public_code) . ")
                                 </a>
                                 <a id='btnNotification_{$data->course_id}' class='btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
-                                                role='button' aria-expanded='false' aria-controls='notification{$data->course_id}'>
+                                                role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                     <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                 </a>
                             </div>
@@ -109,7 +110,7 @@ function getUserCourseInfo($uid): string
                             <div class='col-12 portfolio-tools'>
                                 <div class='d-inline-flex'>";
 
-                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse'>
+                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
                                     <i class='fa-solid fa-display'></i>
                                 </a>
 
@@ -256,7 +257,7 @@ function getUserCourseInfo($uid): string
                                         &nbsp;(" . q($data->public_code) . ")
                                     </a>
                                     <a id='btnNotification_{$data->course_id}' class='btn btn-notification-collaboration text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
-                                                    role='button' aria-expanded='false' aria-controls='notification{$data->course_id}'>
+                                                    role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                         <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                     </a>
                                 </div>
@@ -273,7 +274,7 @@ function getUserCourseInfo($uid): string
                                 <div class='col-12 portfolio-tools'>
                                     <div class='d-inline-flex'>";
 
-                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration'>
+                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
                                         <i class='fa-solid fa-display'></i>
                                     </a>
 

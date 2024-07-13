@@ -563,16 +563,16 @@ a:hover,button:hover{
 /************************************************* TYPOGRAPHY *********************************************************/
 /**********************************************************************************************************************/
 
-h1{
+/* h1{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 32px;
   line-height: 48px;
   color: #2B3944;
   font-style: normal;
-}
+} */
 
-h2{
+h1,h2{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 24px;
@@ -581,7 +581,8 @@ h2{
   font-style: normal;
 }
 
-h3{
+h3,
+.portofolio-text-intro{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -599,7 +600,8 @@ h4{
   font-style: normal;
 }
 
-h5{
+h5,
+.portfolio-texts{
   font-family: 'Manrope', sans-serif;
   font-weight: 700 ;
   font-size: 14px;

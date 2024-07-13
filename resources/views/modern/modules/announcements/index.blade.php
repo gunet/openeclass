@@ -364,7 +364,7 @@
 
             <div class="col_maincontent_active">
 
-                <div class="row m-auto">
+                <div class="row">
 
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])

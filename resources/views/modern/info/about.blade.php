@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
                     <div class='col-12 mb-4'>
-                        <h2>{{ $toolName }}</h2>
+                        <h1>{{ $toolName }}</h1>
                     </div>
 
                     <div class='col-12'>

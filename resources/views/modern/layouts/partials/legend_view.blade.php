@@ -10,7 +10,8 @@
 @endphp
 
 @if(!isset($_GET['fromFlipped']))
-    <div class='d-block mt-4'>
+    <h1 aria-label="@if($pageName) {{ $pageName }} @elseif($course_code) {{ $currentCourseName }} @else {{ trans('langTool') }} @endif"></h1>
+    <div class='col-12 mt-4'>
         <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
             <div class='flex-grow-1'>
                 @if($toolName)
@@ -23,6 +24,9 @@
                     @if (!isset($action_bar) or empty($action_bar))
                         <div class='col-12 d-inline-flex'>
                             <!-- toolName -->
+                            @if(!$course_code) 
+                                <h2 aria-label="{{ trans('langTool') }}"></h2> 
+                            @endif
                             <h3>
                                 {{ $toolName }}
                                 @if ($pageName and ($pageName != $toolName))

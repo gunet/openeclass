@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
             <div class='col-12'>
-                <h2>{{ trans('langRegistration')}}</h2>
+                <h1>{{ trans('langRegistration')}}</h1>
             </div>
 
             @include('layouts.partials.show_alert') 

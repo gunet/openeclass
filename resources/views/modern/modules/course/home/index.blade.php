@@ -474,7 +474,7 @@
                         @endif
 
                         @if($course_info->view_type == 'sessions' && count($course_sessions) > 0)
-                            <div class='card panelCard card-transparent card-sessions px-lg-4 py-lg-3 p-3 mt-4 border-0 mb-5'>
+                            <div class='card panelCard card-transparent card-sessions px-lg-4 py-lg-3 p-3 mt-4 mb-5'>
                                 <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>{{ trans('langSession') }}</h3>
                                     <a class='TextRegular text-decoration-underline vsmall-text'

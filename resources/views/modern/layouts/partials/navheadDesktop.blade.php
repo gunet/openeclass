@@ -7,7 +7,7 @@
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
                         <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label='Homepage'>
-                            <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="Logo"/>
+                            <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
                         @if(!get_config('show_only_loginScreen'))
                             <ul class="container-items nav">
@@ -300,7 +300,7 @@
                         </a>
 
                         <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}" aria-label='Homepage'>
-                            <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}" alt="logo">
+                            <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}" alt="{{ trans('langLogo') }}">
                         </a>
                     </div>
 
@@ -436,8 +436,8 @@
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body px-4">
-                    <div class='col-12 d-flex justify-content-center align-items-center' aria-label='Logo'>
-                        <img src="{{ $logo_img_small }}" alt="Logo">
+                    <div class='col-12 d-flex justify-content-center align-items-center' aria-label="{{ trans('langLogo') }}">
+                        <img src="{{ $logo_img_small }}" alt="{{ trans('langLogo') }}">
                     </div>
                     @if(get_config('enable_search'))
                         <div class='col-12 mt-5'>
