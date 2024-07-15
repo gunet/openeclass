@@ -3851,6 +3851,8 @@ function show_student_assignment($id) {
         $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
         $langPendingPeerSubmissions;
 
+    $_SESSION['has_unlocked'] = array();
+
     $cdate = date('Y-m-d H:i:s');
     $user_group_info = user_group_info($uid, $course_id);
     if (!empty($user_group_info)) {
@@ -3875,8 +3877,10 @@ function show_student_assignment($id) {
                                                     $course_id, $id, $uid);
 
     $count_of_assign = countSubmissions($id);
+    $_SESSION['has_unlocked'][$id] = true;
     if ($row) {
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
+            $_SESSION['has_unlocked'][$id] = false;
             Session::Messages($langWrongPassword, 'alert-warning');
             if (isset($unit)) {
                 redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
@@ -3915,7 +3919,6 @@ function show_student_assignment($id) {
            )
         ));
 
-        // assignment_details($id, $row);
         $user = Database::get()->querySingle("SELECT * FROM assignment_submit
             WHERE assignment_id = ?d AND uid = ?d
             ORDER BY id LIMIT 1", $id, $uid);
@@ -6018,6 +6021,10 @@ function send_file($id, $file_type) {
                 if ((!$info->active) or (date("Y-m-d H:i:s") < $info->submission_date)) {
                     return false;
                 }
+                // make sure that user entered password and has been accepted
+                if ($info->password_lock and (!isset($_SESSION['has_unlocked'][$id]) or !$_SESSION['has_unlocked'][$id])) {
+                    return false;
+                }
             }
             send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, $disposition, true);
         } elseif ($file_type == 2) { // download comments file
@@ -6407,7 +6414,6 @@ function max_grade_from_rubric($rubric_id) {
     global $course_id;
     $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $rubric_id, $course_id);
     $unserialized_scale_items = unserialize($rubric_data->scales);
-    //Session::Messages("<pre>".print_r($unserialized_scale_items,true)."</pre>");
     $max_grade = 0;
     $max_scale_item_value = 0;
     foreach ($unserialized_scale_items as $CritArrItems) {
@@ -6418,7 +6424,6 @@ function max_grade_from_rubric($rubric_id) {
         }
         $max_grade = $max_grade + $CritArrItems['crit_weight'] * $max_scale_item_value;
     }
-    //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
     return $max_grade/100;
 }
 
