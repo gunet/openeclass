@@ -3986,6 +3986,8 @@ function show_student_assignment($id) {
         $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
         $langPendingPeerSubmissions;
 
+    $_SESSION['has_unlocked'] = array();
+
     $cdate = date('Y-m-d H:i:s');
     $user_group_info = user_group_info($uid, $course_id);
     if (!empty($user_group_info)) {
@@ -4010,8 +4012,10 @@ function show_student_assignment($id) {
                                                     $course_id, $id, $uid);
 
     $count_of_assign = countSubmissions($id);
+    $_SESSION['has_unlocked'][$id] = true;
     if ($row) {
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
+            $_SESSION['has_unlocked'][$id] = false;
             Session::Messages($langWrongPassword, 'alert-warning');
             if (isset($unit)) {
                 redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
@@ -4053,7 +4057,6 @@ function show_student_assignment($id) {
            )
         ));
 
-        // assignment_details($id, $row);
         $user = Database::get()->querySingle("SELECT * FROM assignment_submit
             WHERE assignment_id = ?d AND uid = ?d
             ORDER BY id LIMIT 1", $id, $uid);
@@ -6254,6 +6257,10 @@ function send_file($id, $file_type) {
             }
             if (!$is_editor) { // don't show file to users if not active and before submission date
                 if ((!$info->active) or (date("Y-m-d H:i:s") < $info->submission_date)) {
+                    return false;
+                }
+                // make sure that user entered password and has been accepted
+                if ($info->password_lock and (!isset($_SESSION['has_unlocked'][$id]) or !$_SESSION['has_unlocked'][$id])) {
                     return false;
                 }
             }
