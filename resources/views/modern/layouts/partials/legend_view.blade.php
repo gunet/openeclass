@@ -42,21 +42,6 @@
                         </div>
                     @else
                         <div class='col-12 d-inline-flex'>
-                            @if ($course_code)
-                                <p>
-                                    {{ $toolName }}
-                                    @if ($pageName and ($pageName != $toolName))
-                                        - {{ $pageName }}
-                                    @endif
-                                </p>
-                            @else
-                                <h2>
-                                    {{ $toolName }}
-                                    @if ($pageName and ($pageName != $toolName))
-                                        - {{ $pageName }}
-                                    @endif
-                                </h2>
-                            @endif
                         </div>
                     @endif
                 @else
