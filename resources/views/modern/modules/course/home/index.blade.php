@@ -224,7 +224,7 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                 </div>
 
@@ -339,7 +339,7 @@
 
                         @if($course_info->view_type == 'units')
                             <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
-                                <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
+                                <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                     <h3>
                                         <div class='d-flex gap-2'>
                                             {{ trans('langCourseUnits') }}
@@ -496,7 +496,7 @@
                                                                 @foreach($course_sessions as $s)
                                                                     @if($s->start < $current_time && $s->finish > $current_time)
                                                                         <li>
-                                                                            <a class="link-color TextBold" 
+                                                                            <a class="link-color TextBold"
                                                                                 href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
                                                                                 {{ $s->title }}
                                                                             </a>
@@ -530,7 +530,7 @@
                                                             <ul>
                                                                 <li>
                                                                     @if($next_session)
-                                                                        <a class="link-color TextBold" 
+                                                                        <a class="link-color TextBold"
                                                                             href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $next_session->id }}">
                                                                             {{ $next_session->title }}
                                                                         </a>
@@ -551,7 +551,7 @@
                                                                 @foreach($course_sessions as $s)
                                                                     @if($s->start > $current_time)
                                                                         <li>
-                                                                            <a class="link-color TextBold" 
+                                                                            <a class="link-color TextBold"
                                                                                 href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
                                                                                 {{ $s->title }}
                                                                             </a>
@@ -575,7 +575,7 @@
                                                                 @foreach($course_sessions as $s)
                                                                     @if($s->finish < $current_time)
                                                                         <li>
-                                                                            <a class="link-color TextBold" 
+                                                                            <a class="link-color TextBold"
                                                                                 href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $s->id }}">
                                                                                 {{ $s->title }}
                                                                             </a>
