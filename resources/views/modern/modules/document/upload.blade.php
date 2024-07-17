@@ -3,8 +3,8 @@
 @section('content')
 
     <div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+        <div class='{{ $container }} main-container'>
+            <div class="row m-auto">
 
                 @include('layouts.partials.left_menu')
 
@@ -25,35 +25,34 @@
 
                         @include('layouts.partials.legend_view')
 
-                        {!! $backButton !!}
-
-                        @include('layouts.partials.show_alert') 
+                        @include('layouts.partials.show_alert')
 
                         @if ($can_upload)
 
-                                <div class='col-12'>
-                                    <div class='form-wrapper form-edit p-3 mt-2 rounded'>
-
+                            <div class='d-lg-flex gap-4'>
+                                <div class='flex-grow-1'>
+                                    <div class='form-wrapper form-edit rounded'>
                                         <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post' enctype='multipart/form-data'>
                                             <input type='hidden' name='uploadPath' value='{{ $uploadPath }}'>
-                                            @if ($externalFile)
+                                            {!! $group_hidden_input !!}
+                                            @if (isset($_GET['ext']))
                                                 <input type='hidden' name='ext' value='true'>
                                             @endif
                                             <div class='form-group'>
                                                 @if ($pendingCloudUpload)
-                                                    <label for='fileCloudName' class='col-sm-6 control-label-notes'>{{ trans('langCloudFile') }}:</label>
-                                                    <div class='col-sm-12'>
+                                                    <label for='fileCloudName' class='col-12 control-label-notes'>{{ trans('langCloudFile') }}:</label>
+                                                    <div class='col-12'>
                                                         <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='{{ $pendingCloudUpload }}'>
                                                         <input type='text' class='form-control' name='fileCloudName' value='{{ CloudFile::fromJSON($pendingCloudUpload)->name() }}' readonly>
                                                     </div>
-                                                @elseif ($externalFile)
-                                                    <label for='fileURL' class='col-sm-6 control-label-notes'>{{ trans('langExternalFileInfo') }}:</label>
-                                                    <div class='col-sm-12'>
+                                                @elseif (isset($_GET['ext']))
+                                                    <label for='fileURL' class='col-12 control-label-notes'>{{ trans('langExternalFileInfo') }}:</label>
+                                                    <div class='col-12'>
                                                         <input type='text' class='form-control' id='fileURL' name='fileURL'>
                                                     </div>
                                                 @else
-                                                    <label for='userFile' class='col-sm-6 control-label-notes'>{{ trans('langPathUploadFile') }}:</label>
-                                                    <div class='col-sm-12'>
+                                                    <label for='userFile' class='control-label-notes me-2 mt-1'>{{ trans('langPathUploadFile') }}:</label>
+                                                    <div class='col-12'>
                                                         {!! fileSizeHidenInput() !!}
                                                         {!! CloudDriveManager::renderAsButtons() !!}
                                                         <input type='file' id='userFile' name='userFile'>
@@ -62,93 +61,30 @@
                                             </div>
                                             <div class="row p-2"></div>
 
-                                            <div class='form-group'>
-                                                <label for='inputFileTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' id='inputFileTitle' name='file_title'>
+                                            <div class='form-group mt-4'>
+                                                <label for='inputFileTitle' class='col-12 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                                <div class='col-12'>
+                                                    <input type='text' class='form-control' id='inputFileTitle' placeholder='{{ trans('langTitle') }}' name='file_title'>
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <label for='inputFileComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' id='inputFileComment' name='file_comment'>
+                                            <div class='form-group mt-4'>
+                                                <label for='inputFileComment' class='col-12 control-label-notes'>{{ trans('langComment') }}:</label>
+                                                <div class='col-12'>
+                                                    <input type='text' class='form-control' id='inputFileComment' placeholder='{{ trans('langComment') }}' name='file_comment'>
                                                 </div>
                                             </div>
+                                            <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
 
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <label for='inputFileCategory' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
-                                                <div class='col-sm-12'>
-                                                <select class='form-select' name='file_category'>
-                                                    <option selected value='0'>{{ trans('langCategoryOther') }}</option>
-                                                    <option value='1'>{{ trans('langExercise') }}</option>
-                                                    <option value='2'>{{ trans('langCategoryLecture') }}</option>
-                                                    <option value='3'>{{ trans('langCategoryEssay') }}</option>
-                                                    <option value='4'>{{ trans('langDescription') }}</option>
-                                                    <option value='5'>{{ trans('langCategoryExample') }}</option>
-                                                    <option value='6'>{{ trans('langCategoryTheory') }}</option>
-                                                </select>
-                                                </div>
-
-                                                <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
-                                            </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <label for='inputFileSubject' class='col-sm-6 control-label-notes'>{{ trans('langSubject') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' id='inputFileSubject' name='file_subject'>
-                                                </div>
-                                            </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <label for='inputFileDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' id='inputFileDescription' name='file_description'>
-                                                </div>
-                                            </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <label for='inputFileAuthor' class='col-sm-6 control-label-notes'>{{ trans('langAuthor') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' id='inputFileAuthor' name='file_author'>
-                                                </div>
-                                            </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <input type='hidden' name='file_date' value='' size='40'>
-                                                <input type='hidden' name='file_format' value='' size='40'>
-
-                                                <label for='inputFileLanguage' class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    {!! selection($languages, 'file_language', $language) !!}
-                                                </div>
-                                            </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
+                                            <div class='form-group mt-4'>
                                                 <label for='inputFileCopyright' class='col-sm-6 control-label-notes'>{{ trans('langCopyrighted') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    {!! selection($copyrightTitles, 'file_copyrighted') !!}
+                                                <div class='col-12'>
+                                                    {!! selection($license_title, 'file_copyrighted'); !!}
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>
-
-                                            @unless ($externalFile)
-                                                <div class='form-group'>
+                                            @unless (isset($_GET['ext']))
+                                                <div class='form-group mt-4'>
                                                     <div class='col-sm-offset-2 col-sm-10'>
                                                         <div class='checkbox'>
                                                             <label class='label-container'>
@@ -161,50 +97,52 @@
                                                 </div>
                                             @endunless
 
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <div class='col-sm-offset-2 col-sm-12'>
-                                                    <div class='checkbox'>
-                                                         <label class='label-container'>
-                                                            <input type='checkbox' name='replace' value='1'>
-                                                            <span class='checkmark'></span>
-                                                            {{ trans('langReplaceSameName') }}
-                                                        </label>
+                                            @if ($can_upload_replacement)
+                                                <div class='form-group mt-3'>
+                                                    <div class='col-sm-offset-2 col-sm-12'>
+                                                        <div class='checkbox'>
+                                                             <label class='label-container'>
+                                                                <input type='checkbox' name='replace' value='1'>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langReplaceSameName') }}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="row p-2"></div>
+                                           @endif
 
                                             <div class='row'>
-                                                <div class='infotext col-sm-offset-2 col-sm-12 margin-bottom-fat'>{{ trans('langNotRequired') }}
-                                                    {{ trans('langMaxFileSize') }}
+                                                <div class='help-block'>
+                                                    {{ trans('langNotRequired') }}
+                                                </div>
+                                                <div class='help-block'>{{ trans('langMaxFileSize') }}
                                                     {{ ini_get('upload_max_filesize') }}
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <div class='col-xs-offset-2 col-xs-12'>
-                                                    <button class='btn btn-primary' type='submit'>{{ trans('langUpload') }}</button>
-                                                    <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                                </div>
+                                            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                                                <button class='btn submitAdminBtn' type='submit'>{{ trans('langUpload') }}</button>
+                                                <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                             </div>
 
                                         </form>
+                                        {!! generate_csrf_token_form_field() !!}
                                     </div>
                                 </div>
 
+                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                                    <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
+                                </div>
+                            </div>
                         @else
-                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNotAllowed') }}</span></div>
+                            <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNotAllowed') }}</span>
+                            </div>
                         @endif
                     </div>
                 </div>
             </div>
-
-    </div>
+        </div>
     </div>
 @endsection
 

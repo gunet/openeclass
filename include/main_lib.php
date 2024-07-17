@@ -1189,7 +1189,7 @@ function is_module_disable($module_id) {
         $q = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
         if ($q) {
             $is_disabled = true;
-        } 
+        }
     }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration')){
         $q1 = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
         $q2 = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
@@ -1200,7 +1200,7 @@ function is_module_disable($module_id) {
         $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
         if ($q) {
             $is_disabled = true;
-        } 
+        }
     }
 
     return $is_disabled;
@@ -3321,28 +3321,31 @@ function faq_exist() {
 /**
  * Initialize copyright/license global arrays
  */
-function copyright_info($cid, $noImg = 1) {
+function copyright_info($id, $noImg = 1, $type = 'course'): string
+{
 
     global $language, $license, $langCopyrightedNotFree;
 
     $lang = langname_to_code($language);
     $link = '';
+    if ($type == 'documents') {
+        $lic = Database::get()->querySingle("SELECT copyrighted FROM document WHERE id = ?d", $id)->copyrighted;
+    } else {
+        $lic = Database::get()->querySingle("SELECT course_license FROM course WHERE id = ?d", $id)->course_license;
+    }
 
-    $lic = Database::get()->querySingle("SELECT course_license FROM course WHERE id = ?d", $cid)->course_license;
     if ($noImg == 1) {
-        if (($lic == 0) or ($lic >= 10)) {
-            $link = "<a data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($langCopyrightedNotFree) . "'>
-                        <span class='fa-regular fa-copyright fa-lg'></span>
-                    </a>";
-        } else {
+        if (in_array($lic, ['1', '2', '3', '4', '5', '6'])) {
             if ($language != 'en') {
                 $link_suffix = 'deed.' . $lang;
             } else {
                 $link_suffix = '';
             }
             $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='(opens in a new tab)'>
-                        <span class='fa-brands fa-creative-commons fa-lg'></span>
+                        <span class='" . $license[$lic]['image'] . "'></span>
                     </a>";
+        } else if ($lic == 10) {
+            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "'></span>";
         }
     }
     return $link;

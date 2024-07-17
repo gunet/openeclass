@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 
-$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+$is_in_tinymce = isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce';
 
 if (!isset($require_current_course)) {
     $require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
@@ -55,8 +55,6 @@ $require_help = true;
 $helpTopic = 'documents';
 
 doc_init();
-
-
 
 if ($is_editor) {
 
@@ -182,14 +180,9 @@ if ($is_editor) {
                     }
                 }
             }
-
-
         }
-
         redirect_to_home_page('modules/document/index.php?course=' . $course_code);
-
     }
-
 }
 
 
@@ -222,8 +215,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             subject = '',
             description = '',
             author = ?s,
-            format = ?s,
-            language = ?s,
+            format = ?s,            
             copyrighted = 0,
             editable = 0,
             lock_user_id = ?d",
@@ -378,15 +370,14 @@ if (isset($_GET['mindmap'])) {
             subject = '',
             description = '',
             author = ?s,
-            format = ?s,
-            language = ?s,
+            format = ?s,            
             copyrighted = 0,
             editable = 0,
             lock_user_id = ?d",
             $course_id, $subsystem, $subsystem_id, $file_path,
             $filename, $title, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
-            $language, $uid);
+            $uid);
             Session::flash('message',$langMindMapSaved);
             Session::flash('alert-class', 'alert-success');
     }
@@ -435,8 +426,8 @@ if (isset($_POST['imgBase64'])) {
             lock_user_id = ?d",
             $course_id, $subsystem, $subsystem_id, $file_path,
             $filename, $shootname, $file_creator,
-            $file_date, $file_date, $file_creator, $file_format,
-            $language, $uid);
+            $file_date, $file_date, $file_creator, $file_format, $language,
+            $uid);
     }
     exit;
 }
@@ -662,7 +653,7 @@ if ($can_upload or $user_upload) {
         }
         require_once 'modules/admin/extconfig/externals.php';
         $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled() == true ){
+        if($connector->isEnabled()) {
             $output=$connector->check($basedir . $file_path);
             if($output->status==$output::STATUS_INFECTED){
                 AntivirusApp::block($output->output);
@@ -681,22 +672,17 @@ if ($can_upload or $user_upload) {
                                         filename = ?s,
                                         visible = ?d,
                                         comment = ?s,
-                                        category = ?d,
                                         title = ?s,
-                                        creator = ?s,
                                         date = ?t,
                                         date_modified = ?t,
-                                        subject = ?s,
-                                        description = ?s,
-                                        author = ?s,
                                         format = ?s,
                                         language = ?s,
                                         copyrighted = ?d,
                                         lock_user_id = ?d"
                             , $course_id, $subsystem, $subsystem_id, $file_path, $extra_path, $fileName, $vis
-                            , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_creator']
-                            , $file_date, $file_date, $_POST['file_subject'], $_POST['file_description'], $_POST['file_author']
-                            , $file_format, $_POST['file_language'], $_POST['file_copyrighted'], $uid)->lastInsertID;
+                            , $_POST['file_comment'], $_POST['file_title']
+                            , $file_date, $file_date
+                            , $file_format, $language, $_POST['file_copyrighted'], $uid)->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
@@ -1033,21 +1019,15 @@ if ($can_upload or $user_upload) {
                 Database::get()->query("UPDATE document SET comment = ?s
                      WHERE $group_sql AND path = ?s", $_POST['file_comment'], $commentPath);
             } else {
-                $file_language = $session->validate_language_code($_POST['file_language'], $language);
                 Database::get()->query("UPDATE document SET
                                                 comment = ?s,
-                                                category = ?d,
                                                 title = ?s,
-                                                date_modified = NOW(),
-                                                subject = ?s,
-                                                description = ?s,
-                                                author = ?s,
-                                                language = ?s,
+                                                date_modified = " . DBHelper::timeAfter() . ",
                                                 copyrighted = ?d
                                         WHERE $group_sql AND
                                               path = ?s"
-                    , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_subject']
-                    , $_POST['file_description'], $_POST['file_author'], $file_language, $_POST['file_copyrighted'], $commentPath);
+                    , $_POST['file_comment'], $_POST['file_title']
+                    , $_POST['file_copyrighted'], $commentPath);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
@@ -1079,10 +1059,9 @@ if ($can_upload or $user_upload) {
             Database::get()->query("UPDATE document SET
                                 creator = ?s,
                                 date_modified = NOW(),
-                                format = ?s,
-                                language = ?s
+                                format = ?s,                                
                                 WHERE $group_sql AND path = ?s",
-                "$_SESSION[givenname] $_SESSION[surname]", $file_format, $_POST['meta_language'], $metadataPath);
+                "$_SESSION[givenname] $_SESSION[surname]", $file_format, $metadataPath);
         } else {
             Database::get()->query("INSERT INTO document SET
                                 course_id = ?d ,
@@ -1099,7 +1078,7 @@ if ($can_upload or $user_upload) {
                                 lock_user_id = ?d",
                 $course_id, $subsystem, $subsystem_id, $metadataPath, $oldFilename,
                 "$_SESSION[givenname] $_SESSION[surname]", $xml_date, $xml_date,
-                $file_format, $_POST['meta_language'], $uid);
+                $file_format, $language, $uid);
         }
 
         Session::flash('message',$langMetadataMod);
@@ -1186,7 +1165,7 @@ if ($can_upload or $user_upload) {
         }
     }
 
-    // Add comment form
+    // Display comment form
     if (isset($_GET['comment'])) {
         $comment = getDirectReference($_GET['comment']);
         // Retrieve the old comment and metadata
@@ -1196,21 +1175,25 @@ if ($can_upload or $user_upload) {
             $curDirPath = my_dirname($comment);
             $backUrl = documentBackLink($curDirPath);
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
-
-            copyright_info_init();
+            foreach ($license as $license_selection) {
+                $license_title[] = $license_selection['title'];
+            }
 
             $dialogData = array(
+                'backUrl' => $backUrl,
+                'base_url' => $base_url,
                 'file' => $row,
                 'is_dir' => $row->format == '.dir',
-                'languages' => $fileLanguageNames,
-                'categories' => $fileCategoryNames,
-                'copyrightTitles' => $copyright_titles);
+                'selected_license_title' => $row->copyrighted,
+                'license_title' => $license_title
+            );
+            view('modules.document.comment', $dialogData);
         } else {
-            Session::flash('message',$langFileNotFound);
+            Session::flash('message', $langFileNotFound);
             Session::flash('alert-class', 'alert-danger');
             view('layouts.default', $data);
-            exit;
         }
+        exit;
     }
 
     // Display form to modify metadata
@@ -1515,9 +1498,6 @@ foreach ($result as $row) {
         $copyid = $row->copyrighted;
         if ($copyid and $copyid != 2) {
             $info['copyrighted'] = true;
-            $info['copyright_icon'] = ($copyid == 1) ? 'fa-copyright' : 'fa-cc';
-            $info['copyright_title'] = $copyright_titles[$copyid];
-            $info['copyright_link'] = $copyright_links[$copyid];
         }
         $files[] = (object) $info;
     }

@@ -147,7 +147,7 @@
 
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     @if ($dialogBox)
                         <div class='col-12'>
@@ -323,16 +323,14 @@
                                                         @endif
                                                     @endif
                                                     @if ($file->copyrighted)
-                                                        {!! icon($file->copyright_icon, $file->copyright_title, $file->copyright_link,
-                                                            'target="_blank" style="color:#555555;"') !!}
+                                                        <span class="p-1">{!! copyright_info($file->id, 1, 'documents') !!}</span>
                                                     @endif
                                                     @if ($file->comment)
-                                                        <br>
-                                                        <span class='comment text-muted'>
+                                                        <div class='comment text-muted mt-1'>
                                                             <small>
                                                                 {!! nl2br(e($file->comment)) !!}
                                                             </small>
-                                                        </span>
+                                                        </div>
                                                     @endif
 
                                                     @if($file->updated_message)

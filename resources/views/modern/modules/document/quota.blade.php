@@ -34,9 +34,7 @@
 
                         @include('layouts.partials.legend_view')
 
-                        {!! $backButton !!}
-
-                        @include('layouts.partials.show_alert') 
+                        @include('layouts.partials.show_alert')
 
                         <div class='col-12'>
                             <div class='card panelCard px-lg-4 py-lg-3 h-100'>
@@ -70,8 +68,7 @@
                 </div>
             </div>
         </div>
-
-</div>
+    </div>
 </div>
 @endsection
 
