@@ -1207,7 +1207,6 @@ if ($can_upload or $user_upload) {
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             $oldFilename = q($row->filename);
             $real_filename = $basedir . str_replace('/..', '', q($metadata));
-            // $dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
             $metaDataBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
         } else {
             Session::flash('message',$langFileNotFound);

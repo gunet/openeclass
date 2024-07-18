@@ -58,8 +58,6 @@ if (defined('COMMON_DOCUMENTS')) {
 
 load_js('tools.js');
 
-$pageName = $langCreateDoc;
-
 $uploadPath = $editPath = null;
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);

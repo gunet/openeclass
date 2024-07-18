@@ -228,15 +228,10 @@
                                                                 <input type='hidden' id='source_path' name='source_path' value=''>
                                                             </div>
 
-
-
                                                         </form>
                                                     </div>
 
                                                 </div>
-                                            </div>
-                                            <div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>
-                                                <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
                                             </div>
                                         </div>
                                     </div>

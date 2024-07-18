@@ -54,8 +54,10 @@ if (defined('COMMON_DOCUMENTS')) {
         redirect_to_home_page();
     }
     $toolName = $langMyDocs;
+} else if (isset($_GET['ext'])) {
+    $pageName = $langExternalFile;
 } else {
-    $toolName = $langDownloadFile;
+    $pageName = $langUpload;
 }
 
 enableCheckFileSize();
@@ -73,7 +75,7 @@ if (isset($_GET['uploadPath'])) {
 $backUrl = documentBackLink($uploadPath);
 
 if ($can_upload) {
-    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
+    $navigation[] = array('url' => $backUrl, 'name' => $langDoc);
     $pendingCloudUpload = CloudDriveManager::getFileUploadPending();
 }
 
