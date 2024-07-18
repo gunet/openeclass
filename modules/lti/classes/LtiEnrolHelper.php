@@ -216,7 +216,7 @@ class LtiEnrolHelper {
      */
     public static function get_icon(stdClass $tool): string {
         global $urlServer;
-        return $urlServer . "template/favicon/favicon.ico";
+        return $urlServer . "template/modern/favicon/favicon.ico";
     }
 
     /**
