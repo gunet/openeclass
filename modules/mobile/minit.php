@@ -64,7 +64,8 @@ if (isset($require_mcourse) && $require_mcourse) {
         }
     }
 }
-require_once ('../../include/init.php');
+require_once '../../include/init.php';
+require_once 'include/main_lib.php';
 // reset the header because init also sets the header
 header('Content-Type: application/xml; charset=utf-8');
 

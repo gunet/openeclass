@@ -6381,66 +6381,6 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
     return selection($session->native_language_names, $name, $default_langcode, $onchange_js);
 }
 
-/*
- * Function module_path
- *
- * Returns a canonicalized form of the current request path to use in matching
- * the current module
- *
- */
-function module_path($path) {
-    global $urlAppend, $urlServer;
-
-    if (strpos($path, 'modules/units/insert.php') !== false) {
-        if (strpos($path, '&dir=') !== false) {
-            return 'document';
-        }
-    }
-    if (strpos($path, 'listreq.php') !== false) {
-        if (strpos($path, '?type=user') !== false) {
-            return 'listreq-user';
-        } else {
-            return 'listreq';
-        }
-    }
-
-    $original_path = $path;
-    $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
-    $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
-                        array('/', '/', ''), $path);
-    if (strpos($path, '/course_info/restore_course.php') !== false) {
-        return 'course_info/restore_course.php';
-    } elseif (strpos($path, '/info/') !== false) {
-        return preg_replace('|^.*(info/.*\.php)|', '\1', $path);
-    } elseif (strpos($path, '/admin/') !== false) {
-        $new_path = preg_replace('|^.*(/admin/.*)|', '\1', $path);
-        if ($new_path == '/admin/auth_process.php') {
-            return '/admin/auth.php';
-        } elseif ($new_path == '/admin/listusers.php' or $new_path == '/admin/edituser.php') {
-            return '/admin/search_user.php';
-        }
-        return $new_path;
-    } elseif (strpos($path, '/main/unreguser.php') !== false or
-              (strpos($path, '/main/profile') !== false and
-               strpos($path, 'personal_stats') === false)) {
-        return 'main/profile';
-    } elseif (strpos($path, '/main/') !== false) {
-        return preg_replace('|^.*(main/.*\.php)|', '\1', $path);
-    } elseif (preg_match('+/auth/(opencourses|listfaculte)\.php+', $path)) {
-        return '/auth/opencourses.php';
-    } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
-        return '/auth/registration.php';
-    } elseif (isset($GLOBALS['course_code']) and
-              strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
-        return 'course_home';
-    } elseif (strpos($path, '/lti_consumer/launch.php') !== false or
-              strpos($path, '/lti_consumer/load.php') !== false) {
-        $lti_path = str_replace(array($urlServer, $urlAppend, '&amp;'), array('/', '/', '&'), $original_path);
-        return $lti_path;
-    }
-    return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
-}
-
 function is_external_link($link) {
     global $urlServer;
     static $host, $phpMyAdminURL, $phpSysInfoURL;
