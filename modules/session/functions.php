@@ -529,13 +529,64 @@ function show_sessionResource($info) {
             $html .= show_session_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'passage':
-                $html .= show_session_passage($info->title, $info->id, $info->passage, $info->visible);
-                break;
+            $html .= show_session_passage($info->title, $info->id, $info->passage, $info->visible);
+            break;
+        case 'link':
+            $html .= show_session_link($info->title, $info->comments, $info->id, $info->res_id,1);
+            break;
         default:
             $html .= $langUnknownResType;
     }
    
     return $html;
+}
+
+
+/**
+ * @brief display resource link
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $link_id
+ * @param type $visibility
+ * @return string
+ */
+function show_session_link($title, $comments, $resource_id, $link_id, $visibility) {
+
+    global $is_editor, $langWasDeleted, $course_id;
+
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
+    $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
+    if (!$l) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-xmark link-delete');
+            $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+        }
+    } else {
+        if ($title == '') {
+            $title = q($l->url);
+        } else {
+            $title = q($title);
+        }
+        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='(opens in a new tab)'>";
+        $exlink = $link . "$title</a>";
+        $imagelink = icon('fa-link');
+    }
+
+    if (!empty($comments)) {
+        $comment_box = '<br />' . standard_text_escape($comments);
+    } else {
+        $comment_box = '';
+    }
+
+    return "
+        <tr$class_vis data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$exlink $comment_box</td>
+          <td></td>" . session_actions('link', $resource_id, $visibility) . "
+        </tr>";
 }
 
 

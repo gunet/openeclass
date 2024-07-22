@@ -1530,7 +1530,6 @@ $langAddSessionConsultingCompleted = "Registration of counseling completion sess
 $langCompletedConsultingInfo = "Sessions for which <strong>session completion</strong> is enabled are shown below. </br>
  Choose which of these will correspond to the completion of a user's consultation.</br>
  For the selected session, each user's completion percentage will be displayed in detail.";
-$langTableCompletedConsulting = "List of counseling completion sessions";
 $langCompletedSessions = "Completed session <i class='fa-solid fa-check fa-lg Success-200-cl ps-2'></i>";
 $langNotCompletedSession = "Incomplete session";
 $langResponsibleOfSession = "Registered Counselors - Session Manager";
@@ -1613,11 +1612,11 @@ $langUserReferences = "User references";
 $langUserHasCompleted = "Has completed";
 $langNotUploadedDeliverable = "The user has not submitted any deliverables";
 $langNoCommentsAvailable = "There are no comments";
-$langTableCompletedConsulting = "Table of completion of counseling actions";
+$langTableCompletedConsulting = "User reports";
 $langShowOnlySessionWithCompletionEnable = "The user table lists all sessions that have <strong>session completion</strong> enabled";
 $langCourseIsNotCollaborative = "Unauthorized action. Collaboration is not in the form of a session";
 $langSessionsTable = "Sessions table";
-$langSummaryScheduledSessions = "Summary session schedule";
+$langSummaryScheduledSessions = "Sessions reports";
 $langNoSessionsExist = "There are no sessions";
 $langSessionHasCompletionResources = "The session has completion resources";
 $langSessionInProgress = "In progress";

@@ -66,6 +66,12 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
+                            array('title' => trans('langSelect') . ' ' . trans('langInsertLink'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=link',
+                                'icon' => 'fa-solid fa-link',
+                                'level' => 'secondary',
+                                'show' => (!is_module_disable(MODULE_ID_LINKS) && $is_consultant)
+                            ),
                             array('title' => trans('langInsertPassage'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=passage',
                                 'icon' => 'fa-regular fa-keyboard',

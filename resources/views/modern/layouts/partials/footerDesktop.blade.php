@@ -55,13 +55,13 @@
                 <a class="copyright" href='{{$urlAppend}}info/copyright.php'>Copyright © {{ date('Y') }} All rights reserved</a>
                 @if(get_config('enable_social_sharing_links'))
                     <div class='d-flex gap-3 justify-content-end'>
-                        <a class='a_tools_site_footer' href="https://www.facebook.com/" target="_blank" aria-label="Facebook (opens new window)">
+                        <a class='a_tools_site_footer' href="{!! !empty(get_config('link_fb')) ? get_config('link_fb') : 'https://www.facebook.com/' !!}" target="_blank" aria-label="Facebook (opens new window)">
                             <i class="fab fa-facebook-f social-icon-tool"></i>
                         </a>
-                        <a class='a_tools_site_footer' href="https://twitter.com/" target="_blank" aria-label="Twitter (opens new window)">
+                        <a class='a_tools_site_footer' href="{!! !empty(get_config('link_tw')) ? get_config('link_tw') : 'https://twitter.com/' !!}" target="_blank" aria-label="Twitter (opens new window)">
                             <i class="fab fa-twitter social-icon-tool"></i>
                         </a>
-                        <a class='a_tools_site_footer' href="https://linkedin.com/" target="_blank" aria-label="Linkedin (opens new window)">
+                        <a class='a_tools_site_footer' href="{!! !empty(get_config('link_ln')) ? get_config('link_ln') : 'https://linkedin.com/' !!}" target="_blank" aria-label="Linkedin (opens new window)">
                             <i class="fab fa-linkedin-in social-icon-tool"></i>
                         </a>
                     </div>
@@ -94,9 +94,9 @@
                 <div class='d-flex justify-content-start align-items-center'>
                     <a class="copyright px-2" href='{{ $urlAppend }}info/copyright.php'>Copyright © {{ date('Y') }} All rights reserved</a>
                     @if(get_config('enable_social_sharing_links'))
-                        <a class="a_tools_site_footer px-2" href="https://www.facebook.com/" target="_blank" aria-label="Facebook (opens new window)"><i class="fab fa-facebook-f social-icon-tool"></i></a>
-                        <a class="a_tools_site_footer px-2" href="https://twitter.com/" target="_blank" aria-label="Twitter (opens new window)"><i class="fab fa-twitter social-icon-tool"></i></a>
-                        <a class="a_tools_site_footer px-2" href="https://linkedin.com/" target="_blank" aria-label="Linkedin (opens new window)"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
+                        <a class="a_tools_site_footer px-2" href="{!! !empty(get_config('link_fb')) ? get_config('link_fb') : 'https://www.facebook.com/' !!}" target="_blank" aria-label="Facebook (opens new window)"><i class="fab fa-facebook-f social-icon-tool"></i></a>
+                        <a class="a_tools_site_footer px-2" href="{!! !empty(get_config('link_tw')) ? get_config('link_tw') : 'https://twitter.com/' !!}" target="_blank" aria-label="Twitter (opens new window)"><i class="fab fa-twitter social-icon-tool"></i></a>
+                        <a class="a_tools_site_footer px-2" href="{!! !empty(get_config('link_ln')) ? get_config('link_ln') : 'https://linkedin.com/' !!}" target="_blank" aria-label="Linkedin (opens new window)"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
                     @endif
                 </div>
             </nav>
@@ -155,13 +155,13 @@
                 <a class="copyright" href='{{$urlAppend}}info/copyright.php'>Copyright © {{ date('Y') }} All rights reserved</a>
                 @if(get_config('enable_social_sharing_links'))
                     <div class='d-flex gap-3 justify-content-end'>
-                        <a class='a_tools_site_footer' href="https://www.facebook.com/" target="_blank" aria-label="Facebook (opens new window)">
+                        <a class='a_tools_site_footer' href="{!! !empty(get_config('link_fb')) ? get_config('link_fb') : 'https://www.facebook.com/' !!}" target="_blank" aria-label="Facebook (opens new window)">
                             <i class="fab fa-facebook-f social-icon-tool"></i>
                         </a>
-                        <a class='a_tools_site_footer' href="https://twitter.com/" target="_blank" aria-label="Twitter (opens new window)">
+                        <a class='a_tools_site_footer' href="{!! !empty(get_config('link_tw')) ? get_config('link_tw') : 'https://twitter.com/' !!}" target="_blank" aria-label="Twitter (opens new window)">
                             <i class="fab fa-twitter social-icon-tool"></i>
                         </a>
-                        <a class='a_tools_site_footer' href="https://linkedin.com/" target="_blank" aria-label="Linkedin (opens new window)">
+                        <a class='a_tools_site_footer' href="{!! !empty(get_config('link_ln')) ? get_config('link_ln') : 'https://linkedin.com/' !!}" target="_blank" aria-label="Linkedin (opens new window)">
                             <i class="fab fa-linkedin-in social-icon-tool"></i>
                         </a>
                     </div>

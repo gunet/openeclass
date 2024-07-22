@@ -29,6 +29,9 @@ $pageName = $langAdminManageFooter;
 if(isset($_POST['submit'])){
 
     set_config('footer_intro', purify($_POST['footer_intro']));
+    set_config('link_fb', $_POST['link_fb']);
+    set_config('link_tw', $_POST['link_tw']);
+    set_config('link_ln', $_POST['link_ln']);
 
     $config_vars = [
         'activate_privacy_policy_text' => true,
@@ -36,8 +39,9 @@ if(isset($_POST['submit'])){
         'dont_display_courses_menu' => true,
         'dont_display_about_menu' => true,
         'dont_display_contact_menu' => true,
-        'dont_display_manual_menu' => true
-        ];
+        'dont_display_manual_menu' => true,
+        'enable_social_sharing_links' => true
+    ];
 
     register_posted_variables($config_vars, 'all', 'intval');
 
@@ -53,5 +57,8 @@ if(isset($_POST['submit'])){
 
 
 $data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('footer_intro'));
+$data['link_fb'] = get_config('link_fb') ?? '';
+$data['link_tw'] = get_config('link_tw') ?? '';
+$data['link_ln'] = get_config('link_ln') ?? '';
 
 view('admin.other.manage_footer', $data);

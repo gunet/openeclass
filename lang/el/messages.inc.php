@@ -6853,3 +6853,6 @@ $langMyUploadedFiles = "Τα παραδοτέα μου";
 $langViewScreensThemes = "Προβολή θεμάτων";
 $langWhatTypeOfCourse = "Διαθέσιμος τύπος μαθήματος";
 $langPageCollaboration = "Σελίδα συνεργασίας";
+$langLinkFb = "Σύνδεσμος Facebook";
+$langLinkTw = "Σύνδεσμος Twitter";
+$langLinkLn = "Σύνδεσμος LinkedIn";

@@ -6383,3 +6383,6 @@ $langMyUploadedFiles = "My deliverables";
 $langViewScreensThemes = "View themes";
 $langWhatTypeOfCourse = "Type of course";
 $langPageCollaboration = "Collaboration page";
+$langLinkFb = "Facebook link";
+$langLinkTw = "Twitter link";
+$langLinkLn = "LinkedIn link";

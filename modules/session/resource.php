@@ -44,6 +44,7 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'insert_doc.php';
 require_once 'insert_work.php';
 require_once 'insert_tc.php';
+require_once 'insert_link.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
@@ -80,6 +81,8 @@ if(isset($_POST['submit_doc'])){
     upload_session_doc($sessionID);
 }elseif(isset($_POST['submit_passage'])){
     insert_session_passage($sessionID);
+}elseif(isset($_POST['submit_link'])){
+    insert_session_link($sessionID);
 }
 
 $type_resource = '';
@@ -105,6 +108,8 @@ if(isset($_GET['type'])){
         }
     }elseif($_GET['type'] == 'passage'){
         $type_resource = passage_insertion($sessionID);
+    }elseif($_GET['type'] == 'link'){
+        $type_resource = list_session_links($sessionID,$course_id);
     }
 }
 $data['type_resource'] = $type_resource;

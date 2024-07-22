@@ -17,14 +17,14 @@
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
 
 
-                                <div class='form-group mt-4'>
+                                <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langText') }}</label>
                                     <div class='col-sm-12'>
                                         {!! $footer_intro !!}
                                     </div>
                                 </div>
 
-                                <div class='col-sm-12 mt-4'>
+                                <div class='form-group mt-4'>
                                     <div class='checkbox'>
                                         <label class='label-container'>
                                             <input type='checkbox' name='dont_display_contact_menu' value='1' {!! get_config('dont_display_contact_menu') ? 'checked' : '' !!}>
@@ -62,6 +62,28 @@
                                         </label>
                                     </div>
 
+                                    <div class='checkbox'>
+                                        <label class='label-container'>
+                                            <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {!! get_config('enable_social_sharing_links') ? 'checked' : '' !!}>
+                                            <span class='checkmark'></span>
+                                            {{ trans('langEnableSocialSharingLiks') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class='form-group mt-4'>
+                                    <label for='link_fb' class='col-sm-12 control-label-notes'>{{ trans('langLinkFb') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input type='url' name='link_fb' id='link_fb' class='form-control' value="{!! $link_fb !!}">
+                                    </div>
+                                    <label for='link_tw' class='col-sm-12 control-label-notes mt-3'>{{ trans('langLinkTw') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input type='url' name='link_tw' id='link_tw' class='form-control' value="{!! $link_tw !!}">
+                                    </div>
+                                    <label for='link_ln' class='col-sm-12 control-label-notes mt-3'>{{ trans('langLinkLn') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input type='url' name='link_ln' id='link_ln' class='form-control' value="{!! $link_ln !!}">
+                                    </div>
                                 </div>
 
 
