@@ -84,7 +84,7 @@
 
                                             <div class='form-group mt-5'>
 
-                                                <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                                                <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                                                     <button class='btn submitAdminBtn' type='submit'>{{ trans('langSave') }}</button>
                                                     <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                     {!! generate_csrf_token_form_field() !!}

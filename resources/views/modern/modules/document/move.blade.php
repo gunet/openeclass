@@ -20,7 +20,7 @@
                         </div>
                     </div>
 
-                    <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-4'>
+                    <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap mt-4'>
                         <button class='btn submitAdminBtn' type='submit'>{{ trans('langMove') }}</button>
                         <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                     </div>
@@ -28,5 +28,8 @@
                 {!! generate_csrf_token_form_field() !!}
             </form>
         </div>
+    </div>
+    <div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>
+        <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
     </div>
 </div>

@@ -15,7 +15,7 @@
 
 					<div class='form-group mt-4'>
 
-						<div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+						<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                             <button class='btn submitAdminBtn' type='submit'>{{ trans('langRename') }}</button>
                             <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
 						</div>

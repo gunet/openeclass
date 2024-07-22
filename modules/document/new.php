@@ -104,7 +104,7 @@ if ($editPath) {
     $data['pathValue'] = $uploadPath;
     $data['filename'] = '';
 }
-$data['rich_text_editor'] = rich_text_editor('file_content', 20, 40, $fileContent);
+$data['rich_text_editor'] = rich_text_editor('file_content', 5, 20, $fileContent);
 
 if (isset($_GET['ebook_id'])){
     $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
