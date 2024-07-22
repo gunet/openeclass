@@ -1,5 +1,24 @@
 @extends('layouts.default')
 
+@push('head_scripts')
+<script type='text/javascript'>
+
+    $(document).ready(function() {
+
+        $('.chooseFacultyImage').on('click', function () {
+            var id_img = this.id;
+            alert('{{ js_escape(trans('langImageSelected')) }}!');
+            document.getElementById('choose_from_list').value = id_img;
+            $('#FacultiesImagesModal').modal('hide');
+            document.getElementById('selectedImage').value = '{{ trans('langSelect') }}:' + id_img;
+        });
+
+    });
+
+</script>
+@endpush
+
+
 @section('content')
 
 <div class="col-12 main-section">
@@ -16,12 +35,12 @@
                         <div class='mt-4'></div>
                     @endif
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit border-0 px-0'>
 
-                            <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' onsubmit='return validateNodePickerForm();'>
+                            <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' enctype='multipart/form-data' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                                 <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
@@ -44,6 +63,45 @@
                                         </div>
                                     </div>
                                 @endforeach
+
+                                <div id='image_field' class='row form-group mt-4'>
+                                    <label for='faculty_image' class='col-12 control-label-notes'>{{ trans('langFacultyImage') }}</label>
+                                    <div class='col-12'>
+
+                                        @if (isset($faculty_image))
+                                            <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
+                                                <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/facultyimg/{{ $faculty_code }}/image/{{ $faculty_image }}' alt="Faculty image"> &nbsp;&nbsp;
+                                                <a class='btn deleteAdminBtn' href='{{$_SERVER['SCRIPT_NAME'] }}?action=edit&id={{ $id }}&delete_image=true&{!! generate_csrf_token_link_parameter() !!}'>
+                                                    {{ trans('langDelete') }}
+                                                </a>
+                                            </div>
+                                            <input type='hidden' name='faculty_image' value='{{ $faculty_image }}'>
+                                        @else
+                                            {!! fileSizeHidenInput() !!}
+                                            <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
+                                                <li class='nav-item' role='presentation'>
+                                                    <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'> {{ trans('langUpload') }}</button>
+                                                </li>
+                                                <li class='nav-item' role='presentation'>
+                                                    <button class='nav-link' id='tabs-selectImage-tab' data-bs-toggle='tab' data-bs-target='#tabs-selectImage' type='button' role='tab' aria-controls='tabs-selectImage' aria-selected='false'>{{ trans('langAddPicture') }}</button>
+                                                </li>
+                                            </ul>
+                                            <div class='tab-content mt-3' id='tabs-tabContent'>
+                                                <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
+                                                    <input type='file' name='faculty_image' id='faculty_image'>
+                                                </div>
+                                                <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
+                                                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#FacultiesImagesModal'>
+                                                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;{{ trans('langSelect') }}
+                                                    </button>
+                                                    <input type='hidden' id='choose_from_list' name='choose_from_list'>
+                                                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
                                 @foreach ($session->active_ui_languages as $key => $langcode)
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langNodeDescription') }}</label>
@@ -163,6 +221,23 @@
                                 </div>
                             </div>
                             </fieldset>
+
+                            <div class='modal fade' id='FacultiesImagesModal' tabindex='-1' aria-labelledby='FacultiesImagesModalLabel' aria-hidden='true'>
+                                <div class='modal-dialog modal-lg'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <div class='modal-title' id='FacultiesImagesModalLabel'>{{ trans('langFacultyImage') }}</div>
+                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                                {!! $image_content !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {!! generate_csrf_token_form_field() !!}
                             </form>
                         </div>

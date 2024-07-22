@@ -2296,6 +2296,7 @@ $langReturnToAddNode = "Επιστροφή στην προσθήκη";
 $langReturnToEditNode = "Επιστροφή στην επεξεργασία $langsOfFaculty";
 $langEmptyNodeSelect = "Παρακαλώ κάντε μια επιλογή από τη λίστα και μετά πατήστε Επιλογή";
 $langEmptyAddNode = "Παρακαλώ επιλέξτε $langFaculty και ξαναπροσπαθήστε";
+$langFacultyImage = "Φωτογραφία $langOfFaculty";
 
 /* * *************************************************************
  * grades.php

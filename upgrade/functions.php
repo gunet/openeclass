@@ -3078,7 +3078,7 @@ function upgrade_to_4_0($tbl_options): void {
                                 PRIMARY KEY (`id`)) $tbl_options");
     }
 
-    if (!DBHelper::tableexists('course_certificate_template')) {
+    if (!DBHelper::tableExists('course_certificate_template')) {
         Database::get()->query("CREATE TABLE `course_certificate_template` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `course_id` int(11) NOT NULL,
@@ -3091,7 +3091,13 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `certificate_template` ADD `all_courses` tinyint(1) NOT NULL DEFAULT 1");
     }
 
-    if (!DBHelper::tableexists('mod_session_completion')) {
+
+    if (!DBHelper::fieldExists('hierarchy', 'faculty_image')) {
+        Database::get()->query("ALTER TABLE hierarchy ADD faculty_image varchar(400) NULL");
+    }
+
+
+    if (!DBHelper::tableExists('mod_session_completion')) {
         Database::get()->query("CREATE TABLE `mod_session_completion` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `course_id` int(11) NOT NULL,
@@ -3128,7 +3134,7 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('mod_session', 'consent')) {
         Database::get()->query("ALTER TABLE mod_session ADD `consent` int(11) NOT NULL DEFAULT 1");
     }
-    
+
     if (!DBHelper::fieldExists('mod_session_users', 'is_accepted')) {
         Database::get()->query("ALTER TABLE mod_session_users ADD `is_accepted` int(11) NOT NULL DEFAULT 1");
     }
@@ -3442,7 +3448,7 @@ function refreshHierarchyProcedures() {
     Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
     Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
                     IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4), IN p_faculty_image VARCHAR(400))
                 LANGUAGE SQL
                 BEGIN
                     DECLARE lft, rgt INT(11);
@@ -3452,7 +3458,7 @@ function refreshHierarchyProcedures() {
 
                     CALL shift_right(parentlft, 2, 0);
 
-                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
+                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible, faculty_image) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible, p_faculty_image);
                 END");
 
 
@@ -3460,12 +3466,12 @@ function refreshHierarchyProcedures() {
     Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
                     IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
                     IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                    IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                    IN p_order_priority INT(11), IN p_visible TINYINT(4), IN p_faculty_image VARCHAR(400))
                 LANGUAGE SQL
                 BEGIN
                     UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
                         code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                        order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
+                        order_priority = p_order_priority, visible = p_visible, faculty_image = p_faculty_image WHERE id = p_id;
 
                     IF nodelft <> parentlft THEN
                         CALL move_nodes(nodelft, p_lft, p_rgt);

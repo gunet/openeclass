@@ -49,22 +49,23 @@ class Hierarchy {
      * @param  int    $allow_user     - Flag controlling if users are allowed to belong to this new node
      * @param  int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
      * @param  int    $visible        - Visibility flag for the new node
+     * @param string $faculty_image   - faculty image
      * @return int    $ret            - The new node id
      */
-    public function addNode($name, $description, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible) {
+    public function addNode($name, $description, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image) {
         $ret = null;
 
         if ($this->useProcedures()) {
-            $ret = Database::get()->query("CALL add_node(?s, ?s, ?d, ?s, ?d, ?d, ?d, ?d)", $name, $description, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible)->lastInsertID;
+            $ret = Database::get()->query("CALL add_node(?s, ?s, ?d, ?s, ?d, ?d, ?d, ?d, ?s)", $name, $description, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image)->lastInsertID;
         } else {
             $lft = $parentlft + 1;
             $rgt = $parentlft + 2;
 
             $this->shiftRight($parentlft);
 
-            $query = "INSERT INTO hierarchy (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) "
-                    . "VALUES (?s, ?s, ?d, ?d, ?s, ?d, ?d, ?d, ?d)";
-            $ret = Database::get()->query($query, $name, $description, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $visible)->lastInsertID;
+            $query = "INSERT INTO hierarchy (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible, faculty_image) "
+                    . "VALUES (?s, ?s, ?d, ?d, ?s, ?d, ?d, ?d, ?d, ?s)";
+            $ret = Database::get()->query($query, $name, $description, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image)->lastInsertID;
         }
 
         return $ret;
@@ -73,20 +74,21 @@ class Hierarchy {
     /**
      * Update a tree node.
      *
-     * @param int    $id             - The id of the node to update
-     * @param string $name           - The new name for the node
-     * @param string $description    - The new description for the node
-     * @param int    $nodelft        - The new parent lft value
-     * @param int    $lft            - The node's current lft value
-     * @param int    $rgt            - The node's current rgt value
-     * @param int    $parentlft      - The old parent lft value
-     * @param string $code           - The new code for the node
-     * @param int    $allow_course   - Flag controlling if courses are allowed to belong to this node
-     * @param int    $allow_user     - Flag controlling if users are allowed to belong to this node
-     * @param int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
-     * @param int    $visible        - Visibility flag for the new node
+     * @param int $id - The id of the node to update
+     * @param string $name - The new name for the node
+     * @param string $description - The new description for the node
+     * @param int $nodelft - The new parent lft value
+     * @param int $lft - The node's current lft value
+     * @param int $rgt - The node's current rgt value
+     * @param int $parentlft - The old parent lft value
+     * @param string $code - The new code for the node
+     * @param int $allow_course - Flag controlling if courses are allowed to belong to this node
+     * @param int $allow_user - Flag controlling if users are allowed to belong to this node
+     * @param int $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
+     * @param int $visible - Visibility flag for the new node
+     * @param string $faculty_image - Faculty image
      */
-    public function updateNode($id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible) {
+    public function updateNode($id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image) {
 
         $cache1 = new FileCache('nodes',300);
         $cache1->clear();
@@ -94,12 +96,12 @@ class Hierarchy {
         $cache2->clear();
 
         if ($this->useProcedures()) {
-            Database::get()->query("CALL update_node(?d, ?s, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?d)", $id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible);
+            Database::get()->query("CALL update_node(?d, ?s, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?d, ?s)", $id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image);
         } else {
             $query = "UPDATE hierarchy SET name = ?s, description = ?s, lft = ?d, rgt = ?d,
                     code = ?s, allow_course = ?d, allow_user = ?d,
-                    order_priority = ?d, visible = ?d WHERE id = ?d";
-            Database::get()->query($query, $name, $description, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $visible, $id);
+                    order_priority = ?d, visible = ?d, faculty_image = ?s WHERE id = ?d";
+            Database::get()->query($query, $name, $description, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image, $id);
 
             if ($nodelft != $parentlft) {
                 $this->moveNodes($nodelft, $lft, $rgt);
@@ -114,15 +116,20 @@ class Hierarchy {
      */
     public function deleteNode($id) {
 
+        global $webDir;
+
         $cache1 = new FileCache('nodes', 300);
         $cache1->clear();
         $cache2 = new FileCache('coursedeps', 300);
         $cache2->clear();
 
         if ($this->useProcedures()) {
+            $row = Database::get()->querySingle("SELECT code, faculty_image FROM hierarchy WHERE id = ?d", $id);
             Database::get()->query("CALL delete_node(?d)", $id);
+            unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
         } else {
-            $row = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $id);
+            $row = Database::get()->querySingle("SELECT lft, rgt, code, faculty_image FROM hierarchy WHERE id = ?d", $id);
+            unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
             Database::get()->query("DELETE FROM hierarchy WHERE id = ?d", $id);
             $this->delete($row->lft, $row->rgt);
         }

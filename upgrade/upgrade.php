@@ -389,6 +389,7 @@ touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/temp/pdf');
 mkdir_or_error('courses/userimg');
 touch_or_error('courses/userimg/index.php');
+mkdir_or_error('courses/facultyimg');
 touch_or_error($webDir . '/video/index.php');
 mkdir_or_error('courses/user_progress_data');
 mkdir_or_error('courses/user_progress_data/cert_templates');

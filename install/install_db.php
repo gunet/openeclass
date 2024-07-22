@@ -1431,6 +1431,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     `allow_user` boolean NOT NULL default false,
     `order_priority` int(11) default null,
     `visible` TINYINT(4) NOT NULL default 2,
+    `faculty_image` varchar(400) NULL,
     KEY `lftindex` (`lft`),
     KEY `rgtindex` (`rgt`) ) $tbl_options");
 

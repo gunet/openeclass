@@ -98,7 +98,7 @@
                 document.getElementById("radio_collaborative").style.display="none";
             }
         });
-        
+
     });
 
 </script>
@@ -117,7 +117,7 @@
 
                   {!! $action_bar !!}
 
-                  @include('layouts.partials.show_alert') 
+                  @include('layouts.partials.show_alert')
 
                   <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit border-0 px-0'>
@@ -239,11 +239,11 @@
                                     </label>
                                 </div>
 
-                                <div class="radio 
-                                            @if(!get_config('show_collaboration') and !get_config('show_always_collaboration')) 
-                                                d-none 
-                                            @elseif(is_module_disable(MODULE_ID_SESSION)) 
-                                                d-none 
+                                <div class="radio
+                                            @if(!get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                                                d-none
+                                            @elseif(is_module_disable(MODULE_ID_SESSION))
+                                                d-none
                                             @endif" id="radio_collaborative">
                                     <label>
                                         <input type='radio' name='view_type' value='sessions' id='sessions'>
@@ -251,7 +251,7 @@
                                     </label>
                                 </div>
 
-                                @if(get_config('show_collaboration') and !get_config('show_always_collaboration')) 
+                                @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
                                     <input type="hidden" id="radio_collaborative_helper" value="0">
                                 @endif
                             </div>

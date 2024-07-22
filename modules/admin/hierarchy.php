@@ -38,6 +38,7 @@ $helpSubTopic = 'facutlies_departments_actions';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'hierarchy_validations.php';
 
 $tree = new Hierarchy();
@@ -206,15 +207,42 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         }
         // Check for greek letters
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
-            Session::flash('message',$langGreekCode);
+            Session::flash('message', $langGreekCode);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/hierarchy.php?a=1");
         } else {
             // OK Create the new node
+
+            // upload picture (if any)
+            $faculty_image = '';
+            if (isset($_FILES['faculty_image']) && is_uploaded_file($_FILES['faculty_image']['tmp_name'])) {
+                $file_name = $_FILES['faculty_image']['name'];
+                validateUploadedFile($file_name, 2);
+                make_dir("$webDir/courses/facultyimg/$code/image");
+                move_uploaded_file($_FILES['faculty_image']['tmp_name'], "$webDir/courses/facultyimg/$code/image/$file_name");
+                $faculty_image = $file_name;
+            }
+
+            if(!empty($_POST['choose_from_list'])) {
+                $imageName = $_POST['choose_from_list'];
+                $imagePath = "$webDir/template/modern/images/courses_images/$imageName";
+                $newPath = "$webDir/courses/facultyimg/$code/image/";
+                make_dir("$newPath");
+                $ext =  get_file_extension($imageName);
+                $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+                $newName  = $newPath.$image_without_ext.".".$ext;
+                $copied = copy($imagePath , $newName);
+                if ((!$copied)) {
+                    echo "Error : Not Copied";
+                } else {
+                    $faculty_image = $image_without_ext.".".$ext;
+                }
+            }
             $pid = intval($_POST['parentid']);
             validateParentId($pid, isDepartmentAdmin());
-            $tree->addNode($name, $description, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority, $visible);
-            Session::flash('message',$langAddSuccess);
+            $tree->addNode($name, $description, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image);
+
+            Session::flash('message', $langAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/hierarchy.php");
         }
@@ -229,6 +257,28 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
         $data['html'] = $html;
+
+        // faculty image
+        $image_content = '';
+        $dir_images = scandir($webDir . '/template/modern/images/courses_images');
+        foreach($dir_images as $image) {
+            $extension = pathinfo($image, PATHINFO_EXTENSION);
+            $imgExtArr = ['jpg', 'jpeg', 'png'];
+            if (in_array($extension, $imgExtArr)) {
+                $image_content .= "
+                    <div class='col'>
+                        <div class='card panelCard h-100'>
+                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
+                            <div class='card-body'>                                
+                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFacultyImage mt-3' value='$langSelect'>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+        $data['image_content'] = $image_content;
+
         $view = 'admin.courses.hierarchy.create';
     }
 }
@@ -254,7 +304,6 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
 
         if ($c > 0) {
             // The node cannot be deleted
-            //Session::Messages("$langNodeProErase<br>$langNodeNoErase", 'alert-danger');
             Session::flash('message',"$langNodeProErase<br>$langNodeNoErase");
             Session::flash('alert-class', 'alert-danger');
         } else {
@@ -271,7 +320,18 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     $id = intval($_REQUEST['id']);
     validateNode($id, isDepartmentAdmin());
 
+    if (isset($_GET['delete_image'])) {
+        $row = Database::get()->querySingle("SELECT code, faculty_image FROM hierarchy WHERE id = ?d", $id);
+        unlink("$webDir/courses/facultyimg/$row->code/image/$row->faculty_image");
+        Database::get()->querySingle("UPDATE hierarchy SET faculty_image = null WHERE id = ?d", $id);
+
+        Session::flash('message', $langEditNodeSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page('modules/admin/hierarchy.php');
+    }
+
     if (isset($_POST['edit'])) {
+
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         checkSecondFactorChallenge();
 
@@ -307,11 +367,37 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/hierarchy.php?action=edit&id=" . $id);
         } else {
+
             // OK Update the node
+            $faculty_image = null;
+            if (isset($_FILES['faculty_image']) && is_uploaded_file($_FILES['faculty_image']['tmp_name'])) {
+                $file_name = $_FILES['faculty_image']['name'];
+                validateUploadedFile($file_name, 2);
+                make_dir("$webDir/courses/facultyimg/$code/image");
+                move_uploaded_file($_FILES['faculty_image']['tmp_name'], "$webDir/courses/facultyimg/$code/image/$file_name");
+                $faculty_image = $file_name;
+            }
+
+            if(!empty($_POST['choose_from_list'])) {
+                $imageName = $_POST['choose_from_list'];
+                $imagePath = "$webDir/template/modern/images/courses_images/$imageName";
+                $newPath = "$webDir/courses/facultyimg/$code/image/";
+                make_dir("$newPath");
+                $ext =  get_file_extension($imageName);
+                $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+                $newName  = $newPath.$image_without_ext.".".$ext;
+                $copied = copy($imagePath , $newName);
+                if ((!$copied)) {
+                    echo "Error : Not Copied";
+                } else {
+                    $faculty_image = $image_without_ext.".".$ext;
+                }
+            }
+
             $oldpid = intval($_POST['oldparentid']);
             $newpid = intval($_POST['newparentid']);
             validateParentId($newpid, isDepartmentAdmin());
-            $tree->updateNode($id, $name, $description, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority, $visible);
+            $tree->updateNode($id, $name, $description, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority, $visible, $faculty_image);
             Session::flash('message',$langEditNodeSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/hierarchy.php');
@@ -319,7 +405,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     } else {
         // Get node information
         $data['id'] = $id;
-        $data['mynode'] = $mynode = Database::get()->querySingle("SELECT name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible FROM hierarchy WHERE id = ?d", $id);
+        $data['mynode'] = $mynode = Database::get()->querySingle("SELECT name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible, faculty_image FROM hierarchy WHERE id = ?d", $id);
         $parent = $tree->getParent($mynode->lft, $mynode->rgt);
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
 
@@ -367,6 +453,29 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
         $head_content .= $js;
         $data['html'] = $html;
+        $data['faculty_image'] = $faculty_image = $mynode->faculty_image;
+        $data['faculty_code'] = $mynode->code;
+        // faculty image
+        $image_content = '';
+        $dir_images = scandir($webDir . '/template/modern/images/courses_images');
+        foreach($dir_images as $image) {
+            $extension = pathinfo($image, PATHINFO_EXTENSION);
+            $imgExtArr = ['jpg', 'jpeg', 'png'];
+            if (in_array($extension, $imgExtArr)) {
+                $image_content .= "
+                    <div class='col'>
+                        <div class='card panelCard h-100'>
+                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
+                            <div class='card-body'>                                
+                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseFacultyImage mt-3' value='$langSelect'>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+        $data['image_content'] = $image_content;
+
         $view = 'admin.courses.hierarchy.create';
     }
 }

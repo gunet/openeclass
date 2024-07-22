@@ -830,6 +830,7 @@ function create_directories() {
     mkdir_try('courses/temp/pdf');
     mkdir_try('courses/userimg');
     touch_try('courses/userimg/index.php');
+    mkdir_try('courses/faculytimg');
     mkdir_try('courses/commondocs');
     touch_try('courses/commondocs/index.php');
     mkdir_try('video');
