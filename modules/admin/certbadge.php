@@ -62,12 +62,12 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $action_bar = action_bar(array(
         array('title' => "$langAddNewCertTemplate",
               'url' => "$_SERVER[SCRIPT_NAME]?action=add_cert",
-              'icon' => 'fa-plus-circle',
+              'icon' => 'fa-solid fa-certificate',
               'level' => 'primary-label',
               'button-class' => 'btn-success'),
         array('title' => "$langAddNewBadgeTemplate",
               'url' => "$_SERVER[SCRIPT_NAME]?action=add_badge",
-              'icon' => 'fa-plus-circle',
+              'icon' => 'fa-solid fa-id-badge',
               'level' => 'primary-label',
               'button-class' => 'btn-success')
         ));
@@ -101,11 +101,15 @@ if (isset($_GET['del_cert'])) { // delete certificate template
         Session::flash('alert-class', 'alert-warning');
     } else {
         $cert_template = $sql_cert_template->filename;
-        if (unlink($webDir . CERT_TEMPLATE_PATH . $cert_template)) {
-            Database::get()->query("DELETE FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
-            Session::flash('message',$langDelWithSuccess);
-            Session::flash('alert-class', 'alert-success');
+        if (preg_match('/[0-9a-zA-Z]+\//', $cert_template, $cert_path) == 1) {
+            removeDir($webDir . CERT_TEMPLATE_PATH . $cert_path[0]);
+        } else {
+            unlink($webDir . CERT_TEMPLATE_PATH . $cert_template);
         }
+
+        Database::get()->query("DELETE FROM certificate_template WHERE id = ?d", $_GET['del_cert']);
+        Session::flash('message',$langDelWithSuccess);
+        Session::flash('alert-class', 'alert-success');
     }
 }
 
@@ -179,10 +183,14 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
     } else {
         $filename = $_FILES['filename']['name'];
         validateUploadedFile($filename, 3);
-        if (move_uploaded_file($_FILES['filename']['tmp_name'], "$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+        $certificate_directory = safe_filename() . "/";
+        $certificate_path = $webDir . CERT_TEMPLATE_PATH . $certificate_directory;
+        $certificate_file = $certificate_path . $filename;
+        make_dir($certificate_path);
+        if (move_uploaded_file($_FILES['filename']['tmp_name'], $certificate_file)) {
             $files_in_zip = array();
             $archive = new ZipArchive;
-            if ($archive->open("$webDir" . CERT_TEMPLATE_PATH . "$filename")) {
+            if ($archive->open($certificate_file)) {
                 // check for file type in zip contents
                 for ($i = 0; $i < $archive->numFiles; $i++) {
                     $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
@@ -191,14 +199,14 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                         validateUploadedFile(my_basename($files_in_zip[$i]), 3);
                     }
                 }
-                if ($archive->extractTo("$webDir" . CERT_TEMPLATE_PATH)) {
+                if ($archive->extractTo($certificate_path)) {
                     $archive->close();
                     $q = Database::get()->query("INSERT INTO certificate_template SET
                                         name = ?s,
                                         description = ?s,
                                         filename = ?s,
                                         orientation = ?s,
-                                        all_courses = ?s", $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['orientation'], $allcourses);
+                                        all_courses = ?s", $_POST['name'], $_POST['description'], $certificate_directory . $_POST['certhtmlfile'], $_POST['orientation'], $allcourses);
                     $cert_template_id = $q->lastInsertID;
                     if ($allcourses == 0) {
                         foreach ($cert_template_courses as $cert_template_course_id) {
