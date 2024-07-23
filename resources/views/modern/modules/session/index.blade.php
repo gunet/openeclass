@@ -177,18 +177,43 @@
                                                     </div>
                                                 </div>
                                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap mt-4'>
-                                                    <p class='TextBold'>{{ trans('langConsultant') }}:&nbsp;<span>{{ $s->consultant }}</span></p>
-                                                    <a class="btn successAdminBtn 
-                                                                @if(!$is_coordinator && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif
-                                                                @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user) d-none @endif" 
-                                                        href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
-                                                        {{ trans('langEnter') }}
-                                                    </a>
-                                                    @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user)
-                                                        <a data-id='{{ $s->id }}' class="btn submitAdminBtnDefault do-acceptance" data-bs-toggle="modal" data-bs-target="#RegistrationInSession">
-                                                            {{ trans('langRegister') }}
+                                                    <div>
+                                                        <p class='TextBold'>{{ trans('langConsultant') }}:&nbsp;<span>{{ $s->consultant }}</span></p>
+                                                        <p class='TextBold'>{{ trans('langStudents') }}:&nbsp;
+                                                            <a class="link-color" data-bs-toggle="collapse" href="#students{{ $s->id }}" role="button" aria-expanded="false" aria-controls="students{{ $s->id }}">
+                                                                {{ trans('langViewShow') }}
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <a class="btn successAdminBtn 
+                                                                    @if(!$is_coordinator && !$is_consultant && $s->display == 'not_visible') pe-none opacity-help @endif
+                                                                    @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user) d-none @endif" 
+                                                            href='{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&session={{ $s->id }}'>
+                                                            {{ trans('langEnter') }}
                                                         </a>
-                                                    @endif
+                                                        @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user)
+                                                            <a data-id='{{ $s->id }}' class="btn submitAdminBtnDefault do-acceptance" data-bs-toggle="modal" data-bs-target="#RegistrationInSession">
+                                                                {{ trans('langRegister') }}
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mt-4 collapse" id="students{{ $s->id }}">
+                                                    <div class="card card-body">
+                                                        @if(count($s->user_participant) > 0)
+                                                            <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                                                @foreach($s->user_participant as $user)
+                                                                    <div>{!! display_user($user) !!}</div>
+                                                                @endforeach
+                                                            </div>
+                                                        @else
+                                                            <div class='alert alert-warning'>
+                                                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                                <span>{{ trans('langNotExistUsers') }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

@@ -261,6 +261,7 @@ if($is_coordinator or $is_consultant){
             $s->percentage = round($number_percentage);
             $s->has_badge = $has_badge;
             $s->consultant = participant_name($s->creator);
+            $s->user_participant = session_participants_ids($s->id);
         }
     }
 
@@ -348,6 +349,7 @@ if($is_coordinator or $is_consultant){
         $cu->has_badge = $has_badge;
         $cu->consultant = participant_name($cu->creator);
         $cu->is_accepted_user = Database::get()->querySingle("SELECT is_accepted FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$cu->id,$uid)->is_accepted;
+        $cu->user_participant = session_participants_ids($cu->id);
     }
 
 }
