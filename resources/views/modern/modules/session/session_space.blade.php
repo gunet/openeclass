@@ -58,7 +58,13 @@
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
                                 'icon' => 'fa-solid fa-file-arrow-up',
                                 'level' => 'secondary',
-                                'show' => $is_consultant
+                                'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
+                            ),
+                            array('title' => trans('langSelect') . ' ' . trans('langInsertPoll'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
+                                'icon' => 'fa-solid fa-question',
+                                'level' => 'secondary',
+                                'show' => (!is_module_disable(MODULE_ID_QUESTIONNAIRE) && $is_consultant)
                             ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertDoc'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc',

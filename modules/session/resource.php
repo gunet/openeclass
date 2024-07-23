@@ -45,6 +45,7 @@ require_once 'insert_doc.php';
 require_once 'insert_work.php';
 require_once 'insert_tc.php';
 require_once 'insert_link.php';
+require_once 'insert_poll.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
@@ -83,6 +84,8 @@ if(isset($_POST['submit_doc'])){
     insert_session_passage($sessionID);
 }elseif(isset($_POST['submit_link'])){
     insert_session_link($sessionID);
+}elseif(isset($_POST['submit_poll'])){
+    insert_session_poll($sessionID);
 }
 
 $type_resource = '';
@@ -110,6 +113,8 @@ if(isset($_GET['type'])){
         $type_resource = passage_insertion($sessionID);
     }elseif($_GET['type'] == 'link'){
         $type_resource = list_session_links($sessionID,$course_id);
+    }elseif($_GET['type'] == 'poll'){
+        $type_resource = list_session_polls($sessionID,$course_id);
     }
 }
 $data['type_resource'] = $type_resource;

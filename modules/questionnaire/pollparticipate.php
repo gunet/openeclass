@@ -69,7 +69,10 @@ if (!$is_course_reviewer) {
 }
 $p = Database::get()->querySingle($query, $query_params);
 
-if (!$p) { // check poll access
+if($is_consultant){
+    $is_editor = true;
+}
+if (!$p && !$is_consultant) { // check poll access
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 // check poll validity

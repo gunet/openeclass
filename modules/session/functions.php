@@ -534,11 +534,88 @@ function show_sessionResource($info) {
         case 'link':
             $html .= show_session_link($info->title, $info->comments, $info->id, $info->res_id,1);
             break;
+        case 'poll':
+            $html .= show_session_poll($info->title, $info->comments, $info->id, $info->res_id,1);
+            break;
         default:
             $html .= $langUnknownResType;
     }
    
     return $html;
+}
+
+
+/**
+ * @brief display resource poll
+ * @param type $type
+ * @param type $title
+ * @param type $resource_id
+ * @param type $poll_id
+ * @param type $visibility
+ * @return string
+ */
+function show_session_poll($title, $comments, $resource_id, $poll_id, $visibility) {
+
+    global $course_id, $course_code, $is_consultant, $urlServer, $uid, $langWasDeleted, $langResourceBelongsToSessionPrereq, $m;
+
+    $res_prereq_icon = '';
+    $class_vis = ($visibility == 0 ) ? ' class="not_visible"' : ' ';
+    $title = q($title);
+    if ($is_consultant) {
+        $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
+    } else {
+        $gids = user_group_session_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }
+        $query = "SELECT * FROM poll WHERE course_id = ?d AND pid = ?d";
+        $query .= " AND
+                    (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d 
+                        UNION 
+                       SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                    )";
+        $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
+    }
+
+    if (!$poll) { // check if it was deleted
+        if (!$is_consultant) {
+            return '';
+        } else {
+            $imagelink = icon('fa-xmark link-delete');
+            $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        $assign_to_users_message = '';
+        if ($is_consultant) {
+            if ($poll->assign_to_specific == 1) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+            } else if ($poll->assign_to_specific == 2) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            }
+            if (resource_belongs_to_session_completion($_GET['session'], $poll_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);
+            }
+        }
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;session=$_GET[session]'>";
+        $polllink = $link . $title . '</a>';
+        $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br>$comments";
+    } else {
+        $comment_box = '';
+    }
+    return "
+        <tr$class_vis data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td>$polllink $res_prereq_icon $comment_box $assign_to_users_message</td>
+          <td class='text-start'></td>" .
+            session_actions('poll', $resource_id, $visibility) . '
+        </tr>';
 }
 
 
@@ -553,12 +630,12 @@ function show_sessionResource($info) {
  */
 function show_session_link($title, $comments, $resource_id, $link_id, $visibility) {
 
-    global $is_editor, $langWasDeleted, $course_id;
+    global $is_consultant, $langWasDeleted, $course_id;
 
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
     if (!$l) { // check if it was deleted
-        if (!$is_editor) {
+        if (!$is_consultant) {
             return '';
         } else {
             $imagelink = icon('fa-xmark link-delete');
