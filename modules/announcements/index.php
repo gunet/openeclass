@@ -174,7 +174,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $pinned = 0;
                 $tooltip = "data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAdminPinnedOff'";
                 if ($myrow->order != $pinned_greater) {
-                    $to_top = "<a class='reorder ms-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up' data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedToTop'></span></a>";
+                    $to_top = "<a class='reorder ms-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'>
+                                <span class='fa fa-arrow-up float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedToTop'></span>
+                            </a>";
                 }
             } elseif ($myrow->order == 0) {
                 $pinned_class = "not_visible";

@@ -666,7 +666,7 @@ if ($total_cunits > 0) {
         foreach ($all_units as $cu) {
             $not_shown = false;
             $icon = '';
-                // check if course unit has started
+                // check if unit has started
             if (!$is_editor) {
                 if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                     $not_shown = true;
@@ -716,7 +716,8 @@ if ($total_cunits > 0) {
             }
 
             if ($is_editor) {
-                $cunits_content .= "<span class='float-end d-flex justify-content-center mb-3 text-end'>".action_button(array(
+                $cunits_content .= "<span class='float-end d-flex justify-content-center mb-3 text-end'>" .
+                    action_button(array(
                         array('title' => $langEditChange,
                             'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                             'icon' => 'fa-edit'),
@@ -731,11 +732,12 @@ if ($total_cunits > 0) {
                             'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
                             'icon' => 'fa-solid fa-xmark Accent-200-cl',
                             'class' => 'delete',
-                            'confirm' => $langCourseUnitDeleteConfirm)))."</span>";
+                            'confirm' => $langCourseUnitDeleteConfirm))) .
+                    "</span>";
             } else {
-                $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+                $cunits_content .= "<span class='float-end d-flex justify-content-center mb-3 text-end'>";
                 $cunits_content .= $icon;
-                $cunits_content .= "</div>";
+                $cunits_content .= "</span>";
             }
 
             $cunits_content .= "<p><small><span class='help-block'>";
@@ -782,7 +784,7 @@ if ($total_cunits > 0) {
             $counter_hr++;
             $not_shown = false;
             $icon = '';
-                // check if course unit has started
+                // check if unit has started
             if (!$is_editor) {
                 if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                     $not_shown = true;
@@ -852,9 +854,9 @@ if ($total_cunits > 0) {
                             'class' => 'delete',
                             'confirm' => $langCourseUnitDeleteConfirm)))."</span>";
             } else {
-                $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center mb-3'>";
                 $cunits_content .= $icon;
-                $cunits_content .= "</div>";
+                $cunits_content .= "</span>";
             }
 
             $cunits_content .= "<p><span class='help-block $class_vis'>";
