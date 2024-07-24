@@ -145,7 +145,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langTools</div>
+                                                    <div class='title-default'>$langCompletionResources</div>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['tools'] . "
@@ -156,7 +156,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langUserHasCompleted</div>
+                                                    <div class='title-default'>$langCompletedResources</div>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['has_completed'] . "
@@ -204,11 +204,18 @@ if (isset($_GET['u'])) { //  stats per user
 
     $result = users_session($sessionID);
     if (count($result) > 0) {
+        $linkReport = $urlServer . "modules/session/consulting_completion.php?course=$course_code&session=$sessionID";
         foreach ($result as $row) {
             $tool_content .= "<tr>";
-                $tool_content .= "<td>" . display_user($row->id) . "</td>";
+                $tool_content .= "<td>
+                                    <a class='link-color d-flex justify-content-start align-items-center gap-2' href='" . $linkReport . "&user_rep=$row->id" . "' aria-label='".participant_name($row->id)."'
+                                        data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langShowReportUserTable'>
+                                        <img class='user-icon-filename' src='".user_icon($row->id, IMAGESIZE_SMALL)."' alt='".participant_name($row->id)."'>
+                                        <span>" . participant_name($row->id) . "</span>
+                                    </a>
+                                 </td>";
                 $tool_content .= "<td>$row->percentage</td>";
-                $tool_content .= "<td class='text-end'>" . icon('fa-line-chart', $langDetails, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id&amp;session=$sessionID") . "</td>";
+                $tool_content .= "<td class='text-end'>" . icon('fa-line-chart', $langShowReportUserCurrentSession, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id&amp;session=$sessionID") . "</td>";
             $tool_content .= "</tr>";
         }
  $tool_content .= "</table>
@@ -252,7 +259,12 @@ if (isset($_GET['u'])) { //  stats per user
             }
            
             check_session_progress($sid,$r->id);
-            $per = get_cert_percentage_completion_by_user('badge',$badge_id,$r->id);
+            if(isset($badge_id)){
+                $per = get_cert_percentage_completion_by_user('badge',$badge_id,$r->id);
+            }else{
+                $per = 0;
+            }
+            
             $r->percentage = "
                 <div class='progress' style='width:200px;'>
                     <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
@@ -304,7 +316,7 @@ if (isset($_GET['u'])) { //  stats per user
                                                                     WHERE doc_id = ?d AND from_user = ?d AND session_id = ?d",$c->resource, $u, $sid);
                         if($completion && $completion->is_completed){
                             $commentByConsultant = (!empty($completion->deliverable_comments)) ? $completion->deliverable_comments : "$langNoCommentsAvailable";
-                            $tools_completed[] = $titleDoc . "<p><strong>" . $langCommentsByConsultant . "</strong></p><p>" . $commentByConsultant . "</p><hr></br>";
+                            $tools_completed[] = $titleDoc . "<ul><strong>" . $langCommentsByConsultant . "</strong><li>" . $commentByConsultant . "</li></ul>";
                         }
                     }
                 }elseif($c->activity_type == 'tc-completed'){
@@ -347,7 +359,12 @@ if (isset($_GET['u'])) { //  stats per user
     }
     
     check_session_progress($sid,$u);
-    $per = get_cert_percentage_completion_by_user('badge',$badge_id,$u);
+    if(isset($badge_id)){
+        $per = get_cert_percentage_completion_by_user('badge',$badge_id,$u);
+    }else{
+        $per = 0;
+    }
+    
 
     $userInfo = [
         'username' => $user_name,

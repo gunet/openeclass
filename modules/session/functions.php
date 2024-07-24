@@ -3149,3 +3149,114 @@ function session_resource_exists($rid,$sid){
         return false;
     }
 }
+
+/**
+ * @brief All resources which participate in a session.
+ * @param integer $sid
+ * @param integer $cid
+ */
+function session_resources_as_activities($sid,$cid){
+
+    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity;
+
+    $html = "";
+    $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion 
+                                                        WHERE badge IN (SELECT id FROM badge
+                                                                    WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);
+
+    if(count($criteria)){
+        $html .= "<strong>$langResourceAsActivity</strong>";
+        $html .= "<ul>";
+        foreach($criteria as $c){
+            $resource_info = "";
+            if($c->activity_type == 'document-submit'){
+                $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
+                    WHERE session_id = ?d 
+                    AND res_id = ?d
+                    AND type = ?s",$sid,$c->resource,'doc');
+
+            $resource_info = $info_cr->title;
+
+            }elseif($c->activity_type == 'tc-completed'){
+                $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
+                    WHERE session_id = ?d 
+                    AND type = ?s
+                    AND res_id = ?d",$sid,'tc',$c->resource);
+
+                $resource_info = $info_cr->title;
+
+            }elseif($c->activity_type == 'meeting-completed'){
+                $resource_info = "$langCompletedSessionMeeting";
+            }elseif($c->activity_type == 'noactivity'){
+                $resource_info = "$langCompletedSessionWithoutActivity";
+            }
+            $html .= "<li>$resource_info</li>";
+        }
+        $html .= "</ul>";
+    }
+
+    return $html;
+}
+
+/**
+ * @brief Display the completed resources by a user in a session.
+ * @param integer $sid
+ * @param integer $cid
+ * @param integer $user
+ */
+function show_completed_resources($sid,$cid,$user){
+
+    global $langCompletedSessionMeeting, $langCompletedResources, $langCompletedSessionWithoutActivity;
+
+    $html = "";
+    $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$cid,$sid);
+    if($badge){
+
+        // Completed criteria by a user
+        $completed_criteria = Database::get()->queryArray("SELECT * FROM badge_criterion 
+                                                            WHERE badge = ?d
+                                                            AND id IN (SELECT badge_criterion FROM user_badge_criterion
+                                                                        WHERE user = ?d)",$badge->id,$user);
+
+        // Display info regarding completed criteria
+        if(count($completed_criteria)){
+            $html .= "<strong>$langCompletedResources</strong>";
+            $html .= "<ul>";
+            foreach($completed_criteria as $c){
+                $resource_info = "";
+                if($c->activity_type == 'document-submit'){
+                    $info_cr = database::get()->querySingle("SELECT doc_id FROM session_resources 
+                                                                WHERE session_id = ?d 
+                                                                AND doc_id = ?d
+                                                                AND from_user = ?d
+                                                                AND type = ?s
+                                                                AND is_completed = ?d",$sid,$c->resource,$user,'doc',1);
+
+                    $resource_info = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d",$info_cr->doc_id)->title;
+
+                }elseif($c->activity_type == 'tc-completed'){
+                    $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
+                                                                WHERE session_id = ?d 
+                                                                AND doc_id = ?d
+                                                                AND from_user = ?d
+                                                                AND type = ?s
+                                                                AND is_completed = ?d
+                                                                AND res_id = ?d",$sid,0,0,'tc',0,$c->resource);
+
+                    $resource_info = $info_cr->title;
+
+                }elseif($c->activity_type == 'meeting-completed'){
+                    $resource_info = "$langCompletedSessionMeeting";
+                }elseif($c->activity_type == 'noactivity'){
+                    $resource_info = "$langCompletedSessionWithoutActivity";
+                }
+                $html .= "<li>$resource_info</li>";
+            }
+            $html .= "</ul>";
+
+            return $html;
+        }
+    }else{
+        return;
+    }
+}

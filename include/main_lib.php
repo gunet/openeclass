@@ -311,7 +311,7 @@ function load_js($file, $init='') {
 // user's info is fetched from the DB) or a hash with user_id, surname, givenname,
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false, $icon = true, $class = "", $code = "") {
-    global $langAnonymous, $urlAppend;
+    global $langAnonymous, $urlAppend, $langUserProfile;
 
     $course_code_link = "";
 
@@ -365,7 +365,8 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     if (!empty($code)) {
       $course_code_link = "&amp;course=$GLOBALS[course_code]";
     }
-    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'>" .
+    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token' 
+                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langUserProfile'>" .
             $student_name . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }

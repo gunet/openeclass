@@ -1631,3 +1631,9 @@ $langContinueToCompletetionWithMeeting = "The session will end with the completi
  Do you want to proceed with this action?";
 $langCompletedSessionMeeting = "Completion by live meeting";
 $langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed as the current session is logged out by all users.";
+$langAllCompletedResources = "The session resources have been executed successfully by the user.";
+$langShowReportUserTable = "User session reports";
+$langShowReportUserCurrentSession = "Current session user report";
+$langCompletionResources = "Completion resources";
+$langCompletedResources = "Completed resources";
+$langResourceAsActivity = "Session completion resources";

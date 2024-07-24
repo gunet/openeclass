@@ -1458,7 +1458,7 @@ $langSessionResourseParticipatesInSessionCompletion = "Ο πόρος δεν μπ
 $langInsertQuestionnaire = "ερωτηματολογίου";
 $langWithoutCompletedResource = "Χωρίς την χρήση κριτηρίων";
 $langSessionHasCompleted = "Η συνεδρία ολοκληρώθηκε επιτυχώς";
-$langCompletedSessionWithoutActivity = "Ολοκλήρωση συνεδρίας χωρίς την χρήση απαραίτητων κριτηρίων";
+$langCompletedSessionWithoutActivity = "Ολοκλήρωση συνεδρίας χωρίς την χρήση πόρων";
 $langSessionCompletedNotContinue = "Η ολοκλήρωση της συνεδρίας δεν είναι επιτρεπτή.</br>
                                     Ισως υπάρχει μη ολοκληρωμένη προαπαιτούμενη συνεδρία ή υπάρχουν δραστηριότητες που δεν έχουν ολοκληρωθεί";
 $langCompletedSession = "Ολοκληρωμένη";
@@ -1550,7 +1550,7 @@ $langUserHasCompleted = "Έχει ολοκληρώσει";
 $langNotUploadedDeliverable = "Ο χρήστης δεν έχει υποβάλει κάποιο παραδοτέο";
 $langNoCommentsAvailable = "Δεν υπάρχουν σχόλια";
 $langTableCompletedConsulting = "Αναφορές χρηστών";
-$langShowOnlySessionWithCompletionEnable = "Στον πίνακα χρηστών αναφέρονται όσες συνεδρίες έχουν ενεργοποιημένη την <strong>ολοκλήρωση συνεδρίας</strong> στον χώρο της συνεδρίας";
+$langShowOnlySessionWithCompletionEnable = "Στον πίνακα χρηστών αναφέρονται οι συνεδρίες για τις οποίες η <strong>ολοκλήρωση συνεδρίας</strong> είναι ενεργοποιημένη.";
 $langCourseIsNotCollaborative = "Μη επιτρεπτή ενέργεια. Η συνεργασία δεν είναι σε μορφή συνεδρίας";
 $langSessionsTable = "Πίνακας συνεδριών";
 $langSummaryScheduledSessions = "Αναφορές συνεδριών";
@@ -1569,3 +1569,9 @@ $langCompletedSessionWithMeeting = "Με την ολοκλήρωση της δι
 $langCompletedSessionMeeting = "Ολοκλήρωση δια ζώσης συνάντησης";
 $langInfoForbiddenAddPrereq = "Η ενέργεια που επιχειρήσατε δεν μπορεί να ολοκληρώθει καθώς η τρέχουσα συνεδρία είναι ολοκλήρωμενη από όλους τους χρήστες
                                 ενώ επιλέξατε προαπαιτούμενη συνεδρία στην οποία υπάρχουν ανεκπλήρωτα κριτήρια ολοκλήρωσης.";
+$langAllCompletedResources = "Οι πόροι της συνεδρίας έχουν εκτελεστεί επιτυχώς από τον χρήστη.";
+$langShowReportUserTable = "Αναφορές συνεδριών χρήστη";
+$langShowReportUserCurrentSession = "Αναφορά χρήστη τρέχουσας συνεδρίας";
+$langCompletionResources = "Πόροι ολοκλήρωσης";
+$langCompletedResources = "Ολοκληρωμένοι πόροι";
+$langResourceAsActivity = "Πόροι ολοκλήρωσης συνεδρίας";
