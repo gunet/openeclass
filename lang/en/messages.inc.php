@@ -6386,3 +6386,4 @@ $langPageCollaboration = "Collaboration page";
 $langLinkFb = "Facebook link";
 $langLinkTw = "Twitter link";
 $langLinkLn = "LinkedIn link";
+$langLinkBanner = "Banner link";

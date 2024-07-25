@@ -106,6 +106,13 @@
                                     </div>
                                 </div>
 
+                                <div class='form-group mt-4'>
+                                    <label for='link_banner' class='col-sm-12 control-label-notes'>{{ trans('langLinkBanner') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='url' name='link_banner' id='link_banner' value="{!! get_config('banner_link') !!}">
+                                    </div>
+                                </div>
+
 
                                 <div class='form-group mt-4'>
                                     <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </label>

@@ -45,6 +45,7 @@ if(isset($_POST['submit'])){
     set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
     set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
     set_config('hide_login_link', $_POST['hide_login_link'] ?? '');
+    set_config('banner_link',$_POST['link_banner'] ?? '');
 
     Session::flash('message',"$langRegDone");
     Session::flash('alert-class', 'alert-success');

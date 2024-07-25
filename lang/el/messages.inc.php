@@ -6856,3 +6856,4 @@ $langPageCollaboration = "Σελίδα συνεργασίας";
 $langLinkFb = "Σύνδεσμος Facebook";
 $langLinkTw = "Σύνδεσμος Twitter";
 $langLinkLn = "Σύνδεσμος LinkedIn";
+$langLinkBanner = "Σύνδεσμος Banner";

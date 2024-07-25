@@ -62,7 +62,7 @@
                                                 @endif
                                                 @if($eclass_banner_value == 1)
                                                     <div>
-                                                        <a href="http://www.openeclass.org/" target="_blank" aria-label='Banner'>
+                                                        <a href="{!! get_config('banner_link') !!}" target="_blank" aria-label='Banner'>
                                                             <img style='width:150px;' src="{{ $logo_img }}" alt="This is the banner of platform">
                                                         </a>
                                                     </div>
