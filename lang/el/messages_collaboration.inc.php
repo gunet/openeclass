@@ -1578,3 +1578,7 @@ $langResourceAsActivity = "Πόροι ολοκλήρωσης συνεδρίας"
 $langSessionCondition = "Κατάσταση";
 $langUserHasCompletedCriteria = "Ο χρήστης έχει συμμετάσχει στους απαιτούμενους πόρους";
 $langUserHasNotCompletedCriteria = "Ο χρήστης δεν έχει συμμετάσχει σε όλους τους πόρους που απαιτούνται";
+$langUseOfAppInfo = "Επιλέξτε σε ποιες συνεργασίες θα χρησιμοποιείται η εφαρμογή";
+$langUseOfServiceInfo = "Επιλέξτε σε ποιες συνεργασίες θα χρησιμοποιείται η υπηρεσία";
+$langUsersHaveCompletedCriteria = "Οι συμμετέχοντες έχουν συμμετάσχει με επιτυχία στις δραστηριότητες ολοκλήρωσης της συνεδρίας";
+$langUsersCompletedCriteriaInProgress = "Η διαδικασία ολοκλήρωσης της συνεδρίας από τους συμμετέχοντες βρίσκεται σε εξέλιξη";

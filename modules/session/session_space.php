@@ -256,9 +256,33 @@ if ($sql_badge) {
     }
     if( count($participants) > 0 && $per/count($participants) == 100 ){
             $is_session_completed = true;
-            $is_session_completed_message .= "<span class='badge Success-200-bg small-text'>$langCompletedSession</span>";
+            $is_session_completed_message .= "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                                    <div>
+                                                        <span class='badge Success-200-bg d-flex justify-content-center align-items-center' style='width:25px; height:25px; border-radius:50%;'>
+                                                            <i class='fa-solid fa-check fa-lg pt-1'></i>
+                                                        </span>
+                                                    </div>
+                                                    <p class='mb-0'>$langUsersHaveCompletedCriteria</p>
+                                             ";
     }else{
-        $is_session_completed_message .= "<span class='badge Accent-200-bg small-text'>$langNotCompletedSession</span>";
+        $is_session_completed_message .= "  <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                <p>$langUsersCompletedCriteriaInProgress</p>
+                                                <div>
+                                                    <div class='spinner-grow text-success spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                    <div class='spinner-grow text-danger spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                    <div class='spinner-grow text-warning spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                    <div class='spinner-grow text-info spinner-grow-sm' role='status'>
+                                                        <span class='visually-hidden'></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+        ";
     }
 }
 $data['is_session_completed_message'] = $is_session_completed_message;

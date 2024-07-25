@@ -146,7 +146,7 @@ $tool_content .= "
                             foreach($users_actions as $key => $val){
                 $tool_content .= "<div class='card panelCard' style='margin-bottom:25px;'>
                                         <div class='card-body'>  
-                                            <h4 style='text-transform:uppercase; display:flex; justify-content:center; align-items:center; gap:5px;'>
+                                            <h4 style='text-transform:uppercase; display:flex; justify-content:start; align-items:center; gap:5px;'>
                                                 <img class='user-icon-filename' src='".user_icon($key, IMAGESIZE_SMALL)."' alt='".participant_name($key)."'>
                                                 " . participant_name($key) . "
                                             </h4>";
