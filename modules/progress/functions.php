@@ -874,8 +874,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
         }
     } else {
         $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
-                              AND active = 1
-                              AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
+                              AND active = 1";
         $result = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSql ORDER BY title", $course_id, $element_id);
     }
 
@@ -959,8 +958,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
 
     } else {
         $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
-                                    AND exercise.active = 1
-                                    AND (exercise.end_date IS NULL OR exercise.end_date >= ". DBHelper::timeAfter() . ")
+                                    AND exercise.active = 1                                    
                                     AND exercise.id NOT IN
                                     (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource != ''
