@@ -3155,9 +3155,9 @@ function session_resource_exists($rid,$sid){
  * @param integer $sid
  * @param integer $cid
  */
-function session_resources_as_activities($sid,$cid){
+function session_completed_resources_by_user($sid,$cid,$user){
 
-    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity;
+    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity, $langCommentsByConsultant;
 
     $html = "";
     $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion 
@@ -3165,8 +3165,7 @@ function session_resources_as_activities($sid,$cid){
                                                                     WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);
 
     if(count($criteria)){
-        $html .= "<strong>$langResourceAsActivity</strong>";
-        $html .= "<ul>";
+        $html .= "<ul class='resources_list' style='list-style-type: none; padding: 0px;'>";
         foreach($criteria as $c){
             $resource_info = "";
             if($c->activity_type == 'document-submit'){
@@ -3175,7 +3174,28 @@ function session_resources_as_activities($sid,$cid){
                     AND res_id = ?d
                     AND type = ?s",$sid,$c->resource,'doc');
 
-            $resource_info = $info_cr->title;
+                $completed_cr = database::get()->querySingle("SELECT * FROM session_resources 
+                                                                WHERE session_id = ?d 
+                                                                AND doc_id = ?d
+                                                                AND from_user = ?d
+                                                                AND type = ?s
+                                                                AND is_completed = ?d",$sid,$c->resource,$user,'doc',1);
+
+                $comments_by_consultant = "";
+                if($completed_cr){
+                    if(!empty($completed_cr->deliverable_comments)){
+                        $comments_by_consultant = "<div style='margin-left:20px; margin-top:5px;'><strong style='text-decoration: underline;'>$langCommentsByConsultant</strong><ul><li>" . $completed_cr->deliverable_comments . "</li></ul></div>";
+                    }
+                    $resource_info = "<div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Success-200-cl'>&#10003;</div>" . 
+                                            "<div>" . $info_cr->title . $comments_by_consultant . "</div>
+                                      </div>";
+                }else{
+                    $resource_info = "<div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            "<div>" . $info_cr->title . $comments_by_consultant . "</div>
+                                      </div>";
+                }
 
             }elseif($c->activity_type == 'tc-completed'){
                 $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
@@ -3183,14 +3203,58 @@ function session_resources_as_activities($sid,$cid){
                     AND type = ?s
                     AND res_id = ?d",$sid,'tc',$c->resource);
 
-                $resource_info = $info_cr->title;
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
+                                                                WHERE user = ?d 
+                                                                AND badge_criterion = ?d",$user,$c->id);
+
+                if($completed_cr){
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            "<div>" . $info_cr->title . "</div>
+                                        </div>";
+                }else{
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            "<div>" . $info_cr->title . "</div>
+                                        </div>";
+                }
 
             }elseif($c->activity_type == 'meeting-completed'){
-                $resource_info = "$langCompletedSessionMeeting";
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
+                                                                WHERE user = ?d 
+                                                                AND badge_criterion = ?d",$user,$c->id);
+
+                if($completed_cr){
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            "<div>" . "$langCompletedSessionMeeting" . "</div>
+                                        </div>";
+                }else{
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            "<div>" . "$langCompletedSessionMeeting" . "</div>
+                                        </div>";
+                }
+
             }elseif($c->activity_type == 'noactivity'){
-                $resource_info = "$langCompletedSessionWithoutActivity";
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
+                                                                WHERE user = ?d 
+                                                                AND badge_criterion = ?d",$user,$c->id);
+
+                if($completed_cr){
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            "<div>" . "$langCompletedSessionWithoutActivity" . "</div>
+                                        </div>";
+                }else{
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            "<div>" . "$langCompletedSessionWithoutActivity" . "</div>
+                                        </div>";
+                }
+
             }
-            $html .= "<li>$resource_info</li>";
+            $html .= "<li style='margin-bottom:5px;'>$resource_info</li>";
         }
         $html .= "</ul>";
     }

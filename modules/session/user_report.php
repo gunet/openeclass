@@ -148,18 +148,7 @@ if (isset($_GET['u'])) { //  stats per user
                                                     <strong class='title-default'>$langCompletionResources</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
-                                                    " . $user_information['tools'] . "
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                <div class='col-md-3 col-12'>
-                                                    <strong class='title-default'>$langCompletedResources</strong>
-                                                </div>
-                                                <div class='col-md-9 col-12 title-default-line-height'>
-                                                    " . $user_information['has_completed'] . "
+                                                    " . session_completed_resources_by_user($sessionID, $course_id, $_GET['u']) . "
                                                 </div>
                                             </div>
                                         </li>

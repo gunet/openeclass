@@ -48,7 +48,7 @@ $data['action_bar'] = "";
 $user_pdf = "";
 if(isset($_GET['user_rep'])){
     $sql_consultant = "";
-    $user_pdf = "session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
+    $user_pdf = "&amp;session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
     $forUser = "AND user_id = " . $_GET['user_rep'];
     $data['action_bar'] = action_bar([
         [ 'title' => $langBack,
@@ -91,14 +91,7 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
                                                             $per = get_cert_percentage_completion_by_user('badge',$badge->id,$key);
                                                         }
                                                         if($per < 100){
-                                                            $icon_badge = " <strong>
-                                                                                $langSessionCondition
-                                                                            </strong>
-                                                                            <ul>
-                                                                                <li class='criteria_not_completed Accent-200-cl' style='font-style:normal; font-weight:600;'>
-                                                                                    $langUserHasNotCompletedCriteria
-                                                                                </li>
-                                                                            </ul>
+                                                            $icon_badge = " 
                                                                             <strong>
                                                                                 $langPercentageSessionCompletion
                                                                             </strong>
@@ -108,14 +101,7 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
                                                                                 </li>
                                                                             </ul>";
                                                         }else{
-                                                            $icon_badge = " <strong>
-                                                                                $langSessionCondition
-                                                                            </strong>
-                                                                            <ul>
-                                                                                <li class='criteria_completed Success-200-cl' style='font-style:normal; font-weight:600;'>
-                                                                                    $langUserHasCompletedCriteria
-                                                                                </li>
-                                                                            </ul>
+                                                            $icon_badge = " 
                                                                             <strong>
                                                                                 $langPercentageSessionCompletion
                                                                             </strong>
@@ -139,36 +125,41 @@ $tool_content .= "
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <h3 class='mb-0'>$langSessionsTable</h3>
-                            <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf&amp;$user_pdf'>$langDumpPDF</a>
+                            <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf'>$langDumpPDF</a>
                         </div>
                         <div class='card-body'>
                             <p style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
                             foreach($users_actions as $key => $val){
-                $tool_content .= "<div class='card panelCard' style='margin-bottom:25px;'>
+                $tool_content .= "<div class='card cardReports' style='margin-bottom:25px;'>
                                         <div class='card-body'>  
-                                            <h4 style='text-transform:uppercase; display:flex; justify-content:start; align-items:center; gap:5px;'>
+                                            <h4 style=' display:flex; justify-content:end; align-items:center; gap:5px; margin-bottom:10px;'>
                                                 <img class='user-icon-filename' src='".user_icon($key, IMAGESIZE_SMALL)."' alt='".participant_name($key)."'>
                                                 " . participant_name($key) . "
                                             </h4>";
                 $tool_content .= "  
-                                            <div class='row row-cols-1 row-cols-lg-2 g-4'>";
+                                            <table class='table-default'>
+                                                <thead>
+                                                    <tr>
+                                                        <th style='width:30%;'>$langSSession</th>
+                                                        <th style='width:30%;'>$langConsultant</th>
+                                                        <th style='width:40%;'>$langCompletionResources</th>
+                                                    </tr>
+                                                </thead>";
                                                 foreach($val as $v){
-                                $tool_content .= "  <div class='col'>
-                                                        <div class='card cardReports h-100' style='border:0;'>
-                                                            <div class='card-body'>
-                                                                <ul class='session_info' style='list-style-type: none;  padding:0px 10px 0px 10px; margin-bottom:0px;'>
-                                                                    <li><strong style='text-decoration: underline;'>{$v->title}</strong></li>
-                                                                    <li>" . participant_name($v->creator) . "</li>
-                                                                    <li>" . format_locale_date(strtotime($v->start), 'short', false) ."</li>
-                                                                    <li>" . session_resources_as_activities($v->id,$course_id) ."</li>
-                                                                    <li>" . show_completed_resources($v->id,$course_id,$key) . "</li>
-                                                                    <li>{$v->completion}</li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>";
+                                $tool_content .= "  <tr>
+                                                        <td style='vertical-align:top;'>
+                                                            <strong>{$v->title}</br>
+                                                                " .format_locale_date(strtotime($v->start), 'short', false). "
+                                                            </strong>
+                                                        </td>
+                                                        <td style='vertical-align:top;'>" . participant_name($v->creator) . "</td>
+                                                        <td style='vertical-align:top;'>
+                                                            " . session_completed_resources_by_user($v->id,$course_id,$key) ."
+                                                            <div>{$v->completion}</div>
+                                                        </td>
+                                                    </tr>";
                                                 }
-                        $tool_content .= "  </div>";
+                        $tool_content .= "  </table>";
                     $tool_content .= "    </div>
                                     </div>";
                             }
@@ -219,9 +210,9 @@ function pdf_reports_output() {
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
-            .session_info { background:#fafafa; }
             .criteria_not_completed { color: #FF0000; }
             .criteria_completed { color: #008000;}
+            .resources_list { list-style-type: none; padding: 0px; }
           </style>
         </head>
         <body>" . get_platform_logo() .

@@ -5303,4 +5303,5 @@ body:has(.fixed-announcement) .btn-quick-note{
 
 .cardReports{
   background:#FAFBFC;
+  border: solid 1px #EFF6FF;
 }
