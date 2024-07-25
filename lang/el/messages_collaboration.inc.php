@@ -1575,3 +1575,6 @@ $langShowReportUserCurrentSession = "Αναφορά χρήστη τρέχουσ�
 $langCompletionResources = "Πόροι ολοκλήρωσης";
 $langCompletedResources = "Ολοκληρωμένοι πόροι";
 $langResourceAsActivity = "Πόροι ολοκλήρωσης συνεδρίας";
+$langSessionCondition = "Κατάσταση";
+$langUserHasCompletedCriteria = "Ο χρήστης έχει συμμετάσχει στους απαιτούμενους πόρους";
+$langUserHasNotCompletedCriteria = "Ο χρήστης δεν έχει συμμετάσχει σε όλους τους πόρους που απαιτούνται";

@@ -5718,7 +5718,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgQuestionnairePanels'])){
             $styles_str .= "
-                .panelCard-questionnaire{
+                .panelCard-questionnaire,
+                .cardReports{
                     background-color: $theme_options_styles[BgQuestionnairePanels];
                 }
             ";
@@ -5732,7 +5733,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clBorderQuestionnairePanels'])){
             $styles_str .= "
-                .panelCard-questionnaire{
+                .panelCard-questionnaire,
+                .cardReports{
                     border: solid 1px $theme_options_styles[clBorderQuestionnairePanels];
                 }
             ";

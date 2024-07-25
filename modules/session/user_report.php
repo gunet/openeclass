@@ -79,7 +79,7 @@ if (isset($_GET['u'])) { //  stats per user
                         $tool_content .= "<li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langName</div>
+                                                    <strong class='title-default'>$langName</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['username'] . "
@@ -90,7 +90,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langTitle</div>
+                                                    <strong class='title-default'>$langTitle</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['title'] . "
@@ -101,7 +101,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langType</div>
+                                                    <strong class='title-default'>$langType</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['type'] . "
@@ -112,7 +112,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langDate</div>
+                                                    <strong class='title-default'>$langDate</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['date'] . "
@@ -123,7 +123,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langStart</div>
+                                                    <strong class='title-default'>$langStart</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['start_date'] . "
@@ -134,7 +134,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langFinish</div>
+                                                    <strong class='title-default'>$langFinish</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['end_date'] . "
@@ -145,7 +145,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langCompletionResources</div>
+                                                    <strong class='title-default'>$langCompletionResources</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['tools'] . "
@@ -156,7 +156,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langCompletedResources</div>
+                                                    <strong class='title-default'>$langCompletedResources</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['has_completed'] . "
@@ -167,7 +167,7 @@ if (isset($_GET['u'])) { //  stats per user
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>$langPercentageSessionCompletion</div>
+                                                    <strong class='title-default'>$langPercentageSessionCompletion</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     " . $user_information['percentage'] . "%
@@ -316,7 +316,7 @@ if (isset($_GET['u'])) { //  stats per user
                                                                     WHERE doc_id = ?d AND from_user = ?d AND session_id = ?d",$c->resource, $u, $sid);
                         if($completion && $completion->is_completed){
                             $commentByConsultant = (!empty($completion->deliverable_comments)) ? $completion->deliverable_comments : "$langNoCommentsAvailable";
-                            $tools_completed[] = $titleDoc . "<ul><strong>" . $langCommentsByConsultant . "</strong><li>" . $commentByConsultant . "</li></ul>";
+                            $tools_completed[] = $titleDoc . "<div style='margin-top:5px;'><strong style='text-decoration: underline;'>" . $langCommentsByConsultant . "</strong></div><ul><li style='margin-bottom:20px;'>" . $commentByConsultant . "</li></ul>";
                         }
                     }
                 }elseif($c->activity_type == 'tc-completed'){

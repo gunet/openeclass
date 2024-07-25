@@ -5300,3 +5300,7 @@ body:has(.fixed-announcement) .btn-quick-note{
 .table-deliverable-comments .tr-deliverable{
   border: 0 !important;
 }
+
+.cardReports{
+  background:#FAFBFC;
+}

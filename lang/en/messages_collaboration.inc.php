@@ -1637,3 +1637,6 @@ $langShowReportUserCurrentSession = "Current session user report";
 $langCompletionResources = "Completion resources";
 $langCompletedResources = "Completed resources";
 $langResourceAsActivity = "Session completion resources";
+$langSessionCondition = "Condition";
+$langUserHasCompletedCriteria = "The user has joined the required resources";
+$langUserHasNotCompletedCriteria = "User has not joined all required resources";
