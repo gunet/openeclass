@@ -299,42 +299,42 @@
                             </div>
                         @endif
 
-                        <div class='col-12 mt-4'>
-                            <div class='row'>
-                                <div class='panel'>
-                                    <div class='panel-group group-section mt-2 px-0' id='accordionDes'>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item px-0 mb-4 bg-transparent">
+                        @if ($courseDescriptionVisible > 0)
+                            <div class='col-12 mt-4'>
+                                <div class='row'>
+                                    <div class='panel'>
+                                        <div class='panel-group group-section mt-2 px-0' id='accordionDes'>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item px-0 mb-4 bg-transparent">
 
-                                                @if ($courseDescriptionVisible > 0)
                                                     <div class='d-flex justify-content-between border-bottom-default'>
                                                         <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                             <i class='fa-solid fa-chevron-down settings-icon'></i>
                                                             {{ trans('langSyllabus') }}
                                                         </a>
                                                     </div>
-                                                @endif
 
-                                                <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
-                                                    @if(count($course_descriptions) == 0)
-                                                        <div class='col-12 mb-4'>
-                                                            <p>{{ trans('langNoSyllabus')}}</p>
-                                                        </div>
-                                                    @else
-                                                        @foreach ($course_descriptions as $row)
+                                                    <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
+                                                        @if(count($course_descriptions) == 0)
                                                             <div class='col-12 mb-4'>
-                                                                <p class='form-label text-start'>{{ $row->title }}</p>
-                                                                {!! standard_text_escape($row->comments) !!}
+                                                                <p>{{ trans('langNoSyllabus')}}</p>
                                                             </div>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </li>
-                                        </ul>
+                                                        @else
+                                                            @foreach ($course_descriptions as $row)
+                                                                <div class='col-12 mb-4'>
+                                                                    <p class='form-label text-start'>{{ $row->title }}</p>
+                                                                    {!! standard_text_escape($row->comments) !!}
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
 
                         @if($course_info->view_type == 'units')
