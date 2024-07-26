@@ -5949,6 +5949,7 @@ $langActiveTextColor = "Χρώμα Ενεργού Κειμένου";
 $langAccordions = "Accordion" ;
 $langAccordionsBorderBottom = "Χρώμα border στο κάτω μέρος" ;
 $langclBorderPanels = "Χρώμα border";
+$langBoxShadowPanels = "Σκιά (box shadow)";
 $langLists = "List Group";
 $langBgColorList = "Χρώμα φόντου λίστας";
 $langclBorderBottomLists = "Χρώμα border στο κάτω μέρος της λίστας";

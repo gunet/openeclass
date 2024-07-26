@@ -3895,6 +3895,7 @@ $langActiveTextColor = "Active Text Color";
 $langAccordions = "Accordion" ;
 $langAccordionsBorderBottom = "Border color at the bottom" ;
 $langclBorderPanels = "Border color";
+$langBoxShadowPanels = "Box shadow";
 $langLists = "List Group";
 $langBgColorList = "List background color";
 $langclBorderBottomLists = "Border color at the bottom of the list";

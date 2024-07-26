@@ -3220,6 +3220,20 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// BOX SHADOW TO FORM COMPONENT //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['FormsBoxShadow'])){
+            $styles_str .= "
+                .form-wrapper.form-edit {
+                    box-shadow: 0px 0 30px $theme_options_styles[FormsBoxShadow] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////// ADD PADDING TO THE FORM COMPONENT /////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -5684,6 +5698,80 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// BOX SHADOW TO THE PANELS ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BoxShadowPanels'])){
+            $styles_str .= "
+                .panel-action-btn-default,
+                .panel-primary,
+                .panel-success,
+                .panel-default,
+                .panel-info,
+                .panel-danger,
+                .panel-admin,
+                .card,
+                .user-info-card,
+                .panelCard,
+                .cardLogin,
+                .statistics-card,
+                .bodyChat{
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .wallWrapper{
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
+                }
+
+                .testimonials .testimonial {
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels];
+                }
+
+                /* active testimonial */
+                .testimonial.slick-slide.slick-current.slick-active.slick-center{
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels];
+                }
+
+                #lti_label{
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels];
+                }
+
+                #jsmind_container {
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
+                }
+
+                .panel-default .panel-heading,
+                .panel-action-btn-default .panel-heading {
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .card-affixed{
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
+                }
+
+                .panelCard-comments,
+                .panelCard-questionnaire,
+                .cardReports,
+                .panelCard-exercise{
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
+                }
+
+
+                .card-transparent,
+                .card-transparent .card-header,
+                .card-transparent .card-body,
+                .card-transparent .card-footer,
+                .card-transparent .panel-heading,
+                .card-transparent .panel-body,
+                .card-transparent .panel-footer{
+                   box-shadow: none !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         /////////////////// BACKGROUND COLOR TO THE COMMENTS PANELS /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -5801,6 +5889,21 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// BOX SHADOW TO THE CHAT CONTAINER //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutChatContainerBoxShadow'])){
+            $styles_str .= "
+                .bodyChat{
+                    box-shadow: 0px 0 30px $theme_options_styles[AboutChatContainerBoxShadow] !important;
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         //////////////// BACKGROUND COLOR TO THE COURSE INFO CONTAINER //////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -5824,6 +5927,21 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .card-course-info{
                     border: solid 1px $theme_options_styles[AboutBorderCourseInfoContainer];
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BOX SHADOW TO THE COURSE INFO CONTAINER ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutCourseInfoContainerBoxShadow'])){
+            $styles_str .= "
+                .card-course-info{
+                    box-shadow: 0px 0 30px $theme_options_styles[AboutCourseInfoContainerBoxShadow] !important;
                 }
 
             ";
@@ -5856,6 +5974,22 @@ function view($view_file, $view_data = array()) {
                 .card-units,
                 .card-sessions{
                     border: solid 1px $theme_options_styles[AboutBorderUnitsContainer];
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////// BOX SHADOW TO THE COURSE UNITS CONTAINER ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutUnitsContainerBoxShadow'])){
+            $styles_str .= "
+                .card-units,
+                .card-sessions{
+                    box-shadow: 0px 0 30px $theme_options_styles[AboutUnitsContainerBoxShadow] !important;
                 }
 
             ";

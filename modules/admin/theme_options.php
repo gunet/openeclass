@@ -31,7 +31,7 @@ $defaults = array(
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
-                                                    'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent'),
+                                                    'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
@@ -1832,6 +1832,11 @@ $tool_content .= "
                         <label for='clBorderExercisesPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
                         <input name='clBorderExercisesPanels' type='text' class='form-control colorpicker' id='clBorderExercisesPanels' value='$theme_options_styles[clBorderExercisesPanels]'>
                     </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBoxShadowPanels</h3>
+                    <div class='form-group d-flex justify-content-start align-items-center mt-4'>
+                        <label for='BoxShadowPanels' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
+                        <input name='BoxShadowPanels' type='text' class='form-control colorpicker' id='BoxShadowPanels' value='$theme_options_styles[BoxShadowPanels]'>
+                    </div>
                 </div>
             </div>
 
@@ -2035,6 +2040,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgBorderForms' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
                         <input name='BgBorderForms' type='text' class='form-control colorpicker' id='BgBorderForms' value='$theme_options_styles[BgBorderForms]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='FormsBoxShadow' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
+                        <input name='FormsBoxShadow' type='text' class='form-control colorpicker' id='FormsBoxShadow' value='$theme_options_styles[FormsBoxShadow]'>
                     </div>
                     <p class='control-label-notes mt-4'>$langAddPadding:</p>
                     <div class='col-sm-12'>
@@ -2386,6 +2395,10 @@ $tool_content .= "
                         <label for='AboutBorderChatContainer' class='control-label-notes mb-2 me-2'>$langBorderContainerBgColor:</label>
                         <input name='AboutBorderChatContainer' type='text' class='form-control colorpicker' id='AboutBorderChatContainer' value='$theme_options_styles[AboutBorderChatContainer]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='AboutChatContainerBoxShadow' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
+                        <input name='AboutChatContainerBoxShadow' type='text' class='form-control colorpicker' id='AboutChatContainerBoxShadow' value='$theme_options_styles[AboutChatContainerBoxShadow]'>
+                    </div>
 
                     <hr>
 
@@ -2398,6 +2411,10 @@ $tool_content .= "
                         <label for='AboutBorderCourseInfoContainer' class='control-label-notes mb-2 me-2'>$langBorderContainerBgColor:</label>
                         <input name='AboutBorderCourseInfoContainer' type='text' class='form-control colorpicker' id='AboutBorderCourseInfoContainer' value='$theme_options_styles[AboutBorderCourseInfoContainer]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='AboutCourseInfoContainerBoxShadow' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
+                        <input name='AboutCourseInfoContainerBoxShadow' type='text' class='form-control colorpicker' id='AboutCourseInfoContainerBoxShadow' value='$theme_options_styles[AboutCourseInfoContainerBoxShadow]'>
+                    </div>
 
                     <hr>
 
@@ -2409,6 +2426,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutBorderUnitsContainer' class='control-label-notes mb-2 me-2'>$langBorderContainerBgColor:</label>
                         <input name='AboutBorderUnitsContainer' type='text' class='form-control colorpicker' id='AboutBorderUnitsContainer' value='$theme_options_styles[AboutBorderUnitsContainer]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='AboutUnitsContainerBoxShadow' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
+                        <input name='AboutUnitsContainerBoxShadow' type='text' class='form-control colorpicker' id='AboutUnitsContainerBoxShadow' value='$theme_options_styles[AboutUnitsContainerBoxShadow]'>
                     </div>
                 </div>
             </div>
