@@ -2458,14 +2458,26 @@ function session_completion_with_tc_completed($element, $element_id, $session_id
         $ch = Database::get()->querySingle("SELECT id FROM {$element}_criterion 
                                             WHERE badge = ?d AND activity_type = ?s AND module = ?d AND resource = ?d",$element_id,'tc-completed',MODULE_ID_TC,$tc->id);
         if($tc && !$ch){
-            Database::get()->query("INSERT INTO {$element}_criterion
-                                    SET $element = ?d,
-                                    module= " . MODULE_ID_TC . ",
-                                    resource = ?d,
-                                    activity_type = 'tc-completed'",$element_id, $tc->id);
+
+            // Check if tc has been added as a session resource.
+            $exists_as_resource_session = Database::get()->querySingle("SELECT id FROM session_resources 
+                                                                        WHERE session_id = ?d 
+                                                                        AND type = ?s 
+                                                                        AND res_id = ?d",$session_id,'tc',$tc->id);
+            if($exists_as_resource_session){
+                Database::get()->query("INSERT INTO {$element}_criterion
+                        SET $element = ?d,
+                        module= " . MODULE_ID_TC . ",
+                        resource = ?d,
+                        activity_type = 'tc-completed'",$element_id, $tc->id);
             
-            Session::flash('message',$langResourceAddedWithSuccess);
-            Session::flash('alert-class', 'alert-success');
+                Session::flash('message',$langResourceAddedWithSuccess);
+                Session::flash('alert-class', 'alert-success');
+            }else{
+                Session::flash('message',$langNoExistsTClink);
+                Session::flash('alert-class', 'alert-warning');
+            }
+
         }else{
             if(!$tc){
                 Session::flash('message',$langNoExistsTClink);
