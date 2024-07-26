@@ -43,6 +43,12 @@ function select_tc_server($course_id) {
 
     $tool_content .= "<div class='row extapp'><div class='col-sm-12'>";
 
+    // If the request comes from session module then we will get the current session id.
+    $session_req = "";
+    if(isset($_GET['for_session'])){
+        $session_req = "&amp;for_session=" . $_GET['for_session'];
+    }
+
     $descriptions = [
         'bbb' => ['BigBlueButton', $langBBBLongDescription],
         'jitsi' => ['Jitsi', $langJitsiLongDescription],
@@ -68,7 +74,7 @@ function select_tc_server($course_id) {
                     <td>
                         <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <span>$description</span>
-                            <span><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn submitAdminBtn'>$langNewBBBSession</a></span>
+                            <span><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1$session_req&amp;tc_type=$name' class='btn submitAdminBtn'>$langNewBBBSession</a></span>
                         </div>
                     </td>
                   </tr>
@@ -184,6 +190,10 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $value_message = $langModify;
         $meeting_id_input = $row->meeting_id;
     } else { // new TC meeting
+        $for_session_module = 0;
+        if(isset($_GET['for_session'])){
+            $for_session_module = $_GET['for_session'];
+        }
         $meeting_id_input = '';
         $status = 1;
         $unlock_interval = '10';
@@ -251,7 +261,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type' method='post' >
+        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type&for_session_module=$for_session_module' method='post' >
         <fieldset>";
 
         if ($tc_type == 'googlemeet') { // google meet
@@ -980,6 +990,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         } else { // else course will use default tc_server
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = ?s and enabled = 'true' ORDER BY weight ASC", $tc_type)->id;
         }
+
+        $session_module_id = $_GET['for_session_module'] ?? 0;
+
         if ($tc_type == 'bbb') {
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
@@ -997,11 +1010,12 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             participants = ?s,
                                                             record = ?s,
                                                             sessionUsers = ?s,
-                                                            options = ?s",
+                                                            options = ?s,
+                                                            id_session = ?d",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 generateRandomString(), generateRandomString(), generateRandomString(),
-                $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+                $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $session_module_id);
         } elseif ($tc_type == 'jitsi') {
             $meeting_id = $course_code . "_" . generateRandomString();
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
@@ -1112,11 +1126,12 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             participants = ?s,
                                                             record = ?s,
                                                             sessionUsers = ?s,
-                                                            options = ?s",
+                                                            options = ?s,
+                                                            id_session = ?d",
                     $course_id, $title, $desc, $start_session, $BBBEndDate,
                     $status, $server_id,
                     $meeting->id, $meeting->encrypted_password, '' ,
-                    $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+                    $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $session_module_id);
             } else {
                 $data = parse_url($options);
                 $meeting_id = $data['path'];
@@ -1136,11 +1151,12 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             external_users = ?s,
                                                             participants = ?s,
                                                             record = ?s,
-                                                            sessionUsers = ?s",
+                                                            sessionUsers = ?s,
+                                                            id_session = ?d",
                     $course_id, $title, $desc, $start_session, $BBBEndDate,
                     $status, $server_id,
                     $meeting_id, $mod_pw, '' ,
-                    $minutes_before, $external_users, $r_group, $record, $sessionUsers);
+                    $minutes_before, $external_users, $r_group, $record, $sessionUsers, $session_module_id);
             }
 
         } elseif ($tc_type == 'webex') {

@@ -78,6 +78,12 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_LINKS) && $is_consultant)
                             ),
+                            array('title' => trans('langSelect') . ' ' . trans('langInsertTcMeeting'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=tc',
+                                'icon' => 'fa-solid fa-users-rectangle',
+                                'level' => 'secondary',
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && get_config('ext_zoom_enabled'))
+                            ),
                             array('title' => trans('langInsertPassage'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=passage',
                                 'icon' => 'fa-regular fa-keyboard',
@@ -92,7 +98,14 @@
                                 'icon' => 'fa-solid fa-users-rectangle',
                                 'confirm_title' => trans('langAddTcSession'),
                                 'confirm_button' => trans('langSubmit'),
-                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0)
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && !get_config('ext_zoom_enabled') && get_config('ext_bigbluebutton_enabled'))
+                            ),
+                            array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
+                                'url' => $urlAppend . 'modules/tc/index.php?course=' . $course_code . '&new=1' . '&for_session=' . $sessionID,
+                                'class' => "add-session",
+                                'data_action_class' => 'submitAdminBtn',
+                                'icon' => 'fa-solid fa-users-rectangle',
+                                'show' => (!is_module_disable(MODULE_ID_TC) && $is_consultant && is_remote_session($course_id,$sessionID) && count($participants) > 0 && get_config('ext_zoom_enabled'))
                             ),
                         ))
                     !!}

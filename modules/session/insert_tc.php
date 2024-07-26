@@ -8,7 +8,7 @@ function list_teleconferences($sid) {
            $langAddModulesButton, $langChoice, $langNoBBBSesssions,
            $course_code, $langBBB;
 
-    $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d ORDER BY title", $course_id);
+    $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d AND id_session = ?d ORDER BY title", $course_id,$sid);
     $tcinfo = array();
     foreach ($result as $row) {
         $tcinfo[] = array(
