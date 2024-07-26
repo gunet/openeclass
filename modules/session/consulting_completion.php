@@ -59,6 +59,26 @@ if(isset($_GET['user_rep'])){
     ], false);
 }
 
+$user_selected = 0;
+if(isset($_POST['form_user_report'])){
+    if($_POST['form_user_report'] == 0){
+        redirect_to_home_page("modules/session/consulting_completion.php?course=".$course_code);
+    }elseif($_POST['form_user_report'] > 0){
+        $sql_consultant = "";
+        $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
+        $forUser = "AND user_id = " . $_POST['form_user_report'];
+        $user_selected = $_POST['form_user_report'];
+    }
+}
+
+$course_users = Database::get()->queryArray("SELECT user_id FROM course_user
+                                                WHERE course_id = ?d
+                                                AND status = ?d
+                                                AND tutor = ?d
+                                                AND editor = ?d
+                                                AND course_reviewer = ?d
+                                                AND user_id IN (SELECT participants FROM mod_session_users WHERE is_accepted = 1)",$course_id,USER_STUDENT,0,0,0);
+
 $res = Database::get()->queryFunc("SELECT user_id FROM course_user 
                                    WHERE course_id = ?d 
                                    AND status = ?d 
@@ -129,6 +149,19 @@ $tool_content .= "
                         </div>
                         <div class='card-body'>
                             <p style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
+                            if(count($course_users) > 0){
+                                $tool_content .= "<div class='col-lg-6 col-12 mb-4'><form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                                    <label class='control-label-notes'>$langSearchUser</label>
+                                                    <div class='d-flex justify-content-start align-items-center gap-2'>
+                                                    <select class='form-select mt-0' name='form_user_report'>
+                                                    <option value='0'>$langAllUsers</option>";
+                                foreach($course_users as $u){
+                                    $is_selected = ($user_selected == $u->user_id) ? 'selected' : '';
+                                    $tool_content .= "<option value='{$u->user_id}' $is_selected>" . participant_name($u->user_id) . "</option>";
+                                }
+                                $tool_content .= "</select><button type='submit' class='btn submitAdminBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch'>
+                                                                                    <i class='fa-solid fa-search'></i></button></div></form></div>";
+                            }
                             foreach($users_actions as $key => $val){
                 $tool_content .= "<div class='card cardReports' style='margin-bottom:25px;'>
                                         <div class='card-body'>  
@@ -217,6 +250,7 @@ function pdf_reports_output() {
             .text-danger { color: #D22B2B; }
             .cardReports { background: #FAFBFC; padding: 15px; border: solid 1px #989ea6; }
             .export-pdf-btn {display: none;}
+            .form-user-report {display: none;}
           </style>
         </head>
         <body>" . get_platform_logo() .
