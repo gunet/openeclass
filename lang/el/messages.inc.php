@@ -5943,6 +5943,7 @@ $langTables = "Table";
 $langBgTables = "Χρώμα φόντου";
 $langBgBorderBottomHeadTables = "Χρώμα border στο κάτω μέρος της επικεφαλίδας (thead) του πίνακα";
 $langBgBorderBottomRowTables = "Χρώμα border στο κάτω μέρος των γραμμών (tr) του πίνακα";
+$langBoxShadowRowTables = "Σκιά στο κάτω μέρος των γραμμών (box shadow)";
 $langTabs = "Tabs";
 $langHoverTextColor = "Χρώμα Hovered Κειμένου";
 $langActiveTextColor = "Χρώμα Ενεργού Κειμένου";

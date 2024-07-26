@@ -3889,6 +3889,7 @@ $langTables = "Table";
 $langBgTables = "Background color";
 $langBgBorderBottomHeadTables = "Border color at the bottom of the table header";
 $langBgBorderBottomRowTables = "Border color at the bottom of the rows (tr) of the table";
+$langBoxShadowRowTables = "Box shadow color at the bottom of the rows (tr) of the table";
 $langTabs = "Tabs";
 $langHoverTextColor = "Hovered Text Color";
 $langActiveTextColor = "Active Text Color";
