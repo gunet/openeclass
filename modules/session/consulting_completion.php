@@ -159,7 +159,7 @@ $tool_content .= "
                                     $is_selected = ($user_selected == $u->user_id) ? 'selected' : '';
                                     $tool_content .= "<option value='{$u->user_id}' $is_selected>" . participant_name($u->user_id) . "</option>";
                                 }
-                                $tool_content .= "</select><button type='submit' class='btn submitAdminBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch'>
+                                $tool_content .= "</select><button type='submit' class='btn searchGroupBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch'>
                                                                                     <i class='fa-solid fa-search'></i></button></div></form></div>";
                             }
                             foreach($users_actions as $key => $val){
