@@ -124,8 +124,8 @@ $tool_content .= "
         if(count($users_actions) > 0){
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                            <h3 class='mb-0'>$langSessionsTable</h3>
-                            <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf'>$langDumpPDF</a>
+                            <h3 class='mb-0'>$langUserReferences</h3>
+                            <a class='btn submitAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf'>$langDumpPDF</a>
                         </div>
                         <div class='card-body'>
                             <p style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
@@ -192,7 +192,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
  */
 function pdf_reports_output() {
     global $tool_content, $langUserDuration, $currentCourseName,
-           $webDir, $course_id, $course_code;
+           $webDir, $course_id, $course_code, $langHasParticipatedInTool, $langHasNotParticipatedInTool;
 
     $pdf_content = "
         <!DOCTYPE html>
@@ -213,12 +213,22 @@ function pdf_reports_output() {
             .criteria_not_completed { color: #FF0000; }
             .criteria_completed { color: #008000;}
             .resources_list { list-style-type: none; padding: 0px; }
+            .text-success { color: #228B22; }
+            .text-danger { color: #D22B2B; }
+            .cardReports { background: #FAFBFC; padding: 15px; border: solid 1px #989ea6; }
+            .export-pdf-btn {display: none;}
           </style>
         </head>
         <body>" . get_platform_logo() .
         "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
 
-    $pdf_content .= $tool_content;
+    // Array containing icons 
+    $searchVal = array('&#10004;', '&#x2718;');
+    // Array containing replace icons with strings
+    $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
+    $output = str_replace($searchVal, $replaceVal, $tool_content);
+    $pdf_content .= $output;
+
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

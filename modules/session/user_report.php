@@ -379,7 +379,8 @@ if (isset($_GET['u'])) { //  stats per user
  */
 function pdf_session_output($sid) {
     global $tool_content, $langUserDuration, $currentCourseName,
-           $webDir, $course_id, $course_code;
+           $webDir, $course_id, $course_code, $language, $langHasParticipatedInTool,
+           $langHasNotParticipatedInTool;
 
     $sessionTitle = title_session($course_id,$sid);
 
@@ -399,13 +400,23 @@ function pdf_session_output($sid) {
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
+            .text-success { color: #228B22; }
+            .text-danger { color: #D22B2B; }
           </style>
         </head>
         <body>" . get_platform_logo() .
         "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "</h2>";
 
-    $pdf_content .= $tool_content;
+    // Array containing icons 
+    $searchVal = array('&#10004;', '&#x2718;');
+    // Array containing replace icons with strings
+    $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
+
+    $output = str_replace($searchVal, $replaceVal, $tool_content);
+
+    $pdf_content .= $output;
+   
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

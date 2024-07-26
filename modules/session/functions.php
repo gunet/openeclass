@@ -3187,7 +3187,7 @@ function session_completed_resources_by_user($sid,$cid,$user){
                         $comments_by_consultant = "<div style='margin-left:20px; margin-top:5px;'><strong style='text-decoration: underline;'>$langCommentsByConsultant</strong><ul><li>" . $completed_cr->deliverable_comments . "</li></ul></div>";
                     }
                     $resource_info = "<div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Success-200-cl'>&#10003;</div>" . 
+                                            <div class='Success-200-cl'>&#10004;</div>" . 
                                             "<div>" . $info_cr->title . $comments_by_consultant . "</div>
                                       </div>";
                 }else{

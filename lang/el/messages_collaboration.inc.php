@@ -1582,3 +1582,5 @@ $langUseOfAppInfo = "Επιλέξτε σε ποιες συνεργασίες θ�
 $langUseOfServiceInfo = "Επιλέξτε σε ποιες συνεργασίες θα χρησιμοποιείται η υπηρεσία";
 $langUsersHaveCompletedCriteria = "Οι ωφελούμενοι έχουν συμμετάσχει με επιτυχία στις δραστηριότητες ολοκλήρωσης της συνεδρίας";
 $langUsersCompletedCriteriaInProgress = "Η διαδικασία ολοκλήρωσης της συνεδρίας από τους συμμετέχοντες βρίσκεται σε εξέλιξη";
+$langHasParticipatedInTool = "Έχει συμμετάσχει στον πόρο";
+$langHasNotParticipatedInTool = "Δεν έχει συμμετάσχει στον πόρο";

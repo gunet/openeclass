@@ -1644,3 +1644,5 @@ $langUseOfAppInfo = "Choose which collaborations the app will be used in";
 $langUseOfServiceInfo = "Choose in which partnerships the service will be used";
 $langUsersHaveCompletedCriteria = "Participants have successfully participated in the wrap-up activities of the session";
 $langUsersCompletedCriteriaInProgress = "The process of completion of the session by the participants is in progress";
+$langHasParticipatedInTool = "He has participated in the resource";
+$langHasNotParticipatedInTool = "He has not joined the resource";
