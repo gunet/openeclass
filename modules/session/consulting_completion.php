@@ -145,11 +145,11 @@ $tool_content .= "
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <h3 class='mb-0'>$langUserReferences</h3>
-                            <a class='btn submitAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf'>$langDumpPDF</a>
+                            <a class='btn submitAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank'>$langDumpPDF</a>
                         </div>
                         <div class='card-body'>
                             <p style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
-                            if(count($course_users) > 0){
+                            if(count($course_users) > 0 && !isset($_GET['user_rep'])){
                                 $tool_content .= "<div class='col-lg-6 col-12 mb-4'><form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                                                     <label class='control-label-notes'>$langSearchUser</label>
                                                     <div class='d-flex justify-content-start align-items-center gap-2'>
