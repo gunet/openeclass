@@ -1562,7 +1562,7 @@ $langNoExistsNextSession = "Δεν υπάρχει προγραμματισμέν
 $langSessionsNotStarted = "Δεν έχουν ξεκινήσει ακόμα";
 $langSessionsHasExpired = "Έχουν παρέλθει";
 $langNoSessionInProgress =  "Δεν υπάρχει συνεδρία σε εξέλιξη";
-$langWithMeetingCompletion = "Με την ολοκλήρωση της συνάντησης δια ζώσης";
+$langWithMeetingCompletion = "Με την ολοκλήρωση της δια ζώσης συνάντησης";
 $langContinueToCompletetionWithMeeting = "Η συνεδρία θα ολοκληρωθεί με το κριτήριο ολοκλήρωσης της προγραμματισμένης δια ζώσης συνάντησης. </br>
                                           Θέλετε να προχωρήσετε στην συγκεκριμένη ενέργεια?";
 $langCompletedSessionWithMeeting = "Με την ολοκλήρωση της δια ζώσης συνάντησης";
@@ -1584,3 +1584,9 @@ $langUsersHaveCompletedCriteria = "Οι ωφελούμενοι έχουν συμ
 $langUsersCompletedCriteriaInProgress = "Η διαδικασία ολοκλήρωσης της συνεδρίας από τους συμμετέχοντες βρίσκεται σε εξέλιξη";
 $langHasParticipatedInTool = "Έχει συμμετάσχει στον πόρο";
 $langHasNotParticipatedInTool = "Δεν έχει συμμετάσχει στον πόρο";
+$langWithAttendanceRegistrationByConsultant = "Με καταχώριση παρουσιών";
+$langNotExistAttendanceCriterion = "Δεν βρέθηκε το κριτήριο ολοκλήρωσης συνεδρίας μέσω παρουσιολογίου.</br>
+                                        Προκειμένου να καταχωρίσετε τους χρήστες που συμμετείχαν στην συνεδρία,
+                                        θα πρέπει να ενεργοποιήσετε το κριτήριο <strong>καταχώριση παρουσιών </strong> στην <strong>ολοκλήρωση συνεδρίας.</strong>";
+$langChooseParticipatedUser = "Στον παρακάτω πίνακα επιλέξτε τους χρήστες οι οποίοι συμμετείχαν στην τρέχουσα συνεδρία.";
+$langCompleteAttendUser = "Οι παρουσίες καταχωρήθηκαν στους χρήστες";

@@ -60,6 +60,12 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
+                            array('title' => trans('langAttendance') . ' ' . trans('langUsersOf'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=attendance',
+                                'icon' => 'fa-solid fa-clipboard-user',
+                                'level' => 'secondary',
+                                'show' => $is_consultant
+                            ),
                             array('title' => trans('langSelect') . ' ' . trans('langInsertPoll'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=poll',
                                 'icon' => 'fa-solid fa-question',

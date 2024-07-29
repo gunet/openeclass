@@ -1073,7 +1073,7 @@ function get_resource_details($element, $resource_id) {
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
             $langAttendance, $langCompletedSessionWithoutActivity, $langSubmittedUploadedFile, $langFileName, $langTCComplited,
-            $langCompletedSessionWithMeeting;
+            $langCompletedSessionWithMeeting, $langWithAttendanceRegistrationByConsultant;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
@@ -1251,6 +1251,10 @@ function get_resource_details($element, $resource_id) {
             break;
         case 'meeting-completed':
             $title = "$langCompletedSessionWithMeeting";
+            break;
+        case 'consultant-completion':
+            $title = "$langWithAttendanceRegistrationByConsultant";
+            $type = "$langAttendance";
             break;
         default:
             $title = "$langAllActivities";

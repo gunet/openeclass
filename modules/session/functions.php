@@ -1540,7 +1540,7 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, 
            $langWithSubmittedUploadedFile, $langWithTCComplited, 
            $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria, 
-           $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting;
+           $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting, $langWithAttendanceRegistrationByConsultant;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1618,6 +1618,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                 $checkActivityType->activity_type == 'assignment-submit' or 
                 $checkActivityType->activity_type == 'document-submit' or
                 $checkActivityType->activity_type == 'meeting-completed' or
+                $checkActivityType->activity_type == 'consultant-completion' or
                 $checkActivityType->activity_type == 'tc-completed')){
                     $activity_off = '';
                     $active_completion_without_resource = 'opacity-help pe-none';
@@ -1673,6 +1674,11 @@ function display_session_activities($element, $id, $session_id = 0) {
               'icon' => 'fa-solid fa-users-rectangle',
               'icon-class' => $activity_off,
               'show' => $is_remote_session
+        ),
+        array('title' => $langWithAttendanceRegistrationByConsultant,
+              'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=withCompletionByConsultant",
+              'icon' => 'fa-solid fa-users',
+              'icon-class' => $activity_off
         ),
         // array('title' => $langOfSubmitDocument,
         //     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
@@ -2004,7 +2010,10 @@ function insert_session_activity($element, $element_id, $activity, $session_id =
             break;
         case 'withCompletedMeeting':
             session_completion_with_meeting_completed($element, $element_id, $session_id, $session_resource_id);
-                break;
+            break;
+        case 'withCompletionByConsultant':
+            session_completion_by_consultant($element, $element_id, $session_id, $session_resource_id);
+            break;
         default: break;
         }
 }
@@ -2306,6 +2315,35 @@ function display_session_available_documents($element, $element_id, $session_id 
         }
         
     }
+}
+
+/**
+ * @brief session completion without resources
+ * @param type $element
+ * @param type $element_id
+ * @param int $session_id
+ * @param int $session_resource_id
+ */
+function session_completion_by_consultant($element, $element_id, $session_id = 0, $session_resource_id = 0){
+    global $course_code, $course_id, $langResourceAddedWithSuccess, $langResourceExists;
+
+    if($session_id){    
+        $check = Database:: get()->querySingle("SELECT * FROM {$element}_criterion WHERE $element = ?d AND activity_type = ?s",$element_id,'consultant-completion');
+        if(!$check){
+            Database::get()->query("INSERT INTO {$element}_criterion
+                        SET $element = ?d,
+                        activity_type = 'consultant-completion'",$element_id);
+            
+            Session::flash('message',$langResourceAddedWithSuccess);
+            Session::flash('alert-class', 'alert-success');
+        }else{
+            Session::flash('message',$langResourceExists);
+            Session::flash('alert-class', 'alert-warning');
+        }          
+        
+    }
+
+    redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
 }
 
 /**
@@ -3169,7 +3207,7 @@ function session_resource_exists($rid,$sid){
  */
 function session_completed_resources_by_user($sid,$cid,$user){
 
-    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity, $langCommentsByConsultant;
+    global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity, $langCommentsByConsultant, $langAttendance;
 
     $html = "";
     $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion 
@@ -3265,6 +3303,23 @@ function session_completed_resources_by_user($sid,$cid,$user){
                                         </div>";
                 }
 
+            }elseif($c->activity_type == 'consultant-completion'){
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
+                                                                WHERE user = ?d 
+                                                                AND badge_criterion = ?d",$user,$c->id);
+
+                if($completed_cr){
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            "<div>" . "$langAttendance" . "</div>
+                                        </div>";
+                }else{
+                    $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
+                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            "<div>" . "$langAttendance" . "</div>
+                                        </div>";
+                }
+
             }
             $html .= "<li style='margin-bottom:5px;'>$resource_info</li>";
         }
@@ -3282,7 +3337,7 @@ function session_completed_resources_by_user($sid,$cid,$user){
  */
 function show_completed_resources($sid,$cid,$user){
 
-    global $langCompletedSessionMeeting, $langCompletedResources, $langCompletedSessionWithoutActivity;
+    global $langCompletedSessionMeeting, $langCompletedResources, $langCompletedSessionWithoutActivity, $langAttendance;
 
     $html = "";
     $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d",$cid,$sid);
@@ -3325,6 +3380,8 @@ function show_completed_resources($sid,$cid,$user){
                     $resource_info = "$langCompletedSessionMeeting";
                 }elseif($c->activity_type == 'noactivity'){
                     $resource_info = "$langCompletedSessionWithoutActivity";
+                }elseif($c->activity_type == 'consultant-completion'){
+                    $resource_info = "$langAttendance";
                 }
                 $html .= "<li>$resource_info</li>";
             }

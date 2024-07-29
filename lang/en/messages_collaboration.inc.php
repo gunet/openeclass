@@ -1646,3 +1646,9 @@ $langUsersHaveCompletedCriteria = "Participants have successfully participated i
 $langUsersCompletedCriteriaInProgress = "The process of completion of the session by the participants is in progress";
 $langHasParticipatedInTool = "He has participated in the resource";
 $langHasNotParticipatedInTool = "He has not joined the resource";
+$langWithAttendanceRegistrationByConsultant = "With registration of appearances by the consultant";
+$langNotExistAttendanceCriterion = "Present log session completion criteria not found.</br>
+ In order to register the users who participated in the session,
+ you should enable the <strong>registration of occurrences </strong> criterion on <strong>session completion.</strong>";
+$langChooseParticipatedUser = "In the table below, select the users who participated in the current session.";
+$langCompleteAttendUser = "Instances were registered to users";
