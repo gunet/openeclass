@@ -42,8 +42,7 @@ function getUserCourseInfo($uid): string
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty, 
-           $mine_courses, $mine_collaborations, $langNotificationsExist;
-
+           $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage;
 
     if(!get_config('show_always_collaboration')){
         $myCourses = $mine_courses = getUserCourses($uid);
@@ -134,9 +133,9 @@ function getUserCourseInfo($uid): string
                                         <div class='course-content mt-4'>
                                             <div class='col-12 d-flex justify-content-center align-items-start'>";
                 if($data->course_image == NULL) {
-                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' />";
+                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='$langCourseImage' />";
                 } else {
-                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' />";
+                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='$langCourseImage' />";
                 }
                 $lesson_content .= "</div>
                         <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
@@ -298,9 +297,9 @@ function getUserCourseInfo($uid): string
                                             <div class='course-content mt-4'>
                                                 <div class='col-12 d-flex justify-content-center align-items-start'>";
                     if($data->course_image == NULL) {
-                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' />";
+                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='$langCourseImage' />";
                     } else {
-                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' />";
+                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='$langCourseImage' />";
                     }
                     $lesson_content .= "</div>
                             <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";

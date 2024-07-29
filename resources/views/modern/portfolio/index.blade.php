@@ -67,10 +67,10 @@
             });
 
             $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap gap-2'>" +
-                "<a class='btn showCoursesBars active'>" +
+                "<a class='btn showCoursesBars active' aria-label='{{ js_escape(trans('langShowCoursesInTable')) }}'>" +
                 "<i class='fa-solid fa-table-list'></i>" +
                 "</a>" +
-                "<a class='btn showCoursesPics'><i class='fa-solid fa-table-cells-large'></i></a>" +
+                "<a class='btn showCoursesPics' aria-label='{{ js_escape(trans('langShowCoursesInPics')) }}'><i class='fa-solid fa-table-cells-large'></i></a>" +
                 "</div>");
 
             jQuery('.panel_title').click(function()
@@ -713,9 +713,9 @@
                                                                     @endphp
 
                                                                     @if($course->course_image == NULL)
-                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $course->course_image }}" />
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" />
                                                                     @else
-                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ trans('langCourseImage') }}" />
                                                                     @endif
 
                                                                     <div class='card-body'>
@@ -753,13 +753,13 @@
                                                                         @endif
 
 
-                                                                        <div class="modal fade" id="notificationCard{{ $course->course_id }}" tabindex="-1" aria-labelledby="notificationCardLabel" aria-hidden="true">
+                                                                        <div class="modal fade" id="notificationCard{{ $course->course_id }}" tabindex="-1" aria-labelledby="notificationCardLabel{{ $course->course_id }}" aria-hidden="true">
                                                                             <div class="modal-dialog">
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
                                                                                         <div class='modal-title'>
                                                                                             <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                                                                            <h3 class='modal-title-default text-center mb-0'>{{ trans('langNotesNotifications') }}</h3>
+                                                                                            <h3 class='modal-title-default text-center mb-0' id="notificationCardLabel{{ $course->course_id }}">{{ trans('langNotesNotifications') }}</h3>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="modal-body">

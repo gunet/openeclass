@@ -120,9 +120,9 @@
                                                                 <div class='course-content mt-4'>
                                                                     <div class='col-12 d-flex justify-content-center align-items-start'>
                                                                         @if($mycourse->img == NULL)
-                                                                            <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
+                                                                            <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
                                                                         @else
-                                                                            <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ $mycourse->img }}" /></a>
+                                                                            <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ trans('langCourseImage') }}" /></a>
                                                                         @endif
                                                                     </div>
 

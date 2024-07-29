@@ -6389,3 +6389,5 @@ $langLinkFb = "Facebook link";
 $langLinkTw = "Twitter link";
 $langLinkLn = "LinkedIn link";
 $langLinkBanner = "Banner link";
+$langShowCoursesInTable = "Show courses in table format";
+$langShowCoursesInPics = "Show courses in card format";

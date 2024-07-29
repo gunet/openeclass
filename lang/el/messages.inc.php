@@ -6859,3 +6859,5 @@ $langLinkFb = "Σύνδεσμος Facebook";
 $langLinkTw = "Σύνδεσμος Twitter";
 $langLinkLn = "Σύνδεσμος LinkedIn";
 $langLinkBanner = "Σύνδεσμος Banner";
+$langShowCoursesInTable = "Εμφάνιση μαθημάτων σε μορφή πίνακα";
+$langShowCoursesInPics = "Εμφάνιση μαθημάτων σε μορφή εικόνων";
