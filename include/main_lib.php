@@ -2806,7 +2806,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs>$img</a>";
+        return "<a href='$link'$link_attrs aria-label='$title'>$img</a>";
     } else {
         return $img;
     }

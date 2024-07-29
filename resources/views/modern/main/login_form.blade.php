@@ -167,7 +167,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class='col card-login-img d-none {!! $PositionForm !!}' style="background: url({{ $login_img }});"></div>
+                        <div class='col card-login-img d-none {!! $PositionForm !!}' role="img" aria-label="{{ trans('langLoginImg') }}" style="background: url({{ $login_img }});"></div>
                     </div>
                 </div>
             </div>

@@ -206,7 +206,7 @@
                                                                 <div class='form-group mt-4'>
                                                                     <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
                                                                     <div class='col-12'>
-                                                                        <select name='moveTo' class='form-select'>
+                                                                        <select name='moveTo' class='form-select' aria-label="{{ trans('langMove')}}">
                                                                             @if ($curDirPath and $curDirPath != '/')
                                                                                 <option value=''>{{ trans('langParentDir') }}</option>
                                                                             @endif
@@ -245,14 +245,14 @@
 
                                     <thead>
                                         <tr class="list-header">
-                                            <th style='width:5%;' class='checkbox_th d-none'></th>
+                                            <th style='width:5%;' class='checkbox_th d-none' aria-label='{{ trans('langIcon') }}'></th>
                                             <th style='width:50%;'>{!! headlink(trans('langName'), 'name') !!}</th>
 
                                             <th style='width:15%;'>{{ trans('langSize') }}</th>
                                             <th style='width:15%;'>{!! headlink(trans('langDate'), 'date') !!}</th>
 
                                             @unless ($is_in_tinymce)
-                                                <th style='width:10%;'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
+                                                <th style='width:10%;' aria-label='{{ trans('langCommands') }}'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -265,7 +265,7 @@
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
                                                 <td class='text-center checkbox_td d-none'>
                                                     <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect')}}">
                                                             <input type='checkbox' isDir='{{$file->is_dir}}' filepath='{{$file->path}}' cbid='{{$file->id}}' value='{{$file->id}}'>
                                                             <span class='checkmark'></span>
                                                         </label>

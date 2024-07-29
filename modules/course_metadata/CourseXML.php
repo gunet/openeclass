@@ -315,7 +315,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 if (!empty($value)) { // image already exists
                     $mime = (string) $this->getAttribute('mime');
                     $html .= "<img " . $idorclass . "='" . $fullKey . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
-                              <i " . $idorclass . "='" . $fullKey . "_delete' class='fa-xmark fa-solid'>
+                              <i " . $idorclass . "='" . $fullKey . "_delete' class='fa-solid fa-xmark'>
                               <input " . $idorclass . "='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
                               <input " . $idorclass . "='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>
                               </span></div>

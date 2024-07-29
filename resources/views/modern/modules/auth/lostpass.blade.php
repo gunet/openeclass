@@ -40,7 +40,7 @@
                             <div class='col-lg-6 col-12 ms-auto me-auto mt-3'>
                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                     <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                        <h3>{{ trans('langNewPass1') }} </h3>
+                                        <h1>{{ trans('langNewPass1') }} </h1>
                                     </div>
                                     <div class='card-body'>
 
@@ -80,7 +80,7 @@
                     <div class='col-lg-6 col-12 ms-auto me-auto mt-3'>
                         <div class="card panelCard px-lg-4 py-lg-3 h-100">
                             <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                <h3>{{ trans('langUserData') }} </h3>
+                                <h1>{{ trans('langUserData') }} </h1>
                             </div>
                             <div class='card-body'>
 

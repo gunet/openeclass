@@ -16,7 +16,7 @@
                         <ul class='list-group list-group-flush'>
                             @foreach ($general_tutorials['links'] as $gt)
                                 <li class="list-group-item element">
-                                    <a class='TextBold' href='{{ $gt['url'] }}' target='_blank' class='mainpage' aria-label='(opens new window)'>{!! $gt['desc'] !!}</a>
+                                    <a class='TextBold' href='{{ $gt['url'] }}' target='_blank' class='mainpage' aria-label="{!! $gt['desc'] !!}">{!! $gt['desc'] !!}</a>
                                 </li>
                             @endforeach
                         </ul>

@@ -92,7 +92,7 @@
                                             <div class='form-group mt-4'>
                                                 <div class='col-sm-offset-2 col-sm-10'>
                                                     <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langUncompress')}}">
                                                             <input type='checkbox' name='uncompress' value='1'>
                                                             <span class='checkmark'></span>
                                                             {{ trans('langUncompress') }}
@@ -106,7 +106,7 @@
                                             <div class='form-group mt-3'>
                                                 <div class='col-sm-offset-2 col-sm-12'>
                                                     <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langReplaceSameName')}}">
                                                             <input type='checkbox' name='replace' value='1'>
                                                             <span class='checkmark'></span>
                                                             {{ trans('langReplaceSameName') }}

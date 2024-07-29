@@ -59,7 +59,7 @@
                                         <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px gap-2" action='{{ $urlAppend }}modules/search/search.php' method='post' role='search'>
                                     @endif
                                     <div>
-                                        <a id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
+                                        <a id="btn-search" role="button" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" name="quickSearch" aria-label="Quick search">
                                             <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                                         </a>
                                     </div>

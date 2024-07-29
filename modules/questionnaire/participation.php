@@ -241,8 +241,9 @@ $tool_content .= "
                }
             });
             $('.dataTables_filter input').attr({
-                class : 'form-control input-sm ms-0 mb-3',
-                placeholder : '$langSearch...'
+                'class' : 'form-control input-sm ms-0 mb-3',
+                'placeholder' : '$langSearch...',
+                'aria-label' : '$langSearch'
             });
             $('#user_filter').on('change', function () {
                 table.column(4).search($(this).val()).draw();

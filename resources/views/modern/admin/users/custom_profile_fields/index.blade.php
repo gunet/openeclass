@@ -58,9 +58,8 @@
                                         <td class='bg-header-table TextBold'>{{ trans('langCPFFieldDatatype') }}</td>
                                         <td class='bg-header-table TextBold'>{{ trans('langCPFFieldRequired') }}</td>
                                         <td class='bg-header-table TextBold'>{{ trans('langCPFFieldRegistration') }}</td>
-                                        <td class='bg-header-table TextBold'>{{ trans('langCPFFieldUserType') }}</td>
                                         <td class='bg-header-table TextBold'>{{ trans('langCPFFieldVisibility') }}</td>
-                                        <td class='bg-header-table TextBold'>{!! icon('fa-gears') !!}</td>
+                                        <td class='bg-header-table TextBold'></td>
                                     </tr>
                                 </thead>
 
@@ -75,7 +74,7 @@
                                             <td>{{ $yes_no[$f->required] }}</td>
                                             <td>{{ $yes_no[$f->registration] }}</td>
                                             <td>{{ $visibility[$f->visibility] }}</td>
-                                            <td>
+                                            <td class='text-end'>
                                                 {!! action_button(array(
                                                     array('title' => trans('langModify'),
                                                         'url' => "$_SERVER[SCRIPT_NAME]?edit_field=" . getIndirectReference($f->id),

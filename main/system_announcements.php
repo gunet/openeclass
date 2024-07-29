@@ -118,8 +118,9 @@ if (isset($_GET['an_id'])) {
                         })
                     });
                     $('#ann_table_admin_logout_filter label input').attr({
-                          class : 'form-control input-sm ms-0 mb-3',
-                          placeholder : '$langSearch...'
+                          'class' : 'form-control input-sm ms-0 mb-3',
+                          'placeholder' : '$langSearch...',
+                          'aria-label' : '$langSearch'
                         });
                  },
                  'sPaginationType': 'full_numbers',

@@ -710,8 +710,9 @@ if (isset($_GET['mid'])) {
                    'bAutoWidth' : false,
                    'fnDrawCallback': function( oSettings ) {
                         $('#inbox_table_filter label input').attr({
-                          class : 'form-control input-sm ms-0 mb-3',
-                          placeholder : '".js_escape($langSearch)."...'
+                          'class' : 'form-control input-sm ms-0 mb-3',
+                          'placeholder' : '".js_escape($langSearch)."...',
+                          'aria-label' : '".js_escape($langSearch)."'
                         });
                     },
                    'oLanguage': {

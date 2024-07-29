@@ -301,7 +301,7 @@
 
                                     @if(!get_config('show_only_loginScreen'))
                                         <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif"
-                                                style="background: url({{ $loginIMG }});"></div>
+                                        role="img" aria-label="{{ trans('langLoginImg') }}" style="background: url({{ $loginIMG }});"></div>
                                     @endif
                                 </div>
                             </div>
