@@ -1591,3 +1591,7 @@ $langNotExistAttendanceCriterion = "Δεν βρέθηκε το κριτήριο 
 $langChooseParticipatedUser = "Στον παρακάτω πίνακα επιλέξτε τους χρήστες οι οποίοι συμμετείχαν στην τρέχουσα συνεδρία.";
 $langCompleteAttendUser = "Οι παρουσίες καταχωρήθηκαν στους χρήστες";
 $langAddParticipationUser = "Καταχώριση παρουσίας";
+$langDocsUser = "Αρχεία χρηστών";
+$langChooseUser = "Επιλέξτε έναν χρήστη";
+$langNotExistFilesForUser = "Δεν υπάρχουν αρχεία για τον συγκεκριμένο χρήστη";
+$langUserNotParticipatedInSessions = "Ο χρήστης δεν συμμετέχει σε συνεδρίες";

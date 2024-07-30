@@ -1653,3 +1653,7 @@ $langNotExistAttendanceCriterion = "Present log session completion criteria not 
 $langChooseParticipatedUser = "In the table below, select the users who participated in the current session.";
 $langCompleteAttendUser = "Instances were registered to users";
 $langAddParticipationUser = "Presence registration";
+$langDocsUser = "User Documents";
+$langChooseUser = "Select a user";
+$langNotExistFilesForUser = "There are no files for this user";
+$langUserNotParticipatedInSessions = "The user does not participate in sessions";

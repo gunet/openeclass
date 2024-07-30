@@ -29,6 +29,10 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
@@ -68,6 +72,67 @@ if(isset($_POST['form_user_report'])){
         $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
         $forUser = "AND user_id = " . $_POST['form_user_report'];
         $user_selected = $_POST['form_user_report'];
+    }
+}
+
+if(isset($_GET['user_docs'])){
+    $userid = $_GET['user_docs'];
+    if($userid > 0){
+        $sql_consultant = "";
+        $user_pdf = "&amp;user_rep=$_GET[user_docs]";
+        $forUser = "AND user_id = " . $_GET['user_docs'];
+        $user_selected = $_GET['user_docs'];
+        $sessions_user = Database::get()->queryArray("SELECT id,title FROM mod_session
+                                                        WHERE course_id = ?d
+                                                        AND id IN (SELECT session_id FROM mod_session_users
+                                                                    WHERE participants = ?d AND is_accepted = ?d)",$course_id,$userid,1);
+
+        if(count($sessions_user) > 0){
+            $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
+            $theName = preg_replace('/\s+/', '_', participant_name($userid));
+            $real_filename = $theName . '.zip';
+            $subsystem = MYSESSIONS;
+            $zipFile = new ZipArchive();
+            $zipFile->open($dload_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            foreach($sessions_user as $s){
+                $subsystem_id = $s->id;
+                $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id AND lock_user_id = $userid";
+                $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $s->id . '/' . $userid;
+                if (file_exists($basedir)) {
+                    create_map_to_real_filename('/', false);
+                    $topdir = $basedir;
+                    
+                    // Create recursive directory iterator
+                    $files = new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($topdir),
+                        RecursiveIteratorIterator::LEAVES_ONLY
+                    );
+                
+                    foreach ($files as $name => $file) {
+                        // Get real and filename to be added for current file
+                        $filePath = fix_directory_separator($file->getRealPath());
+                        $relativePath = substr($filePath, strlen($basedir));
+                
+                        // Skip directories (they will be added automatically)
+                        if (!$file->isDir()) {
+                            // Add current file to archive
+                            $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
+                        }
+                    }
+                } 
+            }
+
+            if (!$zipFile->close()) {
+                die("Error while creating ZIP file!");
+            }
+            
+            send_file_to_client($dload_filename, $real_filename, null, true, true);
+            exit;
+        }
+    }else{
+        Session::flash('message',$langChooseUser);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code);
     }
 }
 
@@ -145,7 +210,10 @@ $tool_content .= "
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <h3 class='mb-0'>$langUserReferences</h3>
-                            <a class='btn submitAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank'>$langDumpPDF</a>
+                            <div class='d-flex justify-content-end align-items-center gap-2'>
+                                <a class='btn submitAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank'>$langDumpPDF</a>
+                                <a class='btn submitAdminBtn docs-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected'>$langDocsUser</a>
+                            </div>
                         </div>
                         <div class='card-body'>
                             <p style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
@@ -251,6 +319,7 @@ function pdf_reports_output() {
             .cardReports { background: #FAFBFC; padding: 15px; border: solid 1px #989ea6; }
             .export-pdf-btn {display: none;}
             .form-user-report {display: none;}
+            .docs-pdf-btn {display: none;}
           </style>
         </head>
         <body>" . get_platform_logo() .
