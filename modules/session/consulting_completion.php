@@ -92,12 +92,17 @@ if(isset($_GET['user_docs'])){
             $theName = preg_replace('/\s+/', '_', participant_name($userid));
             $real_filename = $theName . '.zip';
             $subsystem = MYSESSIONS;
+            $empty_dirs = 0;
             $zipFile = new ZipArchive();
             $zipFile->open($dload_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
             foreach($sessions_user as $s){
                 $subsystem_id = $s->id;
                 $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id AND lock_user_id = $userid";
                 $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $s->id . '/' . $userid;
+                $total_docs = Database::get()->queryArray("SELECT id FROM document WHERE $group_sql");
+                if (count($total_docs) > 0) {
+                    $empty_dirs++;
+                }
                 if (file_exists($basedir)) {
                     create_map_to_real_filename('/', false);
                     $topdir = $basedir;
@@ -108,6 +113,8 @@ if(isset($_GET['user_docs'])){
                         RecursiveIteratorIterator::LEAVES_ONLY
                     );
                 
+                    $dir = preg_replace('/[\/]{2,}/', '/', $s->title ."/"); 
+                    $zipFile->addEmptyDir($dir);
                     foreach ($files as $name => $file) {
                         // Get real and filename to be added for current file
                         $filePath = fix_directory_separator($file->getRealPath());
@@ -116,7 +123,7 @@ if(isset($_GET['user_docs'])){
                         // Skip directories (they will be added automatically)
                         if (!$file->isDir()) {
                             // Add current file to archive
-                            $zipFile->addFile($filePath, substr($map_filenames[$relativePath], 1));
+                            $zipFile->addFile($filePath, $s->title . '/' . substr($map_filenames[$relativePath], 1));
                         }
                     }
                 } 
@@ -126,8 +133,15 @@ if(isset($_GET['user_docs'])){
                 die("Error while creating ZIP file!");
             }
             
-            send_file_to_client($dload_filename, $real_filename, null, true, true);
-            exit;
+            if($empty_dirs > 0){
+                send_file_to_client($dload_filename, $real_filename, null, true, true);
+                exit;
+            }else{
+                Session::flash('message',$langNotExistFilesForUser);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code);
+            }
+            
         }
     }else{
         Session::flash('message',$langChooseUser);
