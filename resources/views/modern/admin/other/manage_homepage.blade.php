@@ -158,7 +158,7 @@
 
 
 
-                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                    
                     @if($priorities)
                         <div class='col-12 mt-5'>
                             <div id='orderTexts'>
@@ -215,7 +215,7 @@
                                 @endforeach
                             </div>
                         </div>
-                    @endif
+                    
                     @else
                     <div id='orderTexts'></div>      
                     @endif
