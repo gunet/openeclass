@@ -1590,3 +1590,4 @@ $langNotExistAttendanceCriterion = "Δεν βρέθηκε το κριτήριο 
                                         θα πρέπει να ενεργοποιήσετε το κριτήριο <strong>καταχώριση παρουσιών </strong> στην <strong>ολοκλήρωση συνεδρίας.</strong>";
 $langChooseParticipatedUser = "Στον παρακάτω πίνακα επιλέξτε τους χρήστες οι οποίοι συμμετείχαν στην τρέχουσα συνεδρία.";
 $langCompleteAttendUser = "Οι παρουσίες καταχωρήθηκαν στους χρήστες";
+$langAddParticipationUser = "Καταχώριση παρουσίας";

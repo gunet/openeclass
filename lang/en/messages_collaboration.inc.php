@@ -1652,3 +1652,4 @@ $langNotExistAttendanceCriterion = "Present log session completion criteria not 
  you should enable the <strong>registration of occurrences </strong> criterion on <strong>session completion.</strong>";
 $langChooseParticipatedUser = "In the table below, select the users who participated in the current session.";
 $langCompleteAttendUser = "Instances were registered to users";
+$langAddParticipationUser = "Presence registration";
