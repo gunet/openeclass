@@ -50,10 +50,12 @@ if($is_consultant && !$is_coordinator){
 $forUser = "";
 $data['action_bar'] = "";
 $user_pdf = "";
+$user_selected = 0;
 if(isset($_GET['user_rep'])){
     $sql_consultant = "";
     $user_pdf = "&amp;session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
     $forUser = "AND user_id = " . $_GET['user_rep'];
+    $user_selected = $_GET['user_rep'];
     $data['action_bar'] = action_bar([
         [ 'title' => $langBack,
           'url' => 'user_report.php?course=' . $course_code . '&session=' . $_GET['session'],
@@ -62,8 +64,6 @@ if(isset($_GET['user_rep'])){
           'level' => 'primary-label' ]
     ], false);
 }
-
-$user_selected = 0;
 if(isset($_POST['form_user_report'])){
     if($_POST['form_user_report'] == 0){
         redirect_to_home_page("modules/session/consulting_completion.php?course=".$course_code);
@@ -223,14 +223,17 @@ $tool_content .= "
         if(count($users_actions) > 0){
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                            <h3 class='mb-0'>$langUserReferences</h3>
-                            <div class='d-flex justify-content-end align-items-center gap-2'>
-                                <a class='btn submitAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank'>$langDumpPDF</a>
-                                <a class='btn submitAdminBtn docs-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected'>$langDocsUser</a>
+                            <h3 class='title_reports mb-0'>$langUserReferences</h3>
+                            <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                <a class='btn successAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank'>$langDumpPDF</a>
+                                <a class='btn submitAdminBtn docs-pdf-btn gap-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected'>
+                                    <i class='fa-solid fa-download'></i>
+                                    $langDocsUser
+                                </a>
                             </div>
                         </div>
                         <div class='card-body'>
-                            <p style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
+                            <p class='info_completion' style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
                             if(count($course_users) > 0 && !isset($_GET['user_rep'])){
                                 $tool_content .= "<div class='col-lg-6 col-12 mb-4'><form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                                                     <label class='control-label-notes'>$langSearchUser</label>
@@ -246,14 +249,14 @@ $tool_content .= "
                             }
                             foreach($users_actions as $key => $val){
                 $tool_content .= "<div class='card cardReports' style='margin-bottom:25px;'>
-                                        <div class='card-body'>  
-                                            <h4 style=' display:flex; justify-content:end; align-items:center; gap:5px; margin-bottom:10px;'>
-                                                <img class='user-icon-filename' src='".user_icon($key, IMAGESIZE_SMALL)."' alt='".participant_name($key)."'>
-                                                " . participant_name($key) . "
-                                            </h4>";
+                                        <div class='d-flex justify-content-start align-items-center gap-3'>
+                                            <img class='card-img-top' style='width:40px; height:40xp; object-fit:cover;' src='".user_icon($key, IMAGESIZE_LARGE)."' alt='".participant_name($key)."'>
+                                            <h3 class='mb-0'>" . participant_name($key) . "</h3>
+                                        </div>
+                                        <div class='card-body'>";
                 $tool_content .= "  
                                             <table class='table-default'>
-                                                <thead>
+                                                <thead style='background-color: transparent;'>
                                                     <tr>
                                                         <th style='width:30%;'>$langSSession</th>
                                                         <th style='width:30%;'>$langConsultant</th>
@@ -261,14 +264,14 @@ $tool_content .= "
                                                     </tr>
                                                 </thead>";
                                                 foreach($val as $v){
-                                $tool_content .= "  <tr>
-                                                        <td style='vertical-align:top;'>
+                                $tool_content .= "  <tr style='border:0px !important;'>
+                                                        <td style='vertical-align:top; border:0px !important; background-color: transparent;'>
                                                             <strong>{$v->title}</br>
                                                                 " .format_locale_date(strtotime($v->start), 'short', false). "
                                                             </strong>
                                                         </td>
-                                                        <td style='vertical-align:top;'>" . participant_name($v->creator) . "</td>
-                                                        <td style='vertical-align:top;'>
+                                                        <td style='vertical-align:top; border:0px !important; background-color: transparent;'>" . participant_name($v->creator) . "</td>
+                                                        <td style='vertical-align:top; border:0px !important; background-color: transparent;'>
                                                             " . session_completed_resources_by_user($v->id,$course_id,$key) ."
                                                             <div>{$v->completion}</div>
                                                         </td>
@@ -321,19 +324,41 @@ function pdf_reports_output() {
             small, .small { font-size: 8pt; }
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+            h2 { font-size: 14pt; }
+            h3 { font-size: 14pt; color: #000000; margin-top: 0px; margin-bottom:20px; background-color: #EFF6FF; padding: 10px; }
+            h4 { font-size: 11pt; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
-            .criteria_not_completed { color: #FF0000; }
-            .criteria_completed { color: #008000;}
-            .resources_list { list-style-type: none; padding: 0px; }
-            .text-success { color: #228B22; }
-            .text-danger { color: #D22B2B; }
-            .cardReports { background: #FAFBFC; padding: 15px; border: solid 1px #989ea6; }
-            .export-pdf-btn {display: none;}
-            .form-user-report {display: none;}
-            .docs-pdf-btn {display: none;}
+            .criteria_not_completed { 
+                color: #FF0000; 
+            }
+            .criteria_completed { 
+                color: #008000;
+            }
+            .text-success { 
+                color: #228B22; 
+            }
+            .text-danger { 
+                color: #D22B2B; 
+            }
+            .cardReports { 
+                background: #ffffff; 
+                padding: 15px; 
+                border: solid 1px #989ea6; 
+                margin-top:20px; 
+            }
+            .export-pdf-btn,
+            .form-user-report,
+            .docs-pdf-btn,
+            .user-icon-filename,
+            .info_completion,
+            .title_reports,
+            .card-img-top {
+                display: none;
+            }
+            .resource_item {
+                margin-bottom: 25px;
+            }
           </style>
         </head>
         <body>" . get_platform_logo() .

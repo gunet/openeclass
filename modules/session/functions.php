@@ -3215,7 +3215,7 @@ function session_completed_resources_by_user($sid,$cid,$user){
                                                                     WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);
 
     if(count($criteria)){
-        $html .= "<ul class='resources_list' style='list-style-type: none; padding: 0px;'>";
+        $html .= "<div class='resources_list' style='padding: 0px;'>";
         foreach($criteria as $c){
             $resource_info = "";
             if($c->activity_type == 'document-submit'){
@@ -3321,9 +3321,9 @@ function session_completed_resources_by_user($sid,$cid,$user){
                 }
 
             }
-            $html .= "<li style='margin-bottom:5px;'>$resource_info</li>";
+            $html .= "<div class='resource_item' style='margin-bottom:5px;'>$resource_info</div>";
         }
-        $html .= "</ul>";
+        $html .= "</div>";
     }
 
     return $html;

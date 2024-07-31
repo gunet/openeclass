@@ -26,7 +26,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor', 'bgColorContentPlatform',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter',
-                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
+                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgReportsPanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
@@ -43,7 +43,7 @@ $defaults = array(
                                                 'clLinkAlertInfo','clLinkAlertWarning','clLinkAlertSuccess','clLinkAlertDanger', 'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
-                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor','clLinkHoveredAlertInfo','clLinkHoveredAlertWarning','clLinkHoveredAlertSuccess','clLinkHoveredAlertDanger'),
@@ -1831,6 +1831,15 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clBorderExercisesPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
                         <input name='clBorderExercisesPanels' type='text' class='form-control colorpicker' id='clBorderExercisesPanels' value='$theme_options_styles[clBorderExercisesPanels]'>
+                    </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langConcerngingReportsPanels</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgReportsPanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
+                        <input name='BgReportsPanels' type='text' class='form-control colorpicker' id='BgReportsPanels' value='$theme_options_styles[BgReportsPanels]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderReportsPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
+                        <input name='clBorderReportsPanels' type='text' class='form-control colorpicker' id='clBorderReportsPanels' value='$theme_options_styles[clBorderReportsPanels]'>
                     </div>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBoxShadowPanels</h3>
                     <div class='form-group d-flex justify-content-start align-items-center mt-4'>
