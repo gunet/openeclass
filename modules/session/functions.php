@@ -1150,6 +1150,11 @@ function upload_session_empty_doc($sid){
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
+    $sdir = "$webDir/courses/$course_code/session/session_$sid/";
+    if (!file_exists($sdir)) {
+        mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
+    }
+
     $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
     $order = $order+1;
     $title = q($_POST['title']);
