@@ -6392,3 +6392,5 @@ $langLinkLn = "LinkedIn link";
 $langLinkBanner = "Banner link";
 $langShowCoursesInTable = "Show courses in table format";
 $langShowCoursesInPics = "Show courses in card format";
+$langDeliverableInserted = "You have successfully created the deliverable";
+$langCreateDeliverable = "Deliverable creation";

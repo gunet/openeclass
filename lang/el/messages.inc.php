@@ -6862,3 +6862,5 @@ $langLinkLn = "Σύνδεσμος LinkedIn";
 $langLinkBanner = "Σύνδεσμος Banner";
 $langShowCoursesInTable = "Εμφάνιση μαθημάτων σε μορφή πίνακα";
 $langShowCoursesInPics = "Εμφάνιση μαθημάτων σε μορφή εικόνων";
+$langDeliverableInserted = "Δημιουργήσατε με επιτυχία το παραδοτέο";
+$langCreateDeliverable = "Δημιουργία παραδοτέου";

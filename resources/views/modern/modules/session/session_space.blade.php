@@ -54,7 +54,7 @@
                                 'button-class' => 'btn-success',
                                 'show' => $is_consultant
                             ),
-                            array('title' => trans('langDownloadFile'),
+                            array('title' => trans('langCreateDeliverable'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
                                 'icon' => 'fa-solid fa-file-arrow-up',
                                 'level' => 'secondary',

@@ -1145,6 +1145,78 @@ function session_exists($sid){
     }
 }
 
+function upload_session_empty_doc($sid){
+    global $webDir, $course_code, $course_id, $langDeliverableInserted, $uid, $language, $langFile, $langTool;
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
+    $order = $order+1;
+    $title = q($_POST['title']);
+    if(empty($title)){
+        $title = "$langTool" . "_$sid";
+    }
+    $comments = strip_tags($_POST['comments']) ?? '';
+    $textfile = fopen("$webDir/courses/$course_code/session/session_$sid/$title.txt", "w") or die("Unable to open file!");
+    $txt = "$comments";
+    fwrite($textfile, $txt);
+    fclose($textfile);
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    $file_date = date('Y-m-d G:i:s');
+
+    $safe_filename = safe_filename(get_file_extension("$title.txt"));
+    $s_real_filename = "$title.txt";
+    $sfilepath = '/' . $safe_filename;
+    $ses_filename = add_ext_on_mime($s_real_filename);
+    rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
+
+    $upload_file = Database::get()->query("INSERT INTO document SET
+        course_id = ?d,
+        subsystem = ?d,
+        subsystem_id = ?d,
+        path = ?s,
+        extra_path = '',
+        filename = ?s,
+        visible = 1,
+        comment = ?s,
+        category = 0,
+        title = ?s,
+        creator = ?s,
+        date = ?s,
+        date_modified = ?s,
+        subject = '',
+        description = '',
+        author = ?s,
+        format = ?s,
+        language = ?s,
+        copyrighted = 0,
+        editable = 0,
+        lock_user_id = ?d",
+            $course_id, MYSESSIONS, $sid, $sfilepath,
+            $s_real_filename, $comments, $title, $file_creator,
+            $file_date, $file_date, $file_creator, get_file_extension($ses_filename),
+            $language, $uid);
+
+
+    Database::get()->query("INSERT INTO session_resources SET
+                            session_id = ?d,
+                            type = 'doc',
+                            title = ?s,
+                            comments = ?s,
+                            visible = 1,
+                            `order` = ?d,
+                            `date` = " . DBHelper::timeAfter() . ",
+                            res_id = ?d,
+                            doc_id = ?d,
+                            from_user = ?d", $sid, $title, $comments, $order, $upload_file->lastInsertID , 0, 0);
+
+    Session::flash('message',$langDeliverableInserted);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
+        
+}
+
 function upload_session_doc($sid){
     global $webDir, $course_code, $course_id, $language, $uid, 
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 

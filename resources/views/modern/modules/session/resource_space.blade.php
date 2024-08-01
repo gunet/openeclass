@@ -56,13 +56,27 @@
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>{{ trans('langComments') }}</div>
+                                                    <div class='title-default'>{{ trans('langTitle') }}</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    @if(!empty($r->title))
+                                                        {!! $r->title !!}
+                                                    @else
+                                                        {{ trans('langNoInfoAvailable') }}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='title-default'>{{ trans('langDescription') }}</div>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     @if(!empty($r->comments))
                                                         {!! $r->comments !!}
                                                     @else
-                                                        {{ trans('langNoCommentsAvailable') }}
+                                                        {{ trans('langNoInfoAvailable') }}
                                                     @endif
                                                 </div>
                                             </div>

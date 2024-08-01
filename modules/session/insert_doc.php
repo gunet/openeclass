@@ -178,7 +178,8 @@ function list_documents($sid, $cid) {
 
 function upload_file($sid){
     global $webDir, $tool_content, $course_code, $langTitle, $langComments, 
-           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, $uid;
+           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, 
+           $uid, $langDescription;
 
         $resources = array();
         if(!$is_consultant){
@@ -202,7 +203,7 @@ function upload_file($sid){
                                                 <input type='hidden' name='id' value='$sid' />
 
                                                 <div class='form-group'>
-                                                    <label for='file-upload' class='col-12 control-label-notes'>$langDownloadFile&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                                    <label for='file-upload' class='col-12 control-label-notes'>$langDownloadFile</label>
                                                     <input id='file-upload' type='file' name='file-upload'/>
                                                 </div>
 
@@ -214,7 +215,7 @@ function upload_file($sid){
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='comments' class='col-12 control-label-notes'>$langComments</label>
+                                                    <label for='comments' class='col-12 control-label-notes'>$langDescription</label>
                                                     " . rich_text_editor('comments', 5, 40, '') . "
                                                 </div>";
 

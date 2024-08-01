@@ -80,7 +80,11 @@ if(isset($_POST['submit_doc'])){
 }elseif(isset($_POST['submit_work'])){
     insert_session_work($sessionID);
 }elseif(isset($_POST['submit_upload'])){
-    upload_session_doc($sessionID);
+    if (!empty($_FILES['file-upload']['name'])){
+        upload_session_doc($sessionID);
+    }else{
+        upload_session_empty_doc($sessionID);
+    }
 }elseif(isset($_POST['submit_passage'])){
     insert_session_passage($sessionID);
 }elseif(isset($_POST['submit_link'])){
