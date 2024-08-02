@@ -6394,3 +6394,4 @@ $langShowCoursesInTable = "Show courses in table format";
 $langShowCoursesInPics = "Show courses in card format";
 $langDeliverableInserted = "You have successfully created the deliverable";
 $langCreateDeliverable = "Deliverable creation";
+$langImgFormsDes = "Fill in the required fields in the form shown";

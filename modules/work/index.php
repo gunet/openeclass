@@ -1701,7 +1701,7 @@ function new_assignment() {
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
-           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend;
+           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2696,7 +2696,7 @@ function new_assignment() {
             </div>
         </fieldset>
         </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -2726,7 +2726,7 @@ function show_edit_assignment($id) {
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
-        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend;
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend ,$langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -3844,7 +3844,7 @@ function show_edit_assignment($id) {
             </div>
     </fieldset>
     </form></div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
 </div>
 </div>";
 }
@@ -4300,7 +4300,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
     $langNotice3, $langNotice3Multiple, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $langComments, $urlServer;
+    $langGradebookGrade, $langComments, $urlServer, $langImgFormsDes;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -4506,7 +4506,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </fieldset>
                      </form>
                      </div></div><div class='d-none d-lg-block'>
-                     <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                  </div>
                  </div>
                      <div class='float-end'><small>$GLOBALS[langMaxFileSize] " .

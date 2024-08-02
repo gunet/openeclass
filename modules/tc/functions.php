@@ -111,7 +111,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
         $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
-        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend;
+        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend, $langImgFormsDes;
 
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
@@ -670,7 +670,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
          ". generate_csrf_token_form_field() ."
         </form></div></div>
         <div class='d-none d-lg-block'>
-                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div></div>";
     $tool_content .= "<script type='text/javascript'>
         //<![CDATA[

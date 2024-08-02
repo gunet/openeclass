@@ -143,7 +143,7 @@ if ($is_editor) {
                         <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
                         </div>";
         $tool_content .= "</form></div></div><div class='d-none d-lg-block'>
-                                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                             </div>
                         </div>";
         $tool_content .='<script type="text/javascript">
@@ -340,7 +340,7 @@ if ($is_editor) {
                             <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
                         </div>";
         $tool_content .= "</fieldset></form></div></div><div class='d-none d-lg-block'>
-                                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                             </div>
                         </div>";
         $tool_content .='<script language="javaScript" type="text/javascript">

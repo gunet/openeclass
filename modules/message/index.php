@@ -499,7 +499,7 @@ $tool_content .= "<div class='col-12'>
     if($course_id > 0 && isset($_GET['upload']) && isset($_GET['type']) && $_GET['type'] == 'cm'){
         $tool_content .= "
                 <div class='form-content-modules d-none d-lg-block'>
-                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
             </div>
         </div> 
@@ -509,7 +509,7 @@ $tool_content .= "<div class='col-12'>
     if (($course_id == 0 && $type == 'cm') or ($course_id == 0 && $type == 'pm')){
         $tool_content .= "
                 <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
             </div>"; // end row
     }

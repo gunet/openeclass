@@ -200,7 +200,7 @@ function prepareDataFromPost() {
 }
 
 function displayForm($id = null, $name = null, $ordering = null, $multiple = null, $searchable = null, $active = null) {
-    global $session, $langNameOfLang, $urlAppend;
+    global $session, $langNameOfLang, $urlAppend, $langImgFormsDes;
 
     $html = '';
     $action = ($id == null) ? 'add' : 'edit';
@@ -320,7 +320,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     </form>
     </div></div>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
 </div></div>";
 
     return $html;

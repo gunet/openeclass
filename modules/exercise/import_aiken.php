@@ -91,7 +91,7 @@ $tool_content .= "
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='". get_form_image() . "' alt='form-image'>
+            <img class='form-image-modules' src='". get_form_image() . "' alt='$langImgFormsDes'>
         </div>
     </div>
     <div class='d-lg-flex gap-4 mt-4'>

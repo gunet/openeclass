@@ -804,7 +804,7 @@ function edit_analytics_settings ($analytics_id = 0)
 {
     global $tool_content, $course_code, $course_id, $language, $langCertDeadlineHelp, $head_content, $langTitle, $langDescription,
     $langActivate, $langAnalyticsCalculation, $langStart, $langAnalyticsStartDescription, $langFinish, $langAnalyticsEndDescription,
-    $langSave, $langAdd, $urlAppend;
+    $langSave, $langAdd, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datepicker');
 
@@ -926,7 +926,7 @@ function edit_analytics_settings ($analytics_id = 0)
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>";
 }
@@ -940,7 +940,7 @@ function edit_analytics_settings ($analytics_id = 0)
 function analytics_element_form($analytics_id, $type=null, $analytics_element_id=0) {
 
     global $tool_content, $course_code, $langAnalyticsCriticalLevel, $langAnalyticsMinValue,
-           $langAnalyticsWeight, $langAnalyticsMaxValue, $langAnalyticsAdvancedLevel, $langSave, $langAdd, $urlAppend;
+           $langAnalyticsWeight, $langAnalyticsMaxValue, $langAnalyticsAdvancedLevel, $langSave, $langAdd, $urlAppend, $langImgFormsDes;
 
     if ($analytics_element_id==0) {
         $resource = '';
@@ -1048,7 +1048,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         </div>
     </div>
     <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
 </div>";
 }

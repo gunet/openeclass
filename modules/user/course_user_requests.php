@@ -124,7 +124,7 @@ if (isset($_GET['rid'])) {
         <input type='hidden' name='rejected_req_id' value='$_GET[rid]'>
             <input type='hidden' name='rejected_uid' value='$_GET[u]'>
     </fieldset></form></div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
 </div>
 </div>";
     }

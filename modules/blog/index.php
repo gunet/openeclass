@@ -318,7 +318,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                     </div>
                 </div>
                 <div class='$column_content d-none d-lg-block'>
-                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
             </div>
                 ";
@@ -470,7 +470,7 @@ if ($action == "createPost") {
             </div>
         </div>
         <div class='$column_content d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>
 </div>
@@ -595,7 +595,7 @@ if ($action == "editPost") {
         </div>
 
         <div class='$column_content d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>
 </div>

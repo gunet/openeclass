@@ -127,7 +127,7 @@ function show_edit_form($id, $sid, $assign) {
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
            $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
            $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview,
-           $langOpenCoursesFiles, $urlAppend;
+           $langOpenCoursesFiles, $urlAppend, $langImgFormsDes;
 
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
@@ -474,7 +474,7 @@ function show_edit_form($id, $sid, $assign) {
 				</form>
 			</div></div>
 			<div class='d-none d-lg-block'>
-                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
         </div>";
 		}

@@ -300,7 +300,7 @@ $tool_content .= "<div class='row form-group mt-5'><div class='col-12 d-flex jus
   
 
 </div></div></form></div></div><div class='$column_content d-none d-lg-block'>
-<img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+<img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
 </div>
 </div>";
 

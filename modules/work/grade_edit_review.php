@@ -57,7 +57,7 @@ function get_assignment_details($id) {
 function show_form($id, $sid, $assign) {
     global $unit, $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
            $langBack, $assign, $langWorkOnlineText, $course_id, $pageName, $langEndPeerReview,
-           $langReviewStart, $langReviewEnd, $urlAppend;
+           $langReviewStart, $langReviewEnd, $urlAppend, $langImgFormsDes;
 
     $pageName = $m['addgradecomments'];
 
@@ -211,7 +211,7 @@ function show_form($id, $sid, $assign) {
 			$tool_content .= "
 			</form>
 		</div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 	} else {

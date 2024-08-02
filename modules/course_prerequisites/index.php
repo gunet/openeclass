@@ -91,7 +91,7 @@ draw($tool_content, 2, null, $head_content);
 
 function new_prereq() {
     global $tool_content, $head_content, $urlServer, $course_code,
-           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2, $urlAppend;
+           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2, $urlAppend, $langImgFormsDes;
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -148,7 +148,7 @@ hContent;
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>
     ";

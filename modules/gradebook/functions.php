@@ -137,7 +137,7 @@ function display_user_grades($gradebook_id) {
 function new_gradebook() {
 
     global $tool_content, $course_code, $langStart, $langEnd, $head_content, $language,
-           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect, $urlAppend;
+           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect, $urlAppend, $langImgFormsDes;
 
         load_js('bootstrap-datetimepicker');
         $head_content .= "
@@ -245,7 +245,7 @@ function new_gradebook() {
         </div>
     </div>
     <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
 </div>";
 }
@@ -331,7 +331,7 @@ function gradebook_settings($gradebook_id) {
     global $tool_content, $course_code,
            $langTitle, $langSave, $langStart, $langEnd, $head_content,
            $langSave, $langGradebookRange, $langGradebookUpdate,
-           $gradebook, $langGradeScalesSelect, $language, $urlAppend;
+           $gradebook, $langGradeScalesSelect, $language, $urlAppend, $langImgFormsDes;
     load_js('bootstrap-datetimepicker');
     $head_content .= "
     <script type='text/javascript'>
@@ -435,7 +435,7 @@ function gradebook_settings($gradebook_id) {
                 </form>
             </div>
         </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -449,7 +449,7 @@ function user_gradebook_settings() {
            $langAttendanceUpdate, $langGradebookInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $gradebook, $urlAppend;
+           $langStudents, $langMove, $langParticipate, $gradebook, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -575,7 +575,7 @@ function user_gradebook_settings() {
                 </form>
             </div>
         </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -1493,7 +1493,7 @@ function add_gradebook_other_activity($gradebook_id) {
            $langGradeVisible, $langComments, $langGradebookAutoGrade, $langAssignment,
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs, $langExercise,
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langLearnPath,
-           $langGradebookRemainingGrade, $langSave, $head_content, $language, $urlAppend;
+           $langGradebookRemainingGrade, $langSave, $head_content, $language, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1668,7 +1668,7 @@ function add_gradebook_other_activity($gradebook_id) {
                 </form>
             </div>
         </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -1730,7 +1730,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
     global $tool_content, $course_code,
            $langImportGradesGradebookHelp, $langWorkFile, $langUpload,
            $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
-           $langImportExtraGradebookUsers, $langGradesImported, $urlAppend;
+           $langImportExtraGradebookUsers, $langGradesImported, $urlAppend, $langImgFormsDes;
 
     if ($import and isset($_FILES['userfile'])) { // import user grades
         $gradebook_range = get_gradebook_range($gradebook_id);
@@ -1849,7 +1849,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                         </form>
                     </div>
                 </div><div class='d-none d-lg-block'>
-                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
             </div>
             ";

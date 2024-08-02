@@ -190,7 +190,7 @@ $tool_content .= "
       </div>
     </div>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
   </div>";
 

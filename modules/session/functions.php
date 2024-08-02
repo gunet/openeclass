@@ -2009,7 +2009,7 @@ function display_session_activities($element, $id, $session_id = 0) {
  */
 function display_session_modification_activity($element, $element_id, $activity_id, $session_id = 0) {
 
-    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend;
+    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend, $langImgFormsDes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
@@ -2047,7 +2047,7 @@ function display_session_modification_activity($element, $element_id, $activity_
         $tool_content .= "</div></form>
 
     </div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
 </div>
 </div>";
     }
@@ -3177,7 +3177,7 @@ function add_submitted_document_to_certificate($element, $element_id) {
  * @param $sid
  */
 function passage_insertion($sid){
-    global $course_code, $course_id, $tool_content, $langInsertPassage, $langSubmit;
+    global $course_code, $course_id, $tool_content, $langInsertPassage, $langSubmit, $langImgFormsDes;
 
     $tool_content .= "  
     <div class='d-lg-flex gap-4 mt-4'>
@@ -3205,7 +3205,7 @@ function passage_insertion($sid){
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
+            <img class='form-image-modules' src='" . get_form_image() . "' alt='$langImgFormsDes'>
         </div>
     </div>";
 

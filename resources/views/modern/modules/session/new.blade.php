@@ -256,7 +256,7 @@
                                         </div>
 
                                         <div class='form-group mt-4'>
-                                            <label for='comments' class='col-12 control-label-notes'>{{ trans('langComments')}}</label>
+                                            <label for='comments' class='col-12 control-label-notes'>{{ trans('langDescription')}}</label>
                                             {!! $comments !!}
                                         </div>
 
@@ -368,7 +368,7 @@
                             </div>
                         </div>
                         <div class='d-none d-lg-block'>
-                            <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
+                            <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                         </div>
                     </div>
                 </div>

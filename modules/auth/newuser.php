@@ -62,7 +62,7 @@ if ($eclass_stud_reg == 1) {
     $pageName = "$langRegistration $langOfUserS";
 }
 
-$data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
+$data['lang_select_options'] = lang_select_options('localize', "class='form-control' id='UserLang'");
 list($js, $html) = $tree->buildUserNodePickerIndirect();
 $head_content .= $js;
 $data['buildusernode'] = $html;

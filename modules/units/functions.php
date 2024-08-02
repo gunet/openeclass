@@ -1866,7 +1866,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $urlAppend;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $urlAppend, $langImgFormsDes;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -1898,7 +1898,7 @@ function edit_res($resource_id) {
                 </div>
             </form></div>
         </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
     return $content;

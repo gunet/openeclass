@@ -181,7 +181,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
         global $langSearchCriteria, $langTitle, $langTitle_Descr, $langDescription,
         $langDescription_Descr, $langKeywords, $langKeywords_Descr, $langTeacher,
         $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
-        $langNewSearch, $urlAppend;
+        $langNewSearch, $urlAppend, $langImgFormsDes;
 
         return "
         <div class='row'>
@@ -225,7 +225,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                 </div>
             </div>
             <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
         </div>";
     }

@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div class='form-content-modules d-none d-lg-block'>
-                            <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
+                            <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                         </div>
                     </div>
                 </div>

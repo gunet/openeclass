@@ -186,7 +186,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </form>
         </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }

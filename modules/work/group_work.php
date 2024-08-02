@@ -64,7 +64,7 @@ if (isset($_GET['submit'])) {
 function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langSelect,
             $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission,
-            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS, $urlAppend;
+            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS, $urlAppend, $langImgFormsDes;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -157,7 +157,7 @@ function show_assignments() {
                 </fieldset>
             </form>
         </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }

@@ -42,7 +42,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
     global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id, $urlAppend;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id, $urlAppend, $langImgFormsDes;
 
     $urlext = ($is_template == false) ? '?course=' . $course_code : '';
     $urldefault = (strlen($lti_url_default) > 0) ? " value='$lti_url_default' " : '';
@@ -151,7 +151,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                             </div>
                         </div>
                         <div class='form-content-modules d-none d-lg-block'>
-                            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                         </div>
                     </div>";
 
@@ -222,7 +222,7 @@ function edit_lti_app($session_id) {
     global $tool_content, $langSubmit, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $urlAppend;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $urlAppend, $langImgFormsDes;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
@@ -343,7 +343,7 @@ function edit_lti_app($session_id) {
                     </fieldset>
                      ". generate_csrf_token_form_field() ."
                     </form></div></div><div class='col-lg-6 col-12 d-none d-lg-block'>
-                    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
                 </div>";
                 $tool_content .='<script language="javaScript" type="text/javascript">

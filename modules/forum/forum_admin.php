@@ -120,7 +120,7 @@ if (isset($_GET['forumgo'])) {
             </div>
         </fieldset>
         </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -182,7 +182,7 @@ elseif (isset($_GET['forumgoedit'])) {
         </div>
         </fieldset>
         </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -214,7 +214,7 @@ elseif (isset($_GET['forumcatedit'])) {
         </div>
         </fieldset>
         </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }
@@ -477,7 +477,7 @@ elseif (isset($_GET['forumgodel'])) {
        </fieldset>
        </form></div></div>
        <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
    }
@@ -559,7 +559,7 @@ elseif (isset($_GET['forumgodel'])) {
         </form>
         </div></div>
         <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 } else {
@@ -582,7 +582,7 @@ elseif (isset($_GET['forumgodel'])) {
         </div>
         </fieldset>
         </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }

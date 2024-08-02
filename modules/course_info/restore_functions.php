@@ -323,7 +323,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend;
+    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -445,7 +445,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
             </div>
         </div>
         <div class='col-lg-6 col-12 d-none d-lg-block'>
-             <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+             <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>
 

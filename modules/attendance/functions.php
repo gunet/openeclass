@@ -506,7 +506,7 @@ function add_attendance_other_activity($attendance_id) {
 
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
-           $langAttendanceActivityDate, $language, $head_content, $urlAppend;
+           $langAttendanceActivityDate, $language, $head_content, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -606,7 +606,7 @@ function add_attendance_other_activity($attendance_id) {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>";
 }
@@ -762,7 +762,7 @@ function new_attendance() {
 
     global $tool_content, $course_code, $langNewAttendance2, $head_content,
            $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber,
-           $attendance_limit, $langStart, $langEnd, $language, $urlAppend;
+           $attendance_limit, $langStart, $langEnd, $language, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -853,7 +853,7 @@ function new_attendance() {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>";
 }
@@ -1039,7 +1039,7 @@ function attendance_settings($attendance_id) {
     global $tool_content, $course_code, $language,
            $langTitle, $langAttendanceLimitNumber,
            $langAttendanceUpdate, $langSave, $head_content,
-           $attendance, $langStart, $langEnd, $urlAppend;
+           $attendance, $langStart, $langEnd, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1132,7 +1132,7 @@ function attendance_settings($attendance_id) {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>";
 }
@@ -1147,7 +1147,7 @@ function user_attendance_settings($attendance_id) {
            $langAttendanceUpdate, $langAttendanceInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $attendance, $urlAppend;
+           $langStudents, $langMove, $langParticipate, $attendance, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1273,7 +1273,7 @@ function user_attendance_settings($attendance_id) {
             </div>
         </div>
         <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
     </div>
 </div>";

@@ -47,7 +47,7 @@ function random_secret(int $length = 32): string {
 function new_publish_ltiapp() {
     global $tool_content, $langAdd, $course_code, $langTitle, $langDescription,
            $langLTIProviderKey, $langLTIProviderSecret, $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive,
-           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend;
+           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes;
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $key = random_secret(8);
@@ -59,31 +59,31 @@ function new_publish_ltiapp() {
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
                         <fieldset>
                         <div class='form-group'>
-                            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                            <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='desc' class='col-sm-6 control-label-notes'>$langDescription</label>
+                            <label for='desc' class='col-sm-12 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                                 $textarea
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
+                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
                             </div>
                         </div>        
                         <div class='form-group mt-4'>
-                            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
+                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' value='$secret' size='32' />
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus</label>
+                            <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</label>
                             <div class='col-sm-12'>
                                 <div class='radio mb-2'>
                                 <label>
@@ -110,7 +110,7 @@ function new_publish_ltiapp() {
                 </div>
             </div>
             <div class='form-content-modules d-none d-lg-block'>
-                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
         </div>";
 
@@ -131,7 +131,7 @@ function new_publish_ltiapp() {
 function edit_publish_ltiapp($id) {
     global $tool_content, $langModify, $course_code, $langTitle, $langDescription,
            $langLTIProviderKey, $langLTIProviderSecret, $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive,
-           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend;
+           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes;
 
     $row = Database::get()->querySingle("SELECT * FROM course_lti_publish WHERE id = ?d ", $id);
     $status = ($row->enabled == 1 ? 1 : 0);
@@ -195,7 +195,7 @@ function edit_publish_ltiapp($id) {
         </fieldset>
          ". generate_csrf_token_form_field() ."
         </form></div></div><div class='form-content-modules d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
 </div>";
 

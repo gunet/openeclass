@@ -95,7 +95,7 @@ function form($user) {
     global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, 
             $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend, 
             $is_collaborative_course, $langInfoAboutCollabRegistration, $langLabelCollabUserRequest,
-            $langRequestReasonsCollab, $langTypeCollaboration;
+            $langRequestReasonsCollab, $langTypeCollaboration, $langImgFormsDes;
 
     if($is_collaborative_course){
         $langInfoAboutRegistration = $langInfoAboutCollabRegistration;
@@ -133,7 +133,7 @@ function form($user) {
         <input type='hidden' name='course_id' value='$course_id'>
 	</fieldset></form></div></div>
     <div class='col-lg-6 col-12 d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div></div>";
 
     return $ret;

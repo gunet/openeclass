@@ -159,12 +159,12 @@
 
     @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
         <!-- Quick note -->
-        <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote">
+        <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
             <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
                     data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
         </a>
 
-        <div class="modal fade" id="quickNote" tabindex="-1" aria-labelledby="quickNotelLabel" aria-hidden="true">
+        <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

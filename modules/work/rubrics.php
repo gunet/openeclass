@@ -496,7 +496,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     </form>
                 </div>
             </div><div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
         </div>
         </div>";
 

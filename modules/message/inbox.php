@@ -329,7 +329,7 @@ if (isset($_GET['mid'])) {
                 $out .= "</div> <!-- end col-12 -->
                     </div> <!-- end flex-grow -->
                     <div class='form-content-modules d-none message-reply'>
-                        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                     </div>
                 </div>"; // end d-lg-flex
             }
@@ -338,7 +338,7 @@ if (isset($_GET['mid'])) {
                 $out .= "
                     </div> <!-- end col-lg-6 col-12 -->
                     <div class='col-lg-6 col-12 d-none message-reply'>
-                        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                     </div>
                 ";
         $out .= "</div>"; // end row
@@ -487,7 +487,7 @@ if (isset($_GET['mid'])) {
                     $out .= "</div> <!--  end col-12 -->
                         </div> <!--  end flex-grow -->
                         <div class='form-content-modules d-none message-forward'>
-                            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                         </div>
                     </div>"; // end d-lg-flex
                 }
@@ -497,7 +497,7 @@ if (isset($_GET['mid'])) {
                     $out .= "
                         </div> <!-- end col-lg-6 col-12 -->
                         <div class='col-lg-6 col-12 d-none message-forward'>
-                            <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                         </div>
                     </div>
                     ";

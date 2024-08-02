@@ -179,7 +179,7 @@ function list_documents($sid, $cid) {
 function upload_file($sid){
     global $webDir, $tool_content, $course_code, $langTitle, $langComments, 
            $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, 
-           $uid, $langDescription;
+           $uid, $langDescription, $langImgFormsDes;
 
         $resources = array();
         if(!$is_consultant){
@@ -248,7 +248,7 @@ function upload_file($sid){
                                     </div>
                                 </div>
                                 <div class='d-none d-lg-block'>
-                                    <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
+                                    <img class='form-image-modules' src='" . get_form_image() . "' alt='$langImgFormsDes'>
                                 </div>
                             </div>
                             

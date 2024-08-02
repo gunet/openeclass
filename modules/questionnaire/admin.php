@@ -678,7 +678,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </div>
     
     <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 } elseif (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
@@ -811,7 +811,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </form></div>
     </div>
     <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 

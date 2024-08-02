@@ -841,7 +841,7 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  */
 function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
 
-    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend;
+    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend, $langImgFormsDes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
@@ -879,7 +879,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         $tool_content .= "</div></form>
 
     </div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
 </div>
 </div>";
     }
@@ -2329,7 +2329,7 @@ function certificate_settings($element, $element_id = 0) {
     global $tool_content, $head_content, $course_code,
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
-           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlServer, $urlAppend;
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlServer, $urlAppend, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2543,7 +2543,7 @@ function certificate_settings($element, $element_id = 0) {
                 </div>
             </form>
         </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
     </div>
     </div>";
 }

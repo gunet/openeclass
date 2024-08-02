@@ -796,7 +796,7 @@
                                                 <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
 
                                                 <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent solidPanel mt-4'>
-                                                    <nav aria-label='Page navigation example w-100'>
+                                                    <nav aria-label='Page navigation w-100'>
                                                         <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                             <li class='page-item page-item-previous'>
                                                                 <a class='page-link' href='javascript:void(0);' aria-label="{{ trans('langPreviousPage') }}"><span class='fa-solid fa-chevron-left'></span></a>
@@ -824,7 +824,7 @@
 
                                                                     @if($i>=6 && $i<=$pagesPag-1)
                                                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages d-none'>
-                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
+                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
                                                                         </li>
 
                                                                         @if($i==$pagesPag-1)
@@ -836,7 +836,7 @@
 
                                                                     @if($i==$pagesPag)
                                                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
+                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
                                                                         </li>
                                                                     @endif
                                                                 @endfor
@@ -844,7 +844,7 @@
                                                             @else
                                                                 @for($i=1; $i<=$pagesPag; $i++)
                                                                     <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                        <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
+                                                                        <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
                                                                     </li>
                                                                 @endfor
                                                             @endif

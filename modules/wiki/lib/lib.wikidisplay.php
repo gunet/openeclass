@@ -195,7 +195,7 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
 function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $groupId = 0, $acl = null, $script = null) {
 
     global $langWikiTitle, $langWikiDescription,
-            $langCancel, $langSave, $langBack, $course_code, $urlAppend;
+            $langCancel, $langSave, $langBack, $course_code, $urlAppend, $langImgFormsDes;
 
     $title = ( $title != '' ) ? $title : '';
 
@@ -275,7 +275,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                         </fieldset>
                     </form>
                 </div></div><div class='d-none d-lg-block'>
-                <img class='form-image-modules' src='".get_form_image()."' alt='form-image'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
             </div>";
 
