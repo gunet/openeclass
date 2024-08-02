@@ -249,7 +249,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if ($noteNumber > 0) {
         $tool_content .= "<thead><tr class='list-header'>";
         $tool_content .= "<th>$langCategoryNotes</th>";
-        $tool_content .= "<th class='text-end'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr></thead>";
     }
 

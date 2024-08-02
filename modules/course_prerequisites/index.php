@@ -200,7 +200,7 @@ function add_prereq($prereqId) {
 }
 
 function del_prereq($prereqId) {
-    global $course_id, $langDelCoursePrerequisiteSuccess;
+    global $course_id, $langDelCoursePrerequisiteSuccess, $langSettingSelect;
 
     if ($prereqId <= 0) {
         return;
@@ -238,7 +238,7 @@ function show_prereqs() {
             <div class='table-responsive'><table class='table-default'>
                                   <thead><tr class='list-header'>
                                       <th>$langTitle</th>
-                                      <th>".icon('fa-gears')."</th>
+                                      <th aria-label='$langSettingSelect'>".icon('fa-gears')."</th>
                                   </tr></thead>";
         foreach ($result as $row) {
 

@@ -1335,7 +1335,7 @@ function tc_session_details() {
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
         $langBBBNotServerAvailableTeacher,
         $langBBBImportRecordings, $langAllUsers, $langDuration, $langBBBNoServerForRecording,
-        $langFrom, $langTill, $langBBBHideParticipants;
+        $langFrom, $langTill, $langBBBHideParticipants, $langSettingSelect;
 
     $options = [];
     if (!is_enabled_tc_server($course_id)) { // check availability
@@ -1367,7 +1367,7 @@ function tc_session_details() {
                                <th>$langDuration</th>
                                <th>$langParticipants</th>";
         if ($is_editor) {
-            $headings .= "<th>".icon('fa-gears')."</th>";
+            $headings .= "<th aria-label='$langSettingSelect'>".icon('fa-gears')."</th>";
         }
         $headings .= "</tr></thead>";
 

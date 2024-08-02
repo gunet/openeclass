@@ -139,7 +139,7 @@ if (isset($_POST['submitCat'])) {
                     <tbody>
                         <tr class='list-header'>
                             <th>$langTitle</th>
-                            <th></th>
+                            <th aria-label='$langSettingSelect'></th>
                         </tr> 
 
                     ";

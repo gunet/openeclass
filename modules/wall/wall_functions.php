@@ -202,7 +202,7 @@ function generate_single_post_html($post) {
                           });
                       </script>';
         $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
-        $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
+        $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'" aria-label="'.$langDelete.'">
                           <span class="fa-solid fa-xmark link-delete float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
         if ($is_editor) { //add link for pin post
             $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
@@ -217,7 +217,7 @@ function generate_single_post_html($post) {
                 $post_actions .= '<span class="fa fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
         }
-        $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
+        $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'" aria-label="'.$langModify.'">
                           <span class="fa fa-edit float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
 
         if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
@@ -347,16 +347,22 @@ function generate_infinite_container_html($posts, $next_page) {
         $comm = new Commenting('wallpost', $id);
         $comm_content = "<a class='commentPress float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
                             c
-                            <span class='vsmall-text text-decoration-underline'>$langComments (".$comm->getCommentsNum().")</span>
+                            <span class='vsmall-text'>$langComments (".$comm->getCommentsNum().")</span>
                         </a>";
 
 
         if (allow_to_edit($id, $uid, $is_editor)) {
             $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
-            $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
+            $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'" aria-label="'.$langDelete.'">
                               <span class="fa fa-fw fa-xmark link-delete float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
             if ($is_editor) { //add link for pin post
-                $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
+                $langPinOrNot = "";
+                if($pinned == 0){
+                    $langPinOrNot = "$langWallPinPost";
+                }else{
+                    $langPinOrNot = "$langWallUnPinPost";
+                }
+                $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'" aria-label="'.$langPinOrNot.'">';
                 if ($pinned == 0) {
                     $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
                 } elseif ($pinned == 1) {
@@ -368,7 +374,7 @@ function generate_infinite_container_html($posts, $next_page) {
                     $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
                 }
             }
-            $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
+            $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'" aria-label="'.$langModify.'">
                               <span class="fa fa-fw fa-edit float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
                 //if ($next_page == 2) { //needed only for the first page and not for dynamically added content

@@ -1106,7 +1106,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
                               <th class='p-2' colspan='2'>$langQuesList</th>
-                              <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+                              <th class='text-center' aria-label='$langSettingSelect'>".icon('fa-gears', $langActions)."</th>
                             </tr>";
             $i=1;
             $nbrQuestions = count($questions);
@@ -1186,7 +1186,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
                               <th colspan='2'>$langQuesList</th>
-                              <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+                              <th class='text-center' aria-label='$langSettingSelect'>".icon('fa-gears', $langActions)."</th>
                             </tr>";
             $i=1;
             $nbrQuestions = count($questions);

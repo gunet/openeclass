@@ -998,7 +998,7 @@ function display_gradebooks() {
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableGradebooks, $langNoGradeBooks, $is_editor, $is_course_reviewer,
-           $langViewShow, $langViewHide, $langStart, $uid, $langFinish;
+           $langViewShow, $langViewHide, $langStart, $uid, $langFinish, $langSettingSelect;
 
     if ($is_course_reviewer) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
@@ -1022,7 +1022,7 @@ function display_gradebooks() {
                             <th style='width:22%;'>$langStart</th>
                             <th style='width:22%;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th style='width:10%;' class='text-end'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th style='width:10%;' class='text-end' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $g) {
@@ -1162,7 +1162,7 @@ function display_available_lps($gradebook_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer,
            $langAdd, $langAttendanceNoActMessageLp4, $langTitle,
-           $langDescription, $langActions;
+           $langDescription, $langActions, $langSettingSelect;
 
 
     $checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name
@@ -1174,7 +1174,7 @@ function display_available_lps($gradebook_id) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th></th>";
+        $tool_content .= "<th aria-label='$langSettingSelect'></th>";
         $tool_content .= "</tr></thead>";
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";

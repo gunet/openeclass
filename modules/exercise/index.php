@@ -305,7 +305,7 @@ if (!$nbrExercises) {
                 <th>$langExerciseName</th>
                 <th>$langInfoExercise</th>
                 <th>$langResults</th>
-                <th></th>
+                <th aria-label='$langSettingSelect'></th>
               </tr>";
     } else { // student view
         load_js('tools.js');

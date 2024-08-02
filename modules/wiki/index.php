@@ -360,7 +360,7 @@ switch ($action) {
                                     <th>$langDescription</th>
                                     <th>$langPages</th>";
                 if ($is_editor) {
-                    $tool_content .= "<th>" .icon('fa-gears'). "</th>";
+                    $tool_content .= "<th aria-label='$langSettingSelect'>" .icon('fa-gears'). "</th>";
                 } else {
                     $tool_content .= "<th>$langWikiLastModification</th>";
                 }

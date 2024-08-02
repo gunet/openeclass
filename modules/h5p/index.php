@@ -129,7 +129,7 @@ if ($content) {
                 <th>$langTypeH5P</th>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <th>
+                        <th aria-label='$langSettingSelect'>
                         <span class='fa fa-gears'></span>
                     </th>";
                 }

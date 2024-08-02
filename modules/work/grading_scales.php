@@ -171,7 +171,7 @@ if (isset($_GET['scale_id'])) {
                                             <tr class='list-header'>
                                                 <th style='width:47%'>$langWording</th>
                                                 <th style='width:47%'>$langValue</th>
-                                                ".(!$scale_used ? "<th class='text-end option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>" : "")."
+                                                ".(!$scale_used ? "<th class='text-end option-btn-cell' aria-label='$langSettingSelect' style='width:5%'>".icon('fa-gears')."</th>" : "")."
                                             </tr>
                                         </thead>
                                         <tbody>

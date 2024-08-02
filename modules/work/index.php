@@ -5546,7 +5546,7 @@ function show_student_assignments() {
     global $tool_content, $head_content, $m, $uid, $course_id, $urlAppend, $langGroupWorkDeadline_of_Submission,
         $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code, $langNoDeadline,
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio, $langAssignemtTypeTurnitinInfo,
-        $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt, $langAssignmentTypeTurnitin;
+        $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt, $langAssignmentTypeTurnitin, $langSettingSelect;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -5607,7 +5607,7 @@ function show_student_assignments() {
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
-            $add_eportfolio_res_th = "<th style='width:10%;'>".icon('fa-gears')."</th>";
+            $add_eportfolio_res_th = "<th style='width:10%;' aria-label='$langSettingSelect'>".icon('fa-gears')."</th>";
         } else {
             $add_eportfolio_res_th = "<th></th>";
         }
@@ -5741,7 +5741,7 @@ function show_assignments() {
         $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions, $langNoDeadline,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics, $langWillStartAt,
         $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission, $langAssignemtTypeTurnitinInfo,
-        $langActivate, $langDeactivate, $urlAppend, $langAssignmentTypeTurnitin;
+        $langActivate, $langDeactivate, $urlAppend, $langAssignmentTypeTurnitin, $langSettingSelect;
 
     // ordering assignments by deadline, without deadline, expired.
     // query uses pseudo limit in ordering results
@@ -5804,7 +5804,7 @@ function show_assignments() {
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>
                       <th style='width:25%;'>$langGroupWorkDeadline_of_Submission</th>
-                      <th style='width:10%;'>" . icon('fa-gears') . "</th>
+                      <th style='width:10%;' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                     </tr>
                     </thead>
                     <tbody>";

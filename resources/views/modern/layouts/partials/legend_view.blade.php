@@ -11,6 +11,7 @@
 
 @if(!isset($_GET['fromFlipped']))
     <h1 aria-label="@if($pageName) {{ $pageName }} @elseif($course_code) {{ trans('langCourse') }} @else {{ $uname }} @endif"></h1>
+    <h2 aria-label="{{ trans('langThePageIs')}} @if($pageName) {{ $pageName }} @elseif($course_code) {{ trans('langCourse') }} @else {{ $uname }} @endif"></h2>
     <div class='col-12 mt-4'>
         <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
             <div class='flex-grow-1'>

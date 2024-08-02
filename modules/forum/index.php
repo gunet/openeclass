@@ -171,7 +171,7 @@ if ($total_categories > 0) {
             <th class='text-center'>$langTopics</th>
             <th class='text-center'>$langPosts</th>
             <th>$langLastPost</th>
-            <th></th>
+            <th aria-label='$langSettingSelect'></th>
           </tr>";
         $tool_content .= "</thead>";
 

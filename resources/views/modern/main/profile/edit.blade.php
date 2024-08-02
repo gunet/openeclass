@@ -28,7 +28,7 @@
             <div class='col-lg-6 col-12'>
             <div class='form-wrapper form-edit border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
-                    <fieldset>
+                    
                         <div class='form-group'>
                             <label for='givenname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                             <div class='col-sm-12'>
@@ -36,7 +36,7 @@
                                 <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
                             @else {
                                 <p class='form-control-static'>{{$givenname_form}}</p>
-                                <input type='hidden' name='givenname_form' value='{{ $givenname_form }}'>
+                                <input type='hidden' name='givenname_form' value='{{ $givenname_form }}' id='givenname_form'>
                             @endif
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                                 <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
                             @else
                                 <p class='form-control-static'>{{ $surname_form }}</p>
-                                <input type='hidden' name='surname_form' value='{{ $surname_form }}'>
+                                <input type='hidden' name='surname_form' value='{{ $surname_form }}' id='surname_form'>
                             @endif
                             </div>
                         </div>
@@ -68,12 +68,12 @@
                         <div class='form-group mt-4'>
                             <label for='email_form' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                             <div class='row'>
-                                <div class='col-sm-122'>
+                                <div class='col-sm-12'>
                                     @if ($allow_email_change)
                                         <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
                                     @else
                                         <p class='form-control-static'>{{ $email_form }}</p>
-                                        <input type='hidden' name='am_form' value='{{ $email_form }}'>
+                                        <input type='hidden' name='am_form' value='{{ $email_form }}' id='email_form'>
                                     @endif
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                         <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                                     @else
                                         <p class='form-control-static'>{{ $am_form }}</p>
-                                        <input type='hidden' name='am_form' value='{{ $am_form }}'>
+                                        <input type='hidden' name='am_form' value='{{ $am_form }}' id='am_form'>
                                     @endif
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label for='emailfromcourses' class='col-sm-12 control-label-notes mb-2'>{{ trans('langEmailFromCourses') }}</label>
+                            <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langEmailFromCourses') }}</div>
                             <div class='col-sm-12'>
                                 <div class='radio'>
                                     <label>
@@ -119,7 +119,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langViewShow') }}</label>
+                            <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langViewShow') }}</div>
                             <div class='help-block mb-2'>(*){{ trans('langShowSettingsInfo') }}</div>
                             <div class='col-sm-12'>
                                 <div class='checkbox'>
@@ -156,14 +156,14 @@
 
                         @if (get_config('email_verification_required'))
                             <div class='form-group {{ $messageClass }} mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langVerifiedMail') }}</label>
+                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langVerifiedMail') }}</label>
                                 <div class='col-sm-12 form-control-static'>{!! $message !!}</div>
                             </div>
                         @endif
 
                         @if (!get_config('restrict_owndep'))
                             <div class='form-group mt-4'>
-                                <label for='faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                <label for='dialog-set-value' class='col-sm-12 control-label-notes mb-2'>{{ trans('langFaculty') }}</label>
                                 <div class='col-sm-12 form-control-static'>
                                         {!! $html !!}
                                 </div>
@@ -171,23 +171,23 @@
                         @endif
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
-                            <div class='col-sm-12'>{!! lang_select_options('userLanguage', "class='form-control'") !!}</div>
+                            <label for='selected_lang' class='col-sm-12 control-label-notes mb-2'>{{ trans('langLanguage') }}</label>
+                            <div class='col-sm-12'>{!! lang_select_options('userLanguage', "class='form-control' id='selected_lang'") !!}</div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ $message_pic }}</label>
+                            <label for='user_image_selected' class='col-sm-12 control-label-notes mb-2'>{{ $message_pic }}</label>
                             <div class='col-sm-12'>
                                 <span>
                                     {!! $picture !!} {!! $delete !!}
                                 </span>
                                 {!! fileSizeHidenInput() !!}
-                                <input type='file' name='userimage' size='30'>
+                                <input type='file' name='userimage' size='30' id='user_image_selected'>
                             </div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langProfileAboutMe') }}</label>
+                            <label for='desc_form' class='col-sm-12 control-label-notes mb-2'>{{ trans('langProfileAboutMe') }}</label>
                             <div class='col-sm-12'>{!! $info_text_area !!}</div>
                         </div>
 
@@ -196,7 +196,7 @@
                         @if (count($allProviders) > 0)
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langProviderConnectWith') }}</label>
+                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langProviderConnectWith') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='row'>
                                     @foreach ($allProviders as $provider)
@@ -224,7 +224,7 @@
                             <a href='display_profile.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                         </div>
 
-                </fieldset>
+                
                     {!! generate_csrf_token_form_field() !!}
                 </form>
             </div></div>

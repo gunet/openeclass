@@ -164,7 +164,7 @@ function show_post_form() {
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
                             <fieldset> 
                                 <div class="form-group">
-                                    <textarea style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
+                                    <textarea aria-label="'.$langTypeOutMessage.'" style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
                                 </div>
                                 <div id="resources_panel" class="card cardPanel collapse mt-3 border-0">
                                     <div class="card-body border-0">
@@ -182,7 +182,7 @@ function show_post_form() {
                                         </ul>
                                         <div class="tab-content mt-4">
                                             <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
-                                                <label for="extvideo_video mb-1 TextBold">'.$langWallExtVideoLink.'</label>
+                                                <label for="extvideo_video" class="mb-1 TextBold">'.$langWallExtVideoLink.'</label>
                                                 <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                             </div>
                                             '.$video_div.'

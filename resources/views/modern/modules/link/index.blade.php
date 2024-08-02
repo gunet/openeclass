@@ -70,7 +70,7 @@
                                             @endif
                                         </th>
                                         @if (isset($_SESSION['uid']) && !$is_in_tinymce)
-                                            <th>{!! icon('fa-gears') !!}</th>
+                                            <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                                         @endif
                                     </tr></thead>
                                     @if ($socialview)

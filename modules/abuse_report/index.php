@@ -174,7 +174,7 @@ if (!$nbrReports) {
             <th>$langContent</th>
             <th>$langUser</th>
             <th>$langDate</th>
-            <th class='text-end'>".icon('fa-gears')."</th>
+            <th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears')."</th>
           </tr></thead>";
 
     foreach ($result as $report) {

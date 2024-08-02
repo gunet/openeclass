@@ -96,12 +96,12 @@ $showFrom = q($startdate);
 
 $tool_content .= "<div class='row'>
         <div class='col-md-6 col-12'>
-            <label class='text-start control-label-notes'>$langFrom</label>
+            <label for='startdate' class='text-start control-label-notes'>$langFrom</label>
             <input class='form-control flex-fill' name='startdate' id='startdate' type='text' value = '$showFrom'>
         </div>";
 $tool_content .= "
             <div class='col-md-6 col-12'>
-                <label class='text-start control-label-notes mt-md-0 mt-3'>$langUntil</label>
+                <label for='enddate' class='text-start control-label-notes mt-md-0 mt-3'>$langUntil</label>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div></div>";
 $tool_content .= '<div class="row mt-3">

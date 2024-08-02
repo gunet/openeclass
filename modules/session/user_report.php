@@ -186,7 +186,7 @@ if (isset($_GET['u'])) { //  stats per user
                         <tr class='list-header'>
                             <th>$langSurnameName</th>
                             <th>$langPercentageSessionCompletion</th>
-                            <th>" . icon('fa-gears') . "</th>
+                            <th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                         </tr>
                     </thead>";
     

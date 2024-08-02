@@ -153,7 +153,7 @@
                                                     <th class='text-start'>{{ trans('langUnitDescr') }}</th>
                                                     <th class='text-start'>{{ trans('langLTIAppActions') }}</th>
                                                     @if ($is_editor)
-                                                        <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                                                        <th class='text-center' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                                                     @endif
                                                 </tr></thead>
 

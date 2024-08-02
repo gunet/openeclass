@@ -230,7 +230,7 @@ if (!$num_results == 0) {
         <thead>
             <tr class='list-header'>
                 <th>" . $langLearningObjects . "</th>
-                <th>" . icon('fa-gears') . "</th>
+                <th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
             </tr></thead>";
 }
 

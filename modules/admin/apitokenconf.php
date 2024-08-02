@@ -107,7 +107,7 @@ if (count($q) > 0) {
                     <tr class='list-header'>
                         <th>$langExtAppName</th>
                         <th>Remote IP</th>
-                        <th class='text-end'>" . icon('fa-gears') . "</th>
+                        <th class='text-end' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                     </tr>
                 </thead>";
 

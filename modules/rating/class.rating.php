@@ -412,9 +412,9 @@ Class Rating {
                 $img_down = 'thumbs_down_inactive.png';
             }
             
-            $out .= "<img alt=\"Rating image\" id=\"rate_".$this->rid."_img_up\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
+            $out .= "<img alt=\"".$langRateIt."\" id=\"rate_".$this->rid."_img_up\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getUpRating()."</span>&nbsp;&nbsp;";
-            $out .= "<img alt=\"Rating image\" id=\"rate_".$this->rid."_img_down\" src=\"".$urlServer."modules/rating/".$img_down."\" ".$onclick_down."/>&nbsp;";
+            $out .= "<img alt=\"".$langRateIt."\" id=\"rate_".$this->rid."_img_down\" src=\"".$urlServer."modules/rating/".$img_down."\" ".$onclick_down."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_down\">".$this->getDownRating()."</span>";
             $out .= "<div class=\"smaller hidden-xs\" id=\"rate_msg_".$this->rid."\">";
             
@@ -444,7 +444,7 @@ Class Rating {
                 $img_up = 'thumbs_up_inactive.png';
             }
             
-            $out .= "<img alt=\"Rating image\" id=\"rate_".$this->rid."_img\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>";
+            $out .= "<img alt=\"".$langRateIt."\" id=\"rate_".$this->rid."_img\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>";
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
             $out .= "<span class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
             

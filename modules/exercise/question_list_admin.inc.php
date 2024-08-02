@@ -497,7 +497,7 @@ if ($nbrQuestions) {
             <tr>
                 <th class='count-col'>#</th>
                  <th>$langQuestionList $info_random_text</th>
-                 <th></th>
+                 <th aria-label='$langSettingSelect'></th>
             </tr>
         </thead>
         <tbody id='q_sort'>";

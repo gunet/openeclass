@@ -2194,7 +2194,7 @@ function display_session_available_documents($element, $element_id, $session_id 
     global $webDir, $tool_content,
             $langDirectory, $langUp, $langName, $langSize,
             $langDate, $langAddModulesButton, $langChoice,
-            $langNoDocuments, $course_code, $group_sql, $langNotFolders , $course_id;
+            $langNoDocuments, $course_code, $group_sql, $langNotFolders , $course_id, $langSettingSelect;
 
     require_once 'modules/document/doc_init.php';
     require_once 'include/lib/mediaresource.factory.php';
@@ -2321,7 +2321,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                 "<th>$langName</th>" .
                 "<th>$langSize</th>" .
                 "<th>$langDate</th>" .
-                "<th></th>" .
+                "<th aria-label='$langSettingSelect'></th>" .
                 "</tr></thead>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {

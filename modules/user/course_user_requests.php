@@ -133,7 +133,7 @@ if (isset($_GET['rid'])) {
     if ($sql) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>";
-        $tool_content .= "<th width='320'>$langSurnameName</th><th>$langComments</th><th width='170'>$langDateRequest</th><th width='80'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th width='320'>$langSurnameName</th><th>$langComments</th><th width='170'>$langDateRequest</th><th width='80' aria-label='$langSettingSelect'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr></thead>";
         foreach ($sql as $udata) {
             $am_message = '';

@@ -22,7 +22,7 @@
 require_once 'include/course_settings.php';
 
 function list_links($id = NULL) {
-    global $course_id, $langNoCategory, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory;
+    global $course_id, $langNoCategory, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory, $langSelect;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
@@ -51,7 +51,7 @@ function list_links($id = NULL) {
                 $ret_string .= "<td><b>" . icon('fa-folder-open') . "&nbsp;" .
                     q($catrow->name) . "</b></td>";
                 $ret_string .= "<td >" . standard_text_escape($catrow->description) . "</td>";
-                $ret_string .= "<td><label class='label-container'><input type='checkbox' name='catlink[]' value='$catrow->id' /><span class='checkmark'></span></label></td>";
+                $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' name='catlink[]' value='$catrow->id' /><span class='checkmark'></span></label></td>";
                 $ret_string .= "</tr>";
                 $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = ?d", $course_id, $catrow->id);
                 foreach ($sql2 as $linkcatrow) {
@@ -63,7 +63,7 @@ function list_links($id = NULL) {
                     $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
                         q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a></td>";
                     $ret_string .= "<td>" . standard_text_escape($linkcatrow->description) . "</td>";
-                    $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='link[]' value='$linkcatrow->id' /><span class='checkmark'></span></label></td>";
+                    $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='link[]' value='$linkcatrow->id' /><span class='checkmark'></span></label></td>";
                     $ret_string .= "</tr>";
                 }
             }
@@ -90,7 +90,7 @@ function list_links($id = NULL) {
                 $ret_string .= "<tr>" .
                     "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
                     "<td>" . standard_text_escape($entry['comment']) . "</td>" .
-                    "<td><label class='label-container'><input type='checkbox' $checked name='link[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
+                    "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='link[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                 "</tr>";
             }
         }
@@ -117,7 +117,7 @@ function list_links($id = NULL) {
                     $ret_string .= "<tr>" .
                         "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
                         "<td>" . standard_text_escape($entry['comment']) . "</td>" .
-                        "<td><label class='label-container'><input type='checkbox' $checked name='link[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
+                        "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='link[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                     "</tr>";
                 }
             }

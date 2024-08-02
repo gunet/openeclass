@@ -29,7 +29,7 @@
                                         <th>{{ trans('langOpenMeetingsAdminUser') }}</th>
                                         <th>{{ trans('langOpenMeetingsWebApp') }}</th>
                                         <th>{{ trans('langBBBEnabled') }}</th>
-                                        <th>{!! icon('fa-gears') !!}</th>
+                                        <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                                     </tr>
                                 </thead>
                         @foreach ($om_servers as $om_server)

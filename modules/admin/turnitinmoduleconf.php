@@ -124,7 +124,7 @@ if (isset($_GET['add_template'])) {
                 <tr class='list-header'><th>$langTitle</th>
                     <th>$langUnitDescr</th>
                     <th>$langTurnitinEnabled</th>
-                    <th class='text-end'>".icon('fa-gears')."</th></tr>
+                    <th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $lti) {
                 $enabled_lti_template = ($lti->enabled == 1)? $langYes : $langNo;

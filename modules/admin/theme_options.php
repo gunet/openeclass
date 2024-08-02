@@ -37,7 +37,7 @@ $defaults = array(
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
                                                 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral'),
-                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader',
+                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
                                                 'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement'),
@@ -68,6 +68,7 @@ $defaults = array(
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "rgba(62, 73, 101, 1)" => array('clOptionSelect', 'ClTextEditor', 'clInputText', 'clTabs', 'clAccordions', 'clColorBodyAgenda'),
+                "rgba(0, 74, 148, 1)" => array('leftMenuSelectedLinkColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "fluid" => array('view_platform'),
@@ -653,6 +654,7 @@ if (isset($_POST['optionsSave'])) {
                         <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_jumbotronlist' name='choose_from_jumbotronlist'>
+                    <label for='selectedImage'>$langImageSelected:</label>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
                 </div>
             </div>
@@ -689,6 +691,7 @@ if (isset($_POST['optionsSave'])) {
                         <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_loginlist' name='choose_from_loginlist'>
+                    <label for='selectedImageLogin'>$langImageSelected:</label>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageLogin'>
                 </div>
             </div>
@@ -726,6 +729,7 @@ if (isset($_POST['optionsSave'])) {
                         <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_formlist' name='choose_from_formlist'>
+                    <label for='selectedImageForm'>$langImageSelected:</label>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageForm'>
                 </div>
             </div>
@@ -763,6 +767,7 @@ if (isset($_POST['optionsSave'])) {
                         <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_registrationlist' name='choose_from_registrationlist'>
+                    <label for='selectedImageRegistration'>$langImageSelected:</label>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageRegistration'>
                 </div>
             </div>
@@ -800,6 +805,7 @@ if (isset($_POST['optionsSave'])) {
                         <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_faqlist' name='choose_from_faqlist'>
+                    <label for='selectedImageFaq'>$langImageSelected:</label>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageFaq'>
                 </div>
             </div>

@@ -8,6 +8,8 @@
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
+                    <h1 aria-label="{{ trans('langMyCourses') }}"></h1>
+
                     {!! $action_bar !!}
 
                     @include('layouts.partials.show_alert') 

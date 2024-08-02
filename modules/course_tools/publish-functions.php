@@ -274,7 +274,7 @@ function update_publish_ltiapp($id, $title, $desc, $key, $secret, $status) {
 function lti_provider_details() {
     global $course_id, $tool_content, $is_editor, $course_code,
            $langConfirmDelete, $langNewLTIAppSessionDesc, $langTitle, $langActivate,
-           $langDeactivate, $langEditChange, $langDelete, $langNoPUBLTIApps, $langViewShow;
+           $langDeactivate, $langEditChange, $langDelete, $langNoPUBLTIApps, $langViewShow, $langSettingSelect;
 
     load_js('trunk8');
 
@@ -292,7 +292,7 @@ function lti_provider_details() {
                                <th style='width:30%'>$langTitle</th>
                                <th>$langNewLTIAppSessionDesc</th>";
         if ($is_editor) {
-            $headings .= "<th>" . icon('fa-gears') . "</th>";
+            $headings .= "<th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>";
         }
         $headings .= "</tr></thead>";
 

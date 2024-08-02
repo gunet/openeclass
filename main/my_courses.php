@@ -145,7 +145,7 @@ if(isset($_GET['term'])){
 
 
                             <div class='card-body pt-0'>
-                                <img src='{$courseImage}' class='card-img-top cardImgCourse rounded-0 $invisibleCourse' alt='course image'>
+                                <img src='{$courseImage}' class='card-img-top cardImgCourse rounded-0 $invisibleCourse' alt='$langCourseImage&nbsp;(".q($course->title).")'>
                                 <div class='card-text mt-3'>
                                     <p class='d-inline $invisibleCourse mb-0 TextBold'>$langCode:</p>
                                     &nbsp;<p class='d-inline $invisibleCourse'>".q($course->public_code)."</p>
@@ -264,7 +264,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                 <nav aria-label='Page navigation example w-100'>
                     <ul class='pagination mycourses-pagination w-100 mb-0'>
                         <li class='page-item page-item-previous'>
-                            <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
+                            <a class='page-link' href='javascript:void(0);' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
                         </li>";
                         if($pagesPag >=12 ){
                             for($i=1; $i<=$pagesPag; $i++){
@@ -315,7 +315,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         }
 
                         $pagination .=" <li class='page-item page-item-next'>
-                            <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
+                            <a class='page-link' href='javascript:void(0);' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
                         </li>
                     </ul>
                 </nav>

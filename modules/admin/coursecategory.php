@@ -67,7 +67,7 @@ if (!isset($_GET['action'])) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langNoResult . "</span></div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<thead><tr class='list-header'><th>$langAllCourseCategories</th><th class='text-end'>".icon('fa-gears', $langActions)."</th></tr></thead>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langAllCourseCategories</th><th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears', $langActions)."</th></tr></thead>";
         foreach ($categories as $category) {
             $name = Hierarchy::unserializeLangField($category->name);
             $visibility = $category->active ? '' : ' class=not_visible';

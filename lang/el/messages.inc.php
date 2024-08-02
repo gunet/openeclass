@@ -6865,3 +6865,4 @@ $langShowCoursesInPics = "Εμφάνιση μαθημάτων σε μορφή ε
 $langDeliverableInserted = "Δημιουργήσατε με επιτυχία το παραδοτέο";
 $langCreateDeliverable = "Δημιουργία παραδοτέου";
 $langImgFormsDes = "Συμπληρώστε τα υποχρεωτικά πεδία στην εικονιζόμενη φόρμα";
+$langThePageIs = "Βρίσκεστε στην σελίδα:";

@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 function list_chats($id = NULL) {
-    global $course_id, $urlServer, $langChoice, $langNoChatAvailable, $langDescription, $langChat;
+    global $course_id, $urlServer, $langChoice, $langNoChatAvailable, $langDescription, $langChat, $langSelect;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM conference WHERE course_id = ?d ORDER BY conf_title", $course_id);
@@ -59,7 +59,7 @@ function list_chats($id = NULL) {
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa fa-exchange')."&nbsp;&nbsp;<a href='{$urlServer}modules/chat/chat.php?conference_id=$entry[id]'>".q($entry['name'])."</a></td>";
             $ret_string .= "<td>".$entry['description']."</td>";
-            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='chat[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='chat[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

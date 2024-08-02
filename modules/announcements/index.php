@@ -174,7 +174,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $pinned = 0;
                 $tooltip = "data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAdminPinnedOff'";
                 if ($myrow->order != $pinned_greater) {
-                    $to_top = "<a class='reorder ms-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'>
+                    $to_top = "<a class='reorder ms-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1' aria-label='$langAdminPinnedToTop'>
                                 <span class='fa fa-arrow-up float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedToTop'></span>
                             </a>";
                 }
@@ -187,11 +187,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
+                '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
                 '1' => "<div class='table_td announceContent'>
                         <div class='table_td_header clearfix'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".q($myrow->title)."</a>
-                            <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>
+                            <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned' aria-label='$langAdminPinnedToTop'>
                                 <span class='fa fa-thumb-tack $pinned_class float-end' $tooltip></span>
                             </a>
                             $to_top

@@ -48,7 +48,7 @@
                     <table class='table-default'>
                         <thead class='list-header'>
                             <th>{{ trans('langAllAuthTypes') }}</th>
-                            <th>{!! icon('fa-gears', trans('langActions')) !!}</th>
+                            <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears', trans('langActions')) !!}</th>
                         </thead>
                         <tbody>
                         @foreach ($authMethods as $authMethod)

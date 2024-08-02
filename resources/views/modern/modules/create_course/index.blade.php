@@ -124,31 +124,31 @@
                       <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" enctype="multipart/form-data" onsubmit=\"return validateNodePickerForm();\">
 
                         <div class='form-group'>
-                            <h3 for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }}</h3>
+                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }}</label>
                             <div class='col-12'>
                               <input name='title' id='title' type='text' class='form-control' value="{{ trans('title') }}" placeholder="{{ trans('langTitle') }}">
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <h3 for='title' class='col-12 control-label-notes'>{{ trans('langCode') }}</h3>
+                            <label for='public_code' class='col-12 control-label-notes'>{{ trans('langCode') }}</label>
                             <div class='col-sm-12'>
                               <input name='public_code' id='public_code' type='text' class='form-control' value = "{{ trans('public_code') }}"  placeholder="{{ trans('langOptional') }}">
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <h3  class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</h3>
+                            <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                             <div class='col-sm-12'>
                               {!! $buildusernode !!}
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <h3 for='prof_names' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</h3>
+                            <label for='prof_names' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
                             <div class='col-sm-12'>
                                   <input class='form-control' type='text' name='prof_names' id='prof_names' value= "{{ trans('prof_names') }}">
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <h3 for='localize' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</h3>
+                            <label for='lang_selected' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                             <div class='col-sm-12'>
                                   {!! $lang_select_options !!}
                             </div>
@@ -175,6 +175,7 @@
                                             <i class='fa-solid fa-image settings-icons'></i>&nbsp;{{ trans('langSelect') }}
                                         </button>
                                         <input type='hidden' id='choose_from_list' name='choose_from_list'>
+                                        <label for='selectedImage'>{{ trans('langImageSelected')}}:</label>
                                         <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
                                     </div>
                                 </div>
@@ -205,7 +206,7 @@
 
 
                             <div class='form-group mt-4'>
-                               <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</label>
+                               <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</div>
 
 
                                 <div class="radio mb-2">
@@ -257,7 +258,7 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                              <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</label>
+                              <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</div>
 
                               <div class='radio mb-2'>
                                 <label>
@@ -291,12 +292,12 @@
 
                             <div class='form-group mt-4'>
 
-                                   <label for='localize' class='col-sm-12 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</label>
+                                   <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</div>
 
                                     <div class='radio mb-3'>
                                       <label>
                                         <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2'>
-                                        <label for="courseopen">{!! $icon_course_open !!}</label>
+                                        <label for="courseopen" aria-label="{{ trans('langOpenCourse') }}">{!! $icon_course_open !!}</label>
                                         {{ trans('langOpenCourse') }}
                                       </label>
                                       <div class='help-block'>{{ trans('langPublic') }}</div>
@@ -305,7 +306,7 @@
                                     <div class='radio mb-3'>
                                       <label>
                                         <input class='input-StatusCourse' id='coursewithregistration' type='radio' name='formvisible' value='1' checked>
-                                        <label for="coursewithregistration">{!! $icon_course_registration !!}</label>
+                                        <label for="coursewithregistration" aria-label="{{ trans('langRegCourse') }}">{!! $icon_course_registration !!}</label>
                                         {{ trans('langRegCourse') }}
                                       </label>
                                       <div class='help-block'>{{ trans('langPrivOpen') }}</div>
@@ -314,7 +315,7 @@
                                     <div class='radio mb-3'>
                                       <label>
                                         <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0'>
-                                        <label for="courseclose">{!! $icon_course_closed !!}</label>
+                                        <label for="courseclose" aria-label="{{ trans('langClosedCourse') }}">{!! $icon_course_closed !!}</label>
                                         {{ trans('langClosedCourse') }}
                                       </label>
                                       <div class='help-block'>{{ trans('langClosedCourseShort') }}</div>
@@ -323,7 +324,7 @@
                                     <div class='radio'>
                                       <label>
                                           <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3'>
-                                          <label for="courseinactive">{!! $icon_course_inactive !!}</label>
+                                          <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">{!! $icon_course_inactive !!}</label>
                                           {{ trans('langInactiveCourse') }}
                                       </label>
                                       <div class='help-block'>{{ trans('langCourseInactive') }}</div>

@@ -377,7 +377,7 @@ if ($display) {
                     <th width='200'>$langStartDate</th>";
 
         if($is_editor){
-            $tool_content .= "<th>".icon('fa-gears')."</th>";
+            $tool_content .= "<th aria-label='$langSettingSelect'>".icon('fa-gears')."</th>";
         }
         $tool_content .="</tr></thead>";
         foreach ($q as $conf) {

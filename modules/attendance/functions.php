@@ -30,7 +30,7 @@ function display_attendances() {
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableAttendances, $langNoAttendances, $is_editor, $is_course_reviewer,
-           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid;
+           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid, $langSettingSelect;
 
     if ($is_course_reviewer) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
@@ -53,7 +53,7 @@ function display_attendances() {
                             <th style='width:22%;'>$langStart</th>
                             <th style='width:22%;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th style='width:10%;'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th style='width:10%;' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $a) {
@@ -235,7 +235,7 @@ function display_attendance_activities($attendance_id) {
            $langHere, $langAttendanceNoActMessage3, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
-           $is_editor, $is_course_reviewer, $is_collaborative_course;
+           $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
@@ -319,7 +319,7 @@ function display_attendance_activities($attendance_id) {
                             <th>$langDate</th>
                             <th>$langType</th>
                             <th>$langStudents</th>
-                            <th></th>
+                            <th aria-label='$langSettingSelect'></th>
                         </tr></thead>";
 
         foreach ($result as $details) {
@@ -383,7 +383,7 @@ function display_attendance_activities($attendance_id) {
  */
 function attendance_display_available_exercises($attendance_id) {
 
-    global $course_id, $course_code, $tool_content, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $urlServer;
+    global $course_id, $course_code, $tool_content, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $urlServer, $langSettingSelect;
 
     $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                 AND exercise.active = 1 AND exercise.id
@@ -393,7 +393,7 @@ function attendance_display_available_exercises($attendance_id) {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th></th>";
+        $tool_content .= "<th aria-label='$langSettingSelect'></th>";
         $tool_content .= "</tr></thead>";
 
         foreach ($checkForExer as $newExerToGradebook) {
@@ -420,7 +420,7 @@ function attendance_display_available_assignments($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer,
            $m, $langDescription, $langAttendanceNoActMessageAss4,
-           $langAdd, $langTitle;
+           $langAdd, $langTitle, $langSettingSelect;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
                                                 AND assignment.active = 1
@@ -434,7 +434,7 @@ function attendance_display_available_assignments($attendance_id) {
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th></th>";
+        $tool_content .= "<th aria-label='$langSettingSelect'></th>";
         $tool_content .= "</tr></thead>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
@@ -468,7 +468,7 @@ function attendance_display_available_assignments($attendance_id) {
 function attendance_display_available_tc($attendance_id) {
 
     global $tool_content, $course_code, $course_id, $langGradebookActivityDate,
-            $langTitle, $langAdd, $langAttendanceNoActMessageTc;
+            $langTitle, $langAdd, $langAttendanceNoActMessageTc, $langSettingSelect;
 
     $checkForTc = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d
                                                 AND active = '1'
@@ -483,7 +483,7 @@ function attendance_display_available_tc($attendance_id) {
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
-        $tool_content .= "<th></th>";
+        $tool_content .= "<th aria-label='$langSettingSelect'></th>";
         $tool_content .= "</tr></thead>";
         foreach ($checkForTc as $data) {
             $tool_content .= "<tr><td>" . q($data->title) . "</td>";
@@ -963,7 +963,7 @@ function display_all_users_presences($attendance_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAmShort, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAttendanceBook, $langAttendanceDelete, $langConfirmDelete,
-           $langNoStudentsInAttendance, $langHere, $is_editor;
+           $langNoStudentsInAttendance, $langHere, $is_editor, $langSettingSelect;
 
     $attendance_limit = get_attendance_limit($attendance_id);
 
@@ -986,7 +986,7 @@ function display_all_users_presences($attendance_id) {
                   <th>$langAmShort</th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langAttendanceAbsences</th>
-                  <th></th>
+                  <th aria-label='$langSettingSelect'></th>
                 </tr>
             </thead>
             <tbody>";

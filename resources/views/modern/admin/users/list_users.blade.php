@@ -28,7 +28,7 @@
                                 <th>{{ trans('langUsername') }}</th>
                                 <th>{{ trans('langEmail') }}</th>
                                 <th style='width:5%;'>{{ trans('langProperty') }}</th>
-                                <th style='width:5%;'>{!! icon('fa-gears') !!}</th>
+                                <th style='width:5%;' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                                 </tr>
                             </thead>
                             <!-- DO NOT DELETE THESE EMPTY COLUMNS -->

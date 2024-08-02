@@ -251,7 +251,7 @@ $tool_content .= "
               <th>$langDate</th>
               <th>$langExpirationDate</th>
               <th>$langRegistration</th>
-              <th>".icon('fa-gears')."</th>
+              <th aria-label='$langSettingSelect'>".icon('fa-gears')."</th>
             </tr>
         </thead>
         <tbody>

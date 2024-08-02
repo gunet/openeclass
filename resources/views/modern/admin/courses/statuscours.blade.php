@@ -28,7 +28,7 @@
                                       <div class='radio mb-4'>
                                         <label>
                                           <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2'{!! $course->visible == 2 ? ' checked': '' !!}>
-                                          <label for="courseopen">
+                                          <label for="courseopen" aria-label="{{ trans('langPublic') }}">
                                             {!! course_access_icon(COURSE_OPEN) !!}
                                           </label>
                                           {{ trans('langPublic') }}
@@ -38,7 +38,7 @@
                                       <div class='radio mb-4'>
                                         <label>
                                           <input class='input-StatusCourse' id='coursewithregistration' type='radio' name='formvisible' value='1'{!! $course->visible == 1 ? ' checked': '' !!}>
-                                          <label for="coursewithregistration">
+                                          <label for="coursewithregistration" aria-label="{{ trans('langPrivOpen') }}">
                                             {!! course_access_icon(COURSE_REGISTRATION) !!}
                                           </label>
                                           {{ trans('langPrivOpen') }}
@@ -49,7 +49,7 @@
                                       <div class='radio mb-4'>
                                         <label>
                                           <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0'{!! $course->visible == 0 ? ' checked': '' !!}>
-                                          <label for="courseclose">
+                                          <label for="courseclose" aria-label="{{ trans('langClosedCourseShort') }}">
                                             {!! course_access_icon(COURSE_CLOSED) !!}
                                           </label>
                                           {{ trans('langClosedCourseShort') }}
@@ -60,7 +60,7 @@
                                       <div class='radio'>
                                         <label>
                                           <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3'{!! $course->visible == 3 ? ' checked': '' !!}>
-                                          <label for="courseinactive">
+                                          <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">
                                             {!!  course_access_icon(COURSE_INACTIVE) !!}
                                           </label>
                                           {{ trans('langInactiveCourse') }}

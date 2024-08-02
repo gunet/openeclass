@@ -6395,3 +6395,4 @@ $langShowCoursesInPics = "Show courses in card format";
 $langDeliverableInserted = "You have successfully created the deliverable";
 $langCreateDeliverable = "Deliverable creation";
 $langImgFormsDes = "Fill in the required fields in the form shown";
+$langThePageIs = "You are on the page:";

@@ -274,7 +274,7 @@ view($view, $data);
 function table_header($addon = FALSE) {
 
     global $langSurnameName, $langFaculty, $langUsername, $langDateRequest,
-           $langDateClosed, $langDateReject, $langUserPermissions;
+           $langDateClosed, $langDateReject, $langUserPermissions, $langSettingSelect;
 
     $string = "<thead>";
     $datestring = '';
@@ -291,7 +291,7 @@ function table_header($addon = FALSE) {
                 <th>$langDateRequest</th>";
 
     $string .= $datestring;
-    $string .= "<th scope='col'>" . icon('fa-gears') . "</th>";
+    $string .= "<th scope='col' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>";
     $string .= "</tr></thead>";
 
     return $string;

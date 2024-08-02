@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 function list_assignments($id = NULL) {
-    global $course_id, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission, $langAddModulesButton, $langNoAssign;
+    global $course_id, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission, $langAddModulesButton, $langNoAssign, $langSettingSelect, $langSelect;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
@@ -40,7 +40,7 @@ function list_assignments($id = NULL) {
                 "<thead><tr class='list-header'>" .
                 "<th>$langTitle</th>" .
                 "<th>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th></th>" .
+                "<th aria-label='$langSettingSelect'></th>" .
                 "</tr></thead>";
         foreach ($result as $row) {
             $checked = '';
@@ -52,7 +52,7 @@ function list_assignments($id = NULL) {
             $ret_string .= "<tr>" .
                     "<td>".q($row->title)."<br><br><div class='text-muted'>$description</div></td>" .
                     "<td>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
-                    "<td><label class='label-container'><input type='checkbox' $checked name='assignment[]' value='$row->id' /><span class='checkmark'></span></label></td>" .
+                    "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='assignment[]' value='$row->id' /><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
         $ret_string .= "</table></div>";

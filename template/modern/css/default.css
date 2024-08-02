@@ -2550,7 +2550,7 @@ body .form-action-button-popover{
 }
 
 .openCourseDes{
-  text-align: justify;
+  text-align: start;
 }
 
 .modal-content-opencourses{
@@ -4489,7 +4489,7 @@ body .delThemeBtn{
 
 .mycourses-pagination .page-item .page-link.active{
   background-color: #E8EDF8;
-  color: #0073E6;
+  color: #00478F;
 }
 
 .mycourses-pagination .page-item-pages{

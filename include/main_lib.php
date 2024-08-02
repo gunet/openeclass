@@ -2857,7 +2857,7 @@ function profile_image($user_id, $size, $class=null) {
     if (!$imageurl) {
         $imageurl = "$themeimg/default_$size.png";
     }
-    return "<img src='$imageurl$suffix' $class_attr title='$username' alt='$username' $size_width>";
+    return "<img src='$imageurl$suffix' $class_attr alt='$username' $size_width>";
 }
 
 /**
@@ -3958,7 +3958,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         if ($level == 'primary-label') {
             array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'></span></a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
+            array_unshift($out_primary, "<a aria-label='" . q($option['title']) . "' data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }

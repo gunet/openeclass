@@ -21,7 +21,7 @@
  */
 
 function list_polls($id = NULL) {
-    global $course_id, $course_code, $urlServer, $langPollNone, $langQuestionnaire, $langChoice;
+    global $course_id, $course_code, $urlServer, $langPollNone, $langQuestionnaire, $langChoice, $langSettingSelect, $langSelect;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d AND active = 1", $course_id);
@@ -47,7 +47,7 @@ function list_polls($id = NULL) {
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th>$langQuestionnaire</th>" .
-                "<th></th>" .
+                "<th aria-label='$langSettingSelect'></th>" .
                 "</tr></thead>";
         foreach ($pollinfo as $entry) {
             $checked = '';
@@ -57,7 +57,7 @@ function list_polls($id = NULL) {
 
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
-            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

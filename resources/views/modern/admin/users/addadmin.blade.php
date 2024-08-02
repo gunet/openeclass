@@ -125,7 +125,7 @@
                             <th>{{ trans('langSurnameName') }}</th>
                             <th>{{ trans('langUsername') }}</th>
                             <th>{{ trans('langRole') }}</th>
-                            <th>{!! icon('fa-gears') !!}</th>
+                            <th aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                         </tr></thead>
 
                         @foreach ($admins as $admin)

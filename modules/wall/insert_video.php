@@ -25,7 +25,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 
 function list_videos($id = NULL) {
     global $themeimg, $course_id, $langTitle, $langDescription, $langDate,
-    $langChoice, $langCatVideoDirectory, $langNoVideo, $course_code;
+    $langChoice, $langCatVideoDirectory, $langNoVideo, $course_code, $langSelect;
 
     $ret_string = '';
     $count = 0;
@@ -78,7 +78,7 @@ function list_videos($id = NULL) {
                 $ret_string .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
                                  "<td>" . q($row->description) . "</td>".
                                  "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
-                                 "<td><label class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$row->id' /><span class='checkmark'></span></label></td>" .
+                                 "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$row->id' /><span class='checkmark'></span></label></td>" .
                                  "</tr>";
             }
         }
@@ -108,7 +108,7 @@ function list_videos($id = NULL) {
                                     q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
                             $ret_string .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
                             $ret_string .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
-                            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
+                            $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
                             $ret_string .= "</tr>";
                     }
                 }

@@ -491,7 +491,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 <td class='bg-header-table TextBold'>$langDescription</td>
                 <td class='bg-header-table TextBold'>$langCPFFieldDatatype</td>
                 <td class='bg-header-table TextBold'>$langCPFFieldRequired</td>
-                <td class='bg-header-table TextBold'>" . icon('fa-gears') . "</td>
+                <td class='bg-header-table TextBold' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</td>
 		        </tr></thead>";
 
             $q = Database::get()->queryArray("SELECT * FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $res->id);

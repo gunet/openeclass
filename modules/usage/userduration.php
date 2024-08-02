@@ -355,7 +355,7 @@ if (isset($_GET['u'])) { //  stats per user
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>
-          <th>" . icon('fa-gears') . "</th>
+          <th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
         </tr></thead>";
     }
 

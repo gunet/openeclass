@@ -48,7 +48,7 @@
                                     <div class='col-sm-12'>
                                         @if (isset($course_image))
                                             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                                                <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_image }}' alt="Course image"> &nbsp;&nbsp;
+                                                <img style="max-height:100px;max-width:150px;" src='{{ $urlAppend }}courses/{{ $course_code }}/image/{{ $course_image }}' alt="{{ trans('langCourseImage') }}"> &nbsp;&nbsp;
                                                 <a class='btn deleteAdminBtn' href='{{$_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&delete_image=true&{!! generate_csrf_token_link_parameter() !!}'>
                                                     {{ trans('langDelete') }}
                                                 </a>
@@ -74,6 +74,7 @@
                                                         <i class='fa-solid fa-image settings-icons'></i>&nbsp;{{ trans('langSelect') }}
                                                     </button>
                                                     <input type='hidden' id='choose_from_list' name='choose_from_list'>
+                                                    <label for='selectedImage'>{{ trans('langImageSelected') }}:</label>
                                                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
                                                 </div>
                                             </div>

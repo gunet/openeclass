@@ -283,7 +283,7 @@ if (count($result) > 0) { // topics found
           <th>$langSender</th>
           <th>$langSeen</th>
           <th>$langLastMsg</th>
-          <th></th>
+          <th aria-label='$langSettingSelect'></th>
         </tr></thead>";
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;

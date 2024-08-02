@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 function list_exercises($id = NULL) {
-    global $course_id, $course_code, $urlServer, $langDescription, $langChoice, $langExercices, $langNoExercises;
+    global $course_id, $course_code, $urlServer, $langDescription, $langChoice, $langExercices, $langNoExercises, $langSelect;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
@@ -63,7 +63,7 @@ function list_exercises($id = NULL) {
             $ret_string .= "<tr class='$vis'>";
             $ret_string .= "<td><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $ret_string .= "<td>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
-            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

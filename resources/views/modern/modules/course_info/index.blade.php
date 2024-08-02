@@ -173,7 +173,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                        <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $buildusernode !!}
                                         </div>
@@ -302,7 +302,7 @@
                                             <div class='radio mb-3'>
                                                 <label>
                                                     <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
-                                                    <label for="courseopen">{!! course_access_icon(COURSE_OPEN) !!}</label>
+                                                    <label for="courseopen" aria-label="{{ trans('langOpenCourse') }}">{!! course_access_icon(COURSE_OPEN) !!}</label>
                                                     {{ trans('langOpenCourse') }}
                                                 </label>
                                                 <div class='help-block'>{{ trans('langPublic') }}</div>
@@ -312,7 +312,7 @@
                                             <div class='radio mb-3'>
                                                 <label>
                                                     <input class='input-StatusCourse' id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
-                                                    <label for="coursewithregistration">{!! course_access_icon(COURSE_REGISTRATION) !!}</label>
+                                                    <label for="coursewithregistration" aria-label="{{ trans('langTypeRegistration') }}">{!! course_access_icon(COURSE_REGISTRATION) !!}</label>
                                                     {{ trans('langTypeRegistration') }}
                                                 </label>
                                                 <div class='help-block'>{{ trans('langPrivOpen') }}</div>
@@ -322,7 +322,7 @@
                                             <div class='radio mb-3'>
                                                 <label>
                                                     <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
-                                                    <label for="courseclose">{!! course_access_icon(COURSE_CLOSED) !!}</label>
+                                                    <label for="courseclose" aria-label="{{ trans('langClosedCourse') }}">{!! course_access_icon(COURSE_CLOSED) !!}</label>
                                                     {{ trans('langClosedCourse') }}
                                                 </label>
                                                 <div class='help-block'>{{ trans('langClosedCourseShort') }}</div>
@@ -332,7 +332,7 @@
                                             <div class='radio'>
                                                 <label>
                                                     <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
-                                                    <label for="courseinactive">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
+                                                    <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
                                                     {!! trans('langInactiveCourse') !!}
                                                 </label>
                                                 <div class='help-block'>{{ trans('langCourseInactive') }}</div>

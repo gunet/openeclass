@@ -226,9 +226,9 @@
                                                 <img style='height:150px; width:150px;' src="{{ $urlServer }}template/modern/img/game/badge.png" class="card-img-top ms-auto me-auto mt-3" alt="certificate">
                                                 <div class="card-body">
                                                     <a href='../out.php?i={{ $certificate->identifier }}'>
-                                                        <h5 class='certificate_panel_title text-center'>
+                                                        <h4 class='certificate_panel_title text-center'>
                                                             {!! $certificate->cert_title !!}
-                                                        </h5>
+                                                        </h4>
                                                         <div class='text-center text-success'>
                                                             {!! format_locale_date(strtotime($certificate->assigned), null, false) !!}
                                                         </div>

@@ -104,7 +104,7 @@
                                         <tr class="list-header">
                                             <th>{{ trans('langH5pInteractiveContent') }}</th>
                                             <th>{{ trans('langAttendanceType') }} HP5</th>
-                                            <th style="width:109px;">
+                                            <th style="width:109px;" aria-label="{{ trans('langSettingSelect') }}">
                                                 <span class="fa fa-gears"></span>
                                             </th>
                                         </tr>

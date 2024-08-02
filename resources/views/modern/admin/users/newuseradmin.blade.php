@@ -90,7 +90,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group{{ Session::hasError('faculty') ? ' has-error' : '' }} mt-4">
-                                        <label for="faculty" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }}</label>
+                                        <label for="dialog-set-value" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }}</label>
                                         <div class="col-sm-12">
                                             {!! $tree_html !!}
                                         </div>
@@ -150,7 +150,7 @@
                                 </div>
                             @endif
                             <div class="form-group{{ Session::hasError('password') ? ' has-error' : '' }} mt-4">
-                                <label for="passsword_form" class="col-sm-12 control-label-notes">{{ trans('langPass') }}</label>
+                                <label for="password" class="col-sm-12 control-label-notes">{{ trans('langPass') }}</label>
                                 <div class="col-sm-12">
                                     <input class='form-control' id='password' type='text' name='password' value='{{ getValue('password', choose_password_strength()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}...">
                                     @if (Session::hasError('password'))
@@ -172,7 +172,7 @@
                             <div class="form-group{{ Session::hasError('verified_mail_form') ? ' has-error' : '' }} mt-4">
                                 <label for="verified_mail_form" class="col-sm-12 control-label-notes">{{ trans('langEmailVerified') }}</label>
                                 <div class="col-sm-12">
-                                    {!! selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'") !!}
+                                    {!! selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control' id='verified_mail_form'") !!}
                                     @if (Session::hasError('verified_mail_form'))
                                         <span class="help-block Accent-200-cl">{{ Session::getError('verified_mail_form') }}</span>
                                     @endif
@@ -190,7 +190,7 @@
                             </div>
 
                             <div class="form-group{{ Session::hasError('faculty') ? ' has-error' : '' }} mt-4">
-                                <label for="faculty" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }}</label>
+                                <label for="dialog-set-value" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }}</label>
                                 <div class="col-sm-12">
                                     {!! $tree_html !!}
                                     @if (Session::hasError('faculty'))
@@ -214,7 +214,7 @@
                                     </label>
                                 </div>
                                 <div class='checkbox mb-2'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                         <input type='checkbox' name='enable_course_registration' value='1' checked>
                                         <span class='checkmark'></span>{{ trans('langInfoEnableCourseRegistration') }}
                                     </label>
@@ -243,7 +243,7 @@
                                 </div>
                             @else
                                 <div class='input-append date form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
+                                    <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>

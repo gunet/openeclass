@@ -30,7 +30,7 @@
                         <fieldset> 
                             <div class="form-group">
                                 
-                                <textarea id="textr" onfocus="expand_form();" class="form-control" placeholder="{{ trans('langTypeOutMessage') }}" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
+                                <textarea aria-label="{{ trans('langTypeOutMessage') }}" id="textr" onfocus="expand_form();" class="form-control" placeholder="{{ trans('langTypeOutMessage') }}" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
                             </div>
                             <div id="resources_panel" class="panel panel-default collapse mt-3 border-0">
                                 <div class="panel-body border-0">

@@ -568,7 +568,7 @@ if ($userdata) {
                                       <th>$langDate</th>
                                       <th>$langSize</th>";
             if ($id == $uid) {
-                $tool_content .= "<th class='text-end'>".icon('fa-gears', $langCommands)."</th>";
+                $tool_content .= "<th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears', $langCommands)."</th>";
             }
 
             $tool_content .= "</tr>";

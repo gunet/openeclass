@@ -156,7 +156,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                       <th>$langAm</th>
                       <th>$langGroup</th>
                       <th>$langTotalDuration</th>
-                      <th class='text-center'>" . icon('fa-gears') . "</th>
+                      <th class='text-center' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                     </tr></thead>";
 
         if (isset($_GET['xls'])) {

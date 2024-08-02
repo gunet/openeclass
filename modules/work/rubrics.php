@@ -397,7 +397,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                                     <tr>
                                         <th style='width:47%'>$langWording</th>
                                         <th style='width:47%'>$langValue</th>
-                                        <th class='text-center option-btn-cell'  style='width:5%'>" . icon('fa-gears') . "</th>
+                                        <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                                     </tr>
                                 </thead>
                                 <tbody>
