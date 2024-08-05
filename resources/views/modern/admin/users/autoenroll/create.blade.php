@@ -42,15 +42,14 @@
                                 </div>
                     
                                 <div class='form-group mt-4'>
-                                    <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langAutoEnrollCourse') }}:</label>   
+                                    <label for='courses-select' class='col-sm-12 control-label-notes'>{{ trans('langAutoEnrollCourse') }}:</label>   
                                     <div class='col-sm-12'>
-                                        {{--<input class='form-control' type='hidden' id='courses' name='courses' value=''>--}}
                                         <select id='courses-select' class='form-control' name='courses[]' multiple>{{$coursesOptions}}</select>
                                     </div>
                                 </div>
                           
                                 <div class='form-group mt-4'>
-                                    <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langAutoEnrollDepartment') }}:</label>   
+                                    <div class='col-sm-12 control-label-notes'>{{ trans('langAutoEnrollDepartment') }}:</div>   
                                     <div class='col-sm-12 form-control-static'>                  
                                         <div id='nodCnt2'>
                                         @foreach ($deps as $key => $dep)
@@ -58,7 +57,7 @@
                                                 <input type='hidden' name='rule_deps[]' value='{{ $dep }}'>
                                                 {{ $tree->getFullPath(getDirectReference($dep)) }}
                                                 &nbsp;
-                                                <a href='#nodCnt2'>
+                                                <a href='#nodCnt2' aria-label="{{ trans('langNodeDel') }}">
                                                     <span class='fa-solid fa-xmark' data-bs-toggle='tooltip' data-original-title='{{ trans('langNodeDel') }}' data-bs-placement='top' title='{{ trans('langNodeDel') }}'></span>
                                                 </a>
                                             </p>
@@ -66,7 +65,7 @@
                                         </div>
                                         <div>
                                             <p>
-                                                <a id='ndAdd2' href='#add'>
+                                                <a id='ndAdd2' href='#add' aria-label="{{ trans('langNodeAdd') }}">
                                                     <span class='fa fa-plus' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langNodeAdd') }}'></span>
                                                 </a>
                                             </p>
@@ -95,7 +94,7 @@
                           
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 checkbox mb-1'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' name='apply' id='apply' value='1' checked='1'>
                                             <span class='checkmark'></span>{{ trans('langApplyRule') }}
                                         </label>

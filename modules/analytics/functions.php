@@ -191,11 +191,11 @@ function display_general_lists($analytics_id) {
                                                 </a>
                                             </div>
                                             <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='LearnAnalyticsResource$module_id' data-bs-parent='#accordionDes$module_id'>
-                                                <h6 class='text-success'>$message_advanced</h6>
+                                                <div class='text-heading-h6 text-success'>$message_advanced</div>
                                                 <div class='res-table-wrapper'>
                                                     $good_results
                                                 </div>                                                    
-                                                <h6 class='text-danger'>$message_critical</h6>
+                                                <div class='text-heading-h6 text-danger'>$message_critical</div>
                                                 <div class='res-table-wrapper'>
                                                     $bad_results
                                                 </div>       
@@ -399,7 +399,7 @@ function display_analytics_information($analytics_id) {
 function display_analytics_peruser($analytics_id, $startdate, $enddate, $previous, $next, $orderby, $reverse, $period, $download) {
 
     global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage, $langAnalyticsStatus,
-    $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langDetail, $langMessage;
+    $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langDetail, $langMessage, $langBack, $langNext;
 
     $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname, 
                                 u.surname AS surname, cu.user_id AS userid 
@@ -442,19 +442,19 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                 <tr class='list-header'>
                     
                     <th>
-                        $langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a>
+                        $langSurnameName <a aria-label='$langSurnameName' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a>
                     </th>
                     <th>
-                        $langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a>
+                        $langPercentage <a aria-label='$langPercentage' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a>
                     </th>
                     <th>
                         $langAnalyticsStatus
                     </th>
                     <th>
                         <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
+                            <a aria-label='$langBack' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
                             " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                            <a aria-label='$langNext' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                         </div>
                     </th>
                    
@@ -859,29 +859,29 @@ function edit_analytics_settings ($analytics_id = 0)
                     <div class='form-group'>
                         <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                            <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
                         <label for='description' class='col-sm-12 control-label-notes'>$langDescription</label>
                         <div class='col-sm-12'>
-                            <textarea class='form-control' placeholder='$langDescription' name='description' rows='6'>$description</textarea>
+                            <textarea id='description' class='form-control' placeholder='$langDescription' name='description' rows='6'>$description</textarea>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='title' class='col-sm-12 control-label-notes'>$langActivate</label>
+                        <label for='typActive' class='col-sm-12 control-label-notes'>$langActivate</label>
                             <div class='col-sm-12'>";
-                                $tool_content .= selection(get_activation_status(), 'active', $active);
+                                $tool_content .= selection(get_activation_status(), 'active', $active, 'class="form-select" id="typActive"');
                             $tool_content .= "</div>
                     </div>
                     <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsCalculation</label>
+                    <label for='typPeriod' class='col-sm-12 control-label-notes'>$langAnalyticsCalculation</label>
                         <div class='col-sm-12'>";
-                            $tool_content .= selection(get_period_types_array () , 'periodType', $periodType);
+                            $tool_content .= selection(get_period_types_array () , 'periodType', $periodType, 'class="form-select" id="typPeriod"');
                         $tool_content .= "</div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-12 control-label-notes'>$langStart</label>
+                        <label for='start_date' class='col-sm-12 control-label-notes'>$langStart</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
                                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
@@ -891,7 +891,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-12 control-label-notes'>$langFinish</label>
+                        <label for='end_date' class='col-sm-12 control-label-notes'>$langFinish</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
                                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
@@ -982,42 +982,42 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                 <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
                 <div class='form-group mt-4'>
                     <div class='row'>
-                        <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsCriticalLevel</label>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langAnalyticsCriticalLevel</div>
                         <div class='col-md-6 col-12'>
                             <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' type='number' name='min_value' value='$min_value'>
+                                <input id='title' class='form-control' type='number' name='min_value' value='$min_value'>
                             </div>
                         </div>
                         <div class='col-md-6 col-12'>
-                            <label for='title' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
+                            <label for='analyticsMaxValueId' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
+                                <input id='analyticsMaxValueId' class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
                     <div class='row'>
-                        <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel</label>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel</div>
                         <div class='col-md-6 col-12'>
-                            <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
+                            <label for='new_title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
+                                <input id='new_title' class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
                             </div>
                         </div>
                         <div class='col-md-6 col-12'>
-                            <label for='title' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
+                            <label for='analyticsMaxValueNewId' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' type='number' name='max_value' value='$max_value'>
+                                <input id='analyticsMaxValueNewId' class='form-control' type='number' name='max_value' value='$max_value'>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class='form-group mt-4'>   
-                    <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsWeight</label>
+                    <label for='weightId' class='col-sm-12 control-label-notes'>$langAnalyticsWeight</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
+                        <input id='weightId' class='form-control' type='number' placeholder='' name='weight' value='$weight'>
                     </div>
                 </div>";
 
@@ -1236,7 +1236,7 @@ function get_available_resources($type, $analytics_element_id) {
     }
 
     $resource_field =  "<div class='form-group mt-3'>
-                            <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsResource</label>
+                            <div class='col-sm-12 control-label-notes'>$langAnalyticsResource</div>
                             <div class='col-sm-12'>"
                             . selection($resource, 'resource', $resource_id) .
                             "</div>

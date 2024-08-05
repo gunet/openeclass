@@ -92,7 +92,7 @@ if (isset($_POST['toReorder'])) {
         }
         $tool_content .= "
             <div class='form-group mb-4'>
-              <label class='col-sm-12 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . ")</label>
+              <label for='heading-$langcode' class='col-sm-12 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . ")</label>
               <div class='col-sm-12'>
                 <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value' placeholder='$langTitle...'>
               </div>

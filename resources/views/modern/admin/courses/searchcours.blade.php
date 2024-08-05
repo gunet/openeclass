@@ -45,13 +45,13 @@
                             <div class='form-group mt-4'>
                                 <label for='formsearchcode' class='col-sm-12 control-label-notes'>{{ trans('langCourseCode') }}</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' placeholder='{{ trans('langCourseCode') }}' class='form-control' name='formsearchcode' value=''>
+                                    <input id='formsearchcode' type='text' placeholder='{{ trans('langCourseCode') }}' class='form-control' name='formsearchcode' value=''>
                                 </div>
                             </div>
                             <div class='form-group mt-4'>
                                 <label for='formsearchtype' class='col-sm-12 control-label-notes'>{{ trans('langCourseVis') }}</label>
                                 <div class='col-sm-12'>
-                                    <select class='form-select' name='formsearchtype'>
+                                    <select class='form-select' name='formsearchtype' id='formsearchtype'>
                                         <option value='-1'>{{ trans('langAllTypes') }}</option>
                                         <option value='2'>{{ trans('langTypeOpen') }}</option>
                                         <option value='1'>{{ trans('langTypeRegistration') }}</option>
@@ -70,10 +70,10 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langCreationDate') }}</label>
+                                <div class='col-sm-12 control-label-notes'>{{ trans('langCreationDate') }}</div>
                                 <div class='row'>
                                     <div class='col-6'>
-                                        {!! selection($reg_flag_data, 'reg_flag', '', 'class="form-control"') !!}
+                                        {!! selection($reg_flag_data, 'reg_flag', '', 'class="form-select"') !!}
                                     </div>
                                     <div class='col-6'>
                                         <input class='form-control' id='id_date' name='date' type='text' value='' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langCreationDate') }}'>

@@ -47,7 +47,7 @@
                                     {{ showSecondFactorChallenge() }}
                                     <div class='form-group mt-4'>
                                         <div class='col-12'>
-                                            <input class='btn deleteAdminBtn' type='submit' name='delete' value='{{ trans('langDelete') }}'>
+                                            <input aria-label="{{ trans('langDelete') }}" class='btn deleteAdminBtn' type='submit' name='delete' value='{{ trans('langDelete') }}'>
                                         </div>
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}

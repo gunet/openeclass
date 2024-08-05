@@ -140,7 +140,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
-                      <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
+                      <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control" id="datatype"')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
@@ -361,16 +361,16 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
-                          <div class='col-sm-12'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled')."</div>";
+                          <div class='col-sm-12'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" id="datatype" disabled')."</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='required' class='col-sm-12 control-label-notes'>$langCPFFieldRequired</label>
-                          <div class='col-sm-12'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
+                          <div class='col-sm-12'>".selection($yes_no, 'required', $required, 'class="form-control" id="required"')."</div>";
         $tool_content .= "</div>";
         if ($datatype == EPF_MENU) {
             $tool_content .= "<div class='form-group mt-4'>";
             $tool_content .= "<label for='options' class='col-sm-12 control-label-notes'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
-                              <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'>$textarea_val</textarea></div>";
+                              <div class='col-sm-12'><textarea name='options' rows='8' class='w-100' id='options'>$textarea_val</textarea></div>";
             $tool_content .= "</div>";
         }
         $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langSave'></div>";

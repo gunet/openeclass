@@ -8,7 +8,7 @@
 					{!! $group_hidden_input !!}
                     <div class='form-group'>
                         <label class='col-sm-12 control-label-notes' for='newFile'>{!! $replaceMessage !!}</label>
-                        <div class='col-sm-7'><input type='file' name='newFile' size='35'></div>
+                        <div class='col-sm-7'><input type='file' name='newFile' size='35' id='newFile'></div>
                     </div>
 
 					<div class='form-group mt-4'>

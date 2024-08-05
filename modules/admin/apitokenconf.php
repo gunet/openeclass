@@ -155,18 +155,18 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?edit=$_GET[edit]' method='post'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='$langExtAppName' class='col-12 control-label-notes'>$langExtAppName</label>";
-        $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='name' value='$data->name'></div>";
+        $tool_content .= "<div class='col-12'><input id='$langExtAppName' class='form-control' type='text' name='name' value='$data->name'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='$langIpAddress' class='col-12 control-label-notes'>$langIpAddress</label>";
-        $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='remote_url' value='$data->ip'></div>";
+        $tool_content .= "<div class='col-12'><input id='$langIpAddress' class='form-control' type='text' name='remote_url' value='$data->ip'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='$langComments' class='col-12 control-label-notes'>$langComments</label>";
-        $tool_content .= "<div class='col-12'><textarea class='form-control' rows='3' cols='40' name='comments'>$data->comments</textarea></div>";
+        $tool_content .= "<div class='col-12'><textarea id='$langComments' class='form-control' rows='3' cols='40' name='comments'>$data->comments</textarea></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='input-append date form-group mt-4'>
-                                    <label class='col-12 control-label-notes'>$langExpirationDate:</label>
+                                    <label for='token_expires_at' class='col-12 control-label-notes'>$langExpirationDate:</label>
                                     <div class='col-12'>
                                         <div class='input-group'>
                                             <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
@@ -176,7 +176,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
                                 </div>";
         $checked = $data->enabled == 1 ? "checked" : "";
         $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $tool_content .= "<label class='label-container'><input type='checkbox' name='enabled' value='1' $checked><span class='checkmark'></span>$langCΕnabled</label>";
+        $tool_content .= "<label class='label-container' aria-label='$langSettingSelect'><input type='checkbox' name='enabled' value='1' $checked><span class='checkmark'></span>$langCΕnabled</label>";
         $tool_content .= "</div></div></div>";
         $tool_content .= "
                     <div class='form-group mt-4'>
@@ -208,17 +208,17 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         foreach ($app->getParams() as $param) {
             if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
                 $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' checked><span class='checkmark'></span>" . $param->display() . "</label>";
+                $boolean_field .= "<label class='label-container' aria-label='$langSettingSelect'><input type='checkbox' name='" . $param->name() . "' value='1' checked><span class='checkmark'></span>" . $param->display() . "</label>";
                 $boolean_field .= "</div></div></div>";
             } elseif ($param->getType() == ExtParam::TYPE_STRING) {
                 $tool_content .= "<div class='form-group mt-4'>";
                 $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
-                $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+                $tool_content .= "<div class='col-12'><input id='" . $param->name() . "' class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
                 $tool_content .= "</div>";
             } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
                 $tool_content .= "<div class='form-group mt-4'>";
                 $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
-                $tool_content .= "<div class='col-12'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+                $tool_content .= "<div class='col-12'><textarea id='" . $param->name() . "' class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
                     q($param->value()) . "</textarea></div>";
                 $tool_content .= "</div>";
             }

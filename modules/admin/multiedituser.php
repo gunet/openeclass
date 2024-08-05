@@ -307,9 +307,9 @@ if (isset($_POST['submit'])) {
                 $monthsField
                 
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langMultiDelUserData:</label>
+                    <label for='user_names' class='col-sm-12 control-label-notes'>$langMultiDelUserData:</label>
                     <div class='col-sm-12'>
-                        <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
+                        <textarea id='user_names' class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
                     </div>
                 </div>
                 

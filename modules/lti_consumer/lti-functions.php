@@ -68,7 +68,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
        
             
                                         <div class='form-group mt-4'>
-                                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
+                                            <label for='lti_url' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' $urldefault />
                                             </div>
@@ -76,7 +76,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
             
           
                                         <div class='form-group mt-4'>
-                                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
+                                            <label for='lti_key' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' size='50' />
                                             </div>
@@ -85,7 +85,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
         
        
                                         <div class='form-group mt-4'>
-                                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
+                                            <label for='lti_secret' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' size='50' />
                                             </div>
@@ -120,7 +120,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                     if (!isset($course_code)) {
                                         $tool_content .= "
                                         <div class='form-group mt-4' id='courses-list'>
-                                            <label class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                                            <label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
                                             <div class='col-sm-12'>
                                                 <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";

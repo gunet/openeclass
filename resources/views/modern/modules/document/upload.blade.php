@@ -46,7 +46,7 @@
                                         @endif
                                         <div class='form-group'>
                                             @if ($pendingCloudUpload)
-                                                <label for='fileCloudName' class='col-12 control-label-notes'>{{ trans('langCloudFile') }}</label>
+                                                <label for='fileCloudInfo' class='col-12 control-label-notes'>{{ trans('langCloudFile') }}</label>
                                                 <div class='col-12'>
                                                     <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='{{ $pendingCloudUpload }}'>
                                                     <input type='text' class='form-control' name='fileCloudName' value='{{ CloudFile::fromJSON($pendingCloudUpload)->name() }}' readonly>

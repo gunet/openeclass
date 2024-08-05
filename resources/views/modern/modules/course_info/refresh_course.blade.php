@@ -74,7 +74,7 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='delusersinactive'>
                                                 <span class='checkmark'></span>
                                                 {{trans('langInactiveUsers')}}
@@ -83,7 +83,7 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='delusersdate'>
                                                 <span class='checkmark'></span>
                                                 {{trans('langWithRegistrationDate')}}
@@ -95,7 +95,7 @@ $(function() {
                                         </div>
                                         <div class='col-12 mt-3'>
                                             <div class='input-group'>
-                                                <input class='form-control mt-0 border-end-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
+                                                <input aria-label="{{ trans('langDate') }}" class='form-control mt-0 border-end-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
                                                 <div class='input-group-text h-40px bg-input-default input-border-color'>
                                                     <span class="fa-regular fa-calendar" aria-hidden="true"></span>
                                                 </div>
@@ -105,7 +105,7 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='delusersdept'>
                                                 <span class='checkmark'></span>
                                                 {{trans('langWho')}}
@@ -122,7 +122,7 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='delusersid'>
                                                 <span class='checkmark'></span>
                                                 {{trans('langWith')}}
@@ -133,7 +133,7 @@ $(function() {
                                             {!! selection(array('am' => trans('langWithStudentId'), 'uname' => trans('langWithUsernames')), 'id_flag', 'am') !!}
                                         </div>
                                         <div class='col-12 mt-3'>
-                                            <textarea name='idlist' class='form-control' rows='5'></textarea>
+                                            <textarea aria-label="{{ trans('langMessage') }}" name='idlist' class='form-control' rows='5'></textarea>
                                         </div>
 
                                     </div>
@@ -145,9 +145,9 @@ $(function() {
                                         <div class='row'>
                                             <div class='col-md-6 col-12'>
                                                 <div class='form-group mt-4'>
-                                                    <label for='delannounces' class='col-sm-6 control-label-notes mb-1'>{{ trans('langAnnouncements') }}</label>
+                                                    <div class='col-sm-6 control-label-notes mb-1'>{{ trans('langAnnouncements') }}</div>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input type='checkbox' name='delannounces'>
                                                             <span class='checkmark'></span>
                                                             {{ trans('langAnnouncesDel') }}
@@ -159,9 +159,9 @@ $(function() {
 
                                             <div class='col-md-6 col-12'>
                                                 <div class='form-group mt-4'>
-                                                    <label for='delagenda' class='col-sm-6 control-label-notes mb-1'>{{ trans('langAgenda') }}</label>
+                                                    <div class='col-sm-6 control-label-notes mb-1'>{{ trans('langAgenda') }}</div>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input type='checkbox' name='delagenda'>
                                                             <span class='checkmark'></span>
                                                             {{ trans('langAgendaDel') }}
@@ -175,12 +175,12 @@ $(function() {
                                         <div class='row'>
                                             <div class='col-md-6 col-12'>
                                                 <div class='form-group mt-4'>
-                                                    <label for='hideworks' class='col-sm-6 control-label-notes mb-1'>{{ trans('langWorks') }}</label>
+                                                    <div class='col-sm-6 control-label-notes mb-1'>{{ trans('langWorks') }}</div>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label class='label-container'><input type='checkbox' name='hideworks'><span class='checkmark'></span> {{ trans('langHideWork') }}</label>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}"><input type='checkbox' name='hideworks'><span class='checkmark'></span> {{ trans('langHideWork') }}</label>
                                                     </div>
                                                     <div class='col-sm-offset-2 col-sm-10 checkbox'>
-                                                        <label class='label-container'><input type='checkbox' name='delworkssubs'><span class='checkmark'></span> {{ trans('langDelAllWorkSubs') }}</label>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}"><input type='checkbox' name='delworkssubs'><span class='checkmark'></span> {{ trans('langDelAllWorkSubs') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,9 +188,9 @@ $(function() {
 
                                             <div class='col-md-6 col-12'>
                                                 <div class='form-group mt-4'>
-                                                    <label for='purgeexercises' class='col-sm-6 control-label-notes mb-1'>{{ trans('langExercises') }}</label>
+                                                    <div class='col-sm-6 control-label-notes mb-1'>{{ trans('langExercises') }}</div>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label class='label-container'><input type='checkbox' name='purgeexercises'><span class='checkmark'></span> {{ trans('langPurgeExercisesResults') }}</label>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}"><input type='checkbox' name='purgeexercises'><span class='checkmark'></span> {{ trans('langPurgeExercisesResults') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -200,9 +200,9 @@ $(function() {
                                         <div class='row'>
                                             <div class='col-md-6 col-12'>
                                                 <div class='form-group mt-4'>
-                                                    <label for='clearstats' class='col-sm-6 control-label-notes mb-1'>{{ trans('langUsage') }}</label>
+                                                    <div class='col-sm-6 control-label-notes mb-1'>{{ trans('langUsage') }}</div>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label class='label-container'><input type='checkbox' name='clearstats'><span class='checkmark'></span> {{ trans('langClearStats') }}</label>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}"><input type='checkbox' name='clearstats'><span class='checkmark'></span> {{ trans('langClearStats') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -210,9 +210,9 @@ $(function() {
 
                                             <div class='col-md-6 col-12'>
                                                 <div class='form-group mt-4'>
-                                                    <label for='delblogposts' class='col-sm-6 control-label-notes mb-1'>{{ trans('langBlog') }}</label>
+                                                    <div class='col-sm-6 control-label-notes mb-1'>{{ trans('langBlog') }}</div>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label class='label-container'><input type='checkbox' name='delblogposts'><span class='checkmark'></span> {{ trans('langDelBlogPosts') }}</label>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}"><input type='checkbox' name='delblogposts'><span class='checkmark'></span> {{ trans('langDelBlogPosts') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -221,9 +221,9 @@ $(function() {
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='delwallposts' class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</label>
+                                            <div class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</div>
                                             <div class='col-sm-12 checkbox'>
-                                                <label class='label-container'><input type='checkbox' name='delwallposts'><span class='checkmark'></span> {{ trans('langDelWallPosts') }}</label>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}"><input type='checkbox' name='delwallposts'><span class='checkmark'></span> {{ trans('langDelWallPosts') }}</label>
                                             </div>
                                         </div>
                                     @endif

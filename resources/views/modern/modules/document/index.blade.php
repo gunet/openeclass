@@ -206,7 +206,7 @@
                                                                 <div class='form-group mt-4'>
                                                                     <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
                                                                     <div class='col-12'>
-                                                                        <select name='moveTo' class='form-select' aria-label="{{ trans('langMove')}}">
+                                                                        <select id='moveTo' name='moveTo' class='form-select' aria-label="{{ trans('langMove')}}">
                                                                             @if ($curDirPath and $curDirPath != '/')
                                                                                 <option value=''>{{ trans('langParentDir') }}</option>
                                                                             @endif

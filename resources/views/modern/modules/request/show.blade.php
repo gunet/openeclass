@@ -146,7 +146,7 @@
                                     <fieldset>
                                         @if ($can_modify)
                                             <div class='form-group'>
-                                                <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}</label>
+                                                <label for='newState' class='col-sm-12 control-label-notes'>{{ trans('langChangeState') }}</label>
                                                 <div class='col-sm-12'>
                                                     <select class='form-select' name='newState' id='newState'>
                                                         @foreach ($states as $stateId => $stateName)
@@ -160,7 +160,7 @@
 
 
                                         <div class='form-group  @if($can_modify) mt-4 @endif'>
-                                            <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}</label>
+                                            <label for='requestComment' class='col-sm-12 control-label-notes'>{{ trans('langComment') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $commentEditor !!}
                                             </div>
@@ -169,10 +169,10 @@
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}</label>
+                                            <label for='requestFile' class='col-sm-12 control-label-notes'>{{ trans('langAttachedFile') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
-                                                <input type='file' name='requestFile'>
+                                                <input type='file' name='requestFile' id='requestFile'>
                                             </div>
                                         </div>
 

@@ -142,7 +142,7 @@ foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "checked" : "";
         $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
-        $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
+        $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == WebexApp::WEBEXURL) {
         $extra = '';
@@ -156,14 +156,14 @@ foreach ($app->getParams() as $param) {
             }
         }
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
+        $tool_content .= "<label for='default_webex_url' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langWebexUrl'></span></label>";
         $tool_content .= "<div class='col-sm-12'><input class='form-control' id='default_webex_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . WebexApp::WEBEXDEFAULURL . "' $extra></div>";
         $tool_content .= "</div>";
     } else if ($param->name() == WebexApp::WEBEXCUSTOMURL) {
         $checked = $param->value() == 1 ? "checked" : "";
         $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $tool_content .= "<label class='label-container'><input type='checkbox' id='custom_webex_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
+        $tool_content .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' id='custom_webex_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
         $tool_content .= "</div></div></div>";
     } else if ($param->name() == WebexApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -178,7 +178,7 @@ foreach ($app->getParams() as $param) {
             $selected = "selected";
         }
         $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
+        $tool_content .= "<label for='select-courses' class='col-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
         $tool_content .= "<div class='col-12'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
@@ -191,7 +191,7 @@ foreach ($app->getParams() as $param) {
     } else {
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+        $tool_content .= "<div class='col-12'><input id='" . $param->name() . "' class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
 }

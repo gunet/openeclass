@@ -29,7 +29,7 @@
                         <div class='form-group{{ Session::hasError('title') ? " has-error" : "" }}'>
                             <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
+                                <input id='title' class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
                                 {!! Session::getError('title', "<span class='help-block Accent-200-cl'>:message</span>") !!}
                             </div>
                         </div>
@@ -38,9 +38,9 @@
                             <div class='col-sm-12'>{!! $newContentTextarea !!}</div>
                         </div>
                         <div class='mt-4 form-group'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
+                            <label for='lang_selection' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                             <div class='col-sm-12'>
-                                {!! lang_select_options('lang_admin_ann', "class='form-control'", isset($announcement) ? $announcement->lang : false) !!}
+                                {!! lang_select_options('lang_admin_ann', "class='form-control' id='lang_selection'", isset($announcement) ? $announcement->lang : false) !!}
                             </div>
                             <small class='text-end'>
                                 <span class='help-block'>{{ trans('langTipLangAdminAnn') }}</span>
@@ -51,7 +51,7 @@
                             <div class='col-sm-12'>
                                 <div class='input-group'>
                                     <span class='input-group-addon'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                         <input class='mt-0' id='startIdCheckbox' type='checkbox' name='startdate_active'{{ $start_checkbox }}>
                                         <span class='checkmark'></span></label>
                                     </span>
@@ -65,7 +65,7 @@
                             <div class='col-sm-12'>
                                 <div class='input-group'>
                                     <span class='input-group-addon'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                         <input class='mt-0' id='endIdCheckbox' type='checkbox' name='enddate_active'{{ $end_checkbox }} >
                                         <span class='checkmark'></span></label>
                                     </span>
@@ -77,7 +77,7 @@
                         <div class='mt-4 form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                         <input type='checkbox' name='show_public'{{ $checked_public }}> <span class='checkmark'></span>{{ trans('langVisible') }}
                                     </label>
                                 </div>

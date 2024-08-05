@@ -77,7 +77,7 @@
 
                                         <div class='form-group'>
                                             @if (isset($pendingCloudUpload))
-                                                <label for='fileCloudName' class='col-sm-12 control-labe-notes'>{{ trans('langCloudFile') }}</label>
+                                                <label for='fileCloudInfo' class='col-sm-12 control-labe-notes'>{{ trans('langCloudFile') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='{{ $pendingCloudUpload }}'>
                                                     <input type='text' class='form-control' name='fileCloudName' value='{{ CloudFile::fromJSON($pendingCloudUpload)->name() }}' readonly>
@@ -87,42 +87,42 @@
                                                 <div class='col-sm-12'>
                                                     <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
                                                     {!! CloudDriveManager::renderAsButtons() !!}
-                                                    <input type='file' name='userFile'>
+                                                    <input type='file' name='userFile' id='FileName'>
                                                 </div>
                                             @elseif ($form_input === 'url')
                                                 <label for='Url' class='col-sm-12 control-label-notes'>{{ trans('langURL') }}:</label>
                                                 <div class='col-sm-12'>
-                                                    <input class='form-control' type='text' name='URL'>
+                                                    <input class='form-control' type='text' name='URL' id='Url'>
                                                 </div>
                                             @elseif (isset($_GET['id']) && isset($_GET['table_edit']) && $table_edit == 'videolink')
                                                 <label for='Url' class='col-sm-12 control-label-notes'>{{ trans('langURL') }}:</label>
                                                 <div class='col-sm-12'>
-                                                    <input class='form-control' type='text' name='url' value='{{ $edititem->url }}'>
+                                                    <input class='form-control' type='text' name='url' value='{{ $edititem->url }}' id='Url'>
                                                 </div>
                                             @elseif (isset($_GET['id']) && isset($_GET['table_edit']) && $table_edit == 'video')
                                                 <input type='hidden' name='url' value='{{ $edititem->url }}'>
-                                                <label class='col-sm-12 control-label-notes'>{{ trans('langWorkFile') }}:</label>
+                                                <div class='col-sm-12 control-label-notes'>{{ trans('langWorkFile') }}:</div>
                                                 <div class='col-sm-12 margin-top-thin'>{{ $edititem->url }}</div>
                                             @endif
                                         </div>
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
+                                            <label for='Title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($edititem))
-                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ $edititem->title }}'>
+                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ $edititem->title }}' id='Title'>
                                                 @else
-                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' size='55'>
+                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' size='55' id='Title'>
                                                 @endif
                                             </div>
                                         </div>
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='Desc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
+                                            <label for='Desc' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
                                             <div class='col-sm-12'>
-                                                <textarea class='form-control' placeholder="{{ trans('langGiveText') }}..." rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
+                                                <textarea id='Desc' class='form-control' placeholder="{{ trans('langGiveText') }}..." rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
                                             </div>
                                         </div>
 
@@ -134,9 +134,9 @@
                                                     <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}</label>
                                                     <div class='col-sm-12'>
                                                         @if (isset($form_input))
-                                                            <input class='form-control' type='text' name='creator' value='{{ $nick }}'>
+                                                            <input class='form-control' type='text' name='creator' value='{{ $nick }}' id='Creator'>
                                                         @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                            <input class='form-control' type='text' name='creator' value='{{ $edititem->creator }}'>
+                                                            <input class='form-control' type='text' name='creator' value='{{ $edititem->creator }}' id='Creator'>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -147,9 +147,9 @@
                                                     <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}</label>
                                                     <div class='col-sm-12'>
                                                         @if (isset($form_input))
-                                                            <input class='form-control' type='text' name='publisher' value='{{ $nick }}'>
+                                                            <input class='form-control' type='text' name='publisher' value='{{ $nick }}' id='Publisher'>
                                                         @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                            <input class='form-control' type='text' name='publisher' value='{{ $edititem->publisher }}'>
+                                                            <input class='form-control' type='text' name='publisher' value='{{ $edititem->publisher }}' id='Publisher'>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -158,7 +158,7 @@
                                             @if (isset($form_input))
 
                                                 <div class="form-group mt-4 @if(isset($_GET['table_edit'])) d-none @endif">
-                                                    <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}</label>
+                                                    <label for='videodate' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}</label>
                                                     <div class='col-sm-12'><input id='videodate' class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
                                                 </div>
 
@@ -167,7 +167,7 @@
                                                 <div class='form-group mt-4'>
                                                     <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
                                                     <div class='col-sm-12'>
-                                                        <select class='form-select' name='selectcategory'>
+                                                        <select class='form-select' name='selectcategory' id='Category'>
                                                             <option value='0'>--</option>
                                                         @foreach ($resultcategories as $cat)
                                                             <?php

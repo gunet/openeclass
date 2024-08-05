@@ -48,21 +48,21 @@
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME']}}?course={{ $course_code }}'>
                                     <fieldset>
                                         <div class='row form-group'>
-                                            <label class='col-12 control-label-notes'>{{ trans('langName') }}</label>
+                                            <label for='nameID' class='col-12 control-label-notes'>{{ trans('langName') }}</label>
                                             <div class='col-12'>
-                                                <input class='form-control h-40px' value='{!! q($guest_info->givenname) !!}' disabled>
+                                                <input id='nameID' class='form-control h-40px' value='{!! q($guest_info->givenname) !!}' disabled>
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
-                                            <label class='col-12 control-label-notes'>{{ trans('langSurname') }}</label>
+                                            <label for='surnameID' class='col-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                             <div class='col-12'>
-                                                <input class='form-control h-40px' value='{!! q($guest_info->surname) !!}' disabled>
+                                                <input id='surnameID' class='form-control h-40px' value='{!! q($guest_info->surname) !!}' disabled>
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
-                                            <label class='col-12 control-label-notes'>{{ trans('langUsername') }}</label>
+                                            <label for='usernameID' class='col-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                             <div class='col-12'>
-                                                <input class='form-control h-40px' value='{!! q($guest_info->username) !!}' disabled>
+                                                <input id='usernameID' class='form-control h-40px' value='{!! q($guest_info->username) !!}' disabled>
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
@@ -73,7 +73,7 @@
                                             </div>
                                         </div>
                                         <div class='input-append date form-group mt-4'>
-                                            <label class='col-12 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
+                                            <label for='user_date_expires_at' class='col-12 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
                                             <div class='col-12'>
                                                 <div class='input-group'>
                                                     <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>

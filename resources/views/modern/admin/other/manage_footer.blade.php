@@ -18,7 +18,7 @@
 
 
                                 <div class='form-group'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langText') }}</label>
+                                    <label for='footer_intro' class='col-sm-12 control-label-notes'>{{ trans('langText') }}</label>
                                     <div class='col-sm-12'>
                                         {!! $footer_intro !!}
                                     </div>
@@ -26,21 +26,21 @@
 
                                 <div class='form-group mt-4'>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input type='checkbox' name='dont_display_contact_menu' value='1' {!! get_config('dont_display_contact_menu') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{trans('lang_dont_display_contact_menu')}}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input type='checkbox' name='dont_display_about_menu' value='1' {!! get_config('dont_display_about_menu') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{trans('lang_dont_display_about_menu')}}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input type='checkbox' name='dont_display_manual_menu' value='1' {!! get_config('dont_display_manual_menu') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{trans('lang_dont_display_manual_menu')}}
@@ -48,14 +48,14 @@
                                     </div>
 
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text' value='1' {!! get_config('activate_privacy_policy_text') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langDisplayPrivacyPolicyLink') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent' value='1' {!! get_config('activate_privacy_policy_consent') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langAskPrivacyPolicyConsent') }}
@@ -63,7 +63,7 @@
                                     </div>
 
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {!! get_config('enable_social_sharing_links') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langEnableSocialSharingLiks') }}

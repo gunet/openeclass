@@ -147,7 +147,7 @@ if (!isset($_GET['from_other'])) {
 
     foreach ($result as $row) {
         $first_letter = $row->first_letter;
-        $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . urlencode($first_letter) . '">' . q($first_letter) . '</a> ';
+        $letterlinks .= '<a aria-label="'.$langFirstLetterUser.'" href="?course=' . $course_code . '&amp;first=' . urlencode($first_letter) . '">' . q($first_letter) . '</a> ';
     }
 
     $user_opts = "<option value='-1'>$langAllUsers</option>";
@@ -201,8 +201,8 @@ if (isset($_GET['from_other'])) {
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="row form-group mt-4">
-            <label class="col-12 control-label-notes">' . $langLogModules . '</label>
-            <div class="col-12"><select name="u_module_id" class="form-select">';
+            <label for="id_u_module_id" class="col-12 control-label-notes">' . $langLogModules . '</label>
+            <div class="col-12"><select name="u_module_id" class="form-select" id="id_u_module_id">';
     $tool_content .= "<option value='-1'>$langAllModules</option>";
     foreach ($modules as $m => $mid) {
         $extra = '';
@@ -228,7 +228,7 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="row form-group mt-4">
-        <label class="col-12 control-label-notes">' . $langLogTypes . '</label>        
+        <label for="log_typeID" class="col-12 control-label-notes">' . $langLogTypes . '</label>        
          <div class="col-12">';
 
 if (isset($_GET['from_other'])) {   // system actions
@@ -241,7 +241,7 @@ if (isset($_GET['from_other'])) {   // system actions
                     LOG_DELETE => $langDelete);
 }
 
-$tool_content .= selection($log_types, 'logtype', $logtype, "class='row form-control mt-4'");
+$tool_content .= selection($log_types, 'logtype', $logtype, "class='row form-control mt-4' id='log_typeID'");
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='row input-append date form-group mt-4' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     
@@ -273,12 +273,12 @@ $tool_content .= "<div class='row input-append date form-group mt-4' data-date= 
 if (!isset($_GET['from_other'])) {
     $tool_content .=
       '<div class="row form-group mt-4">  
-        <label class="col-12 control-label-notes">' . $langFirstLetterUser . '</label>
+        <div class="col-12 control-label-notes mb-2">' . $langFirstLetterUser . '</div>
         <div class="col-12">' . $letterlinks . '</div>
       </div>
       <div class="row form-group mt-4">  
-        <label class="col-12 control-label-notes">' . $langUser . '</label>
-        <div class="col-12"><select name="u_user_id" class="form-select">' . $user_opts . '</select></div>
+        <label for="usId" class="col-12 control-label-notes">' . $langUser . '</label>
+        <div class="col-12"><select name="u_user_id" class="form-select" id="usId">' . $user_opts . '</select></div>
       </div>';
 }
 

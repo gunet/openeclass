@@ -43,29 +43,29 @@
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' enctype='multipart/form-data' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                                 <div class='form-group'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
+                                    <label for='code' class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' placeholder="{{ trans('langNodeCode1') }}" type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}' maxlength="30">
+                                        <input id='code' class='form-control' placeholder="{{ trans('langNodeCode1') }}" type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}' maxlength="30">
                                         &nbsp;<i>{{ trans('langCodeFaculte2') }}</i>
                                     </div>
                                 </div>
                                 @foreach ($session->active_ui_languages as $key => $langcode)
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langNodeName') }}</label>
+                                        <label for='nodename-{{ $key }}' class='col-sm-12 control-label-notes'>{{ trans('langNodeName') }}</label>
                                         <div class='col-sm-12'>
                                                 @if (isset($is_serialized) && $is_serialized && isset($names[$langcode]))
-                                                    <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $names[$langcode] }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
+                                                    <input id='nodename-{{ $key }}' class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $names[$langcode] }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
                                                 @elseif (isset($is_serialized) && !$is_serialized && $key == 0)
-                                                    <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $mynode->name }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
+                                                    <input id='nodename-{{ $key }}' class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $mynode->name }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
                                                 @else
-                                                    <input class='form-control' type='text' name='name-{{ $langcode }}' value='' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
+                                                    <input id='nodename-{{ $key }}' class='form-control' type='text' name='name-{{ $langcode }}' value='' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
                                                 @endif
                                         </div>
                                     </div>
                                 @endforeach
 
                                 <div id='image_field' class='row form-group mt-4'>
-                                    <label for='faculty_image' class='col-12 control-label-notes'>{{ trans('langFacultyImage') }}</label>
+                                    <div for='faculty_image' class='col-12 control-label-notes'>{{ trans('langFacultyImage') }}</div>
                                     <div class='col-12'>
 
                                         @if (isset($faculty_image))
@@ -105,14 +105,14 @@
 
                                 @foreach ($session->active_ui_languages as $key => $langcode)
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langNodeDescription') }}</label>
+                                        <label for='description-{{ $langcode }}' class='col-sm-12 control-label-notes'>{{ trans('langNodeDescription') }}</label>
                                         <div class='col-sm-12'>
                                             {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
                                         </div>
                                     </div>
                                 @endforeach
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langNodeParent') }}</label>
+                                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langNodeParent') }}</label>
                                     <div class='col-sm-12'>
                                         {!! $html !!}
                                         <span class='help-block'>
@@ -121,9 +121,9 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowCourse') }}</label>
+                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowCourse') }}</div>
                                     <div class='col-sm-12 checkbox'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input type='checkbox' name='allow_course' value='1'{!! isset($mynode) && $mynode->allow_course == 1 ? " checked" : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langNodeAllowCourse2') }}
@@ -132,9 +132,9 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowUser') }}</label>
+                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowUser') }}</div>
                                     <div class='col-sm-12 checkbox'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input type='checkbox' name='allow_user' value='1'{!! isset($mynode) && $mynode->allow_user == 1 ? " checked" : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langNodeAllowUser2') }}
@@ -143,17 +143,17 @@
                                     </div>
                                 </div>
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langNodeOrderPriority') }}</label>
+                                <label for='order_priority' class='col-sm-12 control-label-notes'>{{ trans('langNodeOrderPriority') }}</label>
                                 <div class='col-sm-12'>
 
-                                        <input class='form-control' type='text' name='order_priority' value='{{ isset($mynode) ? $mynode->order_priority : '' }}'>
+                                        <input id='order_priority' class='form-control' type='text' name='order_priority' value='{{ isset($mynode) ? $mynode->order_priority : '' }}'>
                                         <div class='help-block'>{{ trans('langNodeOrderPriority2') }}</div>
 
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</label>
+                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</div>
                                 <div class='col-sm-12'>
                                     <div class='radio mb-3'>
                                         <label>

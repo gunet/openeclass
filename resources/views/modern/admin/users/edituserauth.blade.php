@@ -25,9 +25,9 @@
                             <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>
                                     <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
+                                        <label for='auth_names_id' class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
                                         <div class='col-sm-12'>
-                                            {!! selection($auth_names, 'auth', intval($current_auth), "class='form-control'") !!}
+                                            {!! selection($auth_names, 'auth', intval($current_auth), "class='form-control' id='auth_names_id'") !!}
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}

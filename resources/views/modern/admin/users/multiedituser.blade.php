@@ -30,9 +30,9 @@
                                 <fieldset>
                                     {!! $monthsField !!}
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langMultiDelUserData') }}:</label>
+                                        <label for='auth_input_id' class='col-sm-12 control-label-notes'>{{ trans('langMultiDelUserData') }}:</label>
                                         <div class='col-sm-12'>
-                                            <textarea class='auth_input form-control' name='user_names' rows='30'>{{ $usernames }}</textarea>
+                                            <textarea id='auth_input_id' class='auth_input form-control' name='user_names' rows='30'>{{ $usernames }}</textarea>
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}

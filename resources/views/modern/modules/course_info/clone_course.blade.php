@@ -65,50 +65,50 @@
                                 <form class='form-horizontal' role='form' action='{{ $formAction }}' method='post' onsubmit='return validateNodePickerForm();' >
 
                                     <div class='form-group'>
-                                        <label for='course_code' class='col-sm-6 control-label-notes'>{{ trans('langCourseCode') }}:</label>
+                                        <label for='course_code' class='col-sm-12 control-label-notes'>{{ trans('langCourseCode') }}:</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' id='course_code' name='course_code' value='{{ $code }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='course_code' class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}:</div>
                                         <div class='col-sm-12'>
                                             {!! $lang_selection !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='course_title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                        <label for='course_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}:</label>
                                         <div class='col-sm-12'>
                                             <input class='form-control' type='text' id='course_title' name='course_title' value='{{ $title }}'>
                                         </div>
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langCourseDescription') }}:</label>
+                                        <label for="course_desc" class='col-sm-12 control-label-notes'>{{ trans('langCourseDescription') }}:</label>
                                         <div class='col-sm-12'>
                                             {!! $rich_text_editor !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</div>
                                         <div class='col-sm-12'>
                                             {!! $course_node_picker !!} <br>{{ trans('langOldValue') }}: <i>{{ $old_faculty }}</i>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langCourseVis') }}:</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langCourseVis') }}:</div>
                                         <div class='col-sm-12'>
                                             {!! $visibility_select !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='course_prof' class='col-sm-6 control-label-notes'>{{ trans('langTeacher') }}:</label>
+                                        <label for='course_prof' class='col-sm-12 control-label-notes'>{{ trans('langTeacher') }}:</label>
                                         <div class='col-sm-12'>
                                             <input class='form-control' type='text' id='course_prof' name='course_prof' value='{{ $prof }}' size='50' />
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langUsersWillAdd') }}:</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langUsersWillAdd') }}:</div>
                                         
                                         <div class='radio mb-2'>
                                             <label>
@@ -124,7 +124,7 @@
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                                                 <span class='checkmark'></span>
                                                 {{ trans('langMultiRegType') }}

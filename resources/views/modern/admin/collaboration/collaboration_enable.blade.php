@@ -26,14 +26,14 @@
                             <div class='form-group'>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input id='enable_collaboration' type='checkbox' name='enable_collaboration' {!! get_config('show_collaboration') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langEnableCollaboration') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input id='always_enabled_collaboration' type='checkbox' name='always_enabled_collaboration' {!! get_config('show_always_collaboration') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langAlwaysEnabledCollaboration') }}

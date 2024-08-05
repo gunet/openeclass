@@ -85,58 +85,58 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langUserType') }}</label>
+                            <label id='user_type_id' class='col-sm-12 control-label-notes'>{{ trans('langUserType') }}</label>
                             <div class='col-sm-12'>
-                                {!! selection($usertype_data, 'user_type', 0, 'class="form-select"') !!}
+                                {!! selection($usertype_data, 'user_type', 0, 'class="form-select" id="user_type_id"') !!}
                             </div>
                         </div>
 
                         <div class="form-group mt-4">
-                            <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langAccountStatus') }}</label>
+                            <div class='col-sm-12 control-label-notes mb-2'> {{ trans('langAccountStatus') }}</div>
                             <div class="radio mb-2 d-flex justify-content-start align-items-center">
-                                <input type='radio' name='search' value='all' id='all-option' checked>
+                                <input aria-label="{{ trans('langAllUsers') }}" type='radio' name='search' value='all' id='all-option' checked>
                                 {{ trans('langAllUsers') }}
                             </div>
                             <div class="radio mb-2 d-flex justify-content-start align-items-center">
-                                <input type='radio' name='search' value='active' id='active-option'>
+                                <input aria-label="{{ trans('langActiveUsers') }}" type='radio' name='search' value='active' id='active-option'>
                                 {{ trans('langActiveUsers') }}
                             </div>
                             <div class="radio d-flex justify-content-start align-items-center">
-                                <input type='radio' name='search' value='inactive' id='inactive-option'>
+                                <input aria-label="{{ trans('langInactiveUsers') }}" type='radio' name='search' value='inactive' id='inactive-option'>
                                 {{ trans('langInactiveUsers') }}
                             </div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langAuthMethod') }}</label>
+                            <label id='auth_method' class='col-sm-12 control-label-notes'>{{ trans('langAuthMethod') }}</label>
                             <div class='col-sm-12'>
-                                {!! selection($authtype_data, 'auth_type', 0, 'class="form-select"') !!}
+                                {!! selection($authtype_data, 'auth_type', 0, 'class="form-select" id="auth_method"') !!}
                             </div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</label>
-                                <div class='row'>
-                                    <div class='col-6'>
-                                        {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-select"') !!}
-                                    </div>
-                                    <div class='col-6'>
-                                        <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='{{ $user_registered_at }}' placeholder='{{ trans('langRegistrationDate') }}'>
-                                    </div>
+                            <div class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</div>
+                            <div class='row'>
+                                <div class='col-6'>
+                                    {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-select"') !!}
                                 </div>
+                                <div class='col-6'>
+                                    <input aria-label="{{ trans('langRegistrationDate') }}" class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='{{ $user_registered_at }}' placeholder='{{ trans('langRegistrationDate') }}'>
+                                </div>
+                            </div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
+                            <label for='id_user_expires_until' class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' name='user_expires_until' id='id_user_expires_until' type='text' value='{{ $user_expires_until }}' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langUntil') }}'>
                             </div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>{{ trans('langEmailVerified') }}</label>
+                            <label id='verified_mail_id' class='col-sm-12 control-label-notes'>{{ trans('langEmailVerified') }}</label>
                             <div class='col-sm-12'>
-                                {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-select"') !!}
+                                {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-select" id="verified_mail_id"') !!}
                             </div>
                         </div>
 

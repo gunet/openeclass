@@ -47,7 +47,7 @@
                                     <div class='form-wrapper form-edit border-0 px-0'>
                                         <div id='unsubscontrols'>
                                         @if(isset($_REQUEST['cid']))
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>
                                             @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp
                                             <span class='checkmark'></span>
@@ -57,7 +57,7 @@
                                         @else
                                             @foreach($_SESSION['courses'] as $code => $status)
                                                 @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                     <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>
                                                     <span class='checkmark'></span>
                                                     {{ course_code_to_title($code) }}

@@ -289,7 +289,7 @@
 
                                             <p class='control-label-notes mb-0 mt-3'>{{ trans('langSessionParticipants') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
                                             <div id='select_one_session' class='d-block mt-1'>
-                                                <select name='one_participant' class='form-select'>
+                                                <select name='one_participant' class='form-select' aria-label="{{ trans('langSessionParticipants') }}">
                                                     <option value=''>{{ trans('langSelectUser') }}</option>
                                                     @foreach($simple_users as $u)
                                                         <option value='{{ $u->user_id }}' {!! in_array($u->user_id,$participants_arr) ? 'selected' : '' !!}>
@@ -302,7 +302,7 @@
                                                 @endif
                                             </div>
                                             <div id='select_group_session' class='d-none mt-1'>
-                                                <select id='select_users_group_session' name='many_participants[]' class='form-select' multiple>
+                                                <select aria-label="{{ trans('langSessionParticipants') }}" id='select_users_group_session' name='many_participants[]' class='form-select' multiple>
                                                     @foreach($simple_users as $u)
                                                         <option value='{{ $u->user_id }}' {!! in_array($u->user_id,$participants_arr) ? 'selected' : '' !!}>
                                                             {{ $u->givenname }}&nbsp;{{ $u->surname }}
@@ -322,11 +322,11 @@
                                             <div class="input-group mb-3 rounded-2 border-0 gap-2">
                                                 <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
                                                     <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
-                                                        data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal'>
+                                                        data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal' aria-label="{{ trans('langStartEndSessionDateTime') }}">
                                                         <i class='fa-solid fa-calendar'></i>
                                                     </a>
                                                 </span>
-                                                <input id='startDateValue' type="text" class="form-control mt-0 pe-none rounded-2" aria-describedby="start-end-datetime-session" value='{{ $start }} -- {{ $finish_text }}'>
+                                                <input aria-label="{{ trans('langStartEndSessionDateTime') }}" id='startDateValue' type="text" class="form-control mt-0 pe-none rounded-2" aria-describedby="start-end-datetime-session" value='{{ $start }} -- {{ $finish_text }}'>
                                                 <input type="hidden" id="startTimeTmp">
                                                 <input type="hidden" id="endTimeTmp">
                                                 <input type="hidden" id="whenTmp">
@@ -343,8 +343,8 @@
                                         </div>
 
                                         <div class='form-group mt-4'>
-                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</p>
-                                            <select class='form-select' name='type_remote'>
+                                            <label for='typeRemoteId' class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</label>
+                                            <select class='form-select' name='type_remote' id='typeRemoteId'>
                                                 <option value='0' {!! $type_remote==0 ? 'selected' : '' !!}>{{ trans('langNotRemote') }}</option>
                                                 <option value='1' {!! $type_remote==1 ? 'selected' : '' !!}>{{ trans('langRemote') }}</option>
                                             </select>
@@ -352,7 +352,7 @@
 
                                         <div class='form-group mt-4'>
                                             <div class='checkbox'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label="{{ trans('langVisible') }}">
                                                     <input type='checkbox' name='session_visible' {!! $visible==1 ? 'checked' : '' !!}>
                                                     <span class='checkmark'></span>
                                                     {{ trans('langVisible') }}
@@ -363,7 +363,7 @@
                                         <div class='form-group mt-4'>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
-                                                    <label class='label-container'>
+                                                    <label class='label-container' aria-label="{{ trans('langWithConsent') }}">
                                                         <input type='checkbox' name='with_consent' {!! $withConsent==1 ? 'checked' : '' !!}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('langWithConsent')}}

@@ -611,7 +611,8 @@ h5,
   font-style: normal;
 }
 
-h6{
+h6,
+.text-heading-h6{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 12px;

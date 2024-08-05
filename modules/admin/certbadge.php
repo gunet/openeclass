@@ -296,27 +296,27 @@ if (isset($_GET['action'])) {
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
 
                             <div class='form-group'>
-                                <label class='col-sm-12 control-label-notes'>$langZipFile</label>
-                                <input type='file' class='' name='filename' value=''>
+                                <label for='filename_id' class='col-sm-12 control-label-notes'>$langZipFile</label>
+                                <input id='filename_id' type='file' class='' name='filename' value=''>
 
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>$langHtmlFile</label>
+                                <label for='certhtmlfile_id' class='col-sm-12 control-label-notes'>$langHtmlFile</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' placeholder='$langHtmlFile...' class='form-control' name='certhtmlfile' value='$cert_htmlfile'>
+                                    <input id='certhtmlfile_id' type='text' placeholder='$langHtmlFile...' class='form-control' name='certhtmlfile' value='$cert_htmlfile'>
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>$langTemplateName</label>
+                                <label for='name_id' class='col-sm-12 control-label-notes'>$langTemplateName</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' placeholder='$langTemplateName...' class='form-control' name='name' value='$cert_name'>
+                                    <input id='name_id' type='text' placeholder='$langTemplateName...' class='form-control' name='name' value='$cert_name'>
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes mb-2'>$langOrientation</label>
+                                <div class='col-sm-12 control-label-notes mb-2'>$langOrientation</div>
                                 <div class='radio mb-2'>
                                     <label><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
                                 </div>
@@ -333,7 +333,7 @@ if (isset($_GET['action'])) {
                             </div>
                   
                             <div class='form-group mt-4' id='courses-list'>
-                                <label class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:&nbsp;&nbsp;
+                                <label for='select-courses' class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:&nbsp;&nbsp;
                                 <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langToAllCoursesInfo'></span></label>
                                 <div class='col-sm-12'>
                                 <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";
@@ -397,24 +397,24 @@ if (isset($_GET['action'])) {
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";
                             $tool_content .= "<div class='form-group'>
-                                <label class='col-sm-12 control-label-notes'>$langReplace:</label>
+                                <label for='file_id' class='col-sm-12 control-label-notes'>$langReplace:</label>
                                 <div class='col-sm-12'>
                                     <img src='$icon_link' width='60' height='60'>
-                                    <input type='file' name='icon' value=''>
+                                    <input id='file_id' type='file' name='icon' value=''>
                                 </div>
                             </div>";
                         } else {
                             $tool_content .= "<div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>$langIcon:</label>
+                                <label for='file_id' class='col-sm-12 control-label-notes'>$langIcon:</label>
                                 <div class='col-sm-12'>
-                                    <input type='file' name='icon' value=''>
+                                    <input id='file_id' type='file' name='icon' value=''>
                                 </div>
                             </div>";
                         }
                         $tool_content .= "<div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>$langName</label>
+                                <label for='name_id' class='col-sm-12 control-label-notes'>$langName</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' class='form-control' placeholder='$langName...' name='name' value='$badge_name'>
+                                    <input id='name_id' type='text' class='form-control' placeholder='$langName...' name='name' value='$badge_name'>
                                 </div>
                             </div>
 

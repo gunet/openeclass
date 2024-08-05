@@ -26,7 +26,7 @@
                             <fieldset>      
                               <input type='hidden' name='userid' value='{{ $_GET['userid'] }}'>
                               <div class='form-group'>
-                              <label class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }}</label>
+                                <label for='password' class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' placeholder="{{ trans('langNewPass1') }}" type='password' size='40' name='password_form' value='' id='password' autocomplete='off'>
                                     &nbsp;
@@ -34,9 +34,9 @@
                                 </div>
                               </div>
                               <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langNewPass2') }}</label>
+                                <label id='password_formid' class='col-sm-12 control-label-notes'>{{ trans('langNewPass2') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' placeholder="{{ trans('langNewPass2') }}" type='password' size='40' name='password_form1' value='' autocomplete='off'>
+                                    <input id='password_formid' class='form-control' placeholder="{{ trans('langNewPass2') }}" type='password' size='40' name='password_form1' value='' autocomplete='off'>
                                 </div>
                               </div>
                               <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>

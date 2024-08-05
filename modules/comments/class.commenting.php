@@ -116,9 +116,9 @@ Class Commenting {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
                         $post_actions = '<div class="d-flex flex-wrap gap-3">';
-                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= '<a aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
-                        $post_actions .= '<a class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<a aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
                         $post_actions .='</div>';
                     } else {
@@ -134,9 +134,9 @@ Class Commenting {
                         }
 
                         
-                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= '<a aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
-                        $post_actions .= '<a class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<a aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
 
                         $post_actions .='</div>';
@@ -177,7 +177,7 @@ Class Commenting {
                 $out .= '<div class="col-12"><div class="form-wrapper form-edit Borders px-0 pb-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<div class="d-flex gap-3">';
                 $out .= profile_image($_SESSION['uid'], IMAGESIZE_SMALL,'img-circle rounded-circle');
-                $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea>';
+                $out .= '<textarea class="form-control" aria-label="'.$langTypeOutMessage.'" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea>';
                 $out .= '</div>';
                 $out .= '<input style="margin-left:46px;" class="btn submitAdminBtn mt-3" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
                 $out .= '</form></div></div>';
@@ -185,7 +185,7 @@ Class Commenting {
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
                 $out .= '<div class="col-12 pb-5"><div class="form-wrapper form-edit Borders px-0"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
-                $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
+                $out .= '<textarea class="form-control" aria-label="'.$langTypeOutMessage.'" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn submitAdminBtn" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
                 $out .= '</form></div></div>';
             }

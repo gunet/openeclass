@@ -105,25 +105,25 @@ $tool_content .= "
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div></div>";
 $tool_content .= '<div class="row mt-3">
-<div class="col-md-6 col-12"><select name="interval" id="interval" class="form-select">' . $statsIntervalOptions . '</select></div>';
+<div class="col-md-6 col-12"><select name="interval" id="interval" class="form-select" aria-label="'.$langType.'">' . $statsIntervalOptions . '</select></div>';
 
 //$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
 
 if($stats_type == 'course'){
 
     $tool_content .= '
-    <div class="col-md-6 col-12 mt-md-0 mt-3" style="display:none;"><select name="module" id="module" class="form-select">' . $mod_opts . '</select></div>';
+    <div class="col-md-6 col-12 mt-md-0 mt-3" style="display:none;"><select aria-label="'.$langUser.'" name="module" id="module" class="form-select">' . $mod_opts . '</select></div>';
 
     $tool_content .= '
-    <div class="col-md-6 col-12 mt-md-0 mt-3"><select name="user" id="user" class="form-select">' . $statsUserOptions . '</select></div>';
+    <div class="col-md-6 col-12 mt-md-0 mt-3"><select name="user" id="user" aria-label="'.$langUser.'" class="form-select">' . $statsUserOptions . '</select></div>';
 }
 elseif($stats_type == 'admin'){
     $tool_content .= '
-    <div class="col-md-6 col-12 mt-md-0 mt-3"><select name="department" id="department" class="form-select">' . $statsDepOptions . '</select></div>';
+    <div class="col-md-6 col-12 mt-md-0 mt-3"><select aria-label="'.$langDepartmentList.'" name="department" id="department" class="form-select">' . $statsDepOptions . '</select></div>';
 }
 elseif($stats_type == 'user'){
     $tool_content .= '
-    <div class="col-md-6 col-12 mt-md-0 mt-3"><select name="course" id="course" class="form-select">' . $statsCourseOptions . '</select></div>';
+    <div class="col-md-6 col-12 mt-md-0 mt-3"><select aria-label="'.$langCourse.'" name="course" id="course" class="form-select">' . $statsCourseOptions . '</select></div>';
 }
 $tool_content .= "</div>";
 //<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>

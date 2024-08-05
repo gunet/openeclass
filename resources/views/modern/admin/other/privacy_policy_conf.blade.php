@@ -45,14 +45,14 @@
                                     <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </label>
                                     <div class='col-sm-12'>
                                         <div class='checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                                 <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text' {{ $cbox_activate_privacy_policy_text }} >
                                                 <span class='checkmark'></span>
                                                 {{ trans('langDisplayPrivacyPolicyLink') }}
                                             </label>
                                         </div>
                                         <div class='checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                                 <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent' {{ $cbox_activate_privacy_policy_consent }} >
                                                 <span class='checkmark'></span>
                                                 {{ trans('langAskPrivacyPolicyConsent') }}

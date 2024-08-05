@@ -30,9 +30,9 @@
                             <fieldset>
 
                                     <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langChangeTo') }}:</label>
+                                        <label for='email_ver_data_id' class='col-sm-12 control-label-notes'>{{ trans('langChangeTo') }}:</label>
                                         <div class='col-sm-12'>
-                                            {!! selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'") !!}
+                                            {!! selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control' id='email_ver_data_id'") !!}
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}

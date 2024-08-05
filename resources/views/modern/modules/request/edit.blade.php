@@ -62,7 +62,7 @@
                                     <div class='form-group mt-4'>
                                         <div class='col-12'>
                                             <div class='checkbox'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                     <input type='checkbox' name='send_mail' value='on' checked> <span class='checkmark'></span>{{ trans('langSendInfoMail') }}
                                                 </label>
                                             </div>

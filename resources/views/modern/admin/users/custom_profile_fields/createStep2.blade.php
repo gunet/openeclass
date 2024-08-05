@@ -58,7 +58,7 @@
                                 <div class='form-group mt-4'>
                                     <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
-                                        {!! selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled') !!}
+                                        {!! selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" id="datatype" disabled') !!}
                                     </div>
                                 </div>
                             @endif
@@ -66,17 +66,17 @@
                             <div class='form-group mt-4'>
                                 <label for='required' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldRequired') }}</label>
                                 <div class='col-sm-12'>
-                                    {!! selection($yes_no, 'required', isset($required) ? $required : '', 'class="form-control"') !!}
+                                    {!! selection($yes_no, 'required', isset($required) ? $required : '', 'class="form-control" id="required"') !!}
                                 </div>
                             </div>
                             @if ($datatype == CPF_MENU)
 
                                 <div class='form-group mt-4'>
-                                    <label for='options' class='col-sm-12 control-label-notes'>
+                                    <div class='col-sm-12 control-label-notes'>
                                         {{ trans('langCPFMenuOptions') }} <small>({{ trans('langCPFMenuOptionsExplan') }})</small>
-                                    </label>
+                                    </div>
                                     <div class='col-sm-12'>
-                                        <textarea name='options' rows='8' cols='20' class="form-control">{{ isset($textarea_val) ? $textarea_val : '' }}</textarea>
+                                        <textarea aria-label="{{ trans('langCPFMenuOptionsExplan') }}" name='options' rows='8' cols='20' class="form-control">{{ isset($textarea_val) ? $textarea_val : '' }}</textarea>
                                     </div>
                                 </div>
                             @endif
@@ -84,14 +84,14 @@
                             <div class='form-group mt-4'>
                                 <label for='registration' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldRegistration') }}</label>
                                 <div class='col-sm-12'>
-                                    {!! selection($yes_no, 'registration', isset($registration) ? $registration : '', 'class="form-control"') !!}
+                                    {!! selection($yes_no, 'registration', isset($registration) ? $registration : '', 'class="form-control" id="registration"') !!}
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
                                 <label for='visibility' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldVisibility') }}</label>
                                 <div class='col-sm-12'>
-                                    {!! selection($visibility, 'visibility', isset($vis) ? $vis : 10, 'class="form-control"') !!}
+                                    {!! selection($visibility, 'visibility', isset($vis) ? $vis : 10, 'class="form-control" id="visibility"') !!}
                                 </div>
                             </div>
 

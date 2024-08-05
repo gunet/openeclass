@@ -48,7 +48,7 @@
                                     <div class='form-group mt-4'>
                                         <label for='name_link' class='col-sm-6 control-label-notes'>{{ trans('langLinkName') }}:</label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' type='text' name='name_link' size='50'>
+                                            <input id='name_link' class='form-control' type='text' name='name_link' size='50'>
                                         </div>
                                     </div>
 

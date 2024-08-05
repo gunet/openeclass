@@ -11,12 +11,12 @@
 
                 <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit border-0 px-0'>
-                        <label for='username' class='col-12 control-label-notes'>{{ trans('langActivateConference') }}</label>
+                        <div class='col-12 control-label-notes'>{{ trans('langActivateConference') }}</div>
                         <form action='{{ $_SERVER['SCRIPT_NAME']}}?list={{$tc_server }}' method='post' class='form-horizontal' role='form'>
                             <div class='form-group mt-3'>
-                                <label class='col-3 control-label'>{{ trans('langCourseCode') }} :</label>
-                                <div class='col-3'>
-                                    <input type='text' class='form-control' name='code_to_assign'>
+                                <label for='code_to_assign' class='col-12 control-label-notes'>{{ trans('langCourseCode') }} :</label>
+                                <div class='col-12'>
+                                    <input type='text' class='form-control' name='code_to_assign' id='code_to_assign'>
                                 </div>
                             </div>
 

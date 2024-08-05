@@ -26,7 +26,7 @@
                                 <fieldset>
 
                                     <div class='form-group'>
-                                        <p class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</p>
+                                        <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $node_picker !!}
                                         </div>

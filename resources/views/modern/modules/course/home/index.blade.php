@@ -351,7 +351,7 @@
                                             <i class="fa-solid fa-circle-info"></i>
                                         </a>
                                         @if($is_editor)
-                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}">
                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                                             </button>
 

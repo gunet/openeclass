@@ -35,11 +35,11 @@
                     <div class='col-12 mt-4'>
                         <div class='form-wrapper form-edit p-3 mt-5 rounded'>
                             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
-                                <label for='userFile' class='col-sm-6 control-label-notes'>Αρχείο : </label>
+                                <label for='userFile' class='col-sm-12 control-label-notes'>{{ trans('langFile') }} : </label>
                                                 <div class='col-sm-12'>
                                                     <input type='file' id='userFile' name='userFile'>
                                                 </div>
-                                <button class='btn btn-primary mt-3' type='submit'>Εισαγωγή</button>
+                                <button class='btn btn-primary mt-3' type='submit'>{{ trans('langImportH5P') }}</button>
                             </form>
                         </div>
                     </div>

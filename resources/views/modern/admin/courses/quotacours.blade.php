@@ -28,21 +28,21 @@
                                         {{ trans('langTheCourse') }} <b>{{ $course->title }}</b> {{ trans('langMaxQuota') }}</span>
                                     </div>
                                     <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDoc') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDoc') }}</div>
                                             <div class='col-sm-12'><input class='form-control' type='text' name='dq' value='{{ $dq }}' size='4' maxlength='4'> MB</div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langVideo') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langVideo') }}</div>
                                             <div class='col-sm-12'><input class='form-control' type='text' name='vq' value='{{ $vq }}' size='4' maxlength='4'> MB</div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langGroups') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langGroups') }}</div>
                                         <div class='col-sm-12'>
                                             <input class='form-control' type='text' name='gq' value='{{ $gq }}' size='4' maxlength='4'> MB
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDropBox') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDropBox') }}</div>
                                         <div class='col-sm-12'>
                                             <input class='form-control' type='text' name='drq' value='{{ $drq }}' size='4' maxlength='4'> MB
                                         </div>

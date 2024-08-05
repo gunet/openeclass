@@ -31,7 +31,7 @@
                       <div class='col-md-6 col-12'>
                         <div class='form-group mt-3'>
                           <div class='col-12 checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                               <input type='checkbox' name='moduleDisable[{{ $mid }}]' value='1'{{ in_array($mid, $disabled)? ' checked': '' }}>
                               <span class='checkmark'></span>  
                               <div class='mt-0 me-0'>{!! icon($minfo['image']) !!}</div>
@@ -53,7 +53,7 @@
                       <div class='col-md-6 col-12'>
                         <div class='form-group mt-3'>
                           <div class='col-12 checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                               <input type='checkbox' name='moduleDisableCollaboration[{{ $mid }}]' value='1'{{ in_array($mid, $disabledCollaboration)? ' checked': '' }}>
                               <span class='checkmark'></span>  
                               <div class='mt-0 me-0'>{!! icon($minfo['image']) !!}</div>

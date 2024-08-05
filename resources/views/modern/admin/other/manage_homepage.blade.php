@@ -55,21 +55,21 @@
                                 <div class='form-group'>
                                     <label for='question' class='col-sm-12 control-label-notes'>{{ trans('langCourses') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='number' name='total_courses' value="{{ get_config('total_courses') }}"/>
+                                        <input id='question' class='form-control' type='number' name='total_courses' value="{{ get_config('total_courses') }}"/>
                                     </div>
                                 </div>
 
                                 <div class='form-group mt-4'>
                                     <label for='answer' class='col-sm-12 control-label-notes'>{{trans('langUserLogins')}}/{{trans('langWeek')}}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='number' name='visits_per_week' value="{{ get_config('visits_per_week') }}"/>
+                                        <input id='answer' class='form-control' type='number' name='visits_per_week' value="{{ get_config('visits_per_week') }}"/>
                                     </div>
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label for='answer' class='col-sm-12 control-label-notes'>{{ trans('langRegisteredUsers') }}</label>
+                                    <label for='users_registered' class='col-sm-12 control-label-notes'>{{ trans('langRegisteredUsers') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='users_registered' value="{!! !empty(get_config('users_registered')) ? get_config('users_registered') : 0 !!}"/>
+                                        <input id='users_registered' class='form-control' type='text' name='users_registered' value="{!! !empty(get_config('users_registered')) ? get_config('users_registered') : 0 !!}"/>
                                     </div>
                                 </div>
 
@@ -99,7 +99,7 @@
 
 
                                 <div class='form-group mt-4'>
-                                    <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}</label>
+                                    <label for='homepage_intro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}</label>
                                     <div class='col-sm-12'>
                                         {!! $homepage_intro !!}
                                         <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
@@ -115,24 +115,24 @@
 
 
                                 <div class='form-group mt-4'>
-                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </label>
+                                    <div class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </div>
                                     <div class='col-sm-12'>
                                             <div class='checkbox'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                                     <input id='showOnlyLoginScreen' type='checkbox' name='show_only_loginScreen' {!! get_config('show_only_loginScreen') ? 'checked' : '' !!}>
                                                     <span class='checkmark'></span>
                                                     {{ trans('langShowOnlyLoginScreen') }}
                                                 </label>
                                             </div>
                                             <div class='checkbox'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                                     <input id='hide_login_check' type='checkbox' name='dont_display_login_form' {!! get_config('dont_display_login_form') ? 'checked' : '' !!}>
                                                     <span class='checkmark'></span>
                                                     {{trans('lang_dont_display_login_form')}}
                                                 </label>
                                             </div>
                                             <div class='checkbox'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                                     <input id='hide_login_link_check' type='checkbox' name='hide_login_link' {!! get_config('hide_login_link') ? 'checked' : '' !!}>
                                                     <span class='checkmark'></span>
                                                     {{trans('lang_hide_login_link')}}

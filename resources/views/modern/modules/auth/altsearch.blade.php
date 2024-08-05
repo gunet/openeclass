@@ -34,21 +34,21 @@
 
                                     <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-lg-0 mt-4'>
-                                            <label for='givenname_id' class='col-sm-6 control-label-notes'>{{ trans('langName') }}</label>
-                                            <div class='col-sm-12${!! $givennameClass !!}'>{!! $givennameInput !!}</div>
+                                            <label for='givenname_id' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
+                                            <div for='givenname_id' class='col-sm-12${!! $givennameClass !!}'>{!! $givennameInput !!}</div>
                                         </div>
                                     </div>
 
                                     <div class='col-lg-6 col-12 px-3 pt-3'>
                                         <div class='form-group mt-lg-0 mt-4'>
-                                            <label for='surname_id' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}</label>
-                                            <div class='col-sm-12{!! $surnameClass !!}'>{!! $surnameInput !!}</div>
+                                            <label for='surname_id' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
+                                            <div id='surname_id' class='col-sm-12{!! $surnameClass !!}'>{!! $surnameInput !!}</div>
                                         </div>
                                     </div>
 
                                     <div class='col-12 px-3 pt-4'>
                                         <div class='form-group mt-lg-0 mt-4'>
-                                            <label for='email_id' class='col-sm-6 control-label-notes'>{{ trans('langEmail') }}</label>
+                                            <label for='email_id' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='text' name='email' id='email_id' class='form-control' maxlength='100' placeholder='{{ $email_placeholder }}'>
                                             </div>
@@ -57,16 +57,16 @@
 
                                     <div class='col-lg-6 col-12 px-3 pt-4'>
                                         <div class='form-group mt-lg-0 mt-4'>
-                                            <label for='am_id' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}</label>
+                                            <div class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</div>
                                             <div class='col-sm-12{!! $amClass !!}'>{!! $amInput !!}</div>
                                         </div>
                                     </div>
 
                                     <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-4'>
-                                            <label for='UserPhone' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
+                                            <label for='UserPhone' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
                                             <div class='col-sm-12'>
-                                                <input class='form-control' type='text' name='userphone' size='20' maxlength='20' placeholder='{{ trans('langOptional') }}'>
+                                                <input id='UserPhone' class='form-control' type='text' name='userphone' size='20' maxlength='20' placeholder='{{ trans('langOptional') }}'>
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +76,7 @@
                                             <div class='form-group mt-4'>
                                                 <label for='UserComment' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}</label>
                                                 <div class='col-sm-12'>
-                                                    <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='{{ trans('langReason') }}'></textarea>
+                                                    <textarea id='UserComment' class='form-control' name='usercomment' cols='30' rows='4' placeholder='{{ trans('langReason') }}'></textarea>
                                                 </div>
                                             </div>
                                         </div>

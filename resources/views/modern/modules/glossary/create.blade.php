@@ -40,7 +40,7 @@
 
 
                                                 <div class='form-group{{ Session::getError('term') ? " has-error" : "" }}'>
-                                                    <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryTerm') }} </label>
+                                                    <label for='term' class='col-sm-12 control-label-notes'>{{ trans('langGlossaryTerm') }} </label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' class='form-control' placeholder="{{ trans('langGlossaryTerm') }}" id='term' name='term' placeholder='{{ trans('langGlossaryTerm') }}' value='{{ $term }}'>
                                                         <span class='help-block Accent-200-cl'>{{ Session::getError('term') }}</span>
@@ -48,9 +48,9 @@
                                                 </div>
 
                                                 <div class='form-group{{ Session::getError('definition') ? " has-error" : "" }} mt-4'>
-                                                    <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryDefinition') }} </label>
+                                                    <label for='definition' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryDefinition') }} </label>
                                                     <div class='col-sm-12'>
-                                                        <textarea name="definition" placeholder="{{ trans('langGiveText') }}" rows="4" cols="60" class="form-control">{{ $definition }}</textarea>
+                                                        <textarea id="definition" name="definition" placeholder="{{ trans('langGiveText') }}" rows="4" cols="60" class="form-control">{{ $definition }}</textarea>
                                                         <span class='help-block Accent-200-cl'>{{ Session::getError('definition') }}</span>
                                                     </div>
                                                 </div>

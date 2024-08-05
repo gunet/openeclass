@@ -65,9 +65,9 @@
                              </div>
 
                              <div class='form-group mt-4'>
-                                 <label class='col-12 control-label-notes mb-2'>{{ trans('langBBBLBWeights') }}</label>
+                                 <div class='col-12 control-label-notes mb-2'>{{ trans('langBBBLBWeights') }}</div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightParticipant') }}
+                                     <label for='bbb_lb_weight_part' class='col-12 control-label-notes'>{{ trans('langBBBLBWeightParticipant') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightParticipantInfo') }}'></span>
                                      </label>
                                          <div class='col-12'>
@@ -75,7 +75,7 @@
                                         </div>
                                  </div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightMic') }}
+                                     <label for='bbb_lb_weight_mic' class='col-12 control-label-notes'>{{ trans('langBBBLBWeightMic') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightMicInfo') }}'></span>
                                      </label>
                                     <div class='col-12'>
@@ -83,7 +83,7 @@
                                     </div>
                                  </div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightCamera') }}
+                                     <label for='bbb_lb_weight_camera' class='col-12 control-label-notes'>{{ trans('langBBBLBWeightCamera') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightCameraInfo') }}'></span>
                                      </label>
                                      <div class='col-12'>
@@ -91,7 +91,7 @@
                                      </div>
                                  </div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightRoom') }}
+                                     <label for='bbb_lb_weight_room' class='col-12 control-label-notes'>{{ trans('langBBBLBWeightRoom') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightRoomInfo') }}'></span>
                                      </label>
                                      <div class='col-12'>
@@ -105,62 +105,62 @@
                              </div>
 
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                      <input type='checkbox' name='bbb_recording' $checked_recording value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBRecord') }}
                                  </label>
                              </div>
 
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_muteOnStart' $checked_muteOnStart value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBmuteOnStart') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                      <input type='checkbox' name='bbb_DisableMic' $checked_DisabledMic value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBlockSettingsDisableMic') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_DisableCam' $checked_DisabledCam value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBlockSettingsDisableCam') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBwebcamsOnlyForModerator') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_DisablePrivateChat' $checked_DisablePrivateChat value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBlockSettingsDisablePrivateChat') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_DisablePublicChat' $checked_DisablePublicChat value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBlockSettingsDisablePublicChat') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                      <input type='checkbox' name='bbb_DisableNote' $checked_DisableNote value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBlockSettingsDisableNote') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_HideUserList' $checked_HideUserList value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBlockSettingsHideUserList') }}
                                  </label>
                              </div>
                              <div class='checkbox'>
-                                 <label class='label-container'>
+                                 <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                     <input type='checkbox' name='bbb_hideParticipants' $checked_hideParticipants value='1'>
                                      <span class='checkmark'></span>{{ trans('langBBBHideParticipants') }}
                                  </label>
@@ -171,7 +171,7 @@
                              </div>
 
                              <div class='form-group mt-4'>
-                                 <label class='col-12 control-label-notes'>{{ trans('langBBBMaxDuration') }}
+                                 <label for='bbb_max_duration' class='col-12 control-label-notes'>{{ trans('langBBBMaxDuration') }}
                                      <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langInMinutes') }}'></span>
                                  </label>
                                  <div class='col-12'>
@@ -180,7 +180,7 @@
                              </div>
 
                              <div class='form-group mt-4'>
-                                 <label class='col-12 control-label-notes'>{{ trans('langBBBMaxPartPerRoom') }}
+                                 <label for='bbb_max_part_per_room' class='col-12 control-label-notes'>{{ trans('langBBBMaxPartPerRoom') }}
                                      <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBMaxPartPerRoomInfo') }}'></span>
                                  </label>
                                  <div class='col-12'>

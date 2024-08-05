@@ -55,9 +55,9 @@
                                     <fieldset>
 
                                         <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
-                                            <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
+                                            <label for='CatName' class='col-sm-12 control-label-notes'>{{ trans('langCategoryName') }}:</label>
                                             <div class='col-sm-12'>
-                                                <input class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />
+                                                <input id='CatName' class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />
                                                 <span class='help-block Accent-200-cl'>{{ Session::getError('categoryname') }}</span>
                                             </div>
                                         </div>
@@ -65,8 +65,8 @@
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
-                                            <div class='col-sm-12'><textarea class='form-control' rows='5' name='description'>{{ $form_description }}</textarea></div>
+                                            <label for='CatDesc' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                            <div class='col-sm-12'><textarea id='CatDesc' class='form-control' rows='5' name='description'>{{ $form_description }}</textarea></div>
                                         </div>
 
 

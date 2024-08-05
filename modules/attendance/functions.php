@@ -103,7 +103,7 @@ function register_user_presences($attendance_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langAmShort, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel;
+           $langAmShort, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect;
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
@@ -195,7 +195,7 @@ function register_user_presences($attendance_id, $actID) {
                 <td>" . q($resultUser->am) . "</td>
                 <td>$reg_date</td>
                 <td>
-                    <label class='label-container'>
+                    <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' value='1' name='attend[$userID]' $checked>
                         <span class='checkmark'></span>
                     </label>

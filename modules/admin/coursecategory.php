@@ -200,7 +200,7 @@ function prepareDataFromPost() {
 }
 
 function displayForm($id = null, $name = null, $ordering = null, $multiple = null, $searchable = null, $active = null) {
-    global $session, $langNameOfLang, $urlAppend, $langImgFormsDes;
+    global $session, $langNameOfLang, $urlAppend, $langImgFormsDes, $langSettingSelect;
 
     $html = '';
     $action = ($id == null) ? 'add' : 'edit';
@@ -234,10 +234,10 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group mb-4'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
+        $html .= "<div class='form-group mb-4'><label for='code_id' class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
         $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategory2'] . $langSuffix;
-        $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
+        $html .= $tdpre . "<input id='code_id' class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
         $i++;
     }
 
@@ -245,9 +245,9 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
     <div class='form-group mt-4'>
-        <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langReorder'] . "</label>
+        <label for='ordering_id' class='col-sm-12 control-label-notes'>" . $GLOBALS['langReorder'] . "</label>
         <div class='col-sm-12'>
-            <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
+            <input id='ordering_id' class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
         </div>
     </div>";
 
@@ -264,7 +264,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategoryMultiple'] . "</label>
         <div class='col-sm-12'>
-            <label class='label-container'>
+            <label class='label-container' aria-label='$langSettingSelect'>
                 <input type='checkbox' name='multiple' value='1' " . $check_multiple . ">
                 <span class='checkmark'></span>
                 " . $GLOBALS['langCourseCategoryMultiple2'] . "
@@ -274,7 +274,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategorySearchable'] . "</label>
         <div class='col-sm-12'>
-            <label class='label-container'>
+            <label class='label-container' aria-label='$langSettingSelect'>
                 <input type='checkbox' name='searchable' value='1' " . $check_searchable . ">
                 <span class='checkmark'></span>
                 " . $GLOBALS['langCourseCategorySearchable2'] . "
@@ -284,7 +284,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</label>
         <div class='col-sm-12'>
-            <label class='label-container'>
+            <label class='label-container' aria-label='$langSettingSelect'>
                 <input type='checkbox' name='active' value='1' " . $check_active . ">
                 <span class='checkmark'></span>
                 " . $GLOBALS['langCourseCategoryActive2'] . "

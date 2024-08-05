@@ -247,12 +247,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
         $nameColumn = "<div>
                             <div class='d-flex justify-content-start align-items-start gap-2'>
-                                <img style='width:32px; height:32px; border-radius:50%; border:solid 2px #e8e8e8; 'class='img-circle' src='".user_icon($myrow->id) . "' />
+                                <img style='width:32px; height:32px; border-radius:50%; border:solid 2px #e8e8e8;' alt='".$langUser."' class='img-circle' src='".user_icon($myrow->id) . "' />
                                 <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
                             </div>
                             <div class='pull-left'>
                                 <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
-                                <div><small><a href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
+                                <div><small><a aria-label='".$langProfileSendMail."' href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
                                 <div class='text-muted'><small>$am_message</small></div>
                             </div>
                         </div>";

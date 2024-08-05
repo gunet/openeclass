@@ -98,18 +98,18 @@
                                         <div class="row mt-4 form-group {{ $antitle_error }}">
                                             <label for="AnnTitle" class="col-12 control-label-notes">{{ trans('langAnnTitle') }}</label>
                                             <div class="col-12 ">
-                                                <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
+                                                <input id='AnnTitle' class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
                                                 <span class='help-block Accent-200-cl'>{{ Session::getError('antitle') }}</span>
                                             </div>
                                         </div>
 
                                         <div class='row mt-4 form-groum'>
-                                            <label for='AnnBody' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
+                                            <label for='newContent' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
                                             <div class='col-12'>{!! $contentToModify !!}</div>
                                         </div>
 
                                         <div class='row mt-4 form-group'>
-                                            <label for='Email' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
+                                            <label for='select-recipients' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
                                             <div class='col-12'>
                                                 <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
                                                     <option value='-1' selected>{{ trans('langAllUsers') }}</option>
@@ -128,7 +128,7 @@
                                             <div class='col-12'>
                                                 <div class='input-group'>
                                                     <span class='input-group-addon'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input class='mt-0' id='start_date_active' type='checkbox' name='startdate_active' {{ $start_checkbox }}>
                                                             <span class='checkmark'></span>
                                                         </label>
@@ -146,7 +146,7 @@
                                             <div class='col-12'>
                                                 <div class='input-group'>
                                                     <span class='input-group-addon'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input class='mt-0' id='end_date_active' type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
                                                             <span class='checkmark'></span>
                                                         </label>
@@ -161,7 +161,7 @@
                                         <div class='row mt-4 form-group'>
                                             <div class='col-12'>
                                                 <div class='checkbox'>
-                                                    <label class='label-container'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input class='mt-0' type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('langViewShow') }}
                                                         <span class='checkmark'></span>
                                                     </label>

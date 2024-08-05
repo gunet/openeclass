@@ -45,7 +45,7 @@
                                     <div class="form-group{{ $categoryNameError ? ' has-error' : ''}}">
                                     <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>
+                                        <input id="CatName" class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>
                                         {!! Session::getError('categoryname', "<span class='help-block Accent-200-cl'>:message</span>") !!}
                                     </div>
                                     </div>
@@ -55,7 +55,7 @@
                                     <div class='form-group mt-4'>
                                         <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                         <div class='col-sm-12'>
-                                            <textarea class='form-control' rows='5' name='description'>{{ isset($category) ? $category->description : "" }}</textarea>
+                                            <textarea id="CatDesc" class='form-control' rows='5' name='description'>{{ isset($category) ? $category->description : "" }}</textarea>
                                         </div>
                                     </div>
 

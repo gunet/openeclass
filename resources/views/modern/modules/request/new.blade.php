@@ -49,7 +49,7 @@
                                     
                                         @if ($request_types)
                                             <div class='form-group mt-4'>
-                                                <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
+                                                <label for='requestType' class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
                                                 <div class='col-sm-12'>
                                                     <select class='form-select' name='requestType' id='requestType'>
                                                         <option value='0'>{{ trans('langRequestBasicType') }}</option>
@@ -63,7 +63,7 @@
                                     
                                    
                                         <div class='form-group mt-4'>
-                                            <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
+                                            <label for='requestTitle' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='requestTitle' name='requestTitle' required>
                                             </div>
@@ -74,7 +74,7 @@
                                 
 
                                 <div class='form-group mt-4'>
-                                    <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
+                                    <label for='requestDescription' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
                                     <div class='col-sm-12'>
                                         {!! $descriptionEditor !!}
                                     </div>
@@ -85,7 +85,7 @@
                                
                                     
                                         <div class='form-group mt-4'>
-                                            <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
+                                            <label for='assignTo' class='col-sm-12 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='assignTo[]' multiple id='assignTo'>
                                                     @foreach ($course_users as $cu)
@@ -97,7 +97,7 @@
                                    
                                   
                                         <div class='form-group mt-4'>
-                                            <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
+                                            <label for='requestWatchers' class='col-sm-12 control-label-notes'>{{ trans('langWatchers') }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
                                                     @foreach ($course_users as $cu)
@@ -126,7 +126,7 @@
                                 <div class='form-group mt-4'>
                                     <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='send_mail' value='on' checked><span class='checkmark'></span> {{ trans('langSendInfoMail') }}
                                             </label>
                                         </div>

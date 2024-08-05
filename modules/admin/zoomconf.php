@@ -158,7 +158,7 @@ if (isset($_POST['submit'])) {
         if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
             $checked = $param->value() == 1 ? "checked" : "";
             $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-            $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
+            $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
             $boolean_field .= "</div></div></div>";
         } else if ($param->name() == ZoomApp::ACCOUNT_ID or $param->name() == ZoomApp::CLIENT_ID or $param->name() == ZoomApp::CLIENT_SECRET) {
             $tool_content .= "<div class='form-group mt-4'>";
@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
             if ($param->name() === ZoomApp::CLIENT_SECRET) {
                 $type = 'password';
             }
-            $tool_content .= "<div class='col-sm-12'><input class='form-control' type='" . $type . "' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+            $tool_content .= "<div class='col-sm-12'><input id='" . $param->name() . "' class='form-control' type='" . $type . "' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
             $tool_content .= "</div>";
         } else if ($param->name() == ZoomApp::ENABLEDCOURSES) {
             $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -182,7 +182,7 @@ if (isset($_POST['submit'])) {
                 $selected = "selected";
             }
             $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
-            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
+            $tool_content .= "<label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
             $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
             $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='tc_courses[]' multiple>";
             $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
@@ -228,7 +228,7 @@ if (isset($_POST['submit'])) {
             if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
                 $checked = $param->value() == 1 ? "checked" : "";
                 $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
+                $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
                 $boolean_field .= "</div></div></div>";
             } else if ($param->name() == ZoomApp::ZOOMURL) {
                 $extra = '';
@@ -242,14 +242,14 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 $tool_content .= "<div class='form-group mt-4'>";
-                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
+                $tool_content .= "<label for='default_zoom_url' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
                 $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langZoomUrl'></span></label>";
                 $tool_content .= "<div class='col-sm-12'><input class='form-control' id='default_zoom_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . ZoomApp::ZOOMDEFAULTURL . " ' $extra></div>";
                 $tool_content .= "</div>";
             } else if ($param->name() == ZoomApp::ZOOMCUSTOMURL) {
                 $checked = $param->value() == 1 ? "checked" : "";
                 $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $tool_content .= "<label class='label-container'><input type='checkbox' id='custom_zoom_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
+                $tool_content .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' id='custom_zoom_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
                 $tool_content .= "</div></div></div>";
             } elseif ($param->name() == ZoomApp::ENABLEDCOURSES) {
                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -264,7 +264,7 @@ if (isset($_POST['submit'])) {
                     $selected = "selected";
                 }
                 $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
-                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
+                $tool_content .= "<label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
                 $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
                 $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='tc_courses[]' multiple>";
                 $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";

@@ -29,7 +29,7 @@
                               <div class='col-md-6 col-12'>
                                 <div class='form-group mt-3'>
                                   <div class='col-12 checkbox'>
-                                      <label class='label-container @if(in_array($mid, $disabled)) d-none @endif'>
+                                      <label class='label-container @if(in_array($mid, $disabled)) d-none @endif' aria-label="{{ trans('langSettingSelect') }}">
                                         <input type='checkbox' name='module[{{ $mid }}]' value='1'
                                           @if (in_array($mid, $default)) checked @endif
                                           @if (in_array($mid, $disabled)) disabled @endif>
@@ -53,7 +53,7 @@
                               <div class='col-md-6 col-12'>
                                 <div class='form-group mt-3'>
                                   <div class='col-12 checkbox'>
-                                      <label class='label-container @if(in_array($mid, $disabledCollaboration)) d-none @endif'>
+                                      <label class='label-container @if(in_array($mid, $disabledCollaboration)) d-none @endif' aria-label="{{ trans('langSettingSelect') }}">
                                         <input type='checkbox' name='moduleCollaboration[{{ $mid }}]' value='1'
                                           @if (in_array($mid, $defaultCollaboration)) checked @endif
                                           @if (in_array($mid, $disabledCollaboration)) disabled @endif>

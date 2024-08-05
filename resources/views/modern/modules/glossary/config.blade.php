@@ -35,7 +35,7 @@
                               <div class='form-group'>
                                   <div class='col-sm-12'>            
                                       <div class='checkbox'>
-                                      <label class='label-container'>
+                                      <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                           <input type='checkbox' name='index' value='yes'{{ $checked_index }}><span class='checkmark'></span> {{ trans('langGlossaryIndex') }}                               
                                         </label>
                                       </div>
@@ -45,7 +45,7 @@
                               <div class='form-group mt-2'>
                                   <div class='col-sm-12'>            
                                       <div class='checkbox'>
-                                      <label class='label-container'>
+                                      <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                           <input type='checkbox' name='expand' value='yes'{{ $checked_expand }}><span class='checkmark'></span> {{ trans('langGlossaryExpand') }}                               
                                         </label>
                                       </div>

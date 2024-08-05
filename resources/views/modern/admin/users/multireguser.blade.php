@@ -77,7 +77,7 @@
                     <div class='form-group mt-4'>
                         <label for='passsword' class='col-sm-12 control-label-notes'>{{ trans('langMethods') }}</label>
                         <div class='col-sm-12'>
-                            {!! selection($auth_m, "auth_methods_form", '', "class='form-control'") !!}
+                            {!! selection($auth_m, "auth_methods_form", '', "class='form-control' id='passsword'") !!}
                         </div>
                     </div>
                 @endif
@@ -90,7 +90,7 @@
                 </div>
 
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
                     <div class='col-sm-12'>
                         {!! $html !!}
                     </div>
@@ -98,24 +98,24 @@
 
                 <div class='form-group mt-4'>
                     <label for='lang' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
-                    <div class='col-sm-12'>{!! lang_select_options('lang', 'class="form-control"') !!}</div>
+                    <div class='col-sm-12'>{!! lang_select_options('lang', 'class="form-control" id="lang"') !!}</div>
                 </div>
 
                 <div class='form-group mt-4'>
                 <label for='email_public' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
-                    <div class='col-sm-12'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
+                    <div class='col-sm-12'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control" id="email_public"') !!}</div>
                 </div>
 
 
                 <div class='form-group mt-4'>
                 <label for='am_public' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
-                    <div class='col-sm-12'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
+                    <div class='col-sm-12'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control" id="am_public"') !!}</div>
                 </div>
 
 
                 <div class='form-group mt-4'>
                 <label for='phone_public' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
-                    <div class='col-sm-12'>{!! selection($access_options, 'phone_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
+                    <div class='col-sm-12'>{!! selection($access_options, 'phone_public', ACCESS_PROFS, 'class="form-control" id="phone_public"') !!}</div>
                 </div>
 
                 <div class='form-group mt-4'>
@@ -145,12 +145,12 @@
                     <div class='form-group mt-4'>
                         <label for='email_body' class='col-sm-3 control-label-notes mb-1'>{{ trans('langSubject') }}:</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' name='emailNewSubject'>
+                            <input class='form-control' type='text' name='emailNewSubject' id='email_body'>
                         </div>
                     </div>
 
                     <div class='form-group mt-4'>
-                        <label for='email_body' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmail') }}:</label>
+                        <label for='emailNewBodyEditor' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmail') }}:</label>
                         <div class='col-sm-12'>
                             {!! $rich_text_editor !!}
                         </div>

@@ -88,18 +88,18 @@ foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
         $boolean_field .= "<div class='form-group mb-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
+        $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
         $tool_content .= "<div class='form-group mb-4'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-12'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+        $tool_content .= "<div class='col-sm-12'><textarea id='" . $param->name() . "' class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
             q($param->value()) . "</textarea></div>";
         $tool_content .= "</div>";
     } else {
         $tool_content .= "<div class='form-group mb-4'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+        $tool_content .= "<div class='col-sm-12'><input id='" . $param->name() . "' class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
 }

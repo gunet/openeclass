@@ -276,7 +276,7 @@
 
                                             <p class='control-label-notes mb-0 mt-3'>{{ trans('langSessionParticipants') }}&nbsp;<span class='Accent-200-cl'>(*)</span></p>
                                             <div id='select_one_session' class='d-block mt-1'>
-                                                <select name='one_participant' class='form-select'>
+                                                <select aria-label="{{ trans('langSessionParticipants') }}" name='one_participant' class='form-select'>
                                                     <option value='' selected>{{ trans('langSelectUser') }}</option>
                                                     @foreach($simple_users as $u)
                                                         <option value='{{ $u->user_id }}'>{{ $u->givenname }}&nbsp;{{ $u->surname }}</option>
@@ -287,7 +287,7 @@
                                                 @endif
                                             </div>
                                             <div id='select_group_session' class='d-none mt-1'>
-                                                <select id='select_users_group_session' name='many_participants[]' class='form-select' multiple>
+                                                <select aria-label="{{ trans('langSessionParticipants') }}" id='select_users_group_session' name='many_participants[]' class='form-select' multiple>
                                                     @foreach($simple_users as $u)
                                                         <option value='{{ $u->user_id }}'>{{ $u->givenname }}&nbsp;{{ $u->surname }}</option>
                                                     @endforeach
@@ -308,7 +308,7 @@
                                                         <i class='fa-solid fa-calendar'></i>
                                                     </a>
                                                 </span>
-                                                <input id='startDateValue' type="text" class="form-control mt-0 pe-none rounded-2" aria-describedby="start-end-datetime-session">
+                                                <input aria-label="{{ trans('langStartEndSessionDateTime') }}" id='startDateValue' type="text" class="form-control mt-0 pe-none rounded-2" aria-describedby="start-end-datetime-session">
                                                 <input type="hidden" id="startTimeTmp">
                                                 <input type="hidden" id="endTimeTmp">
                                                 <input type="hidden" id="whenTmp">

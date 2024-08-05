@@ -51,7 +51,7 @@
                                             </tr></thead>
                                             <tr>
                                                 <td class="text-center">
-                                                    <select class="form-select h-100 rounded-0" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
+                                                    <select aria-label="{{ trans('langInactiveTools') }}" class="form-select h-100 rounded-0" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
                                                         @foreach($toolSelection[0] as $item)
                                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                                         @endforeach
@@ -62,7 +62,7 @@
                                                     <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('active_box','inactive_box')" aria-label="Left"><span class="fa fa-arrow-left"></span></button>
                                                 </td>
                                                 <td class="text-center">
-                                                    <select class="form-select h-100 rounded-0" name="toolStatActive[]" id='active_box' size='17' multiple>
+                                                    <select aria-label="{{ trans('langActiveTools') }}" class="form-select h-100 rounded-0" name="toolStatActive[]" id='active_box' size='17' multiple>
                                                         @foreach($toolSelection[1] as $item)
                                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                                         @endforeach

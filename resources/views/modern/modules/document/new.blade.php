@@ -76,7 +76,7 @@
 
 
                                             <div class='form-group mt-4'>
-                                                <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langContent') }}</label>
+                                                <label for='file_content' class='col-sm-12 control-label-notes'>{{ trans('langContent') }}</label>
                                                 <div class='col-sm-12'>
                                                     {!! $rich_text_editor !!}
                                                 </div>

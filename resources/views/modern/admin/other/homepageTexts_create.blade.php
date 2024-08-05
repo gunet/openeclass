@@ -143,15 +143,15 @@
                                     <div class='form-group'>
                                         <label for='question' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='textTitle' value="{{ $new ? '' : $textModify->title }}"/>
+                                            <input id='question' class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='textTitle' value="{{ $new ? '' : $textModify->title }}"/>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='answer' class='col-sm-12 control-label-notes'>{{ trans('langCont') }}</label>
+                                        <label for='content' class='col-sm-12 control-label-notes'>{{ trans('langCont') }}</label>
                                         <div class='col-sm-12'>{!! $editor !!}</div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='answer' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
+                                        <label for='lang_selection' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                                         <div class='col-sm-12'>{!! $lang_select_options !!}</div>
                                     </div>
 

@@ -278,18 +278,18 @@
                                     <th style='width:20%;'>{{ trans('langRole') }}</th>
                                     <th style='width:20%;'>{{ trans('langGroup') }}</th>
                                     <th style='width:10%;'>{{ trans('langRegistrationDate') }}</th>
-                                    <th class='text-end' style='width:10%;'>{!! icon('fa-cogs') !!}</th>
+                                    <th class='text-end' style='width:10%;' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-cogs') !!}</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th style='width:40%;'></th>
-                                    <th style='width:20%;'></th>
-                                    <th style='width:20%;'></th>
-                                    <th style='width:10%;'></th>
-                                    <th class='text-end' style='width:10%;'></th>
+                                    <th style='width:40%;' aria-label="{{ trans('langSurnameName') }}"></th>
+                                    <th style='width:20%;' aria-label="{{ trans('langRole') }}"></th>
+                                    <th style='width:20%;' aria-label="{{ trans('langGroup') }}"></th>
+                                    <th style='width:10%;' aria-label="{{ trans('langRegistrationDate') }}"></th>
+                                    <th class='text-end' style='width:10%;' aria-label="{{ trans('langSettingSelect') }}"></th>
                                 </tr>
                             </tfoot>
                         </table>

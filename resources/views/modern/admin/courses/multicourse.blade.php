@@ -52,22 +52,22 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>	  
+                                        <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>	  
                                         <div class='col-sm-12'>
                                             {!! $html !!}
                                         </div>
                                     </div>    
 
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langConfidentiality') }}</label>
+                                        <label for='password' class='col-sm-12 control-label-notes'>{{ trans('langConfidentiality') }}</label>
                                         <div class='col-sm-12'>
-                                            <input id='coursepassword' class='form-control' type='text' name='password' id='password' autocomplete='off'>
+                                            <input class='form-control' type='text' name='password' id='password' autocomplete='off'>
                                             <div class='help-block'>({{ trans('langOptPassword') }})</div>
                                         </div>
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='Public' class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCourse') }}</label>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCourse') }}</div>
                                         <div class='col-sm-12 radio'>
                                             <label>
                                                 <input id='courseopen' type='radio' name='formvisible' value='2' checked> {{ trans('langPublic') }}
@@ -76,7 +76,7 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='PrivateOpen' class='col-sm-12 control-label-notes mb-2'>{{ trans('langRegCourse') }}</label>	
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langRegCourse') }}</div>	
                                         <div class='col-sm-12 radio'>
                                             <label>
                                                 <input id='coursewithregistration' type='radio' name='formvisible' value='1'> 
@@ -86,7 +86,7 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='PrivateClosed' class='col-sm-12 control-label-notes mb-2'>{{ trans('langClosedCourse') }}</label>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langClosedCourse') }}</div>
                                         <div class='col-sm-12 radio'>
                                             <label>
                                                 <input id='courseclose' type='radio' name='formvisible' value='0'> 
@@ -96,7 +96,7 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='Inactive' class='col-sm-12 control-label-notes mb-2'>{{ trans('langInactiveCourse') }}</label>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langInactiveCourse') }}</div>
                                         <div class='col-sm-12 radio'>
                                             <label>
                                                 <input id='courseinactive' type='radio' name='formvisible' value='3'> {{ trans('langCourseInactiveShort') }}

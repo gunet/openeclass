@@ -23,7 +23,7 @@
                             <div class='form-group'>
                                 <label for='email_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='email_title' value=''>
+                                    <input id='email_title' class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='email_title' value=''>
                                 </div>
                             </div>
 
@@ -35,27 +35,23 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                 <div class='col-sm-12'>
                                     {!! $buildusernode !!}
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                            <label for='sendTo' class='col-sm-12 control-label-notes mb-1'>{{ trans('langSendMessageTo') }}</label>
+                                <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langSendMessageTo') }}</div>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' name='send_to_prof' value='1'>
-
                                             <span class='checkmark'></span> {{ trans('langProfOnly') }}
-
                                         </label>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' name='send_to_users' value='1'>
-
                                             <span class='checkmark'></span>{{ trans('langStudentsOnly') }}
-
                                         </label>
                                     </div>
                                 </div>

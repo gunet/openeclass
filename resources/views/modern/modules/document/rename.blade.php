@@ -9,7 +9,7 @@
 					<div class='form-group'>
 						<label for='renameTo' class='col-12 control-label-notes' >{{ $filenameLabel }}:</label>
 						<div class='col-12'>
-							<input class='form-control' type='text' name='renameTo' value='{{ $filename }}'>
+							<input id='renameTo' class='form-control' type='text' name='renameTo' value='{{ $filename }}'>
 						</div>
 					</div>
 

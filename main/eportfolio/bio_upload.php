@@ -135,7 +135,7 @@ $tool_content .=
             <div class='row'>
                 <label for='bio' class='control-label-notes text-uppercase'>$label</label>
                 <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>
-                <div class='col-12 mt-3'><input type='file' name='bio' class='form-control'></div>
+                <div class='col-12 mt-3'><input type='file' name='bio' id='bio' class='form-control'></div>
             </div>
 
             <div class='form-group mt-5'>

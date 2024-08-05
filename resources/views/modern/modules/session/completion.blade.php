@@ -42,7 +42,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>{{ trans('langSession') }}</th>
-                                                                <th></th>
+                                                                <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                             </tr>
                                                         </thead>
                                                         @foreach($all_sessions as $s)
@@ -55,7 +55,7 @@
                                                                 <td>
                                                                     <div class='d-flex justify-content-end'>
                                                                         <div class='checkbox'>
-                                                                            <label class='label-container'>
+                                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                                 <input type='checkbox' name='sessions_completed[]' value='{{ $s->id }}' {!! in_array($s->id,$session_ids) ? 'checked' : '' !!}>
                                                                                 <span class='checkmark'></span>
                                                                             </label>

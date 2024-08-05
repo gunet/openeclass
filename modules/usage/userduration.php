@@ -502,7 +502,7 @@ function selection_course_modules() {
                 <form class='form-horizontal' name='module_select' action='$_SERVER[SCRIPT_NAME]' method='get'>
                 <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>
-                        <label class='col-sm-12 control-label-notes'>$langModule</label>
+                        <label for='m' class='col-sm-12 control-label-notes'>$langModule</label>
                         <div class='col-sm-12'>
                             <select name='m' id='m' class='form-select' onChange='document.module_select.submit();'>
                                 $mod_opts

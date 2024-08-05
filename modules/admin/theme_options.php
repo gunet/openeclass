@@ -597,7 +597,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
         ";
     } else {
-       $logo_field = "<input type='file' name='imageUpload' id='imageUpload'>";
+       $logo_field = "<label for='imageUpload' aria-label='$langLogo'></label><input type='file' name='imageUpload' id='imageUpload'>";
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
@@ -605,7 +605,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
-       $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall'>";
+       $small_logo_field = "<label for='imageUploadSmall' aria-label='$langLogoSmall'></label><input type='file' name='imageUploadSmall' id='imageUploadSmall'>";
     }
     if (isset($theme_options_styles['imageUploadFooter'])) {
         $image_footer_field = "
@@ -613,7 +613,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='imageUploadFooter' value='$theme_options_styles[imageUploadFooter]'>
         ";
     } else {
-       $image_footer_field = "<input type='file' name='imageUploadFooter' id='imageUploadFooter'>";
+       $image_footer_field = "<label for='imageUploadFooter' aria-label='$langFooterUploadImage'></label><input type='file' name='imageUploadFooter' id='imageUploadFooter'>";
     }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
@@ -831,7 +831,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='faviconUpload' value='$theme_options_styles[faviconUpload]'>
         ";
     } else {
-       $faviconUpload = "<input type='file' name='faviconUpload' id='faviconUpload'>";
+       $faviconUpload = "<label for='faviconUpload' aria-label='$langFavicon'></label><input type='file' name='faviconUpload' id='faviconUpload'>";
     }
 
 
@@ -901,7 +901,7 @@ if (isset($_POST['optionsSave'])) {
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
                     <div class='form-group mt-4'>
                         <div class='col-12'>
-                            <p class='col-12 control-label-notes'>$langAvailableThemes:</p>
+                            <label for='theme_selection' class='col-12 control-label-notes'>$langAvailableThemes:</label>
                             ".  selection($themes_arr, 'active_theme_options', $theme_id, 'class="form-control form-submit" id="theme_selection"')."
                         </div>
                     </div>
@@ -972,7 +972,7 @@ $tool_content .= "
                     <h3 class='theme_options_legend text-decoration-underline'>$langViewPlatform</h3>
                     <div class='form-group'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='view_platform' id='view_platform_boxed' value='boxed' ".(($theme_options_styles['view_platform'] == 'boxed')? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langViewBoxedType
@@ -980,7 +980,7 @@ $tool_content .= "
                             <small class='ms-5'>$langHelpBoxedWidthInfo</small>
                         </div>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='view_platform' id='view_platform_fluid' value='fluid' ".(($theme_options_styles['view_platform'] == 'fluid')? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langViewFluidType
@@ -1096,7 +1096,7 @@ $tool_content .= "
 
                     <div class='form-group mt-4'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='bgOpacityImage' value='1' ".((isset($theme_options_styles['bgOpacityImage']))? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langAddOpacityImage
@@ -1163,7 +1163,7 @@ $tool_content .= "
                     <div class='form-group mt-2'>
                         <div class='col-sm-12'>
                             <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='shadowHeader' value='1' ".((isset($theme_options_styles['shadowHeader']))? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langDeactivate
@@ -1475,7 +1475,7 @@ $tool_content .= "
                         <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
                         <div class='col-sm-12'>
                             <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='openeclassBanner' value='1' ".((isset($theme_options_styles['openeclassBanner']))? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langDeactivate
@@ -2056,7 +2056,7 @@ $tool_content .= "
                     <p class='control-label-notes mt-4'>$langAddPadding:</p>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='AddPaddingFormWrapper' value='1' ".((isset($theme_options_styles['AddPaddingFormWrapper']))? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langActivate
@@ -2293,7 +2293,7 @@ $tool_content .= "
                         <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAddPaddingListGroup</h3>
                         <div class='col-sm-12'>
                             <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSettingSelect'>
                                     <input type='checkbox' name='AddPaddingListGroup' value='1' ".((isset($theme_options_styles['AddPaddingListGroup']))? 'checked' : '').">
                                     <span class='checkmark'></span>
                                     $langActivate

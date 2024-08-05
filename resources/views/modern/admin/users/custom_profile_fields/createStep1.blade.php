@@ -26,7 +26,7 @@
                                 <div class='form-group'>
                                     <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
-                                        {!! selection($field_types, 'datatype', 1, 'class="form-control"') !!}
+                                        {!! selection($field_types, 'datatype', 1, 'class="form-control" id="datatype"') !!}
                                     </div>
                                 </div>
                              

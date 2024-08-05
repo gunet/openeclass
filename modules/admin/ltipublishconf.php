@@ -132,13 +132,13 @@ foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "checked" : "";
         $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
+        $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == LtiPublishApp::FRAMEANCESTORS) {
         $tool_content .= "<div class='form-group mb-4'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langLtiPublishFrameAncestorsTooltip'></span></label>";
-        $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='https://url1, https://url2'></div>";
+        $tool_content .= "<div class='col-sm-12'><input id='" . $param->name() . "' class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='https://url1, https://url2'></div>";
         $tool_content .= "</div>";
     } else if ($param->name() == LtiPublishApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -153,7 +153,7 @@ foreach ($app->getParams() as $param) {
             $selected = "selected";
         }
         $tool_content .= "<div class='form-group mb-4' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>$langUseOfApp&nbsp;&nbsp;";
+        $tool_content .= "<label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfApp&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langUseOfAppInfo'></span></label>";
         $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
@@ -166,7 +166,7 @@ foreach ($app->getParams() as $param) {
     } else {
         $tool_content .= "<div class='form-group mb-4'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+        $tool_content .= "<div class='col-sm-12'><input id='" . $param->name() . "' class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
 }
@@ -174,16 +174,8 @@ foreach ($app->getParams() as $param) {
 $tool_content .= $boolean_field;
 $tool_content .= "
             <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-              
-             
-               
-                    <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
-              
-                
-                    <button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>$langClearSettings</button>
-                
-               
-             
+              <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
+              <button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>$langClearSettings</button>
             </div>" .
           generate_csrf_token_form_field() . "
         </form>

@@ -33,7 +33,7 @@
                             <div class='form-wrapper form-edit rounded'>
                             <form class='form-horizontal' role='form' method='post' action='editdesc.php?course={{$course_code}}' enctype='multipart/form-data'>
                                 <div class='row form-group'>
-                                    <label for='description' class='col-12 control-label-notes'>{{ trans('langCourseLayout') }}</label>
+                                    <div class='col-12 control-label-notes'>{{ trans('langCourseLayout') }}</div>
                                     <div class='col-12'>
                                         {!! $selection !!}
                                     </div>

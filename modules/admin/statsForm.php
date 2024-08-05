@@ -55,20 +55,20 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
 $tool_content .= '<div class="col-12"><div class="form-wrapper form-edit rounded"><form class="form-horizontal" role="form" method="post">';   
 $tool_content .= "
 <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-12 control-label-notes'>$langStartDate:</label>
+    <label for='user_date_start_t' class='col-sm-12 control-label-notes'>$langStartDate:</label>
     <div class='input-group'>   
         <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
-        <input class='form-control mt-0 border-start-0' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        <input class='form-control mt-0 border-start-0' id='user_date_start_t' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
     
         
     </div>
 </div>";        
 $tool_content .= "
 <div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-12 control-label-notes'>$langEndDate:</label>
+    <label for='user_date_end_t' class='col-sm-12 control-label-notes'>$langEndDate:</label>
     <div class='input-group'>      
         <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
-        <input class='form-control mt-0 border-start-0' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+        <input class='form-control mt-0 border-start-0' id='user_date_end_t' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
         
         
     </div>
@@ -78,12 +78,12 @@ $tool_content .= '<div class="form-group mt-4">
     <div class="col-sm-12">' . $letterlinks . '</div>
   </div>
   <div class="form-group mt-4">  
-    <label class="col-sm-12 control-label-notes">' . $langUser . ':</label>
-     <div class="col-sm-12"><select name="u_user_id" class="form-select">' . $user_opts . '</select></div>
+    <label for="u_user_id_t" class="col-sm-12 control-label-notes">' . $langUser . ':</label>
+     <div class="col-sm-12"><select name="u_user_id" id="u_user_id_t" class="form-select">' . $user_opts . '</select></div>
   </div>
   <div class="form-group mt-4">  
-    <label class="col-sm-12 control-label-notes">' . $langInterval . ':</label>
-     <div class="col-sm-12"><select name="u_interval" class="form-select">' . $statsIntervalOptions . '</select></div>
+    <label for="u_interval_id" class="col-sm-12 control-label-notes">' . $langInterval . ':</label>
+     <div class="col-sm-12"><select name="u_interval" id="u_interval_id" class="form-select">' . $statsIntervalOptions . '</select></div>
   </div>
   <div class="col-sm-offset-2 col-sm-10">    
     <input class="btn submitAdminBtn" type="submit" name="btnUsage" value="' . $langSubmit . '">

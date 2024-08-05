@@ -8,7 +8,7 @@
                     <div class='form-group'>
                         <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
                         <div class='col-12'>
-                            <select name='moveTo' class='form-select'>
+                            <select name='moveTo' class='form-select' id='moveTo'>
                                 @if ($curDirPath and $curDirPath != '/')
                                     <option value=''>{{ trans('langParentDir') }}</option>
                                 @endif

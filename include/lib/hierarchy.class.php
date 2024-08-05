@@ -1265,7 +1265,7 @@ jContent;
         $ret .= "<div class='form-wrapper form-edit border-0'>
                     <form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
         $ret .= "<div class='form-group'>";
-        $ret .= "<label class='col-12 form-label mb-0'>$langSelectFac</label>";
+        $ret .= "<div class='col-12 form-label mb-0'>$langSelectFac</div>";
         $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'", $options);
         $ret .= "</div></form></div></div>";
         return $ret;

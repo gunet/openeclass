@@ -501,9 +501,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         }
                                                         $tool_content .= "
                                                             <div class='form-group mt-4'>
-                                                                <label class='col-sm-12 control-label-notes'>$langShowTo</label>
+                                                                <label for='visibility_level_id' class='col-sm-12 control-label-notes'>$langShowTo</label>
                                                                 <div class='col-sm-12'>
-                                                                    <select class='form-select' name='visibility_level'>
+                                                                    <select class='form-select' name='visibility_level' id='visibility_level_id'>
                                                                         <option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>
                                                                         <option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>
                                                                         <option value='0' $selectedvis[0]>$langShowToAdminsOnly</option>

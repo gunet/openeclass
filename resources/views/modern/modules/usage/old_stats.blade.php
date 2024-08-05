@@ -212,25 +212,25 @@
                                 <div class="form-wrapper form-edit rounded">
                                     <form class="form-horizontal" role="form" method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code  }}">
                                         <div class='input-append date form-group mt-4' id='user_date_start' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
-                                            <label class='col-12 control-label-notes'>{{ trans('langStartDate') }}</label>
+                                            <label for="user_date_start_id" class='col-12 control-label-notes'>{{ trans('langStartDate') }}</label>
                                             <div class='input-group'>
                                                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                <input class='form-control mt-0 border-start-0' name='user_date_start' id='user_date_start' type='text' value='{{ $user_date_start }}'>
+                                                <input class='form-control mt-0 border-start-0' name='user_date_start' id='user_date_start_id' type='text' value='{{ $user_date_start }}'>
                                             </div>
                                         </div>
 
                                         <div class='input-append date form-group mt-4' id='user_date_end' data-date='{{ $user_date_end }}' data-date-format='dd-mm-yyyy'>
-                                            <label class='col-12 control-label-notes'>{{ trans('langEndDate') }}</label>
+                                            <label for="user_date_end_id" class='col-12 control-label-notes'>{{ trans('langEndDate') }}</label>
                                             <div class='input-group'>
                                                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                <input class='form-control mt-0 border-start-0' name='user_date_end' type='text' value='{{ $user_date_end }}'>
+                                                <input class='form-control mt-0 border-start-0' name='user_date_end' id='user_date_end_id' type='text' value='{{ $user_date_end }}'>
                                             </div>
                                         </div>
 
                                         <div class="form-group mt-4">
-                                            <label class="col-12 control-label-notes">{{ trans('langModule') }}</label>
+                                            <label for="u_module_id" class="col-12 control-label-notes">{{ trans('langModule') }}</label>
                                             <div class="col-12">
-                                                <select name="u_module_id" id="u_module_id" class="form-select">{!! $mod_opts !!}}</select>
+                                                <select name="u_module_id" id="u_module_id" class="form-select">{!! $mod_opts !!}</select>
                                             </div>
                                         </div>
                                         <div class="form-group mt-5">

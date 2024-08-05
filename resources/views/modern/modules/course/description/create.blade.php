@@ -41,7 +41,7 @@
                             
 
                                 <div class='form-group'>
-                                    <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
+                                    <label for='typSel' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
                                     </div>

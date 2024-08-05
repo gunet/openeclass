@@ -23,17 +23,17 @@
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>                                    
                                     <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langUser') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langUser') }}</div>
                                         <div class='col-sm-12'>
                                             {!! display_user($info['id']) !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}</div>
                                         <div class='col-sm-12'>{!! get_auth_info($auth_id) !!}</div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>                     
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</div>                     
                                         <div class='col-sm-12'>{!! $status_names[$info['status']] !!}</div>
                                     </div>                    
                                     {!! $target_field !!}

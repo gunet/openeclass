@@ -44,20 +44,20 @@
                                         <input type='hidden' name='editId' value='{{ getIndirectReference($editId) }}'>
                                     @endif
                                     <div class='form-group'>
-                                        <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
+                                        <label for='typSel' class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
                                         <div class='col-sm-12'>
-                                            {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
+                                            {!! selection($types, 'editType', $defaultType, 'class="form-select" id="typSel"') !!}
                                         </div>
                                     </div>
                                     <div class='form-group{{ $titleError ? " form-error" : ""}} mt-4'>
-                                        <label for='titleSel' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
+                                        <label for='titleSel' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' name='editTitle' class='form-control' value='{{ $cdtitle }}' size='40' id='titleSel'>
                                             {!! Session::getError('editTitle', "<span class='help-block Accent-200-cl'>:message</span>") !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='editComments' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}</label>
+                                        <label for='editComments' class='col-sm-12 control-label-notes'>{{ trans('langContent') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $text_area_comments !!}
                                         </div>

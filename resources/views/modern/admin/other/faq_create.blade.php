@@ -183,9 +183,9 @@
                                         <label for='question' class='col-sm-12 control-label-notes'>{{ trans('langFaqQuestion') }} <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
                                         <div class='col-sm-12'>
                                             @if ($modify)
-                                                <input class='form-control' placeholder="{{ trans('langFaqQuestion') }}..." type='text' name='question' value="{{ $faq_mod->title }}" />
+                                                <input id='question' class='form-control' placeholder="{{ trans('langFaqQuestion') }}..." type='text' name='question' value="{{ $faq_mod->title }}" />
                                             @else
-                                                <input class='form-control' placeholder="{{ trans('langFaqQuestion') }}..." type='text' name='question' value="" />
+                                                <input id='question' class='form-control' placeholder="{{ trans('langFaqQuestion') }}..." type='text' name='question' value="" />
                                             @endif
                                         </div>
                                     </div>

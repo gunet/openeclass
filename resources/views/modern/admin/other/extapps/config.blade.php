@@ -40,7 +40,7 @@
                                                 <div class='form-group mt-4'>
                                                     <label for='{{ $param->name() }}' class='col-sm-12 control-label-notes'>{{ $param->display() }}</label>
                                                     <div class='col-sm-12'>
-                                                        <textarea class='form-control' rows='3' cols='40' name='{{ $param->name() }}'>
+                                                        <textarea id='{{ $param->name() }}' class='form-control' rows='3' cols='40' name='{{ $param->name() }}'>
                                                             {{ $param->value() }}
                                                         </textarea>
                                                     </div>
@@ -49,7 +49,7 @@
                                                 <div class='form-group mt-4'>
                                                     <label for='{{ $param->name() }}' class='col-sm-12 control-label-notes'>{{ $param->display() }}</label>
                                                     <div class='col-sm-12'>
-                                                        <input class='form-control' type='text' name='{{ $param->name() }}' value='{{ $param->value() }}'>
+                                                        <input id='{{ $param->name() }}' class='form-control' type='text' name='{{ $param->name() }}' value='{{ $param->value() }}'>
                                                     </div>
                                                 </div>
                                             @endif
@@ -58,7 +58,7 @@
                                                 <div class='form-group mt-4'>
                                                     <div class='col-sm-offset-2 col-sm-10'>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                                                 <input type='checkbox' name='{{ $param->name() }}'{!! $param->value() == 1 ? " value='0' checked" : " value='1'" !!}> 
                                                                 <span class='checkmark'></span>{{ $param->display() }}
                                                             </label>
@@ -68,20 +68,12 @@
                                         @endforeach
                                             <div class='form-group mt-5'>
                                                 <div class='col-12 d-flex justify-content-end align-items-center'>
-                                                
-                                                       
-                                                             <button class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
-                                                                {{ trans('langModify') }}
-                                                            </button> 
-                                                     
-                                                      
-                                                            <button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>
-                                                                {{ trans('langClearSettings') }}
-                                                            </button>
-                                                     
-                                                   
-                                                   
-                                                    
+                                                    <button class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                                        {{ trans('langModify') }}
+                                                    </button> 
+                                                    <button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>
+                                                        {{ trans('langClearSettings') }}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </fieldset>
