@@ -155,26 +155,26 @@ function show_form($id, $sid, $assign) {
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>
                     <div class='form-group'>
-                        <label class='col-sm-12 control-label-notes'>$m[username]:</label>
+                        <div class='col-sm-12 control-label-notes'>$m[username]:</div>
                         <div class='col-sm-12'>
                         $uid_2_name
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-12 control-label-notes'>$langReviewStart</label>
+                        <div class='col-sm-12 control-label-notes'>$langReviewStart</div>
                         <div class='col-sm-12'>
                             <span>".q($assign->start_date_review)."</span>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-12 control-label-notes'>$langReviewEnd</label>
+                        <div class='col-sm-12 control-label-notes'>$langReviewEnd</div>
                         <div class='col-sm-12'>
                             <span>".q($assign->due_date_review)."</span>
                         </div>
                     </div>
                     $submission
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-                        <label for='grade' class='col-sm-6 control-label-notes'>$langGradebookGrade</label>                        
+                        <div class='col-sm-6 control-label-notes'>$langGradebookGrade</div>                        
                             $grade_field
                             <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
                     </div>
@@ -189,7 +189,7 @@ function show_form($id, $sid, $assign) {
                         <div class='form-group mt-4'>
                             <div class='col-sm-9 col-sm-offset-3'>
                                 <div class='checkbox'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label='$langSelect'>
                                         <input type='checkbox' value='1' id='email_button' name='email' checked>
                                         <span class='checkmark'></span>
                                         $m[email_users]

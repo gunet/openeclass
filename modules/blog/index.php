@@ -229,7 +229,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>$langBlogPerm</label>
+                                    <div class='col-sm-12 control-label-notes'>$langBlogPerm</div>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
@@ -246,7 +246,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                             </fieldset>
                             <fieldset>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>$langBlogCommenting</label>
+                                    <div class='col-sm-12 control-label-notes'>$langBlogCommenting</div>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
@@ -261,7 +261,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>$langBlogRating:</label>
+                                    <div class='col-sm-12 control-label-notes'>$langBlogRating:</div>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
@@ -276,7 +276,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>$langBlogSharing:</label>
+                                    <div class='col-sm-12 control-label-notes'>$langBlogSharing:</div>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>

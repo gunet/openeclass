@@ -167,19 +167,19 @@ if (isset($_POST['submit'])) {
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
             <div class='form-group'>
-              <label for='subject' class='col-sm-6 control-label-notes'>$langSubject</label>
+              <label for='subject' class='col-sm-12 control-label-notes'>$langSubject</label>
               <div class='col-sm-12'>
                 <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
               </div>
             </div>
             <div class='form-group mt-4'>
-              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage</label>
+              <label for='message' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
               <div class='col-sm-12'>
                 " . rich_text_editor('message', 14, 50, '') . "
               </div>
             </div>
             <div class='form-group mt-4'>
-                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile</label>
+                <label for='topic_file' class='col-sm-12 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     <input type='file' name='topic_file' id='topic_file' size='35'>
                     " . fileSizeHidenInput() . "

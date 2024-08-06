@@ -211,14 +211,8 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                                 <div class='col-sm-12'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>
                             </div>
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
-                            
-                                
-                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langDoSearch'>
-                               
-                              
-                                    <input class='btn submitAdminBtn ms-1' type='reset' name='reset' value='$langNewSearch'>
-                               
-                               
+                                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langDoSearch'>
+                                <input class='btn submitAdminBtn ms-1' type='reset' name='reset' value='$langNewSearch'>
                             </div>
                         </fieldset>
                     </form>

@@ -88,12 +88,12 @@ $tool_content .= "
             <fieldset>     
                   
             <div class='form-group'>
-               <div class='col-sm-12 radio mb-2'><label class='control-label'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
-                <div class='col-sm-12 radio'><label class='control-label'><input type='radio' name='type' value='am'>$langAm</label></div>
+               <div class='col-sm-12 radio mb-2'><div class='control-label'><input type='radio' name='type' value='uname' checked>$langUsername</div></div>
+                <div class='col-sm-12 radio'><div class='control-label'><input type='radio' name='type' value='am'>$langAm</div></div>
             </div>
                  
             <div class='form-group mt-4'>
-                <textarea class='auth_input w-100' name='user_info' rows='10'></textarea>
+                <textarea aria-label='$langTypeOutMessage' class='auth_input w-100' name='user_info' rows='10'></textarea>
             </div>
             ".showSecondFactorChallenge()." 
                

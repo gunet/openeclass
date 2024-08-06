@@ -223,9 +223,9 @@ $tool_content .= "<div class='col-12'>
                     $tool_content .= "
                         <fieldset>
                                 <div class='form-group'>
-                                    <label for='title' class='col-sm-6 control-label-notes'>$langSender</label>
+                                    <label for='titleid' class='col-sm-6 control-label-notes'>$langSender</label>
                                     <div class='col-sm-12'>
-                                    <input type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
+                                    <input for='titleid' type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
                                     </div>
                                 </div>";
                                 if ($type == 'cm' && $course_id == 0) {//course message from central interface
@@ -267,7 +267,7 @@ $tool_content .= "<div class='col-12'>
 
                                     $tool_content .= "
                                         <div class='form-group mt-4'>
-                                            <label for='title' class='col-sm-6 control-label-notes'>$langCourse</label>
+                                            <label for='courseselect' class='col-sm-6 control-label-notes'>$langCourse</label>
                                             <div class='col-sm-12'>
                                                 <select id='courseselect' class='form-select' name='course'>
                                                     <option value='-1'>&nbsp;</option>";
@@ -282,7 +282,7 @@ $tool_content .= "<div class='col-12'>
                                 if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
                                     $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
+                                        <label for='select-recipients' class='col-sm-6 control-label-notes'>$langSendTo</label>
                                         <div class='col-sm-12'>
                                             <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
@@ -412,15 +412,15 @@ $tool_content .= "<div class='col-12'>
                                         }
                                         $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
+                                                            <div class='col-sm-6 control-label-notes'>$langSendTo</div>
                                                             <div class='col-sm-12'>
-                                                                <label>$u_name</label>
+                                                                <div>$u_name</div>
                                                             </div>
                                                         </div>";
                                     } else {
                                         $tool_content .= "
                                                         <div class='form-group mt-4'>
-                                                            <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
+                                                            <label for='recipients' class='col-sm-6 control-label-notes'>$langSendTo</label>
                                                             <div class='col-sm-12'>
                                                                 <select name='recipients' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                                             </div>
@@ -430,15 +430,15 @@ $tool_content .= "<div class='col-12'>
 
                                 $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='title' class='col-sm-6 control-label-notes'>$langSubject</label>
+                                        <label for='message_title_id' class='col-sm-6 control-label-notes'>$langSubject</label>
                                         <div class='col-sm-12'>
-                                            <input type='text' class='form-control' name='message_title'>
+                                            <input type='text' class='form-control' name='message_title' id='message_title_id'>
                                         </div>
                                     </div>";
 
                                 $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='title' class='col-sm-6 control-label-notes'>$langMessage</label>
+                                        <label for='body' class='col-sm-6 control-label-notes'>$langMessage</label>
                                         <div class='col-sm-12'>
                                             ".rich_text_editor('body', 4, 20, '')."
                                         </div>
@@ -447,10 +447,10 @@ $tool_content .= "<div class='col-12'>
                                     enableCheckFileSize();
                                     $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='title' class='col-sm-6 control-label-notes mb-2'>$langAttachedFile</label>
+                                        <label for='file_ID' class='col-sm-6 control-label-notes mb-2'>$langAttachedFile</label>
                                         <div class='col-sm-12'>" .
                                             fileSizeHidenInput() . "
-                                            <input type='file' name='file'>
+                                            <input type='file' name='file' id='file_ID'>
                                             <div class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></div>
                                         </div>
                                     </div>";
@@ -460,7 +460,7 @@ $tool_content .= "<div class='col-12'>
                                     <div class='form-group mt-4'>
                                         <div class='col-xs-10 col-xs-offset-2'>
                                             <div class='checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label='$langSelect'>
                                                 <input type='checkbox' name='mailing' value='1' checked />
                                                 <span class='checkmark'></span>
                                                 $langMailToUsers

@@ -84,18 +84,18 @@ if (empty($search_terms)) {
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
         <div class='row form-group'>
-            <label for='search_terms' class='col-12 control-label-notes'>$langOR</label>
+            <label for='search_terms_id' class='col-12 control-label-notes'>$langOR</label>
             <div class='col-12'>
-                <input name='search_terms' type='text' class='form-control'>
+                <input name='search_terms' type='text' class='form-control' id='search_terms_id'>
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='search_terms' class='col-sm-6 control-label-notes mb-2'>$langSearchIn</label>
+            <div class='col-sm-6 control-label-notes mb-2'>$langSearchIn</div>
             <div class='col-12'>
                 <div class='row'>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='announcements' checked>
                             <span class='checkmark'></span>
                             $langAnnouncements
@@ -104,7 +104,7 @@ if (empty($search_terms)) {
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='agenda' checked>
                             <span class='checkmark'></span>
                             $langAgenda
@@ -113,7 +113,7 @@ if (empty($search_terms)) {
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='course_units' checked>
                             <span class='checkmark'></span>
                             $langCourseUnits
@@ -122,7 +122,7 @@ if (empty($search_terms)) {
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='documents' checked>
                             <span class='checkmark'></span>
                             $langDoc
@@ -131,7 +131,7 @@ if (empty($search_terms)) {
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='forums' checked>
                             <span class='checkmark'></span>
                             $langForums
@@ -141,7 +141,7 @@ if (empty($search_terms)) {
                     if(!$is_collaborative_course){
                     $tool_content .=" <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='exercises' checked>
                             <span class='checkmark'></span>
                             $langExercices
@@ -151,7 +151,7 @@ if (empty($search_terms)) {
                     $tool_content .= "
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='video' checked>
                             <span class='checkmark'></span>
                             $langVideo
@@ -160,7 +160,7 @@ if (empty($search_terms)) {
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='links' checked>
                             <span class='checkmark'></span>
                             $langLinks

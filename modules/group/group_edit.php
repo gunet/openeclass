@@ -288,28 +288,28 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
-            <label class='col-sm-6 control-label-notes'>$langGroupName</label>
+            <label for='name_Id' class='col-sm-12 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>
-                <input class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>
+                <input id='name_Id' class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>
                 <span class='help-block Accent-200-cl'>".Session::getError('name')."</span>
             </div>
         </div>
         <div class='form-group mt-4'>
-          <label class='col-sm-6 control-label-notes'>$langDescription $langOptional</label>
-          <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
+          <label for='description_id' class='col-sm-12 control-label-notes'>$langDescription $langOptional</label>
+          <div class='col-sm-12'><textarea id='description_id' class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
         </div>
         
             
                 <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")." mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis</label>
+                    <label for='maxStudent_id' class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' type=text name='maxStudent' size=2 value='$max_members'>
+                        <input id='maxStudent_id' class='form-control' type='text' name='maxStudent' size=2 value='$max_members'>
                         <span class='help-block Accent-200-cl'>".Session::getError('maxStudent')."</span>
                     </div>
                 </div>
            
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langGroupTutor</label>
+                    <label for='select-tutor' class='col-sm-12 control-label-notes'>$langGroupTutor</label>
                     <div class='col-sm-12'>
                         $tool_content_tutor
                     </div>
@@ -317,7 +317,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
             
         
         <div class='form-group mt-4'>
-            <label class='col-sm-6 control-label-notes'>$langGroupMembers</label>
+            <label class='col-sm-12 control-label-notes'>$langGroupMembers</label>
         <div class='col-sm-12'>
             <div class='table-responsive mt-0'>
                 <table class='table-default'>
@@ -331,7 +331,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-select h-100 rounded-0' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select aria-label='$langNoGroupStudents' class='form-select h-100 rounded-0' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -344,7 +344,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-select h-100 rounded-0' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select aria-label='$langGroupMembers' class='form-select h-100 rounded-0' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -375,10 +375,10 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
 
     $tool_content .= "
             <div class='form-group mt-4'>
-            <label class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
+            <div class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='self_reg' $checked[self_reg]>
                             <span class='checkmark'></span>
                             $langGroupAllowStudentRegistration
@@ -387,10 +387,10 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                 </div>
             </div>
             <div class='form-group mt-4'>
-            <label class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</label>
+            <div class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</labedivl>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
                             <span class='checkmark'></span>
                             $langGroupAllowStudentUnregister
@@ -399,7 +399,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <label class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</label>
+                <div class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -419,7 +419,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='public_users_list' $checked[public_users_list]>
                             <span class='checkmark'></span>
                             $langGroupPublicUserList
@@ -431,7 +431,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='forum' $checked[has_forum]>
                             <span class='checkmark'></span>
                             $langGroupForum
@@ -443,7 +443,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='documents' $checked[documents]>
                             <span class='checkmark'></span>
                             $langDoc
@@ -457,7 +457,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='wiki' $checked[wiki]>
                             <span class='checkmark'></span>
                             $langWiki
@@ -471,7 +471,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                     <div class='form-group mt-4'>
                         <div class='col-12'>
                             <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' name='booking' $checked[booking]>
                                     <span class='checkmark'></span>
                                     $langBookings

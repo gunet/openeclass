@@ -151,6 +151,7 @@ if (!isset($_POST['next'])) {
 
     $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours ='';
      $tool_content .= "
+     <h1 aria-label='$toolName'></h1>
      <div class='row'>
        
         <div class='col-lg-6 col-12'>
@@ -196,8 +197,8 @@ if (!isset($_POST['next'])) {
                 </div>
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
-                        <label for='goals' class='control-label-notes me-2'>$langGoals</label>
-                        <a href='#!' name='add_g' id='add_g'>
+                        <div class='control-label-notes me-2'>$langGoals</div>
+                        <a href='#!' name='add_g' id='add_g' aria-label='$langAdd'>
                             <span class='fa fa-plus-circle add-unit-btn'>
                             </span>
                         </a>
@@ -217,7 +218,7 @@ if (!isset($_POST['next'])) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='localize' class='col-sm-12 control-label-notes mb-1'>$langLectModel</label>
+                    <div class='col-sm-12 control-label-notes mb-1'>$langLectModel</div>
                     <div class='row'>
                         <div class='col-md-6 col-12 radio'>
 
@@ -236,8 +237,8 @@ if (!isset($_POST['next'])) {
                 </div>
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
-                        <label for='units' class='control-label-notes me-2'>$langUnits</label>
-                        <a href='#!' name='add_u' id='add_u'>
+                        <div class='control-label-notes me-2'>$langUnits</div>
+                        <a href='#!' name='add_u' id='add_u' aria-label='$langAdd'>
                             <span class='fa fa-plus-circle add-unit-btn'>
                             </span>
                         </a>

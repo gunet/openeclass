@@ -133,9 +133,9 @@ if (empty($_POST['email']) or !valid_email($_POST['email'])) {
         <form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
             <div class='form-group'>
-                <label class='col-sm-6 control-label-notes'>$lang_email</label>
+                <label for='email_id' class='col-sm-12 control-label-notes'>$lang_email</label>
                 <div class='col-sm-12'>
-                    <input class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
+                    <input id='email_id' class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
                 </div>
             </div>
             <div class='form-group mt-5'>

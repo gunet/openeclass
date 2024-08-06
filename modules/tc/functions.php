@@ -111,7 +111,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
         $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
-        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend, $langImgFormsDes;
+        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend, $langImgFormsDes,
+        $langSettingSelect, $langSelect;
 
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
@@ -269,9 +270,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToGoogleMeetLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
-                <label for='title' class='col-12 control-label-notes'>$langLink:</label>
+                <label for='title_id' class='col-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
-                    <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>                
+                    <input id='title_id' class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>                
                 </div>
             </div>";
         }
@@ -281,9 +282,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://teams.live.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToMicrosoftTeamsLinkText</a></div>";
 
             $tool_content .= "<div class='form-group mt-4'>
-                            <label for='title' class='col-sm-12 control-label-notes'>$langLink:</label>
+                            <label for='microsoft_teams_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50' $disabled>
+                                <input id='microsoft_teams_link_id' class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50' $disabled>
                             </div>
                         </div>";
         }
@@ -313,9 +314,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToZoomLinkText</a></div>";
                 }
                 $tool_content .= "<div class='form-group'>
-                    <label for='title' class='col-12 control-label-notes'>$langLink:</label>
+                    <label for='zoom_link_id' class='col-12 control-label-notes'>$langLink:</label>
                     <div class='col-12'>
-                        <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
+                        <input id='zoom_link_id' class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
                     </div>
                 </div>";
             }
@@ -327,9 +328,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToWebexLinkText</a></div>";
             }
             $tool_content .= "<div class='form-group'>
-                <label for='title' class='col-sm-12 control-label-notes'>$langLink:</label>
+                <label for='webex_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
-                    <input class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50' $disabled>
+                    <input id='webex_link_id' class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50' $disabled>
                 </div>
             </div>";
         }
@@ -337,7 +338,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "<div class='form-group mt-4'>
             <label for='title' class='col-12 control-label-notes'>$langTitle:</label>
             <div class='col-12'>
-
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
             </div>
         </div>
@@ -358,7 +358,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             <div class='col-sm-12'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                         <input class='mt-0' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                         <span class='checkmark'></span></label>
                     </span>
@@ -371,7 +371,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $en_recordings = has_enable_recordings($server_id);
         if ($en_recordings == 'true') {
             $tool_content .= "<div class='form-group mt-4'>
-                <label for='group_button' class='col-sm-12 control-label-notes mb-2'>$langBBBRecord</label>
+                <div class='col-sm-12 control-label-notes mb-2'>$langBBBRecord</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -389,7 +389,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>";
         }
         $tool_content .= "<div class='form-group mt-4'>
-            <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewBBBSessionStatus:</label>
+            <div class='col-sm-12 control-label-notes mb-2'>$langNewBBBSessionStatus:</div>
             <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -407,7 +407,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langAnnouncements</label>
             <div class='col-sm-12'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='addAnnouncement' value='1'><span class='checkmark'></span>$langBBBAnnDisplay
                       </label>
                     </div>
@@ -491,7 +491,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='notifyUsers' value='1'><span class='checkmark'></span>$langBBBNotifyUsers
                       </label>
                     </div>
@@ -499,7 +499,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         </div>
     
         <div class='form-group mt-4'>
-            <label for='user-list' class='col-sm-12 control-label-notes'>$langBBBExternalUsers:</label>
+            <div class='col-sm-12 control-label-notes'>$langBBBExternalUsers:</div>
             <div class='col-sm-12'>
                 <table id='user-list' class='table'>
                     <thead>
@@ -548,7 +548,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 <div class='form-group mt-4'>
                     <div class='col-sm-6'>
                         <div class='btn btn-primary newExtUserAdd'>
-    $langInsertUserInfo
+                            $langInsertUserInfo
                         </div>
                     </div>
                 </div>
@@ -559,7 +559,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='notifyExternalUsers' value='1'><span class='checkmark'></span>$langBBBNotifyExternalUsers
                       </label>
                     </div>
@@ -569,16 +569,16 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
     if ($tc_type != 'jitsi' and $tc_type != 'googlemeet') {
         $tool_content .= "<div class='clearfix mt-4'>
                             <a role='button' data-bs-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
-                                 <h5 class='panel-heading' style='margin-bottom: 0px;'>
+                                 <div class='panel-heading' style='margin-bottom: 0px;'>
                                        <span class='fa fa-chevron-down fa-fw'></span> $langReadMore
-                                 </h5>
+                                 </div>
                             </a>
                           </div>";
         $tool_content .= "<div class='collapse $options_show' id='MoreInfo'>
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'><span class='checkmark'></span>$langBBBmuteOnStart
                       </label>
                     </div>
@@ -587,7 +587,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='lockSettingsDisableMic' $checked_lockSettingsDisableMic value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableMic
                       </label>
                     </div>
@@ -596,7 +596,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='lockSettingsDisableCam' $checked_lockSettingsDisableCam value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableCam
                       </label>
                     </div>
@@ -605,7 +605,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'><span class='checkmark'></span>$langBBBwebcamsOnlyForModerator
                       </label>
                     </div>
@@ -614,7 +614,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='lockSettingsDisablePrivateChat' $checked_lockSettingsDisablePrivateChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePrivateChat
                       </label>
                     </div>
@@ -623,7 +623,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='lockSettingsDisablePublicChat' $checked_lockSettingsDisablePublicChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePublicChat
                       </label>
                     </div>
@@ -632,7 +632,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='lockSettingsDisableNote' $checked_lockSettingsDisableNote value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableNote
                       </label>
                     </div>
@@ -641,7 +641,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='lockSettingsHideUserList' $checked_lockSettingsHideUserList value='1'><span class='checkmark'></span>$langBBBlockSettingsHideUserList
                       </label>
                     </div>
@@ -650,7 +650,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                     <label class='label-container'>
+                     <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'><span class='checkmark'></span>$langBBBHideParticipants
                       </label>
 

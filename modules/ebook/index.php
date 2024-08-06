@@ -142,8 +142,7 @@ if ($is_editor) {
                
 
                 <div class='row mt-4'>
-                      
-                      <div class='col-12 infotext TextBold'>$langMaxFileSize" . ini_get('upload_max_filesize') . "</div>
+                    <div class='col-12 infotext TextBold'>$langMaxFileSize" . ini_get('upload_max_filesize') . "</div>
                 </div>
 
                

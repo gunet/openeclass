@@ -163,7 +163,7 @@ if (isset($_GET['scale_id'])) {
                        
 
                         <div class='row form-group mt-4'>
-                            <label class='col-12 control-label-notes mb-1'>$langScales</label>
+                            <div class='col-12 control-label-notes mb-1'>$langScales</div>
                             <div class='col-12'>
                                 <div class='table-responsive mt-0'>
                                     <table class='table-default' id='scale_table'>
@@ -283,7 +283,7 @@ if (isset($_GET['scale_id'])) {
                         <tr class='list-header'>
                             <th>$langTitle</th>
                             <th>$langGradebookMEANS</th>
-                            <th class='text-end'>" . icon('fa-cogs') . "</th>
+                            <th aria-label='$langSettingSelect' class='text-end'>" . icon('fa-cogs') . "</th>
                         </tr>
                     </thead>
                     <tbody>

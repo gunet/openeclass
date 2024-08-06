@@ -239,7 +239,7 @@ if (isset($_GET['mid'])) {
                                     $out .= "
 
                                             <div class='form-group mt-4'>
-                                                <label for='title' class='col-sm-12 control-label-notes'>$langSendTo</label>
+                                                <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                 <div class='col-sm-12'>
                                                     <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
@@ -274,10 +274,10 @@ if (isset($_GET['mid'])) {
                                             $out .= "
 
                                             <div class='form-group mt-4'>
-                                                <label for='body' class='col-sm-12 control-label-notes'>$langFileName</label>
+                                                <label for='fileID' class='col-sm-12 control-label-notes'>$langFileName</label>
                                                 <div class='col-sm-12'>" .
                                                     fileSizeHidenInput() . "
-                                                    <input type='file' name='file' size='35'>
+                                                    <input id='fileID' type='file' name='file' size='35'>
                                                 </div>
                                             </div>";
                                         }
@@ -287,7 +287,7 @@ if (isset($_GET['mid'])) {
                                             <div class='form-group mt-4'>
                                                 <div class='col-sm-10 col-sm-offset-2'>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label='$langSelect'>
                                                                 <input type='checkbox' name='mailing' value='1' checked>
                                                                 <span class='checkmark'></span>
                                                                 " . q($langMailToUsers) . "
@@ -389,7 +389,7 @@ if (isset($_GET['mid'])) {
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='title' class='col-sm-12 control-label-notes'>$langSendTo</label>
+                                                    <label for='select-recipients-forward' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                     <div class='col-sm-12'>
                                                         <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
 
@@ -418,7 +418,7 @@ if (isset($_GET['mid'])) {
                                             $out .= "
 
                                                 <div class='form-group attachment-section mt-4'>
-                                                    <label class='col-sm-12 control-label-notes'>$langAttachedFile</label>
+                                                    <div class='col-sm-12 control-label-notes'>$langAttachedFile</div>
                                                     <div class='col-sm-8'>
                                                         <p class='form-control-static'>
                                                             <input type='hidden' name='keepAttachment' value='{$msg->id}'>
@@ -436,10 +436,10 @@ if (isset($_GET['mid'])) {
                                             enableCheckFileSize();
 
                                         $out .= "<div class='form-group mt-4'>
-                                                    <label for='body' class='col-sm-12 control-label-notes'>$langFileName</label>
+                                                    <label for='fileID' class='col-sm-12 control-label-notes'>$langFileName</label>
                                                     <div class='col-sm-12'>" .
                                                         fileSizeHidenInput() . "
-                                                        <input type='file' name='file' size='35'>
+                                                        <input id='fileID' type='file' name='file' size='35'>
                                                     </div>
                                                 </div>";
                                         }
@@ -448,7 +448,7 @@ if (isset($_GET['mid'])) {
                                                 <div class='form-group mt-4'>
                                                     <div class='col-sm-10 col-sm-offset-2'>
                                                             <div class='checkbox'>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label='$langSelect'>
                                                                     <input type='checkbox' name='mailing' value='1' checked>
                                                                     <span class='checkmark'></span>
                                                                     " . q($langMailToUsers) . "
@@ -682,7 +682,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "         <th>$langSender</th>
                       <th style='width:15%;'>$langDate</th>
-                      <th style='width:10%;' class='option-btn-cell'><i class='fa fa-cogs'></i></th>
+                      <th style='width:10%;' class='option-btn-cell' aria-label='$langSettingSelect'><i class='fa fa-cogs'></i></th>
                     </tr>
                 </thead>
                 <tbody>

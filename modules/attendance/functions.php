@@ -506,7 +506,8 @@ function add_attendance_other_activity($attendance_id) {
 
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
-           $langAttendanceActivityDate, $language, $head_content, $urlAppend, $langImgFormsDes;
+           $langAttendanceActivityDate, $language, $head_content, $urlAppend, 
+           $langImgFormsDes, $langSelect;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -553,20 +554,20 @@ function add_attendance_other_activity($attendance_id) {
                     if (!isset($contentToModify)) $contentToModify = "";
                     @$tool_content .= "
                         <div class='form-group'>
-                            <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle</label>
+                            <label for='actTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
                             <div class='col-sm-12'>
-                                <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
+                                <input id='actTitle' type='text' class='form-control' name='actTitle' value='$titleToModify'/>
                             </div>
                         </div>
                         <div class='form-group".($date_error ? " has-error" : "")." mt-4'>
-                            <label for='date' class='col-sm-6 control-label-notes'>$langAttendanceActivityDate</label>
+                            <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langAttendanceActivityDate</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='date' id='startdatepicker' value='" . datetime_remove_seconds($date) . "'/>
                                 <span class='help-block'>$date_error</span>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='actDesc' class='col-sm-6 control-label-notes'>$langDescription</label>
+                            <label for='actDesc' class='col-sm-12 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                                 " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
                             </div>
@@ -574,7 +575,7 @@ function add_attendance_other_activity($attendance_id) {
                     if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto attendance mechanism
                         $tool_content .= "<div class='form-group mt-4'>
                                 <div class='col-sm-12'>
-                                    <label class='label-container'><input type='checkbox' value='1' name='auto' ";
+                                    <label class='label-container' aria-label='$langSelect'><input type='checkbox' value='1' name='auto' ";
                         if ($auto) {
                             $tool_content .= " checked";
                         }
@@ -791,10 +792,10 @@ function new_attendance() {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
-                    <label class='col-12 control-label-notes'>$langNewAttendance2</label></div>
+                    <label for='titleID' class='col-12 control-label-notes'>$langNewAttendance2</label></div>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <div class='col-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title'>
+                            <input id='titleID' class='form-control' type='text' placeholder='$langTitle' name='title'>
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
@@ -802,7 +803,7 @@ function new_attendance() {
                         
                             <div class='form-group mt-4".($start_date_error ? " has-error" : "")."'>
                                 <div class='col-12'>
-                                    <label class='control-label-notes'>$langStart</label>
+                                    <label for='start_date' class='control-label-notes'>$langStart</label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
@@ -813,7 +814,7 @@ function new_attendance() {
                       
                             <div class='form-group mt-4".($end_date_error ? " has-error" : "")."'>
                                 <div class='col-12'>
-                                    <label class='control-label-notes'>$langEnd</label>
+                                    <label for='end_date' class='control-label-notes'>$langEnd</label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
@@ -823,9 +824,9 @@ function new_attendance() {
                        
                    
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
-                        <label class='col-12 control-label-notes'>$langAttendanceLimitNumber</label>
+                        <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
+                            <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
@@ -1069,9 +1070,9 @@ function attendance_settings($attendance_id) {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <label class='col-12 control-label-notes'>$langTitle</label>
+                        <label for='title_id' class='col-12 control-label-notes'>$langTitle</label>
                         <div class='col-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
+                            <input id='title_id' class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
@@ -1079,7 +1080,7 @@ function attendance_settings($attendance_id) {
                        
                             <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
-                                    <label class='control-label-notes'>$langStart</label>
+                                    <label for='start_date' class='control-label-notes'>$langStart</label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
@@ -1090,7 +1091,7 @@ function attendance_settings($attendance_id) {
                        
                             <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
-                                    <label class='control-label-notes'>$langEnd</label>
+                                    <label for='end_date' class='control-label-notes'>$langEnd</label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
@@ -1100,9 +1101,9 @@ function attendance_settings($attendance_id) {
                         
                     
                     <div class='form-group".($limit_error ? " has-error" : "")." mt-4'>
-                        <label class='col-12 control-label-notes'>$langAttendanceLimitNumber:</label>
+                        <label for='limitId' class='col-12 control-label-notes'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' name='limit' value='$limit'/>
+                            <input id='limitId' class='form-control' type='text' name='limit' value='$limit'/>
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
@@ -1173,10 +1174,10 @@ function user_attendance_settings($attendance_id) {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
                     <div class='form-group'>
-                        <label class='col-12'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
+                        <div class='col-12'><span class='help-block'>$langAttendanceInfoForUsers</span></div>
                     </div>
                     <div class='form-group mt-4'>
-                    <label class='col-sm-6 control-label-notes mb-2'>$langUserDuration</label>
+                    <div class='col-sm-12 control-label-notes mb-2'>$langUserDuration</div>
                         <div class='col-sm-12'>
                             <div class='radio mb-2'>
                               <label>
@@ -1238,7 +1239,7 @@ function user_attendance_settings($attendance_id) {
                                     </thead>
                                     <tr>
                                       <td>
-                                        <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
+                                        <select aria-label='$langStudents' class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td>
                                         <div class='d-flex align-items-center flex-column gap-2'>
@@ -1247,7 +1248,7 @@ function user_attendance_settings($attendance_id) {
                                         </div>
                                       </td>
                                       <td width='40%'>
-                                        <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
+                                        <select aria-label='$langParticipate' class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
                                       </td>
                                     </tr>
                                 </table>

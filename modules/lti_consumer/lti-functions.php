@@ -100,7 +100,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                         </div>
         
                                         <div class='form-group mt-4'>
-                                            <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</label>
+                                            <div class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</div>
                                             <div class='col-sm-12'>
                                                 <div class='radio mb-2'>
                                                 <label>
@@ -285,7 +285,7 @@ function edit_lti_app($session_id) {
         </div>
 
         <div class='form-group mt-4'>
-            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus:</label>
+            <div class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus:</div>
             <div class='col-sm-12'>
                     <div class='radio mb-2'>
                         <label>
@@ -304,8 +304,8 @@ function edit_lti_app($session_id) {
 
                     if (!isset($course_id)) {
                         $tool_content .= "<div class='form-group mt-4' id='courses-list'>
-                            <label class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
-                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
+                            <div class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></div>
                             <div class='col-sm-12'>
                                 <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course

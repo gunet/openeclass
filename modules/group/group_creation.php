@@ -74,21 +74,21 @@ if (isset($_GET['all'])) {
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
-            <label for='group_quantity' class='col-sm-6 control-label-notes'>$langNewGroups</label>
+            <label for='group_quantity' class='col-sm-12 control-label-notes'>$langNewGroups</label>
             <div class='col-sm-12'>
                 <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
                 <span class='help-block Accent-200-cl'>".Session::getError('group_quantity')."</span>
             </div>
         </div>
         <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-4'>
-            <label for='group_max' class='col-sm-6 control-label-notes'>$langNewGroupMembers</label>
+            <label for='group_max' class='col-sm-12 control-label-notes'>$langNewGroupMembers</label>
             <div class='col-sm-12'>
                 <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
                 <span class='help-block Accent-200-cl'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
+            <label for='selectcategory' class='col-sm-12 control-label-notes'>$langCategory:</label>
             <div class='col-12'>
                 <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
@@ -147,29 +147,29 @@ if (isset($_GET['all'])) {
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
-            <label class='col-sm-12 control-label-notes'>$langGroupName</label>
+            <label for='group_name_id' class='col-sm-12 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>
-                <input class='form-control' type=text name='group_name' size='40'>
+                <input id='group_name_id' class='form-control' type=text name='group_name' size='40'>
                 <span class='help-block Accent-200-cl'>".Session::getError('group_name')."</span>
             </div>
         </div>
         <div class='form-group mt-4'>
-          <label class='col-sm-12 control-label-notes'>$langDescription $langOptional</label>
-          <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
+          <label for='description_id' class='col-sm-12 control-label-notes'>$langDescription $langOptional</label>
+          <div class='col-sm-12'><textarea id='description_id' class='form-control' name='description' rows='2' cols='60'></textarea></div>
         </div>
        
            
                 <div class='form-group".(Session::getError('group_max') ? " has-error" : "")." mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langNewGroupMembers</label>
+                    <label for='group_max_id' class='col-sm-12 control-label-notes'>$langNewGroupMembers</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' type=text name='group_max' value='$group_max_value' size=2>
+                        <input id='group_max_id' class='form-control' type=text name='group_max' value='$group_max_value' size=2>
                         <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
                     </div>
                 </div>
             
             
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes mb-2'>$langGroupTutor</label>
+                    <label for='select-tutor' class='col-sm-12 control-label-notes mb-2'>$langGroupTutor</label>
                     <div class='col-sm-12'>
                         $tool_content_tutor
                     </div>
@@ -224,7 +224,7 @@ if (isset($_GET['all'])) {
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-select h-100 rounded-0' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select aria-label='$langNoGroupStudents' class='form-select h-100 rounded-0' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -237,7 +237,7 @@ if (isset($_GET['all'])) {
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-select h-100 rounded-0' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select aria-label='$langGroupMembers' class='form-select h-100 rounded-0' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>

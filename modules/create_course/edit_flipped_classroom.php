@@ -137,6 +137,8 @@ function checkedBoxes() {
 </script>
 hContent;
 
+$tool_content .= "<h1 aria-label='$toolName'></h1>";
+
 register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
 if (empty($prof_names)) {
     $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
@@ -191,6 +193,7 @@ $num_of_new_units = 0;
 if (!isset($_POST['next'])) {
     $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours = '';
      $tool_content .= "
+     <h2 aria-label='$langEdit'></h2>
      <div class='row'>
         
         <div class='col-lg-6 col-12'>
@@ -236,8 +239,8 @@ if (!isset($_POST['next'])) {
             
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
-                        <label for='goals' class='control-label-notes me-2'>$langGoals:</label>
-                        <a href='#!' name='add_g' id='add_g'>
+                        <div class='control-label-notes me-2'>$langGoals:</div>
+                        <a href='#!' name='add_g' id='add_g' aria-label='$langAdd'>
                             <span class='fa fa-plus-circle add-unit-btn'>
                             </span>
                         </a>
@@ -252,7 +255,7 @@ if (!isset($_POST['next'])) {
                                         ";
                                     if($count_goals > 1){
 
-                                        $tool_content.="<a href='#!' class='btn_remove mt-2' name='remove_g' id='rm_g_".$count_goals."'>
+                                        $tool_content.="<a href='#!' class='btn_remove mt-2' name='remove_g' id='rm_g_".$count_goals."' aria-label='$langDelete'>
                                                 <span class='fa fa-minus-circle text-danger'>
                                                 </span>
                                             </a>";
@@ -276,7 +279,7 @@ if (!isset($_POST['next'])) {
                 </div>";
                 if($q4->lectures_model==2){
                     $tool_content .="<div class='form-group mt-4'>
-                        <label for='localize' class='col-sm-12 control-label-notes mb-1'>$langLectModel:</label>
+                        <div class='col-sm-12 control-label-notes mb-1'>$langLectModel:</div>
                         <div class='row'>
                             <div class='col-md-6 col-12 radio'>
                                 <label>
@@ -294,7 +297,7 @@ if (!isset($_POST['next'])) {
                     </div>";
                 }else{
                     $tool_content .="<div class='form-group mt-4'>
-                        <label for='localize' class='col-sm-12 control-label-notes'>$langLectModel:</label>
+                        <div class='col-sm-12 control-label-notes'>$langLectModel:</div>
                         <div class='row'>
                             <div class='col-md-6 col-12 radio'>
                                 <label>
@@ -314,7 +317,7 @@ if (!isset($_POST['next'])) {
             $tool_content .="
                     <div class='form-group mt-4'>
                         <div class='col-12 mb-2'>
-                            <label for='units' class='control-label-notes'>$langUnits:</label>
+                            <div class='control-label-notes'>$langUnits:</div>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -329,11 +332,11 @@ if (!isset($_POST['next'])) {
                                             <input name='units[]' id='unit_$count_units' type='text' class='form-control ms-2' value='" . $unit->title . "' placeholder='$langUnits'>
                                             <input name='ids[]' type='hidden' value='$unit->id'>";
                             if ($count_units == 1) {
-                                $tool_content .= "<a href='#!' id='add_u' class='mt-2'>
+                                $tool_content .= "<a href='#!' id='add_u' class='mt-2' aria-label='$langAdd'>
                                                     <span class='fa fa-plus-circle add-unit-btn'></span>
                                                 </a>";
                             } else {
-                                $tool_content .= "<a href='#!' class='btn_remove p-0 mt-2 btn disabled' name='remove_u' id='rm_u_" . $count_units . "' disabled>
+                                $tool_content .= "<a aria-label='$langDelete' href='#!' class='btn_remove p-0 mt-2 btn disabled' name='remove_u' id='rm_u_" . $count_units . "' disabled>
                                                     <span class='fa fa-minus-circle text-danger'></span>
                                                   </a>";
                             }
@@ -450,7 +453,7 @@ if (!isset($_POST['next'])) {
 
             }
 
-            $tool_content .= " <div class='form-wrapper'>
+            $tool_content .= "<h2 aria-label='$langEdit'></h2> <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">        
                 <div class='card border-0'>
                     <div class='card-header border-0 px-0'>
@@ -492,7 +495,7 @@ if (!isset($_POST['next'])) {
                     foreach ($_SESSION['units'] as $utitle){
                         if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
-                                  <td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input><span class='checkmark'></span></label></td>";
+                                  <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input><span class='checkmark'></span></label></td>";
                               $newUnitId ++;
                               $j++;
                         }
@@ -527,7 +530,7 @@ if (!isset($_POST['next'])) {
 
                         if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
-                                    <td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input><span class='checkmark'></span></label></td>";
+                                    <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input><span class='checkmark'></span></label></td>";
                              $newUnitId ++;
                                 $k++;
                         }
@@ -565,7 +568,7 @@ if (!isset($_POST['next'])) {
 
                         if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
-                                  <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input><span class='checkmark'></span></label></td>";
+                                  <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input><span class='checkmark'></span></label></td>";
                               $newUnitId++;
                               $z++;
                         }

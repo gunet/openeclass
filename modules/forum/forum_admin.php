@@ -95,19 +95,19 @@ if (isset($_GET['forumgo'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
             <div class='form-group'>
-                <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory</label>
+                <label for='cat_title' class='col-sm-12 control-label-notes'>$langCategory</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' id='cat_title' value='$ctg' disabled>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName</label>
+                <label for='forum_name' class='col-sm-12 control-label-notes'>$langForName</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' name='forum_name' id='forum_name'>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <label for='forum_desc' class='col-sm-6 control-label-notes'>$langDescription</label>
+                <label for='forum_desc' class='col-sm-12 control-label-notes'>$langDescription</label>
                 <div class='col-sm-12'>
                     <textarea class='form-control' name='forum_desc' id='forum_desc' rows='3'></textarea>
                 </div>
@@ -141,13 +141,13 @@ elseif (isset($_GET['forumgoedit'])) {
                 <input type='hidden' name='forum_id' value='$forum_id'>
                 <fieldset>
                 <div class='form-group'>
-                    <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName</label>
+                    <label for='forum_name' class='col-sm-12 control-label-notes'>$langForName</label>
                     <div class='col-sm-12'>
                         <input name='forum_name' type='text' class='form-control' id='forum_name' value='" . q($forum_name) . "'>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='forum_desc' class='col-sm-6 control-label-notes'>$langDescription</label>
+                    <label for='forum_desc' class='col-sm-12 control-label-notes'>$langDescription</label>
                     <div class='col-sm-12'>
                         <textarea name='forum_desc' id='forum_desc' class='form-control' cols='47' rows='3'>" . q($forum_desc) . "</textarea>
                     </div>
@@ -156,7 +156,7 @@ elseif (isset($_GET['forumgoedit'])) {
     $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $forum_id);
     if ($result->c == 0) {//group forums cannot change category
         $tool_content .= "
-                    <label for='cat_id' class='col-sm-6 control-label-notes'>$langChangeCat</label>
+                    <label for='cat_id' class='col-sm-12 control-label-notes'>$langChangeCat</label>
                     <div class='col-sm-12'>
                     <select name='cat_id' id='cat_id' class='form-select'>";
         $result = Database::get()->queryArray("SELECT `id`, `cat_title` FROM `forum_category` WHERE `course_id` = ?d AND `cat_order` <> ?d", $course_id, -1);
@@ -201,7 +201,7 @@ elseif (isset($_GET['forumcatedit'])) {
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
         <div class='form-group'>
-            <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory</label>
+            <label for='cat_title' class='col-sm-12 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>
                 <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCategory' value='$cat_title'>
             </div>
@@ -540,8 +540,8 @@ elseif (isset($_GET['forumgodel'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
         <div class='form-group'>
-            <label class='col-sm-12 control-label-notes mb-2'>$langForumPostRating</label>
-            <div class='col-sm-9'>
+            <div class='col-sm-12 control-label-notes mb-2'>$langForumPostRating</div>
+            <div class='col-sm-12'>
                 <div class='radio mb-2'>
                     <label><input type='radio' value='1' name='r_radio' $checkEn/>$langRatingEn</label>
                 </div>

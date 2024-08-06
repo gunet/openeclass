@@ -97,7 +97,7 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
-                    <label class='label-container'>
+                    <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='status' checked>
                         <span class='checkmark'></span> 
                         $langViewShow
@@ -109,7 +109,7 @@ if ($is_editor) {
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='chat_activity' >
                             <span class='checkmark'></span> 
                             $langChatActivity
@@ -119,7 +119,7 @@ if ($is_editor) {
             </div>";
         }
 
-        $tool_content .= "<div class='form-group mt-4'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers</label></div>
+        $tool_content .= "<div class='form-group mt-4'><label for='select-chatusers' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers</label></div>
             <div class='form-group mt-4'>
                 <div class='col-sm-12'>
                     <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
@@ -260,13 +260,13 @@ if ($is_editor) {
         $tool_content .= "</div>";
 
         $tool_content .= "<div class='form-group mt-4'>";
-        $tool_content .= "<label for='desc' class='col-sm-6 control-label-notes'>$langDescription</label>";
+        $tool_content .= "<label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group mt-4'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel control-label-notes'>$langChatToSpecUsers</label></div>
+        $tool_content .= "<div class='form-group mt-4'><label for='select-chatusers' class='col-sm-offset-2 col-sm-10 control-panel control-label-notes'>$langChatToSpecUsers</label></div>
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
                 <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
@@ -310,7 +310,7 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
-                    <label class='label-container'>
+                    <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='status' $checked_status>
                         <span class='checkmark'></span>
                         $langViewShow
@@ -324,7 +324,7 @@ if ($is_editor) {
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='chat_activity' $activity_status>
                             <span class='checkmark'></span>
                             $langChatActivity

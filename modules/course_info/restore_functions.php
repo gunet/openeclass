@@ -323,7 +323,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes;
+    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes,$langSelect;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -363,7 +363,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='course_code' class='col-12 control-label-notes'>$langLanguage</label>
+                            <label for='course_lang' class='col-12 control-label-notes'>$langLanguage</label>
                             <div class='col-sm-12'>
                                 " . lang_select_options('course_lang') . "
                             </div>
@@ -376,13 +376,13 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label class='col-12 control-label-notes'>$langCourseDescription</label>
+                            <label for='course_desc' class='col-12 control-label-notes'>$langCourseDescription</label>
                             <div class='col-sm-12'>
                                 " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label class='col-12 control-label-notes'>$langFaculty</label>
+                            <label for='dialog-set-value' class='col-12 control-label-notes'>$langFaculty</label>
                             <div class='col-sm-12'>
                                 " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
                             </div>
@@ -400,7 +400,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label class='col-12 control-label-notes mb-2'>$langUsersWillAdd</label>
+                            <div class='control-label-notes mb-2'>$langUsersWillAdd</div>
 
                             <div class='col-sm-12'>
                             <div class='radio mb-2'>
@@ -427,7 +427,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                         (isset($GLOBALS['course_code'])? '': "
                         <div class='form-group mt-4'>
                             <div class='col-sm-12'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                                     <span class='checkmark'></span>
                                     $langMultiRegType

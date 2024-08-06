@@ -69,9 +69,9 @@ if (isset($_GET['delete'])) {
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                     <input type='hidden' name='id' value='$ebook_id' />
                     <div class='form-group'>
-                        <label class='col-sm-6 control-label-notes'>$langTitle</label>
+                        <label for='ebook_title_id' class='col-sm-12 control-label-notes'>$langTitle</label>
                         <div class='col-sm-12 input-group'>
-                            <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
+                            <input id='ebook_title_id' class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
                             <span class='input-group-btn'>
                                 <button class='btn submitAdminBtn mt-1' name='title_submit' type='submit' value='$langModify'>$langModify</button>
                             </span>

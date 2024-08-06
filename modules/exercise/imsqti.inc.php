@@ -93,9 +93,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             <form class='form-horizontal' role='form' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes' method='post'>
                 <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >                    
                     <div class='form-group'>
-                        <label class='col-sm-12 control-label-notes'>$langIMSQTIUploadFile:</label>
+                        <label for='uploadedPackageId' class='col-sm-12 control-label-notes'>$langIMSQTIUploadFile:</label>
                         <div class='col-sm-12'>
-                            <input type='file' name='uploadedPackage'>                            
+                            <input type='file' name='uploadedPackage' id='uploadedPackageId'>                            
                         </div>
                     </div>
                 <div class='form-group mt-4'>

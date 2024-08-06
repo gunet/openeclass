@@ -151,7 +151,7 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label class='col-sm-12 control-label-notes'>$langExpirationDate:</label>
+                            <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>$langExpirationDate:</label>
                             <div class='col-sm-12'>
                                 <div class='input-group'>
                                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
@@ -164,7 +164,7 @@ $tool_content .= "
                         <div class='form-group mt-4'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label='$langSelect'>
                                         <input name='customEmailBody' id='customEmailBody' type='checkbox'> 
                                         <span class='checkmark'></span>
                                         $langCustomEmailBody
@@ -181,7 +181,7 @@ $tool_content .= "
                         </div>
 
                         <div class='form-group emailbody hidden mt-4'>
-                            <label for='email_body' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
+                            <label for='emailNewBodyEditor' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
                             <div class='col-sm-12'>" .
                                 rich_text_editor('emailNewBodyEditor', 4, 20, $default_email_body) . "
                             </div>
@@ -189,7 +189,7 @@ $tool_content .= "
                         </div>
 
                         <div class='form-group customMailHelp hidden mt-4'>
-                            <label for='email_body' class='col-sm-12 control-label-notes'></label>
+                            <div class='col-sm-12 control-label-notes'></div>
                             <div class='col-sm-12'>
                                 <div class='alert alert-info'>
                                     $langInvitationCustomEmail

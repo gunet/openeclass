@@ -199,13 +199,13 @@ if (isset($_POST['submit'])) {
         <form class='form-horizontal' role='form' action='$form_url' method='post' enctype='multipart/form-data'>
             <input type='hidden' name='parent_post' value='$parent_post'>
             <div class='form-group'>
-              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage</label>
+              <label for='message' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
               <div class='col-sm-12'>
                 " . rich_text_editor('message', 15, 70, $reply) . "
               </div>
             </div>
             <div class='form-group mt-4'>
-                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile</label>
+                <label for='topic_file' class='col-sm-12 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     <input type='file' name='topic_file' id='topic_file' size='35'>
                     " . fileSizeHidenInput() . "

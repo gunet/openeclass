@@ -144,7 +144,7 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSubject</label>
                 <div class='col-sm-12'>
-                    <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
+                    <input id='title' type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
                 </div>
             </div>";
     }
@@ -153,7 +153,7 @@ if (isset($_POST['submit'])) {
         $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $myrow->topic_filepath;
         $attached_file_content =
             "<div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes'>$langAttachedFile</label>
+                <label for='filedelete' class='col-sm-12 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     " .q($myrow->topic_filename) ." (" . format_file_size(filesize($actual_filename)) . ") <a id='filedelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;delete=$myrow->id'>
                         <span class='fa-solid fa-xmark fa-fw text-danger' data-original-title='$langDeleteAttachment' title='' data-toggle='tooltip'></span>
@@ -173,7 +173,7 @@ if (isset($_POST['submit'])) {
                 $subject_field
                 $attached_file_content
                 <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langBodyMessage</label>
+                    <label for='message' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
                     <div class='col-sm-12'>
                         " . rich_text_editor('message', 10, 50, $message) . "
                     </div>

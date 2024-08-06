@@ -116,12 +116,12 @@ function form($user) {
     $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit p-0 border-0 mt-2 mb-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
-        <div class='col-sm-12'><label class='control-label-notes'>$langRequest $langOfCourse:</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
-        <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>$user</small></div>
-        <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>$userprof</small></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langRequest $langOfCourse:</div>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>$user</small></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>$userprof</small></div>
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
-              <textarea name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
+              <textarea aria-label='$langRequestReasons' name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
             </div>
 	    </div>
         <div class='form-group mt-4'>

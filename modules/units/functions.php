@@ -1880,8 +1880,8 @@ function edit_res($resource_id) {
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
         $content .= "<div class='form-group'>
-                <label class='col-sm-6 control-label-notes'>$langTitle</label>
-                <div class='col-sm-12'><input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
+                <label for='restitle_id' class='col-sm-6 control-label-notes'>$langTitle</label>
+                <div class='col-sm-12'><input id='restitle_id' class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
                 </div>";
         $message = $langDescription;
     } else {
@@ -1889,7 +1889,7 @@ function edit_res($resource_id) {
     }
     $content .= "
                 <div class='form-group mt-4'>
-                    <label class='col-sm-6 control-label-notes'>$message</label>
+                    <label for='rescomments' class='col-sm-6 control-label-notes'>$message</label>
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
                 </div>
                 <div class='col-12 mt-5 d-flex justify-content-end'>

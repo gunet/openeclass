@@ -71,19 +71,19 @@ function new_publish_ltiapp() {
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
+                            <label for='lti_key' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
                             </div>
                         </div>        
                         <div class='form-group mt-4'>
-                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
+                            <label for='lti_secret' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' value='$secret' size='32' />
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</label>
+                            <div class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</div>
                             <div class='col-sm-12'>
                                 <div class='radio mb-2'>
                                 <label>
@@ -158,19 +158,19 @@ function edit_publish_ltiapp($id) {
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
+            <label for='lti_key' class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
             </div>
         </div>        
         <div class='form-group mt-4'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
+            <label for='lti_secret' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' value='$secret' size='32' />
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus</label>
+            <div class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus</div>
             <div class='col-sm-12'>
                 <div class='radio mb-2'>
                   <label>
@@ -225,27 +225,27 @@ function show_publish_ltiapp($id) {
 
     $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'><form class='form-horizontal'><fieldset>
             <div class='form-group'>
-                <label class='col-sm-6 control-label-notes'>$langLTIProviderUrl</label>
+                <label for='ProviderUrl' class='col-sm-6 control-label-notes'>$langLTIProviderUrl</label>
                 <div class='col-sm-12'>
-                    <input type='text' class='form-control' value='$launchurl' readonly>
+                    <input id='ProviderUrl' type='text' class='form-control' value='$launchurl' readonly>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
+                <label for='ProviderKey' class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
                 <div class='col-sm-12'>
-                    <input type='text' class='form-control' value='$key' readonly>
+                    <input id='ProviderKey' type='text' class='form-control' value='$key' readonly>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
+                <label for='ProviderSecret' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
                 <div class='col-sm-12'>
-                    <input type='text' class='form-control' value='$secret' readonly>
+                    <input id='ProviderSecret' type='text' class='form-control' value='$secret' readonly>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes'>$langLTIProviderCartridgeUrl</label>
+                <label for='ProviderCartridgeUrl' class='col-sm-6 control-label-notes'>$langLTIProviderCartridgeUrl</label>
                 <div class='col-sm-12'>
-                    <input type='text' class='form-control' value='$cartridgeurl' readonly>
+                    <input id='ProviderCartridgeUrl' type='text' class='form-control' value='$cartridgeurl' readonly>
                 </div>
             </div>
         </fieldset></form></div></div><p>$langLTIProviderHelp1</p><p>$langLTIProviderHelp2</p>";

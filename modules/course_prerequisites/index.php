@@ -126,12 +126,12 @@ hContent;
     <div class='d-lg-flex gap-4 mt-5'>
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
-                <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><label>$langNote</label> $langNewCoursePrerequisiteHelp2</span></div>
+                <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNewCoursePrerequisiteHelp2</span></div>
                 <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
                     <input type='hidden' name='addcommit' value='1'>
                     <fieldset>
                         <div class='form-group'>
-                        <label for='courses-select' class='col-sm-6 control-label-notes'>$langCourse:</label>
+                        <label for='courses-select' class='col-sm-12 control-label-notes'>$langCourse:</label>
                         <div class='col-sm-12'>
                             <select id='courses-select' class='form-select' name='prerequisite_course'></select>
                         </div>
@@ -139,7 +139,7 @@ hContent;
                         <div class='form-group mt-4'>
                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                             <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                            <a href='index.php?course=" . $course_code . "'' class='btn cancelAdminBtn'>$langCancel</a>
+                            <a href='index.php?course=" . $course_code . "' class='btn cancelAdminBtn'>$langCancel</a>
                         </div>
                         </div>
                     </fieldset>

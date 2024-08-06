@@ -76,15 +76,15 @@ function display_sso_exception_form($uid) {
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?exception=TRUE' method='post'>
             <fieldset>
                 <div class='form-group'>
-                    <label class='col-sm-6 control-label-notes'>$langName</label>
+                    <label for='name_id' class='col-sm-12 control-label-notes'>$langName</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='$langName' value='" . q($firstname) . "' disabled  />
+                        <input id='name_id' class='form-control' type='text' name='$langName' value='" . q($firstname) . "' disabled  />
                     </div>
                 </div>                          
                 <div class='form-group mt-4'>
-                    <label for='$langComments' class='col-sm-6 control-label-notes'>$langComments</label>
+                    <label for='comments_id' class='col-sm-12 control-label-notes'>$langComments</label>
                     <div class='col-sm-12'>
-                        <textarea class='form-control' rows='6' name='comments'></textarea>
+                        <textarea id='comments_id' class='form-control' rows='6' name='comments'></textarea>
                     </div>
                 </div>
                 <div class='form-group mt-5'>

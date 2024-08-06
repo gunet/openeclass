@@ -321,22 +321,22 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 $tool_content .= "
                 <div id='critDiv$crit'>
                 <div class='form-group'>
-                    <label for='title[$crit]' class='col-12 control-label-notes mb-1 mt-4'>$langRubricCrit:</label>
+                    <div class='col-12 control-label-notes mb-1 mt-4'>$langRubricCrit:</div>
                     <div class='col-12'>
                         <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required>                    
-                        <label for='weight[$crit]' class='col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%):</label>                    
+                        <div class='col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%):</div>                    
                         <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>
                     </div>";
                 if($crit>0) {
                     $tool_content .= "
                         <div class='col-sm-1'>
-                                <a href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>
+                            <a aria-label='$langDelete' href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>
                         </div>";
                 }
                 $tool_content .= "</div>";
                 $tool_content .= "
                     <div class='row form-group mt-4'>
-                        <label class='col-12 control-label-notes mb-1'>$langScales:</label>
+                        <div class='col-12 control-label-notes mb-1'>$langScales:</div>
                         <div class='col-12'>
                             <div class='table-responsive mt-0'>
                                 <table class='table-default' id='scale_table$crit'>
@@ -344,7 +344,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                                         <tr>
                                             <th style='width:47%'>$langWording</th>
                                             <th style='width:47%'>$langValue</th>
-                                            <th class='text-center option-btn-cell' style='width:5%'>" . icon('fa-cogs') . "</th>
+                                            <th aria-label='$langSettingSelect' class='text-center option-btn-cell' style='width:5%'>" . icon('fa-cogs') . "</th>
                                         </tr>
                                     </thead>
                                     <tbody>";
@@ -358,7 +358,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                         if ($i == 0) {
                             $tool_content .= "<td class='text-center'></td>";
                         } else {
-                            $tool_content .= "<td class='text-center'><a href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a></td>";
+                            $tool_content .= "<td class='text-center'><a aria-label='$langDelete' href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a></td>";
                         }
                         $tool_content .= "</tr>";
                         $i++;
@@ -389,7 +389,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langScales:</label>
+                    <div class='col-sm-12 control-label-notes'>$langScales:</div>
                     <div class='col-sm-12'>
                         <div class='table-responsive mt-0'>
                             <table class='table-default' id='scale_table0'>
@@ -440,14 +440,14 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
 
     $tool_content .= "
                     <div class='row form-group mt-4'>
-                        <label for='rubric_options' class='col-12 control-label-notes mb-1'>$langConfig</label>
+                        <div class='col-12 control-label-notes mb-1'>$langConfig</div>
                         <div class='col-12'>
                             <div class='table-responsive mt-0'>
                                 <table class='table-default' id='rubric_opts'>
                                     <tr>
                                         <td colspan='2'>
                                             <div class='checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label='$langSelect'>
                                                     <input type='checkbox' id='user_button0' name='options0' value='$opt1' $sel_opt1 />
                                                     <span class='checkmark'></span>
                                                     $langRubricOption1
@@ -458,7 +458,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                                     <tr>
                                         <td colspan='2'>
                                             <div class='checkbox'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label='$langSelect'>
                                                     <input type='checkbox' id='user_button1' name='options1' value='$opt2' $sel_opt2/>
                                                     <span class='checkmark'></span>
                                                     $langRubricOption2
@@ -583,7 +583,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     <tr class='list-header'>
                         <th>$langName</th>
                         <th>$langWorks</th>
-                        <th class='text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
+                        <th aria-label='$langSettingSelect' class='text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -607,7 +607,7 @@ function show_rubric ($rubric_id): void
 
     global $tool_content, $course_code, $course_id,
         $langName, $langDescription, $langRubricCriteria,
-        $langEdit,$langDelete,$langConfirmDelete;
+        $langEdit,$langDelete,$langConfirmDelete, $langSettingSelect;
 
     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
 
@@ -628,7 +628,7 @@ function show_rubric ($rubric_id): void
                 <th>$langName</th>
                 <th>$langDescription</th>
                 <th>$langRubricCriteria</th>
-                <th class='text-end' rowspan='2'>" . icon('fa-cogs') . "</th>
+                <th aria-label='$langSettingSelect' class='text-end' rowspan='2'>" . icon('fa-cogs') . "</th>
             </thead>
             <tr>
                 <td>$rubric->name</td>

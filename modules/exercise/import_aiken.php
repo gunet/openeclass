@@ -77,8 +77,8 @@ $tool_content .= "
                     </div>
                     <div class='form-group mt-4'>
                         <div class='col-12'>                            
-                            <label class='col-12 control-label-notes mb-1'>$langGradebookGrade:</label>
-                            <input class='form-control' type='number' style='width:70px' step='0.01' name='weight' value='$weight' />
+                            <label for='weight_id' class='col-12 control-label-notes mb-1'>$langGradebookGrade:</label>
+                            <input id='weight_id' class='form-control' type='number' style='width:70px' step='0.01' name='weight' value='$weight' />
                             <span class='help-block'>($langAikenWithNoGrades)</span>
                         </div>
                     </div>

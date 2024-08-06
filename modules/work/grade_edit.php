@@ -127,7 +127,7 @@ function show_edit_form($id, $sid, $assign) {
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
            $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
            $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview,
-           $langOpenCoursesFiles, $urlAppend, $langImgFormsDes;
+           $langOpenCoursesFiles, $urlAppend, $langImgFormsDes, $langSelect;
 
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
@@ -219,34 +219,34 @@ function show_edit_form($id, $sid, $assign) {
                                     <input type='hidden' name='assignment' value='$id' />
                                     <input type='hidden' name='submission' value='$row->id' />
                                     <div class='btn-group float-end'>
-                                        <a class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langDeletePeerReview' data-bs-original-title=''>
+                                        <a aria-label='$langDeletePeerReview' class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langDeletePeerReview' data-bs-original-title=''>
                                             <span class='fa-solid fa-xmark'></span>
                                         </a>
                                     </div>
                                     <div class='row form-group mt-4'>
-                                        <label class='col-12 control-label-notes'>$m[username]</label>
+                                        <div class='col-12 control-label-notes'>$m[username]</div>
                                         $uid_2_name &nbsp; $message
                                     </div>
 
                                     <div class='row form-group mt-4'>
-                                        <label class='col-12 control-label-notes'>$m[sub_date]</label>
+                                        <div class='col-12 control-label-notes'>$m[sub_date]</div>
                                         <div class='col-12'>
                                             <span>".q($row->date_submit)."</span>
                                         </div>
                                     </div>
                                     <div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-                                        <label for='grade' class='col-12 control-label-notes'>$langGradeRubric</label>
+                                        <div class='col-12 control-label-notes'>$langGradeRubric</div>
                                         $grade_field
                                         <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
                                     </div>
                                     <div class='row form-group mt-4'>
-                                        <label class='col-12 control-label-notes'>$langGradebookGrade</label>
+                                        <div class='col-12 control-label-notes'>$langGradebookGrade</div>
                                         <div class='col-12'>
                                             <span>".q($row->grade)."</span>
                                         </div>
                                     </div>
                                     <div class='row form-group mt-4'>
-                                        <label class='col-12 control-label-notes'>$m[gradecomments]</label>
+                                        <div class='col-12 control-label-notes'>$m[gradecomments]</div>
                                         <div class='col-12'>
                                             <span>".q($row->comments)."</span>
                                         </div>
@@ -263,7 +263,7 @@ function show_edit_form($id, $sid, $assign) {
                                     $tool_content .= "<div class='form-group'>
                                         <div class='col-sm-9 col-sm-offset-3'>
                                             <div class='checkbox'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label='$langSelect'>
                                                     <input type='checkbox' value='1' id='email_button' name='email' checked>
                                                     <span class='checkmark'></span>
                                                     $m[email_users]
@@ -304,7 +304,7 @@ function show_edit_form($id, $sid, $assign) {
                 // online text
                 $submission = "
                         <div class='row form-group mt-4'>
-							<label class='col-12 control-label-notes'>$langWorkOnlineText</label>
+							<div class='col-12 control-label-notes'>$langWorkOnlineText</div>
                             <div class='col-12'>
                                 <p class='form-control-static'>$sub->submission_text</p>
 							</div>
@@ -322,14 +322,14 @@ function show_edit_form($id, $sid, $assign) {
                 }, $files));
                 $submission = "
                         <div class='row form-group mt-4'>
-							<label class='col-12 control-label-notes'>$langOpenCoursesFiles</label>
+							<div class='col-12 control-label-notes'>$langOpenCoursesFiles</div>
 							<div class='col-12'><p class='form-control-static'>$links</p></div>
 						</div>";
             } else {
                 // single file
                 $submission = "
                         <div class='row form-group mt-4'>
-							<label class='col-12 control-label-notes'>$m[filename]</label>
+							<div class='col-12 control-label-notes'>$m[filename]</div>
 							<div class='col-12'>
                                 <p class='form-control-static'>
                                     <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
@@ -349,7 +349,7 @@ function show_edit_form($id, $sid, $assign) {
 					foreach ($scales as $scale) {
 						$scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
 					}
-					$grade_field = "<div class='col-12'><select name='grade' class='form-select' id='scales'>$scale_options</select></div>";
+					$grade_field = "<div class='col-12'><select aria-label='$scale_options' name='grade' class='form-select' id='scales'>$scale_options</select></div>";
 				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
@@ -383,7 +383,7 @@ function show_edit_form($id, $sid, $assign) {
 							$criteria_list .= "</ul></li>";
 						}
 					}
-					$grade_field = "<div class='col-12' id='myModalLabel'><h5>$rubric->name</h5>
+					$grade_field = "<div class='col-12' id='myModalLabel'><div class='TextBold large-text'>$rubric->name</div>
 								<table class='table-default'>
 								<tr>
 									<td>
@@ -397,7 +397,7 @@ function show_edit_form($id, $sid, $assign) {
 				}
 			} else {
 				$grade_field = "<div class='col-12'>"
-							  . "<input class='form-control' type='text' name='grade' maxlength='4' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)"
+							  . "<input aria-label='$m[max_grade]' class='form-control' type='text' name='grade' maxlength='4' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)"
 							  . "</div>";
 
 			}
@@ -411,14 +411,14 @@ function show_edit_form($id, $sid, $assign) {
 				<fieldset>
 
 					<div class='row form-group'>
-						<label class='col-12 control-label-notes'>$m[username]</label>
+						<div class='col-12 control-label-notes'>$m[username]</div>
 						<div class='col-12'>
 						$uid_2_name $group_submission
 						</div>
 					</div>
 
 					<div class='row form-group mt-4'>
-						<label class='col-12 control-label-notes'>$m[sub_date]</label>
+						<div class='col-12 control-label-notes'>$m[sub_date]</div>
 						<div class='col-12'>
 							".format_locale_date(strtotime($sub->submission_date))."
 						</div>
@@ -427,7 +427,7 @@ function show_edit_form($id, $sid, $assign) {
 					$submission
 
 					<div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-						<label for='grade' class='col-12 control-label-notes'>$langGradebookGrade</label>
+						<div class='col-12 control-label-notes'>$langGradebookGrade</div>
 							$grade_field
 							<span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>
@@ -451,7 +451,7 @@ function show_edit_form($id, $sid, $assign) {
                        $tool_content .= "<div class='form-group mt-4'>
 						<div class='col-12'>
 							<div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
 									<input type='checkbox' value='1' id='email_button' name='email' checked>
                                     <span class='checkmark'></span>
 									$m[email_users]

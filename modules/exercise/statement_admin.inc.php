@@ -239,7 +239,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     <div class='row form-group mt-4'>
                         <div class='col-12'>
                             <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
                                     <span class='checkmark'></span>
                                     $langDeletePicture
@@ -283,7 +283,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             ";
         $tool_content .= "<div class='row form-group mt-4'>
-                <label class='col-12 control-label-notes mb-1'>$langAnswerType</label>
+                <div class='col-12 control-label-notes mb-1'>$langAnswerType</div>
                 <div class='col-12'>
                     <div class='radio'>
                       <label>

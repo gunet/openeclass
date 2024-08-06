@@ -2329,7 +2329,8 @@ function certificate_settings($element, $element_id = 0) {
     global $tool_content, $head_content, $course_code,
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
-           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlServer, $urlAppend, $langImgFormsDes;
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, 
+           $urlServer, $urlAppend, $langImgFormsDes, $langSelect;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2453,17 +2454,17 @@ function certificate_settings($element, $element_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
                     <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
                     <div class='col-sm-12'>
-                        <textarea class='form-control' name='description' rows='6'>$description</textarea>
+                        <textarea id='description' class='form-control' name='description' rows='6'>$description</textarea>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-6 control-label-notes'>";
+                    <label for='selectWithIcon' class='col-sm-6 control-label-notes'>";
                     $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
                         <div class='col-sm-12'>";
@@ -2491,24 +2492,24 @@ function certificate_settings($element, $element_id = 0) {
                 </div>
 
                 <div class='form-group mt-4'>
-                    <label for='message' class='col-sm-12 control-label-notes'>$langMessage</label>
+                    <label for='message_id' class='col-sm-12 control-label-notes'>$langMessage</label>
                     <div class='col-sm-12'>
-                        <textarea class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
+                        <textarea id='message_id' class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
                     </div>
                 </div>
                 
                 <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-12 control-label-notes'>$langpublisher</label>
+                    <label for='issuer_id' class='col-sm-12 control-label-notes'>$langpublisher</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='issuer' value='$issuer'>
+                        <input id='issuer_id' class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langCertificateDeadline:</label>
+                    <div class='col-sm-12 control-label-notes'>$langCertificateDeadline:</div>
                     <div class='col-sm-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                     <input class='mt-0' type='checkbox' id='enablecertdeadline' name='enablecertdeadline' value='1' $check_certdeadline>
                                     <span class='checkmark'></span>
                                 </label>

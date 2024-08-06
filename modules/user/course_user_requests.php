@@ -107,12 +107,12 @@ if (isset($_GET['rid'])) {
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
-        <div class='col-sm-12'><label class='control-label-notes'>$langReasonReject</label></div>
-        <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>" . q(uid_to_name($uid, 'fullname')) . "</small></div>
-        <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>" . q(uid_to_name($_GET['u'], 'fullname')) . "</small></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langReasonReject</div></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>" . q(uid_to_name($uid, 'fullname')) . "</small></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>" . q(uid_to_name($_GET['u'], 'fullname')) . "</small></div>
         <div class='form-group mt-3'>
             <div class='col-sm-12'>
-              <textarea name='rej_content' rows='8' cols='80'></textarea>
+              <textarea aria-label='$langTypeOutMessage' name='rej_content' rows='8' cols='80'></textarea>
             </div>
     </div>
         <div class='form-group mt-3'>

@@ -126,7 +126,7 @@ function show_assignments() {
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>
                     <input type='hidden' name='group_id' value='$group_id'>
                     <div class='form-group mt-4'>
-                        <label for='title' class='col-sm-6 control-label-notes'>$langWorks ($langSelect)</label>
+                        <div class='col-sm-6 control-label-notes'>$langWorks ($langSelect)</div>
                         <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
@@ -143,9 +143,9 @@ function show_assignments() {
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='title' class='col-sm-6 control-label-notes'>$m[comments]</label>
+                        <label for='comments_id' class='col-sm-6 control-label-notes'>$m[comments]</label>
                         <div class='col-sm-12'>
-                            <textarea name='comments' rows='4' cols='60' class='form-control'></textarea>
+                            <textarea id='comments_id' name='comments' rows='4' cols='60' class='form-control'></textarea>
                         </div>
                     </div>
                     <div class='form-group mt-5'>

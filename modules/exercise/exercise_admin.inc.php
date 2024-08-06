@@ -342,7 +342,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>
                  
                  <div class='row form-group mt-4'>
-                     <label for='exerciseDescription' class='col-12 control-label-notes mb-1'>$langViewShow</label>
+                     <div class='col-12 control-label-notes mb-1'>$langViewShow</div>
                      <div class='col-12'>
                          <div class='radio'>
                            <label>
@@ -365,9 +365,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                    <label class='col-12 control-label-notes mb-1'>$langExerciseScaleGrade</label>
+                    <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>$langExerciseScaleGrade</label>
                     <div class='col-12'>
-                        <select name='exerciseRange' class='form-select'>
+                        <select name='exerciseRange' class='form-select' id='exerciseRangeId'>
                             <option value".($exerciseRange == 0 ? ' selected' : '').">-- $langExerciseNoScaleGrade --</option>
                             <option value='10'" . ($exerciseRange == 10 ? " selected" : "") .">0-10</option>
                             <option value='20'" . ($exerciseRange == 20 ? " selected" : "") .">0-20</option>
@@ -409,7 +409,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                     <label for='exerciseTempSave' class='col-12 control-label-notes mb-1'>$langTemporarySave</label>
+                     <div class='col-12 control-label-notes mb-1'>$langTemporarySave</div>
                      <div class='col-12'>
                         <div class='row'>
                             <div class='col-md-6 col-12 radio'>
@@ -450,7 +450,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
                 $tool_content .= "
                 <div class='row form-group mt-4'>
-                     <label for='dispresults' class='col-12 control-label-notes mb-1'>$langAnswers</label>
+                     <div class='col-12 control-label-notes mb-1'>$langAnswers</div>
                      <div class='col-12'>
                          <div class='radio'>
                            <label>
@@ -479,7 +479,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                     <label for='dispresults' class='col-12 control-label-notes mb-1'>$langScore</label>
+                     <div class='col-12 control-label-notes mb-1'>$langScore</div>
                      <div class='col-12'>
                          <div class='radio'>
                            <label>
@@ -508,7 +508,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                    <label class='col-12 control-label-notes mb-1'>$m[WorkAssignTo]</label>
+                    <div class='control-label-notes mb-1'>$m[WorkAssignTo]</div>
                     <div class='col-12'>
                         <div class='radio'>
                           <label>
@@ -565,10 +565,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 </div>
 
                 <div class='row form-group mt-4'>
-                    <label class='col-12 control-label-notes mb-1'>$langContinueAttempt</label>
+                    <div class='col-12 control-label-notes mb-1'>$langContinueAttempt</div>
                     <div class='col-12'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
                                 <input id='continueAttempt' name='continueAttempt' type='checkbox' " . ($continueTimeLimit? 'checked' : '') . ">
                                 <span class='checkmark'></span>
                                 $langContinueAttemptExplanation
@@ -580,10 +580,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 </div>
 
                 <div class='row form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes mb-1'>$langExercisePreventCopy:</label>
+                    <div class='col-sm-12 control-label-notes mb-1'>$langExercisePreventCopy:</div>
                     <div class='col-12'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
                                 <input id='jsPreventCopy' name='jsPreventCopy' type='checkbox' " . ($exercisePreventCopy? 'checked' : '') . ">
                                 <span class='checkmark'></span>
                                 $langExercisePreventCopyExplanation

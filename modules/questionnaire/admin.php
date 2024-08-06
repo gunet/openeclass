@@ -434,10 +434,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4'>
-                <label class='col-sm-12 control-label-notes'>$langResults:</label>
+                <div class='col-sm-12 control-label-notes'>$langResults:</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1'" .
                         ((isset($poll->anonymized) && $poll->anonymized) ? ' checked' : '') .
                         ($attempt_counter > 0 ? ' disabled' : '') . ">
@@ -446,7 +446,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </label>
                     </div>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='PollShowResults' id='PollShowResults' value='1' ".((isset($poll->show_results) && $poll->show_results) ? 'checked' : '').">
                             <span class='checkmark'></span>
                             $langPollShowResults
@@ -455,10 +455,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>
             <div class='form-group mt-4'>
-                <label class='col-sm-12 control-label-notes'>$langAnswers:</label>
+                <div class='col-sm-12 control-label-notes'>$langAnswers:</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='MulSubmissions' id='MulSubmissions' value='1'" .
                             ((isset($poll->multiple_submissions) && $poll->multiple_submissions) ? ' checked' : '') .">
                             <span class='checkmark'></span>
@@ -466,7 +466,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </label>
                     </div>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='DefaultAnswer' id='DefaultAnswer' value='1'" .
                             ((isset($poll->default_answer) && $poll->default_answer) ? ' checked' : '') . ">
                             <span class='checkmark'></span>
@@ -477,7 +477,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4'>
-                <label class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:</label>
+                <div class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
@@ -510,7 +510,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
+                                <select aria-label='$langStudents' class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
                                 ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                 </select>
                               </td>
@@ -518,7 +518,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <input class='btn btn-outline-primary h-40px rounded-2' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary h-40px rounded-2 mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
-                                <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                <select aria-label='$m[WorkAssignTo]' class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
                                 ".((isset($assignee_options)) ? $assignee_options : '')."
                                 </select>
                               </td>
@@ -528,7 +528,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group" . (Session::getError('survey_type') ? ' has-error' : '')." mt-4'>
-                <label class='col-sm-12 control-label-notes'>$langType:</label>
+                <div class='col-sm-12 control-label-notes'>$langType:</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
@@ -568,10 +568,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group mt-4 display_position ".($PollSurveyType == POLL_QUICK ? "" : "hide")." '>
-                <label class='col-sm-12 control-label-notes'>$langShowFront:</label>
+                <div class='col-sm-12 control-label-notes'>$langShowFront:</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='display_position' id='display_position' value='1'" .
                             ((isset($poll->display_position) && $poll->display_position) ? ' checked' : '') . ">
                             <span class='checkmark'></span>
@@ -605,7 +605,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "<div class='container-fluid form-group $lti_hidden px-lg-3 py-lg-4 p-3 mt-4' id='lti_label'>
                 <h3>$langLimesurveyLTIOptions</h3>
                 <div class='form-group $lti_hidden'>
-                    <label for='title' class='col-sm-12 control-label-notes'>$langLimesurveyApp:</label>
+                    <label for='lti_templates' class='col-sm-12 control-label-notes'>$langLimesurveyApp:</label>
                     <div class='col-sm-12'>
                       <select name='lti_template' class='form-select' id='lti_templates' $lti_disabled>
                             $lti_template_options
@@ -748,7 +748,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </script>";
         $tool_content .= "
             <div class='form-group mt-4'>
-                <label for='answerType' class='col-sm-12 control-label-notes'>$langType:</label>
+                <div class='col-sm-12 control-label-notes'>$langType:</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
@@ -858,7 +858,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='card-body'>
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>
                     <div class='form-group'>
-                        <label class='col-12 control-label-notes'>$langPollAddAnswer:</label>
+                        <div class='col-12 control-label-notes'>$langPollAddAnswer:</div>
                         <div class='col-12'>
                           <input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
                         </div>

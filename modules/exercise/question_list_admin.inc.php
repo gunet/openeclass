@@ -460,7 +460,7 @@ if ($nbrQuestions) {
                 <div class='form-group'>
                     <div class='col-sm-12'>
                         <div class='checkbox' id='divcheckboxShuffleQuestions'>
-                            <label class='form-control-static label-container'>
+                            <label class='form-control-static label-container' aria-label='$langSelect'>
                                  <input id='checkboxShuffleQuestions' type='checkbox' name='enableShuffleQuestions' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
                                  <span class='checkmark'></span>
                                  $langShuffleQuestions
@@ -469,7 +469,7 @@ if ($nbrQuestions) {
                      </div>
                      <div class='col-sm-12'>
                         <div class='checkbox' id='divcheckboxRandomQuestions'>
-                            <label class='form-control-static label-container'>
+                            <label class='form-control-static label-container' aria-label='$langSelect'>
                                 <input id='checkboxRandomQuestions'type='checkbox' name='enableRandomQuestions' value='1' ".(($randomQuestions > 0)? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langChooseRandomQuestions                                                     

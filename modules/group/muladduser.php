@@ -148,7 +148,7 @@ $tool_content .= "
                <div class='col-sm-12 radio'><label><input type='radio' name='type' value='am' $checked_am> $langAm</label></div>
             </div>
             <div class='form-group mt-4'>
-                <textarea class='form-control' name='user_info' rows='10'>" . q(Session::get('user_info')) . "</textarea>
+                <textarea aria-label='$langTypeOutMessage' class='form-control' name='user_info' rows='10'>" . q(Session::get('user_info')) . "</textarea>
             </div>
             <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                 <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
