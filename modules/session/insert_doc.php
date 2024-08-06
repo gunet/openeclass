@@ -31,7 +31,7 @@ function list_documents($sid, $cid) {
     global $webDir, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
     $langDate, $langAddModulesButton, $langChoice,
-    $langNoDocuments, $course_code, $langCommonDocs, $pageName;
+    $langNoDocuments, $course_code, $langCommonDocs, $pageName, $langSelect;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     $path = get_dir_path('path');
@@ -144,7 +144,7 @@ function list_documents($sid, $cid) {
                     $vis = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */
@@ -197,7 +197,7 @@ function upload_file($sid){
                             <div class='d-lg-flex gap-4 mt-4'>
                                 <div class='flex-grow-1'>
                                     <div class='form-wrapper form-edit rounded'>
-                                        <form role='form' class='form-horizontal' action='resource.php?course=$course_code&session=$sid' method='post' enctype='multipart/form-data'>
+                                        <form role='form' class='form-horizontal' action='resource.php?course=$course_code&session=$sid&doc_deliverable=1' method='post' enctype='multipart/form-data'>
                                             <fieldset>
 
                                                 <input type='hidden' name='id' value='$sid' />

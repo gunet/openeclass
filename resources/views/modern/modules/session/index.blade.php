@@ -57,12 +57,12 @@
                         <div class='control-label-notes mt-lg-0 mt-2'>{{ trans('langSearch') }}:</div>
                         <div class='flex-fill'>
                             <form class='d-flex gap-3 flex-wrap flex-lg-nowrap' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
-                                <select class='form-select mb-0 mt-0' name='remoteType'>
+                                <select class='form-select mb-0 mt-0' name='remoteType' aria-label="{{ trans('langSelect') }}">
                                     <option value='-1'>{{ trans('langALLSessions') }}</option>
                                     <option value='0' {!! $remoteType==0 ? 'selected' : '' !!}>{{ trans('langNotRemote') }}</option>
                                     <option value='1' {!! $remoteType==1 ? 'selected' : '' !!}>{{ trans('langRemote') }}</option>
                                 </select>
-                                <select class='form-select mb-0 mt-0' name='sessionType'>
+                                <select class='form-select mb-0 mt-0' name='sessionType' aria-label="{{ trans('langSelect') }}">
                                     <option value='other'>{{ trans('langALLSessions') }}</option>
                                     <option value='one' {!! $sessionType=='one' ? 'selected' : '' !!}>{{ trans('langIndividualS') }}</option>
                                     <option value='group' {!! $sessionType=='group' ? 'selected' : '' !!}>{{ trans('langGroupS') }}</option>

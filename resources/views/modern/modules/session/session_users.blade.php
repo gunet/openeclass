@@ -60,7 +60,7 @@
                                                 <tr>
                                                     <th>{{ trans('langUsers') }}</th>
                                                     <th>{{ trans('langRegisteredUsers') }}</th>
-                                                    <th></th>
+                                                    <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>

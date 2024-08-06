@@ -177,7 +177,7 @@ if(isset($_POST['delete_resource'])){
     }
     Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$_POST['delete_resource'],MYSESSIONS);
     Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_POST['delete_resource']);
-    Session::flash('message',$langSessionResourseDeleted);
+    Session::flash('message',$langDocDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
 }
@@ -414,6 +414,8 @@ if(count($docs) > 0){
     }
 }
 $data['docs'] = $docs;
+
+$data['comments_text'] = rich_text_editor('comments', 5, 40, '');
 
 $data['users_participants'] = session_participants_ids($sessionID);
 

@@ -37,6 +37,17 @@
 
                                         <input type='hidden' name='resourceId' value='{{ $resource_id }}'>
 
+                                        <div class='d-flex justify-content-end'>
+                                            <div>
+                                                <sup>
+                                                    <small>(<span class='text-danger'>*</span>)</small>
+                                                </sup> 
+                                                <small class='text-muted'>
+                                                    {{ trans('langCPFFieldRequired') }}
+                                                </small>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle')}}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>

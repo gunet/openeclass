@@ -34,7 +34,7 @@ function list_session_attendance($sid,$cid) {
 
     global $course_id, $course_code, $tool_content, $langChoice, 
             $langNotExistAttendanceCriterion, $langUser, $langSubmit, 
-            $langChooseParticipatedUser, $langAddParticipationUser;
+            $langChooseParticipatedUser, $langAddParticipationUser, $langSelect;
 
     // Firstly check if exists criterio for attendance completion.
     $cr_exists = Database::get()->querySingle("SELECT id FROM badge_criterion 
@@ -73,7 +73,7 @@ function list_session_attendance($sid,$cid) {
                 $tool_content .= " <tr>
                                         <td>
                                             <div class='d-flex justify-content-start align-items-center gap-2'>
-                                                <label class='label-container'>
+                                                <label class='label-container' aria-label='$langSelect'>
                                                     <input name='submit_attendance[]' value='{$p->participants}' type='checkbox' $selected>
                                                     <span class='checkmark'></span>
                                                 </label>

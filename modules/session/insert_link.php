@@ -27,7 +27,7 @@ require_once 'include/course_settings.php';
 function list_session_links($sid,$cid) {
     global $id, $course_id, $tool_content,
             $langNoCategory, $langAddModulesButton,
-            $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory;
+            $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM link 
                                             WHERE course_id = ?d 
@@ -69,7 +69,7 @@ function list_session_links($sid,$cid) {
                         $cat_description_text = '';
                     }
                     $tool_content .= "<tr>";
-                    $tool_content .= "<td><label class='label-container'><input type='checkbox' name='link[]' value='$linkcatrow->id'><span class='checkmark'></span></label></td>";
+                    $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='link[]' value='$linkcatrow->id'><span class='checkmark'></span></label></td>";
                     $tool_content .= "<td>".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
                             q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a>$cat_description_text</td>";
                     $tool_content .= "</tr>";
@@ -97,7 +97,7 @@ function list_session_links($sid,$cid) {
                 } else {
                     $link_description_text = '';
                 }
-                $tool_content .= "<tr><td><label class='label-container'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+                $tool_content .= "<tr><td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($entry['title']) . "</a>$link_description_text</td>";
                 $tool_content .= "</tr>";
             }
@@ -124,7 +124,7 @@ function list_session_links($sid,$cid) {
                     } else {
                         $sb_link_description_text = '';
                     }
-                    $tool_content .= "<tr><td><label class='label-container'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+                    $tool_content .= "<tr><td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                     $tool_content .= "<td>&nbsp;&nbsp;".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a>$sb_link_description_text</td>";
                     $tool_content .= "</tr>";
                 }

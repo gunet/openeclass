@@ -85,7 +85,7 @@
                                                 <th>{{ trans('langDate') }}</th>
                                                 <th>{{ trans('langStart') }}</th>
                                                 <th>{{ trans('langFinish') }}</th>
-                                                <th></th>
+                                                <th>{{ trans('langStatement') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>

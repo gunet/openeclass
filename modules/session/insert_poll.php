@@ -26,7 +26,7 @@
 function list_session_polls($sid,$cid) {
 
     global $course_id, $course_code, $urlServer, $tool_content, $id,
-            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton;
+            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d AND active = 1", $course_id);
     $pollinfo = array();
@@ -54,7 +54,7 @@ function list_session_polls($sid,$cid) {
                 $description_text = '';
             }
             $tool_content .= "<tr>";
-            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }

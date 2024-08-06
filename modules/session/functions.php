@@ -1617,7 +1617,8 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, 
            $langWithSubmittedUploadedFile, $langWithTCComplited, 
            $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria, 
-           $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting, $langWithAttendanceRegistrationByConsultant;
+           $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting, 
+           $langWithAttendanceRegistrationByConsultant, $langSettingSelect;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -1806,7 +1807,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                                                                     <th>
                                                                                         $langValue
                                                                                     </th>
-                                                                                    <th>
+                                                                                    <th aria-label='$langSettingSelect'>
                                                                                         <i class='fa fa-cogs'></i>
                                                                                     </th>
                                                                                 </tr></thead>";
@@ -2107,7 +2108,7 @@ function display_session_available_assignments($element, $element_id, $activity_
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
            $langAddModulesButton, $langChoice, $langParticipateSimple,
-           $langOperator, $langGradebookGrade, $urlServer;
+           $langOperator, $langGradebookGrade, $urlServer, $langSelect;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $form_submit_name = 'add_assignment';
@@ -2171,7 +2172,7 @@ function display_session_available_assignments($element, $element_id, $activity_
                 "<td><input class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
             }
             $tool_content .=
-                "<td><label class='label-container'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                "<td><label class='label-container' aria-label='$langSelect'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                 "</tr>";
         }
         $tool_content .= "</table></div>
@@ -2194,7 +2195,7 @@ function display_session_available_documents($element, $element_id, $session_id 
     global $webDir, $tool_content,
             $langDirectory, $langUp, $langName, $langSize,
             $langDate, $langAddModulesButton, $langChoice,
-            $langNoDocuments, $course_code, $group_sql, $langNotFolders , $course_id, $langSettingSelect;
+            $langNoDocuments, $course_code, $group_sql, $langNotFolders , $course_id, $langSettingSelect, $langSelect;
 
     require_once 'modules/document/doc_init.php';
     require_once 'include/lib/mediaresource.factory.php';
@@ -2378,7 +2379,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                     $date = format_locale_date(strtotime($entry['date']), 'short', false);
                     $tool_content .= "<td>$size</td><td>$date</td>";
                 }
-                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
                 $counter++;
             }
@@ -2770,7 +2771,7 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
 function display_session_available_polls($element, $element_id, $session_id = 0, int $session_resource_id = 0) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
-            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton;
+            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton, $langSelect;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -2821,7 +2822,7 @@ function display_session_available_polls($element, $element_id, $session_id = 0,
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
-            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";

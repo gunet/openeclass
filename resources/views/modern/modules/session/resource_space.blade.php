@@ -185,7 +185,7 @@
                                                     <th>{{ trans('langReferencedObject') }}</th>
                                                     <th>{{ trans('langDate') }}</th>
                                                     @if(($is_consultant || $is_course_reviewer) && $is_criterion_completion)<th class='text-center'>{{ trans('langAlreadyBrowsed')}}</th>@endif
-                                                    <th class='text-end'></th>
+                                                    <th class='text-end' aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 </tr>
                                                 <tr></tr>
                                             </thead>
@@ -295,6 +295,17 @@
 
                                                 <input type='hidden' name='id' value='{{ $sessionID }}' />
 
+                                                <div class='d-flex justify-content-end'>
+                                                    <div>
+                                                        <sup>
+                                                            <small>(<span class='text-danger'>*</span>)</small>
+                                                        </sup> 
+                                                        <small class='text-muted'>
+                                                            {{ trans('langCPFFieldRequired') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+
                                                 <div class='form-group'>
                                                     <label for='file-upload' class='col-12 control-label-notes'>{{ trans('langDownloadFile') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
                                                     <input id='file-upload' type='file' name='file-upload'/>
@@ -308,8 +319,8 @@
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='comments' class='col-12 control-label-notes'>{{ trans('langComments') }}</label>
-                                                    {!! rich_text_editor('comments', 5, 40, '') !!}
+                                                    <label for='comments' class='col-12 control-label-notes'>{{ trans('langDescription') }}</label>
+                                                    {!! $comments_text !!}
                                                 </div>
 
                                                 @if(!$is_consultant)

@@ -80,6 +80,9 @@ if(isset($_POST['modify_resource'])){
         Session::flash('message',$langResourceCompleted);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
+    }else{
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/session/edit_resource.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_POST['resourceId']);
     }
 }
 

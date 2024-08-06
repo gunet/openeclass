@@ -236,15 +236,15 @@ $tool_content .= "
                             <p class='info_completion' style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
                             if(count($course_users) > 0 && !isset($_GET['user_rep'])){
                                 $tool_content .= "<div class='col-lg-6 col-12 mb-4'><form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                                                    <label class='control-label-notes'>$langSearchUser</label>
+                                                    <label for='form_id_user_report' class='control-label-notes'>$langSearchUser</label>
                                                     <div class='d-flex justify-content-start align-items-center gap-2'>
-                                                    <select class='form-select mt-0' name='form_user_report'>
+                                                    <select class='form-select mt-0' name='form_user_report' aria-label='$langSelect' id='form_id_user_report'>
                                                     <option value='0'>$langAllUsers</option>";
                                 foreach($course_users as $u){
                                     $is_selected = ($user_selected == $u->user_id) ? 'selected' : '';
                                     $tool_content .= "<option value='{$u->user_id}' $is_selected>" . participant_name($u->user_id) . "</option>";
                                 }
-                                $tool_content .= "</select><button type='submit' class='btn searchGroupBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch'>
+                                $tool_content .= "</select><button type='submit' class='btn searchGroupBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langSearch' aria-label='$langSearch'>
                                                                                     <i class='fa-solid fa-search'></i></button></div></form></div>";
                             }
                             foreach($users_actions as $key => $val){
