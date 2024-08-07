@@ -30,7 +30,7 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($tool_group[1] as $key2 => $tool)
                                     <li>
-                                        <a href="{!! $tool_group[2][$key2] !!}"
+                                        <a aria-label="{!! $tool !!}" href="{!! $tool_group[2][$key2] !!}"
                                            class='list-group-item d-flex justify-content-start align-items-start gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}
                                            data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" title="{!! $tool !!}">
                                             <i class="{{ $tool_group[3][$key2] }} mt-1 settings-icons"></i>

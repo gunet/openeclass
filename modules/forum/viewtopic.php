@@ -647,11 +647,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $content .= "
                 <span class='d-flex gap-2'>
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
-                        "&amp;topic=$topic&amp;forum=$forum'>" .
+                        "&amp;topic=$topic&amp;forum=$forum' aria-label='$langModify'>" .
                             "<span class='fa fa-edit pe-1' title='$langModify' data-bs-toggle='tooltip' " .
                                 "data-bs-original-title='$langModify' data-bs-placement='bottom'></span></a>" .
                     "<a class='delete-btn link-delete' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
-                        "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
+                        "&amp;topic=$topic&amp;forum=$forum&amp;delete=on' aria-label='$langDelete'>" .
                             "<span class='fa-solid fa-xmark' title='$langDelete' data-bs-toggle='tooltip' " .
                             "data-bs-original-title='$langDelete' data-bs-placement='bottom'></span></a>
                 </span>";

@@ -33,19 +33,15 @@
                             @foreach ($course_descs as $key => $course_desc)    
                                 <div class='col-12 mb-4'>      
                                     <div class='card panelCard px-lg-4 py-lg-3'>
-                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                           
-                                            
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>                                 
                                             <h3>
                                                 {{ $course_desc->title}}
                                                 @if ($course_desc->visible && $is_editor)
-                                                   
-                                                    <span data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom' class='label label-primary'>
+                                                    <a aria-label="{{ trans('langSeenToCourseHome') }}" data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'>
                                                         <i class='fa fa-eye'></i>
-                                                    </span>
+                                                    </a>
                                                 @endif
                                             </h3>
-                                            
                                             @if ($is_editor)
                                             
                                                 <div>

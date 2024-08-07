@@ -250,7 +250,7 @@ if ($total_categories > 0) {
                         if ($total_topics > 0 && $total_posts > 0) {
                             $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";
                             if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
-                                $tool_content .= "<a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>".icon('fa-comment-o', $langLastPost) ."</a>";
+                                $tool_content .= "<a aria-label='$langLastPost' href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>".icon('fa-comment-o', $langLastPost) ."</a>";
                             }
                             $tool_content .= "<br>$human_last_post_time</span></td>";
                         } else {

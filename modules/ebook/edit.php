@@ -287,7 +287,7 @@ if (isset($_GET['delete'])) {
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     <h3>$langEBookInfo</h3>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1' aria-label='$langEdit'>
                         <i class='fa-solid fa-edit fa-lg' title='$langEdit' data-bs-toggle='tooltip'></i>
                     </a>
                 </div>

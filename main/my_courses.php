@@ -116,22 +116,22 @@ if(isset($_GET['term'])){
                       $html .= "<div class='card-header border-0'>
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
                                     if($course->visible == 1){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse'>
+                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse' aria-label='$langRegCourse'>
                                             <i class='fa-solid fa-square-pen title-default fa-lg'></i>
                                         </button>";
                                     }
                                     if($course->visible == 2){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langOpenCourse'>
+                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langOpenCourse' aria-label='$langOpenCourse'>
                                             <i class='fa-solid fa-lock-open title-default fa-lg'></i>
                                         </button>";
                                     }
                                     if($course->visible == 0){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langClosedCourse'>
+                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langClosedCourse' aria-label='$langClosedCourse'>
                                             <i class='fa-solid fa-lock title-default fa-lg'></i>
                                         </button>";
                                     }
                                     if($course->visible == 3){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langInactiveCourse'>
+                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langInactiveCourse' aria-label='$langInactiveCourse'>
                                             <i class='fa-solid fa-triangle-exclamation title-default fa-lg'></i>
                                         </button>";
                                     }

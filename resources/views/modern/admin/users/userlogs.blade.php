@@ -57,7 +57,7 @@
                                 <div class="form-group mt-5">
                                     <div class="col-12 d-flex justify-content-end align-items-center gap-2">
                                         <input class="btn submitAdminBtn" type="submit" name="submit" value="{{ trans('langSubmit') }}">
-                                        <a class="btn cancelAdminBtn" href="listusers.php" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="{{ trans('langBack') }}" >
+                                        <a class="btn cancelAdminBtn" href="listusers.php" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="{{ trans('langBack') }}" aria-label="{{ trans('langBack') }}">
                                             <span class="fa fa-reply space-after-icon"></span>{{ trans('langBack') }}
                                         </a>
                                     </div>

@@ -130,9 +130,13 @@ $tool_content .= "</div>";
 
 $tool_content .= '<div class="float-end pt-4">
     <div id="toggle-view" class="btn-group gap-2">
-        <a id="plots-view" class="btn submitAdminBtn submitAdminBtnClassic active rounded-2"  data-bs-placement="top" title="'.$langPlots.'" data-bs-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>
-        <a id="list-view" class="btn submitAdminBtn submitAdminBtnClassic rounded-2"  data-bs-placement="top" title="'.$langDetails.'" data-bs-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>';
-$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn submitAdminBtn submitAdminBtnClassic rounded-2"  data-bs-placement="top" title="'.$langUsersLog.'" data-bs-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>':'';
+        <a id="plots-view" class="btn submitAdminBtn submitAdminBtnClassic active rounded-2" data-bs-placement="top" title="'.$langPlots.'" data-bs-toggle="tooltip" data-bs-original-title="'.$langPlots.'" aria-label="'.$langPlots.'">
+            <span class="fa fa-bar-chart" data-bs-toggle="tooltip" data-bs-placement="top"></span>
+        </a>
+        <a id="list-view" class="btn submitAdminBtn submitAdminBtnClassic rounded-2" data-bs-placement="top" title="'.$langDetails.'" data-bs-toggle="tooltip" data-bs-original-title="'.$langDetails.'" aria-label="'.$langDetails.'">
+            <span class="fa fa-list" data-bs-toggle="tooltip" data-bs-placement="top"></span>
+        </a>';
+$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn submitAdminBtn submitAdminBtnClassic rounded-2"  data-bs-placement="top" title="'.$langUsersLog.'" data-bs-toggle="tooltip" data-bs-original-title="'.$langUsersLog.'" aria-label="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>':'';
 
 $tool_content .= '</div>
 </div>';

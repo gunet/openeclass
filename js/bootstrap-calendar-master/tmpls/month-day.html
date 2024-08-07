@@ -10,7 +10,7 @@
 	<% if (events.length > 0) { %>
 		<div class="events-list w-100 d-flex justify-content-center align-items-center flex-wrap" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
 			<% _.each(events, function(event) { %>
-				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
+				<a aria-label="<%= event.title %>" href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
 					class="event <%= event['class'] %>" data-bs-toggle="tooltip"
 					title="<%= event.title %>">
 				</a>

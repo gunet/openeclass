@@ -2632,7 +2632,7 @@ function new_assignment() {
                                       <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output'></td>
                                       <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
                                       <td>
-                                          <a href='#' class='autojudge_remove_scenario' style='display: none;'>
+                                          <a href='#' class='autojudge_remove_scenario' style='display: none;' aria-label='$langDelete'>
                                             <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                           </a>
                                       </td>
@@ -4229,7 +4229,7 @@ function show_assignment_review($id, $display_graph_results = false) {
             } else {
                 $edit_grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
             }
-            $icon_field = "<a class='link' href='$edit_grade_link'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
+            $icon_field = "<a class='link' href='$edit_grade_link' aria-label='$langEdit'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
 
             $grade = Database::get()->querySingle("SELECT grade FROM assignment_grading_review WHERE id = ?d ", $row->id )->grade;
             if (!empty($grade)) {
@@ -4241,7 +4241,7 @@ function show_assignment_review($id, $display_graph_results = false) {
                 } else {
                     $grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 }
-                $grade_field = "<a class='link' href='$grade_link'><span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
+                $grade_field = "<a class='link' href='$grade_link' aria-label='$langSGradebookBook'><span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
             }
             $tool_content .= "<tr><td class='text-end' width='4'>$i.</td>";
             // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
@@ -4769,7 +4769,7 @@ function assignment_details($id, $row, $x =false) {
                 $m[WorkInfo]
             </h3>
                 ". (($is_editor) ?
-                "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
+                "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit' aria-label='$langEditChange'>
                     <span class='fa-solid fa-edit fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
             
@@ -5237,7 +5237,7 @@ function show_assignment($id) {
                 $grade_edit_link = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
             }
 
-            $icon_field = "<a class='link' href='$grade_edit_link'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
+            $icon_field = "<a class='link' href='$grade_edit_link' aria-label='$langEdit'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
             if ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_SCALING_GRADE) {
                 $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                 $scales = unserialize($serialized_scale_data);
@@ -5272,7 +5272,7 @@ function show_assignment($id) {
                 } else {
                     $icon_field = '';
                     if ($is_editor) {
-                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
                                     <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
                     } else {
                         $grade_field = "";
@@ -5333,7 +5333,7 @@ function show_assignment($id) {
                     } else {
                         $icon_field = '';
                         if ($is_editor) {
-                            $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
+                            $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
                                     <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
                         } else {
                             $grade_field = "";
@@ -5405,7 +5405,7 @@ function show_assignment($id) {
             if ($is_editor) {
                 $tool_content .= "<td class='text-end'>
                                     $icon_field
-                                <a class='linkdelete ps-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
+                                <a class='linkdelete ps-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' aria-label='$langDeleteSubmission'>
                                     <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
                                 </a>
                             </td>";

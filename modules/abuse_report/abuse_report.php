@@ -79,7 +79,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $langClose, $langSend,
     $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther, $langForm;
 
-    $out = '<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#abuse_modal_'.$rtype.'_'.$rid.'"><i class="fa-regular fa-flag float-end" data-bs-original-title="'.$langAbuseReport.'" title="" data-bs-toggle="tooltip"></i></a>';
+    $out = '<a aria-label="'.$langAbuseReport.'" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#abuse_modal_'.$rtype.'_'.$rid.'"><i class="fa-regular fa-flag float-end" data-bs-original-title="'.$langAbuseReport.'" title="" data-bs-toggle="tooltip"></i></a>';
     $out .= '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
                  <div class="modal-dialog">
                      <div class="modal-content">

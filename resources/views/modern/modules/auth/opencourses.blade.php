@@ -151,7 +151,7 @@
                                                                         <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
                                                                         <input type='hidden' name='pass' value=''>
                                                                         <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                        <button style='width:20px; height:25px;' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top'>
+                                                                        <button style='width:20px; height:25px;' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top' aria-label="{!! trans('langGuestLogin') !!}">
                                                                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                                                         </button>
                                                                     </form>

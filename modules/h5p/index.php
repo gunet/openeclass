@@ -78,7 +78,7 @@ if ($is_editor) {
 
     // Import
     $tool_content .= "
-        <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport'>
+        <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport' aria-label='$langImport'>
             <span class='fa-solid fa-upload space-after-icon settings-icons'></span>
             <span class='TextBold hidden-xs ps-2'>$langImport</span>
         </a>";

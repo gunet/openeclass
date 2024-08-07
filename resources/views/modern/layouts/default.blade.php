@@ -132,7 +132,7 @@
                 <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
                     <div class='{{ $container }} padding-default'>
                         <div class='d-flex justify-content-center align-items-center gap-2'>
-                            <button class='btn hide-notification-bar' id='closeNotificationBar' data-bs-toggle='tooltip' data-bs-placement='bottom' title="{{ trans('langDontDisplayAgain') }}">
+                            <button class='btn hide-notification-bar' id='closeNotificationBar' data-bs-toggle='tooltip' data-bs-placement='bottom' title="{{ trans('langDontDisplayAgain') }}" aria-label="{{ trans('langDontDisplayAgain') }}">
                                 <i class='fa-solid fa-xmark link-delete fa-lg me-2'></i>
                             </button>
                             <i class='fa-regular fa-bell fa-xl d-block'></i>

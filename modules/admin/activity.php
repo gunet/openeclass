@@ -209,9 +209,10 @@ $(function() {
                         
             <div class='d-flex justify-content-end align-items-center'>$type " .
                 icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
-                <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
-                    <span class='fa-solid fa-xmark delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
-                <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' aria-label='$langDelete' title='$langDelete' data-bs-toggle='tooltip'>
+                    <span class='fa-solid fa-xmark delete_btn text-danger'></span>
+                    <span class='sr-only'>$langDelete</span></a>
+                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
             </div>
            
           
