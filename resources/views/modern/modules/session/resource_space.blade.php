@@ -292,7 +292,7 @@
                                     <div class='form-wrapper form-edit rounded'>
                                         <form role='form' class='form-horizontal' action='{{ $urlAppend }}modules/session/resource.php?course={{ $course_code }}&session={{ $sessionID }}' method='post' enctype='multipart/form-data'>
                                             <fieldset>
-
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <input type='hidden' name='id' value='{{ $sessionID }}' />
 
                                                 <div class='d-flex justify-content-end'>
@@ -381,7 +381,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-award fa-xl Neutral-500-cl'></i></div>
-                        <h3 class="modal-title-default text-center mb-0 mt-2" id="doUserAwardLabel">{!! trans('langSubmitCompletion') !!}</h3>
+                        <div class="modal-title-default text-center mb-0 mt-2" id="doUserAwardLabel">{!! trans('langSubmitCompletion') !!}</div>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
@@ -409,7 +409,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-award fa-xl Neutral-500-cl'></i></div>
-                        <h3 class="modal-title-default text-center mb-0 mt-2" id="noUserAwardLabel">{!! trans('langNoSubmitCompletion') !!}</h3>
+                        <div class="modal-title-default text-center mb-0 mt-2" id="noUserAwardLabel">{!! trans('langNoSubmitCompletion') !!}</div>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
@@ -437,7 +437,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
-                        <h3 class="modal-title-default text-center mb-0 mt-2" id="doCommentsLabel">{!! trans('langAddComment') !!}</h3>
+                        <div class="modal-title-default text-center mb-0 mt-2" id="doCommentsLabel">{!! trans('langAddComment') !!}</div>
                     </div>
                 </div>
                 <div class='modal-body text-start'>
@@ -471,7 +471,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <h3 class="modal-title-default text-center mb-0 mt-2" id="docDeleteLabel">{!! trans('langDelete') !!}</h3>
+                        <div class="modal-title-default text-center mb-0 mt-2" id="docDeleteLabel">{!! trans('langDelete') !!}</div>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

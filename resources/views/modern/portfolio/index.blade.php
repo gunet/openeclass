@@ -759,7 +759,7 @@
                                                                                     <div class="modal-header">
                                                                                         <div class='modal-title'>
                                                                                             <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                                                                            <h3 class='modal-title-default text-center mb-0' id="notificationCardLabel{{ $course->course_id }}">{{ trans('langNotesNotifications') }}</h3>
+                                                                                            <div class='modal-title-default text-center mb-0' id="notificationCardLabel{{ $course->course_id }}">{{ trans('langNotesNotifications') }}</div>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="modal-body">

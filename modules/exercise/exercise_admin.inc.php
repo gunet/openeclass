@@ -319,6 +319,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
              <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
                  <div class='row form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
                    <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>$langExerciseName</label>
                    <div class='col-12'>

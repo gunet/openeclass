@@ -86,10 +86,20 @@ $tool_content .= "
 <div class='form-wrapper form-edit rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>     
-                  
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
-               <div class='col-sm-12 radio mb-2'><div class='control-label'><input type='radio' name='type' value='uname' checked>$langUsername</div></div>
-                <div class='col-sm-12 radio'><div class='control-label'><input type='radio' name='type' value='am'>$langAm</div></div>
+                <div class='col-sm-12 radio mb-2'>
+                    <label>
+                        <input type='radio' name='type' value='uname' checked>
+                        $langUsername
+                    </label>
+                </div>
+                <div class='col-sm-12 radio'>
+                    <label>
+                        <input type='radio' name='type' value='am'>
+                        $langAm
+                    </label>
+                </div>
             </div>
                  
             <div class='form-group mt-4'>

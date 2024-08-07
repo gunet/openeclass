@@ -42,7 +42,8 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
     global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id, $urlAppend, $langImgFormsDes;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id, $urlAppend, 
+           $langImgFormsDes, $langForm;
 
     $urlext = ($is_template == false) ? '?course=' . $course_code : '';
     $urldefault = (strlen($lti_url_default) > 0) ? " value='$lti_url_default' " : '';
@@ -53,6 +54,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                             <div class='form-wrapper form-edit border-0 px-0'>
                                 <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
                                     <fieldset>
+                                        <legend class='mb-0' aria-label='$langForm'></legend>
                                         <div class='form-group'>
                                             <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                                             <div class='col-sm-12'>
@@ -222,7 +224,7 @@ function edit_lti_app($session_id) {
     global $tool_content, $langSubmit, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $urlAppend, $langImgFormsDes;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $urlAppend, $langImgFormsDes, $langForm;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
@@ -234,6 +236,7 @@ function edit_lti_app($session_id) {
                 <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
                     <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='form-group'>
                         <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                         <div class='col-sm-12'>

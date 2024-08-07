@@ -77,7 +77,7 @@
                                                                 <div class="modal-header">
                                                                     <div class='modal-title'>
                                                                         <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                                                        <h3 class='modal-title-default text-center mb-0 mt-2' id="BookingAcceptLabel{{ $b->id }}">{!! trans('langAcceptBooking') !!}</h3>
+                                                                        <div class='modal-title-default text-center mb-0 mt-2' id="BookingAcceptLabel{{ $b->id }}">{!! trans('langAcceptBooking') !!}</div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-body text-center">
@@ -102,7 +102,7 @@
                                                                 <div class='modal-header'>
                                                                     <div class='modal-title' id='BookingDeleteLabel{{ $b->id }}'>
                                                                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                                                                        <h3 class="modal-title-default text-center mb-0 mt-2" id="BookingDeleteLabel{{ $b->id }}">{!! trans('langCancelBooking') !!}</h3>
+                                                                        <div class="modal-title-default text-center mb-0 mt-2" id="BookingDeleteLabel{{ $b->id }}">{!! trans('langCancelBooking') !!}</div>
                                                                     </div>
                                                                 </div>
                                                                 <div class='modal-body text-center'>

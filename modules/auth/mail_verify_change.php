@@ -132,6 +132,7 @@ if (empty($_POST['email']) or !valid_email($_POST['email'])) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
                 <label for='email_id' class='col-sm-12 control-label-notes'>$lang_email</label>
                 <div class='col-sm-12'>

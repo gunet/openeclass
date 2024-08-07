@@ -150,6 +150,7 @@ if (isset($_GET['scale_id'])) {
                 <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         $hidden_input
                         
                         <div class='row form-group".(Session::getError('title') ? " has-error" : "")."'>

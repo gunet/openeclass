@@ -287,6 +287,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
 <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
             <label for='name_Id' class='col-sm-12 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>

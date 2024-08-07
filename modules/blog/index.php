@@ -228,6 +228,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                     <div class='form-wrapper form-edit rounded border-0 px-0'>
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>
+                                <legend class='mb-0' aria-label='$langForm'></legend>
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 control-label-notes'>$langBlogPerm</div>
                                     <div class='col-sm-12'>
@@ -245,6 +246,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <fieldset>
+                                <legend class='mb-0' aria-label='$langForm'></legend>
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 control-label-notes'>$langBlogCommenting</div>
                                     <div class='col-sm-12'>
@@ -423,7 +425,7 @@ if ($action == "createPost") {
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                     <fieldset>
 
-
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
                             <div class='col-sm-12'>
@@ -548,6 +550,7 @@ if ($action == "editPost") {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                     <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
                             <div class='col-sm-12'>

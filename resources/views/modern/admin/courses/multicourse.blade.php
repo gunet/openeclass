@@ -27,7 +27,7 @@
                         <div class='form-wrapper form-edit border-0 px-0'>
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit="return validateNodePickerForm();">
                                 <fieldset>
-
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group'>
                                         <label for="type_course" class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
                                         @if(get_config('show_collaboration') and get_config('show_always_collaboration'))

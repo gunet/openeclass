@@ -94,6 +94,7 @@ if (isset($_GET['forumgo'])) {
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
                 <label for='cat_title' class='col-sm-12 control-label-notes'>$langCategory</label>
                 <div class='col-sm-12'>
@@ -140,6 +141,7 @@ elseif (isset($_GET['forumgoedit'])) {
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
                 <input type='hidden' name='forum_id' value='$forum_id'>
                 <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
                 <div class='form-group'>
                     <label for='forum_name' class='col-sm-12 control-label-notes'>$langForName</label>
                     <div class='col-sm-12'>
@@ -200,6 +202,7 @@ elseif (isset($_GET['forumcatedit'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group'>
             <label for='cat_title' class='col-sm-12 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>
@@ -453,6 +456,7 @@ elseif (isset($_GET['forumgodel'])) {
        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
        <fieldset>
+       <legend class='mb-0' aria-label='$langForm'></legend>
        <div class='form-group'>
         <div class='col-sm-12'>
         <select name='forum_id' class='form-select'>";
@@ -539,6 +543,7 @@ elseif (isset($_GET['forumgodel'])) {
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group'>
             <div class='col-sm-12 control-label-notes mb-2'>$langForumPostRating</div>
             <div class='col-sm-12'>
@@ -568,6 +573,7 @@ elseif (isset($_GET['forumgodel'])) {
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group'>
             <label for='categories' class='col-sm-6 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>

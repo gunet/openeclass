@@ -64,7 +64,7 @@ if (isset($_GET['submit'])) {
 function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langSelect,
             $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission,
-            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS, $urlAppend, $langImgFormsDes;
+            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS, $urlAppend, $langImgFormsDes, $langForm;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -123,6 +123,7 @@ function show_assignments() {
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>
                     <input type='hidden' name='group_id' value='$group_id'>
                     <div class='form-group mt-4'>

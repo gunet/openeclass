@@ -47,6 +47,7 @@
                                 <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME']}}?course={{ $course_code }}'>
                                     <fieldset>
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         <div class='row form-group'>
                                             <label for='nameID' class='col-12 control-label-notes'>{{ trans('langName') }}</label>
                                             <div class='col-12'>

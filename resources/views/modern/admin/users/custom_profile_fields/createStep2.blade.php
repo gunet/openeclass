@@ -24,6 +24,7 @@
 
                         <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             @if (isset($_GET['edit_field']))
                                 <input type='hidden' name='field_id' value='{{ $fieldid }}'>
                             @else

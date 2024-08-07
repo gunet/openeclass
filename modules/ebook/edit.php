@@ -85,7 +85,8 @@ if (isset($_GET['delete'])) {
         
         <form class='panelCard border-card py-3 px-4 rounded-2 mt-4'method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <h3>$langSections</h3>
+        <legend class='mb-0' aria-label='$langForm'></legend>
+        <div class='action-bar-title'>$langSections</div>
         <input type='hidden' name='id' value='$ebook_id' />
         <div class='table-responsive mt-0'>
           <table class='table-default'>
@@ -353,6 +354,7 @@ if (isset($_GET['delete'])) {
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
                 <div class='table-responsive mt-0'>
                     <table class='table-default'>
                     <thead><tr class='list-header'>

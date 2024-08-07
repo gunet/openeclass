@@ -27,6 +27,7 @@
                         <div class='form-wrapper form-edit border-0 px-0'>
                             <form class='form-horizontal' role='form' name='authchange' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>   
                             <fieldset>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='form-group'>
                                     <label id='auth_change_id' class='col-sm-12 control-label-notes'>{{ trans('langAuthChangeto') }}</label>
                                     <div class='col-sm-12'>

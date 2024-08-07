@@ -84,7 +84,7 @@ $head_content .= "<script>
 
                       bootbox.confirm({ 
                         closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                         buttons: {
                             cancel: {
@@ -119,7 +119,7 @@ $tool_content .=
    "<div class='row'>
         <div class='col-lg-6 col-12'>
                 <form class='form-wrapper form-edit border-0 px-0' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
-                    <fieldset>";
+                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;

@@ -20,6 +20,7 @@
 
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
                                 <label for='email_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                 <div class='col-sm-12'>

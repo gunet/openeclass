@@ -38,9 +38,9 @@
                             <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}'>
                                 <fieldset>                 
-                                             
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langSocialBookmarksFunct') }}</label>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langSocialBookmarksFunct') }}</div>
                                         <div class='col-sm-12'> 
                                             <div class='radio mb-2'>
                                                 <label>

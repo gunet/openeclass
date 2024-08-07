@@ -101,6 +101,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
         <div class='form-wrapper form-edit'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>
             <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
                 <div class='form-group'>
                     <label for='name_id' class='col-12 control-label-notes'>$langName</label>
                     <div class='col-12'>

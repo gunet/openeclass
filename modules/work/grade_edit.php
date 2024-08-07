@@ -40,7 +40,7 @@ $head_content .= '
                 e.preventDefault();               
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
+                    title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
                     message: "<p class=\"text-center\">'.js_escape($langConfirmDeleteStudentReview).'</p>",
                     buttons: {
                         cancel: {
@@ -127,7 +127,7 @@ function show_edit_form($id, $sid, $assign) {
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
            $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
            $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview,
-           $langOpenCoursesFiles, $urlAppend, $langImgFormsDes, $langSelect;
+           $langOpenCoursesFiles, $urlAppend, $langImgFormsDes, $langSelect, $langForm;
 
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
@@ -409,7 +409,7 @@ function show_edit_form($id, $sid, $assign) {
 				<input type='hidden' name='assignment' value='$id'>
 				<input type='hidden' name='submission' value='$sid'>
 				<fieldset>
-
+                    <legend class='mb-0' aria-label='$langForm'></legend>
 					<div class='row form-group'>
 						<div class='col-12 control-label-notes'>$m[username]</div>
 						<div class='col-12'>

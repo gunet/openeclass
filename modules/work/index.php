@@ -313,7 +313,7 @@ if ($is_editor) {
 
                 bootbox.confirm({
                     closeButton: false,
-                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
+                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                     message: '<p class=\'text-center\'>".js_escape($langDelWarnUserAssignment)."</p>',
                     buttons: {
                         cancel: {
@@ -1701,7 +1701,8 @@ function new_assignment() {
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
-           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend, $langImgFormsDes, $langSelect;
+           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend, $langImgFormsDes, 
+           $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2123,6 +2124,7 @@ function new_assignment() {
         <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='row form-group " . ($title_error ? "has-error" : "") . "'>
                 <label for='title' class='col-12 control-label-notes mb-1'>$langTitle</label>
                 <div class='col-12'>
@@ -2726,7 +2728,8 @@ function show_edit_assignment($id) {
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
-        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend ,$langImgFormsDes, $langSelect;
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend ,$langImgFormsDes, 
+        $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -3198,6 +3201,7 @@ function show_edit_assignment($id) {
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='row form-group ".($title_error ? "has-error" : "")."'>
                 <label for='title' class='col-12 control-label-notes'>$langTitle</label>
                 <div class='col-12'>
@@ -4300,7 +4304,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
     $langNotice3, $langNotice3Multiple, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $langComments, $urlServer, $langImgFormsDes, $langSelect;
+    $langGradebookGrade, $langComments, $urlServer, $langImgFormsDes, $langSelect, $langForm;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -4478,6 +4482,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                      <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         $group_select_form
                         $submission_form
                         <div class='form-group mt-4'>

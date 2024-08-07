@@ -41,7 +41,7 @@
                                     <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
                                 @endif
                                 <fieldset>
-
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class="form-group{{ $categoryNameError ? ' has-error' : ''}}">
                                     <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}</label>
                                     <div class='col-sm-12'>

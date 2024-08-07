@@ -82,76 +82,55 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <label for='formurlServer' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langSiteUrl') }}:</label>
                                                     <div class='col-sm-12 col-md-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formurlServer' id='formurlServer' value='{{ $urlServer }}'>
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='formphpMyAdminURL' class='col-sm-12 control-label-notes'>{{ trans('langphpMyAdminURL') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='{{ get_config('phpMyAdminURL') }}'>
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
-                                                <label for='formphpSysInfoURL' class='col-sm-12 control-label-notes'>{{ trans('langSystemInfoURL') }}:</label>
+                                                    <label for='formphpSysInfoURL' class='col-sm-12 control-label-notes'>{{ trans('langSystemInfoURL') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='{{ get_config('phpSysInfoURL') }}'>
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
-                                                <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langAdminEmail') }}:</label>
+                                                    <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langAdminEmail') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formemailAdministrator' id='formemailAdministrator' value='{{ get_config('email_sender') }}'>
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
-                                                    <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langDefaultAdminName') }}:</label>
+                                                    <label for='formadministratorName' class='col-sm-12 control-label-notes'>{{ trans('langDefaultAdminName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formadministratorName' id='formadministratorName' value='{{ get_config('admin_name') }}'>
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='formsiteName' class='col-sm-12 control-label-notes'>{{ trans('langCampusName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formsiteName' id='formsiteName' value='{{ get_config('site_name') }}'>
                                                     </div>
                                                 </div>
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='formInstitution' class='col-sm-12 control-label-notes'>{{ trans('langInstituteShortName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formInstitution' id='formInstitution' value='{{ get_config('institution') }}'>
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='formInstitutionUrl' class='col-sm-12 control-label-notes'>{{ trans('langInstituteName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='{{ get_config('institution_url') }}'>
                                                     </div>
                                                 </div>
-
-
                                             </fieldset>
                                         </div>
                                     </div>
@@ -160,12 +139,11 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='two'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-
-                                               <h3>{{ trans('langUpgReg') }}</h3>
-
+                                            <h3>{{ trans('langUpgReg') }}</h3>
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <label for='user_registration' class='col-sm-12 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
                                                     <div class='col-sm-12'>
@@ -180,9 +158,6 @@
                                                                         ) !!}
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='registration_link' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationLink') }}:</label>
                                                     <div class='col-sm-12'>
@@ -194,17 +169,12 @@
                                                                         ) !!}
                                                     </div>
                                                 </div>
-
-
                                                 <div class='form-group mt-4' id='registration-info-block'>
                                                     <label for='registration_info' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationInfo') }}:</label>
                                                     <div class='col-sm-12'>
                                                         {!! $registration_info_textarea !!}
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='eclass_stud_reg' class='col-sm-12 control-label-notes'>{{ trans('langUserAccount') }}  {{ trans('langViaeClass') }}:</label>
                                                     <div class='col-sm-12'>
@@ -220,9 +190,6 @@
                                                                         ) !!}
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='alt_auth_stud_reg' class='col-sm-12 control-label-notes'>{{ trans('langUserAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
                                                     <div class='col-sm-12'>
@@ -238,9 +205,6 @@
                                                                     ) !!}
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='eclass_prof_reg' class='col-sm-12 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaeClass') }}:</label>
                                                     <div class='col-sm-12'>
@@ -255,9 +219,6 @@
                                                                 ) !!}
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='alt_auth_prof_reg' class='col-sm-12 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
                                                     <div class='col-sm-12'>
@@ -272,13 +233,10 @@
                                                                 ) !!}
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_block_duration_account') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_block_duration_account') }}:</div>
                                                     <div class='checkbox col-sm-12'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input type='checkbox' name='block_duration_account' value='1' {{ $cbox_block_duration_account }}>
                                                             <span class='checkmark'></span>
                                                             {{ trans('lang_message_block_duration_account') }}
@@ -289,9 +247,9 @@
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_block_duration_alt_account') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_block_duration_alt_account') }}:</div>
                                                     <div class='checkbox col-sm-12'>
-                                                    <label class='label-container'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='block_duration_alt_account' value='1' {{ $cbox_block_duration_alt_account }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('lang_message_block_duration_account') }}
@@ -311,9 +269,9 @@
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_display_captcha_label') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_display_captcha_label') }}:</div>
                                                     <div class='checkbox col-sm-12'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input type='checkbox' name='display_captcha' value='1' {{ $cbox_display_captcha }} {{ $disable_display_captcha }}>
                                                             <span class='checkmark'></span>
                                                             {{ trans('lang_display_captcha') }}
@@ -326,7 +284,7 @@
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
+                                                    <label for='GuestLoginId' class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
                                                     <div class='col-sm-12'>
                                                         {{-- {!! selection([
                                                                         'off' => trans('m[deactivate]'),
@@ -345,16 +303,16 @@
                                                             ],
                                                             'course_guest',
                                                             get_config('course_guest', 'on'),
-                                                            "class='form-control form-control-admin'"
+                                                            "class='form-control form-control-admin' id='GuestLoginId'"
                                                         ) !!}
                                                     </div>
                                                 </div>
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langcourseExternalUsersInviation') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes'>{{ trans('langcourseExternalUsersInviation') }}:</div>
                                                     <div class='checkbox col-sm-12'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input type='checkbox' name='course_invitation' value='1' {{ $cbox_course_invitation }}>
                                                             <span class='checkmark'></span>
                                                             {{ trans('langCourseInvitationHelp') }}
@@ -370,12 +328,11 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='three'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-
-                                                <h3>{{ trans('langSupportedLanguages') }}</h3>
-
+                                            <h3>{{ trans('langSupportedLanguages') }}</h3>
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <label for='default_language' class='col-sm-12 control-label-notes'>{{ trans('langMainLang') }}: </label>
                                                     <div class='col-sm-12'>
@@ -390,7 +347,7 @@
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes mb-1'>{{ trans('langSupportedLanguages') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langSupportedLanguages') }}:</div>
                                                     <div class='col-sm-12'>
                                                     {!! implode(' ', $sel) !!}
                                                     </div>
@@ -410,6 +367,7 @@
                                         <div class='card-body'>
                                             <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='landing-default'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label class='d-inline-flex align-items-top'>
@@ -433,24 +391,24 @@
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-4'>
-                                                            <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <label for='homepage_intro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', trans('langInfoAbout'))) !!}
                                                                 <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-4'>
-                                                            <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </label>
+                                                            <div class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </div>
                                                             <div class='col-sm-12'>
                                                                     <div class='checkbox'>
-                                                                    <label class='label-container'>
+                                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                             <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
                                                                             <span class='checkmark'></span>
                                                                             {{trans('lang_dont_display_login_form')}}
                                                                         </label>
                                                                     </div>
                                                                     <div class='checkbox'>
-                                                                    <label class='label-container'>
+                                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                             <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
                                                                             <span class='checkmark'></span>
                                                                             {{trans('lang_hide_login_link')}}
@@ -460,32 +418,32 @@
                                                         </div>
 
                                                         <div class='form-group mt-4'>
-                                                            <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('langHomePageMenuSettings')}}: </label>
+                                                            <div class='col-sm-12 control-label-notes mb-1'>{{trans('langHomePageMenuSettings')}}: </div>
                                                         </div>
                                                         <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input id='hide_login_check' type='checkbox' name='dont_display_courses_menu' value='1' {{ $cbox_dont_display_courses_menu }}>
                                                                     <span class='checkmark'></span>
                                                                     {{trans('lang_dont_display_courses_menu')}}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input id='hide_login_check' type='checkbox' name='dont_display_contact_menu' value='1' {{ $cbox_dont_display_contact_menu }}>
                                                                     <span class='checkmark'></span>
                                                                     {{trans('lang_dont_display_contact_menu')}}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input id='hide_login_check' type='checkbox' name='dont_display_about_menu' value='1' {{ $cbox_dont_display_about_menu }}>
                                                                     <span class='checkmark'></span>
                                                                     {{trans('lang_dont_display_about_menu')}}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input id='hide_login_check' type='checkbox' name='dont_display_manual_menu' value='1' {{ $cbox_dont_display_manual_menu }}>
                                                                     <span class='checkmark'></span>
                                                                     {{trans('lang_dont_display_manual_menu')}}
@@ -511,19 +469,19 @@
 
                                         </div>
                                         <div class='card-body'>
-                                            <fieldset>
+                                            <fieldset><legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     @endif
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input type='checkbox' name='dont_mail_unverified_mails' value='1' {!! $cbox_dont_mail_unverified_mails !!}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_dont_mail_unverified_mails') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input type='checkbox' name='email_from' value='1' {!! $cbox_email_from !!}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_email_from') }}
@@ -616,66 +574,67 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input type='checkbox' name='course_multidep' value='1' {{ $cbox_course_multidep }}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_course_multidep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input type='checkbox' name='user_multidep' value='1' {{ $cbox_user_multidep }}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_user_multidep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input id='uown' type='checkbox' name='restrict_owndep' value='1' {{ $cbox_restrict_owndep }}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_restrict_owndep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' {{ $town_dis }} {{ $cbox_restrict_teacher_owndep }}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_restrict_teacher_owndep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                     <input type='checkbox' name='allow_teacher_clone_course' value='1' {{ $cbox_allow_teacher_clone_course }}>
                                                                     <span class='checkmark'></span>
                                                                     {{ trans('lang_allow_teacher_clone_course') }}
                                                                 </label>
                                                             </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langCourseOfflineSettings') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='allow_rec_video' value='1' {{ $cbox_allow_rec_video }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_allow_rec_video') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='allow_rec_audio' value='1' {{ $cbox_allow_rec_audio }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_allow_rec_audio') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='show_modal_openCourses' value='1' {{ $cbox_allow_modal_courses }}>
                                                                 <span class='checkmark'></span>
                                                                 {!! trans('lang_openCourse_inModal') !!}
@@ -699,24 +658,25 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_insert_xml_metadata') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_course_metadata') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_opencourses_enable') }}
@@ -740,31 +700,32 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='case_insensitive_usernames' value='1' {{ $cbox_case_insensitive_usernames }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langCaseInsensitiveUsername') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='email_required' value='1' {{ $cbox_email_required }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_email_required') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='email_verification_required' value='1' {{ $cbox_email_verification_required }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_email_verification_required') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='am_required' value='1' {{ $cbox_am_required }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_am_required') }}
@@ -772,56 +733,56 @@
                                                         </div>
 
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='index_enable' type='checkbox' name='enable_indexing' value='1' {{ $cbox_enable_indexing }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableIndexing') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='search_enable' type='checkbox' name='enable_search' value='1' {{ $cbox_enable_search }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableSearch') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='dropbox_allow_student_to_student' value='1' {{ $cbox_dropbox_allow_student_to_student }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_dropbox_allow_student_to_student') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='dropbox_allow_personal_messages' value='1' {{ $cbox_dropbox_allow_personal_messages }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_dropbox_allow_personal_messages') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='personal_blog_enable' type='checkbox' name='personal_blog' value='1' {{ $cbox_personal_blog }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' {{ $cbox_personal_blog_commenting }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog_commenting') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='personal_blog_rating_enable' type='checkbox' name='personal_blog_rating' value='1' {{ $cbox_personal_blog_rating }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog_rating') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' {{ $cbox_personal_blog_sharing }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog_sharing') }}
@@ -829,77 +790,77 @@
                                                         </div>
 
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_eportfolio_enable') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='block_username_change' value='1' {{ $cbox_block_username_change }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_block_username_change') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='disable_name_surname_change' value='1' {{ $cbox_disable_name_surname_change }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_name_surname_change') }}
                                                                 </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='disable_email_change' value='1' {{ $cbox_disable_email_change }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_email_change') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='disable_am_change' value='1' {{ $cbox_disable_am_change }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_am_change') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input {!! $id_enable_mobileapi !!} type='checkbox' name='enable_mobileapi' value='1' {{ $cbox_enable_mobileapi }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_enable_mobileapi') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {{ $cbox_enable_social_sharing_links }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableSocialSharingLiks') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {{ $cbox_enable_strong_passwords }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableStrongPasswords') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' {{ $cbox_disable_student_unregister_cours }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langUnsubscribeCourse') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='individual_group_bookings' type='checkbox' name='individual_group_bookings' value='1' {{ $cbox_individual_group_bookings }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langIndividualGroupBookings') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='enable_quick_note' type='checkbox' name='enable_quick_note' value='1' {{ $cbox_enable_quick_note }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableQuickNote') }}
@@ -918,18 +879,18 @@
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('lang_max_glossary_terms') }} </label>
+                                                    <label for='max_glossary_terms_id' class='col-sm-12 control-label-notes'>{{ trans('lang_max_glossary_terms') }} </label>
                                                     <div class='col-sm-12'>
-                                                            <input class='form-control form-control-admin' type='text' name='max_glossary_terms' value='{{ $max_glossary_terms }}'>
+                                                            <input id='max_glossary_terms_id' class='form-control form-control-admin' type='text' name='max_glossary_terms' value='{{ $max_glossary_terms }}'>
                                                     </div>
                                                 </div>
 
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
+                                                    <label for='actions_expire_interval_id' class='col-sm-12 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
                                                     <div class='col-sm-12'>
-                                                            <input type='text' class='form-control form-control-admin' name='actions_expire_interval' value='{{ get_config('actions_expire_interval') }}'>
+                                                            <input id='actions_expire_interval_id' type='text' class='form-control form-control-admin' name='actions_expire_interval' value='{{ get_config('actions_expire_interval') }}'>
                                                     </div>
                                                 </div>
                                             </fieldset>
@@ -945,18 +906,19 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
-                                                <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</div>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='mydocs_teacher_enable' id='mydocs_teacher_enable_id' value='1' {{ $cbox_mydocs_teacher_enable }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langTeachers') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='mydocs_student_enable' id='mydocs_student_enable_id' value='1' {{ $cbox_mydocs_student_enable }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langStudents') }}
@@ -968,16 +930,16 @@
 
 
                                                 <div class='form-group mt-4'>
-                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langMyDocsQuota') }} (MB):</label>
+                                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langMyDocsQuota') }} (MB):</div>
                                                     <div class='col-sm-12'>
-                                                            <label>
-                                                                <input class='form-control' type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='{{ $mydocs_teacher_quota }}'>
-                                                                {{ trans('langTeachers') }}
-                                                            </label>
-                                                            <label class='mt-md-0 mt-2 ms-md-3 ms-0'>
-                                                                <input class='form-control' type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='{{ $mydocs_student_quota }}'>
-                                                                {{ trans('langStudents') }}
-                                                            </label>
+                                                        <div>
+                                                            <label for='mydocs_teacher_quota_id' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
+                                                            <input class='form-control' type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='{{ $mydocs_teacher_quota }}'>
+                                                        </div>
+                                                        <div>
+                                                            <label for='mydocs_student_quota_id' class='col-sm-12 control-label-notes'>{{ trans('langStudents') }}</label>
+                                                            <input class='form-control' type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='{{ $mydocs_student_quota }}'>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -990,14 +952,14 @@
                                                     </div>
                                                 </div>
                                                 <div class='checkbox mt-4'>
-                                                <label class='label-container'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='enable_common_docs' value='1' {{ $cbox_enable_common_docs }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('langEnableCommonDocs') }}
                                                     </label>
                                                 </div>
                                                 <div class='checkbox'>
-                                                <label class='label-container'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                     <input type='checkbox' name='enable_docs_public_write' value='1' {{ $cbox_enable_docs_public_write }}>
                                                     <span class='checkmark'></span>
                                                     {{ trans('langEnableDocsPublicWrite') }}
@@ -1015,6 +977,7 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <label for='doc_quota' class='col-sm-12 control-label-notes'>{{ trans('langDocQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
@@ -1053,6 +1016,7 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <label for='student_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langStudentUploadWhitelist') }}:</label>
                                                     <div class='col-sm-12'>
@@ -1083,24 +1047,25 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='disable_log_actions' value='1' {{ $cbox_disable_log_actions }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_log_actions') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='disable_log_course_actions' value='1' {{ $cbox_disable_log_course_actions }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_log_course_actions') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='disable_log_system_actions' value='1' {{ $cbox_disable_log_system_actions }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_log_system_actions') }}
@@ -1140,10 +1105,11 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' {{ $cbox_login_fail_check }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableLoginFailCheck') }}
@@ -1190,10 +1156,11 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
+                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='maintenance' value='1' {{ $cbox_maintenance }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langMaintenanceMode') }}
@@ -1201,7 +1168,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <label class='col-sm-12 control-label-notes'>{{ trans('langMaintenanceChange') }}</label>
+                                                <div class='col-sm-12 control-label-notes'>{{ trans('langMaintenanceChange') }}</div>
                                                 @foreach ($selectable_langs as $langCode => $langName)
                                                     @php $maintenance_text = get_config('maintenance_text_' . $langCode) @endphp
                                                     <div class='form-group mt-4'>
@@ -1213,7 +1180,7 @@
                                                 @endforeach
                                                 <hr>
                                                 <div class='mt-4'>
-                                                    <label class='col-sm-12 control-label-notes mb-3'>{{ trans('langThemes') }}</label>
+                                                    <div class='col-sm-12 control-label-notes mb-3'>{{ trans('langThemes') }}</div>
                                                     <div class='row'>
                                                         <div class='col-sm-6'>
                                                             <div class='form-check'>

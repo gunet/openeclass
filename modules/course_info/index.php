@@ -294,7 +294,7 @@ if (isset($_POST['submit'])) {
     $data['teacher_name'] = $c->prof_names;
 
     $language = $c->lang;
-    $data['lang_select_options'] = lang_select_options('course_language', 'class="form-control"', $language);
+    $data['lang_select_options'] = lang_select_options('course_language', 'id="course_language_id" class="form-control"', $language);
     $data['course_keywords'] = $c->keywords;
 
     $data['password'] = $c->password;
@@ -337,7 +337,7 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    $data['license_selection'] = selection($cc_license, 'cc_use', $course_license, 'class="form-control"'.$disabledVisibility);
+    $data['license_selection'] = selection($cc_license, 'cc_use', $course_license, 'id="course_license_id" class="form-control"'.$disabledVisibility);
     $data['license_checked0'] = $license_checked[0];
     $data['license_checked10'] = $license_checked[10];
 

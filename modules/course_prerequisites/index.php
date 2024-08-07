@@ -37,7 +37,7 @@ $(document).ready(function () {
        
         bootbox.confirm({ 
             closeButton: false,
-            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">$langConfirmDelete</h3>",
+            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">$langConfirmDelete</div>",
             message: "<p class=\"text-center\">$langDelWarnCoursePrerequisite</p>",
             buttons: {
                 cancel: {
@@ -91,7 +91,8 @@ draw($tool_content, 2, null, $head_content);
 
 function new_prereq() {
     global $tool_content, $head_content, $urlServer, $course_code,
-           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2, $urlAppend, $langImgFormsDes;
+           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2, 
+           $urlAppend, $langImgFormsDes, $langForm;
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -130,6 +131,7 @@ hContent;
                 <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
                     <input type='hidden' name='addcommit' value='1'>
                     <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                         <label for='courses-select' class='col-sm-12 control-label-notes'>$langCourse:</label>
                         <div class='col-sm-12'>

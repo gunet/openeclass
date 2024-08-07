@@ -448,7 +448,7 @@ if (isset($_GET['modifyAnswers'])) {
                 <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                 <input type='hidden' name='formSent' value='1'>
                 <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
-                <fieldset>
+                <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                 <div class='table-responsive'>
                 <table class='table table-striped table-hover table-default'>";
             $tool_content .= "<tr>
@@ -524,7 +524,7 @@ if (isset($_GET['modifyAnswers'])) {
              if (!isset($displayBlanks)) {
                  $str_weighting = isset($weighting)? implode(',', $weighting): '';
                  $tool_content .= "<input type='hidden' name='str_weighting' value='$str_weighting'>
-                   <fieldset>
+                   <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
                      <table class='table table-default'>
                        <tr>
                          <td>$langTypeTextBelow, $langAnd $legend :<br/><br/>
@@ -589,7 +589,7 @@ if (isset($_GET['modifyAnswers'])) {
              <input type='hidden' name='formSent' value='1'>
              <input type='hidden' name='nbrOptions' value='$nbrOptions'>
              <input type='hidden' name='nbrMatches' value='$nbrMatches'>
-             <fieldset>
+             <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
              <table class='table table-default'>";
          $optionsList = array();
          // create an array with the option letters
@@ -687,7 +687,7 @@ if (isset($_GET['modifyAnswers'])) {
                      <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                      <input type='hidden' name='formSent' value='1'>
                      <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
-                     <fieldset>";
+                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
          // if there is an error message
          if (!empty($msgErr)) {
              $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>";

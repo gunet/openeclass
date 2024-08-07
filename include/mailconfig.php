@@ -122,7 +122,7 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $tool_content, $langEmailBounces, $langSave, $langEG;
+        $tool_content, $langEmailBounces, $langSave, $langEG, $langForm;
 
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
@@ -156,7 +156,8 @@ function mail_settings_form() {
                     <div class='panel-title'>$langEmailSettings</div>
                 </div>
                 <div class='panel-body'>
-                    <fieldset>";
+                    <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>";
     }
     $tool_content .= "
                         <div class='form-group'>

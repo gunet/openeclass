@@ -198,7 +198,7 @@ function prepareDataFromPost() {
 }
 
 function displayForm($id = null, $name = null, $ordering = null, $active = null) {
-    global $catId, $session, $langNameOfLang, $urlAppend, $langImgFormsDes, $langSettingSelect;
+    global $catId, $session, $langNameOfLang, $urlAppend, $langImgFormsDes, $langSettingSelect, $langForm;
 
     $html = '';
     $action = ($id == null) ? 'add' : 'edit';
@@ -210,7 +210,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     
     <div class='col-lg-6 col-12'><div class='form-wrapper form-edit border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?category=" . $catId . "&amp;action=" . $action . "'>
-        <fieldset>";
+        <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 
     // name multi-lang field
     $is_serialized = false;

@@ -35,7 +35,8 @@ require_once 'include/log.class.php';
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
            $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
-           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, $langOfCourse, $is_collaborative_course;
+           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, 
+           $langOfCourse, $is_collaborative_course, $langForm;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -163,6 +164,7 @@ function show_post_form() {
                     <div class="card-body">
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
                             <fieldset> 
+                                <legend class="mb-0" aria-label="'.$langForm.'"></legend>
                                 <div class="form-group">
                                     <textarea aria-label="'.$langTypeOutMessage.'" style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
                                 </div>

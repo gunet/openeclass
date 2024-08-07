@@ -34,7 +34,7 @@
                                             <div style="padding:10px;">
                                                 <a href="{{ $urlAppend . $app->getConfigUrl() }}">
                                                 @if ($app->getAppIcon() !== null)
-                                                    <img width="89" src="{{ $app->getAppIcon() }}">
+                                                    <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ $app->getName() }}">
                                                 @endif
                                                 {{ $app->getDisplayName() }}
                                                 </a>
@@ -49,14 +49,14 @@
                                                 <div class="btn-group btn-group-sm gap-2">
                                                     @if ($app->isConfigured())
                                                         @if (showSecondFactorChallenge() != "")
-                                                            <button onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
+                                                            <button aria-label="{{ $app->getName() }}" onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @else
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
+                                                            <button aria-label="{{ $app->getName() }}" type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @endif
                                                             {!! $app->isEnabled() ? '<i class="fa fa-toggle-on"></i>' : '<i class="fa fa-toggle-off"></i>' !!}
                                                         </button>
                                                     @else
-                                                        <button type="button" class="btn cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'>
+                                                        <button aria-label="{{ $app->getName() }}" type="button" class="btn cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'>
                                                             <i class="fa fa-warning"></i>
                                                         </button>
                                                     @endif

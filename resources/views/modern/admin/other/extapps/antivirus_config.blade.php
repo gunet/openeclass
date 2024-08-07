@@ -22,6 +22,7 @@
                     <div class='col-lg-6 col-12'>
                         <form class='form-wrapper form-edit border-0 px-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <table class='table table-bordered' width='100%'>
                                     <tr>
                                     <th width='200' class='left'>

@@ -66,7 +66,7 @@ $(function() {
                                     <form class='form-horizontal' role='form' action='{{ $form_url_from_user }}' method='post'>
                                 @endif
                                 <fieldset>
-
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group text-center'>
                                         <div class='col-sm-12 alert alert-info'>
                                             <p class='form-control-static'>{{ trans('langUserDelCourseInfo') }}</p>

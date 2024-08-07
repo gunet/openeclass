@@ -42,6 +42,7 @@
 
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' enctype='multipart/form-data' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='form-group'>
                                     <label for='code' class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
                                     <div class='col-sm-12'>
@@ -88,6 +89,7 @@
                                             </ul>
                                             <div class='tab-content mt-3' id='tabs-tabContent'>
                                                 <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
+                                                    <label for='faculty_image'>{{ trans('langImageSelected') }}</label>
                                                     <input type='file' name='faculty_image' id='faculty_image'>
                                                 </div>
                                                 <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
@@ -123,7 +125,7 @@
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowCourse') }}</div>
                                     <div class='col-sm-12 checkbox'>
-                                    <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
+                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' name='allow_course' value='1'{!! isset($mynode) && $mynode->allow_course == 1 ? " checked" : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langNodeAllowCourse2') }}
@@ -134,7 +136,7 @@
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowUser') }}</div>
                                     <div class='col-sm-12 checkbox'>
-                                    <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
+                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' name='allow_user' value='1'{!! isset($mynode) && $mynode->allow_user == 1 ? " checked" : '' !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langNodeAllowUser2') }}
@@ -158,7 +160,9 @@
                                     <div class='radio mb-3'>
                                         <label>
                                             <input class='input-StatusCourse' id='nodeopen' type='radio' name='visible' value='2' {{ $visibleChecked[2] }}>
-                                            <label for="nodeopen" aria-label="{{ trans('langNodePublic') }}"><span class='fa fa-unlock fa-lg fa-fw'></span></label>
+                                            <label for="nodeopen" aria-label="{{ trans('langNodePublic') }}">
+                                                <span class='fa fa-unlock fa-lg fa-fw'></span>
+                                            </label>
                                             {{ trans('langNodePublic') }}
                                         </label>
                                         <div class='help-block'>{{ trans('langNodePublic2') }}</div>
@@ -181,7 +185,7 @@
                                     <div class='radio'>
                                         <label>
                                             <input class='input-StatusCourse' id='nodehidden' type='radio' name='visible' value='0' {{ $visibleChecked[0] }}>
-                                            <label aria-label="{{ trans('langViewHide') }}"><span class='fa fa-lock fa-lg fa-fw'></span></label>
+                                            <label for='nodehidden' aria-label="{{ trans('langViewHide') }}"><span class='fa fa-lock fa-lg fa-fw'></span></label>
                                             {{ trans('langViewHide') }}
                                         </label>
                                          <div class='help-block'>{{ trans('langNodeHidden2') }}</div>

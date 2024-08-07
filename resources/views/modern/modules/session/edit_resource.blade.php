@@ -34,7 +34,7 @@
                             <div class='form-wrapper form-edit rounded'>
                                 <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&session={{ $sessionID }}" method='post'>
                                     <fieldset>
-
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         <input type='hidden' name='resourceId' value='{{ $resource_id }}'>
 
                                         <div class='d-flex justify-content-end'>

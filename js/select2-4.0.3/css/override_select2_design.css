@@ -36,5 +36,14 @@
 
 .select2-dropdown--below{ background-color: #ffffff; }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #ffffff !important;
+    border: solid 1px #687DA3;
+    color: #3E4965;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+    color: #3E4965;
+}
+
 
 

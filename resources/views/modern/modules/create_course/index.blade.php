@@ -207,8 +207,6 @@
 
                             <div class='form-group mt-4'>
                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</div>
-
-
                                 <div class="radio mb-2">
                                   <label>
                                       <input type='radio' name='view_type' value='simple' id='simple'>
@@ -286,6 +284,7 @@
 
                             <div class='form-group mt-4' id='cc'>
                                 <div class='col-sm-12 col-sm-offset-2'>
+                                    <label class='mb-0' for='course_license_id' aria-label="{{ trans('langOpenCoursesLicense') }}"></label>
                                       {!! $selection_license !!}
                                 </div>
                             </div>

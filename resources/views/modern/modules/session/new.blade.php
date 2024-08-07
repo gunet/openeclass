@@ -219,7 +219,7 @@
                             <div class='form-wrapper form-edit rounded'>
                                 <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method='post'>
                                     <fieldset>
-
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         <div class="form-group">
                                             <label for='creators' class='control-label-notes'>{{ trans('langResponsibleOfSession') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
                                             <select class='form-select' name='creators' id='creators'>

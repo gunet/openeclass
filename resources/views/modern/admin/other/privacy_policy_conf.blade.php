@@ -42,7 +42,7 @@
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </label>
+                                    <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </div>
                                     <div class='col-sm-12'>
                                         <div class='checkbox'>
                                             <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">

@@ -3,6 +3,7 @@
         <div class='form-wrapper form-edit mt-2 border-0 px-0'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}' enctype='multipart/form-data'>
 				<fieldset>
+                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
 					<input type='hidden' name='replacePath' value='{{ $replacePath }}'>
                     {!! fileSizeHidenInput() !!}
 					{!! $group_hidden_input !!}

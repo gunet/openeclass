@@ -32,7 +32,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $langTopicHelp, $langSubTopic, $langSubTopicHelp, $langLevel, $langLevelHelp,
     $langTypicalAgeRange, $langTypicalAgeRangeHelp, $langComment, $langCommentHelp,
     $langCopyright, $langCopyrightHelp, $langIntentedEndUserRole, $langIntentedEndUserRoleHelp,
-    $langOkComment, $langNotRequired;
+    $langOkComment, $langNotRequired, $langForm;
 
     // variable definitions
     $metaTitle = "";
@@ -77,6 +77,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     <div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
 	<form method='post' action='index.php?course=$course_code'>
 	<fieldset>
+      <legend class='mb-0' aria-label='$langForm'></legend>
 	  <input type='hidden' name='metadataPath' value='" . q($metadata) . "' />
 	  <input type='hidden' name='meta_filename' value='$oldFilename' />
 	  <input type='hidden' name='meta_mimetype' value='" . get_mime_type($oldFilename) . "' />

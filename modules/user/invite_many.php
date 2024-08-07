@@ -139,6 +139,7 @@ $tool_content .= "
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='invite_many.php?course=$course_code'>" .
                     generate_csrf_token_form_field() . "
                     <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <div class='col-sm-12'>
                                 <p class='form-control-static'>$langCourseInvitationUsersExcelInfo</p>

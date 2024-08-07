@@ -414,7 +414,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         <div class='control-label-notes mt-2'>$langCalculateNewDuration <small>$langInHour</small></div>
                                                         <div class='d-flex justify-content-start align-items-center gap-2'>
                                                             <div id='idNewDuration'></div>
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label='$langSelect'>
                                                                 <input type='checkbox' id='OnOffDuration' checked>
                                                                 <span class='checkmark'></span>
                                                             </label>
@@ -458,7 +458,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     $tool_content .= "</select>
                                                             </div>
                                                             <div class='col-md-6 col-12 mt-md-0 mt-4'>
-                                                                    <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
+                                                                    <select class='form-select' name='frequencyperiod' id='frequencyperiod' aria-label='$langSelectFromMenu'>
                                                                         <option value=\"\">$langSelectFromMenu...</option>
                                                                         <option value=\"D\"{$selected['D']}>$langDays</option>
                                                                         <option value=\"W\"{$selected['W']}>$langWeeks</option>
@@ -812,7 +812,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
                                                             <div class='d-flex justify-content-start align-items-center gap-2'>
                                                                 <div id='idDuration'></div>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label='$langSelect'>
                                                                     <input type='checkbox' id='OnOffDuration' checked>
                                                                     <span class='checkmark'></span>
                                                                 </label>
@@ -862,7 +862,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                                     "</select>
                                                                 </div>
                                                                 <div class='col-md-6 col-12 mt-md-0 mt-4'>
-                                                                    <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
+                                                                    <select class='form-select' name='frequencyperiod' id='frequencyperiod' aria-label='$langSelectFromMenu'>
                                                                         <option value=\"\">$langSelectFromMenu...</option>
                                                                         <option value=\"D\"{$selected['D']}>$langDays</option>
                                                                         <option value=\"W\"{$selected['W']}>$langWeeks</option>
@@ -887,7 +887,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                 
                                                             
                                                             <div class='form-group mt-4'>
-                                                                <label class='col-sm-6 control-label-notes mb-0'>$langReferencedObject</label>
+                                                                <label for='refobjgentype' class='col-sm-6 control-label-notes mb-0'>$langReferencedObject</label>
                                                                 <div class='col-sm-12 mt-0'>
                                                                     " . References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected) . "
                                                                 </div>
@@ -900,9 +900,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             }
                                                             $tool_content .= "
                                                                 <div class='form-group mt-4'>
-                                                                    <label class='col-sm-6 control-label-notes'>$langShowTo</label>
+                                                                    <label for='visibility_level_id' class='col-sm-6 control-label-notes'>$langShowTo</label>
                                                                     <div class='col-sm-12'>
-                                                                        <select class='form-select' name='visibility_level'>
+                                                                        <select class='form-select' name='visibility_level' id='visibility_level_id'>
                                                                             <option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>
                                                                             <option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>
                                                                             <option value='0' $selectedvis[0]>$langShowToAdminsOnly</option>

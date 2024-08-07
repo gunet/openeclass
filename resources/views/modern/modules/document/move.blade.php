@@ -4,6 +4,7 @@
             <form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='movePath' value='{{ $file }}'>
                 <fieldset>
+                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                     {!! $group_hidden_input !!}
                     <div class='form-group'>
                         <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>

@@ -222,10 +222,11 @@ $tool_content .= "<div class='col-12'>
     }
                     $tool_content .= "
                         <fieldset>
+                                <legend class='mb-0' aria-label='$langForm'></legend>
                                 <div class='form-group'>
-                                    <label for='titleid' class='col-sm-6 control-label-notes'>$langSender</label>
+                                    <label for='titleid' class='col-sm-12 control-label-notes'>$langSender</label>
                                     <div class='col-sm-12'>
-                                    <input for='titleid' type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
+                                    <input id='titleid' type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
                                     </div>
                                 </div>";
                                 if ($type == 'cm' && $course_id == 0) {//course message from central interface
@@ -267,7 +268,7 @@ $tool_content .= "<div class='col-12'>
 
                                     $tool_content .= "
                                         <div class='form-group mt-4'>
-                                            <label for='courseselect' class='col-sm-6 control-label-notes'>$langCourse</label>
+                                            <label for='courseselect' class='col-sm-12 control-label-notes'>$langCourse</label>
                                             <div class='col-sm-12'>
                                                 <select id='courseselect' class='form-select' name='course'>
                                                     <option value='-1'>&nbsp;</option>";
@@ -282,7 +283,7 @@ $tool_content .= "<div class='col-12'>
                                 if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
                                     $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='select-recipients' class='col-sm-6 control-label-notes'>$langSendTo</label>
+                                        <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                         <div class='col-sm-12'>
                                             <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
@@ -412,7 +413,7 @@ $tool_content .= "<div class='col-12'>
                                         }
                                         $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
                                                         <div class='form-group mt-4'>
-                                                            <div class='col-sm-6 control-label-notes'>$langSendTo</div>
+                                                            <div class='col-sm-12 control-label-notes'>$langSendTo</div>
                                                             <div class='col-sm-12'>
                                                                 <div>$u_name</div>
                                                             </div>
@@ -420,7 +421,7 @@ $tool_content .= "<div class='col-12'>
                                     } else {
                                         $tool_content .= "
                                                         <div class='form-group mt-4'>
-                                                            <label for='recipients' class='col-sm-6 control-label-notes'>$langSendTo</label>
+                                                            <label for='recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                             <div class='col-sm-12'>
                                                                 <select name='recipients' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                                             </div>
@@ -430,7 +431,7 @@ $tool_content .= "<div class='col-12'>
 
                                 $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='message_title_id' class='col-sm-6 control-label-notes'>$langSubject</label>
+                                        <label for='message_title_id' class='col-sm-12 control-label-notes'>$langSubject</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='message_title' id='message_title_id'>
                                         </div>
@@ -438,7 +439,7 @@ $tool_content .= "<div class='col-12'>
 
                                 $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='body' class='col-sm-6 control-label-notes'>$langMessage</label>
+                                        <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
                                         <div class='col-sm-12'>
                                             ".rich_text_editor('body', 4, 20, '')."
                                         </div>
@@ -447,7 +448,7 @@ $tool_content .= "<div class='col-12'>
                                     enableCheckFileSize();
                                     $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='file_ID' class='col-sm-6 control-label-notes mb-2'>$langAttachedFile</label>
+                                        <label for='file_ID' class='col-sm-12 control-label-notes mb-2'>$langAttachedFile</label>
                                         <div class='col-sm-12'>" .
                                             fileSizeHidenInput() . "
                                             <input type='file' name='file' id='file_ID'>

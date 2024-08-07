@@ -762,7 +762,7 @@ if ($is_editor) {
 
             bootbox.dialog({
                 closeButton: false,
-                title: '<div class=\"icon-modal-default\"><i class=\"fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">" . js_escape($langCreateDuplicateIn) . "</h3>',
+                title: '<div class=\"icon-modal-default\"><i class=\"fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">" . js_escape($langCreateDuplicateIn) . "</div>',
                 message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
                             '<select class=\"form-select\" id=\"course_id\" name=\"clone_to_course_id\">'+
                                 '<option value=\"$course_id\">--- " . js_escape($langCurrentCourse) . " ---</option>'+

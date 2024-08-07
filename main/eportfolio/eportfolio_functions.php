@@ -153,7 +153,7 @@ function render_eportfolio_fields_content($uid) {
  * @return string
  */
 function render_eportfolio_fields_form() {
-    global $uid, $langOptional, $langCompulsory;
+    global $uid, $langOptional, $langCompulsory, $langForm;
 
     $return_string = array();
     $return_string['panels'] = "";
@@ -180,7 +180,7 @@ function render_eportfolio_fields_form() {
                                            <h3>' . q($c->name) .'</h3>
                                        </div>
                                        <div class="card-body">
-                                           <fieldset>';
+                                           <fieldset><legend class="mb-0" aria-label="'.$langForm.'"></legend>';
             if ($j == 0) {
                 $active = " class='active'";
             } else {
@@ -206,7 +206,7 @@ function render_eportfolio_fields_form() {
                 }
 
                 $return_string['panels'] .= '<div class="'.$form_class.'">';
-                $return_string['panels'] .= '<label class="col-sm-12 title-default" for="'.$f->shortname.'">'.q($f->name).'</label>';
+                $return_string['panels'] .= '<label class="col-sm-12 title-default" for="epf_'.$f->shortname.'">'.q($f->name).'</label>';
                 $return_string['panels'] .= '<div class="col-sm-12">';
 
                 //get data to prefill fields
@@ -235,7 +235,7 @@ function render_eportfolio_fields_form() {
                         } else {
                             $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
-                        $return_string['panels'] .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
+                        $return_string['panels'] .= '<input id="epf_'.$f->shortname.'" class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
                         break;
                     case EPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
@@ -262,7 +262,7 @@ function render_eportfolio_fields_form() {
                             $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
                         load_js('bootstrap-datepicker');
-                        $return_string['panels'] .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
+                        $return_string['panels'] .= '<input id="epf_'.$f->shortname.'" class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
                         break;
                     case EPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -276,7 +276,8 @@ function render_eportfolio_fields_form() {
                         $options = array_combine(range(1, count($options)), array_values($options));
                         $options[0] = "";
                         ksort($options);
-                        $return_string['panels'] .= selection($options, 'epf_'.$f->shortname, $def_selection);
+                        $id_field = "id=epf_" . $f->shortname;
+                        $return_string['panels'] .= selection($options, 'epf_'.$f->shortname, $def_selection, $id_field);
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {
@@ -294,7 +295,7 @@ function render_eportfolio_fields_form() {
                         } else {
                             $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
-                        $return_string['panels'] .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
+                        $return_string['panels'] .= '<input id="epf_'.$f->shortname.'" class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
                         break;
                 }
                 if (!empty($f->description)) {

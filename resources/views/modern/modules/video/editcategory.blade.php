@@ -53,6 +53,7 @@
                                     <input type='hidden' name='id' value='{{ $_GET["id"] }}' />
                                     @endif
                                     <fieldset>
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
 
                                         <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
                                             <label for='CatName' class='col-sm-12 control-label-notes'>{{ trans('langCategoryName') }}:</label>

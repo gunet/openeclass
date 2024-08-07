@@ -82,7 +82,7 @@ if (isset($_POST['toReorder'])) {
         <div class='form-wrapper form-edit rounded border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
           $idInput
-          <fieldset>";
+          <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 
     foreach ($session->active_ui_languages as $key => $langcode) {
         if (isset($headings[$langcode])) {

@@ -22,6 +22,7 @@
                             
                             <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <input type='hidden' name='catid' value='{{ getIndirectReference($catid) }}'>
                                 <div class='form-group'>
                                     <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>

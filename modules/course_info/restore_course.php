@@ -47,7 +47,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     validateUploadedFile($_FILES['archiveZipped']['name'], 3);
 
-    $tool_content .= "<fieldset class='mt-5'>
+    $tool_content .= "<fieldset class='mt-5'><legend class='mb-0' aria-label='$langForm'></legend>
         <h3 class='mb-2'>" . $langFileSent . "</h3>
         <div class='table-responsive mt-0'><table class='table-default'>
                    <tr><th class='px-2' width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
@@ -67,7 +67,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     if (get_file_extension($pathToArchive) !== 'zip') {
         $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . $langErrorFileMustBeZip . "</span></div>";
     } else if (file_exists($pathToArchive)) {
-        $tool_content .= "<fieldset>
+        $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>
         <h3 class='mt-3 mb-2'>" . $langFileUnzipping . "</h3>
         <div class='table-responsive mt-0'><table class='table-default'>";
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";

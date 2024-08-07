@@ -36,6 +36,7 @@
                                 <div class='form-wrapper form-edit'>
                                     <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method='post'>
                                         <fieldset>
+                                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                             <div class='form-group'>
                                                 <div class='table-responsive mt-0'>
                                                     <table class='table-default'>

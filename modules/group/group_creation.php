@@ -73,6 +73,7 @@ if (isset($_GET['all'])) {
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
             <label for='group_quantity' class='col-sm-12 control-label-notes'>$langNewGroups</label>
             <div class='col-sm-12'>
@@ -146,6 +147,7 @@ if (isset($_GET['all'])) {
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
             <label for='group_name_id' class='col-sm-12 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>

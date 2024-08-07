@@ -84,7 +84,7 @@
                 }
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h3 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h3>",
+                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<div class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</div>",
                     message: "<p class='text-center'>"+info_message+"</p>",
                     buttons: {
                         confirm: {

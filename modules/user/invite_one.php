@@ -162,6 +162,7 @@ $tool_content .= "
         ($id? "<input type='hidden' name='id' value='$id_indirect'>": '') .
         generate_csrf_token_form_field() . "
         <fieldset>
+          <legend class='mb-0' aria-label='$langForm'></legend>
           <div class='form-group'>
             <label for='givenname_form' class='col-sm-12 control-label-notes'>$langName:</label>
             <div class='col-sm-12'><input class='form-control' id='givenname_form' type='text' name='givenname_form' placeholder='$langName' $value_givenname></div>

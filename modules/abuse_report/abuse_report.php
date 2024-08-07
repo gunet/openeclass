@@ -77,7 +77,7 @@ function abuse_report_add_js() {
  */
 function abuse_report_icon_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $langClose, $langSend,
-    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
+    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther, $langForm;
 
     $out = '<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#abuse_modal_'.$rtype.'_'.$rid.'"><i class="fa-regular fa-flag float-end" data-bs-original-title="'.$langAbuseReport.'" title="" data-bs-toggle="tooltip"></i></a>';
     $out .= '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
@@ -91,6 +91,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
 	                         <form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
+                                     <legend class="mb-0" aria-label="'.$langForm.'"></legend>
                                       <div class="form-group">
                                           <label class="control-label-notes" for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
                                           <select class="form-select" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
@@ -129,7 +130,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
  */
 function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $urlServer, $langClose, $langSend, $langError,
-    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
+    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther, $langForm;
 
     $ret = array();
 
@@ -149,6 +150,7 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
 	                         <form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
+                                    <legend class="mb-0" aria-label="'.$langForm.'"></legend>
                                       <div class="form-group">
                                           <label class="control-label-notes" for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
                                           <select class="form-select" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">

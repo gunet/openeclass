@@ -19,6 +19,7 @@
 
                     <form class='form-horizontal' name='authmenu' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                     <fieldset>
+                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                         <input type='hidden' name='auth' value='{{ intval($auth) }}'>
                         @switch ($auth)
                             @case (1)

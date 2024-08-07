@@ -31,20 +31,22 @@
                         
                         <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <fieldset>
-                            <h4 class='control-label-notes'>{{ trans('langUsersData') }}</h4>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                <div class='control-label-notes'>{{ trans('langUsersData') }}</div>
                                 <div class='form-group'>
                                     <div class='radio'>
-                                    <label>
-                                        <input type='radio' name='type' value='uname' checked>{{ trans('langUsername') }}
-                                    </label>
+                                        <label>
+                                            <input type='radio' name='type' value='uname' checked>{{ trans('langUsername') }}
+                                        </label>
                                     </div>
-                                <div class='col-sm-12'>{!! text_area('user_info', 10, 30, '') !!}</div>
-                            </div>
+                                    <div class='col-sm-12'>{!! text_area('user_info', 10, 30, '') !!}</div>
+                                </div>
                             </fieldset>
                             <div class='mt-4'></div>
                             <fieldset>
-                            <h4 class='control-label-notes'>{{ trans('langCourseCodes') }}</h4>
-                            <div class='form-group'>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                <div class='control-label-notes'>{{ trans('langCourseCodes') }}</div>
+                                <div class='form-group'>
                                     <div class='col-sm-12'>{!! text_area('courses_codes', 10, 30, '') !!}</div>
                                 </div>
                                 {!! showSecondFactorChallenge() !!}

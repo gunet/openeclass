@@ -144,7 +144,7 @@ function act_confirm() {
         bootbox.dialog({
             closeButton: false,
             message: "<p class='text-center'>"+message+"</p>",
-            title: $icon+"<h3 class='modal-title-default text-center mb-0'>"+title+"</h3>",
+            title: $icon+"<div class='modal-title-default text-center mb-0'>"+title+"</div>",
             buttons: {
                 cancel_btn: {
                     label: cancel_text,

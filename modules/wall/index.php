@@ -396,6 +396,7 @@ if (isset($_GET['showPost'])) { //show comments case
                 <div class="form-wrapper form-edit py-lg-4 px-lg-5 py-0 px-0 wallWrapper ">
                     <form id="wall_form" method="post" action="" enctype="multipart/form-data">
                         <fieldset>
+                            <legend class="mb-0" aria-label="'.$langForm.'"></legend>
                             <div class="form-group">
                                 <label for="message_input" class="control-label-notes">'.$langMessage.'</label>
                                 <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>

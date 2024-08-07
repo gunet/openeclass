@@ -23,6 +23,7 @@
                     
                     <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}" method='post'>
                         <fieldset>
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>

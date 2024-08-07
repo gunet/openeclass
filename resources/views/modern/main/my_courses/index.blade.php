@@ -18,7 +18,7 @@
                         <div class='row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4'>
                             @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
                                 <div class='col'>
-                                    <select id='select-type-course' class='form-select'>
+                                    <select id='select-type-course' class='form-select' aria-label="{{ trans('langSelect') }}">
                                         <option value="0" selected>{{ trans('langCourse') }}</option>
                                         <option value="1">{{ trans('langTypeCollaboration') }}</option>
                                     </select>

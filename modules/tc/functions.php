@@ -112,7 +112,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
         $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
         $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend, $langImgFormsDes,
-        $langSettingSelect, $langSelect;
+        $langSettingSelect, $langSelect, $langForm;
 
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
@@ -263,7 +263,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type&for_session_module=$for_session_module' method='post' >
-        <fieldset>";
+        <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 
         if ($tc_type == 'googlemeet') { // google meet
             $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToGoogleMeetLink</span></div>";

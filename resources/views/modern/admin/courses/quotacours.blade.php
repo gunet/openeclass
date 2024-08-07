@@ -23,7 +23,8 @@
                         <div class='form-wrapper form-edit border-0 px-0'>
                             
                             <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course->code }}" method='post'>
-                                <fieldset>                    
+                                <fieldset>      
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>              
                                     <div class='alert alert-info mt-0'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                                         {{ trans('langTheCourse') }} <b>{{ $course->title }}</b> {{ trans('langMaxQuota') }}</span>
                                     </div>

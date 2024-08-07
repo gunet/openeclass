@@ -28,7 +28,7 @@
 
                             <form class='form-horizontal' role='form' name='mail_verification_change' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <fieldset>
-
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group'>
                                         <label for='email_ver_data_id' class='col-sm-12 control-label-notes'>{{ trans('langChangeTo') }}:</label>
                                         <div class='col-sm-12'>

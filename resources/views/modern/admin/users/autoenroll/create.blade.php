@@ -27,6 +27,7 @@
                                 <input type='hidden' name='id' value='{{ $_GET['edit'] }}'>
                             @endif           
                             <fieldset>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langStatus') }}:</label>   
                                     <div class='col-sm-12'>

@@ -48,6 +48,7 @@ if (isset($_GET['addcategory'])) {
     $form_legend = $langCategoryAdd;
 
     $tool_content .= "<fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
                         <label for='CatName' class='col-sm-12 control-label-notes'>$langCategoryName</label>
                         <div class='col-sm-12'>
@@ -83,6 +84,7 @@ if (isset($_GET['addcategory'])) {
     <div class='flex-grow-1'><div class = 'form-wrapper form-edit rounded'>";
     $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
     $tool_content .= "<fieldset>
+    <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
             <label for='CatName' class='col-sm-12 control-label-notes'>$langCategoryName</label>
             <div class='col-sm-12'>

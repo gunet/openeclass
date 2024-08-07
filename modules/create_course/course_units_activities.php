@@ -176,15 +176,16 @@ if (!isset($_POST['final_submit'])) {
 
 
                     <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='table-responsive'>
                             <table class='table table-default'>
                             <thead>
                             <tr class='list-header'><td></td>
-                            <th class='px-0' scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>
+                            <th class='px-0' scope='col'>$langActivities</th>
                 ";
                 $i=1;
                 foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .= "<th class='px-0' scope='col'><label for='title' class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
+                    $tool_content .= "<th class='px-0' scope='col'><div class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</div></th>";
                     $i++;
                 }
 
@@ -201,7 +202,7 @@ if (!isset($_POST['final_submit'])) {
                     $tool_content .= "<td>$title_home</td>";
                     $newUnitId =$maxUnitId->muid +1;
                     foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .= "<td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input><span class='checkmark'></span></label></td>";
+                        $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input><span class='checkmark'></span></label></td>";
                         $newUnitId ++;
                         $j++;
 
@@ -232,7 +233,7 @@ if (!isset($_POST['final_submit'])) {
                     $newUnitId =$maxUnitId->muid +1;
                     foreach ($_SESSION['units'] as $utitle) {
                         $tool_content .= "
-                            <td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input><span class='checkmark'></span></label></td>";
+                            <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input><span class='checkmark'></span></label></td>";
                         $newUnitId ++;
                         $k++;
                     }
@@ -263,7 +264,7 @@ if (!isset($_POST['final_submit'])) {
                     foreach($_SESSION['units'] as $utitle) {
 
                         $tool_content .= "
-                            <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input><span class='checkmark'></span></label></td>";
+                            <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input><span class='checkmark'></span></label></td>";
                         $newUnitId++;
                         $z++;
                     }
@@ -360,20 +361,21 @@ if (!isset($_POST['final_submit'])) {
 
         }
 
-        $tool_content .= "<div class='form-wrapper'><fieldset>
+        $tool_content .= "<div class='form-wrapper'><fieldset><legend class='mb-0' aria-label='$langForm'></legend>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
                  
-                <h4>$langActSelect</h4>
+                <div class='action-bar-title'>$langActSelect</div>
                         
                 <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
                         <thead><tr class='list-header'>
                         <td class='px-0'></td>
-                        <th class='px-0' scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
+                        <th class='px-0' scope='col'>$langActivities</th>";
             $i=1;
 
-            $tool_content .= "<th class='px-0' scope='col'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
+            $tool_content .= "<th class='px-0' scope='col'> <div class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</div></th>";
             $tool_content .= "
                             </tr></thead>
                             <tr>
@@ -390,10 +392,10 @@ if (!isset($_POST['final_submit'])) {
 
                 if ($q) {
                     $tool_content .= "
-                        <td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked><span class='checkmark'></span></label></td>";
+                        <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked><span class='checkmark'></span></label></td>";
                 } else {
                     $tool_content .= "
-                        <td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'><span class='checkmark'></span></label></td>";
+                        <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'><span class='checkmark'></span></label></td>";
                 }
 
                 if ($title_home == $end){
@@ -418,9 +420,9 @@ if (!isset($_POST['final_submit'])) {
 
                 if($q) {
                     $tool_content .= "
-                        <td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input><span class='checkmark'></span></label></td>";
+                        <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input><span class='checkmark'></span></label></td>";
                 } else {
-                    $tool_content .= "<td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input><span class='checkmark'></span></label></td>";
+                    $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input><span class='checkmark'></span></label></td>";
                 }
 
                 if ($title_class == $end) {
@@ -448,10 +450,10 @@ if (!isset($_POST['final_submit'])) {
 
                 if($q) {
                     $tool_content .= "
-                        <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input><span class='checkmark'></span></label></td>";
+                        <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input><span class='checkmark'></span></label></td>";
                 } else {
                     $tool_content .= "
-                        <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input><span class='checkmark'></span></label></td>";
+                        <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input><span class='checkmark'></span></label></td>";
                 }
 
                 if ($title_after_class == $end) {

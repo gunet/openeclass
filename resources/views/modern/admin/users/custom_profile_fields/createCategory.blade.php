@@ -22,6 +22,7 @@
                         
                         <form class='form-horizontal' role='form' name='catForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             @if ($catid)
                             <input type='hidden' name='cat_id' value='{{ getIndirectReference($catid) }}'>
                             @endif

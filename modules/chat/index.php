@@ -119,9 +119,10 @@ if ($is_editor) {
             </div>";
         }
 
-        $tool_content .= "<div class='form-group mt-4'><label for='select-chatusers' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers</label></div>
+        $tool_content .= "
             <div class='form-group mt-4'>
                 <div class='col-sm-12'>
+                    <label for='select-chatusers' class='col-12 control-label-notes'>$langChatToSpecUsers</label>
                     <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
             $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username
                                                         FROM course_user cu
@@ -251,7 +252,7 @@ if ($is_editor) {
         $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                             <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
-        $tool_content .= "<fieldset>";
+        $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>";
         $tool_content .= "<div class='col-sm-12'>";
@@ -266,9 +267,10 @@ if ($is_editor) {
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group mt-4'><label for='select-chatusers' class='col-sm-offset-2 col-sm-10 control-panel control-label-notes'>$langChatToSpecUsers</label></div>
+        $tool_content .= "
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
+                <label for='select-chatusers' class='col-12 control-label-notes'>$langChatToSpecUsers</label>
                 <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
 
         if ($conf->user_id > 0) { // existing chat users (if exist)

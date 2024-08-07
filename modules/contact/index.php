@@ -95,7 +95,7 @@ function form($user) {
     global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, 
             $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend, 
             $is_collaborative_course, $langInfoAboutCollabRegistration, $langLabelCollabUserRequest,
-            $langRequestReasonsCollab, $langTypeCollaboration, $langImgFormsDes;
+            $langRequestReasonsCollab, $langTypeCollaboration, $langImgFormsDes, $langForm;
 
     if($is_collaborative_course){
         $langInfoAboutRegistration = $langInfoAboutCollabRegistration;
@@ -116,6 +116,7 @@ function form($user) {
     $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit p-0 border-0 mt-2 mb-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='col-sm-12'><div class='control-label-notes'>$langRequest $langOfCourse:</div>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
         <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>$user</small></div>
         <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>$userprof</small></div>

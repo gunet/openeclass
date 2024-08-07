@@ -286,6 +286,7 @@ if (isset($_POST['install2'])) {
         <div class='card-body'>
        <form class='form-horizontal form-wrapper' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
+           <legend class='mb-0' aria-label='$langForm'></legend>
            <div class='form-group step2-form'>
              <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('info/license/gpl.txt'))) . "</pre>
            </div>
@@ -318,6 +319,7 @@ elseif (isset($_POST['install3'])) {
     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWillWrite $langDBSettingIntro</span></div>
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
+         <legend class='mb-0' aria-label='$langForm'></legend>
            <div class='form-group'>
              <label for='dbHostForm' class='col-sm-12 control-label-notes'>$langdbhost</label>
              <div class='row'>
@@ -386,7 +388,7 @@ elseif (isset($_POST['install4'])) {
     }
     $tool_content .= "
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset>" .
+         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>" .
            form_entry('urlForm', text_input('urlForm', 40), "$langSiteUrl (*)") .
            form_entry('nameForm', text_input('nameForm', 40), "$langAdminName (*)") .
            form_entry('emailForm', text_input('emailForm', 40), "$langAdminEmail (*)") .
@@ -447,6 +449,7 @@ elseif(isset($_POST['install5'])){
                   </div>
                   <div class='card-body'>
                       <fieldset>
+                      <legend class='mb-0' aria-label='$langForm'></legend>
                           <div class='form-group'>
                               " . form_entry('homepage_intro', textarea_input('homepage_intro', 3, 40), $langHomePageIntroTextHelp) . "
                           </div>
@@ -518,7 +521,7 @@ elseif (isset($_POST['install6'])) {
     }
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset>";
+         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     mail_settings_form();
     $tool_content .= "
            <div class='form-group mt-5'>
@@ -576,7 +579,7 @@ elseif (isset($_POST['install7'])) {
     $tool_content .= "
     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langReviewSettings</span></div>
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset>" .
+         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>" .
            display_entry(q($dbHostForm), $langdbhost) .
            display_entry(q($dbUsernameForm), $langDBLogin) .
            display_entry(q($dbNameForm), $langMainDB) .
@@ -788,6 +791,7 @@ elseif (isset($_POST['install1'])) {
             <div class='card-body'>
               <form class='form-horizontal form-wrapper' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                 <fieldset>
+                  <legend class='mb-0' aria-label='$langForm'></legend>
                   <div class='form-group'>
                     <label for='lang' class='col-sm-12 control-label-notes text-start'>$langChooseLang:</label>
                     <div class='col-sm-12'>" . selection($langLanguages, 'lang', $lang, 'class="form-control" onChange=\"document.langform.submit();\"') . "</div>
@@ -798,7 +802,7 @@ elseif (isset($_POST['install1'])) {
                       <input type='hidden' name='welcomeScreen' value='true'>
                     </div>
                   </div>
-                <fieldset>
+                </fieldset>
               </form>
             </div>
           </div>

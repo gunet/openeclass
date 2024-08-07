@@ -22,7 +22,7 @@
                     <div class='col-12'>
                         <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
-                                <legend class='text-start mb-3'>{{ trans('langBasicCfgSetting') }}</legend>
+                                <legend class='mb-0' aria-label="{{ trans('langBasicCfgSetting') }}"></legend>
                                 <table class='table table-bordered table-default' width='100%'>
                                     <tr>
                                         <th width='200' class='left'>

@@ -143,6 +143,7 @@ $tool_content .= "
 <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'><p class='mb-4'>$langGroupManyUsers</p>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
                <div class='col-sm-12 radio mb-2'><label><input type='radio' name='type' value='uname' $checked_uname> $langUsername</label></div>
                <div class='col-sm-12 radio'><label><input type='radio' name='type' value='am' $checked_am> $langAm</label></div>

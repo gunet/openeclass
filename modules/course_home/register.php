@@ -170,6 +170,7 @@ $tool_content .= action_bar(array(
             <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>" .
                 generate_csrf_token_form_field() . "
                 <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='col-12'>
                         <div class='form-group'>
                             <label class='col-sm-12 control-label-notes'>$langCode</label>

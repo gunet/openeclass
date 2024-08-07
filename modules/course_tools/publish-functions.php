@@ -47,7 +47,7 @@ function random_secret(int $length = 32): string {
 function new_publish_ltiapp() {
     global $tool_content, $langAdd, $course_code, $langTitle, $langDescription,
            $langLTIProviderKey, $langLTIProviderSecret, $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive,
-           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes;
+           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes, $langForm;
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $key = random_secret(8);
@@ -58,6 +58,7 @@ function new_publish_ltiapp() {
                 <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
                         <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                             <div class='col-sm-12'>
@@ -131,7 +132,7 @@ function new_publish_ltiapp() {
 function edit_publish_ltiapp($id) {
     global $tool_content, $langModify, $course_code, $langTitle, $langDescription,
            $langLTIProviderKey, $langLTIProviderSecret, $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive,
-           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes;
+           $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes, $langForm;
 
     $row = Database::get()->querySingle("SELECT * FROM course_lti_publish WHERE id = ?d ", $id);
     $status = ($row->enabled == 1 ? 1 : 0);
@@ -145,6 +146,7 @@ function edit_publish_ltiapp($id) {
         <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
             <div class='col-sm-12'>
@@ -215,7 +217,7 @@ function edit_publish_ltiapp($id) {
  */
 function show_publish_ltiapp($id) {
     global $tool_content, $urlServer, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret, $langLTIProviderCartridgeUrl,
-           $langLTIProviderHelp1, $langLTIProviderHelp2;
+           $langLTIProviderHelp1, $langLTIProviderHelp2, $langForm;
 
     $row = Database::get()->querySingle("SELECT * FROM course_lti_publish WHERE id = ?d", $id);
     $launchurl = $urlServer . "modules/lti/tool.php?id=".$id;
@@ -224,6 +226,7 @@ function show_publish_ltiapp($id) {
     $cartridgeurl = $urlServer . "modules/lti/cartridge.php?id=" . $id . "&token=" . LtiEnrolHelper::generate_cartridge_token($id);
 
     $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'><form class='form-horizontal'><fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
                 <label for='ProviderUrl' class='col-sm-6 control-label-notes'>$langLTIProviderUrl</label>
                 <div class='col-sm-12'>

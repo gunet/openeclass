@@ -25,6 +25,7 @@
 
                     <form class='form-horizontal' role='form' name='edituser' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();'>
                         <fieldset>
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
                                 <label for='lname' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                 <div class='col-sm-12'>

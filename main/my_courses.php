@@ -185,7 +185,7 @@ if(isset($_GET['term'])){
 
                                         <div class='modal-title' id='exampleModalLabel{$course->course_id}'>
                                             <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                                            <h3 class='modal-title-default text-center text-center mb-0'>$langUnCourse</h3>
+                                            <div class='modal-title-default text-center text-center mb-0'>$langUnCourse</div>
                                         </div>
                                     </div>
                                     <div class='modal-body text-center'>
@@ -261,7 +261,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
             <input type='hidden' id='KeypagesCourse' value='$pagesPag'>
 
             <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent mt-4'>
-                <nav aria-label='Page navigation example w-100'>
+                <nav role='navigation' aria-label='Pagination Navigation'>
                     <ul class='pagination mycourses-pagination w-100 mb-0'>
                         <li class='page-item page-item-previous'>
                             <a class='page-link' href='javascript:void(0);' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>

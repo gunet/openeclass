@@ -147,7 +147,7 @@
 
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
-
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group'>
                                         <label for='fcode' class='col-sm-12 control-label-notes'>{{ trans('langCode') }}</label>
                                         <div class='col-sm-12'>
@@ -205,7 +205,7 @@
                                     @endif
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</div>
                                         <div class='col-sm-12'>
                                             <div class="radio mb-2">
                                                 <label>
@@ -262,7 +262,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
@@ -290,13 +290,14 @@
 
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 col-sm-offset-2' id='cc'>
+                                            <label class='mb-0' for='course_license_id' aria-label="{{ trans('langOpenCoursesLicense') }}"></label>
                                             {!! $license_selection !!}
                                         </div>
                                     </div>
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</div>
                                         <div class='col-sm-12'>
 
                                             <div class='radio mb-3'>
@@ -354,7 +355,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <label for='Options' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
+                                        <label for='course_language_id' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $lang_select_options !!}
                                         </div>
@@ -362,7 +363,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p for='courseoffline' class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseOfflineSettings') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseOfflineSettings') }}</div>
                                         <div class="col-sm-12">
                                             <div class="radio mb-2">
                                                 <label>
@@ -382,7 +383,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseUserRequests') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseUserRequests') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
@@ -393,15 +394,16 @@
                                             </div>
                                             <div class='radio'>
                                                 <label>
-                                                    <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}>
+                                                    <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}>
                                                     {{ trans('langDeactivate') }}
                                                 </label>
+                                                <div class='help-block'>{{ $log_course_user_requests_disable }}</div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langUsersListAccess') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langUsersListAccess') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
@@ -421,7 +423,7 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseSharing') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseSharing') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
@@ -444,7 +446,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langForum') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langForum') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
@@ -465,7 +467,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseRating') }}:</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseRating') }}:</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
@@ -485,7 +487,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseAnonymousRating') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseAnonymousRating') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
@@ -508,7 +510,7 @@
 
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseCommenting') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseCommenting') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
@@ -526,7 +528,7 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <p class='col-sm-12 control-label-notes mb-2'>{{ trans('langAbuseReport') }}</p>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAbuseReport') }}</div>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>

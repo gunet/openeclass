@@ -46,6 +46,7 @@
 
                     <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
                         <fieldset>
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
                                 <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                 <div class='col-sm-12'>

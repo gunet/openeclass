@@ -300,6 +300,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='rubric_form'>
                     <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='row form-group".(Session::getError('name') ? " has-error" : "")."'>
                             <label for='name' class='col-12 control-label-notes mb-1'>$langTitleRubric:</label>
                             <div class='col-12'>

@@ -1730,7 +1730,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
     global $tool_content, $course_code,
            $langImportGradesGradebookHelp, $langWorkFile, $langUpload,
            $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
-           $langImportExtraGradebookUsers, $langGradesImported, $urlAppend, $langImgFormsDes;
+           $langImportExtraGradebookUsers, $langGradesImported, $urlAppend, $langImgFormsDes, $langForm;
 
     if ($import and isset($_FILES['userfile'])) { // import user grades
         $gradebook_range = get_gradebook_range($gradebook_id);
@@ -1824,6 +1824,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                         <form class='form-horizontal' enctype='multipart/form-data' method='post' 
                             action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;imp=$activity_id&amp;import_grades=true'>
                             <fieldset>
+                                <legend class='mb-0' aria-label='$langForm'></legend>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>$langImportGradesGradebookHelp</p>

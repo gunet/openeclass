@@ -28,6 +28,7 @@
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     {!! $monthsField !!}
                                     <div class='form-group mt-4'>
                                         <label for='auth_input_id' class='col-sm-12 control-label-notes'>{{ trans('langMultiDelUserData') }}:</label>

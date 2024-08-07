@@ -133,20 +133,21 @@ if(isset($_POST['searchGroupByCategory'])){
 $tool_content .= "<div class='row mb-4'>
                     <div class='col-md-6 col-12'>";
                        $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
-                                            <p class='mb-1'>$langSearchGroupByName</p>
+                                            <label for='group-name' class='control-label-notes mb-1'>$langSearchGroupByName</label>
                                             <div class='col-12 d-flex justify-content-start'>
-                                                <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-40px' aria-label='Submit button'><span class='fa fa-search fs-6'></span></button>
+                                                <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-40px' aria-label='Submit button'>
+                                                    <span class='fa fa-search fs-6'></span>
+                                                </button>
                                                 <select id='group-name' class='form-select' name='groupNames[]' multiple></select>
-
                                             </div>
                                          </form>";
 $tool_content .= "  </div>
                     <div class='col-md-6 col-12 mt-md-0 mt-3'>";
                         $tool_content .= "
                         <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
-                            <p class='mb-1'>$langSearchGroupByCategory</p>
+                            <label for='searchGroupByCategoryId' class='control-label-notes mb-1'>$langSearchGroupByCategory</label>
                             <div class='col-12'>
-                                <select class='form-select py-0 mt-0' name='searchGroupByCategory' onchange='this.form.submit()'>
+                                <select id='searchGroupByCategoryId' class='form-select py-0 mt-0' name='searchGroupByCategory' onchange='this.form.submit()'>
                                     <option value='-1' $selectedCategory2>--</option>
                                     <option value='0' $selectedCategory3>$langAllGroupsWithoutCategory</option>";
                                     $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
@@ -342,7 +343,7 @@ $tool_content .= "<div class='col-12'>
                                                                             <a type='button' href='group_space.php?course=$course_code&amp;group_id=$gr->id'>" . q($gr->name) . "
                                                                                 &nbsp;<span class='$link_class text-danger'></span>
                                                                             </a>
-                                                                            <button class='btn submitAdminBtn btn-sm showSettings' type='button' data-bs-toggle='collapse' data-bs-target='#CollapseGroup_$gr->id'>
+                                                                            <button aria-label='$langSettingSelect' class='btn submitAdminBtn btn-sm showSettings' type='button' data-bs-toggle='collapse' data-bs-target='#CollapseGroup_$gr->id'>
                                                                                 <span class='fa fa-cogs'></span>
                                                                             </button>
                                                                         </div>
@@ -359,7 +360,7 @@ $tool_content .= "<div class='col-12'>
                                                                     $tool_content .= "
                                                                                     <div class='row'>
                                                                                         <div class='col-12 form-group'>
-                                                                                            <label class='control-label-notes mb-1'>$langGroupTutor</label>
+                                                                                            <label for='select-tutor_$gr->id' class='control-label-notes mb-1'>$langGroupTutor</label>
                                                                                             <select name='tutor_$gr->id[]' multiple id='select-tutor_$gr->id' class='form-select'>\n";
 
 
@@ -383,9 +384,9 @@ $tool_content .= "<div class='col-12'>
 
 
                                                                     $tool_content .= "  <div class='col-12 form-group mt-4'>
-                                                                                            <label class='control-label-notes mb-1'>$langMax $langGroupPlacesThis</label>
+                                                                                            <label for='maxsStudent_$gr->id' class='control-label-notes mb-1'>$langMax $langGroupPlacesThis</label>
                                                                                             <div class='col-sm-12'>
-                                                                                                <input class='form-control' type=text name='maxStudent_$gr->id' size=2 value='$max_members'>
+                                                                                                <input id='maxsStudent_$gr->id' class='form-control' type=text name='maxStudent_$gr->id' size=2 value='$max_members'>
                                                                                             </div>";
                                                                                             $membersAvailable = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                                                                                             WHERE group_id = ?d
@@ -418,10 +419,10 @@ $tool_content .= "<div class='col-12'>
                                                                                 <div class='col-lg-4 col-12 col-12 mt-lg-0 mt-4'>
                                                                                     <div class='row'>";
                                                                         $tool_content .="<div class='col-12 form-group'>
-                                                                                                <label class='control-label-notes mb-1'>$langGroupStudentRegistrationType</label>
+                                                                                                <div class='control-label-notes mb-1'>$langGroupStudentRegistrationType</div>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='checkbox'>
-                                                                                                        <label class='label-container'>
+                                                                                                        <label class='label-container' aria-label='$langSelect'>
                                                                                                             <input type='checkbox' name='self_reg_$gr->id' $checked[$self_reg]>
                                                                                                             <span class='checkmark'></span>
                                                                                                             $langGroupAllowStudentRegistration
@@ -431,10 +432,10 @@ $tool_content .= "<div class='col-12'>
                                                                                             </div>
 
                                                                                             <div class='col-12 form-group mt-4'>
-                                                                                                <label class='control-label-notes mb-1'>$langGroupAllowUnregister</label>
+                                                                                                <div class='control-label-notes mb-1'>$langGroupAllowUnregister</div>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='checkbox'>
-                                                                                                        <label class='label-container'>
+                                                                                                        <label class='label-container' aria-label='$langSelect'>
                                                                                                             <input type='checkbox' name='allow_unreg_$gr->id' $checked[$allow_unreg]>
                                                                                                             <span class='checkmark'></span>
                                                                                                             $langGroupAllowStudentUnregister
@@ -444,7 +445,7 @@ $tool_content .= "<div class='col-12'>
                                                                                             </div>
 
                                                                                             <div class='col-12 form-group mt-4'>
-                                                                                                <label class='control-label-notes mb-1'>$langPrivate_1</label>
+                                                                                                <div class='control-label-notes mb-1'>$langPrivate_1</div>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='radio mb-2'>
                                                                                                         <label>
@@ -464,12 +465,12 @@ $tool_content .= "<div class='col-12'>
                                                                 $tool_content .= "</div>
 
                                                                                 <div class='col-lg-4 col-12 col-12 mt-lg-0 mt-4'>
-                                                                                    <label class='control-label-notes mb-1'>$langTools</label>
+                                                                                    <div class='control-label-notes mb-1'>$langTools</div>
                                                                                     <div class='row'>";
 
                                                                     $tool_content .= "  <div class='col-12 form-group'>
                                                                                             <div class='checkbox'>
-                                                                                                <label class='label-container'>
+                                                                                                <label class='label-container' aria-label='$langSelect'>
                                                                                                     <input type='checkbox' name='public_users_list_$gr->id' $checked[$public_users_list]>
                                                                                                     <span class='checkmark'></span>
                                                                                                     $langGroupPublicUserList
@@ -479,7 +480,7 @@ $tool_content .= "<div class='col-12'>
 
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
-                                                                                                <label class='label-container'>
+                                                                                                <label class='label-container' aria-label='$langSelect'>
                                                                                                     <input type='checkbox' name='forum_$gr->id' $checked[$has_forum]>
                                                                                                     <span class='checkmark'></span>
                                                                                                     $langGroupForum
@@ -489,7 +490,7 @@ $tool_content .= "<div class='col-12'>
 
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
-                                                                                                <label class='label-container'>
+                                                                                                <label class='label-container' aria-label='$langSelect'>
                                                                                                     <input type='checkbox' name='documents_$gr->id' $checked[$documents]>
                                                                                                     <span class='checkmark'></span>
                                                                                                     $langDoc
@@ -501,7 +502,7 @@ $tool_content .= "<div class='col-12'>
                                                                                         $tool_content .= "
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
-                                                                                                <label class='label-container'>
+                                                                                                <label class='label-container' aria-label='$langSelect'> 
                                                                                                     <input type='checkbox' name='wiki_$gr->id' $checked[$wiki]>
                                                                                                     <span class='checkmark'></span>
                                                                                                     $langWiki
@@ -512,7 +513,7 @@ $tool_content .= "<div class='col-12'>
                                                                                         if(get_config('individual_group_bookings')){
                                                                                             $tool_content .= "<div class='col-12 form-group mt-2'>
                                                                                                 <div class='checkbox'>
-                                                                                                    <label class='label-container'>
+                                                                                                    <label class='label-container' aria-label='$langSelect'>
                                                                                                         <input type='checkbox' name='booking_$gr->id' $checked[$booking]>
                                                                                                         <span class='checkmark'></span>
                                                                                                         $langBookings

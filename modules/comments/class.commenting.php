@@ -95,7 +95,7 @@ Class Commenting {
                           <div class='modal-header'>
                             <div class='modal-title'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                <h3 class='modal-title-default text-center mb-0'>$langComments</h3>
+                                <div class='modal-title-default text-center mb-0'>$langComments</div>
                             </div>
                            
                               

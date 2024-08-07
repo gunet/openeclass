@@ -20,6 +20,7 @@
                         <form class='form-horizontal' name='authmenu' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <input type='hidden' name='auth' value='{{ $auth }}'>
                             <fieldset>
+                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langTestAccount') }} ({{ $auth_ids[$auth] }})</span></div>
 
                                 <div class='form-group mt-4'>

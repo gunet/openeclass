@@ -37,7 +37,7 @@
                 <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' method='post' action='{{ $passUrl }}'>
                         <fieldset>
-
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group{{ $old_pass_error ? " has-error" : "" }}'>
                                 <label for='old_pass' class='col-sm-12 control-label-notes'>{{ trans('langOldPass') }} </label>
                                 <div class='col-sm-12'>

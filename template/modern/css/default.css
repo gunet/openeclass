@@ -583,7 +583,8 @@ h1,h2{
 
 h3,
 .portofolio-text-intro,
-.action-bar-title{
+.action-bar-title,
+.modal-title-default{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -1574,8 +1575,6 @@ b a {
   font-weight: 400; font-style: normal;
   position: relative;
   transition: 0.5s;
-  /* line-height: 16px;
-  letter-spacing: 0px; */
   cursor: pointer;
   margin-bottom: 10px;
 }
@@ -1634,20 +1633,22 @@ input[type="radio"]:checked {
 label:has(input[type="radio"]:disabled){
   font-size: 14px;
   font-weight: 400; font-style: normal;
-  color: #687DA3;
+  color: #2B3944;
   line-height: 16px;
   letter-spacing: 0px;
   cursor: not-allowed;
-  opacity: 0.4;
+  /* opacity: 0.4; */
 }
 input[type="radio"]:disabled{
   cursor: not-allowed;
-  opacity: 0.4;
+  color: #2B3944;
+  /* opacity: 0.4; */
 }
 
 .radio:has(input[type='radio']:disabled) .help-block{
   cursor: not-allowed;
-  opacity: 0.4;
+  color: #2B3944;
+  /* opacity: 0.4; */
 }
 
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
@@ -1710,12 +1711,12 @@ input[type="radio"]:disabled{
 
 .label-container:has(input[type="checkbox"]:disabled){
   cursor:not-allowed;
-  color: #687DA3;
+  color: #2B3944;
 }
 .label-container > input[type="checkbox"]:disabled {
   cursor:not-allowed;
+  color: #2B3944;
 }
-
 
 /**************************************************************/
 

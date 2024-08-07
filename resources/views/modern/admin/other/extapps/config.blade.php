@@ -31,6 +31,7 @@
                                     
                                     <form class='form-horizontal' role='form' action='extapp.php?edit={{ $appName }}' method='post'>
                                         <fieldset>
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         <?php $boolean_fields = [];?>
                                         @foreach ($app->getParams() as $param)
                                             @if ($param->getType() == ExtParam::TYPE_BOOLEAN)

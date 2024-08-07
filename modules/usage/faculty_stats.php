@@ -235,8 +235,8 @@ if (isset($_GET['stats_submit'])) {
     <div class='$flex_grow'>
         <div class='form-wrapper form-edit rounded'>
                         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='get'>
-                    <fieldset>";
-    $tool_content .= "<div class='row form-group mt-4'><label class='col-12 control-label-notes'>$langFaculty</label>";
+                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
+    $tool_content .= "<div class='row form-group mt-4'><label for='dialog-set-value' class='col-12 control-label-notes'>$langFaculty</label>";
     $tool_content .= "<div class='col-12'>";
     if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));

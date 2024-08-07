@@ -67,7 +67,7 @@ draw($tool_content, 1);
  */
 function display_sso_exception_form($uid) {
 
-    global $tool_content, $langName, $langComments, $langSend, $urlAppend;
+    global $tool_content, $langName, $langComments, $langSend, $urlAppend, $langForm;
 
     $firstname = uid_to_name($uid);
     $tool_content .= "
@@ -75,6 +75,7 @@ function display_sso_exception_form($uid) {
         <div class='col-12 mt-4'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?exception=TRUE' method='post'>
             <fieldset>
+                <legend class='mb-0' aria-label='$langForm'></legend>
                 <div class='form-group'>
                     <label for='name_id' class='col-sm-12 control-label-notes'>$langName</label>
                     <div class='col-sm-12'>

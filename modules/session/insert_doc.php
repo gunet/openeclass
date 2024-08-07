@@ -179,7 +179,7 @@ function list_documents($sid, $cid) {
 function upload_file($sid){
     global $webDir, $tool_content, $course_code, $langTitle, $langComments, 
            $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, 
-           $uid, $langDescription, $langImgFormsDes;
+           $uid, $langDescription, $langImgFormsDes, $langForm;
 
         $resources = array();
         if(!$is_consultant){
@@ -199,7 +199,7 @@ function upload_file($sid){
                                     <div class='form-wrapper form-edit rounded'>
                                         <form role='form' class='form-horizontal' action='resource.php?course=$course_code&session=$sid&doc_deliverable=1' method='post' enctype='multipart/form-data'>
                                             <fieldset>
-
+                                                <legend class='mb-0' aria-label='$langForm'></legend>
                                                 <input type='hidden' name='id' value='$sid' />
 
                                                 <div class='form-group'>

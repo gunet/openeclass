@@ -83,6 +83,7 @@ if (empty($search_terms)) {
     <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='row form-group'>
             <label for='search_terms_id' class='col-12 control-label-notes'>$langOR</label>
             <div class='col-12'>

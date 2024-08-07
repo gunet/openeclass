@@ -227,7 +227,8 @@ if (isset($_GET['mid'])) {
                         $out .= generate_csrf_token_form_field() . "
 
                                     <fieldset>
-                                            <h3 class='TextBold text-center'>$langReply</h3>
+                                            <legend class='mb-0' aria-label='$langForm'></legend>
+                                            <div class='action-bar-title text-center'>$langReply</div>
 
                                             <div class='form-group mt-4'>
                                                 <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -345,18 +346,6 @@ if (isset($_GET['mid'])) {
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
             // forward form
             if(!isset($_GET['course'])){
                 $out .= "<div class='row'>
@@ -379,7 +368,8 @@ if (isset($_GET['mid'])) {
                                         $out .= generate_csrf_token_form_field() . "
 
                                             <fieldset>
-                                                <h3 class='TextBold text-center'>$langForward</h3>
+                                                <legend class='mb-0' aria-label='$langForm'></legend>
+                                                <div class='action-bar-title text-center'>$langForward</div>
 
                                                 <div class='form-group mt-4'>
                                                     <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -611,7 +601,7 @@ if (isset($_GET['mid'])) {
 
                         bootbox.confirm({
                             closeButton: false,
-                            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
+                            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
                             message: "<p class=\"text-center\">'.js_escape($langConfirmDelete).'</p>",
                             buttons: {
                                 cancel: {
@@ -771,7 +761,7 @@ if (isset($_GET['mid'])) {
 
                     bootbox.confirm({
                         closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                         buttons: {
                             cancel: {
@@ -843,7 +833,7 @@ if (isset($_GET['mid'])) {
 
                     bootbox.confirm({
                         closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDeleteAllMsgs)."</p>',
                         buttons: {
                             cancel: {

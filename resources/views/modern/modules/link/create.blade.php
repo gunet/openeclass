@@ -40,7 +40,7 @@
                                     <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
                                 @endif
                                 <fieldset>
-                                    
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group{{ $urlLinkError ? " has-error" : "" }}'>
                                         <label for='urllink' class='col-sm-6 control-label-notes'>URL</label>
                                             <div class='col-sm-12'>

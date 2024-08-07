@@ -151,6 +151,7 @@ if (!$conference_activity) {
        <input type='hidden' name='course' value='$course_code'>
        <input type='hidden' name='conference_id' value='$conference_id'>
        <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='col-12'>
             <div class='col-md-6 col-12 d-flex justify-content-start align-items-center gap-2'>
                 <div>

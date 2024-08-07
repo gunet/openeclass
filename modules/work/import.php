@@ -122,6 +122,7 @@ $tool_content .= "
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
                     <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <div class='col-sm-12'>
                                 <p class='form-control-static'>$langImportGradesHelp</p>

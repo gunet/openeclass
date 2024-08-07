@@ -24,6 +24,7 @@
                             
                             <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group'>
                                         <label for='auth_names_id' class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
                                         <div class='col-sm-12'>

@@ -507,7 +507,7 @@ function add_attendance_other_activity($attendance_id) {
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
            $langAttendanceActivityDate, $language, $head_content, $urlAppend, 
-           $langImgFormsDes, $langSelect;
+           $langImgFormsDes, $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -528,7 +528,7 @@ function add_attendance_other_activity($attendance_id) {
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded px-0 border-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
-                    <fieldset>";
+                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
                     if (isset($_GET['modify'])) { // modify an existing attendance activity
 
                         $id  = filter_var(getDirectReference($_GET['modify']), FILTER_VALIDATE_INT);

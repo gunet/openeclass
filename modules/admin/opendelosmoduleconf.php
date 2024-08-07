@@ -81,7 +81,7 @@ $tool_content .= "<div class='row'>
 <div class='col-lg-6 col-12'>";
 $tool_content .= "<div class='form-wrapper form-edit border-0 px-0'>";
 $tool_content .= "<form class='form-horizontal' role='form' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>";
-$tool_content .= "<fieldset>";
+$tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 
 foreach ($app->getParams() as $param) {
 

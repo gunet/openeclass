@@ -1934,7 +1934,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                         <div class='modal-header'>
                                             <div class='modal-title'>
                                                 <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                                <h3 class='modal-title-default text-center mb-0 mt-2' id='CompletionWithoutActivitiesLabel'>$langSessionCompletion</h3>
+                                                <div class='modal-title-default text-center mb-0 mt-2' id='CompletionWithoutActivitiesLabel'>$langSessionCompletion</div>
                                             </div>
                                         </div>
                                         <div class='modal-body text-center'>
@@ -1956,7 +1956,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                     <div class='modal-header'>
                                         <div class='modal-title'>
                                             <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                            <h3 class='modal-title-default text-center mb-0 mt-2' id='WithCompletedTcLabel'>$langSessionCompletion</h3>
+                                            <div class='modal-title-default text-center mb-0 mt-2' id='WithCompletedTcLabel'>$langSessionCompletion</div>
                                         </div>
                                     </div>
                                     <div class='modal-body text-center'>
@@ -1978,7 +1978,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                                     <div class='modal-header'>
                                         <div class='modal-title'>
                                             <div class='icon-modal-default'><i class='fa-solid fa-circle-info fa-xl Neutral-500-cl'></i></div>
-                                            <h3 class='modal-title-default text-center mb-0 mt-2' id='WithCompletedLiveMeetingLabel'>$langSessionCompletion</h3>
+                                            <div class='modal-title-default text-center mb-0 mt-2' id='WithCompletedLiveMeetingLabel'>$langSessionCompletion</div>
                                         </div>
                                     </div>
                                     <div class='modal-body text-center'>
@@ -3178,7 +3178,7 @@ function add_submitted_document_to_certificate($element, $element_id) {
  * @param $sid
  */
 function passage_insertion($sid){
-    global $course_code, $course_id, $tool_content, $langInsertPassage, $langSubmit, $langImgFormsDes;
+    global $course_code, $course_id, $tool_content, $langInsertPassage, $langSubmit, $langImgFormsDes, $langForm;
 
     $tool_content .= "  
     <div class='d-lg-flex gap-4 mt-4'>
@@ -3186,7 +3186,7 @@ function passage_insertion($sid){
             <div class='form-wrapper form-edit rounded'>
                 <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code&session=$sid' method='post'>
                     <fieldset>
-
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
                             <label for='add_passage' class='col-12 control-label-notes'>$langInsertPassage</label>
                             " . rich_text_editor('add_passage', 5, 40, '') . "

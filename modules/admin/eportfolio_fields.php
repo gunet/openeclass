@@ -51,7 +51,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='col-lg-6 col-12'>
                       <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<fieldset>";
+    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>";
@@ -102,7 +102,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
-    $tool_content .= "<fieldset>";
+    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>";
@@ -136,7 +136,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='col-lg-6 col-12'>
                       <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<fieldset>";
+    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
@@ -172,7 +172,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='col-lg-6 col-12'>
                       <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<fieldset>";
+    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
     $tool_content .= "<div class='form-group'>";
@@ -344,7 +344,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         <div class='col-lg-6 col-12'>
                           <div class='form-wrapper form-edit border-0 px-0'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<fieldset>";
+        $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
         $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";
         $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
         $tool_content .= "<div class='form-group'>";

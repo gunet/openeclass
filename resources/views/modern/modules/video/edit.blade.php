@@ -74,7 +74,7 @@
 
                                 <form class='form-horizontal' role='form' method='POST' action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}' enctype='{{ $form_enctype }}' onsubmit="return checkrequired(this, 'title');">
                                     <fieldset>
-
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         <div class='form-group'>
                                             @if (isset($pendingCloudUpload))
                                                 <label for='fileCloudInfo' class='col-sm-12 control-labe-notes'>{{ trans('langCloudFile') }}</label>

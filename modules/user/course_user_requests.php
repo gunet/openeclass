@@ -107,6 +107,7 @@ if (isset($_GET['rid'])) {
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
+        <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='col-sm-12'><div class='control-label-notes'>$langReasonReject</div></div>
         <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>" . q(uid_to_name($uid, 'fullname')) . "</small></div>
         <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>" . q(uid_to_name($_GET['u'], 'fullname')) . "</small></div>

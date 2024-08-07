@@ -166,6 +166,7 @@ if (isset($_POST['submit'])) {
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
               <label for='subject' class='col-sm-12 control-label-notes'>$langSubject</label>
               <div class='col-sm-12'>

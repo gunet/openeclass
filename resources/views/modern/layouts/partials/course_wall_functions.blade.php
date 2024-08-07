@@ -28,8 +28,8 @@
                 <div class="form-wrapper form-edit rounded">
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
                         <fieldset> 
+                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class="form-group">
-                                
                                 <textarea aria-label="{{ trans('langTypeOutMessage') }}" id="textr" onfocus="expand_form();" class="form-control" placeholder="{{ trans('langTypeOutMessage') }}" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
                             </div>
                             <div id="resources_panel" class="panel panel-default collapse mt-3 border-0">

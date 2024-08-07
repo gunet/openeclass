@@ -144,6 +144,7 @@
                             <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
                                     <fieldset>
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         @if ($can_modify)
                                             <div class='form-group'>
                                                 <label for='newState' class='col-sm-12 control-label-notes'>{{ trans('langChangeState') }}</label>

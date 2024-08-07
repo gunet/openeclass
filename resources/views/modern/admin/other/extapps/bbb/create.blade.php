@@ -52,6 +52,7 @@
                 <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                     <fieldset>
+                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                         <div class='form-group mt-4'>
                             <label for='hostname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                             <div class='col-sm-12'>

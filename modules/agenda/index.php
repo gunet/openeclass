@@ -301,7 +301,7 @@ if ($is_editor) {
                                                             <div class='control-label-notes mt-2'>$langCalculateNewDuration <small>$langInHour</small></div>
                                                             <div class='d-flex justify-content-start align-items-center gap-2'>
                                                                 <div id='idNewDuration'></div>
-                                                                <label class='label-container'>
+                                                                <label class='label-container' aria-label='$langSelect'>
                                                                     <input type='checkbox' id='OnOffDuration' checked>
                                                                     <span class='checkmark'></span>
                                                                 </label>
@@ -319,7 +319,7 @@ if ($is_editor) {
 
 
                                                         $tool_content .= "<div class='row form-group mt-4'>
-                                                                                    <label class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
+                                                                                    <label for='frequencynumber' class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
 
                                                                                     <div class='col-12'>
                                                                                     <div class='row'>
@@ -340,7 +340,7 @@ if ($is_editor) {
                                                                 $selected[$repeatperiod] = ' selected';
                                                             }
                                                             $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-4'>
-                                                                        <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
+                                                                        <select class='form-select' name='frequencyperiod' id='frequencyperiod' aria-label='$langSelectFromMenu'>
                                                                             <option value=\"\">$langSelectFromMenu...</option>
                                                                             <option value=\"D\"{$selected['D']}>$langDays</option>
                                                                             <option value=\"W\"{$selected['W']}>$langWeeks</option>
@@ -361,7 +361,7 @@ if ($is_editor) {
                                                             </div>";
                                                         /**** end of recursion paramneters *****/
                                                         $tool_content .= "<div class='row form-group mt-4'>
-                                                                                <label class='col-12 control-label-notes text-capitalize'>$langDetail</label>
+                                                                                <label for='content' class='col-12 control-label-notes text-capitalize'>$langDetail</label>
                                                                                 <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
                                                                             </div>
 
@@ -681,7 +681,7 @@ if ($is_editor) {
                                                 <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
                                                 <div class='d-flex justify-content-start align-items-center gap-2'>
                                                     <div id='idDuration'></div>
-                                                    <label class='label-container'>
+                                                    <label class='label-container' aria-label='$langSelect'>
                                                         <input type='checkbox' id='OnOffDuration' checked>
                                                         <span class='checkmark'></span>
                                                     </label>
@@ -700,13 +700,13 @@ if ($is_editor) {
                                             </div>
 
                                             <div class='row form-group mt-4'>
-                                                <label class='col-12 control-label-notes text-capitalize'>$langDetail</label>
+                                                <label for='content' class='col-12 control-label-notes text-capitalize'>$langDetail</label>
                                                 <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
                                             </div>";
 
                                             /**** Recursion parameters *****/
                                             $tool_content .= "<div class='row form-group mt-4'>
-                                                                    <label class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
+                                                                    <label for='frequencynumber' class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
 
                                                                     <div class='col-12'>
                                                                     <div class='row'>
@@ -727,7 +727,7 @@ if ($is_editor) {
                                                 $selected[$repeatperiod] = ' selected';
                                             }
                                             $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-4'>
-                                                        <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
+                                                        <select class='form-select' name='frequencyperiod' id='frequencyperiod' aria-label='$langSelectFromMenu'>
                                                             <option value=\"\">$langSelectFromMenu...</option>
                                                             <option value=\"D\"{$selected['D']}>$langDays</option>
                                                             <option value=\"W\"{$selected['W']}>$langWeeks</option>
