@@ -30,9 +30,9 @@
             });
             $('.dataTables_filter input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',
-                'placeholder': '{{ trans('langSearch') }}...',
-                'aria-label' : '{{ trans('langSearch') }}'
+                'placeholder': '{{ trans('langSearch') }}...'
             });
+            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
         });
 
     </script>

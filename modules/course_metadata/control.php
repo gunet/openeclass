@@ -229,21 +229,21 @@ $tool_content .= <<<EOF
                                     </li>
                                     <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <div>$langOpenCoursesType <strong>($langOpenCoursesIsAMinusLevel)</strong></div>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label='$langSelect'>
                                             <input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/>
                                             <span class='checkmark'></span>
                                         </label>
                                     </li>
                                     <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <div>$langOpenCoursesType <strong>($langOpenCoursesIsALevel)</strong></div>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label='$langSelect'>
                                             <input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/>
                                             <span class='checkmark'></span>
                                         </label>
                                     </li>
                                     <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <div>$langOpenCoursesType <strong>($langOpenCoursesIsAPlusLevel)</strong></div>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label='$langSelect'>
                                             <input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/>
                                             <span class='checkmark'></span>
                                         </label>

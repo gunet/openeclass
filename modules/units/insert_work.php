@@ -25,7 +25,7 @@
  */
 function list_assignments() {
     global $id, $tool_content, $langWorks, $langChoice, $langGroupWorkDeadline_of_Submission,
-    $langAddModulesButton, $langNoAssign, $langPassCode, $course_id, $course_code, $urlServer;
+    $langAddModulesButton, $langNoAssign, $langPassCode, $course_id, $course_code, $urlServer, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
     if (count($result) == 0) {
@@ -54,7 +54,7 @@ function list_assignments() {
             $description = empty($row->description) ? '' :
                     "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr class='$vis'>" .
-                    "<td><label class='label-container'><input name='work[]' value='$row->id' type='checkbox' /><span class='checkmark'></span></label></td>" .
+                    "<td><label class='label-container' aria-label='$langSelect'><input name='work[]' value='$row->id' type='checkbox' /><span class='checkmark'></span></label></td>" .
                     "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
                     "<td>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "</tr>";

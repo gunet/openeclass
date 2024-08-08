@@ -68,6 +68,7 @@ $head_content .= "
                 class : 'form-control input-sm mb-3 me-3',
                 placeholder : '$langSearch...'
             });
+            $('.dataTables_filter label').attr('aria-label', '$langSearch'); 
 
             $(document).on('click', '.warnLink', function(e){
                 var modifyAllLink = $(this).attr('href');

@@ -93,9 +93,9 @@ $head_content .= "<script type='text/javascript'>
             });
             $('.dataTables_filter input').attr({
                   'class' : 'form-control input-sm ms-0 mb-3',
-                  'placeholder' : '$langSearch...',
-                  'aria-label' : '$langSearch'
+                  'placeholder' : '$langSearch...'
             });
+            $('.dataTables_filter label').attr('aria-label', '$langSearch');
             
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
@@ -395,10 +395,10 @@ if (!$nbrExercises) {
                         </td>";
             $tool_content .= "<td data-sort='$sort_date'><small>";
             if (isset($row->start_date)) {
-                $tool_content .= "<div style='color:green;'>$langStart: " . format_locale_date(strtotime($row->start_date), 'short') . "</div>";
+                $tool_content .= "<div class='Success-200-cl'>$langStart: " . format_locale_date(strtotime($row->start_date), 'short') . "</div>";
             }
             if (isset($row->end_date)) {
-                $tool_content .= "<div style='color:red;'>$langFinish: " . format_locale_date(strtotime($row->end_date), 'short') . "</div>";
+                $tool_content .= "<div class='Accent-200-cl'>$langFinish: " . format_locale_date(strtotime($row->end_date), 'short') . "</div>";
             }
 
             if ($row->time_constraint > 0) {
@@ -410,7 +410,7 @@ if (!$nbrExercises) {
             }
             // is temp save enabled?
             if ($row->temp_save == 1) {
-                $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
+                $tool_content .= "<div>$langTemporarySave: <span class='Success-200-cl'>$langYes</span></div>";
             }
             $tool_content .= "</small></td>";
 
@@ -533,7 +533,7 @@ if (!$nbrExercises) {
             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span style='color:red;'>$langHasExpiredS</span>)";
+                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='Accent-200-cl'>$langHasExpiredS</span>)";
             }
             if (has_user_participate_in_exercise($row->id)) {
                 $tool_content .= "&nbsp; <span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
@@ -547,10 +547,10 @@ if (!$nbrExercises) {
             }
             $tool_content .= "<td data-sort='$sort_date'><small>";
             if (isset($row->start_date)) {
-                $tool_content .= "<div style='color:green;'>$langStart: " . format_locale_date(strtotime($row->start_date), 'short') . "</div>";
+                $tool_content .= "<div class='Success-200-cl'>$langStart: " . format_locale_date(strtotime($row->start_date), 'short') . "</div>";
             }
             if (isset($row->end_date)) {
-                $tool_content .= "<div style='color:red;'>$langFinish: " . format_locale_date(strtotime($row->end_date), 'short') . "</div>";
+                $tool_content .= "<div class='Accent-200-cl'>$langFinish: " . format_locale_date(strtotime($row->end_date), 'short') . "</div>";
             }
 
             if ($row->time_constraint > 0) {
@@ -563,7 +563,7 @@ if (!$nbrExercises) {
             }
             // is temp save enabled?
             if ($row->temp_save == 1) {
-                $tool_content .= "<div>$langTemporarySave: <span style='color:green;'>$langYes</span></div>";
+                $tool_content .= "<div>$langTemporarySave: <span class='Success-200-cl'>$langYes</span></div>";
             }
             $tool_content .= "</small></td>";
             if ($previousResultsAllowed) {

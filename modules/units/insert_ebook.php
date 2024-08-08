@@ -25,7 +25,7 @@
 function list_ebooks() {
     global $id, $course_id, $tool_content,
     $langAddModulesButton, $langChoice, $langNoEBook,
-    $langEBook, $course_code;
+    $langEBook, $course_code, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE course_id = ?d ORDER BY `order`", $course_id);
     if (count($result) == 0) {
@@ -41,7 +41,7 @@ function list_ebooks() {
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>
-            <label class='label-container'><input type='checkbox' name='ebook[]' value='$catrow->id' />
+            <label class='label-container' aria-label='$langSelect'><input type='checkbox' name='ebook[]' value='$catrow->id' />
                             <span class='checkmark'></span></label>
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";

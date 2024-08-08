@@ -102,8 +102,9 @@
                         </a>
                     @endif
                     @if ($require_help)
-                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}' class='btn helpAdminBtn text-decoration-none'
-                            data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
+                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}' 
+                            class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip' data-bs-placement='bottom' 
+                            title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" tabindex="-1">
                             <i class="fas fa-question-circle"></i>
                         </a>
                     @endif

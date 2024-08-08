@@ -760,7 +760,7 @@ function get_learnPath_combined_progress($lpid, $lpUid): float {
  */
 function display_my_exercises($dialogBox, $style) {
 
-    global $langAdd, $langExercise, $langNoExercises, $langSelection, $course_code, $course_id, $urlServer, $langCancel;
+    global $langAdd, $langExercise, $langNoExercises, $langSelection, $course_code, $course_id, $urlServer, $langCancel, $langSelect;
 
     $output = "";
     /* --------------------------------------
@@ -799,7 +799,7 @@ function display_my_exercises($dialogBox, $style) {
                     $output .= "</td>";
                 }
                 $output .= '<td>'
-                        . '<label class="label-container"><input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" /><span class="checkmark"></span></label>'
+                        . '<label class="label-container" aria-label="'.$langSelect.'"><input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" /><span class="checkmark"></span></label>'
                         . '</td></tr>';
             }
         $output .= "</table></div>";
@@ -827,7 +827,7 @@ function display_my_documents()
 {
     global $langUp, $langName, $langSize, $langDate, $langAdd,
            $fileinfo, $langChoice,$langDirectory,  $langCancel,
-           $course_code, $group_sql, $urlbase, $path;
+           $course_code, $group_sql, $urlbase, $path, $langSelect;
 
 
     if (!empty($path)) {
@@ -903,7 +903,7 @@ function display_my_documents()
                 $content .= "<td>$size</td><td>$date</td>";
             }
             $content .= "<td>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
                                 <input type='checkbox' name='document[]' value='$entry[id]' />
                                 <span class='checkmark'></span>
                             </label>

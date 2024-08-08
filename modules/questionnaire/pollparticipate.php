@@ -121,7 +121,7 @@ function printPollForm() {
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5, $langDescription;
+    $pageName, $lang_rate1, $lang_rate5, $langDescription, $langSelect;
 
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     $head_content .= "
@@ -269,7 +269,7 @@ function printPollForm() {
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
-                                    <label class='$class_type_attr'>
+                                    <label class='$class_type_attr' aria-label='$langSelect'>
                                         <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>
                                         $checkMark_class
                                         ".q_math($theAnswer->answer_text)."

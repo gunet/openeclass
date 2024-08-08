@@ -62,7 +62,7 @@
             <div class='form-group mt-3'>
                <div class='col-12'>
                    <div class='checkbox'>
-                    <label class='label-container mb-3'>
+                    <label class='label-container mb-3' aria-label="{{ trans('langSelect') }}">
                           <input type='checkbox' name='checkseparator' value='on' {!! $checkedshib !!}>
                           <span class='checkmark'></span>{{ trans('langCharSeparator') }}
                      </label>

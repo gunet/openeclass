@@ -239,7 +239,7 @@ if (!class_exists('IMSCPExport')) {
         function prepareQuiz($quizId, $raw_to_pass=50)
         {
             global $langQuestion, $langOk, $langScore, $langError, $claro_stylesheet, $clarolineRepositorySys;
-            global $charset, $langExerciseDone;
+            global $charset, $langExerciseDone, $langSelect;
             // those two variables are needed by display_attached_file()
             global $attachedFilePathWeb;
             global $attachedFilePathSys;
@@ -376,7 +376,7 @@ if (!class_exists('IMSCPExport')) {
                         $raw = $answer->selectWeighting($answerId);
 
                         $pageBody .= '<tr><td width="5%" align="center">
-                            <label class="label-container"><input type="checkbox" name="' . $htmlQuestionId . '"
+                            <label class="label-container" aria-label="'.$langSelect.'"><input type="checkbox" name="' . $htmlQuestionId . '"
                             id="scorm_' . $idCounter . '"
                             value="' . $raw . '"><span class="checkmark"></span></label></td>
                         <td width="95%"><label for="scorm_' . $idCounter . '">' . $answerText . '</label>

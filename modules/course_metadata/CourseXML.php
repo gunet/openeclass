@@ -346,7 +346,7 @@ class CourseXMLElement extends SimpleXMLElement {
                                 }
                                 $html .= "<img id='" . $fullKey . $cnt . "_image' src='data:" . q($mime) . ";base64," . q($value) . "'/>
                                           <a id='" . $fullKey . $cnt . "_delete' href='javascript:photoDelete(\"#" . $fullKey . $cnt . "\");'>
-                                          <span class='fa-solid fa-xmark fa-lg' style='color:red;'></span>
+                                          <span class='fa-solid fa-xmark fa-lg Accent-200-cl'></span>
                                           </a>
                                           <input id='" . $fullKey . $cnt . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "' value='" . q($value) . "'>
                                           <input id='" . $fullKey . $cnt . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "' value='" . q($mime) . "'>";

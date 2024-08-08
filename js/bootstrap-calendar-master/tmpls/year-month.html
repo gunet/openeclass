@@ -4,8 +4,8 @@
 	<div class="hidden events-list" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
 		<% _.each(events, function(event) { %>
 			<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
-				class="pull-left event <%= event['class'] %> event<%= event.id %>" data-toggle="tooltip"
-				title="<%= event.title %>"></a>
+				class="pull-left event <%= event['class'] %> event<%= event.id %>" data-bs-toggle="tooltip"
+				title="<%= event.title %>" aria-label="Event"></a>
 		<% }); %>
 	</div>
 <% } %>

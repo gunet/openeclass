@@ -212,7 +212,8 @@ function getdepnumcourses($fac) {
  */
 function expanded_faculte($facid, $uid) {
     global $m, $langTutor, $langRegistration, $langCourseCode, $langLabelCourseUserRequest,
-    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess, $langLabelCollabUserRequest;
+    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess, 
+    $langLabelCollabUserRequest, $langSelect;
 
     $retString = '';
 
@@ -327,7 +328,7 @@ function expanded_faculte($facid, $uid) {
                 } else {
                     $requirepassword = '';
                 }
-                $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class $cbox_disable_student_unregister_cours /><span class='checkmark'></span></label>";
+                $retString .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class $cbox_disable_student_unregister_cours /><span class='checkmark'></span></label>";
             } else {
                 $retString .= "<i class='fa fa-user'></i>";
             }
@@ -345,7 +346,7 @@ function expanded_faculte($facid, $uid) {
             }
 
             $disabled = (!is_enabled_course_registration($uid) or $mycours->visible == COURSE_CLOSED) ? 'disabled' : '';
-            $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
+            $retString .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>

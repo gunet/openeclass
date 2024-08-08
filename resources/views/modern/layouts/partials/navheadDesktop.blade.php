@@ -446,16 +446,10 @@
                             @else
                                 <form action="{{ $urlAppend }}modules/search/search.php">
                             @endif
-                                    {{--
-                                    <input id='search-mobile' type="text" class="form-control w-100" placeholder="{{ trans('langGiveText')}}..." name="search_terms">
-                                    <button class="btn submitAdminBtnDefault mt-3 ms-auto me-auto" type="submit" name="quickSearch" aria-label='Quick search'>
-                                        {{ trans('langSubmit') }}
-                                    </button>--}}
-
-                                    <div class="input-group">
-                                        <input id='search-mobile' type="text" class="form-control mt-0"
-                                                placeholder="{{ trans('langSearch')}}..." name="search_terms" aria-label="Search terms" aria-describedby="search-btn-mobile">
-                                        <button class="btn btn-primary btn-mobile-quick-search" type="submit" id="search-btn-mobile" name="quickSearch" aria-label='Quick search'>
+                                    <div class="input-group gap-2">
+                                        <input id='search-mobile' type="text" class="form-control mt-0 rounded-2"
+                                                placeholder="{{ trans('langSearch')}}..." name="search_terms" aria-label="Search terms">
+                                        <button class="btn btn-primary btn-mobile-quick-search rounded-2" type="submit" id="search-btn-mobile" name="quickSearch" aria-label='Quick search'>
                                             <i class="fa-solid fa-magnifying-glass-arrow-right fa-lg"></i>
                                         </button>
                                     </div>

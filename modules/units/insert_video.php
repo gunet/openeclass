@@ -28,7 +28,7 @@ require_once 'include/lib/multimediahelper.class.php';
 function list_videos() {
     global $id, $tool_content, $course_id,
             $langVideo, $langDate, $langChoice, $langAddModulesButton,
-            $langNoVideo, $course_code;
+            $langNoVideo, $course_code, $langSelect;
 
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
@@ -59,7 +59,7 @@ function list_videos() {
                 } else {
                     $description_text = '';
                 }
-                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
                                  "<td>".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description_text . "</td>" .
                                  "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                                  "</tr>";
@@ -69,7 +69,7 @@ function list_videos() {
         if ($sql) {
             foreach ($sql as $videocat) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>".icon('fa-folder-open')."&nbsp;&nbsp;<strong>" . q($videocat->name) . "</strong>";
                 if (!empty($videocat->description)) {
                     $videocat_description_text = "<div>" .  q($videocat->description). "</div>";
@@ -87,7 +87,7 @@ function list_videos() {
                             $linkvideocat_description_text = '';
                         }
                         $tool_content .= "<tr>";
-                        $tool_content .= "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
+                        $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
                         $tool_content .= "<td>" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
                         $tool_content .= $linkvideocat_description_text . "</td>";

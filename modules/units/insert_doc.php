@@ -33,7 +33,7 @@ function list_docs() {
     global $id, $webDir, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
     $langDate, $langAddModulesButton, $langChoice,
-    $langNoDocuments, $course_code, $langCommonDocs, $pageName;
+    $langNoDocuments, $course_code, $langCommonDocs, $pageName, $langSelect;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     $path = get_dir_path('path');
@@ -139,7 +139,7 @@ function list_docs() {
                     $vis = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */

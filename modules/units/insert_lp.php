@@ -25,7 +25,7 @@
 function list_lps() {
     global $id, $course_id, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoLearningPath,
-    $langLearningPaths, $course_code;
+    $langLearningPaths, $course_code, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name", $course_id);
     $lpinfo = array();
@@ -65,7 +65,7 @@ function list_lps() {
                     $comment_text = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td><a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
                  . $comment_text . "</td>";
                 $tool_content .= "</tr>";

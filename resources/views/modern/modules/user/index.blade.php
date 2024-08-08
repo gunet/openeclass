@@ -236,6 +236,7 @@
             .attr({ style: 'width: 200px',
                     class: 'form-control input-sm mb-3',
                     placeholder: '{{ js_escape(trans('langName') . ', Username, Email') }}' });
+        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
         $('.success').delay(3000).fadeOut(1500);
     });
 </script>

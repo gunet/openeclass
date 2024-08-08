@@ -411,7 +411,7 @@ class References {
                 }
             }
 
-            $itemlink = "<a href='$itemurl' target='_blank'>" . q($itemattributes->title) . "</a>";
+            $itemlink = "<a href='$itemurl' target='_blank' aria-label='(opens in a new tab)'>" . q($itemattributes->title) . "</a>";
             return $itemlink;
         }
         return false;

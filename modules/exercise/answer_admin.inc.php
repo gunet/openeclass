@@ -469,7 +469,7 @@ if (isset($_GET['modifyAnswers'])) {
                         $tool_content .= "></td>";
                     }
                 } else {
-                    $tool_content .= "<td><label class='label-container'><input type='checkbox' value='1' name=\"correct[" . $i . "]\" ";
+                    $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' value='1' name=\"correct[" . $i . "]\" ";
                     if ((isset($correct[$i]) && ($correct[$i]) or (isset($_POST['correct'][$i]) and $_POST['correct'][$i]))) {
                         $tool_content .= "checked='checked'><span class='checkmark'></span></label></td>";
                     } else {

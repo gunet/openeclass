@@ -322,7 +322,7 @@ echo "</html>" . "\n";
 // pio panw se auto edw to php arxeio.
 function showQuestion($questionId, $onlyAnswers = false) {
 
-    global $picturePath, $urlServer, $langSelect, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
+    global $picturePath, $urlServer, $langSelect, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond, $langSelect;
 
     // construction of the Question object
     $objQuestionTmp = new Question();
@@ -384,7 +384,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
         } elseif ($answerType == MULTIPLE_ANSWER) { // multiple answers
             echo "
                   <div class='checkbox'>
-                    <label class='label-container'>
+                    <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='choice[$questionId][$answerId]' value='1'>
                         <span class='checkmark'></span>
                         " . $answer . "

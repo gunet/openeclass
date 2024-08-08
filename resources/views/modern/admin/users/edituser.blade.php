@@ -105,7 +105,7 @@
                                         </label>
                                     </div>
                                     <div class='checkbox mb-2'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
                                             <input type='checkbox' name='enable_course_registration' value='1' {!! (!$info->disable_course_registration) ? 'checked' : ''; !!}>
                                             <span class='checkmark'></span>{{ trans('langInfoEnableCourseRegistration') }}
                                         </label>

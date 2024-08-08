@@ -701,9 +701,9 @@ if (isset($_GET['mid'])) {
                    'fnDrawCallback': function( oSettings ) {
                         $('#inbox_table_filter label input').attr({
                           'class' : 'form-control input-sm ms-0 mb-3',
-                          'placeholder' : '".js_escape($langSearch)."...',
-                          'aria-label' : '".js_escape($langSearch)."'
+                          'placeholder' : '".js_escape($langSearch)."...'
                         });
+                        $('#inbox_table_filter label').attr('aria-label', '".js_escape($langSearch)."');  
                     },
                    'oLanguage': {
                         'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',

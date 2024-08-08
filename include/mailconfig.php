@@ -122,7 +122,7 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $tool_content, $langEmailBounces, $langSave, $langEG, $langForm;
+        $tool_content, $langEmailBounces, $langSave, $langEG, $langForm, $langSelect;
 
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
@@ -163,14 +163,14 @@ function mail_settings_form() {
                         <div class='form-group'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label='$langSelect'>
                                         <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>
                                         <span class='checkmark'></span>
                                         $lang_dont_mail_unverified_mails
                                     </label>
                                 </div>
                                 <div class='checkbox'>
-                                    <label class='label-container'>
+                                    <label class='label-container' aria-label='$langSelect'>
                                         <input type='checkbox' name='email_from' value='1' $cbox_email_from>
                                         <span class='checkmark'></span>
                                         $lang_email_from

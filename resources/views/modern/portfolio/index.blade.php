@@ -15,6 +15,7 @@
                         class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
                         placeholder: '{{ js_escape(trans('langSearch')) }} ...'
                     });
+                    $('#portfolio_lessons_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
                     $('#portfolio_lessons_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
                 },
                 "dom": "<'all_courses float-end px-0'>frtip",
@@ -45,6 +46,7 @@
                         class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
                         placeholder: '{{ js_escape(trans('langSearch')) }} ...'
                     });
+                    $('#portfolio_collaborations_filter label').attr('aria-label', '{{ trans('langSearch') }}');
                     $('#portfolio_collaborations_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
                 },
                 "dom": @if(get_config('show_always_collaboration')) "<'all_courses float-end px-0'>frtip" @else "" @endif,

@@ -297,7 +297,7 @@
                                     @else
                                         <div class='col-lg-6 col-12'>
                                             <div>
-                                                <a style='color:red; font-weight: bold;' href='h5pconf.php'>{{ trans('langUpdateRequired') }} !</a>
+                                                <a class='TextBold Accent-200-cl' href='h5pconf.php'>{{ trans('langUpdateRequired') }} !</a>
                                             </div>
                                         </div>
                                     @endif

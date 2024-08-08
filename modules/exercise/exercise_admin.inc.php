@@ -382,7 +382,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <div class='col-12'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                     <input class='mt-0' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
                                     <span class='checkmark'></span>
                                 </label>
@@ -398,7 +398,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <div class='col-12'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                      <input class='mt-0' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                                      <span class='checkmark'></span>
                                 </label>

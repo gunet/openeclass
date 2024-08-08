@@ -49,7 +49,7 @@
                                 <tfoot>
                                     <tr>
                                         <th colspan='5'>
-                                            <label class='label-container'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' id='closedRequests'>
                                                 <span class='checkmark'></span>
                                                 {{ trans('langShowClosedRequests') }}
@@ -157,6 +157,7 @@
             style: 'width: 200px',
             class:'form-control input-sm'
         });
+        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
         $(document).on('change', '#closedRequests', function (e) {
             if($(this).is(":checked")){
                  $('#closedRequests').attr( 'checked', true );

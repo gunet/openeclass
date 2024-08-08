@@ -137,7 +137,7 @@ foreach ($result as $list) {
     }
     $tool_content .= '</td>'
             . '<td align="center">'
-            . '<label class="label-container"><input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">'
+            . '<label class="label-container" aria-label="'.$langSelect.'"><input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">'
             . '<span class="checkmark"></span></label></td>'
             . '</tr>';
 

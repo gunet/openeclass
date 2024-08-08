@@ -12,7 +12,7 @@
 function list_chats() {
     global $id, $course_id, $tool_content, $urlServer,
            $langAddModulesButton, $langChoice, $langNoChatAvailable,
-           $course_code, $langChat;
+           $course_code, $langChat, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM conference WHERE course_id = ?d ORDER BY conf_title", $course_id);
     $chatinfo = array();
@@ -47,7 +47,7 @@ function list_chats() {
                 $description_text = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/chat/chat.php?course=$course_code&amp;conference_id=$entry[id]'>" . q($entry['name']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }

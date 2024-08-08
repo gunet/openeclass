@@ -277,7 +277,7 @@ if (isset($_GET['all'])) {
              <label class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label class='label-container'>
+                    <label class='label-container' aria-label='$langSelect'>
                         <input type='checkbox' name='self_reg' checked>
                         <span class='checkmark'></span>$langGroupAllowStudentRegistration
                     </label>
@@ -288,7 +288,7 @@ if (isset($_GET['all'])) {
              <label class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label class='label-container'>
+                    <label class='label-container' aria-label='$langSelect'>
                      <input type='checkbox' name='allow_unreg'>
                      <span class='checkmark'></span>$langGroupAllowStudentUnregister
                    </label>
@@ -317,7 +317,7 @@ if (isset($_GET['all'])) {
         
                     
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='forum'>
                             <span class='checkmark'></span>
                             $langGroupForum
@@ -331,7 +331,7 @@ if (isset($_GET['all'])) {
                     
                 
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='documents'>
                             <span class='checkmark'></span>
                             $langDoc
@@ -346,7 +346,7 @@ if (isset($_GET['all'])) {
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='wiki'>
                             <span class='checkmark'></span>
                             $langWiki
@@ -360,7 +360,7 @@ if (isset($_GET['all'])) {
                     <div class='form-group mt-4'>
                         <div class='col-12'>
                             <div class='checkbox'>
-                                <label class='label-container'>
+                                <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' name='booking'>
                                     <span class='checkmark'></span>
                                     $langBookings

@@ -76,7 +76,7 @@
                                                     <td>{{ $resource->videoLecture->organization->name }}</td>
                                                     <td>{{ $resource->videoLecture->date }}</td>
                                                     <td class="center" width="10">
-                                                        <label class='label-container'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                             <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/><span class='checkmark'></span> {!! $alreadyAdded !!}
                                                         </label>
                                                     </td>
@@ -118,7 +118,7 @@
                                                         <td>{{ $resource->videoLecture->organization->name }}</td>
                                                         <td>{{ $resource->videoLecture->date }}</td>
                                                         <td class="center" width="10">
-                                                            <label class='label-container'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/><span class='checkmark'></span> {!! $alreadyAdded !!}
                                                             </label>
                                                         </td>

@@ -31,7 +31,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,
-            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear;
+            $exerciseType, $nbrQuestions, $langInfoGrade, $langHasAnswered, $langClear, $langSelect;
 
     $questionId = $objQuestionTmp->selectId();
     $questionWeight = $objQuestionTmp->selectWeighting();
@@ -149,7 +149,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
             $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='checkbox mb-1'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
                                 <input type='checkbox' name='choice[$questionId][$answerId]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
                                 <span class='checkmark'></span>
                                 " . standard_text_escape($answer) . "

@@ -158,7 +158,7 @@ draw($tool_content, 2, null, $head_content);
  * @return string
  */
 function showlinks() {
-    global $langName, $langSelection, $langAdd, $langCancel, $course_id, $course_code, $langNoLinksExist;
+    global $langName, $langSelection, $langAdd, $langCancel, $course_id, $course_code, $langNoLinksExist, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
@@ -185,7 +185,7 @@ function showlinks() {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($myrow->title) . "</a>";
             }
             $output .= "<br><small class='comments'>" . $myrow->description . "</small></td>";
-            $output .= "<td><label class='label-container'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></td>
+            $output .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></td>
             </tr>";
             $i++;
         }

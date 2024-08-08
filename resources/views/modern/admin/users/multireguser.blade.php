@@ -122,7 +122,7 @@
                 <label for='send_mail' class='col-sm-12 control-label-notes mb-1'>{{ trans('langInfoMail') }}</label>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
-                        <label class='label-container'>
+                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                 <input name='send_mail' id='send_mail' type='checkbox'><span class='checkmark'></span> {{ trans('langMultiRegSendMail') }}
                             </label>
                         </div>
@@ -133,7 +133,7 @@
                     <label for='customEmailBody' class='col-sm-12 control-label-notes mb-1'>{{ trans('langCustomEmailBody') }}</label>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                 <input name='customEmailBody' id='customEmailBody' type='checkbox'>
                                 <span class='checkmark'></span>{{ trans('langYes') }}
                             </label>

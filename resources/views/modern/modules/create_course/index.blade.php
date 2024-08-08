@@ -194,7 +194,7 @@
                                 <div class='col-sm-12'>
                                     <label class='control-label-notes' for='type_collab'>{!! trans('langWhatTypeOfCourse') !!}</label>
                                     <div class='checkbox'>
-                                        <label class='label-container'>
+                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                             <input type='checkbox' id='type_collab' name='is_type_collaborative'>
                                             <span class='checkmark'></span>
                                             {!! trans('langTypeCollaboration') !!}

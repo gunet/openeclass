@@ -25,7 +25,7 @@
  */
 function list_wikis() {
     global $id, $course_id, $tool_content, $urlServer,
-    $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $course_code;
+    $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki, $course_code, $langSelect;
 
 
     $result = Database::get()->queryArray("SELECT * FROM wiki_properties WHERE group_id = 0 AND course_id = ?d", $course_id);
@@ -54,7 +54,7 @@ function list_wikis() {
                 $description_text = '';
             }
             $tool_content .= "<tr>
-                                <td><label class='label-container'><input type='checkbox' name='wiki[]' value='$entry[id]'><span class='checkmark'></span></label></td>
+                                <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='wiki[]' value='$entry[id]'><span class='checkmark'></span></label></td>
                                 <td><a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a>
                                 $description_text</td>
                             </tr>";

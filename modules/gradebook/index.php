@@ -82,9 +82,9 @@ $(function() {
                'fnDrawCallback': function( oSettings ) {
                     $('#users_table{$course_id}_filter label input').attr({
                           'class' : 'form-control input-sm ms-0 mb-3',
-                          'placeholder' : '$langSearch...',
-                          'aria-label' : '$langSearch'
-                        });
+                          'placeholder' : '$langSearch...'
+                    });
+                    $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');  
                 },
                'sPaginationType': 'full_numbers',
                 'bSort': true,

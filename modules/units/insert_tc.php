@@ -12,7 +12,7 @@
 function list_tcs() {
     global $id, $course_id, $tool_content,
            $langAddModulesButton, $langChoice, $langNoBBBSesssions,
-           $course_code, $langBBB;
+           $course_code, $langBBB, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d ORDER BY title", $course_id);
     $tcinfo = array();
@@ -47,7 +47,7 @@ function list_tcs() {
                 $description_text = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='tc[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='tc[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
             $tool_content .= "<td>" . q($entry['name']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }

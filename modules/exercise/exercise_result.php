@@ -478,7 +478,7 @@ if (count($exercise_question_ids) > 0) {
                                 // adds the word in green at the end of the string
                                 $answer .= '<strong>' . q($choice[$j]) . '</strong>';
                                 if (isset($_GET['pdf'])) {
-                                    $icon = "<label class='label-container'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
+                                    $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                                 } else {
                                     $icon = "<span class='fa fa-check text-success'></span>";
                                 }
@@ -547,7 +547,7 @@ if (count($exercise_question_ids) > 0) {
                                 // adds the word in green at the end of the string
                                 $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
                                 if (isset($_GET['pdf'])) {
-                                    $icon = "<label class='label-container'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
+                                    $icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                                 } else {
                                     $icon = "<span class='fa fa-check text-success'></span>";
                                 }
@@ -614,7 +614,7 @@ if (count($exercise_question_ids) > 0) {
                         $answer_icon  = '';
                         if ($studentChoice) {
                             $student_choice_icon = "fa-regular fa-square-check";
-                            $pdf_student_choice_icon = "<label class='label-container'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
+                            $pdf_student_choice_icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox' checked='checked'><span class='checkmark'></span></label>";
                             $style = '';
                             if ($answerCorrect) {
                                 $answer_icon = "fa fa-check text-success";
@@ -623,7 +623,7 @@ if (count($exercise_question_ids) > 0) {
                             }
                         } else {
                             $student_choice_icon = "fa-regular fa-square";
-                            $pdf_student_choice_icon = "<label class='label-container'><input type='checkbox'><span class='checkmark'></span></label>";
+                            $pdf_student_choice_icon = "<label class='label-container' aria-label='$langSelect'><input type='checkbox'><span class='checkmark'></span></label>";
                             $style = "visibility: hidden;";
                         }
                         if (isset($_GET['pdf'])) {

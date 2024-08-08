@@ -166,6 +166,7 @@
                     class : 'form-control input-sm mb-3 ms-0',
                     placeholder : '{{ trans('langSearch') }}...'
                 });
+                $('#ann_table{{ $course_id }}_filter label').attr('aria-label', '{{ trans('langSearch') }}');
             },
             sPaginationType: 'full_numbers',
             bSortable: true,

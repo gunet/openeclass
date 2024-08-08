@@ -1513,7 +1513,7 @@ $tool_content .= "
                     <p class='control-label-notes mt-4'>$langAddPaddingListGroup:</p>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSettingSelect'>
                                 <input type='checkbox' name='AddPaddingAnnouncementsListGroup' value='1' ".((isset($theme_options_styles['AddPaddingAnnouncementsListGroup']))? 'checked' : '').">
                                 <span class='checkmark'></span>
                                 $langActivate

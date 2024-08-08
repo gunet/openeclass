@@ -619,7 +619,7 @@ if ($displayQuickPoll) {
                     <div class='form-group'>
                         <div class='col-sm-12'>
                             <div class='$type_attr'>
-                                <label class='$labelContainer'>
+                                <label class='$labelContainer' aria-label='$langSelect'>
                                     <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
                                     $checkMark
                                     ".q_math($theAnswer->answer_text)."

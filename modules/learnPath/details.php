@@ -72,10 +72,10 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          'class' : 'form-control input-sm ms-0 mb-3',
-                          'placeholder' : '$langSearch...',
-                          'aria-label' : '$langSearch'
-                        });
+                'class' : 'form-control input-sm ms-0 mb-3',
+                'placeholder' : '$langSearch...'
+            });
+            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
         });
         </script>";
 

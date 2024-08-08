@@ -55,7 +55,7 @@
                                         <th class='text-start'>{{ trans('langRequestSendMessage') }}</th>
                                         <td>
                                             <input type='text' class='auth_input form-control' name='prof_email' value='{!! q($user_request->email) !!}'>
-                                            <label class='label-container mt-3'>
+                                            <label class='label-container mt-3' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' name='sendmail' value='1' checked='yes'> 
                                                 <span class='checkmark'></span>
                                                 {{ trans('langGroupValidate') }}

@@ -24,7 +24,7 @@
  */
 function list_forums() {
     global $id, $tool_content, $urlServer, $course_id,
-           $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code;
+           $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code, $langSelect;
 
     // select topics from forums (not from group forums)
     $foruminfo = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d
@@ -47,7 +47,7 @@ function list_forums() {
                 $description_text = '';
             }
             $tool_content .= "<tr>
-                <td><label class='label-container'><input type='checkbox' name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
+                <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
                 <td><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'>" . $entry->name . "</a>$description_text</td>
               </tr>";
 
@@ -62,7 +62,7 @@ function list_forums() {
                 }
                 foreach ($topicinfo as $topicentry) {
                     $tool_content .= "<tr>";
-                    $tool_content .= "<td><label class='label-container'><input type='checkbox' name='forum[]'  value='{$entry->id}:$topicentry[topic_id]'><span class='checkmark'></span></label></td>";
+                    $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='forum[]'  value='{$entry->id}:$topicentry[topic_id]'><span class='checkmark'></span></label></td>";
                     $tool_content .= "<td>".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
                     $tool_content .= "</tr>";
                 }

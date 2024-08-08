@@ -134,7 +134,7 @@
                                         <input type='checkbox' name='am_public' value='1' {!! $am_public_selected !!}> 
                                         <span class='checkmark'></span>
                                         {{ trans('langAm') }}
-                                    </label class='label-container'>
+                                    </label>
                                 </div>
                                 <div class='checkbox'>
                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">

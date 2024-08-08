@@ -302,7 +302,7 @@ else {
             $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
             $data['sel'][] = "
                         <div class='checkbox'>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label='$langSelect'>
                                 <input type='checkbox' name='av_lang[]' value='$langcode' $checked>
                                 <span class='checkmark'></span>
                                 $loclangname

@@ -868,7 +868,7 @@ function display_user_presences($attendance_id) {
     global $course_code, $tool_content,
            $langTitle, $langType, $langAttendanceNewBookRecord, $langDate,
            $langAttendanceNoActMessage1, $langAttendanceActAttend, $langAttendanceActCour,
-           $langAttendanceInsAut, $langAttendanceInsMan, $langAttendanceBooking;
+           $langAttendanceInsAut, $langAttendanceInsMan, $langAttendanceBooking, $langSelect;
 
         $userID = intval($_GET['book']); //user
         //check if there are booking records for the user, otherwise alert message for first input
@@ -941,7 +941,7 @@ function display_user_presences($attendance_id) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                 }
                 $tool_content .= "<td>
-                <label class='label-container'><input type='checkbox' value='1' name='" . $activity->id . "'";
+                <label class='label-container' aria-label='$langSelect'><input type='checkbox' value='1' name='" . $activity->id . "'";
                 if(isset($userAttend) && $userAttend) {
                     $tool_content .= " checked";
                 }

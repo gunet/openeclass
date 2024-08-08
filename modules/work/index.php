@@ -168,9 +168,9 @@ $head_content .= "<script type='text/javascript'>
             });
             $('.dataTables_filter input').attr({
                   'class' : 'form-control input-sm ms-0 mb-3',
-                  'placeholder' : '$langSearch...',
-                  'aria-label' : '$langSearch'
-                });
+                  'placeholder' : '$langSearch...'
+            });
+            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
 
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
@@ -3230,7 +3230,7 @@ function show_edit_assignment($id) {
                     <div class='col-12'>
                       ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
                       . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
-                             <span class='fa-solid fa-xmark fa-lg' style='color:red;' title='$m[WorkDeleteAssignmentFile]'></span></a>" : "<input type='file' id='userfile' name='userfile' />")."
+                             <span class='fa-solid fa-xmark fa-lg Accent-200-cl' title='$m[WorkDeleteAssignmentFile]'></span></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>";
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
@@ -5284,7 +5284,7 @@ function show_assignment($id) {
                 $grade_disabled = ($assign->assignment_type == 1 or !$is_editor) ? ' disabled': '';
                 $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
             }
-            $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
+            $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div class='Accent-200-cl'><small>$m[late_submission]</small></div>" : '';
             $am_field = '';
             if (!is_null($stud_am)) {
                 $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
@@ -5344,7 +5344,7 @@ function show_assignment($id) {
                     $grade_disabled = ($assign->assignment_type == 1 or !$is_editor) ? ' disabled': '';
                     $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
                 }
-                $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
+                $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div class='Accent-200-cl'><small>$m[late_submission]</small></div>" : '';
                 $am_field = '';
                 if (trim($stud_am) != '') {
                     $am_field = "<span>$langAmShort: " . q($stud_am) . "</span>";
@@ -6464,7 +6464,7 @@ function create_zip_index($path, $id) {
             }
         }
 
-        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
+        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div class='Accent-200-cl'>$m[late_submission]</div>" : '';
         if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
             if ($assignment->grading_scale_id and !is_null($row->grade)) {
                 $key = closest($row->grade, $scale_values)['key'];

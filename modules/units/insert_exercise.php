@@ -25,7 +25,7 @@
 function list_exercises() {
     global $id, $course_id, $tool_content, $urlServer, $langPassCode,
             $langAddModulesButton, $langChoice, $langNoExercises,
-            $langExercices, $course_code;
+            $langExercices, $course_code, $langSelect;
 
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
     $quizinfo = [];
@@ -58,7 +58,7 @@ function list_exercises() {
                 $exclamation_icon = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$entry[id]&amp;preview=1'>" . q($entry['name']) . "</a>"
                 . $exclamation_icon . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "</tr>";

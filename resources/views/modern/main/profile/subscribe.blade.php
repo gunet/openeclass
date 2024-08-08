@@ -30,7 +30,7 @@
                         @endif
                         @if(isset($mail_notification))
                             <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langEmailUnsubscribeWarning') }}</span></div>
-                            <label class='label-container'>
+                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                 <input type='checkbox' id='unsub' name='unsub' value='1'>
                                 <span class='checkmark'></span>
                                 {{ trans('langEmailFromCourses') }}

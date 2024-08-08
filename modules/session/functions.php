@@ -889,7 +889,7 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
             $has_expired = "&nbsp;<span class='TextBold text-danger'>($langHasExpired)</span>";
         }
         $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
-        $tclink = "<a class='$locked' href='$bbblink' target='_blank'>";
+        $tclink = "<a class='$locked' href='$bbblink' target='_blank' aria-label='(opens in a new tab)'>";
         if (!$module_visible) {
             $tclink .= " <i>($langInactiveModule)</i>&nbsp;";
         }

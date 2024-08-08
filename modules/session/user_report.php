@@ -69,7 +69,7 @@ if (isset($_GET['u'])) { //  stats per user
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
                     <h3>$langRefernce</h3>";
                     if(($is_consultant or $is_course_reviewer) && !isset($_GET['format'])){
-                        $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=pdf' target='_blank'>$langDumpPDF</a>";
+                        $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=pdf' target='_blank' aria-label='(opens in a new tab)'>$langDumpPDF</a>";
                     }
     $tool_content .= "
             </div>
