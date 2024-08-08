@@ -155,6 +155,37 @@ if(isset($_GET['del'])){
             foreach($file as $f){
                 unlink($target_dir.$f->path);
             }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // Here we will delete the user's files that related to the current deliverable.
+            $users_docs = Database::get()->queryArray("SELECT id,res_id,from_user,type FROM session_resources 
+                                                        WHERE doc_id = ?d AND session_id = ?d AND from_user > 0",$q->res_id,$sessionID);
+            if(count($users_docs) > 0){
+                foreach($users_docs as $d){
+                    $currentUser = $d->from_user;
+                    $target_userdir = "$webDir/courses/$course_code/session/session_$sessionID/$currentUser/";
+                    $files_user = Database::get()->queryArray("SELECT filename,path FROM document 
+                                                                WHERE id = ?d
+                                                                AND course_id = ?d
+                                                                AND subsystem = ?d
+                                                                AND subsystem_id = ?d
+                                                                AND lock_user_id = ?d", $d->res_id, $course_id, MYSESSIONS, $sessionID, $currentUser);
+                    foreach($files_user as $f){
+                        unlink($target_userdir.$f->path);
+                    }
+                    if($d->type == 'doc'){
+                        Database::get()->query("DELETE FROM document 
+                                                WHERE id = ?d 
+                                                AND course_id = ?d
+                                                AND subsystem = ?d 
+                                                AND subsystem_id = ?d
+                                                AND lock_user_id = ?d", $d->res_id, $course_id, MYSESSIONS, $sessionID, $currentUser);
+
+                        Database::get()->query("DELETE FROM session_resources WHERE id = ?d AND session_id = ?d AND from_user = ?d", $d->id, $sessionID, $currentUser);
+                    }
+                }
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////
         }
         if($q->type == 'doc'){
             Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,MYSESSIONS);
