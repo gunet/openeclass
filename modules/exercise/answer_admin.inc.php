@@ -452,7 +452,7 @@ if (isset($_GET['modifyAnswers'])) {
                 <div class='table-responsive'>
                 <table class='table table-striped table-hover table-default'>";
             $tool_content .= "<tr>
-                          <th></th>
+                          <th aria-label='$langTotal'></th>
                           <th>$langCorrect</th>
                           <th>$langAnswer</th>
                           <th>$langComment</th>

@@ -67,9 +67,9 @@ $tool_content .= "
             <thead>
                 <tr class='list-header'>
                     <th>$langAttempts</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th aria-label='$langAttempts'></th>
+                    <th aria-label='$langAttempts'></th>
+                    <th aria-label='$langAttempts'></th>
                 </tr>
             </thead>
             <tbody>
@@ -90,8 +90,8 @@ $tool_content .= "
                 <tr class='active user-details-exec mt-2'>
                     <th class='form-label px-2'>$langTotal</th>
                     <th class='form-label px-2'>$total_attempts</th>
-                    <th></th>
-                    <th></th>
+                    <th aria-label='$langAttempts'></th>
+                    <th aria-label='$langAttempts'></th>
                 </tr>            
             </tfoot>
         </table>
@@ -101,7 +101,7 @@ $tool_content .= "
             <thead>
                 <tr class='list-header'>
                     <th>$langScore</th>
-                    <th></th>
+                    <th aria-label='$langGradebookGrade'></th>
                 </tr>
             </thead>
             <tbody>
@@ -125,7 +125,7 @@ $tool_content .= "
             <thead>
                 <tr class='list-header'>
                     <th>$langStudents</th>
-                    <th></th>
+                    <th aria-label='$langDuration'></th>
                 </tr>
             </thead>
             <tbody>
