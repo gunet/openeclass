@@ -83,7 +83,7 @@
                                                 <div>
                                                     @if(!$is_simple_user)
                                                         {!! action_button(array(
-                                                            array('title' => trans('langEdit'),
+                                                            array('title' => trans('langEditUnitSection'),
                                                                     'url' => $urlAppend . "modules/session/edit.php?course=" . $course_code . "&session=" . $s->id,
                                                                     'icon-class' => "edit-session",
                                                                     'icon' => 'fa-edit',

@@ -1657,3 +1657,5 @@ $langDocsUser = "User Documents";
 $langChooseUser = "Select a user";
 $langNotExistFilesForUser = "There are no files for this user";
 $langUserNotParticipatedInSessions = "The user does not participate in sessions";
+$langInfoIfTcExists = "The live mode option has been disabled as there is a video conference link in the session.";
+$langInfoIfMeetingExists = "The remote type option has been disabled as the live meeting completion criterion is active.";

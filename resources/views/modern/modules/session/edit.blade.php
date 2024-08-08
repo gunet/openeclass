@@ -345,9 +345,15 @@
                                         <div class='form-group mt-4'>
                                             <label for='typeRemoteId' class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</label>
                                             <select class='form-select' name='type_remote' id='typeRemoteId'>
-                                                <option value='0' {!! $type_remote==0 ? 'selected' : '' !!}>{{ trans('langNotRemote') }}</option>
-                                                <option value='1' {!! $type_remote==1 ? 'selected' : '' !!}>{{ trans('langRemote') }}</option>
+                                                <option value='0' {!! $type_remote==0 ? 'selected' : '' !!} {{ $tc_disabled }}>{{ trans('langNotRemote') }}</option>
+                                                <option value='1' {!! $type_remote==1 ? 'selected' : '' !!} {{ $meeting_disabled }}>{{ trans('langRemote') }}</option>
                                             </select>
+                                            @if($tc_disabled)
+                                                <span class='help-block Accent-200-cl'>{{ trans('langInfoIfTcExists') }}</span>
+                                            @endif
+                                            @if($meeting_disabled)
+                                                <span class='help-block Accent-200-cl'>{{ trans('langInfoIfMeetingExists') }}</span>
+                                            @endif
                                         </div>
 
                                         <div class='form-group mt-4'>

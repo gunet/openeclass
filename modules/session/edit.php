@@ -355,7 +355,21 @@ if(count($users_participants) > 0){
         $participants_arr[] = $u->participants;
     }
 }
-$data['participants_arr'] = $participants_arr;               
+$data['participants_arr'] = $participants_arr;
+
+// If exists tc link , disable the tc choice.
+$data['tc_disabled'] = '';
+$exists_tc = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND id_session = ?d",$course_id,$_GET['session']);
+if($exists_tc){
+  $data['tc_disabled'] = 'disabled';
+}
+$data['meeting_disabled'] = '';
+$exists_meeting = Database::get()->querySingle("SELECT id FROM badge_criterion 
+                                                WHERE badge IN (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d)
+                                                AND activity_type = ?s",$course_id,$_GET['session'],'meeting-completed');
+if($exists_meeting){
+  $data['meeting_disabled'] = 'disabled';
+}
 
 if($is_coordinator){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
