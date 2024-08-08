@@ -318,15 +318,12 @@ if ($command_line or $ajax_call) {
                     steps_finished();
                 }
             } elseif ($version == '3.15') {
-                if ($step == 1) {
-                    upgrade_to_3_15($tbl_options);
-                    break_on_step();
-                }
+                upgrade_to_3_15($tbl_options);
+                steps_finished();
+
             } elseif ($version == '3.16') {
-                if ($step == 1) {
-                    upgrade_to_3_16($tbl_options);
-                    break_on_step();
-                }
+                upgrade_to_3_16($tbl_options);
+                steps_finished();
             }
         }
         if ($command_line) {
