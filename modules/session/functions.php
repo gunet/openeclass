@@ -1408,6 +1408,17 @@ function upload_session_doc($sid){
 
             // Now we must delete the resource file from document table in db.
             if($q){
+                $target_userdir = "$webDir/courses/$course_code/session/session_$sid/$uUserId/";
+                $oldFilePath = Database::get()->querySingle("SELECT path FROM document 
+                                                                WHERE id = ?d 
+                                                                AND course_id = ?d
+                                                                AND subsystem = ?d
+                                                                AND subsystem_id = ?d
+                                                                AND lock_user_id = ?d",$checkExist->res_id, $course_id, MYSESSIONS, $sid, $uUserId);
+                if($oldFilePath){
+                    unlink($target_userdir.$oldFilePath->path);
+                }
+
                 Database::get()->query("DELETE FROM document 
                                         WHERE id = ?d 
                                         AND course_id = ?d
