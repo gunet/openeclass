@@ -105,9 +105,9 @@
                                                     {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
                                                 @endif
                                                 </th>
-                                                <th></th>
+                                                <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 @if (!$is_in_tinymce)
-                                                    <th></th>
+                                                    <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 @endif
                                             </tr>
                                         </thead>

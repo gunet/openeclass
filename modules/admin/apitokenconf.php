@@ -225,7 +225,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         }
 
         $tool_content .= "<div class='input-append date form-group mt-4'>
-                    <label class='col-12 control-label-notes'>$langExpirationDate:</label>
+                    <div class='col-12 control-label-notes'>$langExpirationDate:</div>
                     <div class='col-12'>
                         <div class='input-group'>
                             <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>

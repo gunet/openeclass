@@ -47,7 +47,7 @@
                                             <th>{{ trans('langStart') }}</th>
                                             <th>{{ trans('langEnd') }}</th>
                                             <th>{{ trans('langAccept')}}</th>
-                                            <th></th>
+                                            <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                         </tr>
                                     </thead>
                                     @foreach($booking_history as $h)

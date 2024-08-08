@@ -42,13 +42,13 @@
                                             <input type='hidden' name='commentPath' value='{{ $file->path }}'>
 
                                             <div class='form-group'>
-                                                <label class='col-12 control-label-notes'>
+                                                <div class='col-12 control-label-notes'>
                                                     @if ($is_dir)
                                                         {{ trans('langDirectory') }}
                                                     @else
                                                         {{ trans('langFile') }}
                                                     @endif
-                                                </label>
+                                                </div>
                                                 <div class='col-sm-12'>
                                                     <p class='form-control-static'>{{ $file->filename }}</p>
                                                 </div>
@@ -77,7 +77,7 @@
                                                         {!! selection($license_title, 'file_copyrighted', $selected_license_title) !!}
                                                     </div>
                                                 </div>
-                                                <div class='row'>
+                                                <div class='row mt-4'>
                                                     <div class='help-block'>
                                                         {{ trans('langNotRequired') }}
                                                     </div>

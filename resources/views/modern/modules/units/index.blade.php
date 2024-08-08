@@ -240,7 +240,7 @@
                                     <table class='table table-default'>
                                         <tbody>
                                         @if ($q_in_home)
-                                            <tr><th scope='row' colspan="2"><label class='col-12 control-label-notes'>{{ trans('langActInHome') }}</label></th>
+                                            <tr><th scope='row' colspan="2"><div class='col-12 control-label-notes'>{{ trans('langActInHome') }}</div></th>
                                             @foreach ($q_in_home as $in_home)
                                                 @php
                                                     $act_title = q($activities[$in_home->activity_id]['title']);
@@ -385,7 +385,7 @@
                                         @endif
 
                                         @if($q_in_class)
-                                            <tr><th scope='row' colspan='2'><label class='col-12 control-label-notes'>{{ trans('langActInClass') }}</label></th>
+                                            <tr><th scope='row' colspan='2'><div class='col-12 control-label-notes'>{{ trans('langActInClass') }}</div></th>
 
                                             @foreach($q_in_class as $in_class)
 

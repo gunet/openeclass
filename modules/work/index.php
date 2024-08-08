@@ -5614,7 +5614,7 @@ function show_student_assignments() {
         if (get_config('eportfolio_enable')) {
             $add_eportfolio_res_th = "<th style='width:10%;' aria-label='$langSettingSelect'>".icon('fa-gears')."</th>";
         } else {
-            $add_eportfolio_res_th = "<th></th>";
+            $add_eportfolio_res_th = "<th aria-label='$langSettingSelect'></th>";
         }
 
 

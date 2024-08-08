@@ -14,7 +14,7 @@
                             <th>{{ trans('langDate') }}</th>
                             @if ($is_editor)
                                 <th>{{ trans('langNewBBBSessionStatus') }}</th>
-                                <th></th>
+                                <th aria-label="{{ trans('langSettingSelect') }}"></th>
                             @endif
                         </tr>
                     </thead>

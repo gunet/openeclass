@@ -27,7 +27,7 @@
                             <th>{{ trans('langAnnouncement') }}</th>
                             <th>{{ trans('langDate') }}</th>
                             <th>{{ trans('langNewBBBSessionStatus') }}</th>
-                            <th></th>
+                            <th aria-label="{{ trans('langSettingSelect') }}"></th>
                         </tr></thead>
                         @foreach ($announcements as $announcement)
                             <tr{!! !$announcement->visible

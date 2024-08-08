@@ -424,7 +424,7 @@ $tool_content .= "
 
 if ($is_editor) {
     // Titles for teachers
-    $tool_content .= "<th></th>";
+    $tool_content .= "<th aria-label='$langSettingSelect'></th>";
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
     $tool_content .= "<th>$langTotalTimeSpent</th>

@@ -39,7 +39,7 @@
                                             <th>{{ trans('langName') }}</th>
                                             <th>{{ trans('langDescription')}}</th>
                                             @if($is_editor)
-                                                <th></th>
+                                                <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                             @endif
                                         </tr></thead>
                                         <tbody>

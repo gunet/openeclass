@@ -388,7 +388,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label class='col-12 control-label-notes'>$langCourseVis:</label>
+                            <div class='col-12 control-label-notes'>$langCourseVis:</div>
                             <div class='col-sm-12'>
                                 " . visibility_select($vis) . "
                             </div>

@@ -400,7 +400,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     $tool_content .= "<thead>
     <tr class='list-header'>
       <th>$langQuesList</th>
-      <th></th>
+      <th aria-label='$langSettingSelect'></th>
     </tr></thead><tbody>";
     foreach ($result as $row) {
         $question_temp = new Question();

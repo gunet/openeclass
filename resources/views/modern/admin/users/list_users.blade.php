@@ -34,12 +34,12 @@
                             <!-- DO NOT DELETE THESE EMPTY COLUMNS -->
                             <tfoot>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    <th aria-label="{{ trans('langSurname') }}"></th>
+                                    <th aria-label="{{ trans('langName') }}"></th>
+                                    <th aria-label="{{ trans('langUsername') }}"></th>
+                                    <th aria-label="{{ trans('langEmail') }}"></th>
+                                    <th aria-label="{{ trans('langProperty') }}"></th>
+                                    <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                 </tr>
                             </tfoot>
                             <tbody>
