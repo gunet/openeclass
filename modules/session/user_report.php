@@ -51,6 +51,14 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 $pageName = $langUserReferences;
 
+// check if this session contains participants.
+$count_u = Database::get()->queryArray("SELECT id FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$sessionID,1);
+if(count($count_u) == 0){
+    Session::flash('message',$langAnalyticsNoUsersToDisplay);
+    Session::flash('alert-class', 'alert-warning');
+    redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sessionID");
+}
+
 if (isset($_GET['u'])) { //  stats per user
     if ($is_simple_user) { // security check
         Session::flash('message',$langCheckCourseAdmin);
