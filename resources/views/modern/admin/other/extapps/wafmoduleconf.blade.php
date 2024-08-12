@@ -48,7 +48,7 @@
                                                     <input class='FormData_InputText form-control' type='text' name='form{{ $curField }}' size='80' value='{{ $rules[$curField]['description'] }}' disabled>
                                                 </td>
                                                 <td>  
-                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langActivate') }}:</label>
+                                                    <div class='col-sm-12 control-label-notes'>{{ trans('langActivate') }}:</div>
                                                     <br>
                                                     <div class='col-sm-12 radio'>
                                                         <label>

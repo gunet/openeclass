@@ -31,19 +31,19 @@
                                 </div>
                                 @foreach($connectorClasses as $curConnectorClass)
                                     <div class='form-group connector-config connector-{{ $curConnectorClass }} mt-4' style='display: none;'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langAutoJudgeSupportedLanguages') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langAutoJudgeSupportedLanguages') }}</div>
                                         <div class='col-sm-12'>
                                             {!! implode(', ', array_keys((new $curConnectorClass)->getSupportedLanguages())) !!}</div>
                                     </div>
                                     <div class='form-group connector-config connector-{{ $curConnectorClass }} mt-4' style='display: none;'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langAutoJudgeSupportsInput') }}</label>
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langAutoJudgeSupportsInput') }}</div>
                                         <div class='col-sm-12'>
                                             {{ (new $curConnectorClass)->supportsInput() ? trans("langCMeta['true']") : trans("langCMeta['false']") }}
                                         </div>
                                     </div>
                                     @foreach((new $curConnectorClass())->getConfigFields() as $curField => $curLabel)
                                         <div class='form-group connector-config connector-{{ $curConnectorClass }} mt-4' style='display: none;'>
-                                            <label class='col-sm-12 control-label-notes'>{{ $curLabel }}:</label>
+                                            <div class='col-sm-12 control-label-notes'>{{ $curLabel }}:</div>
                                             <div class='col-sm-12'><input class='FormData_InputText' type='text' name='form$curField' size='40' value='{{ get_config($curField) }}'></div>
                                         </div>
                                     @endforeach

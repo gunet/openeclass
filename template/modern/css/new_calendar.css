@@ -41,8 +41,11 @@
   color: #3E4965;
 }
 
+.cal-day-outmonth{
+  background-color: #FAFBFC;
+}
 .cal-day-outmonth > .number-day-cal {
-  opacity: 0.2;
+  opacity: 1;
 }
 
 /* .cal-day-today > .number-day-cal{ color:white; padding:3px 6px 2px 6px; border-radius: 50%; background-color: #005ad9;} */

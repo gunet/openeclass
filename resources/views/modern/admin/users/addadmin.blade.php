@@ -55,7 +55,7 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }}</label>
+                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }}</div>
                                     <div class='col-sm-12'>
                                         <div class='radio mb-4'>
                                             <label>

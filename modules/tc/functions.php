@@ -404,7 +404,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>
         <div class='form-group mt-4'>
-        <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langAnnouncements</label>
+            <div class='col-sm-12 control-label-notes mb-2'>$langAnnouncements</div>
             <div class='col-sm-12'>
                      <div class='checkbox'>
                      <label class='label-container' aria-label='$langSelect'>

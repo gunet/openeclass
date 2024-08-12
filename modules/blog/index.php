@@ -384,7 +384,7 @@ if ($action == "createPost") {
         $commenting_setting = '';
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-4'>
-                                       <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
+                                       <div class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</div>
 
                                            <div class='radio mb-2'>
                                                 <label>
@@ -511,7 +511,7 @@ if ($action == "editPost") {
                 }
                 $commenting_setting = "
                                         <div class='form-group mt-4'>
-                                              <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
+                                              <div class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</div>
 
                                                <div class='radio mb-2'>
                                                     <label>

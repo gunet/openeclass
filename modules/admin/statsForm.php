@@ -74,7 +74,7 @@ $tool_content .= "
     </div>
 </div>";
 $tool_content .= '<div class="form-group mt-4">  
-    <label class="col-sm-12 control-label-notes">' . $langFirstLetterUser . ':</label>
+    <div class="col-sm-12 control-label-notes">' . $langFirstLetterUser . ':</div>
     <div class="col-sm-12">' . $letterlinks . '</div>
   </div>
   <div class="form-group mt-4">  

@@ -79,7 +79,7 @@
         var initComplete = function () {
             var api = this.api();
             var column = api.column(1);
-            var select = $('<select id="select_role">' +
+            var select = $('<select id="select_role" aria-label="{{ js_escape(trans('langAllUsers')) }}">' +
                            '<option value="0">-- {{ js_escape(trans('langAllUsers')) }} --</option>' +
                            '<option value="editor">{{ js_escape(trans('langTeacher')) }}</option>' +
                            '<option value="course_reviewer">{{ js_escape(trans('langCourseReviewer')) }}</option>' +

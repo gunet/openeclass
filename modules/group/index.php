@@ -619,7 +619,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link' href='javascript:void(0);' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -671,7 +671,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link' href='javascript:void(0);' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -908,9 +908,9 @@ if ($is_editor) {
         if ($aantalcategories > 0) {
                 $tool_content .= "<span class='form-label'>$langCategorisedGroups</span>&nbsp;";
             if (isset($urlview) and abs(intval($urlview)) == 0) {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a aria-label='$langViewShow' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a aria-label='$langViewHide' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
             }
         }
         if($cat){

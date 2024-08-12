@@ -259,7 +259,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
 
     $html .= "
     <div class='form-group mt-4'>
-        <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</label>
+        <div class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</div>
         <div class='col-sm-12'>
             <div class='checkbox'>
                 <label class='label-container' aria-label='$langSettingSelect'>

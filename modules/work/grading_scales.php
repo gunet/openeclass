@@ -77,13 +77,13 @@ if (isset($_GET['scale_id'])) {
                 $('#scale_table tbody').append(
                     '<tr>'+
                     '<td class=\'form-group\'>'+
-                    '<input type=\'text\' name=\'scale_item_name[' + rowCount +']\' class=\'form-control\' value=\'\' required>'+
+                    '<input aria-label=\'$langWording\' type=\'text\' name=\'scale_item_name[' + rowCount +']\' class=\'form-control\' value=\'\' required>'+
                     '</td>'+
                     '<td class=\'form-group\'>'+
-                    '<input type=\'number\' name=\'scale_item_value[' + rowCount +']\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+                    '<input aria-label=\'$langValue\' type=\'number\' name=\'scale_item_value[' + rowCount +']\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                     '</td>'+
                     '<td class=\'text-start\'>'+
-                    '<a href=\'#\' class=\'removeScale\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
+                    '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeScale\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                     '</td>'+
                     '</tr>'
                 );
@@ -116,14 +116,14 @@ if (isset($_GET['scale_id'])) {
             $scale_rows .= "
                     <tr>
                         <td class='form-group'>
-                            <input type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required".($scale_used ? " disabled" : "").">
+                            <input aria-label='$langWording' type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required".($scale_used ? " disabled" : "").">
                         </td>
                         <td class='form-group'>
-                            <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
+                            <input aria-label='$langValue' type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
                         </td>";
             if (!$scale_used) {
                     $scale_rows .= "<td>
-                                    <a href='#' class='removeScale'><span class='fa-solid fa-xmark' style='color:red'></span></a>
+                                    <a href='#' aria-label='$langDelete' class='removeScale'><span class='fa-solid fa-xmark' style='color:red'></span></a>
                                 </td>";
             }
             $scale_rows .= "</tr>";

@@ -94,13 +94,16 @@ if (isset($_REQUEST['u'])) {
             } else {
                 $target_auth_id = 1; // eclass default method
             }
-            $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langUserMergeTarget:</label>
+            $data['target_field'] .= "<div class='form-group mt-3'><div class='col-sm-12 control-label-notes'>$langUserMergeTarget:</div>
                                               <div class='col-sm-12'><p class='form-control-static'>" . display_user($target['id']) .
                     " (" . q($target['username']) . ")</p></div></div>
-                <div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langEditAuthMethod:</label>
-                          <div class='col-sm-12'>" . get_auth_info($target_auth_id) . "</div></div>
-                              <div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langProperty:</label>                                          
-                          <div class='col-sm-12'>" . q($status_names[$target['status']]) . "</div></div>";
+                            <div class='form-group mt-3'>
+                                <div class='col-sm-12 control-label-notes'>$langEditAuthMethod:</div>
+                                <div class='col-sm-12'>" . get_auth_info($target_auth_id) . "</div>
+                            </div>
+                            <div class='form-group mt-3'>
+                                <div class='col-sm-12 control-label-notes'>$langProperty:</div>                                          
+                                <div class='col-sm-12'>" . q($status_names[$target['status']]) . "</div></div>";
             if ($info['status'] == USER_TEACHER and $target['status'] != USER_TEACHER) {
                 $target = false;
                 $data['target_field'] .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUserMergeForbidden</span></div>";
@@ -117,8 +120,8 @@ if (isset($_REQUEST['u'])) {
             }
         }
         if (!$target) {
-            $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langUserMergeTarget:</label>
-                                              <div class='col-sm-12'><input class='form-control' type='text' name='target' size='30'></div></div>";
+            $data['target_field'] .= "<div class='form-group mt-3'><label for='target_id' class='col-sm-12 control-label-notes'>$langUserMergeTarget:</label>
+                                              <div class='col-sm-12'><input id='target_id' class='form-control' type='text' name='target' size='30'></div></div>";
         }
     }
     $data['info'] = $info;

@@ -93,7 +93,7 @@ if ($userdata) {
                                     </button>
                                 </div>
                                 <div class='card-body'>
-                                    <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
+                                    <input aria-label='$langCopy' class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
                                 </div>                              
                             </div>";
             $head_content .= "<script type='text/javascript'>

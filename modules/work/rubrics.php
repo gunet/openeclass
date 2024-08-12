@@ -175,13 +175,13 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     $('#scale_table'+par.attr('id').substr(8)+' tbody').append(
                         '<tr>'+
                         '<td class=\'form-group\'>'+
-                        '<input type=\'text\' name=\'scale_item_name['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' required>'+
+                        '<input aria-label=\'$langWording\' type=\'text\' name=\'scale_item_name['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' required>'+
                         '</td>'+
                         '<td class=\'form-group\'>'+
-                        '<input type=\'number\' name=\'scale_item_value['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+                        '<input aria-label=\'$langValue\' type=\'number\' name=\'scale_item_value['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                         '</td>'+
                         '<td class=\'text-center\'>'+
-                        '<a href=\'#\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
+                        '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                         '</td>'+
                         '</tr>'
                     );
@@ -354,8 +354,8 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     foreach ($title['crit_scales'] as $key => $scale) {
                         $cc++;
                         $tool_content .= "<tr>
-                                        <td class='form-group'><input name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required type='text'></td>
-                                        <td class='form-group'><input name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required type='number'></td>";
+                                        <td class='form-group'><input aria-label='$langWording' [$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required type='text'></td>
+                                        <td class='form-group'><input aria-label='$langValue' name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required type='number'></td>";
                         if ($i == 0) {
                             $tool_content .= "<td class='text-center'></td>";
                         } else {
@@ -404,10 +404,10 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                                 <tbody>
                                     <tr>
                                         <td class='form-group'>
-                                            <input type='text' name='scale_item_name[0][]' class='form-control' value='' required>
+                                            <input aria-label='$langWording' type='text' name='scale_item_name[0][]' class='form-control' value='' required>
                                         </td>
                                         <td class='form-group'>
-                                            <input type='number' name='scale_item_value[0][]' class='form-control' value='' min='0' required>
+                                            <input aria-label='$langValue' type='number' name='scale_item_value[0][]' class='form-control' value='' min='0' required>
                                         </td>
                                         <td class='text-center'>
                                         </td>

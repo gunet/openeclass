@@ -2821,7 +2821,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
  */
 
 function profile_image($user_id, $size, $class=null) {
-    global $urlServer, $themeimg, $uid, $course_id, $is_editor;
+    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langUser;
 
     if (isset($_SESSION['profile_image_cache_buster'])) {
         $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
@@ -2857,7 +2857,7 @@ function profile_image($user_id, $size, $class=null) {
     if (!$imageurl) {
         $imageurl = "$themeimg/default_$size.png";
     }
-    return "<img src='$imageurl$suffix' $class_attr alt='$username' $size_width>";
+    return "<img src='$imageurl$suffix' $class_attr alt='$langUser:$username' $size_width>";
 }
 
 /**

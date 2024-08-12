@@ -182,7 +182,7 @@ switch ($cmd) {
                     </form>";
             } else {
                 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>\n"
-                        . '<table class="table-default"><tr><td>' . ""
+                        . '<table class="table-default"><tr><td><label for="comment" class="control-label-notes">'.$langComments.'</label>' . ""
                         . rich_text_editor('comment', 2, 30, '')
                         . "</td></tr></table>\n"
                         . "<input type='hidden' name='cmd' value='exComment'>\n"

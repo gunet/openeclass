@@ -69,6 +69,7 @@ $defaults = array(
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "rgba(62, 73, 101, 1)" => array('clOptionSelect', 'ClTextEditor', 'clInputText', 'clTabs', 'clAccordions', 'clColorBodyAgenda'),
                 "rgba(0, 74, 148, 1)" => array('leftMenuSelectedLinkColor'),
+                "rgba(250, 251, 252,1)" => array('bgColorDeactiveDateTime'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "fluid" => array('view_platform'),
@@ -624,7 +625,7 @@ if (isset($_POST['optionsSave'])) {
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
         ";
     } else {
-       $bg_field = "<input type='file' name='bgImage' id='bgImage'>";
+       $bg_field = "<input aria-label='$langBgImg' type='file' name='bgImage' id='bgImage'>";
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
@@ -684,7 +685,7 @@ if (isset($_POST['optionsSave'])) {
             </ul>
             <div class='tab-content mt-3' id='tabs-tabContent2'>
                 <div class='tab-pane fade show active' id='tabs-upload2' role='tabpanel' aria-labelledby='tabs-upload-tab2'>
-                    <input type='file' name='loginImgL' id='loginImgL'>
+                    <input aria-label='$langBgImg' type='file' name='loginImgL' id='loginImgL'>
                 </div>
                 <div class='tab-pane fade' id='tabs-selectImage2' role='tabpanel' aria-labelledby='tabs-selectImage-tab2'>
                     <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#LoginImagesModal'>
@@ -993,7 +994,7 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline'>$langLayoutConfig</h3>
                     <div class='form-group'>
-                        <p class='col-sm-12 control-label-notes mb-2'>$langLayout:</p>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langLayout:</div>
                         <div class='form-inline col-sm-12'>
                             <div class='row'>
                                 <div class='col-sm-3'>
@@ -1027,20 +1028,20 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLogoConfig</h3>
                     <div class='form-group'>
-                        <p class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</p>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $logo_field
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <p class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</p>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</div>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $small_logo_field
                         </div>
                     </div>
 
                     <div class='form-group mt-4'>
-                        <p class='col-sm-12 control-label-notes mb-2'>$langFavicon </p>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $faviconUpload
                         </div>
@@ -1068,7 +1069,7 @@ $tool_content .= "
                         <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
                     </div>
                     <div class='form-group mt-4'>
-                        <p class='col-sm-12 control-label-notes mb-2'>$langBgImg:</p>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langBgImg:</div>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $bg_field
                         </div>
@@ -1304,7 +1305,7 @@ $tool_content .= "
             <div role='tabpanel' class='tab-pane fade' id='navsettingsProgressBar'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langSettingsProgressBar</h3>
-                    <h5>($langInfoProgressBar)</h5>
+                    <h4>($langInfoProgressBar)</h4>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BackProgressBar' class='control-label-notes mb-2 me-2'>$langBackProgressBar:</label>
                         <input name='BackProgressBar' type='text' class='form-control colorpicker' id='BackProgressBar' value='$theme_options_styles[BackProgressBar]'>
@@ -1424,7 +1425,7 @@ $tool_content .= "
                         <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient (jumbotron):</label>
                         <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
                         <i class='fa fa-arrow-right ms-3 me-3'></i>
-                        <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
+                        <input aria-label='$langBgColor' name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
                     </div>
                     <div class='form-group mt-4'>
                         <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langBgImg (jumbotron):</label>
@@ -1446,7 +1447,7 @@ $tool_content .= "
 
                 
                     <div class='form-group mt-4'>
-                        <p class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</p>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</div>
                         <div class='col-sm-12'>
                         $login_image_fieldL
                         </div>
@@ -1472,7 +1473,7 @@ $tool_content .= "
 
 
                     $tool_content .= "<div class='form-group mt-4'>
-                        <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</div>
                         <div class='col-sm-12'>
                             <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSettingSelect'>
@@ -1982,6 +1983,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColorActiveDateTime' class='control-label-notes mb-2 me-2'>$langbgColorActiveDateTime:</label>
                         <input name='bgColorActiveDateTime' type='text' class='form-control colorpicker' id='bgColorActiveDateTime' value='$theme_options_styles[bgColorActiveDateTime]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgColorDeactiveDateTime' class='control-label-notes mb-2 me-2'>$langbgColorDeactiveDateTime:</label>
+                        <input name='bgColorDeactiveDateTime' type='text' class='form-control colorpicker' id='bgColorDeactiveDateTime' value='$theme_options_styles[bgColorDeactiveDateTime]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='TextColorActiveDateTime' class='control-label-notes mb-2 me-2'>$langtextColorActiveDateTime:</label>

@@ -34,7 +34,7 @@
                                             <div style="padding:10px;">
                                                 <a href="{{ $urlAppend . $app->getConfigUrl() }}">
                                                 @if ($app->getAppIcon() !== null)
-                                                    <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ $app->getName() }}">
+                                                    <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ trans('langTool') }}:{{ $app->getName() }}">
                                                 @endif
                                                 {{ $app->getDisplayName() }}
                                                 </a>

@@ -3988,6 +3988,7 @@ $langclColorBodyAgenda = "Text color (days, hours, minutes)";
 $langbgColorHoveredBodyAgenda = "Hovered background color (days, hours, minutes)";
 $langclColorHoveredBodyAgenda = "Hovered text color (days, hours, minutes)";
 $langbgColorActiveDateTime = "Active slot background color (small calendar)";
+$langbgColorDeactiveDateTime = "Disable slot background color (small calendar)";
 $langtextColorActiveDateTime = "Active slot text color (small calendar)";
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Popover Menu Settings";

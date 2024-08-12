@@ -82,9 +82,9 @@
                                         <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
 
                                         <div class='form-group mt-4'>
-                                            <label for='inputFileCopyright' class='col-sm-6 control-label-notes'>{{ trans('langCopyrighted') }}</label>
+                                            <label for='inputFileCopyright' class='col-sm-12 control-label-notes'>{{ trans('langCopyrighted') }}</label>
                                             <div class='col-12'>
-                                                {!! selection($license_title, 'file_copyrighted'); !!}
+                                                {!! selection($license_title, 'file_copyrighted','','id="inputFileCopyright"'); !!}
                                             </div>
                                         </div>
 

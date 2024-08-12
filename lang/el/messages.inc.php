@@ -6044,6 +6044,7 @@ $langclColorBodyAgenda = "Χρώμα κειμένων (ημέρες, ώρες, �
 $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, ώρες, λεπτά)";
 $langclColorHoveredBodyAgenda = "Χρώμα hovered κειμένου (ημέρες, ώρες, λεπτά)";
 $langbgColorActiveDateTime = "Χρώμα φόντου ενεργού slot (μικρό ημερολόγιο)";
+$langbgColorDeactiveDateTime = "Χρώμα φόντου ανενεργού slot (μικρό ημερολόγιο)";
 $langtextColorActiveDateTime = "Χρώμα κειμένου ενεργού slot(μικρό ημερολόγιο)";
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Ρυθμίσεις Menu Popover";

@@ -122,6 +122,7 @@ $head_content .= "
                       'placeholder' : '$langSearch...'
                 });
                 $('#ann_table_admin_logout_filter label').attr('aria-label', '$langSearch');
+                $('#ann_table_my_ann_filter label').attr('aria-label', '$langSearch');
              },
              'sPaginationType': 'full_numbers',
             'bSort': false,

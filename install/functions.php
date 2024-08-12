@@ -208,7 +208,7 @@ function display_entry($input, $label) {
     if ($input) {
         $content = "
             <div class='form-group mt-3'>
-              <label class='col-sm-12 control-label-notes'>" . q($label) . "</label>
+              <div class='col-sm-12 control-label-notes'>" . q($label) . "</div>
               <div class='col-sm-12'>
                 <p class='form-control-static'>
                     $input

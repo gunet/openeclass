@@ -465,7 +465,7 @@ $head_content .= "<script>
             initComplete: function () {
                 var api = this.api();
                 var column = api.column(0);
-                var select = $('<select id=\'select_role\'>'+
+                var select = $('<select id=\'select_role\' aria-label=\'" . js_escape($langAll) . "\'>'+
                                  '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
                                  '<option value=\'".USER_TEACHER."\'>" . js_escape($langUsersWithRightsS) . "</option>'+
                                  '<option value=\'".USER_STUDENT."\'>" . js_escape($langUsersWithNoRightsS) . "</option>'+

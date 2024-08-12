@@ -74,15 +74,15 @@
                                 <div class='col-sm-12 control-label-notes'>{{ trans('langCreationDate') }}</div>
                                 <div class='row'>
                                     <div class='col-6'>
-                                        {!! selection($reg_flag_data, 'reg_flag', '', 'class="form-select"') !!}
+                                        {!! selection($reg_flag_data, 'reg_flag', '', 'class="form-select" aria-label="Date creation"') !!}
                                     </div>
                                     <div class='col-6'>
-                                        <input class='form-control' id='id_date' name='date' type='text' value='' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langCreationDate') }}'>
+                                        <input aria-label="{{ trans('langCreationDate') }}" class='form-control' id='id_date' name='date' type='text' value='' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langCreationDate') }}'>
                                     </div>
                                 </div>
                             </div>
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                 <div class='col-sm-12'>
                                     {!! $html !!}
                                 </div>

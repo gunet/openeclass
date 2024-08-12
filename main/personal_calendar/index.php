@@ -1163,7 +1163,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         });
 
         </script>' . "
-        <div class='modal fade' id='iCalDescription' tabindex='-1' role='dialog' aria-labelledby='iCalDescriptionLabel'>
+        <div class='modal fade' id='iCalDescription' tabindex='-1' role='dialog'>
             <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
@@ -1177,7 +1177,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 <p class='form-control-static'>$langiCalExplanation</p>
                             </div>
                             <div class='form-group mt-3'>
-                                <input type='text' class='form-control' value='$iCalFeedLink' readonly>
+                                <input aria-label='$langText' type='text' class='form-control' value='$iCalFeedLink' readonly>
                             </div>
                             <div class='form-group text-end'>
                                 <button class='btn cancelAdminBtn' data-bs-dismiss='modal'>$langClose</button>

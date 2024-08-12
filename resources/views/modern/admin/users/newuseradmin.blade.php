@@ -200,7 +200,7 @@
                             </div>
 
                             <div class="form-group mt-4">
-                                <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langUserPermissions') }}</label>
+                                <div class='col-sm-12 control-label-notes mb-2'> {{ trans('langUserPermissions') }}</div>
                                 <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                     <label>
                                         <input type='radio' name='pstatus' value='5' id='norights-option' {!! $user_selected !!}>
@@ -236,7 +236,7 @@
 
                             @if (get_config('block_duration_account'))
                                 <div class='input-append date form-group mt-4'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
+                                    <div class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</div>
                                     <div class='col-sm-12'>
                                         <span class='help-block'>{{ trans('lang_message_block_duration_account') }}</span>
                                     </div>

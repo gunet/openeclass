@@ -72,9 +72,9 @@
 
                                             @unless ($is_dir)
                                                 <div class='form-group mt-4'>
-                                                    <label for='inputFileCopyright' class='col-sm-6 control-label-notes'>{{ trans('langCopyrighted') }}:</label>
+                                                    <label for='inputFileCopyright' class='col-sm-12 control-label-notes'>{{ trans('langCopyrighted') }}:</label>
                                                     <div class='col-12'>
-                                                        {!! selection($license_title, 'file_copyrighted', $selected_license_title) !!}
+                                                        {!! selection($license_title, 'file_copyrighted', $selected_license_title,'id="inputFileCopyright"') !!}
                                                     </div>
                                                 </div>
                                                 <div class='row mt-4'>

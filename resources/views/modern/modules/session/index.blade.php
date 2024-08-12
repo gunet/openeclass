@@ -145,14 +145,14 @@
                                                                     @if($s->start < $current_time && $current_time < $s->finish)
                                                                         <div class="d-flex align-items-center gap-2">
                                                                             <div class="spinner-grow text-success" role="status" style='width:20px; height:20px;'>
-                                                                                <span class="visually-hidden">Loading...</span>
+                                                                                <span class="visually-hidden"></span>
                                                                             </div>
                                                                             {{ trans('langInProgress') }}
                                                                         </div>
                                                                     @elseif($current_time < $s->start)
                                                                         <div class="d-flex align-items-center gap-2">
                                                                             <div class="spinner-border text-warning" role="status" style='width:20px; height:20px;'>
-                                                                                <span class="visually-hidden">Loading...</span>
+                                                                                <span class="visually-hidden"></span>
                                                                             </div>
                                                                             {{ trans('langSessionHasNotStarted') }}
                                                                         </div>

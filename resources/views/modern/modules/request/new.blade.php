@@ -36,10 +36,9 @@
                             <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
-                                        <label class='control-label-notes'>{{ trans('langCreator') }}: 
+                                        <div class='control-label-notes'>{{ trans('langCreator') }}: 
                                             <span>{{ $creatorName }}</span>
-
-                                        </label>
+                                        </div>
                                     </div>
                                 </div>
 

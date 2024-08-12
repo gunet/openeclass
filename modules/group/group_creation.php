@@ -212,7 +212,7 @@ if (isset($_GET['all'])) {
     }
 
     $tool_content .= "<div class='form-group mt-4'>
-            <label class='col-sm-12 control-label-notes'>$langGroupMembers</label>
+            <div class='col-sm-12 control-label-notes'>$langGroupMembers</div>
         <div class='col-sm-12'>
             <div class='table-responsive'>
                 <table class='table-default'>
@@ -274,7 +274,7 @@ if (isset($_GET['all'])) {
             </div>
         </div>
             <div class='form-group mt-4'>
-             <label class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
+                <div class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label class='label-container' aria-label='$langSelect'>
@@ -285,7 +285,7 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='form-group mt-4'>
-             <label class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</label>
+                <div class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label class='label-container' aria-label='$langSelect'>
@@ -296,7 +296,7 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='form-group mt-4'>
-                 <label class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</label>
+                 <div class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</div>
                 <div class='col-sm-12'>
                     <div class='radio'>
                       <label>

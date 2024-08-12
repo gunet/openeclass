@@ -129,7 +129,7 @@ $tool_content .= "</div></div>";
 
 
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
-$tool_content .= "<div class='col-12 mt-4'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering'>
+$tool_content .= "<div class='col-12 mt-4'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering' aria-label='$langCurrentStatus'>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === ATTEMPT_ACTIVE)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_ACTIVE) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === ATTEMPT_COMPLETED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_COMPLETED) . "</option>

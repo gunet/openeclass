@@ -318,7 +318,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
             
         
         <div class='form-group mt-4'>
-            <label class='col-sm-12 control-label-notes'>$langGroupMembers</label>
+            <div class='col-sm-12 control-label-notes'>$langGroupMembers</div>
         <div class='col-sm-12'>
             <div class='table-responsive mt-0'>
                 <table class='table-default'>

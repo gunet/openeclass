@@ -548,7 +548,7 @@
                 <div class='row row-cols-xl-3 row-cols-md-2 row-cols-1'>
                         <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
                             <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
-                                <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                                <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 <div>
                                     <div class='mb-0 portofolio-text-intro TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
                                     <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>

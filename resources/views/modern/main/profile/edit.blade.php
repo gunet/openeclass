@@ -156,7 +156,7 @@
 
                         @if (get_config('email_verification_required'))
                             <div class='form-group {{ $messageClass }} mt-4'>
-                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langVerifiedMail') }}</label>
+                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langVerifiedMail') }}</div>
                                 <div class='col-sm-12 form-control-static'>{!! $message !!}</div>
                             </div>
                         @endif
@@ -196,7 +196,7 @@
                         @if (count($allProviders) > 0)
 
                             <div class='form-group mt-4'>
-                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langProviderConnectWith') }}</label>
+                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langProviderConnectWith') }}</div>
                                 <div class='col-sm-12'>
                                     <div class='row'>
                                     @foreach ($allProviders as $provider)

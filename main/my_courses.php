@@ -254,6 +254,8 @@ view('main.my_courses.index', $data);
 
 function GroupCardsPagination($allCourses,$pagesPag){
 
+    global $langPreviousPage, $langNextPage;
+
   $pagination = "";
 
 

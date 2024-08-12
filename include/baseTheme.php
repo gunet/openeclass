@@ -578,6 +578,8 @@ function view($view_file, $view_data = array()) {
                 .control-label-notes,
                 .title-default,
                 .modal-title-default,
+                .text-heading-h5,
+                .text-heading-h6,
                 .action-bar-title,
                 .list-group-item.list-group-item-action,
                 .list-group-item.element{
@@ -4062,6 +4064,20 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////// BACKGROUND COLOR TO THE DISABLED SLOTS OF SMALL CALENDAR ////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        if(!empty($theme_options_styles['bgColorDeactiveDateTime'])){
+            $styles_str .= "
+                .cal-day-outmonth{
+                    background-color: $theme_options_styles[bgColorDeactiveDateTime] !important;
+                }
+            ";
+        }
+
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////

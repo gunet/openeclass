@@ -199,7 +199,7 @@ if (isset($_GET['u'])) { //  stats per user
                 $tool_content .= "<td>
                                     <a class='link-color d-flex justify-content-start align-items-center gap-2' href='" . $linkReport . "&user_rep=$row->id" . "' aria-label='".participant_name($row->id)."'
                                         data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langShowReportUserTable'>
-                                        <img class='user-icon-filename' src='".user_icon($row->id, IMAGESIZE_SMALL)."' alt='".participant_name($row->id)."'>
+                                        <img class='user-icon-filename' src='".user_icon($row->id, IMAGESIZE_SMALL)."' alt='$langUser:".participant_name($row->id)."'>
                                         <span>" . participant_name($row->id) . "</span>
                                     </a>
                                  </td>";

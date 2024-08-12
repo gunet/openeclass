@@ -1565,10 +1565,10 @@ function add_gradebook_other_activity($gradebook_id) {
                         
                
                                 <div class='form-group'>
-                                    <label for='activity_type_id' class='col-sm-6 control-label-notes'>$langType</label>
+                                    <div class='col-sm-6 control-label-notes'>$langType</div>
                                     <div class='col-sm-12'>" . (isset($module_auto_label)? "
                                         <p class='form-control-static'>$module_auto_label</p>": "
-                                        <select name='activity_type' class='form-select' id='activity_type_id'>
+                                        <select name='activity_type' class='form-select' id='activity_type_id' aria-label='$langType'>
                                             <option value=''  " . typeSelected($activity_type, '') . " >-</option>
                                             <option value='4' " . typeSelected($activity_type, 4) . " >" . $langGradebookExams . "</option>
                                             <option value='2' " . typeSelected($activity_type, 2) . " >" . $langGradebookLabs . "</option>

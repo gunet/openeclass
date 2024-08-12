@@ -4861,7 +4861,7 @@ function assignment_details($id, $row, $x =false) {
                                     <th>$langCriteria</th>
                                 </thead>
                                 <tr>
-                                    <td><h5>$rubric_name</h5><h6>$rubric_desc</h6></td>
+                                    <td><div class='text-heading-h5'>$rubric_name</div><div class='text-heading-h6'>$rubric_desc</div></td>
                                     <td>
                                         <ul class='list-unstyled'>
                                             $criteria_list
@@ -5154,11 +5154,11 @@ function show_assignment($id) {
                                 }
                             }
                             if ($counter == 0) {
-                                $mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6>&nbsp;</span>";
+                                $mess = "<span style='color: green;'><div class='text-heading-h6'>$langPeerReviewCompletedByStudent</div>&nbsp;</span>";
                             } elseif ($counter < $r_count){
-                                $mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent<br>($langQuestionCorrectionTitle2 $counter $langFrom2 $r_count)</h6></span>";
+                                $mess = "<span style='color: darkorange;'><div class='text-heading-h6'>$langPeerReviewPendingByStudent<br>($langQuestionCorrectionTitle2 $counter $langFrom2 $r_count)</div></span>";
                             } else {
-                                $mess = "<span style='color: red;'><h6>$langPeerReviewMissingByStudent</h6></span>";
+                                $mess = "<span style='color: red;'><div class='text-heading-h6'>$langPeerReviewMissingByStudent</div></span>";
                             }
                         }
                         // grade_field pedio
@@ -5268,7 +5268,7 @@ function show_assignment($id) {
                     }
                 }
                 if (!empty($grade)) {
-                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
+                    $grade_field = "<input aria-label='$langGradebookGrade' class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' disabled>";
                 } else {
                     $icon_field = '';
                     if ($is_editor) {
@@ -5282,12 +5282,12 @@ function show_assignment($id) {
             } else {
                 // disabled grade field if turnitin or user is course reviewer
                 $grade_disabled = ($assign->assignment_type == 1 or !$is_editor) ? ' disabled': '';
-                $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
+                $grade_field = "<input aria-label='$langGradebookGrade' class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
             }
             $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div class='Accent-200-cl'><small>$m[late_submission]</small></div>" : '';
             $am_field = '';
             if (!is_null($stud_am)) {
-                $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
+                $am_field = "<div class='text-heading-h6'>$langAmShort: " . q($stud_am) . "</div>";
             }
             $tool_content .= "<tr>
                             <td class='count-col'>$i.</td>
@@ -5302,7 +5302,7 @@ function show_assignment($id) {
             $comments = '';
             //emfanizei pote vathmologhthhke
             if ($row->grade != '') { // grade submission date
-                $label = "<h6>($langGradedAt " .format_locale_date(strtotime($row->grade_submission_date), 'short', false) . ")</h6>";
+                $label = "<div class='text-heading-h6'>($langGradedAt " .format_locale_date(strtotime($row->grade_submission_date), 'short', false) . ")</div>";
             }
             // professor comments
             if ($row->grade_comments or $row->grade_comments_filename) {
@@ -5342,7 +5342,7 @@ function show_assignment($id) {
                 } else {
                     // disabled grade field if turnitin or user is course reviewer
                     $grade_disabled = ($assign->assignment_type == 1 or !$is_editor) ? ' disabled': '';
-                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
+                    $grade_field = "<input aria-label='$langGradebookGrade' class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3' $grade_disabled>";
                 }
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div class='Accent-200-cl'><small>$m[late_submission]</small></div>" : '';
                 $am_field = '';

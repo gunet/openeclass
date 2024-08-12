@@ -18,25 +18,25 @@
                   {!! generate_csrf_token_form_field() !!}
                 @endif
                 <div class='form-group'>
-                  <label class='col-sm-12 control-label-notes'>{{ trans('langCourse') }}:</label>
+                  <div class='col-sm-12 control-label-notes'>{{ trans('langCourse') }}:</div>
                   <div class='col-sm-12'>
                     <p class='form-control-static'>{{ $course->title }}</p>
                   </div>
                 </div>
                 <div class='form-group mt-3'>
-                  <label class='col-sm-12 control-label-notes'>{{ trans('langTeacher') }}:</label>
+                  <div class='col-sm-12 control-label-notes'>{{ trans('langTeacher') }}:</div>
                   <div class='col-sm-12'>
                     <p class='form-control-static'>{{ $course->prof_names }}</p>
                   </div>
                 </div>
                 <div class='form-group mt-3'>
-                  <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                  <div class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</div>
                   <div class='col-sm-12'>
                     <p class='form-control-static'>{!! $departments !!}</p>
                   </div>
                 </div>
                 <div class='form-group mt-3'>
-                  <label class='col-sm-12 control-label-notes'>{{ trans('langCode') }}:</label>
+                  <div class='col-sm-12 control-label-notes'>{{ trans('langCode') }}:</div>
                   <div class='col-sm-12'>
                     <p class='form-control-static'>{{  $course->public_code }}</p>
                   </div>

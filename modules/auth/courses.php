@@ -261,7 +261,7 @@ function expanded_faculte($facid, $uid) {
                         AND course_department.department = ?d
                         AND course.visible != ?d
                    ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $langLabelCourseUserRequest, $unlock_all_courses, $langLabelCollabUserRequest) {
-        global $urlAppend, $courses_list;
+        global $urlAppend, $courses_list, $langSelect;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
         $password = q($mycours->password);
