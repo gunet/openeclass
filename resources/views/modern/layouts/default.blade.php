@@ -200,5 +200,28 @@
         </div>
     @endif
 
+
+    <!-- For accessibility -->
+    <script>
+        $(function() {
+            $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
+                $(this).attr("aria-label", "{{ trans('langPrevious') }}");
+            });
+            $(".datetimepicker table > thead > tr").find("th.next").each(function() {
+                $(this).attr("aria-label", "{{ trans('langNext') }}");
+            });
+            $(".datepicker table > thead > tr").find("th.prev").each(function() {
+                $(this).attr("aria-label", "{{ trans('langPrevious') }}");
+            });
+            $(".datepicker table > thead > tr").find("th.next").each(function() {
+                $(this).attr("aria-label", "{{ trans('langNext') }}");
+            });
+            $("#cboxPrevious").attr("aria-label","{{ trans('langPrevious') }}");
+            $("#cboxNext").attr("aria-label","{{ trans('langNext') }}");
+            $("#cboxSlideshow").attr("aria-label","{{ trans('langShow') }}");
+            $(".select2-search__field").attr("aria-label","{{ trans('langSearch') }}");
+        });
+    </script>
+
  </body>
 </html>
