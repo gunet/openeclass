@@ -131,7 +131,7 @@ if ($displayFull == 0) {
        }, $action_period);</script>"
     . "</head>"
     . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
-    . "<frame src='$startModuleLink' name='mainFrame' />" . "\n"
+    . "<frame title='$langFrameOpens' src='$startModuleLink' name='mainFrame' />" . "\n"
     . "</frameset>"
     . "<noframes>"
     . "<body>"

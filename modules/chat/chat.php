@@ -406,7 +406,7 @@ $head_content .= "<script>
                 title: fileTitle,
                 message: '<div class=\"row\">'+
                             '<div class=\"col-sm-12\">'+
-                                '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
                             '</div>'+
                         '</div>',
                 buttons: bts

@@ -136,9 +136,9 @@
                                                     @foreach ($all_session as $cu)
                                                         <li>
                                                             <a class='TextBold 
-                                                                @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) opacity-help @endif
-                                                                @if(!$is_consultant && ($cu->start > $current_time)) pe-none opacity-help @endif
-                                                                @if(!$is_consultant && ($cu->finish < $current_time)) opacity-help @endif'
+                                                                @if($is_consultant && ($cu->finish < $current_time or !$cu->visible)) link-delete @endif
+                                                                @if(!$is_consultant && ($cu->start > $current_time)) pe-none @endif
+                                                                @if(!$is_consultant && ($cu->finish < $current_time)) link-delete @endif'
                                                                 href='{{ $urlServer }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $cu->id }}'>
                                                                 {{ $cu->title }}
                                                             </a>
@@ -153,7 +153,7 @@
                                                             @endif
                                                             @if($cu->finish < $current_time or !$cu->visible or $cu->start > $current_time) 
                                                                 @if($cu->finish < $current_time)
-                                                                    <span class='badge Accent-200-bg'>{{ trans('langHasExpired') }}</span>
+                                                                    <span class='badge Accent-200-bg'>{{ trans('langSessionHasExpired') }}</span>
                                                                 @elseif(!$cu->visible)
                                                                     <span class='badge Accent-200-bg'>{{ trans('langNotDisplay') }}</span>
                                                                 @elseif($cu->start > $current_time)

@@ -876,7 +876,7 @@ if (!class_exists('IMSCPExport')) {
              */
             function createFrameFile($fileName, $targetPath)
             {
-                global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
+                global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset, $langFrameOpens;
 
                 if ( !($f = fopen($fileName, 'w')) )
                 {
@@ -890,7 +890,7 @@ if (!class_exists('IMSCPExport')) {
         <title>Default Title</title>
     </head>
     <frameset border="0" rows="100%" onload="immediateComplete()">
-        <frame src="' . $targetPath . '" scrolling="auto">
+        <frame title="'.$langFrameOpens.'" src="' . $targetPath . '" scrolling="auto">
     </frameset>
     </html>');
                 fclose($f);

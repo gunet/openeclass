@@ -790,7 +790,7 @@ if (!class_exists('ScormExport')) {
              * @author Amand Tihon <amand@alrj.org>
              */
             function createFrameFile($fileName, $targetPath) {
-                global $langErrorCreatingFrame, $charset;
+                global $langErrorCreatingFrame, $charset, $langFrameOpens;
 
                 if (!($f = fopen($fileName, 'w'))) {
                     $this->error[] = $langErrorCreatingFrame;
@@ -803,7 +803,7 @@ if (!class_exists('ScormExport')) {
     <title>Default Title</title>
 </head>
 <frameset border="0" rows="100%,*" onload="immediateComplete()">
-    <frame src="' . $targetPath . '" scrolling="auto">
+    <frame title="'.$langFrameOpens.'" src="' . $targetPath . '" scrolling="auto">
     <frame src="SCOFunctions.js">
 </frameset>
 </html>');
