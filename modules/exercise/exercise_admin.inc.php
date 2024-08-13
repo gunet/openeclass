@@ -154,7 +154,7 @@ if (isset($_POST['submitExercise'])) {
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
     $continueTimeLimit = Session::has('continueTimeLimit') ? Session::get('continueTimeLimit') : $objExercise->continueTimeLimit();
     $continueTimeField = str_replace('[]',
-        "<input type='text' class='form-control' name='continueTimeLimit' value='$continueTimeLimit'>",
+        "<input type='text' class='form-control' name='continueTimeLimit' value='$continueTimeLimit' aria-label='$langminutes'>",
         $langContinueAttemptTime);
     if (!is_null($objExercise->selectIPLock())) {
         $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : explode(',', $objExercise->selectIPLock());
@@ -544,18 +544,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                 </thead>
                                 <tr>
                                   <td>
-                                    <select class='form-select h-100' id='assign_box' size='10' multiple>
+                                    <select aria-label='$langStudents' class='form-select h-100' id='assign_box' size='10' multiple>
                                     ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                     </select>
                                   </td>
                                   <td>
                                     <div class='d-flex align-items-center flex-column gap-2'>
-                                        <input class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' />
-                                        <input class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                        <input aria-label='$langMove' class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' />
+                                        <input aria-label='$langMove' class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                                     </div>
                                   </td>
                                   <td>
-                                    <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                    <select aria-label='$m[WorkAssignTo]' class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
                                     ".((isset($assignee_options)) ? $assignee_options : '')."
                                     </select>
                                   </td>

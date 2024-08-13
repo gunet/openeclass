@@ -6868,3 +6868,4 @@ $langCreateDeliverable = "Δημιουργία παραδοτέου";
 $langImgFormsDes = "Συμπληρώστε τα υποχρεωτικά πεδία στην εικονιζόμενη φόρμα";
 $langThePageIs = "Βρίσκεστε στην σελίδα:";
 $langFrameOpens = "Άνοιγμα παραθύρου";
+$langListChoices = "Λίστα επιλογών";

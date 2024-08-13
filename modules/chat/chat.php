@@ -165,7 +165,7 @@ if (!$conference_activity) {
                 </div>
             </div>
             <div class='embed-responsive embed-responsive-4by3 chat-iframe margin-top-fat mt-3'>
-              <iframe class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList'></iframe>
+              <iframe title='$langFrameOpens' class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList'></iframe>
             </div>
         </div>
        </fieldset>

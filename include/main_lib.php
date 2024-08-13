@@ -3677,7 +3677,7 @@ function form_buttons($btnArray) {
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete,
-           $course_code, $toolName, $pageName;
+           $course_code, $toolName, $pageName, $langListChoices;
 
     $out_primary = $out_secondary = array();
     $i=0;
@@ -3823,7 +3823,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
 
     if (count($out_secondary) > 0) {
-        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false' aria-label='Dropdown menu'>
+        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
                                 <span class='hidden-xs TextBold'>$secondary_title</span>
@@ -3899,7 +3899,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array(), $fc=false) {
-    global $langConfirmDelete, $langCancel, $langDelete;
+    global $langConfirmDelete, $langCancel, $langDelete, $langListChoices;
     $out_primary = $out_secondary = array();
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
 
@@ -3984,7 +3984,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
             $tmp_class_title = "";
         }
         $action_button = "
-                <a tabindex='0' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
+                <a tabindex='0' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list' aria-label='$langListChoices'>
                     <span class='fa $secondary_icon'></span>
                     $tmp_class_title
 

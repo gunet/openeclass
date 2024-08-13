@@ -83,8 +83,6 @@
             $('.blockUI').click(function() {
                 $.blockUI({ message: "<div class='card'><h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4></div>" });
             });
-            $('.table-condensed thead tr th.prev').attr("aria-label", "{{ trans('langPrevious') }}");
-            $('.table-condensed thead tr th.next').attr("aria-label", "{{ trans('langNext') }}");
         });
     </script>
 
