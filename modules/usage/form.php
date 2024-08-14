@@ -119,7 +119,7 @@ if($stats_type == 'course'){
 }
 elseif($stats_type == 'admin'){
     $tool_content .= '
-    <div class="col-md-6 col-12 mt-md-0 mt-3"><select aria-label="'.$langDepartmentList.'" name="department" id="department" class="form-select">' . $statsDepOptions . '</select></div>';
+    <div class="col-md-6 col-12 mt-md-0 mt-3"><select aria-label="'.$langDepartmentsList.'" name="department" id="department" class="form-select">' . $statsDepOptions . '</select></div>';
 }
 elseif($stats_type == 'user'){
     $tool_content .= '

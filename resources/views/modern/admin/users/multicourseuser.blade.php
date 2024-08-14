@@ -32,22 +32,22 @@
                         <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <fieldset>
                                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
-                                <div class='control-label-notes'>{{ trans('langUsersData') }}</div>
+                                <label for='user_Id' class='control-label-notes'>{{ trans('langUsersData') }}</label>
                                 <div class='form-group'>
                                     <div class='radio'>
                                         <label>
                                             <input type='radio' name='type' value='uname' checked>{{ trans('langUsername') }}
                                         </label>
                                     </div>
-                                    <div class='col-sm-12'>{!! text_area('user_info', 10, 30, '') !!}</div>
+                                    <div class='col-sm-12'>{!! text_area('user_info', 10, 30, '', 'id="user_Id"') !!}</div>
                                 </div>
                             </fieldset>
                             <div class='mt-4'></div>
                             <fieldset>
                                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
-                                <div class='control-label-notes'>{{ trans('langCourseCodes') }}</div>
+                                <label for='courses_Id' class='control-label-notes'>{{ trans('langCourseCodes') }}</label>
                                 <div class='form-group'>
-                                    <div class='col-sm-12'>{!! text_area('courses_codes', 10, 30, '') !!}</div>
+                                    <div class='col-sm-12'>{!! text_area('courses_codes', 10, 30, '', 'id="courses_Id"') !!}</div>
                                 </div>
                                 {!! showSecondFactorChallenge() !!}
                                 <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>

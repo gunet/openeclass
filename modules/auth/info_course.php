@@ -26,7 +26,14 @@ $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 
 $data['courseId'] = $courseId = course_code_to_id($_GET['c']);
 
+$is_collab_course = 0;
 $data['infoCourse'] = $infoCourse = Database::get()->queryArray("SELECT * FROM course WHERE id = ?d",$courseId);
+foreach($infoCourse as $c){
+      if($c->is_collaborative){
+            $is_collab_course = 1;
+      }
+}
+$data['is_collab_course'] = $is_collab_course;
 
 $data['course_descriptions'] = $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)

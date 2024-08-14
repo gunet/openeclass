@@ -29,14 +29,14 @@
                             <fieldset>
                                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='form-group'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langStatus') }}:</label>   
+                                    <div class='col-sm-12 control-label-notes'>{{ trans('langStatus') }}:</div>   
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>{{ $type == USER_STUDENT ? trans('langStudents') : trans('langTeachers') }}</p>
                                     </div>
                                 </div>
                              
                                 <div class='form-group mt-4'>
-                                    <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>   
+                                    <div class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</div>   
                                     <div class='col-sm-12 form-control-static'>
                                         {!! $htmlTree !!}
                                     </div>

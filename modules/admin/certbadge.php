@@ -481,14 +481,14 @@ if (isset($_GET['action'])) {
                             <th style='width:30%;'>$langTitle</th>
                             <th style='width:60%;'>$langDescription</th>
                             <th style='width:10%;'>$langIcon</th>
-                            <th style='width:10%;'></th>
+                            <th style='width:10%;' aria-label='$langSettingSelect'></th>
                         </tr>
                         </thead>";
                 foreach ($sql2 as $badge_data) {
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";
                     $tool_content .= "<tr><td style='width:30%;'>$badge_data->name</td>
                                       <td style='width:50%;'>" . ellipsize_html($badge_data->description, 100) . "</td>
-                                      <td style='width:10%;' ><img src='$icon_link' width='50' height='50'></td>";
+                                      <td style='width:10%;' ><img src='$icon_link' width='50' height='50' alt='$badge_data->name'></td>";
                     $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,

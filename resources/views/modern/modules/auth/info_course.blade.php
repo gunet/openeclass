@@ -39,9 +39,6 @@
 
                                     <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;- &nbsp;{!! $c->prof_names !!}</p>
 
-                                    
-
-
                                     @if(empty($c->description))
                                         @if(!$c->is_collaborative)
                                         <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
@@ -79,40 +76,41 @@
                 @endforeach
             </div>
 
+            @if(!$is_collab_course)
+                <div class='col-12 mt-4'>
+                    <div class='row'>
+                        <div class='panel'>
+                            <div class='panel-group group-section mt-2 px-0' id='accordionDesC'>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item px-0 mb-4 bg-transparent">
 
-            <div class='col-12 mt-4'>
-                <div class='row'>
-                    <div class='panel'>
-                        <div class='panel-group group-section mt-2 px-0' id='accordionDesC'>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0 mb-4 bg-transparent">
-
-                                    <div class='d-flex justify-content-between border-bottom-default'>
-                                        <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescriptionc' aria-expanded='true' aria-controls='collapseDescriptionc'>
-                                            <i class='fa-solid fa-chevron-down settings-icon'></i>
-                                            {{ trans('langSyllabus') }}
-                                        </a>
-                                    </div>
-                                    <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='collapseDescriptionc' data-bs-parent='#accordionDesC'>
-                                        @if(count($course_descriptions) == 0)
-                                            <div class='col-12 mb-4'>
-                                                <p>{{ trans('langNoSyllabus')}}</p>
-                                            </div>
-                                        @else
-                                            @foreach ($course_descriptions as $row)
+                                        <div class='d-flex justify-content-between border-bottom-default'>
+                                            <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescriptionc' aria-expanded='true' aria-controls='collapseDescriptionc'>
+                                                <i class='fa-solid fa-chevron-down settings-icon'></i>
+                                                {{ trans('langSyllabus') }}
+                                            </a>
+                                        </div>
+                                        <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='collapseDescriptionc' data-bs-parent='#accordionDesC'>
+                                            @if(count($course_descriptions) == 0)
                                                 <div class='col-12 mb-4'>
-                                                    <p class='form-label text-start'>{{ $row->title }}</p>
-                                                    {!! standard_text_escape($row->comments) !!}
+                                                    <p>{{ trans('langNoSyllabus')}}</p>
                                                 </div>
-                                            @endforeach
-                                        @endif
-                                    </div>
-                                </li>
-                            </ul>
+                                            @else
+                                                @foreach ($course_descriptions as $row)
+                                                    <div class='col-12 mb-4'>
+                                                        <p class='form-label text-start'>{{ $row->title }}</p>
+                                                        {!! standard_text_escape($row->comments) !!}
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
         </div>
 

@@ -257,7 +257,7 @@
                             <div class="form-group{{ Session::hasError('language_form') ? ' has-error' : '' }} mt-4">
                                 <label for="language_form" class="col-sm-12 control-label-notes">{{ trans('langLanguage') }}</label>
                                 <div class="col-sm-12">
-                                    {!! lang_select_options('language_form', "class='form-control'", Session::has('language_form') ? Session::get('language_form'): $language) !!}
+                                    {!! lang_select_options('language_form', "class='form-control' id='language_form'", Session::has('language_form') ? Session::get('language_form'): $language) !!}
                                     @if (Session::hasError('language_form'))
                                     <span class="help-block Accent-200-cl">{{ Session::getError('language_form') }}</span>
                                     @endif
@@ -279,7 +279,7 @@
                             @if (isset($_GET['id']))
 
                                 <div class="form-group mt-4">
-                                    <label for="comments" class="col-sm-12 control-label-notes">{{ trans('langComments') }}</label>
+                                    <div class="col-sm-12 control-label-notes">{{ trans('langComments') }}</div>
                                     <div class="col-sm-12">
                                         <p class='form-control-static'>
                                             {{ $pcom }}
@@ -288,7 +288,7 @@
                                 </div>
 
                                 <div class="form-group mt-4">
-                                    <label for="date" class="col-sm-12 control-label-notes">{{ trans('langDate') }}</label>
+                                    <div class="col-sm-12 control-label-notes">{{ trans('langDate') }}</div>
                                     <div class="col-sm-12">
                                         <p class='form-control-static'>
                                             {{ $pdate }}

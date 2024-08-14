@@ -559,6 +559,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['ColorHyperTexts'])){
             $styles_str .= "
+                caption,
                 body,
                 h1,h2,h3,h4,h5,h6,
                 p,strong,.li-indented,li,small,

@@ -47,8 +47,8 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langMultiCourseTitles') }}</label>
-                                        <div class='col-sm-12'>{!! text_area('courses', 20, 80, '') !!}</div>
+                                        <label for='courses_id' class='col-sm-12 control-label-notes'>{{ trans('langMultiCourseTitles') }}</label>
+                                        <div class='col-sm-12'>{!! text_area('courses', 20, 80, '', 'id="courses_id"') !!}</div>
                                     </div>
 
                                     <div class='form-group mt-4'>
@@ -105,7 +105,7 @@
                                     </div>
 
                                     <div class='form-group mt-4'>
-                                        <label for='language' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>	  
+                                        <div class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</div>	  
                                         <div class='col-sm-12'>{!! lang_select_options('lang') !!}</div>
                                     </div>
                                     

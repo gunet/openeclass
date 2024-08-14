@@ -85,7 +85,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label id='user_type_id' class='col-sm-12 control-label-notes'>{{ trans('langUserType') }}</label>
+                            <label for='user_type_id' class='col-sm-12 control-label-notes'>{{ trans('langUserType') }}</label>
                             <div class='col-sm-12'>
                                 {!! selection($usertype_data, 'user_type', 0, 'class="form-select" id="user_type_id"') !!}
                             </div>
@@ -108,17 +108,17 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label id='auth_method' class='col-sm-12 control-label-notes'>{{ trans('langAuthMethod') }}</label>
+                            <label for='auth_method' class='col-sm-12 control-label-notes'>{{ trans('langAuthMethod') }}</label>
                             <div class='col-sm-12'>
                                 {!! selection($authtype_data, 'auth_type', 0, 'class="form-select" id="auth_method"') !!}
                             </div>
                         </div>
 
                         <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</div>
+                            <label for='reg_flag_id' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</label>
                             <div class='row'>
                                 <div class='col-6'>
-                                    {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-select"') !!}
+                                    {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-select" id="reg_flag_id"') !!}
                                 </div>
                                 <div class='col-6'>
                                     <input aria-label="{{ trans('langRegistrationDate') }}" class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='{{ $user_registered_at }}' placeholder='{{ trans('langRegistrationDate') }}'>
@@ -134,7 +134,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label id='verified_mail_id' class='col-sm-12 control-label-notes'>{{ trans('langEmailVerified') }}</label>
+                            <label for='verified_mail_id' class='col-sm-12 control-label-notes'>{{ trans('langEmailVerified') }}</label>
                             <div class='col-sm-12'>
                                 {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-select" id="verified_mail_id"') !!}
                             </div>

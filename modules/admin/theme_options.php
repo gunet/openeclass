@@ -629,6 +629,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
+            <div class='col-sm-12 control-label-notes mb-2'>$langBgImg (jumbotron):</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;' alt='Image upload for login form'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
@@ -637,7 +638,7 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $login_image_field = "
-
+            <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langBgImg (jumbotron):</label>
             <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
                 <li class='nav-item' role='presentation'>
                     <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'>$langUpload</button>
@@ -666,6 +667,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['loginImgL'])) {
         $login_image_fieldL = "
+            <div class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;' alt='Image upload'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImgL'>$langDelete</a>
@@ -674,7 +676,7 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $login_image_fieldL = "
-
+            <label for='loginImgL' class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</label>
             <ul class='nav nav-tabs' id='nav-tab2' role='tablist'>
                 <li class='nav-item' role='presentation'>
                     <button class='nav-link active' id='tabs-upload-tab2' data-bs-toggle='tab' data-bs-target='#tabs-upload2' type='button' role='tab' aria-controls='tabs-upload2' aria-selected='true'>$langUpload</button>
@@ -704,15 +706,16 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['imageUploadForm'])) {
         $form_image_fieldL = "
+            <div class='col-12 control-label-notes'>$langFormUploadImage</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                <img src='$urlThemeData/$theme_options_styles[imageUploadForm]' style='max-height:100px;max-width:150px;' alt='Image upload'>
+                <img src='$urlThemeData/$theme_options_styles[imageUploadForm]' style='max-height:100px;max-width:150px;' alt='$langDownloadFile'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadForm'>$langDelete</a>
             </div>
             <input type='hidden' name='imageUploadForm' value='$theme_options_styles[imageUploadForm]'>
         ";
     } else {
        $form_image_fieldL = "
-
+            <label for='imageUploadForm' class='col-12 control-label-notes'>$langFormUploadImage</label>
             <ul class='nav nav-tabs' id='nav-tab3' role='tablist'>
                 <li class='nav-item' role='presentation'>
                     <button class='nav-link active' id='tabs-upload-tab3' data-bs-toggle='tab' data-bs-target='#tabs-upload3' type='button' role='tab' aria-controls='tabs-upload3' aria-selected='true'>$langUpload</button>
@@ -742,6 +745,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['imageUploadRegistration'])) {
         $registration_image_fieldL = "
+            <div class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[imageUploadRegistration]' style='max-height:100px;max-width:150px;' alt='Image upload'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadRegistration'>$langDelete</a>
@@ -750,7 +754,7 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $registration_image_fieldL = "
-
+            <label for='imageUploadRegistration' class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</label>
             <ul class='nav nav-tabs' id='nav-tab4' role='tablist'>
                 <li class='nav-item' role='presentation'>
                     <button class='nav-link active' id='tabs-upload-tab4' data-bs-toggle='tab' data-bs-target='#tabs-upload4' type='button' role='tab' aria-controls='tabs-upload4' aria-selected='true'>$langUpload</button>
@@ -780,6 +784,7 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['imageUploadFaq'])) {
         $faq_image_fieldL = "
+            <div class='col-sm-12 control-label-notes mb-2'>$langFaqUploadImage:</div>
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
                 <img src='$urlThemeData/$theme_options_styles[imageUploadFaq]' style='max-height:100px;max-width:150px;' alt='Image upload'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFaq'>$langDelete</a>
@@ -788,7 +793,7 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $faq_image_fieldL = "
-
+            <label for='imageUploadFaq' class='col-sm-12 control-label-notes mb-2'>$langFaqUploadImage:</label>
             <ul class='nav nav-tabs' id='nav-tab5' role='tablist'>
                 <li class='nav-item' role='presentation'>
                     <button class='nav-link active' id='tabs-upload-tab5' data-bs-toggle='tab' data-bs-target='#tabs-upload5' type='button' role='tab' aria-controls='tabs-upload5' aria-selected='true'>$langUpload</button>
@@ -1210,7 +1215,7 @@ $tool_content .= "
                     </div>
                     <hr>
                     <div class='form-group mt-4'>
-                        <label for='imageUploadFooter' class='col-sm-6 control-label-notes mb-2'>$langFooterUploadImage:</label>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langFooterUploadImage:</div>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $image_footer_field
                         </div>
@@ -1428,7 +1433,7 @@ $tool_content .= "
                         <input aria-label='$langBgColor' name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langBgImg (jumbotron):</label>
+                        
                         <div class='col-sm-12'>
                         $login_image_field
                         </div>
@@ -1447,7 +1452,6 @@ $tool_content .= "
 
                 
                     <div class='form-group mt-4'>
-                        <div class='col-sm-12 control-label-notes mb-2'>$langLoginImg:</div>
                         <div class='col-sm-12'>
                         $login_image_fieldL
                         </div>
@@ -2073,7 +2077,6 @@ $tool_content .= "
                         <input name='clLabelForms' type='text' class='form-control colorpicker' id='clLabelForms' value='$theme_options_styles[clLabelForms]'>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='imageUploadForm' class='col-sm-12 control-label-notes mb-2'>$langFormUploadImage:</label>
                         <div class='col-sm-12'>
                             $form_image_fieldL
                         </div>
@@ -2083,7 +2086,6 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutRegistrationImageUpload</h3>
                     <div class='form-group mt-4'>
-                        <label for='imageUploadRegistration' class='col-sm-12 control-label-notes mb-2'>$langRegistrationUploadImage:</label>
                         <div class='col-sm-12'>
                             $registration_image_fieldL
                         </div>
@@ -2395,7 +2397,7 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutFaqImageUpload</h3>
                     <div class='form-group mt-4'>
-                        <label for='imageUploadFaq' class='col-sm-12 control-label-notes mb-2'>$langFaqUploadImage:</label>
+                        
                         <div class='col-sm-12'>
                             $faq_image_fieldL
                         </div>
@@ -2584,7 +2586,7 @@ $tool_content .= "
                                 $tool_content .= "
                                     <div class='col'>
                                         <div class='card panelCard h-100'>
-                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/form_images/$image' alt='form image'/>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/form_images/$image' alt='$langFormImg'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
 
@@ -2622,7 +2624,7 @@ $tool_content .= "
                                 $tool_content .= "
                                     <div class='col'>
                                         <div class='card panelCard h-100'>
-                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/registration_images/$image' alt='Registration image'/>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/registration_images/$image' alt='$langRegistration'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
 
@@ -2658,7 +2660,7 @@ $tool_content .= "
                                 $tool_content .= "
                                     <div class='col'>
                                         <div class='card panelCard h-100'>
-                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/faq_images/$image' alt='FAQ image'/>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/faq_images/$image' alt='$langFaq'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
 

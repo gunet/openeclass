@@ -98,7 +98,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
         
                                         <div class='form-group mt-4'>
                                             <label for='lti_launchcontainer' class='col-sm-12 control-label-notes'>$langLTILaunchContainer</label>
-                                            <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
+                                            <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED, 'id="lti_launchcontainer"') . "</div>
                                         </div>
         
                                         <div class='form-group mt-4'>

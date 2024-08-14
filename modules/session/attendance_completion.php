@@ -34,7 +34,8 @@ function list_session_attendance($sid,$cid) {
 
     global $course_id, $course_code, $tool_content, $langChoice, 
             $langNotExistAttendanceCriterion, $langUser, $langSubmit, 
-            $langChooseParticipatedUser, $langAddParticipationUser, $langSelect;
+            $langChooseParticipatedUser, $langAddParticipationUser, $langSelect ,
+            $langAnalyticsNoUsersToDisplay;
 
     // Firstly check if exists criterio for attendance completion.
     $cr_exists = Database::get()->querySingle("SELECT id FROM badge_criterion 
@@ -89,6 +90,13 @@ function list_session_attendance($sid,$cid) {
                                     </td>
                                 </tr>";
             $tool_content .= "</tbody></table></div></form></div>";
+        }else{
+            $tool_content .= "<div class='col-12'>
+                                <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>$langAnalyticsNoUsersToDisplay</span>
+                                </div>
+                             </div>";
         }
     }else{
         $tool_content .= "<div class='col-12'>

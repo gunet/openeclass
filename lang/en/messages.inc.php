@@ -6399,3 +6399,5 @@ $langImgFormsDes = "Fill in the required fields in the form shown";
 $langThePageIs = "You are on the page:";
 $langFrameOpens = "Window opening";
 $langListChoices = "Choices list";
+$langAccuratePath = "Accurate path";
+$langOptForColor = "Color selection";

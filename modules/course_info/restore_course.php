@@ -145,14 +145,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
-            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><label>$langFirstMethod</label> $langRequest1</span></div></div>
+            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><strong>$langFirstMethod</strong> $langRequest1</span></div></div>
 
             <div class='form-wrapper form-edit rounded'>
                 <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
                     <div class='form-group mt-3'>
                         <div class='col-sm-4'>" .
                             fileSizeHidenInput() . "
-                            <input type='file' name='archiveZipped' />
+                            <input aria-label='$langFileName' type='file' name='archiveZipped' />
                         </div>
                         <div class='col-sm-6'>
                             <input class='btn mt-3 submitAdminBtn' type='submit' name='send_archive' value='" . $langSend . "'>
@@ -165,13 +165,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         
         
             <div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
-            <label>$langSecondMethod</label> $langRequest2</span></div></div>   
+            <strong>$langSecondMethod</strong> $langRequest2</span></div></div>   
 
 
             <div class='form-wrapper form-edit rounded'>
                 <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
                     <div class='form-group mt-3'>
-                        <input type='text' class='form-control' name='pathToArchive'>
+                        <input aria-label='$langAccuratePath' type='text' class='form-control' name='pathToArchive'>
                     </div>
                     <div class='form-group mt-3'>
                         <input class='btn submitAdminBtn' type='submit' name='send_path' value='" . $langSend . "'>

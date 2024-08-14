@@ -370,7 +370,8 @@ a:hover,button:hover{
   background-color: #2B3944;
 }
 
-.Neutral-900-cl{
+.Neutral-900-cl,
+caption{
   color: #2B3944;
 }
 
@@ -3482,7 +3483,7 @@ table{
 }
 
 .label.label-warning{
-  color: #fcc152;
+  color: #F57600;
   width:188px;
   margin-top: 5px;
   border-radius: 4px;
@@ -5324,4 +5325,8 @@ body:has(.fixed-announcement) .btn-quick-note{
 .cardReports{
   background:#FAFBFC;
   border: solid 1px #EFF6FF;
+}
+
+.sp-dd {
+  font-size: 12px !important;
 }
