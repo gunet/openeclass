@@ -27,9 +27,12 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body) {
 
     $message = new Swift_Message($subject, $body);
     $message->setFrom(fromHeader($from, $from_address));
-    if (count($to_address) > 1) {
+    if (is_array($to_address) and count($to_address) > 1) {
         $message->setBcc($to_address);
     } else {
+        if (is_array($to_adderss)) {
+            $to_address = $to_address[0];
+        }
         $message->setTo(array($to_address => $to));
     }
 
