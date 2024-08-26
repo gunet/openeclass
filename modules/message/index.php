@@ -423,7 +423,7 @@ $tool_content .= "<div class='col-12'>
                                                         <div class='form-group mt-4'>
                                                             <label for='recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                             <div class='col-sm-12'>
-                                                                <select name='recipients' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
+                                                                <select name='recipients[]' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                                             </div>
                                                         </div>";
                                     }
