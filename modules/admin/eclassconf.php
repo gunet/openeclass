@@ -348,7 +348,12 @@ if (isset($_POST['submit'])) {
         set_config('homepage_intro', purify($_POST['homepage_intro']));
     }
 
-    set_config('maintenance_theme', $_POST['maintenance_theme']);
+    if (!isset($_POST['maintenance_theme'])) {
+        $maintenance_theme = 5;
+    } else {
+        $maintenance_theme = intval($_POST['maintenance_theme']);
+    }
+    set_config('maintenance_theme', $maintenance_theme);
 
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
