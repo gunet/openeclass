@@ -406,7 +406,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                             <div class='form-group'>
                                 <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
                                 <div class='col-sm-10'>
-                                    <select name='recipients' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
+                                    <select name='recipients[]' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                 </div>
                             </div>";
         }
