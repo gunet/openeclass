@@ -71,7 +71,7 @@ $auth = array_search($password, $auth_ids);
 if (!$auth) {
     $auth = 1;
 }
-$auth_text = get_auth_info($auth);
+$auth_text = q(get_auth_info($auth));
 
 if ($auth != 1) {
     $allow_username_change = false;
