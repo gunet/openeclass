@@ -30,6 +30,8 @@ require_once 'include/log.class.php';
 $toolName = $langAddManyUsers;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langUsers);
 
+$results = '';
+
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
@@ -53,72 +55,33 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($not_found)) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUsersNotExist<br>";
+        $results .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUsersNotExist<br>";
         foreach ($not_found as $uname) {
-            $tool_content .= q($uname) . '<br>';
+            $results .= q($uname) . '<br>';
         }
-        $tool_content .= '</span></div></div>';
+        $results .= '</span></div></div>';
     }
 
     if (count($ok)) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUsersRegistered<br>";
+        $results .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUsersRegistered<br>";
         foreach ($ok as $userid) {
-            $tool_content .= display_user($userid) . '<br>';
+            $results .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</span></div></div>';
+        $results .= '</span></div></div>';
     }
 
     if (count($existing)) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUsersAlreadyRegistered<br>";
+        $results .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUsersAlreadyRegistered<br>";
         foreach ($existing as $userid) {
-            $tool_content .= display_user($userid) . '<br>';
+            $results .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</span></div></div>';
+        $results .= '</span></div></div>';
     }
 }
 
+$data['results'] = $results;
 
-$tool_content .= "
-        
-<div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'>
-    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langAskManyUsers</span></div>
-<div class='form-wrapper form-edit rounded'>
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <fieldset>     
-            <legend class='mb-0' aria-label='$langForm'></legend>
-            <div class='form-group'>
-                <div class='col-sm-12 radio mb-2'>
-                    <label>
-                        <input type='radio' name='type' value='uname' checked>
-                        $langUsername
-                    </label>
-                </div>
-                <div class='col-sm-12 radio'>
-                    <label>
-                        <input type='radio' name='type' value='am'>
-                        $langAm
-                    </label>
-                </div>
-            </div>
-                 
-            <div class='form-group mt-4'>
-                <textarea aria-label='$langTypeOutMessage' class='auth_input w-100' name='user_info' rows='10'></textarea>
-            </div>
-            ".showSecondFactorChallenge()." 
-               
-            <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
-                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
-            </div>                       
-        </fieldset>
-        ". generate_csrf_token_form_field() ."  
-        </form>
-        </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-    </div>
-    </div>";
-
-draw($tool_content, 2);
+view('modules.user.muladduser', $data);
 
 /**
  * @brief find if user exists according to criteria
@@ -141,9 +104,10 @@ function finduser($user, $field) {
  * Add users
  * @param type $userid
  * @param type $cid
- * @return boolean (false if user is already in the course and true if registration was succesful)
+ * @return boolean (false if user is already in the course and true if registration was successful)
  */
-function adduser($userid, $cid) {
+function adduser($userid, $cid): bool
+{
 
     $result = Database::get()->querySingle("SELECT * FROM course_user WHERE user_id = ?d AND course_id = ?d", $userid, $cid);
     if ($result) {
