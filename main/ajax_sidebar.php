@@ -67,14 +67,13 @@ function getSidebarNotifications() {
 }
 
 function getCoursesNotifications() {
-    global $modules, $icons_map, $urlAppend, $urlServer, $langNoExistNotifications;
+    global $modules, $icons_map, $urlAppend, $langNoExistNotifications;
 
     $notifications_arr = array();
     $notification_content = array();
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
 
         foreach ($_GET['courseIDs'] as $id) {
-            $sideBarCourseNotify = '';
             $existNotification = 0;
             $notifications = get_course_notifications($id);
             $course_code = course_id_to_code($id);
@@ -90,10 +89,8 @@ function getCoursesNotifications() {
                     (!is_module_visible($n->module_id, $id))) {
                         continue;
                 }
-     
-                if (isset($modules_array[$n->module_id]) &&
-                    isset($modules_array[$n->module_id]['image']) &&
-                    isset($icons_map['icon_map'][$n->module_id])) {
+
+                if (isset($modules_array[$n->module_id]['image']) && isset($icons_map['icon_map'][$n->module_id])) {
                     $sideBarCourseNotifyIcon = $icons_map['icon_map'][$n->module_id];
                     $sideBarCourseNotifyCount = $n->notcount;
                     $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
@@ -131,7 +128,7 @@ function getCoursesNotifications() {
 }
 
 function getSidebarMessages() {
-    global $uid, $urlServer, $langFrom, $dateFormatLong, $langDropboxNoMessage, $langMailSubject, $langCourse;
+    global $uid, $urlServer, $langFrom, $langDropboxNoMessage, $langMailSubject, $langCourse;
 
     $message_content = '';
 
@@ -193,4 +190,5 @@ $json_obj = array(
     'notifications_courses' => getCoursesNotifications(),
     'langNotificationsExist' => $langNotificationsExist,
 );
+
 echo json_encode($json_obj, JSON_UNESCAPED_UNICODE);

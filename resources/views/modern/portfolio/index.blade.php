@@ -15,7 +15,7 @@
                         class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
                         placeholder: '{{ js_escape(trans('langSearch')) }} ...'
                     });
-                    $('#portfolio_lessons_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
+                    $('#portfolio_lessons_filter label').attr('aria-label', '{{ trans('langSearch') }}');
                     $('#portfolio_lessons_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
                 },
                 "dom": "<'all_courses float-end px-0'>frtip",
@@ -738,7 +738,7 @@
                                                                             <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
                                                                         </a>
 
-                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' 
+                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top'
                                                                             title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}" aria-label="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                                             <i class='fa-solid fa-display'></i>
                                                                         </a>

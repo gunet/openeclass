@@ -30,7 +30,7 @@ $(document).ready(function(){
 		html: true,
 		sanitize: false
 	});
-	
+
 	$('.view-style > span').on('click',function(){
 		$('.view-style > span').removeClass('active');
 		if($(this).hasClass('list-style')){
@@ -49,7 +49,7 @@ $(document).ready(function(){
         javascript:window.history.back();
     });
 
-    
+
     /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
 
 	$('#courses_table_pag').DataTable();
@@ -68,7 +68,7 @@ $(document).ready(function(){
 
 
     //fix modal appearance
-    $('.modal').appendTo("body") 
+    $('.modal').appendTo("body")
 
     //startdate , enddate disabled
     if($("#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active").is(':checked')){
@@ -101,9 +101,9 @@ $(document).ready(function(){
 });
 
 
-function switch_cources_toggle(id) 
+function switch_cources_toggle(id)
 {
-	if( $('#bars-active').is(":visible") ) 
+	if( $('#bars-active').is(":visible") )
 	{
 		$('#bars-active').hide();
 		$('#cources-bars').hide();
@@ -119,7 +119,7 @@ function switch_cources_toggle(id)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-// popover and tooltip with bootbox 
+// popover and tooltip with bootbox
 
 
 
@@ -127,7 +127,7 @@ function act_confirm() {
     $('.confirmAction').click(function (e) {
 
 		var message = $(this).attr('data-message');
-		var title = $(this).attr('data-title'); 
+		var title = $(this).attr('data-title');
 		var cancel_text = $(this).attr('data-cancel-txt');
 		var action_text = $(this).attr('data-action-txt');
 		var action_btn_class = $(this).attr('data-action-class');
@@ -154,7 +154,7 @@ function act_confirm() {
                     label: action_text,
                     className: action_btn_class+" "+"position-center",
                     callback: function () {
-                        form.submit(); 
+                        form.submit();
 						//location.href = href;
                     }
                 }
@@ -234,10 +234,10 @@ function truncate_toggle(click_elem, truncated, not_truncated, container_elem){
 
 function validator_rubric(){
     'use strict'
-  
+
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.querySelectorAll('#rubric_form')
-  
+
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms)
       .forEach(function (form) {
@@ -246,7 +246,7 @@ function validator_rubric(){
             event.preventDefault()
             event.stopPropagation()
           }
-  
+
           form.classList.add('was-validated')
         }, false)
       })
@@ -282,7 +282,7 @@ function nextAuthedicationMethod(){
             if(nextPage2 != null){
                 nextPage2.style.marginLeft = "100%";
             }
-        
+
         });
     }
 
@@ -294,7 +294,7 @@ function nextAuthedicationMethod(){
             if(nextPage2 != null){
                 nextPage2.style.marginLeft = "0%";
             }
-        
+
         });
     }
 
@@ -306,7 +306,7 @@ function nextAuthedicationMethod(){
             if(nextPage2 != null){
                 nextPage2.style.marginLeft = "100%";
             }
-        
+
         });
     }
 
@@ -318,7 +318,7 @@ function nextAuthedicationMethod(){
             if(nextPage2 != null){
                 nextPage2.style.marginLeft = "0%";
             }
-        
+
         });
     }
 
@@ -330,7 +330,7 @@ function nextAuthedicationMethod(){
             if(nextPage2 != null){
                 nextPage2.style.marginLeft = "100%";
             }
-        
+
         });
     }
 
@@ -342,7 +342,7 @@ function nextAuthedicationMethod(){
             if(nextPage2 != null){
                 nextPage2.style.marginLeft = "-100%";
             }
-        
+
         });
     }
 
@@ -380,10 +380,9 @@ function lesson_notifications(){
                     if (data.notifications_courses[id]) {
                         $(elem).html(data.notifications_courses[id]['notification_content']);
                         var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
-                        if (noexistNotification.length > 0) { 
-                            var Table = $('#portfolio_lessons').dataTable();
-                            var row = Table.$(".btn-notification-course", {"page": "all"});
-                            row.each(function(index,element){ 
+                        if (noexistNotification.length > 0) {
+                            var row = portFolioTable.$(".btn-notification-course", {"page": "all"});
+                            row.each(function(index,element){
                                 var id_btn = $(element).attr('id');
                                 if(id_btn == 'btnNotification_'+id){
                                     $(element).css('display','none');
@@ -429,10 +428,10 @@ function collaboration_notifications(){
                     if (data.notifications_courses[id]) {
                         $(elem).html(data.notifications_courses[id]['notification_content']);
                         var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
-                        if (noexistNotification.length > 0) { 
+                        if (noexistNotification.length > 0) {
                             var Table = $('#portfolio_collaborations').dataTable();
                             var row = Table.$(".btn-notification-collaboration", {"page": "all"});
-                            row.each(function(index,element){ 
+                            row.each(function(index,element){
                                 var id_btn = $(element).attr('id');
                                 if(id_btn == 'btnNotification_'+id){
                                     $(element).css('display','none');
