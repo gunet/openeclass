@@ -59,7 +59,7 @@ if (isset($_GET['add'])) {
         Session::flash('alert-class', 'alert-success');
         // notify user via email
         $email = uid_to_email($uid_to_add);
-        if (!empty($email) and valid_email($email)) {
+        if (!empty($email) and valid_email($email) and get_user_email_notification($uid_to_add)) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
             $emailbody = "$langNotifyRegUser1 <a href='{$urlServer}courses/$course_code/'>" . q(course_id_to_title($course_id)) . "</a> $langNotifyRegUser2 $langFormula \n$gunet";
 
