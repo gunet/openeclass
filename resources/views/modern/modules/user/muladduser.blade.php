@@ -17,14 +17,14 @@
 
                         <div class='d-lg-flex gap-4 mt-4'>
                             <div class='flex-grow-1'>
-                                <div class='alert alert-info'>
+                                <div class='alert alert-info text-md-start'>
                                     <i class='fa-solid fa-circle-info fa-lg'></i>
-                                    <strong>
+                                    <h4 class='alert-heading'>
                                         {{ trans('langNote') }}:
-                                    </strong>
-                                    <span>
+                                    </h4>
+                                    <p>
                                         {{ trans('langAskManyUsers') }}
-                                    </span>
+                                    </p>
                                 </div>
                                 <div class='form-wrapper form-edit rounded'>
                                     <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}'>

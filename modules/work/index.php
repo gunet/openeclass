@@ -1701,7 +1701,7 @@ function new_assignment() {
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
-           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend, $langImgFormsDes, 
+           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend, $langImgFormsDes,
            $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
@@ -2728,7 +2728,7 @@ function show_edit_assignment($id) {
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
-        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend ,$langImgFormsDes, 
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend ,$langImgFormsDes,
         $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
@@ -5437,7 +5437,9 @@ function show_assignment($id) {
             }
         $tool_content .= "</form>";
     } else { // no submissions
-        $tool_content .= "<div class='col-12 mt-3 bg-transparent'><p class='sub_title1 text-center TextBold text-uppercase mb-0 pt-2'>$langSubmissions:</p><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoSubmissions</span></div></div>";
+        $tool_content .= "<div class='col-12 mt-3 bg-transparent'>
+                <p class='sub_title1 text-center TextBold mb-0 pt-2'>$langSubmissions:</p>
+                <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoSubmissions</span></div></div>";
     }
 }
 

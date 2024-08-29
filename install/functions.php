@@ -62,7 +62,6 @@ function draw($toolContent, $options=null, $head_content ='') {
         $t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
         $t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
         $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
-        $t->set_block('mainBlock', 'searchBlock', 'delete');
 
         if (is_array($toolArr)) {
             for ($i = 0; $i < $numOfToolGroups; $i++) {
