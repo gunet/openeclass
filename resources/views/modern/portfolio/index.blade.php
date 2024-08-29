@@ -4,69 +4,22 @@
 
 @push('head_scripts')
     <script type='text/javascript'>
-        jQuery(document).ready(function() {
-            $('#consentModal').modal('show');
-            jQuery('#portfolio_lessons').DataTable({
-                "bLengthChange": false,
-                "iDisplayLength": 10,
-                "bSort": false,
-                "fnDrawCallback": function (oSettings) {
-                    $('#portfolio_lessons_filter label input').attr({
-                        class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
-                        placeholder: '{{ js_escape(trans('langSearch')) }} ...'
-                    });
-                    $('#portfolio_lessons_filter label').attr('aria-label', '{{ trans('langSearch') }}');
-                    $('#portfolio_lessons_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
-                },
-                "dom": "<'all_courses float-end px-0'>frtip",
-                "oLanguage": {
-                    "sLengthMenu": "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
-                    "sZeroRecords": "{{ trans('langNoResult') }}",
-                    "sInfo": " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}",
-                    "sInfoEmpty": " {{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}",
-                    "sInfoFiltered": '',
-                    "sInfoPostFix": '',
-                    "sSearch": '',
-                    "sUrl": '',
-                    "oPaginate": {
-                        "sFirst": '&laquo;',
-                        "sPrevious": '&lsaquo;',
-                        "sNext": '&rsaquo;',
-                        "sLast": '&raquo;'
-                    }
-                }
-            });
+        var msg = {
+            langSearch: '{{ js_escape(trans('langSearch')) }}',
+            langDisplay: '{{ js_escape(trans('langDisplay')) }}',
+            langResults2: '{{ js_escape(trans('langResults2')) }}',
+            langNoResult: '{{ js_escape(trans('langNoResult')) }}',
+            langDisplayed: '{{ js_escape(trans('langDisplayed')) }}',
+            langNoResult: '{{ js_escape(trans('langNoResult')) }}',
+            langTill: '{{ js_escape(trans('langTill')) }}',
+            langFrom2: '{{ js_escape(trans('langFrom2')) }}',
+            langTotalResults: '{{ js_escape(trans('langTotalResults')) }}',
+            dataTablesDomParam: "{{ get_config('show_always_collaboration')? "<'all_courses float-end px-0'>frtip" : "" }}" };
 
-            jQuery('#portfolio_collaborations').DataTable({
-                "bLengthChange": false,
-                "iDisplayLength": 10,
-                "bSort": false,
-                "fnDrawCallback": function (oSettings) {
-                    $('#portfolio_collaborations_filter label input').attr({
-                        class: 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
-                        placeholder: '{{ js_escape(trans('langSearch')) }} ...'
-                    });
-                    $('#portfolio_collaborations_filter label').attr('aria-label', '{{ trans('langSearch') }}');
-                    $('#portfolio_collaborations_filter label').prepend("<span class='sr-only'>{{ js_escape(trans('langSearch')) }}</span>")
-                },
-                "dom": @if(get_config('show_always_collaboration')) "<'all_courses float-end px-0'>frtip" @else "" @endif,
-                "oLanguage": {
-                    "sLengthMenu": "{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}",
-                    "sZeroRecords": "{{ trans('langNoResult') }}",
-                    "sInfo": " {{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}",
-                    "sInfoEmpty": " {{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}",
-                    "sInfoFiltered": '',
-                    "sInfoPostFix": '',
-                    "sSearch": '',
-                    "sUrl": '',
-                    "oPaginate": {
-                        "sFirst": '&laquo;',
-                        "sPrevious": '&lsaquo;',
-                        "sNext": '&rsaquo;',
-                        "sLast": '&raquo;'
-                    }
-                }
-            });
+        $(function() {
+            $('#consentModal').modal('show');
+
+            initialize_lesson_display();
 
             $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap gap-2'>" +
                 "<a class='btn showCoursesBars active' aria-label='{{ js_escape(trans('langShowCoursesInTable')) }}'>" +
