@@ -74,56 +74,62 @@ function getCoursesNotifications() {
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
 
         foreach ($_GET['courseIDs'] as $id) {
-            $existNotification = 0;
-            $notifications = get_course_notifications($id);
-            $course_code = course_id_to_code($id);
-            $course_title = course_id_to_title($id);
 
-            $notification_content['notification_content'] = "
-                <div class='panel panelCard border-0 mt-2'>
-                    <div class='card-body p-lg-2 p-3'>
-                        <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>";
-            foreach ($notifications as $n) {
-                $modules_array = (isset($modules[$n->module_id]))? $modules : '';
-                if (isset($modules_array[$n->module_id]) &&
-                    (!is_module_visible($n->module_id, $id))) {
-                        continue;
-                }
-
-                if (isset($modules_array[$n->module_id]['image']) && isset($icons_map['icon_map'][$n->module_id])) {
-                    $sideBarCourseNotifyIcon = $icons_map['icon_map'][$n->module_id];
-                    $sideBarCourseNotifyCount = $n->notcount;
-                    $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
-                    $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
-                                                    '/index.php?course=' . $course_code;
-
-                    $notification_content['notification_content'] .= "
-                            <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative link-color' href='$sideBarCourseNotifyURL'
-                                data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$sideBarCourseNotifyTitle' aria-label='$sideBarCourseNotifyTitle'>
-                                <i class='$sideBarCourseNotifyIcon fa-md'></i>
-                                <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill Accent-200-bg vsmall-text'>
-                                    $sideBarCourseNotifyCount
-                                    <span class='visually-hidden'></span>
-                                </span>
-                            </a>
-                    ";
-
-                    $existNotification++;
-
-                }
-            }
-            if ($existNotification == 0){
-                $notification_content['notification_content'] .= "<p class='no_exist_notification_{$id}'>$langNoExistNotifications</p>";
-                $notification_content['notifications_exist'] = false;
+            if (isset($_SESSION['notifications'][$id]) and time() - $_SESSION['notifications'][$id]['ts'] < 300) {
+                $notifications_arr[$id] = $_SESSION['notifications'][$id]['content'];
             } else {
-                $notification_content['notifications_exist'] = true;
-            }
-            $notification_content['notification_content'] .= "
-                        </div>
-                    </div>
-                </div>";
+                $existNotification = 0;
+                $notifications = get_course_notifications($id);
+                $course_code = course_id_to_code($id);
+                $course_title = course_id_to_title($id);
 
-            $notifications_arr[$id] = $notification_content;
+                $notification_content['notification_content'] = "
+                    <div class='panel panelCard border-0 mt-2'>
+                        <div class='card-body p-lg-2 p-3'>
+                            <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>";
+                foreach ($notifications as $n) {
+                    $modules_array = (isset($modules[$n->module_id]))? $modules : '';
+                    if (isset($modules_array[$n->module_id]) &&
+                        (!is_module_visible($n->module_id, $id))) {
+                            continue;
+                    }
+
+                    if (isset($modules_array[$n->module_id]['image']) && isset($icons_map['icon_map'][$n->module_id])) {
+                        $sideBarCourseNotifyIcon = $icons_map['icon_map'][$n->module_id];
+                        $sideBarCourseNotifyCount = $n->notcount;
+                        $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
+                        $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
+                                                        '/index.php?course=' . $course_code;
+
+                        $notification_content['notification_content'] .= "
+                                <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative link-color' href='$sideBarCourseNotifyURL'
+                                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$sideBarCourseNotifyTitle' aria-label='$sideBarCourseNotifyTitle'>
+                                    <i class='$sideBarCourseNotifyIcon fa-md'></i>
+                                    <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill Accent-200-bg vsmall-text'>
+                                        $sideBarCourseNotifyCount
+                                        <span class='visually-hidden'></span>
+                                    </span>
+                                </a>
+                        ";
+
+                        $existNotification++;
+
+                    }
+                }
+                if ($existNotification == 0){
+                    $notification_content['notification_content'] .= "<p class='no_exist_notification_{$id}'>$langNoExistNotifications</p>";
+                    $notification_content['notifications_exist'] = false;
+                } else {
+                    $notification_content['notifications_exist'] = true;
+                }
+                $notification_content['notification_content'] .= "
+                            </div>
+                        </div>
+                    </div>";
+
+                $_SESSION['notifications'][$id]['content'] = $notifications_arr[$id] = $notification_content;
+                $_SESSION['notifications'][$id]['ts'] = time();
+            }
         }
     }
 
