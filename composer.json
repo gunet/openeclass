@@ -15,7 +15,7 @@
         "hiqdev/hoa-file": "~1.0",
         "egulias/email-validator": "^2.1",
         "bacon/bacon-qr-code": "^2.0",
-        "phpoffice/phpspreadsheet": "^1.28",
+        "phpoffice/phpspreadsheet": "^2.2.2",
         "dapphp/securimage": "dev-mantis",
         "h5p/h5p-core": "<1.25",
         "h5p/h5p-editor": "<1.25",
