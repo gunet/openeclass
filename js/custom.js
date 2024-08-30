@@ -343,97 +343,56 @@ function nextAuthedicationMethod(){
 
 }
 
-function lesson_notifications (settings, json) {
-  var courseIDs = [];
-  var table = settings.oInstance.api();
-  var rowcollection = table.$(".lesson-notifications", {"page": "all"});
-  rowcollection.each(function () {
-    courseIDs.push($(this).data('id'));
-  });
-  $.ajax({
-    type: "GET",
-    url: notificationsCourses.getNotifications,
-    dataType: "json",
-    data: {courseIDs: courseIDs},
-    success: function (data) {
-      // For cards
-      $(".lesson-notifications").each(function () {
-        var id = $(this).data('id');
-        if (data.notifications_courses[id]) {
-          $(this).html(data.notifications_courses[id]['notification_content']);
-          var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
-          if (noexistNotification.length > 0) {
-            $('#btnNotificationCards_'+id).css('display','none');
+// Returns a function to use as a callback for the rendering of notifications
+// where type = [lesson|collaboration] to initialize the corresponding display
+function build_notification_callback(type) {
+  var selector = "." + type + "-notifications";
+  return function (settings, json) {
+    var courseIDs = [];
+    var table = settings.oInstance.api();
+    var rowcollection = table.$(selector, {"page": "all"});
+    rowcollection.each(function () {
+      courseIDs.push($(this).data('id'));
+    });
+    $.ajax({
+      type: "GET",
+      url: notificationsCourses.getNotifications,
+      dataType: "json",
+      data: {courseIDs: courseIDs},
+      success: function (data) {
+        courseIDs.forEach(function (id) {
+          var notifications = data.notifications_courses[id]
+          if (notifications) {
+            $('#notificationCard' + id).find('.lesson-notifications').html(notifications.notification_content);
+            $('#notification' + id).find('.lesson-notifications').html(notifications.notification_content);
+            if (notifications.notifications_exist) {
+              $('#btnNotificationCards_' + id).removeClass('d-none').show();
+              $('#btnNotification_'+id).removeClass('invisible');
+            }
           }
-        }
-      });
-      // For datatable
-      rowcollection.each(function(index,elem){
-        var id = $(elem).data('id');
-        if (data.notifications_courses[id]) {
-          $(elem).html(data.notifications_courses[id]['notification_content']);
-          var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
-          if (noexistNotification.length > 0) {
-            var row = table.$(".btn-notification-course", {"page": "all"});
-            row.each(function(index,element){
-              var id_btn = $(element).attr('id');
-              if(id_btn == 'btnNotification_'+id){
-                $(element).css('display','none');
-              }
-            });
-          }
-        }
-      });
-    }
-  });
-}
-
-function collaboration_notifications (settings, json) {
-  var collabotationIDs = [];
-  $(".collaboration-notifications").each(function () {
-    collabotationIDs.push($(this).data('id'));
-  });
-  $.ajax({
-    type: "GET",
-    url: notificationsCourses.getNotifications,
-    dataType: "json",
-    data: {courseIDs: collabotationIDs},
-    success: function (data) {
-      // For cards
-      $(".collaboration-notifications").each(function () {
-        var id = $(this).data('id');
-        if (data.notifications_courses[id]) {
-          $(this).html(data.notifications_courses[id]['notification_content']);
-          var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
-          if (noexistNotification.length > 0) {
-            $('#btnNotificationCards_'+id).css('display','none');
-          }
-        }
-      });
-      // Fill in notifications in existing datatable
-      var table = settings.oInstance.api();
-      var rowcollection = table.$(".collaboration-notifications", {"page": "all"});
-      rowcollection.each(function(index,elem){
-        var id = $(elem).data('id');
-        if (data.notifications_courses[id]) {
-          $(elem).html(data.notifications_courses[id]['notification_content']);
-          var noexistNotification = document.getElementsByClassName('no_exist_notification_'+id);
-          if (noexistNotification.length > 0) {
-            var row = table.$(".btn-notification-collaboration", {"page": "all"});
-            row.each(function(index,element){
-              var id_btn = $(element).attr('id');
-              if(id_btn == 'btnNotification_'+id){
-                $(element).css('display','none');
-              }
-            });
-          }
-        }
-      });
-    }
-  });
+        });
+      }
+    });
+  }
 }
 
 function initialize_lesson_display () {
+    var languageOptions = {
+        "sLengthMenu": msg.langDisplay + " _MENU_ " + msg.langResults2,
+        "sZeroRecords": msg.langNoResult,
+        "sInfo": " " + msg.langDisplayed + " _START_ " + msg.langTill + " _END_ " + msg.langFrom2 + " _TOTAL_ " + msg.langTotalResults,
+        "sInfoEmpty": " " + msg.langDisplayed + " 0 " + msg.langTill + " 0 " + msg.langFrom2 + " 0 " + msg.langResults2,
+        "sInfoFiltered": '',
+        "sInfoPostFix": '',
+        "sSearch": '',
+        "sUrl": '',
+        "oPaginate": {
+            "sFirst": '&laquo;',
+            "sPrevious": '&lsaquo;',
+            "sNext": '&rsaquo;',
+            "sLast": '&raquo;'
+        },
+    };
     $('#portfolio_lessons').DataTable({
       "bLengthChange": false,
       "iDisplayLength": 10,
@@ -446,24 +405,9 @@ function initialize_lesson_display () {
         $('#portfolio_lessons_filter label').attr('aria-label', msg.langSearch);
         $('#portfolio_lessons_filter label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
       },
-      "initComplete": lesson_notifications,
+      "initComplete": build_notification_callback('lesson'),
       "dom": "<'all_courses float-end px-0'>frtip",
-      "oLanguage": {
-        "sLengthMenu": msg.langDisplay + " _MENU_ " + msg.langResults2,
-        "sZeroRecords": msg.langNoResult,
-        "sInfo": " " + msg.langDisplayed + " _START_ " + msg.langTill + " _END_ " + msg.langFrom2 + " _TOTAL_ " + msg.langTotalResults,
-        "sInfoEmpty": " " + msg.langDisplayed + " 0 " + msg.langTill + " 0 " + msg.langFrom2 + " 0 " + msg.langResults2,
-        "sInfoFiltered": '',
-        "sInfoPostFix": '',
-        "sSearch": '',
-        "sUrl": '',
-        "oPaginate": {
-          "sFirst": '&laquo;',
-          "sPrevious": '&lsaquo;',
-          "sNext": '&rsaquo;',
-          "sLast": '&raquo;'
-        }
-      }
+      "oLanguage": languageOptions,
     });
 
     $('#portfolio_collaborations').DataTable({
@@ -478,23 +422,8 @@ function initialize_lesson_display () {
         $('#portfolio_collaborations_filter label').attr('aria-label', msg.langSearch);
         $('#portfolio_collaborations_filter label').prepend("<span class='sr-only'>" + msg.langSearch + "</span>")
       },
-      "initComplete": collaboration_notifications,
+      "initComplete": build_notification_callback('collaboration'),
       "dom": msg.dataTablesDomParam,
-      "oLanguage": {
-        "sLengthMenu": msg.langDisplay + " _MENU_ " + msg.langResults2,
-        "sZeroRecords": msg.langNoResult,
-        "sInfo": " " + msg.langDisplayed + " _START_ " + msg.langTill + " _END_ " + msg.langFrom2 + " _TOTAL_ " + msg.langTotalResults,
-        "sInfoEmpty": " " + msg.langDisplayed + " 0 " + msg.langTill + " 0 " + msg.langFrom2 + " 0 " + msg.langResults2,
-        "sInfoFiltered": '',
-        "sInfoPostFix": '',
-        "sSearch": '',
-        "sUrl": '',
-        "oPaginate": {
-          "sFirst": '&laquo;',
-          "sPrevious": '&lsaquo;',
-          "sNext": '&rsaquo;',
-          "sLast": '&raquo;'
-        }
-      }
+      "oLanguage": languageOptions,
     });
 }

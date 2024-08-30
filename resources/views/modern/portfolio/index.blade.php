@@ -686,7 +686,7 @@
                                                                     </div>
 
                                                                     <div class='card-footer d-flex justyfy-content-start align-items-center gap-3 flex-wrap border-0'>
-                                                                        <a id='btnNotificationCards_{{ $course->course_id }}' class='btn btn-notification-course-card text-decoration-none'
+                                                                        <a id='btnNotificationCards_{{ $course->course_id }}' class='d-none btn btn-notification-course-card text-decoration-none'
                                                                             data-bs-toggle='modal' href='#notificationCard{{ $course->course_id }}' aria-label="{{ trans('langNotificationsExist') }}">
                                                                             <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
                                                                         </a>

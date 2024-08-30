@@ -41,7 +41,7 @@ function getUserCourseInfo($uid): string
            $langWelcomeSelect, $langPreview, $langOfCourse,
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
-           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty, 
+           $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty,
            $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage;
 
     if(!get_config('show_always_collaboration')){
@@ -91,7 +91,7 @@ function getUserCourseInfo($uid): string
                                 <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                                     &nbsp;(" . q($data->public_code) . ")
                                 </a>
-                                <a id='btnNotification_{$data->course_id}' class='btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
+                                <a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
                                                 role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                     <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                 </a>
@@ -99,8 +99,8 @@ function getUserCourseInfo($uid): string
                             <div>
                                 <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
                             </div>
-                            <div class='collapse' id='notification{$data->course_id}'>                
-                                <div class='d-flex align-items-start lesson-notifications' data-id='{$data->course_id}'></div>                                
+                            <div class='collapse' id='notification{$data->course_id}'>
+                                <div class='d-flex align-items-start lesson-notifications' data-id='{$data->course_id}'></div>
                             </div>
                         </td>";
 
@@ -122,7 +122,7 @@ function getUserCourseInfo($uid): string
                                                     <h2 class='mb-0'>". q($data->title) . "</h2>
                                                     " . course_access_icon($data->visible) . "
                                                     $license
-                                                </div>  
+                                                </div>
                                                 <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                             </div>
                                             <div>
@@ -152,7 +152,7 @@ function getUserCourseInfo($uid): string
                                                         <div class='panel-group group-section mt-2 px-0' id='accordionCourseSyllabus{$data->course_id}'>
                                                             <ul class='list-group list-group-flush'>
                                                                 <li class='list-group-item px-0 mb-4 bg-transparent'>
-        
+
                                                                     <div class='d-flex justify-content-between border-bottom-default'>
                                                                         <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#courseSyllabus{$data->course_id}' aria-expanded='true' aria-controls='courseSyllabus{$data->course_id}'>
                                                                             <i class='fa-solid fa-chevron-down settings-icon'></i>
@@ -255,7 +255,7 @@ function getUserCourseInfo($uid): string
                                     <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                                         &nbsp;(" . q($data->public_code) . ")
                                     </a>
-                                    <a id='btnNotification_{$data->course_id}' class='btn btn-notification-collaboration text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}' 
+                                    <a id='btnNotification_{$data->course_id}' class='btn btn-notification-collaboration text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
                                                     role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                         <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                     </a>
@@ -263,8 +263,8 @@ function getUserCourseInfo($uid): string
                                 <div>
                                     <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
                                 </div>
-                                <div class='collapse' id='notification{$data->course_id}'>                
-                                    <div class='d-flex align-items-start collaboration-notifications' data-id='{$data->course_id}'></div>                                
+                                <div class='collapse' id='notification{$data->course_id}'>
+                                    <div class='d-flex align-items-start collaboration-notifications' data-id='{$data->course_id}'></div>
                                 </div>
                             </td>";
 
@@ -286,7 +286,7 @@ function getUserCourseInfo($uid): string
                                                         <h2 class='mb-0'>". q($data->title) . "</h2>
                                                         " . course_access_icon($data->visible) . "
                                                         $license
-                                                    </div>  
+                                                    </div>
                                                     <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                                 </div>
                                                 <div>
@@ -317,7 +317,7 @@ function getUserCourseInfo($uid): string
                                                             <div class='panel-group group-section mt-2 px-0' id='accordionCollaborationSyllabus{$data->course_id}'>
                                                                 <ul class='list-group list-group-flush'>
                                                                     <li class='list-group-item px-0 mb-4 bg-transparent'>
-            
+
                                                                         <div class='d-flex justify-content-between border-bottom-default'>
                                                                             <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#collaborationSyllabus{$data->course_id}' aria-expanded='true' aria-controls='collaborationSyllabus{$data->course_id}'>
                                                                                 <i class='fa-solid fa-chevron-down settings-icon'></i>

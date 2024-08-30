@@ -112,8 +112,11 @@ function getCoursesNotifications() {
 
                 }
             }
-            if($existNotification ==  0){
+            if ($existNotification == 0){
                 $notification_content['notification_content'] .= "<p class='no_exist_notification_{$id}'>$langNoExistNotifications</p>";
+                $notification_content['notifications_exist'] = false;
+            } else {
+                $notification_content['notifications_exist'] = true;
             }
             $notification_content['notification_content'] .= "
                         </div>
