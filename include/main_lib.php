@@ -365,7 +365,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     if (!empty($code)) {
       $course_code_link = "&amp;course=$GLOBALS[course_code]";
     }
-    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token' 
+    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'
                     data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langUserProfile'>" .
             $student_name . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
