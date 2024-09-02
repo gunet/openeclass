@@ -5330,3 +5330,10 @@ body:has(.fixed-announcement) .btn-quick-note{
 .sp-dd {
   font-size: 12px !important;
 }
+
+.theme-img-settings{
+  min-width:350px;
+  min-height: 150px;
+  max-width: 650px;
+  max-height: 500px;
+}

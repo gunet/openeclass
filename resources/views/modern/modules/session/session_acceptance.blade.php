@@ -40,41 +40,41 @@
                                         @foreach($session_info as $s)
                                             <ul class='list-group list-group-flush'>
                                                 <li class='list-group-item element'>
-                                                    <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                        <div class='col-md-3 col-12'>
+                                                    <div class='row row-cols-1 g-1'>
+                                                        <div class='col-12'>
                                                             <div class='title-default'>{{ trans('langTitle') }}</div>
                                                         </div>
-                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                        <div class='col-12 title-default-line-height'>
                                                             {{ $s->title }}
                                                         </div>
                                                     </div>
                                                 </li>
                                                 <li class='list-group-item element'>
-                                                    <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                        <div class='col-md-3 col-12'>
+                                                    <div class='row row-cols-1 g-1'>
+                                                        <div class='col-12'>
                                                             <div class='title-default'>{{ trans('langConsultant') }}</div>
                                                         </div>
-                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                        <div class='col-12 title-default-line-height'>
                                                             {!! participant_name($s->creator) !!}
                                                         </div>
                                                     </div>
                                                 </li>
                                                 <li class='list-group-item element'>
-                                                    <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                        <div class='col-md-3 col-12'>
+                                                    <div class='row row-cols-1 g-1'>
+                                                        <div class='col-12'>
                                                             <div class='title-default'>{{ trans('langStartDate') }}</div>
                                                         </div>
-                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                        <div class='col-12 title-default-line-height'>
                                                         {!! format_locale_date(strtotime($s->start), 'short') !!}
                                                         </div>
                                                     </div>
                                                 </li>
                                                 <li class='list-group-item element'>
-                                                    <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                        <div class='col-md-3 col-12'>
+                                                    <div class='row row-cols-1 g-1'>
+                                                        <div class='col-12'>
                                                             <div class='title-default'>{{ trans('langEndDate') }}</div>
                                                         </div>
-                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                        <div class='col-12 title-default-line-height'>
                                                             <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>
                                                             {!! format_locale_date(strtotime($s->finish), 'short'); !!}  
                                                             </div>
@@ -82,11 +82,11 @@
                                                     </div>
                                                 </li>
                                                 <li class='list-group-item element'>
-                                                    <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                        <div class='col-md-3 col-12'>
+                                                    <div class='row row-cols-1 g-1'>
+                                                        <div class='col-12'>
                                                             <div class='title-default'>{{ trans('langTypeRemote') }}</div>
                                                         </div>
-                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                        <div class='col-12 title-default-line-height'>
                                                             @if($s->type_remote)
                                                                 {{ trans('langRemote') }}
                                                             @else
@@ -96,11 +96,11 @@
                                                     </div>
                                                 </li>
                                                 <li class='list-group-item element'>
-                                                    <div class='row row-cols-1 row-cols-md-2 g-1'>
-                                                        <div class='col-md-3 col-12'>
+                                                    <div class='row row-cols-1 g-1'>
+                                                        <div class='col-12'>
                                                             <div class='title-default'>{{ trans('langSSession') }}</div>
                                                         </div>
-                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                        <div class='col-12 title-default-line-height'>
                                                             @if($s->type='one')
                                                                 {{ trans('langIndividualS') }}
                                                             @else

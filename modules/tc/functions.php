@@ -1405,7 +1405,7 @@ function tc_session_details() {
             $starttimeLabel = '';
             if (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) > 0) {
                 $starttimeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-                $starttimeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
+                $starttimeLabel .= "<br><span><small class='label label-warning'>$langDaysLeft " .
                     format_time_duration($starttimeLeft * 60) .
                     "</small></span>";
             }
@@ -1418,11 +1418,11 @@ function tc_session_details() {
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
-                $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
+                $timeLabel .= "<br><span><small class='label label-warning'>$langDaysLeft " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
             } elseif (isset($end_date) and ($timeLeft < 0)) {
-                $timeLabel .= "<br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
+                $timeLabel .= "<br><span><small class='label label-danger'>$langHasExpiredS</small></span>";
             }
             $meeting_id = $row->meeting_id;
             $att_pw = $row->att_pw;

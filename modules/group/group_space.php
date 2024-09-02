@@ -149,9 +149,9 @@ if (isset($_GET['group_as'])) {
                             <td>$num_ungraded</td>
                             <td>$deadline";
             if ($row->time > 0) {
-                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
+                $tool_content .= " <br><span><small class='label label-warning'>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
-                $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
+                $tool_content .= " <br><span><small class='label label-danger'>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td></tr>";
         }

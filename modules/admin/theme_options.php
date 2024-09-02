@@ -971,10 +971,9 @@ $tool_content .= "
     <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
         <div class='tab-content'>
 
-        
+            <!-- GENERAL SETTINGS -->
             <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
                 <div class='form-wrapper form-edit form-create-theme rounded'>
-
                     <h3 class='theme_options_legend text-decoration-underline'>$langViewPlatform</h3>
                     <div class='form-group'>
                         <div class='checkbox'>
@@ -994,9 +993,7 @@ $tool_content .= "
                             <small class='ms-5'>$langHelpFluidWidthInfo</small>
                         </div>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline'>$langLayoutConfig</h3>
                     <div class='form-group'>
                         <div class='col-sm-12 control-label-notes mb-2'>$langLayout:</div>
@@ -1028,9 +1025,7 @@ $tool_content .= "
                             <span style='margin-left:10px;' id='pixelCounter'></span>
                         </div>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLogoConfig</h3>
                     <div class='form-group'>
                         <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
@@ -1044,31 +1039,19 @@ $tool_content .= "
                             $small_logo_field
                         </div>
                     </div>
-
                     <div class='form-group mt-4'>
                         <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $faviconUpload
                         </div>
                     </div>
-
-                   
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
+            <!-- BODY SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsBody'>
                 <div class='form-wrapper form-edit form-create-theme rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langBgColorConfig</h3>
+                    <h3 class='theme_options_legend text-decoration-underline'>$langConfig (Body)</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
                         <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
@@ -1099,7 +1082,6 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>
-
                     <div class='form-group mt-4'>
                         <div class='checkbox'>
                             <label class='label-container' aria-label='$langSettingSelect'>
@@ -1112,79 +1094,64 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-- HEADER SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsHeader'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langBgHeaderCongiguration</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgColorWrapperHeader' class='control-label-notes mb-2 me-2'>$langBgColor Header:</label>
-                        <input name='BgColorWrapperHeader' type='text' class='form-control colorpicker' id='BgColorWrapperHeader' value='$theme_options_styles[BgColorWrapperHeader]'>
-                    </div>
-                    <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLinkColorHeader</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='linkColorHeader' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
-                        <input name='linkColorHeader' type='text' class='form-control colorpicker' id='linkColorHeader' value='$theme_options_styles[linkColorHeader]'>
-                    </div>
-                    <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHoverLinkColorHeader</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='linkHoverColorHeader' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
-                        <input name='linkHoverColorHeader' type='text' class='form-control colorpicker' id='linkHoverColorHeader' value='$theme_options_styles[linkHoverColorHeader]'>
-                    </div>
-                    <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langActiveLinkBgColorHeader</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='linkActiveBgColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkBgColorHeader:</label>
-                        <input name='linkActiveBgColorHeader' type='text' class='form-control colorpicker' id='linkActiveBgColorHeader' value='$theme_options_styles[linkActiveBgColorHeader]'>
-                    </div>
-                    <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langActiveLinkColorHeader</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='linkActiveColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkColorHeader:</label>
-                        <input name='linkActiveColorHeader' type='text' class='form-control colorpicker' id='linkActiveColorHeader' value='$theme_options_styles[linkActiveColorHeader]'>
-                    </div>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHoveredActiveLinkColorHeader</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='HoveredActiveLinkColorHeader' class='control-label-notes mb-2 me-2'>$langHoveredActiveLinkColorHeader:</label>
-                        <input name='HoveredActiveLinkColorHeader' type='text' class='form-control colorpicker' id='HoveredActiveLinkColorHeader' value='$theme_options_styles[HoveredActiveLinkColorHeader]'>
-                    </div>
-                    <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langShadowHeader</h3>
-                    <div class='form-group mt-2'>
-                        <div class='col-sm-12'>
-                            <div class='checkbox'>
-                                <label class='label-container' aria-label='$langSettingSelect'>
-                                <input type='checkbox' name='shadowHeader' value='1' ".((isset($theme_options_styles['shadowHeader']))? 'checked' : '').">
-                                <span class='checkmark'></span>
-                                $langDeactivate
-                                </label>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langConfig (Header)</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgColorWrapperHeader' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                <input name='BgColorWrapperHeader' type='text' class='form-control colorpicker' id='BgColorWrapperHeader' value='$theme_options_styles[BgColorWrapperHeader]'>
                             </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkColorHeader' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+                                <input name='linkColorHeader' type='text' class='form-control colorpicker' id='linkColorHeader' value='$theme_options_styles[linkColorHeader]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkHoverColorHeader' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+                                <input name='linkHoverColorHeader' type='text' class='form-control colorpicker' id='linkHoverColorHeader' value='$theme_options_styles[linkHoverColorHeader]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkActiveBgColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkBgColorHeader:</label>
+                                <input name='linkActiveBgColorHeader' type='text' class='form-control colorpicker' id='linkActiveBgColorHeader' value='$theme_options_styles[linkActiveBgColorHeader]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkActiveColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkColorHeader:</label>
+                                <input name='linkActiveColorHeader' type='text' class='form-control colorpicker' id='linkActiveColorHeader' value='$theme_options_styles[linkActiveColorHeader]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='HoveredActiveLinkColorHeader' class='control-label-notes mb-2 me-2'>$langHoveredActiveLinkColorHeader:</label>
+                                <input name='HoveredActiveLinkColorHeader' type='text' class='form-control colorpicker' id='HoveredActiveLinkColorHeader' value='$theme_options_styles[HoveredActiveLinkColorHeader]'>
+                            </div>
+                            <hr>
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langShadowHeader</h3>
+                            <div class='form-group mt-2'>
+                                <div class='col-sm-12'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                        <input type='checkbox' name='shadowHeader' value='1' ".((isset($theme_options_styles['shadowHeader']))? 'checked' : '').">
+                                        <span class='checkmark'></span>
+                                        $langDeactivate
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='d-flex justify-content-center align-items-start'>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/header.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
             </div>
 
-
-
+            <!-- MAIN SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsMainSection'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langBgColorConfig</h3>
+                    <h3 class='theme_options_legend text-decoration-underline'>$langConfig (Main)</h3>
                     <div class='form-group'>
                         <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                             <label for='bgColorContentPlatform' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1194,36 +1161,42 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
+            <!-- FOOTER SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsFooter'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langBgFooterCongiguration</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='bgColorWrapperFooter' class='control-label-notes mb-2 me-2'>$langBgColor Footer:</label>
-                        <input name='bgColorWrapperFooter' type='text' class='form-control colorpicker' id='bgColorWrapperFooter' value='$theme_options_styles[bgColorWrapperFooter]'>
-                    </div>
-                    <hr>
-                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLinkColorFooter</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='linkColorFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
-                        <input name='linkColorFooter' type='text' class='form-control colorpicker' id='linkColorFooter' value='$theme_options_styles[linkColorFooter]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='linkHoverColorFooter' class='control-label-notes mb-2 me-2'>$langHoverLinkColorFooter:</label>
-                        <input name='linkHoverColorFooter' type='text' class='form-control colorpicker' id='linkHoverColorFooter' value='$theme_options_styles[linkHoverColorFooter]'>
-                    </div>
-                    <hr>
-                    <div class='form-group mt-4'>
-                        <div class='col-sm-12 control-label-notes mb-2'>$langFooterUploadImage:</div>
-                        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                            $image_footer_field
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langConfig (Footer)</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgColorWrapperFooter' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                <input name='bgColorWrapperFooter' type='text' class='form-control colorpicker' id='bgColorWrapperFooter' value='$theme_options_styles[bgColorWrapperFooter]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkColorFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+                                <input name='linkColorFooter' type='text' class='form-control colorpicker' id='linkColorFooter' value='$theme_options_styles[linkColorFooter]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='linkHoverColorFooter' class='control-label-notes mb-2 me-2'>$langHoverLinkColorFooter:</label>
+                                <input name='linkHoverColorFooter' type='text' class='form-control colorpicker' id='linkHoverColorFooter' value='$theme_options_styles[linkHoverColorFooter]'>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12 control-label-notes mb-2'>$langFooterUploadImage:</div>
+                                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                                    $image_footer_field
+                                </div>
+                            </div>
+                        </div>
+                        <div class='d-flex justify-content-center align-items-start'>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/footer.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
             </div>
 
-
+            <!-- BADGES SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsBadge'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>Badge Success</h3>
@@ -1235,9 +1208,7 @@ $tool_content .= "
                         <label for='clBadgeSuccess' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clBadgeSuccess' type='text' class='form-control colorpicker' id='clBadgeSuccess' value='$theme_options_styles[clBadgeSuccess]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline'>Badge Warning</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgBadgeWarning' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1247,9 +1218,7 @@ $tool_content .= "
                         <label for='clBadgeWarning' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clBadgeWarning' type='text' class='form-control colorpicker' id='clBadgeWarning' value='$theme_options_styles[clBadgeWarning]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline'>Badge Neutral</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgBadgeNeutral' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1259,9 +1228,7 @@ $tool_content .= "
                         <label for='clBadgeNeutral' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clBadgeNeutral' type='text' class='form-control colorpicker' id='clBadgeNeutral' value='$theme_options_styles[clBadgeNeutral]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline'>Badge Primary</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgBadgePrimary' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1271,9 +1238,7 @@ $tool_content .= "
                         <label for='clBadgePrimary' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clBadgePrimary' type='text' class='form-control colorpicker' id='clBadgePrimary' value='$theme_options_styles[clBadgePrimary]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline'>Badge Danger</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgBadgeAccent' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1283,11 +1248,10 @@ $tool_content .= "
                         <label for='clBadgeAccent' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='clBadgeAccent' type='text' class='form-control colorpicker' id='clBadgeAccent' value='$theme_options_styles[clBadgeAccent]'>
                     </div>
-                    
                 </div>
             </div>
 
-
+            <!-- SCROLLBAR SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsScrollBar'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langSettingsScrollBar</h3>
@@ -1306,11 +1270,11 @@ $tool_content .= "
                 </div>
             </div>
 
-
+            <!-- PROGRESSBAR SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsProgressBar'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langSettingsProgressBar</h3>
-                    <h4>($langInfoProgressBar)</h4>
+                    <p>($langInfoProgressBar)</p>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BackProgressBar' class='control-label-notes mb-2 me-2'>$langBackProgressBar:</label>
                         <input name='BackProgressBar' type='text' class='form-control colorpicker' id='BackProgressBar' value='$theme_options_styles[BackProgressBar]'>
@@ -1326,6 +1290,7 @@ $tool_content .= "
                 </div>
             </div>
 
+            <!-- TOOLTIP SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsTooltip'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langSettingsTooltip</h3>
@@ -1340,6 +1305,7 @@ $tool_content .= "
                 </div>
             </div>
 
+            <!-- ALERT SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsAlerts'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langSettingsAlertInfo</h3>
@@ -1359,9 +1325,7 @@ $tool_content .= "
                         <label for='clLinkHoveredAlertInfo' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
                         <input name='clLinkHoveredAlertInfo' type='text' class='form-control colorpicker' id='clLinkHoveredAlertInfo' value='$theme_options_styles[clLinkHoveredAlertInfo]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-3'>$langSettingsAlertWarning</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgAlertWarning' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1379,9 +1343,7 @@ $tool_content .= "
                         <label for='clLinkHoveredAlertWarning' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
                         <input name='clLinkHoveredAlertWarning' type='text' class='form-control colorpicker' id='clLinkHoveredAlertWarning' value='$theme_options_styles[clLinkHoveredAlertWarning]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-3'>$langSettingsAlertSuccess</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgAlertSuccess' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1399,9 +1361,7 @@ $tool_content .= "
                         <label for='clLinkHoveredAlertSuccess' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
                         <input name='clLinkHoveredAlertSuccess' type='text' class='form-control colorpicker' id='clLinkHoveredAlertSuccess' value='$theme_options_styles[clLinkHoveredAlertSuccess]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-3'>$langSettingsAlertDanger</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgAlertDanger' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -1422,7 +1382,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
+            <!-- HOMEPAGE SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsLoginHomepage'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langBasicOptions</h3>
@@ -1433,7 +1393,6 @@ $tool_content .= "
                         <input aria-label='$langBgColor' name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
                     </div>
                     <div class='form-group mt-4'>
-                        
                         <div class='col-sm-12'>
                         $login_image_field
                         </div>
@@ -1441,23 +1400,16 @@ $tool_content .= "
                     <div class='form-group mt-4'>
                         <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor (jumbotron):</label>
                         <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
-
                     </div>
                     <div class='form-group mt-4'>
                         <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
                         <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
-
                     </div>
-
-
-                
                     <div class='form-group mt-4'>
                         <div class='col-sm-12'>
                         $login_image_fieldL
                         </div>
                     </div>";
-
-
                     $tool_content .= "<div class='form-group mt-4'>
                         <div class='form-inline col-sm-9 col-sm-offset-3'>
                             <div class='radio'>
@@ -1474,8 +1426,6 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>";
-
-
                     $tool_content .= "<div class='form-group mt-4'>
                         <div class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</div>
                         <div class='col-sm-12'>
@@ -1514,7 +1464,6 @@ $tool_content .= "
                         <label for='clHoveredColorAnnouncementHomepageLinkElement' class='control-label-notes mb-2 me-2'>$langclHoveredLists:</label>
                         <input name='clHoveredColorAnnouncementHomepageLinkElement' type='text' class='form-control colorpicker' id='clHoveredColorAnnouncementHomepageLinkElement' value='$theme_options_styles[clHoveredColorAnnouncementHomepageLinkElement]'>
                     </div>
-                    
                     <p class='control-label-notes mt-4'>$langAddPaddingListGroup:</p>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
@@ -1528,28 +1477,9 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-- COURSEHOME SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettings'>
                 <div class='form-wrapper form-edit rounded'>
-
                     <h3 class='theme_options_legend text-decoration-underline'>$langBgColorConfigRightColumn</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='RightColumnCourseBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
@@ -1563,44 +1493,38 @@ $tool_content .= "
                         <label for='BorderLeftToRightColumnCourseBgColor' class='control-label-notes me-2 mb-2'>$langBgBorderLeftColor:</label>
                         <input name='BorderLeftToRightColumnCourseBgColor' type='text' class='form-control colorpicker' id='BorderLeftToRightColumnCourseBgColor' value='$theme_options_styles[BorderLeftToRightColumnCourseBgColor]'>
                     </div>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgColorConfig $langHelpCourseUI</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
                         <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
                     </div>
-
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='leftNavBgColorSmallScreen' class='control-label-notes me-2 mb-2'>$langBgColor <small>$langLogoSmall</small>:</label>
                         <input name='leftNavBgColorSmallScreen' type='text' class='form-control colorpicker' id='leftNavBgColorSmallScreen' value='$theme_options_styles[leftNavBgColorSmallScreen]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langMainMenuConfiguration $langHelpCourseUI</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='leftMenuFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkColor:</label>
-                    <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
+                        <label for='leftMenuFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkColor:</label>
+                        <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='leftMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkHoverColor:</label>
-                    <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
+                        <label for='leftMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkHoverColor:</label>
+                        <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSubMenuConfig $langHelpCourseUI</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='leftSubMenuFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColor:</label>
-                    <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
+                        <label for='leftSubMenuFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColor:</label>
+                        <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='leftSubMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkHoverColor:</label>
-                    <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
+                        <label for='leftSubMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkHoverColor:</label>
+                        <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='leftSubMenuHoverBgColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkBgHoverColor:</label>
-                    <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
+                        <label for='leftSubMenuHoverBgColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkBgHoverColor:</label>
+                        <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='leftMenuSelectedBgColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkBgActive:</label>
@@ -1613,23 +1537,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-- BUTTON SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navButtons'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langButtonsColorCongiguration</h3>
@@ -1645,9 +1553,7 @@ $tool_content .= "
                         <label for='buttonHoverBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
                         <input name='buttonHoverBgColor' type='text' class='form-control colorpicker' id='buttonHoverBgColor' value='$theme_options_styles[buttonHoverBgColor]'>
                     </div>
-                    
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorWhiteCongiguration</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgWhiteButtonColor' class='control-label-notes mb-2 me-2'>$langButtonColorWhiteCongiguration:</label>
@@ -1673,9 +1579,7 @@ $tool_content .= "
                         <label for='whiteButtonHoveredBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
                         <input name='whiteButtonHoveredBgColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredBgColor' value='$theme_options_styles[whiteButtonHoveredBgColor]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorDel</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langbgDeleteButtonColor:</label>
@@ -1693,9 +1597,7 @@ $tool_content .= "
                         <label for='clHoveredDeleteButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredDeleteButtonColor:</label>
                         <input name='clHoveredDeleteButtonColor' type='text' class='form-control colorpicker' id='clHoveredDeleteButtonColor' value='$theme_options_styles[clHoveredDeleteButtonColor]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorSuccess</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgSuccessButtonColor' class='control-label-notes mb-2 me-2'>$langbgSuccessButtonColor:</label>
@@ -1713,9 +1615,7 @@ $tool_content .= "
                         <label for='clHoveredSuccessButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredSuccessButtonColor:</label>
                         <input name='clHoveredSuccessButtonColor' type='text' class='form-control colorpicker' id='clHoveredSuccessButtonColor' value='$theme_options_styles[clHoveredSuccessButtonColor]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorHelp</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgHelpButtonColor' class='control-label-notes mb-2 me-2'>$langbgHelpButtonColor:</label>
@@ -1733,13 +1633,10 @@ $tool_content .= "
                         <label for='clHoveredHelpButtonColor' class='control-label-notes mb-2 me-2'>$langclHoveredHelpButtonColor:</label>
                         <input name='clHoveredHelpButtonColor' type='text' class='form-control colorpicker' id='clHoveredHelpButtonColor' value='$theme_options_styles[clHoveredHelpButtonColor]'>
                     </div>
-
-
                 </div>
             </div>
 
-
-
+            <!-- LINKS SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navLinks'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langLinksCongiguration</h3>
@@ -1758,12 +1655,9 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
+            <!-- PORTFOLIO SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navcontainer'>
                 <div class='form-wrapper form-edit rounded'>
-
                     <h3 class='theme_options_legend text-decoration-underline'>$langPortFolioProfileContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langPortFolioProfileContainer:</label>
@@ -1773,20 +1667,16 @@ $tool_content .= "
                         <label for='BriefProfilePortfolioTextColor' class='control-label-notes mb-2 me-2'>$langBriefProfilePortfolioTextColor:</label>
                         <input name='BriefProfilePortfolioTextColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioTextColor' value='$theme_options_styles[BriefProfilePortfolioTextColor]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPortfolioCoursesContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgColorWrapperPortfolioCourses' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
                         <input name='BgColorWrapperPortfolioCourses' type='text' class='form-control colorpicker' id='BgColorWrapperPortfolioCourses' value='$theme_options_styles[BgColorWrapperPortfolioCourses]'>
                     </div>
-
-
                 </div>
             </div>
 
-
+            <!-- TEXT SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navHyperTexts'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langPHyperTextColor</h3>
@@ -1797,7 +1687,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
+            <!-- PANEL SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navPanels'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langConcerngingPanels</h3>
@@ -1853,7 +1743,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
+            <!-- RADIO SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navRadios'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langRadios</h3>
@@ -1884,10 +1774,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
+            <!-- CHECKBOX SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navCheckboxes'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langCheckboxes</h3>
@@ -1922,33 +1809,36 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
+            <!-- TEXT EDITOR SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navTextEditor'>
-                <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langInputTextEditor</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgTextEditor' class='control-label-notes mb-2 me-2'>$langBgTextEditor:</label>
-                        <input name='BgTextEditor' type='text' class='form-control colorpicker' id='BgTextEditor' value='$theme_options_styles[BgTextEditor]'>
+                <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                    <div>
+                        <div class='form-wrapper form-edit rounded'>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langInputTextEditor</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgTextEditor' class='control-label-notes mb-2 me-2'>$langBgTextEditor:</label>
+                                <input name='BgTextEditor' type='text' class='form-control colorpicker' id='BgTextEditor' value='$theme_options_styles[BgTextEditor]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgBorderTextEditor' class='control-label-notes mb-2 me-2'>$langBgBorderTextEditor:</label>
+                                <input name='BgBorderTextEditor' type='text' class='form-control colorpicker' id='BgBorderTextEditor' value='$theme_options_styles[BgBorderTextEditor]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='ClTextEditor' class='control-label-notes mb-2 me-2'>$langClTextEditor:</label>
+                                <input name='ClTextEditor' type='text' class='form-control colorpicker' id='ClTextEditor' value='$theme_options_styles[ClTextEditor]'>
+                            </div>
+                        </div>
                     </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgBorderTextEditor' class='control-label-notes mb-2 me-2'>$langBgBorderTextEditor:</label>
-                        <input name='BgBorderTextEditor' type='text' class='form-control colorpicker' id='BgBorderTextEditor' value='$theme_options_styles[BgBorderTextEditor]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='ClTextEditor' class='control-label-notes mb-2 me-2'>$langClTextEditor:</label>
-                        <input name='ClTextEditor' type='text' class='form-control colorpicker' id='ClTextEditor' value='$theme_options_styles[ClTextEditor]'>
+                    <div class='d-flex justify-content-center align-items-start'>
+                        <figure class='figure'>
+                            <img src='$urlServer/template/modern/images/theme_settings/text_editor.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                            <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
 
-
-
-
-
-
+            <!-- AGENDA SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsAgenda'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langAgendaSettings</h3>
@@ -1999,11 +1889,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
+            <!-- MENU POPOVER SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navMenuPopover'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langMenuPopover</h3>
@@ -2042,11 +1928,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
+            <!-- FORM SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navForms'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langForms</h3>
@@ -2081,9 +1963,7 @@ $tool_content .= "
                             $form_image_fieldL
                         </div>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutRegistrationImageUpload</h3>
                     <div class='form-group mt-4'>
                         <div class='col-sm-12'>
@@ -2093,13 +1973,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
-
-
+            <!-- INPUT SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navInputText'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langInputText</h3>
@@ -2118,12 +1992,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
-
-
+            <!-- SELECT SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navSelect'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langSettingSelect</h3>
@@ -2158,76 +2027,77 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
+            <!-- MODAL SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navModal'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langSettingModals</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgModal' class='control-label-notes mb-2 me-2'>$langBgModal:</label>
-                        <input name='BgModal' type='text' class='form-control colorpicker' id='BgModal' value='$theme_options_styles[BgModal]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clBorderModal' class='control-label-notes mb-2 me-2'>$langclBorderModal:</label>
-                        <input name='clBorderModal' type='text' class='form-control colorpicker' id='clBorderModal' value='$theme_options_styles[clBorderModal]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clTextModal' class='control-label-notes mb-2 me-2'>$langclTextModal:</label>
-                        <input name='clTextModal' type='text' class='form-control colorpicker' id='clTextModal' value='$theme_options_styles[clTextModal]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clDeleteIconModal' class='control-label-notes mb-2 me-2'>$langclDeleteIconModal:</label>
-                        <input name='clDeleteIconModal' type='text' class='form-control colorpicker' id='clDeleteIconModal' value='$theme_options_styles[clDeleteIconModal]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clXmarkModal' class='control-label-notes mb-2 me-2'>$langclXmarkModal:</label>
-                        <input name='clXmarkModal' type='text' class='form-control colorpicker' id='clXmarkModal' value='$theme_options_styles[clXmarkModal]'>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langSettingModals</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgModal' class='control-label-notes mb-2 me-2'>$langBgModal:</label>
+                                <input name='BgModal' type='text' class='form-control colorpicker' id='BgModal' value='$theme_options_styles[BgModal]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clBorderModal' class='control-label-notes mb-2 me-2'>$langclBorderModal:</label>
+                                <input name='clBorderModal' type='text' class='form-control colorpicker' id='clBorderModal' value='$theme_options_styles[clBorderModal]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clTextModal' class='control-label-notes mb-2 me-2'>$langclTextModal:</label>
+                                <input name='clTextModal' type='text' class='form-control colorpicker' id='clTextModal' value='$theme_options_styles[clTextModal]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clDeleteIconModal' class='control-label-notes mb-2 me-2'>$langclDeleteIconModal:</label>
+                                <input name='clDeleteIconModal' type='text' class='form-control colorpicker' id='clDeleteIconModal' value='$theme_options_styles[clDeleteIconModal]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clXmarkModal' class='control-label-notes mb-2 me-2'>$langclXmarkModal:</label>
+                                <input name='clXmarkModal' type='text' class='form-control colorpicker' id='clXmarkModal' value='$theme_options_styles[clXmarkModal]'>
+                            </div>
+                        </div>
+                        <div class='d-flex justify-content-center align-items-start'>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/modal.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
-
-
-
-
-
-
+            <!-- TABLE SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navTables'>
-                <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langTables</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgTables' class='control-label-notes mb-2 me-2'>$langBgTables:</label>
-                        <input name='BgTables' type='text' class='form-control colorpicker' id='BgTables' value='$theme_options_styles[BgTables]'>
+                <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                    <div>
+                        <div class='form-wrapper form-edit rounded'>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langTables</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgTables' class='control-label-notes mb-2 me-2'>$langBgTables:</label>
+                                <input name='BgTables' type='text' class='form-control colorpicker' id='BgTables' value='$theme_options_styles[BgTables]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgBorderBottomHeadTables' class='control-label-notes mb-2 me-2'>$langBgBorderBottomHeadTables:</label>
+                                <input name='BgBorderBottomHeadTables' type='text' class='form-control colorpicker' id='BgBorderBottomHeadTables' value='$theme_options_styles[BgBorderBottomHeadTables]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgBorderBottomRowTables' class='control-label-notes mb-2 me-2'>$langBgBorderBottomRowTables:</label>
+                                <input name='BgBorderBottomRowTables' type='text' class='form-control colorpicker' id='BgBorderBottomRowTables' value='$theme_options_styles[BgBorderBottomRowTables]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BoxShadowRowTables' class='control-label-notes mb-2 me-2'>$langBoxShadowRowTables:</label>
+                                <input name='BoxShadowRowTables' type='text' class='form-control colorpicker' id='BoxShadowRowTables' value='$theme_options_styles[BoxShadowRowTables]'>
+                            </div>
+                        </div>
                     </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgBorderBottomHeadTables' class='control-label-notes mb-2 me-2'>$langBgBorderBottomHeadTables:</label>
-                        <input name='BgBorderBottomHeadTables' type='text' class='form-control colorpicker' id='BgBorderBottomHeadTables' value='$theme_options_styles[BgBorderBottomHeadTables]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgBorderBottomRowTables' class='control-label-notes mb-2 me-2'>$langBgBorderBottomRowTables:</label>
-                        <input name='BgBorderBottomRowTables' type='text' class='form-control colorpicker' id='BgBorderBottomRowTables' value='$theme_options_styles[BgBorderBottomRowTables]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BoxShadowRowTables' class='control-label-notes mb-2 me-2'>$langBoxShadowRowTables:</label>
-                        <input name='BoxShadowRowTables' type='text' class='form-control colorpicker' id='BoxShadowRowTables' value='$theme_options_styles[BoxShadowRowTables]'>
+                    <div class='d-flex justify-content-center align-items-start'>
+                        <figure class='figure'>
+                            <img src='$urlServer/template/modern/images/theme_settings/table.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                            <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-- TAB SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navTabs'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langTabs</h3>
@@ -2246,75 +2116,86 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
-
+            <!-- ACCORDION SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navAccordions'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langAccordions</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clAccordions' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
-                        <input name='clAccordions' type='text' class='form-control colorpicker' id='clAccordions' value='$theme_options_styles[clAccordions]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clBorderBottomAccordions' class='control-label-notes mb-2 me-2'>$langAccordionsBorderBottom:</label>
-                        <input name='clBorderBottomAccordions' type='text' class='form-control colorpicker' id='clBorderBottomAccordions' value='$theme_options_styles[clBorderBottomAccordions]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clHoveredAccordions' class='control-label-notes mb-2 me-2'>$langHoverTextColor:</label>
-                        <input name='clHoveredAccordions' type='text' class='form-control colorpicker' id='clHoveredAccordions' value='$theme_options_styles[clHoveredAccordions]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clActiveAccordions' class='control-label-notes mb-2 me-2'>$langActiveTextColor:</label>
-                        <input name='clActiveAccordions' type='text' class='form-control colorpicker' id='clActiveAccordions' value='$theme_options_styles[clActiveAccordions]'>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-            <div role='tabpanel' class='tab-pane fade' id='navLists'>
-                <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langLists</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='bgLists' class='control-label-notes mb-2 me-2'>$langBgColorList:</label>
-                        <input name='bgLists' type='text' class='form-control colorpicker' id='bgLists' value='$theme_options_styles[bgLists]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clBorderBottomLists' class='control-label-notes mb-2 me-2'>$langclBorderBottomLists:</label>
-                        <input name='clBorderBottomLists' type='text' class='form-control colorpicker' id='clBorderBottomLists' value='$theme_options_styles[clBorderBottomLists]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clLists' class='control-label-notes mb-2 me-2'>$langclLists:</label>
-                        <input name='clLists' type='text' class='form-control colorpicker' id='clLists' value='$theme_options_styles[clLists]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clHoveredLists' class='control-label-notes mb-2 me-2'>$langclHoveredLists:</label>
-                        <input name='clHoveredLists' type='text' class='form-control colorpicker' id='clHoveredLists' value='$theme_options_styles[clHoveredLists]'>
-                    </div>
-                    <hr>
-                    <div class='form-group mt-2'>
-                        <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAddPaddingListGroup</h3>
-                        <div class='col-sm-12'>
-                            <div class='checkbox'>
-                                <label class='label-container' aria-label='$langSettingSelect'>
-                                    <input type='checkbox' name='AddPaddingListGroup' value='1' ".((isset($theme_options_styles['AddPaddingListGroup']))? 'checked' : '').">
-                                    <span class='checkmark'></span>
-                                    $langActivate
-                                </label>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langAccordions</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clAccordions' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                                <input name='clAccordions' type='text' class='form-control colorpicker' id='clAccordions' value='$theme_options_styles[clAccordions]'>
                             </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clBorderBottomAccordions' class='control-label-notes mb-2 me-2'>$langAccordionsBorderBottom:</label>
+                                <input name='clBorderBottomAccordions' type='text' class='form-control colorpicker' id='clBorderBottomAccordions' value='$theme_options_styles[clBorderBottomAccordions]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clHoveredAccordions' class='control-label-notes mb-2 me-2'>$langHoverTextColor:</label>
+                                <input name='clHoveredAccordions' type='text' class='form-control colorpicker' id='clHoveredAccordions' value='$theme_options_styles[clHoveredAccordions]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clActiveAccordions' class='control-label-notes mb-2 me-2'>$langActiveTextColor:</label>
+                                <input name='clActiveAccordions' type='text' class='form-control colorpicker' id='clActiveAccordions' value='$theme_options_styles[clActiveAccordions]'>
+                            </div>
+                        </div>
+                        <div class='d-flex justify-content-center align-items-start'>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/accordion.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- LIST SETTINGS -->
+            <div role='tabpanel' class='tab-pane fade' id='navLists'>
+                <div class='form-wrapper form-edit rounded'>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langLists</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgLists' class='control-label-notes mb-2 me-2'>$langBgColorList:</label>
+                                <input name='bgLists' type='text' class='form-control colorpicker' id='bgLists' value='$theme_options_styles[bgLists]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clBorderBottomLists' class='control-label-notes mb-2 me-2'>$langclBorderBottomLists:</label>
+                                <input name='clBorderBottomLists' type='text' class='form-control colorpicker' id='clBorderBottomLists' value='$theme_options_styles[clBorderBottomLists]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clLists' class='control-label-notes mb-2 me-2'>$langclLists:</label>
+                                <input name='clLists' type='text' class='form-control colorpicker' id='clLists' value='$theme_options_styles[clLists]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clHoveredLists' class='control-label-notes mb-2 me-2'>$langclHoveredLists:</label>
+                                <input name='clHoveredLists' type='text' class='form-control colorpicker' id='clHoveredLists' value='$theme_options_styles[clHoveredLists]'>
+                            </div>
+                            <hr>
+                            <div class='form-group mt-2'>
+                                <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAddPaddingListGroup</h3>
+                                <div class='col-sm-12'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='AddPaddingListGroup' value='1' ".((isset($theme_options_styles['AddPaddingListGroup']))? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langActivate
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='d-flex justify-content-center align-items-start'>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/list_group.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-
-
-
+            <!-- CONTEXTUAL MENU SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navContextualMenu'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline'>$langContextualMenuInfo</h3>
@@ -2369,9 +2250,7 @@ $tool_content .= "
                 </div>
             </div>
 
-
-
-
+            <!-- MORE OPTIONS SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navMoreOptions'>
                 <div class='form-wrapper form-edit rounded'>
 
@@ -2392,9 +2271,7 @@ $tool_content .= "
                         <label for='clHoveredLinkImportantAnnouncement' class='control-label-notes mb-2 me-2'>$langclHoveredLinkImportantAnnouncement:</label>
                         <input name='clHoveredLinkImportantAnnouncement' type='text' class='form-control colorpicker' id='clHoveredLinkImportantAnnouncement' value='$theme_options_styles[clHoveredLinkImportantAnnouncement]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutFaqImageUpload</h3>
                     <div class='form-group mt-4'>
                         
@@ -2402,9 +2279,7 @@ $tool_content .= "
                             $faq_image_fieldL
                         </div>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutChatContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutChatContainer' class='control-label-notes mb-2 me-2'>$langContainerBgColor:</label>
@@ -2418,9 +2293,7 @@ $tool_content .= "
                         <label for='AboutChatContainerBoxShadow' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
                         <input name='AboutChatContainerBoxShadow' type='text' class='form-control colorpicker' id='AboutChatContainerBoxShadow' value='$theme_options_styles[AboutChatContainerBoxShadow]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutCourseInfoContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutCourseInfoContainer' class='control-label-notes mb-2 me-2'>$langContainerBgColor:</label>
@@ -2434,9 +2307,7 @@ $tool_content .= "
                         <label for='AboutCourseInfoContainerBoxShadow' class='control-label-notes mb-2 me-2'>$langBoxShadowPanels:</label>
                         <input name='AboutCourseInfoContainerBoxShadow' type='text' class='form-control colorpicker' id='AboutCourseInfoContainerBoxShadow' value='$theme_options_styles[AboutCourseInfoContainerBoxShadow]'>
                     </div>
-
                     <hr>
-
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutUnitsContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='AboutUnitsContainer' class='control-label-notes mb-2 me-2'>$langContainerBgColor:</label>
@@ -2452,29 +2323,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             <div role='tabpanel' class='tab-pane' id='messages'>...</div>
             <div role='tabpanel' class='tab-pane' id='settings'>...</div>

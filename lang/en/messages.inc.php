@@ -3938,7 +3938,7 @@ $langclHoveredHelpButtonColor = "Hovered text color";
 
 $langBgBorderForms = "Form border color";
 $langSubmitComment = "Submit a comment";
-$langBriefProfilePortfolioTextColor = "Χρώμα κειμένων σύντομου προφίλ";
+$langBriefProfilePortfolioTextColor = "Χρώμα κειμένων";
 $langRadio = "Radio";
 $langRadios = "Settings radio button";
 $langBgRadios = "Radio button background color";
@@ -6401,3 +6401,4 @@ $langFrameOpens = "Window opening";
 $langListChoices = "Choices list";
 $langAccuratePath = "Accurate path";
 $langOptForColor = "Color selection";
+$langDisplayOptionsImg = "Display settings";
