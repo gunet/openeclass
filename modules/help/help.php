@@ -1,22 +1,4 @@
 <?php
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
- *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
 
 session_start();
 
@@ -27,9 +9,45 @@ if (isset($_GET['language']) and $_GET['language'] == 'el') {
 }
 
 $siteName = '';
-
 include "../../lang/$language/common.inc.php";
 include '../../include/main_lib.php';
+
+$course_help_modules = [
+    'agenda',
+    'links',
+    'documents',
+    'video',
+    'assignments',
+    'announcements',
+    'forum',
+    'exercises',
+    'groups',
+    'message',
+    'glossary',
+    'ebook',
+    'chat',
+    'questionnaire',
+    'learningpath',
+    'wiki',
+    'blog',
+    'wall',
+    'gradebook',
+    'attendance',
+    'tc',
+    'progress',
+    'request',
+    'h5p',
+    'course_settings',
+    'course_description',
+    'course_users',
+    'course_stats',
+    'course_tools',
+    'course_abuse_report',
+    'prequesities',
+    'learning_analytics',
+    'portfolio',
+    'registration'
+];
 
 $shortVer = preg_replace('/^(\d\.\d+).*$/', '\1', ECLASS_VERSION);
 
@@ -40,15 +58,20 @@ if (isset($_GET['topic'])) {
 if (isset($_GET['subtopic'])) {
     $subtopic = '/' . htmlspecialchars($_GET['subtopic'], ENT_QUOTES);
 }
-if (isset($_SESSION['is_admin']) and !isset($course_code)) {
-    $user_status = 'admin';
-} else if (isset($_SESSION['status']) and  $_SESSION['status'] == USER_TEACHER) {
-    $user_status = 'teacher';
+
+if (isset($_SESSION['is_admin'])) {
+    if (in_array($topic, $course_help_modules)) {
+        $help_status = 'teacher';
+    } else {
+        $help_status = 'admin';
+    }
+} else if (isset($_SESSION['status']) and $_SESSION['status'] == USER_TEACHER) {
+    $help_status = 'teacher';
 } else {
-    $user_status = 'student';
+    $help_status = 'student';
 }
 
-$link = "https://docs.openeclass.org/$language/$shortVer/$user_status/$topic$subtopic?do=export_xhtml";
+$link = "https://docs.openeclass.org/$language/$shortVer/$help_status/$topic$subtopic?do=export_xhtml";
 header('Content-Type: text/html; charset=UTF-8');
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

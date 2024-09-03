@@ -32,11 +32,6 @@ $pageName = $langDelCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 if (isset($_POST['delete'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $data['action_bar'] = action_bar(array(
-        array('title' => "$langBackHome $siteName",
-            'url' => '../../index.php',
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
 
     // first archive course
     $zipfile = doArchive($course_id, $course_code);
@@ -102,15 +97,6 @@ if (isset($_POST['delete'])) {
     Session::flash('alert-class', 'alert-info');
     unset($_SESSION['dbname']);
     redirect_to_home_page('main/portfolio.php');
-} else {
-    $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-              'url' => "index.php?course=" . q($course_code),
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
-
-    $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
 }
 
-$data['menuTypeID'] = 2;
-view('modules.course_info.delete_course', $data);
+view('modules.course_info.delete_course');
