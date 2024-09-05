@@ -63,8 +63,6 @@ function store_mail_config() {
     if ($email_announce == '' or valid_email($email_announce)) {
         set_config('email_announce', $email_announce);
     } else {
-        //Session::Messages("$langEmailAnnounce: $langInvalidEmail: " . q($email_announce),
-            //'alert-warning');
             Session::flash('message',"$langEmailAnnounce: $langInvalidEmail: " . q($email_announce));
             Session::flash('alert-class', 'alert-warning');
     }
@@ -72,8 +70,6 @@ function store_mail_config() {
     if ($email_bounces == '' or valid_email($email_bounces)) {
         set_config('email_bounces', $email_bounces);
     } else {
-        // Session::Messages("$langEmailBounces: $langInvalidEmail: " . q($email_bounces),
-        //     'alert-warning');
             Session::flash('message',"$langEmailBounces: $langInvalidEmail: " . q($email_bounces));
             Session::flash('alert-class', 'alert-warning');
     }
@@ -106,7 +102,7 @@ function store_mail_config() {
 }
 
 function get_var($name, $default=null) {
-    if (isset($GLOBALS['input_fields'])) {
+    if (isset($GLOBALS['input_fields']) or (isset($_SESSION['step']))) {
         if (isset($GLOBALS[$name])) {
             return $GLOBALS[$name];
         } else {
@@ -122,10 +118,11 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $tool_content, $langEmailBounces, $langSave, $langEG, $langForm, $langSelect;
+        $langEmailBounces, $langSave, $langEG, $langForm, $langSelect;
 
+    $content = '';
     // True if running initial install
-    $install = isset($GLOBALS['input_fields']);
+    $install = isset($_SESSION['step']);
 
     $emailTransports = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
     $email_transport = get_var('email_transport');
@@ -150,7 +147,7 @@ function mail_settings_form() {
     $cbox_dont_mail_unverified_mails = get_var('dont_mail_unverified_mails') ? 'checked' : '';
     $cbox_email_from = get_var('email_from') ? 'checked' : '';
     if (!$install) {
-        $tool_content .= "
+        $content .= "
             <div class='panel panel-primary' id='five'>
                 <div class='panel-heading'>
                     <div class='panel-title'>$langEmailSettings</div>
@@ -159,7 +156,7 @@ function mail_settings_form() {
                     <fieldset>
                         <legend class='mb-0' aria-label='$langForm'></legend>";
     }
-    $tool_content .= "
+    $content .= "
                         <div class='form-group'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
@@ -240,7 +237,7 @@ function mail_settings_form() {
                         </div>
                         <hr>";
                         if (!$install) { // not to be displayed in install screen
-                            $tool_content .= "
+                            $content .= "
                             <div class='form-group mt-3'>
                                 <div class='col-sm-12'>
                                     <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
@@ -248,9 +245,11 @@ function mail_settings_form() {
                             </div>";
                         }
     if (!$install) {
-        $tool_content .= "
+        $content .= "
                     </fieldset>
                 </div>
             </div>";
     }
+
+    return $content;
 }

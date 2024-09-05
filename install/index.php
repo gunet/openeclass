@@ -5,7 +5,7 @@ header('Content-Type: text/html; charset=UTF-8');
  * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2023 Greek Universities Network - GUnet
+ * Copyright 2003-2024 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,8 +35,16 @@ require_once 'include/mailconfig.php';
 require_once 'modules/db/database.php';
 require_once 'upgrade/functions.php';
 require_once 'install/functions.php';
-
 require_once 'modules/h5p/classes/H5PHubUpdater.php';
+
+$viewsDir = 'resources/views/modern/install';
+$cacheDir = 'storage/views/';
+if (!is_dir($cacheDir)) {
+    mkdir($cacheDir, 0755, true);
+}
+
+use Jenssegers\Blade\Blade;
+$blade = new Blade($viewsDir, $cacheDir);
 
 $autoinstall = false;
 if ($command_line and getenv('BASE_URL') and getenv('MYSQL_LOCATION')) {
@@ -53,7 +61,6 @@ if ($command_line and getenv('BASE_URL') and getenv('MYSQL_LOCATION')) {
     create_directories();
 }
 
-$tool_content = '';
 if (!isset($siteName)) {
     $siteName = '';
 }
@@ -79,11 +86,11 @@ if (!isset($language_codes[$lang])) {
 }
 
 if ($lang == 'el') {
-    $install_info_file = "http://docs.openeclass.org/el/install";
-    $readme_file =  "http://docs.openeclass.org/el/general";
+    $data['install_info_file'] = "http://docs.openeclass.org/el/install";
+    $data['readme_file'] =  "http://docs.openeclass.org/el/general";
 } else {
-    $install_info_file = "http://docs.openeclass.org/en/install";
-    $readme_file = "http://docs.openeclass.org/en/general";
+    $data['install_info_file'] = "http://docs.openeclass.org/en/install";
+    $data['readme_file'] = "http://docs.openeclass.org/en/general";
 }
 
 // include_messages
@@ -104,25 +111,16 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
+// error - config.php exists
 if (file_exists('config/config.php')) {
     if ($autoinstall) {
         die("$langWarnConfig1. $langWarnConfig2\n");
     } else {
-        $tool_content .= "
-            <div class='panel panel-info'>
-              <div class='panel-heading'>$langWarnConfig3!</div>
-              <div class='panel-body'>
-                  $langWarnConfig1. $langWarnConfig2.
-              </div>
-            </div>";
-        draw($tool_content, array('no-menu' => true));
+        echo $blade->make('config_exists')->render();
+        exit;
     }
 }
 
-// Input fields that have already been included in the form, either as hidden or as normal inputs
-$input_fields = array();
-$phpSysInfoURL = '../admin/sysinfo/';
-$availableThemes = array('Default','Crimson','Emerald','Dark','Wood','Neutral','Soft_light');
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
     // Get DB credentials from environment for Docker image or automated installation
@@ -130,6 +128,7 @@ if (isset($_POST['welcomeScreen'])) {
     $dbUsernameForm = getenv_default('MYSQL_ROOT_USER', 'root');
     $dbPassForm = getenv_default('MYSQL_ROOT_PASSWORD', '');
     $dbNameForm = getenv_default('MYSQL_DB', 'eclass');
+
     $dbMyAdmin = $emailForm = '';
     if (!isset($urlForm)) {
         $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
@@ -146,114 +145,95 @@ if (isset($_POST['welcomeScreen'])) {
     $helpdeskForm = '+30 2xx xxxx xxx';
     $institutionForm = $langDefaultInstitutionName;
     $institutionUrlForm = 'https://www.gunet.gr/';
-    $helpdeskmail = $postaddressForm = '';
-
+    $helpdeskmail = $postaddressForm = $homepage_intro = '';
+    $theme_selection = 0;
     $eclass_stud_reg = 2;
 
-} else {
-    register_posted_variables(array(
-        'lang' => true,
-        'dbHostForm' => true,
-        'dbUsernameForm' => true,
-        'dbNameForm' => true,
-        'dbPassForm' => true,
-        'dbMyAdmin' => true,
-        'urlForm' => true,
-        'nameForm' => true,
-        'loginForm' => true,
-        'passForm' => true,
-        'campusForm' => true,
-        'helpdeskForm' => true,
-        'helpdeskmail' => true,
-        'postaddressForm' => true,
-        'eclass_stud_reg' => true,
-        'emailForm' => true,
-        'lang' => true,
-        'institutionForm' => true,
-        'institutionUrlForm' => true,
-        'dont_mail_unverified_mails' => true,
-        'email_from' => true,
-        'email_announce' => true,
-        'email_bounces' => true,
-        'email_transport' => true,
-        'smtp_server' => true,
-        'smtp_port' => true,
-        'smtp_encryption' => true,
-        'smtp_username' => true,
-        'smtp_password' => true,
-        'theme_selection' => true,
-        'homepage_intro' => true,
-        'sendmail_command' => true));
+    // Check for db connection after settings submission
+    $mysqlServer = $GLOBALS['dbHostForm'] = $dbHostForm;
+    $mysqlUser = $GLOBALS['dbUsernameForm'] = $dbUsernameForm;
+    $mysqlPassword = $GLOBALS['dbPassForm'] = $dbPassForm;
 }
+$all_vars = [
+    'lang',
+    'dbHostForm',
+    'dbUsernameForm',
+    'dbNameForm',
+    'dbPassForm',
+    'dbMyAdmin',
+    'urlForm',
+    'nameForm',
+    'loginForm',
+    'passForm',
+    'campusForm',
+    'helpdeskForm',
+    'helpdeskmail',
+    'postaddressForm',
+    'eclass_stud_reg',
+    'emailForm',
+    'institutionForm',
+    'institutionUrlForm',
+    'dont_mail_unverified_mails',
+    'email_from',
+    'email_announce',
+    'email_bounces',
+    'email_transport',
+    'smtp_server',
+    'smtp_port',
+    'smtp_encryption',
+    'smtp_username',
+    'smtp_password',
+    'theme_selection',
+    'homepage_intro',
+    'sendmail_command'
+];
 
-function hidden_vars($names) {
-    $out = '';
-    foreach ($names as $name) {
-        if (isset($GLOBALS[$name]) and
-                !isset($GLOBALS['input_fields'][$name])) {
-            $out .= "<input type='hidden' name='$name' value='" . q($GLOBALS[$name]) . "'>\n";
-        }
+foreach ($all_vars as $name) {
+    if (isset($_POST[$name])) {
+        $GLOBALS[$name] = $_POST[$name];
     }
-    return $out;
 }
 
-function text_input($name, $size) {
-    $GLOBALS['input_fields'][$name] = true;
-    return "<input class='form-control' type='text' size='$size' name='$name' value='" .
-            q($GLOBALS[$name]) . "'>";
-}
+//db error flags
+$data['db_error_db_engine'] = false;
+$data['db_error_connection'] = false;
+$data['db_error_db_exists'] = false;
+$data['db_error_message'] = '';
+$data['config_error'] = false;
 
-function textarea_input($name, $rows, $cols) {
-    $GLOBALS['input_fields'][$name] = true;
-    return "<textarea class='form-control' rows='$rows' cols='$cols' name='$name'>" .
-            q($GLOBALS[$name]) . "</textarea>";
-}
+$data['lang_selection'] = selection(
+    [
+        'el' => 'Ελληνικά (el)',
+        'en' => 'English (en)'
+    ],
+    'lang',
+    $lang,
+    "class='form-control' onChange='document.langform.submit();'"
+);
 
-function selection_input($entries, $name) {
-    $GLOBALS['input_fields'][$name] = true;
-    return selection($entries, $name, q($GLOBALS[$name]), "class='form-select'");
-}
+$availableThemes = [
+                    'Default',
+                    'Crimson',
+                    'Emerald',
+                    'Dark',
+                    'Wood',
+                    'Neutral',
+                    'Soft_light'
+                ];
 
-$all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
-    'dbPassForm', 'urlForm', 'nameForm', 'emailForm', 'loginForm', 'lang',
-    'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
-    'eclass_stud_reg', 'institutionForm',
-    'institutionUrlForm', 'postaddressForm',
-    'dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
-    'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
-    'smtp_username', 'smtp_password', 'sendmail_command', 'theme_selection', 'homepage_intro');
+$data['user_registration_selection'] = selection(
+    [
+        '2' => $langUserRegistration,
+        '1' => $langReqRegUser,
+        '0' => $langDisableEclassStudReg
+    ],
+    'eclass_stud_reg',
+    $langUsersAccount
+);
 
-// Check for db connection after settings submission
-$GLOBALS['mysqlServer'] = $dbHostForm;
-$GLOBALS['mysqlUser'] = $dbUsernameForm;
-$GLOBALS['mysqlPassword'] = $dbPassForm;
-if (isset($_POST['install4'])) {
-    try {
-        Debug::setLevel(Debug::ALWAYS);
-        Database::core();
-        if (!check_engine()) {
-          $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInnoDBMissing</span></div>";
-            unset($_POST['install4']);
-            $_POST['install3'] = true;
-        } else {
-            $GLOBALS['mysqlMainDb'] = $dbNameForm;
-            try {
-                Database::get();
-                $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" .
-                sprintf($langDatabaseExists, '<b>' . q($dbNameForm) . '</b>') .
-                "</span></div>";
-            } catch (Exception $e) {
-                // no problem, database doesn't exist
-            }
-        }
-    } catch (Exception $e) {
-          $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span><p>" .
-          $langErrorConnectDatabase . '</p><p><i>' .
-          q($e->getMessage()) . "</i></p><p>$langCheckDatabaseSettings</p></span></div>";
-      unset($_POST['install4']);
-      $_POST['install3'] = true;
-    }
-} elseif ($autoinstall) {
+$data['all_vars'] = $all_vars;
+
+if ($autoinstall) {
     Debug::setLevel(Debug::ALWAYS);
     try {
         Database::core();
@@ -274,279 +254,92 @@ if (isset($_POST['install4'])) {
     $_POST['install7'] = true; // Move to final installation steps
 }
 
-// step 2 license
-if (isset($_POST['install2'])) {
-    $langStepTitle = $langLicense;
-    $langStep = sprintf($langStep1, 2, 8);
+$data['autoinstall'] = $autoinstall;
+
+if (isset($_POST['install1'])) { // step 1 requirements
+    $data['StepTitle'] = $langRequirements;
+    $_SESSION['step'] = 1;
+    $configErrorExists = false;
+
+    create_directories();
+    $data['configErrorExists'] = $configErrorExists;
+
+    if (!is_null($errorContent)) {
+        $data['errorContent'] = implode(' ', $errorContent);
+    }
+
+} elseif (isset($_POST['install2'])) { // step 2 license
+    $data['StepTitle'] = $langLicense;
     $_SESSION['step'] = 2;
-    $gpl_link = '../info/license/gpl_print.txt';
-    $tool_content .= "
-    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoLicence</span></div>
-        <div class='card panelCard px-lg-4 py-lg-3'>
-        <div class='card-body'>
-       <form class='form-horizontal form-wrapper' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset>
-           <legend class='mb-0' aria-label='$langForm'></legend>
-           <div class='form-group step2-form'>
-             <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('info/license/gpl.txt'))) . "</pre>
-           </div>
-           <div class='form-group mt-3'>
-             <div class='col-sm-12'>" . icon('fa-print') . " <a href='$gpl_link'>$langPrintVers</a></div>
-           </div>
-           <div class='form-group mt-5'>
-              <div class='col-12'>
-                <div class='row'>
-                  <div class='col-lg-6 col-12'>
-                    <input type='submit' class='btn cancelAdminBtn w-100' name='install1' value='&laquo; $langPreviousStep'>
-                  </div>
-                  <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                    <input type='submit' class='btn w-100' name='install3' value='$langAccept'>
-                  </div>
-                </div>
-              </div>
-           </div>
-         </fieldset>" . hidden_vars($all_vars) . "</form></div></div>";
-
-    draw($tool_content);
-}
-
-// step 3 mysql database settings
-elseif (isset($_POST['install3'])) {
-    $langStepTitle = $langDBSetting;
-    $langStep = sprintf($langStep1, 3, 8);
+} elseif (isset($_POST['install3'])) { // step 3 mysql database settings
+    $data['StepTitle'] = $langDBSetting;
     $_SESSION['step'] = 3;
-    $tool_content .= "
-    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWillWrite $langDBSettingIntro</span></div>
-       <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset>
-         <legend class='mb-0' aria-label='$langForm'></legend>
-           <div class='form-group'>
-             <label for='dbHostForm' class='col-sm-12 control-label-notes'>$langdbhost</label>
-             <div class='row'>
-              <div class='col-sm-12'>" . text_input('dbHostForm', 25) . "</div>
-              <div class='col-sm-12 help-block'>$langEG localhost</div>
-             </div>
-           </div>
-
-           <div class='form-group mt-3'>
-             <label for='dbUsernameForm' class='col-sm-12 control-label-notes'>$langDBLogin</label>
-             <div class='row'>
-              <div class='col-sm-12'>" . text_input('dbUsernameForm', 25) . "</div>
-              <div class='col-sm-12 help-block'>$langEG root</div>
-            </div>
-           </div>
-
-           <div class='form-group mt-3'>
-             <label for='dbPassForm' class='col-sm-12 control-label-notes'>$langDBPassword</label>
-             <div class='col-sm-12'>" . text_input('dbPassForm', 25) . "</div>
-           </div>
-
-           <div class='form-group mt-3'>
-             <label for='dbNameForm' class='col-sm-12 control-label-notes'>$langMainDB</label>
-             <div class='row'>
-              <div class='col-sm-12'>" . text_input('dbNameForm', 25) . "</div>
-              <div class='col-sm-12 help-block'>$langNeedChangeDB</div>
-            </div>
-           </div>
-           <div class='form-group mt-3'>
-             <label for='dbMyAdmin' class='col-sm-12 control-label-notes'>$langphpMyAdminURL</label>
-             <div class='row'>
-              <div class='col-sm-12'>" . text_input('dbMyAdmin', 25) . "</div>
-              <div class='col-sm-12 help-block'>$langOptional</div>
-          </div>
-
-           </div>
-
-           <div class='form-group mt-5'>
-             <div class='col-12'>
-              <div class='row'>
-                  <div class='col-lg-6 col-12'>
-                    <input type='submit' class='btn cancelAdminBtn w-100' name='install2' value='&laquo; $langPreviousStep'>
-                  </div>
-                  <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                    <input type='submit' class='btn w-100' name='install4' value='$langNextStep &raquo;'>
-                  </div>
-                </div>
-            </div>
-
-           </div>
-           <div class='form-group mt-3'>
-             <div class='col-sm-12'>$langAllFieldsRequired</div>
-           </div>
-         </fieldset>" . hidden_vars($all_vars) . "</form>";
-
-    draw($tool_content);
-}
-
-// step 4 basic config settings
-elseif (isset($_POST['install4'])) {
-    $langStepTitle = $langBasicCfgSetting;
-    $langStep = sprintf($langStep1, 4, 8);
+} elseif (isset($_POST['install4'])) { // step 4 basic config settings
+    $data['StepTitle'] = $langBasicCfgSetting;
     $_SESSION['step'] = 4;
     if (empty($helpdeskmail)) {
         $helpdeskmail = '';
     }
-    $tool_content .= "
-       <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>" .
-           form_entry('urlForm', text_input('urlForm', 40), "$langSiteUrl (*)") .
-           form_entry('nameForm', text_input('nameForm', 40), "$langAdminName (*)") .
-           form_entry('emailForm', text_input('emailForm', 40), "$langAdminEmail (*)") .
-           form_entry('loginForm', text_input('loginForm', 40), "$langAdminLogin (*)") .
-           form_entry('passForm', text_input('passForm', 40), "$langAdminPass (*)") .
-           form_entry('campusForm', text_input('campusForm', 40), $langCampusName) .
-           form_entry('helpdeskForm', text_input('helpdeskForm', 40), $langHelpDeskPhone) .
-           form_entry('helpdeskmail', text_input('helpdeskmail', 40), "$langHelpDeskEmail (**)") .
-           form_entry('institutionForm', text_input('institutionForm', 40), $langInstituteShortName) .
-           form_entry('institutionUrlForm', text_input('institutionUrlForm', 40), $langInstituteName) .
-           form_entry('postaddressForm', textarea_input('postaddressForm', 3, 40), $langInstitutePostAddress) .
-           form_entry('eclass_stud_reg',
-                      selection_input(array('2' => $langUserRegistration,
-                                            '1' => $langReqRegUser,
-                                            '0' => $langDisableEclassStudReg),
-                                          'eclass_stud_reg'),
-                      "$langUsersAccount") . "
-           <div class='form-group mt-5'>
-            <div class='col-12'>
-              <div class='row'>
-                  <div class='col-lg-6 col-12'>
-                     <input type='submit' class='btn cancelAdminBtn w-100' name='install3' value='&laquo; $langPreviousStep'>
-                  </div>
-                  <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                     <input type='submit' class='btn w-100' name='install5' id='install5' value='$langNextStep &raquo;'>
-                  </div>
-              </div>
-            </div>
-            
-             
-           </div>
-           <div class='form-group mt-3'>
-             <div class='col-sm-12'>$langRequiredFields</div>
-             <div class='col-sm-12'>(**) $langWarnHelpDesk</div></td>
-           </div>
-         </fieldset>" . hidden_vars($all_vars) . "</form>";
-    draw($tool_content);
-}
+    try {
+        $mysqlServer = $GLOBALS['dbHostForm'];
+        $mysqlUser = $GLOBALS['dbUsernameForm'];
+        $mysqlPassword = $GLOBALS['dbPassForm'];
+        Debug::setLevel(Debug::ALWAYS);
+        Database::core();
+        if (!check_engine()) {
+            $data['db_error_db_engine'] = true;
+            unset($_POST['install4']);
+            $_POST['install3'] = true;
+        } else {
+            $mysqlMainDb = $GLOBALS['mysqlMainDb'] = $dbNameForm;
+            try {
+                Database::get();
+                $data['db_error_db_exists'] = true;
+                $data['dbNameForm'] = $GLOBALS['dbNameForm'];
+                unset($_POST['install4']);
+                $_POST['install3'] = true;
+            } catch (Exception $e) {
+                // no problem, database doesn't exist
+            }
+        }
+    } catch (Exception $e) {
+        $data['db_error_connection'] = true;
+        $data['db_error_message'] = $e->getMessage();
+        unset($_POST['install4']);
+        $_POST['install3'] = true;
+    }
 
-// step 5 basic ui
-elseif(isset($_POST['install5'])){
-  $langStepTitle = $langThemeSettings;
-  $langStep = sprintf($langStep1, 5, 8);
+} elseif(isset($_POST['install5'])) { // step 5 basic ui
+  $data['StepTitle'] = $langThemeSettings;
   $_SESSION['step'] = 5;
-
   // Get all images from dir screenshots
+  $theme_images = '';
   $dir_screens = getcwd();
   $dir_screens = $dir_screens . '/template/modern/images/screenshots';
   $dir_themes_images = scandir($dir_screens);
 
-  $tool_content .= "
-          <div class='col-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
-              <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
-                  <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                      <h3>$langThemeSettings</h2>
-                  </div>
-                  <div class='card-body'>
-                      <fieldset>
-                      <legend class='mb-0' aria-label='$langForm'></legend>
-                          <div class='form-group'>
-                              " . form_entry('homepage_intro', textarea_input('homepage_intro', 3, 40), $langHomePageIntroTextHelp) . "
-                          </div>
-                          <div class='form-group mt-4'>
-                              <div class='col-sm-12'>
-                                  <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>$langViewScreensThemes</a></br></br>
-                                  <label for='themeSelection' class='control-label-notes'>$langAvailableThemes:</label>
-                                  ".  selection_input($availableThemes, 'theme_selection')."
-                              </div>
-                          </div>
-                          <div class='form-group mt-4'>
-                              <div class='col-12 d-flex justify-content-between'>
-                                  <input class='btn btn-primary' name='install4' value='&laquo; $langBack' type='submit'>
-                                  <input class='btn btn-primary' name='install6' value='$langContinue &raquo;' type='submit'>
-                              </div>
-                          </div>
-                      </fieldset>
-                  </div>
-                </div>
-                " . hidden_vars($all_vars) . "
-              </form>
-            </div>
-          </div>
-          
-          
-          <div class='modal fade' id='view_themes_screens' tabindex='-1' aria-labelledby='view_themes_screensLabel' aria-hidden='true'>
-              <div class='modal-dialog modal-fullscreen' style='margin-top:0px;'>
-                  <div class='modal-content'>
-                      <div class='modal-header'>
-                          <div class='modal-title' id='view_themes_screensLabel'>$langAvailableThemes</div>
-                          <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
-                      </div>
-                      <div class='modal-body'>
-                          <div class='row row-cols-1 g-4'>";
-                                  foreach($dir_themes_images as $image) {
-                                      $extension = pathinfo($image, PATHINFO_EXTENSION);
-                                      $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
-                                      if(in_array($extension, $imgExtArr)){
-                                          $tool_content .= "
-                                              <div class='col-lg-8 col-md-10 m-auto py-4'>
-                                                  <div class='card panelCard h-100'>
-                                                      <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='../template/modern/images/screenshots/$image' alt='Image for current theme'/>
-                                                      <div class='card-footer'>
-                                                          <p> " . strtok($image, '.') . " </p>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          ";
-                                      }
-                                  }
-          $tool_content .= "
+  foreach($dir_themes_images as $image) {
+          $extension = pathinfo($image, PATHINFO_EXTENSION);
+          $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
+          if(in_array($extension, $imgExtArr)) {
+              $theme_images .= "
+                  <div class='col-lg-8 col-md-10 m-auto py-4'>
+                      <div class='card panelCard h-100'>
+                          <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='../template/modern/images/screenshots/$image' alt='Image for current theme'/>
+                          <div class='card-footer'>
+                              <p> " . strtok($image, '.') . " </p>
                           </div>
                       </div>
-                  </div>
-              </div>
-          </div>";
-          draw($tool_content);
-}
-
-// step 6 email settings
-elseif (isset($_POST['install6'])) {
-    $langStepTitle = $langEmailSettings;
-    $langStep = sprintf($langStep1, 6, 8);
+                  </div>";
+          }
+      }
+  $data['theme_images'] = $theme_images;
+  $data['theme_selection'] = selection($availableThemes, 'theme_selection', $GLOBALS['theme_selection'], "class='form-select'");
+} elseif (isset($_POST['install6'])) { // step 6 email settings
+    $data['StepTitle'] = $langEmailSettings;
     $_SESSION['step'] = 6;
-    foreach (array('dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
-                   'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
-                   'smtp_username', 'smtp_password', 'sendmail_command') as $name) {
-       $GLOBALS['input_fields'][$name] = true;
-    }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
-       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
-    mail_settings_form();
-    $tool_content .= "
-           <div class='form-group mt-5'>
-             <div class='col-12'>
-               <div class='row'>
-                <div class='col-lg-6 col-12'>
-                  <input type='submit' class='btn cancelAdminBtn w-100' name='install5' value='&laquo; $langPreviousStep'>
-                </div>
-                <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                  <input type='submit' class='btn w-100' name='install7' value='$langNextStep &raquo;'>
-                </div>
-              </div>
-             </div>
-           </div>
-         </fieldset>" .
-         hidden_vars($all_vars) . "
-       </form></div></div>
-       <script>$(function () {" . $mail_form_js . '});</script>';
-    draw($tool_content);
-}
-
-// step 7 last check before install
-elseif (isset($_POST['install7'])) {
-    $langStepTitle = $langLastCheck;
-    $langStep = sprintf($langStep1, 7, 8);
+} elseif (isset($_POST['install7'])) {// step 7 last check before install
+    $data['StepTitle'] = $langLastCheck;
     $_SESSION['step'] = 7;
 
     switch ($eclass_stud_reg) {
@@ -557,70 +350,26 @@ elseif (isset($_POST['install7'])) {
         case '2': $disable_eclass_stud_reg_info = $langDisableEclassStudRegNo;
                     break;
     }
+    $data['available_theme'] = $availableThemes[$GLOBALS['theme_selection']];
 
-    $head_content = "
-    <script type='text/javascript'>
-        $(function() {
-            $('#install6').on( 'click', function() {
-                bootbox.dialog({
-                  closeButton: false,
-                  message:  '<div><p>$langInstallMsg</p></div>'+
-                            '<div class=\"progress\">'+
-                                '<div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 100%\">'+
-                                  '<span class=\"sr-only\">$langCheckNotOk1</span>'+
-                                '</div>'+
-                            '</div>',
-                  title: '$langCheckNotOk1'
-                });
-            });
-        });
-    </script>
-    ";
-    $tool_content .= "
-    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langReviewSettings</span></div>
-       <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>" .
-           display_entry(q($dbHostForm), $langdbhost) .
-           display_entry(q($dbUsernameForm), $langDBLogin) .
-           display_entry(q($dbNameForm), $langMainDB) .
-           display_entry(q($urlForm), $langSiteUrl) .
-           display_entry(q($emailForm), $langAdminEmail) .
-           display_entry(q($nameForm), $langAdminName) .
-           display_entry(q($loginForm), $langAdminLogin) .
-           display_entry(q($passForm), $langAdminPass) .
-           display_entry(q($campusForm), $langCampusName) .
-           display_entry(q($helpdeskForm), $langHelpDeskPhone) .
-           display_entry(q($helpdeskmail), $langHelpDeskEmail) .
-           display_entry(q($institutionForm), $langInstituteShortName) .
-           display_entry(q($institutionUrlForm), $langInstituteName) .
-           display_entry(q($disable_eclass_stud_reg_info), $langDisableEclassStudRegType) .
-           display_entry(nl2br(q($postaddressForm)), $langInstitutePostAddress) .
-           display_entry(q($homepage_intro), $langHomePageIntroTextHelp) .
-           display_entry(q($availableThemes[$theme_selection]), $langActiveTheme) ."
-           <div class='form-group mt-5'>
-             <div class='col-12'>
-              <div class='row'>
-                <div class='col-lg-5 col-12'>
-                  <input type='submit' class='btn cancelAdminBtn w-100' name='install6' value='&laquo; $langPreviousStep'>
-                </div>
-                <div class='col-lg-7 col-12 mt-lg-0 mt-3'>
-                 <input type='submit' class='btn w-100' name='install8' id='install8' value='$langInstall &raquo;'>
-                </div>
-              </div>
-             </div>                        
-           </div>
-         </fieldset>" . hidden_vars($all_vars) . "</form>";
-
-    draw($tool_content, null, $head_content);
-}
-
-// step 8 installation successful
-elseif (isset($_POST['install8'])) {
-    // database creation
-    $langStepTitle = $langInstallEnd;
-    $langStep = sprintf($langStep1, 8, 8);
+} elseif (isset($_POST['install8'])) { // step 8 install db
+    $data['StepTitle'] = $langInstallEnd;
     $_SESSION['step'] = 8;
+
+    foreach ($all_vars as $name) {
+        if (isset($_POST[$name])) {
+            $name = $_POST[$name];
+        } else {
+            $name = '';
+        }
+    }
+
+    $mysqlServer = $dbHostForm;
+    $mysqlUser = $dbUsernameForm;
+    $mysqlPassword = $dbPassForm;
     $mysqlMainDb = $dbNameForm;
+    $phpSysInfoURL = $_POST['dbMyAdmin'];
+
     $active_ui_languages = 'el en';
 
     // create main database
@@ -633,11 +382,11 @@ elseif (isset($_POST['install8'])) {
     set_config('dont_display_open_courses', 1);
     set_config('dont_display_texts', 1);
     set_config('dont_display_login_form', 0);
-    $selectedTheme = Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s',$availableThemes[$_POST['theme_selection']]);
-    if($selectedTheme){
-      $selectedThemeId = $selectedTheme->id;
-    }else{
-      $selectedThemeId = 0;
+    $selectedTheme = Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', $availableThemes[$_POST['theme_selection']]);
+    if($selectedTheme) {
+        $selectedThemeId = $selectedTheme->id;
+    } else {
+        $selectedThemeId = 0;
     }
     set_config('theme_options_id', $selectedThemeId);
     set_config('homepage_intro', $_POST['homepage_intro']);
@@ -659,10 +408,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 ';
     $fd = @fopen('config/config.php', 'w');
     if (!$fd) {
-        $config_dir = dirname(__DIR__) . '/config';
-        $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
-                "<p class='info'>" . sprintf($langErrorConfigAlt, $config_dir) .
-                "</p><pre class='config'>" . q($stringConfig) . "</pre>";
+        $data['config_dir'] = dirname(__DIR__) . '/config';
+        $data['config_error'] = true;
     } else {
         // write to file
         fwrite($fd, $stringConfig);
@@ -685,132 +432,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 "Base URL: $urlForm\n" .
                 "Admin username: $loginForm\n" .
                 "Admin password: $passForm\n");
-        } else {
-            $tool_content .= "
-                <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langInstallSuccess</span></div>
-                <br>
-                <div>$langProtect</div>
-                <br /><br />
-                <form action='../'><input class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' type='submit' value='$langEnterFirstTime' /></form>";
         }
-
     }
     $_SESSION['langswitch'] = $lang;
-    draw($tool_content);
 }
 
-// step 1 requirements
-elseif (isset($_POST['install1'])) {
-    $langStepTitle = $langRequirements;
-    $langStep = sprintf($langStep1, 1, 7);
-    $_SESSION['step'] = 1;
-    $configErrorExists = false;
+$data['installer_menu'] = installer_menu();
 
-
-    create_directories();
-
-
-    if ($configErrorExists) {
-      $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . implode('', $errorContent) . "</span></div>" .
-      "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</span></div>";
-        draw($tool_content);
-        exit();
-    }
-
-    $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-body'><form class='form-wrapper' action='$_SERVER[SCRIPT_NAME]' method='post'>
-    <h3>$langCheckReq</h3>";
-
-    $tool_content .= "<ul class='list-group list-group-flush'>
-        <li class='list-group-item element'>" . icon('fa-check') . " <strong>Webserver</strong> <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>
-    </ul>";
-
-    $tool_content .= "<ul class='list-group list-group-flush'>";
-    $tool_content .= "<strong>$langPHPVersion</strong>";
-    checkPHPVersion('8.0');
-    $tool_content .= "</ul>";
-    $tool_content .= "<h3>$langRequiredPHP</h3>";
-    $tool_content .= "<ul class='list-group list-group-flush'>";
-
-    warnIfExtNotLoaded('pdo_mysql');
-    warnIfExtNotLoaded('gd');
-    warnIfExtNotLoaded('mbstring');
-    warnIfExtNotLoaded('xml');
-    warnIfExtNotLoaded('zlib');
-    warnIfExtNotLoaded('pcre');
-    warnIfExtNotLoaded('curl');
-    warnIfExtNotLoaded('zip');
-    warnIfExtNotLoaded('intl');
-    $tool_content .= "</ul><h5 class='control-label-notes'>$langOptionalPHP</h5>";
-    $tool_content .= "<ul class='list-group list-group-flush'>";
-    warnIfExtNotLoaded('soap');
-    warnIfExtNotLoaded('ldap');
-    $tool_content .= "</ul>";
-    if (ini_get('register_globals')) { // check if register globals is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
-    }
-    if (ini_get('short_open_tag')) { // check if short_open_tag is Off
-        $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
-    }
-    $tool_content .= "
-    <p class='sub_title1'>$langOtherReq</p>
-    <ul class='installBullet'>
-    <li>$langInstallBullet1</li>
-    <li>$langInstallBullet3</li>
-    </ul>
-    <div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
-    <div class='smaller'>$langBeforeInstall2<a href='$readme_file' target=_blank>$langHere</a>.</div></div><br />
-    <div class='col-12 d-flex justify-content-center mt-5'><input type='submit' class='btn w-100' name='install2' value='$langNextStep &raquo;' /></div>" .
-            hidden_vars($all_vars) . "</form></div></div>\n";
-    draw($tool_content);
-} elseif (!$autoinstall) {
-    $langLanguages = array(
-        'el' => 'Ελληνικά (el)',
-        'en' => 'English (en)');
-
-    $tool_content .= "
-    <div class='row'>
-      <div class='col-sm-12 text-center'>        
-        <h3 class='mt-3'>$langWelcomeWizard</h3>
-        <div class='col-12 col-md-6 m-auto d-block mt-3'>
-          <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-              <h3>$langThisWizard</h3>
-            </div>
-            <div class='card-body'>
-              <ul class='list-group list-group-flush'>
-                  <li class='list-group-item element text-start'>$langWizardHelp1</li>
-                  <li class='list-group-item element text-start'>$langWizardHelp2</li>
-                  <li class='list-group-item element text-start'>$langWizardHelp3</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class='col-12 col-md-6 m-auto d-block mt-3'>
-          <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-body'>
-              <form class='form-horizontal form-wrapper' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-                <fieldset>
-                  <legend class='mb-0' aria-label='$langForm'></legend>
-                  <div class='form-group'>
-                    <label for='lang' class='col-sm-12 control-label-notes text-start'>$langChooseLang:</label>
-                    <div class='col-sm-12'>" . selection($langLanguages, 'lang', $lang, 'class="form-control" onChange=\"document.langform.submit();\"') . "</div>
-                  </div>
-                  <div class='form-group mt-4'>
-                    <div class='col-12'>
-                      <input type='submit' class='btn w-100' name='install1' value='$langNextStep &raquo;'>
-                      <input type='hidden' name='welcomeScreen' value='true'>
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>";
-    draw($tool_content, array('no-menu' => true));
-}
+echo $blade->make('index', $data)->render();
 
 function get_base_path() {
     $path = dirname(dirname(__FILE__));
@@ -821,44 +450,53 @@ function get_base_path() {
     }
 }
 
-// Create config, courses directories etc.
-function create_directories() {
-    mkdir_try('config');
-    touch_try('config/index.php');
-    mkdir_try('storage');
-    mkdir_try('storage/views');
-    mkdir_try('courses');
-    touch_try('courses/index.php');
-    mkdir_try('courses/temp');
-    touch_try('courses/temp/index.php');
-    mkdir_try('courses/temp/pdf');
-    mkdir_try('courses/userimg');
-    touch_try('courses/userimg/index.php');
-    mkdir_try('courses/faculytimg');
-    mkdir_try('courses/commondocs');
-    touch_try('courses/commondocs/index.php');
-    mkdir_try('video');
-    touch_try('video/index.php');
-    mkdir_try('courses/user_progress_data');
-    mkdir_try('courses/user_progress_data/cert_templates');
-    touch_try('courses/user_progress_data/cert_templates/index.php');
-    mkdir_try('courses/user_progress_data/badge_templates');
-    touch_try('courses/user_progress_data/badge_templates/index.php');
-    mkdir_try('courses/eportfolio');
-    touch_try('courses/eportfolio/index.php');
-    mkdir_try('courses/eportfolio/userbios');
-    touch_try('courses/eportfolio/userbios/index.php');
-    mkdir_try('courses/eportfolio/work_submissions');
-    touch_try('courses/eportfolio/work_submissions/index.php');
-    mkdir_try('courses/eportfolio/mydocs');
-    touch_try('courses/eportfolio/mydocs/index.php');
+/**
+ * @brief transfer global variables
+ * @param $names
+ * @param $form_parameters
+ * @return string
+ */
+function hidden_vars($names, $form_parameters = []) {
+    $out = '';
+    foreach ($names as $name) {
+        if (isset($GLOBALS[$name]) and !(in_array($name, $form_parameters))) {
+            $out .= "<input type='hidden' name='$name' value='" . $GLOBALS[$name] . "'>";
+        }
+    }
+    return $out;
 }
 
-function getenv_default($name, $default) {
-    $value = getenv($name);
-    if ($value === false) {
-        return $default;
-    } else {
-        return $value;
+
+/**
+ * @brief display right menu
+ * @return string
+ */
+function installer_menu()
+{
+    global $langRequirements, $langLicense, $langDBSetting, $langBasicCfgSetting,
+    $langThemeSettings, $langEmailSettings, $langLastCheck, $langInstallEnd;
+
+    $step_messages = [
+                      1 => $langRequirements,
+                      2 => $langLicense,
+                      3 => $langDBSetting,
+                      4 => $langBasicCfgSetting,
+                      5 => $langThemeSettings,
+                      6 => $langEmailSettings,
+                      7 => $langLastCheck,
+                      8 => $langInstallEnd
+                    ];
+
+    $menu = '';
+    foreach ($step_messages as $step => $title) {
+        if (isset($_SESSION['step']) and $step == $_SESSION['step']) {
+            $class = 'active';
+        } else {
+            $class = '';
+        }
+        $menu .= "<a href='#' class='list-group-item $class'>";
+        $menu .= "<span>$title</span>";
+        $menu .= "</a>";
     }
+    return $menu;
 }

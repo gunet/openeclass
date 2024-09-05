@@ -4282,40 +4282,38 @@ function my_dirname($path) {
 /**
  * @brief check PHP version
  * @param $version
- * @return void
+ * @return string
  */
 function checkPHPVersion($version) {
 
-    global $tool_content;
-
     if (version_compare(PHP_VERSION, $version) > 0) {
-        $tool_content .= "<li class='list-group-item element'>" . icon('fa-check') . " " . PHP_VERSION . "</li>";
+        $content = "<li class='list-group-item element'>" . icon('fa-check') . " " . PHP_VERSION . "</li>";
     } else {
-        $tool_content .= "<li class='list-group-item element text-danger'>" . icon('fa-xmark') . " " . PHP_VERSION . "</li>";
+        $content = "<li class='list-group-item element text-danger'>" . icon('fa-xmark') . " " . PHP_VERSION . "</li>";
     }
-
+    return $content;
 }
 
-/*
- * check extension and  write  if exist  in a  <LI></LI>
- * @params string       $extensionName  name  of  php extension to be checked
- * @params boolean      $echoWhenOk     true => show ok when  extension exist
- * @author Christophe Gesche
- * @desc check extension and  write  if exist  in a  <LI></LI>
+
+/**
+ * @brief check if given PHP extension is installed
+ * @param $extensionName
+ * @return string
  */
 function warnIfExtNotLoaded($extensionName) {
 
-    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
+    global $langModuleNotInstalled, $langReadHelp, $langHere;
 
     if (extension_loaded($extensionName)) {
-        $tool_content .= '<li class="list-group-item element">' . icon('fa-check') . ' ' . $extensionName . '</li>';
+        $content = '<li class="list-group-item element">' . icon('fa-check') . ' ' . $extensionName . '</li>';
     } else {
-        $tool_content .= "
+        $content = "
                 <li class='list-group-item element text-danger'>" . icon('fa-xmark') . " $extensionName
-                <b>$langModuleNotInstalled</b>
+                <strong>$langModuleNotInstalled</strong>
                 (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
                 </li>";
     }
+    return $content;
 }
 
 

@@ -416,26 +416,26 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     $tool_content .= "<div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langPHPVersion</h3></div><div class='card-body'>";
     $tool_content .= "<ul class='list-group list-group-flush'>";
-    checkPHPVersion('8.0');
+    $tool_content .= checkPHPVersion('8.0');
     $tool_content .= "</ul>";
     $tool_content .= "</div></div></div>";
     $tool_content .= "<div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langRequiredPHP</h3></div><div class='card-body'>";
     $tool_content .= "<ul class='list-group list-group-flush'>";
-    warnIfExtNotLoaded('pdo_mysql');
-    warnIfExtNotLoaded('gd');
-    warnIfExtNotLoaded('mbstring');
-    warnIfExtNotLoaded('xml');
-    warnIfExtNotLoaded('zlib');
-    warnIfExtNotLoaded('pcre');
-    warnIfExtNotLoaded('curl');
-    warnIfExtNotLoaded('zip');
-    warnIfExtNotLoaded('intl');
+    $tool_content .= warnIfExtNotLoaded('pdo_mysql');
+    $tool_content .= warnIfExtNotLoaded('gd');
+    $tool_content .= warnIfExtNotLoaded('mbstring');
+    $tool_content .= warnIfExtNotLoaded('xml');
+    $tool_content .= warnIfExtNotLoaded('zlib');
+    $tool_content .= warnIfExtNotLoaded('pcre');
+    $tool_content .= warnIfExtNotLoaded('curl');
+    $tool_content .= warnIfExtNotLoaded('zip');
+    $tool_content .= warnIfExtNotLoaded('intl');
     $tool_content .= "</ul></div></div></div><div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langOptionalPHP</h3></div><div class='card-body'>";
     $tool_content .= "<ul class='list-group list-group-flush'>";
-    warnIfExtNotLoaded('soap');
-    warnIfExtNotLoaded('ldap');
+    $tool_content .= warnIfExtNotLoaded('soap');
+    $tool_content .= warnIfExtNotLoaded('ldap');
     $tool_content .= "</ul></div></div></div>";
     $tool_content .= "</div>";
 
@@ -448,7 +448,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         if (get_config('email_transport', 'mail') == 'mail' and
                 !get_config('email_announce')) {
             $head_content .= '<script>$(function () {' . $mail_form_js . '});</script>';
-            mail_settings_form();
+            $tool_content .= mail_settings_form();
         }
 
         setGlobalContactInfo();
