@@ -363,8 +363,8 @@ function build_notification_callback(type) {
         courseIDs.forEach(function (id) {
           var notifications = data.notifications_courses[id]
           if (notifications) {
-            $('#notificationCard' + id).find('.lesson-notifications').html(notifications.notification_content);
-            $('#notification' + id).find('.lesson-notifications').html(notifications.notification_content);
+            $('#notificationCard' + id).find(selector).html(notifications.notification_content);
+            $('#notification' + id).find(selector).html(notifications.notification_content);
             if (notifications.notifications_exist) {
               $('#btnNotificationCards_' + id).removeClass('d-none').show();
               $('#btnNotification_'+id).removeClass('invisible');
