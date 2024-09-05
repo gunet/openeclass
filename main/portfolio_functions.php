@@ -522,7 +522,7 @@ function getUserMessages() {
             $message_content .= "<li class='list-group-item element'>
                                         <div class='text-title TextBold'>
                                             <span>$langFrom:</span>
-                                            <span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span>
+                                            <span>".display_user($message->author_id, false, false)."</span>
                                         </div>
 
                                         <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>

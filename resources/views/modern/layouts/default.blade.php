@@ -123,10 +123,7 @@
 </head>
 
 <body>
-
     <div class="ContentEclass d-flex flex-column min-vh-100 @if($pinned_announce_id > 0 && !isset($_COOKIE['CookieNotification'])) fixed-announcement @endif">
-
-        <!-- important announcement -->
         @if($pinned_announce_id > 0 && !empty($pinned_announce_title) && !empty($pinned_announce_body))
             @if(!isset($_COOKIE['CookieNotification']))
                 <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
@@ -145,25 +142,15 @@
                 </div>
             @endif
         @endif
-
-        <!-- Header -->
         @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
-
-         <!-- Main content -->
-         <main id="main">@yield('content')</main>
-
-        <!-- Footer -->
+        <main id="main">@yield('content')</main>
         @include('layouts.partials.footerDesktop')
     </div>
-
-
     @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
-        <!-- Quick note -->
         <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
             <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
                     data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
         </a>
-
         <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -199,9 +186,6 @@
             </div>
         </div>
     @endif
-
-
-    <!-- For accessibility -->
     <script>
         $(function() {
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
@@ -227,6 +211,5 @@
             $(".sp-input-container .sp-input").attr("aria-label","{{ trans('langOptForColor') }}");
         });
     </script>
-
  </body>
 </html>

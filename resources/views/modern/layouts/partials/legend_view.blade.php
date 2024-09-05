@@ -10,8 +10,8 @@
 @endphp
 
 @if(!isset($_GET['fromFlipped']))
-    <h1 aria-label="@if($pageName) {{ $pageName }} @elseif($course_code) {{ trans('langCourse') }} @else {{ $uname }} @endif"></h1>
-    <h2 aria-label="{{ trans('langThePageIs')}} @if($pageName) {{ $pageName }} @elseif($course_code) {{ trans('langCourse') }} @else {{ $uname }} @endif"></h2>
+    <h1 aria-label="@if($course_code) {{ trans('langCourse') }} : {{ $currentCourseName }} @elseif($pageTitle) {{ $pageTitle }} @endif"></h1>
+    <h2 aria-label="@if($course_code) {{ trans('langCode') }} : {{ $course_code }} @elseif($pageName) {{ trans('langThePageIs') }} {{ $pageName }} @elseif($toolName) {{ trans('langThePageIs') }} {{ $toolName }} @endif"></h2>
     <div class='col-12 mt-4'>
         <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
             <div class='flex-grow-1'>

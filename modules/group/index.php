@@ -619,7 +619,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link' href='javascript:void(0);' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -628,7 +628,7 @@ if ($is_editor) {
                                                                 if($i==1) {
                                                                     $tool_content .="
                                                                         <li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                            <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                            <a id='Keypage$i' class='page-link'>$i</a>
                                                                         </li>
                         
                                                                         <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
@@ -637,7 +637,7 @@ if ($is_editor) {
                                                                 } else {
                                                                     if($i<$pagesPag){
                                                                         $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                            <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                            <a id='Keypage$i' class='page-link'>$i</a>
                                                                                         </li>";
                                                                     }
                                                                 }
@@ -645,7 +645,7 @@ if ($is_editor) {
 
                                                             if($i>=6 && $i<=$pagesPag-1){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages d-none'>
-                                                                                    <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                    <a id='Keypage$i' class='page-link'>$i</a>
                                                                                 </li>";
 
                                                                 if($i==$pagesPag-1){
@@ -657,7 +657,7 @@ if ($is_editor) {
 
                                                             if($i==$pagesPag){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                    <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                    <a id='Keypage$i' class='page-link'>$i</a>
                                                                                 </li>";
                                                             }
                                                         }
@@ -665,13 +665,13 @@ if ($is_editor) {
                                                     } else {
                                                         for($i=1; $i<=$pagesPag; $i++){
                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                <a id='Keypage$i' class='page-link'>$i</a>
                                                                             </li>";
                                                         }
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link' href='javascript:void(0);' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -830,7 +830,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -839,7 +839,7 @@ if ($is_editor) {
                                                                 if($i==1){
                                                                     $tool_content .="
                                                                         <li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                            <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                            <a id='Keypage$i' class='page-link'>$i</a>
                                                                         </li>
                         
                                                                         <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
@@ -848,7 +848,7 @@ if ($is_editor) {
                                                                 }else{
                                                                     if($i<$pagesPag){
                                                                         $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                            <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                            <a id='Keypage$i' class='page-link'>$i</a>
                                                                                         </li>";
                                                                     }
                                                                 }
@@ -856,7 +856,7 @@ if ($is_editor) {
 
                                                             if($i>=6 && $i<=$pagesPag-1){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages d-none'>
-                                                                                    <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                    <a id='Keypage$i' class='page-link'>$i</a>
                                                                                 </li>";
 
                                                                 if($i==$pagesPag-1){
@@ -868,7 +868,7 @@ if ($is_editor) {
 
                                                             if($i==$pagesPag){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                    <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                    <a id='Keypage$i' class='page-link'>$i</a>
                                                                                 </li>";
                                                             }
                                                         }
@@ -876,13 +876,13 @@ if ($is_editor) {
                                                     }else{
                                                         for($i=1; $i<=$pagesPag; $i++){
                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
-                                                                                <a id='Keypage$i' class='page-link' href='javascript:void(0);'>$i</a>
+                                                                                <a id='Keypage$i' class='page-link'>$i</a>
                                                                             </li>";
                                                         }
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>
