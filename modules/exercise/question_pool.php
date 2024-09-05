@@ -438,7 +438,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             }
             $tool_content .= "
                 <td>
-                  <div class='float-end small not_visible d-none'>id: {$row->id}</div>
+                  <h6 class='float-end fw-lighter'>id: {$row->id}</></h6>
                   <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
                   $question_excl_legend<br>
                   <small>$question_type_legend $question_difficulty_legend $question_category_legend $question_excl_legend_2 $exercises_used_in</small>

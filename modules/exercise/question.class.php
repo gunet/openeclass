@@ -153,11 +153,11 @@ if (!class_exists('Question')) {
                    $langQuestionDifficult, $langQuestionVeryDifficult;
 
             switch($difficulty) {
-                case 1: return icon('fa-smile-o', $langQuestionVeryEasy);
-                case 2: return icon('fa-smile-o', $langQuestionEasy);
-                case 3: return icon('fa-meh-o', $langQuestionModerate);
-                case 4: return icon('fa-frown-o', $langQuestionDifficult);
-                case 5: return icon('fa-fire', $langQuestionVeryDifficult);
+                case 1: return icon('fa-regular fa-face-smile', $langQuestionVeryEasy);
+                case 2: return icon('fa-regular fa-face-smile-wink', $langQuestionEasy);
+                case 3: return icon('fa-regular fa-face-meh-blank', $langQuestionModerate);
+                case 4: return icon('fa-regular fa-face-frown', $langQuestionDifficult);
+                case 5: return icon('fa-solid fa-fire', $langQuestionVeryDifficult);
             }
         }
 
