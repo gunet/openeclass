@@ -1048,9 +1048,13 @@ $tool_content .= "
                                 </div>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-center align-items-start'>
+                        <div class='d-flex justify-content-center align-items-start flex-wrap gap-4'>
                             <figure class='figure'>
-                                <img src='$urlServer/template/modern/images/theme_settings/general.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <img src='$urlServer/template/modern/images/theme_settings/general_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/general_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
                                 <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                             </figure>
                         </div>
@@ -1317,19 +1321,29 @@ $tool_content .= "
             <!-- PROGRESSBAR SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsProgressBar'>
                 <div class='form-wrapper form-edit rounded'>
-                    <h3 class='theme_options_legend text-decoration-underline'>$langSettingsProgressBar</h3>
-                    <p>($langInfoProgressBar)</p>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BackProgressBar' class='control-label-notes mb-2 me-2'>$langBackProgressBar:</label>
-                        <input name='BackProgressBar' type='text' class='form-control colorpicker' id='BackProgressBar' value='$theme_options_styles[BackProgressBar]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgProgressBar' class='control-label-notes mb-2 me-2'>$langBgProgressBar:</label>
-                        <input name='BgProgressBar' type='text' class='form-control colorpicker' id='BgProgressBar' value='$theme_options_styles[BgProgressBar]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgColorProgressBarAndText' class='control-label-notes mb-2 me-2'>$langBgColorProgressBarAndText:</label>
-                        <input name='BgColorProgressBarAndText' type='text' class='form-control colorpicker' id='BgColorProgressBarAndText' value='$theme_options_styles[BgColorProgressBarAndText]'>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline'>$langSettingsProgressBar</h3>
+                            <p>($langInfoProgressBar)</p>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BackProgressBar' class='control-label-notes mb-2 me-2'>$langBackProgressBar:</label>
+                                <input name='BackProgressBar' type='text' class='form-control colorpicker' id='BackProgressBar' value='$theme_options_styles[BackProgressBar]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgProgressBar' class='control-label-notes mb-2 me-2'>$langBgProgressBar:</label>
+                                <input name='BgProgressBar' type='text' class='form-control colorpicker' id='BgProgressBar' value='$theme_options_styles[BgProgressBar]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgColorProgressBarAndText' class='control-label-notes mb-2 me-2'>$langBgColorProgressBarAndText:</label>
+                                <input name='BgColorProgressBarAndText' type='text' class='form-control colorpicker' id='BgColorProgressBarAndText' value='$theme_options_styles[BgColorProgressBarAndText]'>
+                            </div>
+                        </div>
+                        <div class='d-flex justify-content-center align-items-start gap-3 flex-wrap'>
+                            <figure class='figure'>
+                                <img src='$urlServer/template/modern/images/theme_settings/progressbar.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                            </figure>
+                        </div>
                     </div>
                 </div>
             </div>
