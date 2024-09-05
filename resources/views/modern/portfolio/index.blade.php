@@ -754,7 +754,7 @@
                                                     <nav aria-label='Page navigation w-100'>
                                                         <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                             <li class='page-item page-item-previous'>
-                                                                <a class='page-link' href='javascript:void(0);' aria-label="{{ trans('langPreviousPage') }}"><span class='fa-solid fa-chevron-left'></span></a>
+                                                                <a class='page-link' aria-label="{{ trans('langPreviousPage') }}"><span class='fa-solid fa-chevron-left'></span></a>
                                                             </li>
                                                             @if($pagesPag >=12 )
                                                                 @for($i=1; $i<=$pagesPag; $i++)
@@ -762,7 +762,7 @@
                                                                     @if($i>=1 && $i<=5)
                                                                         @if($i==1)
                                                                             <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                                <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
+                                                                                <a id='Keypage{{$i}}' class='page-link' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
                                                                             </li>
 
                                                                             <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
@@ -771,7 +771,7 @@
                                                                         @else
                                                                             @if($i<$pagesPag)
                                                                                 <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                                    <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
+                                                                                    <a id='Keypage{{$i}}' class='page-link' aria-label="{{ trans('langWikiNumberOfPages')}}">{{$i}}</a>
                                                                                 </li>
                                                                             @endif
                                                                         @endif
@@ -779,7 +779,7 @@
 
                                                                     @if($i>=6 && $i<=$pagesPag-1)
                                                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages d-none'>
-                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
+                                                                            <a id='Keypage{{$i}}' class='page-link' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
                                                                         </li>
 
                                                                         @if($i==$pagesPag-1)
@@ -791,7 +791,7 @@
 
                                                                     @if($i==$pagesPag)
                                                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
+                                                                            <a id='Keypage{{$i}}' class='page-link' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
                                                                         </li>
                                                                     @endif
                                                                 @endfor
@@ -799,13 +799,13 @@
                                                             @else
                                                                 @for($i=1; $i<=$pagesPag; $i++)
                                                                     <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                        <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
+                                                                        <a id='Keypage{{$i}}' class='page-link' aria-label="{{ trans('langWikiNumberOfPages')}} {{$i}}">{{$i}}</a>
                                                                     </li>
                                                                 @endfor
                                                             @endif
 
                                                             <li class='page-item page-item-next'>
-                                                                <a class='page-link' href='javascript:void(0);' aria-label="{{ trans('langNextPage') }}"><span class='fa-solid fa-chevron-right'></span></a>
+                                                                <a class='page-link' aria-label="{{ trans('langNextPage') }}"><span class='fa-solid fa-chevron-right'></span></a>
                                                             </li>
                                                         </ul>
                                                     </nav>

@@ -675,7 +675,7 @@
                                                 @if ($is_editor)
                                                     <div class='card statistics-card drop-shadow'>
                                                         <div class='card-body d-flex justify-content-center align-items-center'>
-                                                            <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
+                                                            <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true' aria-label="{{ trans('langTotalPercentCompleteness') }}">
                                                                 @if ($percentage_t == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else
@@ -693,7 +693,7 @@
                                                 @else
                                                     <div class='card statistics-card drop-shadow'>
                                                         <div class='card-body d-flex justify-content-center align-items-center'>
-                                                            <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
+                                                            <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}' aria-label="{{ trans('langTotalPercentCompleteness') }}">
                                                                 @if ($percentage == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else

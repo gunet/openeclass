@@ -266,7 +266,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                 <nav role='navigation' aria-label='Pagination Navigation'>
                     <ul class='pagination mycourses-pagination w-100 mb-0'>
                         <li class='page-item page-item-previous'>
-                            <a class='page-link' href='javascript:void(0);' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
+                            <a class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
                         </li>";
                         if($pagesPag >=12 ){
                             for($i=1; $i<=$pagesPag; $i++){
@@ -274,7 +274,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                                 if($i>=1 && $i<=5){
                                     if($i==1){
                                         $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                            <a id='Keypage{$i}' class='page-link' href='javascript:void(0);'>{$i}</a>
+                                            <a id='Keypage{$i}' class='page-link'>{$i}</a>
                                         </li>
 
                                         <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
@@ -283,7 +283,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                                     }else{
                                         if($i<$pagesPag){
                                             $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                                <a id='Keypage{$i}' class='page-link' href='javascript:void(0);'>{$i}</a>
+                                                <a id='Keypage{$i}' class='page-link'>{$i}</a>
                                             </li>";
                                         }
                                     }
@@ -291,7 +291,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                                 if($i>=6 && $i<=$pagesPag-1){
                                     $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages d-none'>
-                                        <a id='Keypage{$i}' class='page-link' href='javascript:void(0);'>{$i}</a>
+                                        <a id='Keypage{$i}' class='page-link'>{$i}</a>
                                     </li>";
 
                                     if($i==$pagesPag-1){
@@ -303,7 +303,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                                 if($i==$pagesPag){
                                     $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                        <a id='Keypage{$i}' class='page-link' href='javascript:void(0);'>{$i}</a>
+                                        <a id='Keypage{$i}' class='page-link'>{$i}</a>
                                     </li>";
                                 }
                             }
@@ -311,13 +311,13 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         }else{
                             for($i=1; $i<=$pagesPag; $i++){
                                 $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                    <a id='Keypage{$i}' class='page-link' href='javascript:void(0);'>{$i}</a>
+                                    <a id='Keypage{$i}' class='page-link'>{$i}</a>
                                 </li>";
                             }
                         }
 
                         $pagination .=" <li class='page-item page-item-next'>
-                            <a class='page-link' href='javascript:void(0);' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
+                            <a class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
                         </li>
                     </ul>
                 </nav>

@@ -167,7 +167,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         }
         
         $response[0] = 'succes';
-        $response[1] = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';
+        $response[1] = '<p>'.$langAbuseReportSaveSuccess.'</p>';
     }
     
     echo json_encode($response);

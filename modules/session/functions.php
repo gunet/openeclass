@@ -3410,7 +3410,7 @@ function session_completed_resources_by_user($sid,$cid,$user){
                 }
 
             }
-            $html .= "<div class='resource_item' style='margin-bottom:5px;'>$resource_info</div>";
+            $html .= "<div class='resource_item' style='margin-bottom:5px;'>$resource_info<div class='bottom-split'></div></div>";
         }
         $html .= "</div>";
     }
