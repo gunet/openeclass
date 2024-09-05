@@ -255,7 +255,7 @@ function getUserCourseInfo($uid): string
                                     <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                                         &nbsp;(" . q($data->public_code) . ")
                                     </a>
-                                    <a id='btnNotification_{$data->course_id}' class='btn btn-notification-collaboration text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
+                                    <a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-collaboration text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
                                                     role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                         <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                     </a>
