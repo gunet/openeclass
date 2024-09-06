@@ -1238,7 +1238,7 @@ function edit_assignment($id) {
  * @param type $on_behalf_of
  */
 function submit_work($id, $on_behalf_of = null) {
-    global $course_id, $uid, $langOnBehalfOfGroupComment,
+    global $course_id, $uid, $unit, $langOnBehalfOfGroupComment,
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeInvalidFileType, $langExerciseNotPermit, $langNoFileUploaded,
