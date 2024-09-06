@@ -160,7 +160,7 @@ function render_profile_fields_form($context, $valitron = false) {
                             //$placeholder = 'placeholder="'.$langCompulsory.'"';
                             $helpBlock = '<em>'.$langCompulsory.'</em>';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
+                        $return_string .= '<input id="'.$f->shortname.'" class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
                         $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_TEXTAREA:
