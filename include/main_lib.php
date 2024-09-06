@@ -2359,6 +2359,7 @@ tinymce.init({
     ],
     $filebrowser
     menu: true,
+    menubar: false,
     // Toolbar options
     toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview',
     toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome strikethrough superscript subscript table $copy_paste| removeformat | searchreplace undo redo | code'
