@@ -189,7 +189,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         $td[$i++] = format_locale_date($msg->timestamp, 'short');
         $btn_class = ($mbox_type == 'inbox')? 'delete_in' : 'delete_out';
-        $td[$i++] = "<a href='javascript:void(0)' class='$btn_class link-delete' data-id='$msg->id'><span class='fa-solid fa-xmark' style='padding-top:8px; font-size:1.2em;'></span></a>";
+        $td[$i++] = "<a href='javascript:void(0)' aria-label='$langDelete' class='$btn_class link-delete' data-id='$msg->id'><span class='fa-solid fa-xmark' style='padding-top:8px; font-size:1.2em;'></span></a>";
 
         if ($course_id == 0) {
             $data['aaData'][] = array(
