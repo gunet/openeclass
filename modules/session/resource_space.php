@@ -275,8 +275,10 @@ if(isset($_POST['add_comment'])){
     $emailbody = $emailHeader.$emailMain;
 
     $emailPlainBody = html2text($emailbody);
-    $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['for_user_id'])->email;
-    send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+    if(get_user_email_notification($_POST['for_user_id'])){
+        $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['for_user_id'])->email;
+        send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+    }
 
     Session::flash('message',$langAddCommentsSuccess);
     Session::flash('alert-class', 'alert-success');

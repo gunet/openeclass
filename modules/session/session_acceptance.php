@@ -98,7 +98,9 @@ if(isset($_POST['submit'])){
 
       $emailPlainBody = html2text($emailbody);
 
-      send_mail_multipart('', '', '', $emailConsultant, $emailsubject, $emailPlainBody, $emailbody);
+      if(get_user_email_notification($consultant_id)){
+        send_mail_multipart('', '', '', $emailConsultant, $emailsubject, $emailPlainBody, $emailbody);
+      }
 
       Session::flash('message',$langProcessCompleted);
       Session::flash('alert-class', 'alert-success');

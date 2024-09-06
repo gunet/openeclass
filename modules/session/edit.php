@@ -308,15 +308,19 @@ if(isset($_POST['modify'])){
       if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
         if(count($willSendEmail) > 0){
           foreach($willSendEmail as $m){
-            $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
-            send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+            if(get_user_email_notification($m)){
+              $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+              send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+            }
           }
         }
       }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
         if(count($willSendEmail) > 0){
           foreach($willSendEmail as $m){
-            $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
-            send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+            if(get_user_email_notification($m)){
+              $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+              send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+            }
           }
         }
       }
