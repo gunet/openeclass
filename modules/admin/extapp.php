@@ -32,7 +32,6 @@ $toolName = $langExtAppConfig;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 load_js('validation.js');
-$available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 $data['appName'] = $appName = $_GET['edit'] ?? null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page

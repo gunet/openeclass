@@ -29,7 +29,6 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 // code from extapp.php
 

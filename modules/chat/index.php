@@ -56,8 +56,6 @@ $head_content .= "<script type='text/javascript'>
     });
 </script>";
 
-$available_themes = active_subdirs("$webDir/template", 'theme.html');
-
 if ($is_editor) {
     if (isset($_GET['visible'])) {
         if ($_GET['visible'] == 1) {

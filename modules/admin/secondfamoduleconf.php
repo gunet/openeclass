@@ -31,8 +31,6 @@ $nameTools = $langSFAadd;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
-$available_themes = active_subdirs("$webDir/template", 'theme.html');
-
 // Scan the connectors directory and locate the appropriate classes
 $data['connectorClasses'] = secondfaApp::getsecondfaServices();
 if (isset($_POST['submit'])) {
