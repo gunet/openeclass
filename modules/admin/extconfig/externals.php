@@ -180,7 +180,7 @@ abstract class ExtApp {
     public abstract function getLongDescription();
 
     public function getAppIcon() {
-        return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
+        return $this->getBaseURL() . "resources/icons/" . $this->getName() . ".png";
     }
 
     public function update_tc_sessions($type) {

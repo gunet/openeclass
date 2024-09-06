@@ -30,13 +30,13 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div id="loaderBooking" class="modal fade in" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-body bg-transparent d-flex justify-content-center align-items-center">
-                                    <img src='{{ $urlAppend }}template/modern/img/ajax-loader.gif' alt='Loading'>
+                                    <img src='{{ $urlAppend }}resources/img/ajax-loader.gif' alt='Loading'>
                                     <span>{{ trans('langPlsWait') }}</span>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-12 mt-3 bookings-content">
                         <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                             <div class='card-body'>
@@ -81,7 +81,7 @@
                     <input type="hidden" id="course_Id" value="{{ $course_id }}">
                     <input type="hidden" id="tutor_Id" value="{{ $tutor_id_for_booking }}">
                     <input type="hidden" id="group_Id" value="{{ $group_id }}">
-                   
+
                 </div>
             </div>
         </div>
@@ -115,7 +115,7 @@
 
 
                 var timee = element.find( '.fc-time span' );
-                
+
                 element.popover({
                     title: timee[0].innerText+event.title,
                     trigger: 'hover',
@@ -126,12 +126,12 @@
                 });
 
             },
-            eventClick:  function(event) { 
+            eventClick:  function(event) {
                 start = moment(event.start).format('YYYY-MM-DD HH:mm');
                 end = moment(event.end).format('YYYY-MM-DD HH:mm');
-                
+
                 if(event.className == 'bookingAdd'){
-                    
+
                     if(confirm("{{ js_escape(trans('langdobookingwithtutor')) }}")){
                         var startTime = start;
                         var endTime = end;
@@ -141,7 +141,7 @@
                         var group_id = $('#group_Id').val();
 
                         $('#loaderBooking').modal('toggle');
-                        
+
                         $.ajax({
                             url: '{{ $urlAppend }}modules/group/booking_create_delete.php',
                             data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime+'&tutor_Id='+user_id+'&course_Id='+course_Id+'&group_Id='+group_id,
@@ -158,19 +158,19 @@
                                     alert("{{ js_escape(trans('langTutorHasRemovedTheDate')) }}");
                                     window.location.reload();
                                 }
-                                
+
                             },
                             error:function(error){
                                 console.log(error)
                             },
                         });
-                        
+
                     }
 
                 }
-                   
+
                 if(event.className == 'bookingDelete'){
-                   
+
                     var id = event.id;
                     if(confirm("{{ js_escape(trans('langdelbookingwithtutor')) }}")){
                         $('#loaderBooking').modal('toggle');
@@ -183,13 +183,13 @@
                                 if(json == 1){
                                     alert("{{ js_escape(trans('langDeleteBookingSuccess')) }}");
                                     window.location.reload();
-                                }    
+                                }
                             },
                             error:function(error){
                                 console.log(error)
                             },
                         });
-                        
+
                     }
                 }
             }

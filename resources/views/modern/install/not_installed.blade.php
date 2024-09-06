@@ -11,7 +11,7 @@
             <div id="header_section" class="row">
                 <div class="col-12 nav-container">
                     <a href='' class="navbar-brand">
-                        <img style="margin-top: 25px; max-width: 350px;" class="img-responsive hidden-md hidden-lg ms-2" src="../template/modern/img/eclass-new-logo.svg" alt=''>
+                        <img style="margin-top: 25px; max-width: 350px;" class="img-responsive hidden-md hidden-lg ms-2" src="../resources/img/eclass-new-logo.svg" alt=''>
                     </a>
                 </div>
             </div>

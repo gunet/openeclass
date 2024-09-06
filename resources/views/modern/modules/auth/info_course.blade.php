@@ -20,7 +20,7 @@
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="col-md-4 col d-flex justify-content-center justify-content-md-start">
                                 @if($c->course_image == NULL)
-                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ trans('langImageSelected') }}" />
+                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langImageSelected') }}" />
                                 @else
                                     <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}courses/{{ $c->code }}/image/{{ $c->course_image }}" alt="{{ trans('langImageSelected') }}" />
                                 @endif
@@ -35,7 +35,7 @@
                                             {!! copyright_info($c->id) !!}
                                         @endif
                                     </div>
-                                    
+
 
                                     <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;- &nbsp;{!! $c->prof_names !!}</p>
 
@@ -60,7 +60,7 @@
 
                                     <div class='col-12 mt-4 d-flex justify-content-md-end justify-content-center'>
                                         <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/index.php'>
-                                            
+
                                             @if($c->is_collaborative)
                                                 {{ trans('langPageCollaboration')}}
                                             @else

@@ -20,7 +20,7 @@
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             <div class='col-12'>
                 <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -223,7 +223,7 @@
                                     @foreach ($cert_completed as $key => $certificate)
                                         <div class='col'>
                                             <div class="card h-100 border-0">
-                                                <img style='height:150px; width:150px;' src="{{ $urlServer }}template/modern/img/game/badge.png" class="card-img-top ms-auto me-auto mt-3" alt="certificate">
+                                                <img style='height:150px; width:150px;' src="{{ $urlServer }}resources/img/game/badge.png" class="card-img-top ms-auto me-auto mt-3" alt="certificate">
                                                 <div class="card-body">
                                                     <a href='../out.php?i={{ $certificate->identifier }}'>
                                                         <h4 class='certificate_panel_title text-center'>

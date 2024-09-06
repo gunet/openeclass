@@ -37,7 +37,7 @@
                 'class': 'form-control input-sm ms-0 mb-3',
                 'placeholder': '{{ trans('langSearch') }}...'
             });
-            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
+            $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
         });
 
     </script>
@@ -63,12 +63,12 @@
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             @if($showUsers)
                 @if(count($user_teachers) > 0)
                     <div class='col-12'>
-                        
+
                             <table id="all_users_booking" class='table-default'>
                                 <thead>
                                     <tr>
@@ -92,7 +92,7 @@
                                                 @endif
                                             </td>
                                             <td class='text-end'>
-                                                <a class='btn submitAdminBtn d-inline-flex text-decoration-none' 
+                                                <a class='btn submitAdminBtn d-inline-flex text-decoration-none'
                                                     href="{{ $_SERVER['SCRIPT_NAME'] }}?uBook={{ $u->id }}&amp;bookWith=1&amp;do_booking=1">
                                                         {{ trans('langDoBooking')}}
                                                 </a>
@@ -102,14 +102,14 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        
+
                     </div>
                 @else
                     <div class='col-12'>
                         <div class='alert alert-warning'>
                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoInfoAvailable') }}</span>
                         </div>
-                    </div>       
+                    </div>
                 @endif
             @else
 
@@ -117,7 +117,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-body bg-transparent d-flex justify-content-center align-items-center">
-                                <img src='{{ $urlAppend }}template/modern/img/ajax-loader.gif' alt='Loading'>
+                                <img src='{{ $urlAppend }}resources/img/ajax-loader.gif' alt='Loading'>
                                 <span>{{ trans('langPlsWait') }}</span>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                         </div>
                     </div>
                 </div>
-                    
+
                 <div class="col-12 mt-3 bookings-content">
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-body'>
@@ -161,14 +161,14 @@
                 <input type="hidden" id="startTime">
                 <input type="hidden" id="endTime">
                 <input type="hidden" id="tutor_Id" value="{{ $tutor_id }}">
-                 
+
             @endif
-            
-           
+
+
 
 
         </div>
-      
+
     </div>
 </div>
 
@@ -200,7 +200,7 @@
 
 
                     var timee = element.find( '.fc-time span' );
-                    
+
                     element.popover({
                         title: timee[0].innerText+event.title,
                         trigger: 'hover',
@@ -211,12 +211,12 @@
                     });
 
                 },
-                eventClick:  function(event) { 
+                eventClick:  function(event) {
                     start = moment(event.start).format('YYYY-MM-DD HH:mm');
                     end = moment(event.end).format('YYYY-MM-DD HH:mm');
-                    
+
                     if(event.className == 'bookingAdd'){
-                        
+
                         if(confirm("{{ js_escape(trans('langdobookingwithtutor')) }}")){
                             var startTime = start;
                             var endTime = end;
@@ -225,7 +225,7 @@
 
 
                             $('#loaderBooking').modal('toggle');
-                            
+
                             $.ajax({
                                 url: '{{ $urlAppend }}main/profile/book_create_delete.php',
                                 data: 'action=add&title='+title+'&start='+startTime+'&end='+endTime+'&tutor_Id='+user_id,
@@ -245,19 +245,19 @@
                                         alert("{{ js_escape(trans('ThereIsABookingWithTheSameSlot')) }}");
                                         window.location.reload();
                                     }
-                                    
+
                                 },
                                 error:function(error){
                                     console.log(error)
                                 },
                             });
-                            
+
                         }
 
                     }
-                    
+
                     if(event.className == 'bookingDelete'){
-                    
+
                         var id = event.id;
                         if(confirm("{{ js_escape(trans('langdelbookingwithtutor')) }}")){
                             $('#loaderBooking').modal('toggle');
@@ -270,13 +270,13 @@
                                     if(json == 1){
                                         alert("{{ js_escape(trans('langDeleteBookingSuccess')) }}");
                                         window.location.reload();
-                                    }    
+                                    }
                                 },
                                 error:function(error){
                                     console.log(error)
                                 },
                             });
-                            
+
                         }
                     }
                 }

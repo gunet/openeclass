@@ -133,7 +133,7 @@ function getUserCourseInfo($uid): string
                                         <div class='course-content mt-4'>
                                             <div class='col-12 d-flex justify-content-center align-items-start'>";
                 if($data->course_image == NULL) {
-                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='$langCourseImage' />";
+                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}resources/img/ph1.jpg' alt='$langCourseImage' />";
                 } else {
                     $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='$langCourseImage' />";
                 }
@@ -297,7 +297,7 @@ function getUserCourseInfo($uid): string
                                             <div class='course-content mt-4'>
                                                 <div class='col-12 d-flex justify-content-center align-items-start'>";
                     if($data->course_image == NULL) {
-                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='$langCourseImage' />";
+                        $lesson_content .= "<img class='openCourseImg' src='{$urlServer}resources/img/ph1.jpg' alt='$langCourseImage' />";
                     } else {
                         $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='$langCourseImage' />";
                     }

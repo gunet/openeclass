@@ -138,7 +138,7 @@ function display_message($message) {
                 <div class='row'>
                     <div class='col-12 text-center'>
                         <div style='padding-top: 10px; padding-bottom: 10px;'>
-                            <img style = 'filter: invert(100%);' src='{$urlServer}template/modern/img/logo_eclass.png' alt=''>
+                            <img style = 'filter: invert(100%);' src='{$urlServer}resources/img/logo_eclass.png' alt=''>
                         </div>                        
                         <div class='panel-body'>
                             <div class='alert alert-warning'>

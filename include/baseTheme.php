@@ -294,7 +294,7 @@ function view($view_file, $view_data = array()) {
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $logo_img_small = $themeimg.'/eclass-new-logo.svg';
     $loginIMG = $themeimg.'/loginIMG.png';
-    $favicon_img = $urlAppend . 'template/modern/favicon/openeclass_128x128.png';
+    $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
 
     //////////////////////////////////////////  Theme creation  ///////////////////////////////////////////////
 
@@ -5129,7 +5129,7 @@ function view($view_file, $view_data = array()) {
 
                 .tree-units summary::before,
                 .tree-sessions summary::before{
-                    background: $theme_options_styles[linkColor] url($urlServer/template/modern/img/units-expand-collapse.svg) 0 0;
+                    background: $theme_options_styles[linkColor] url($urlServer/resources/img/units-expand-collapse.svg) 0 0;
                 }
 
                 .prev-next-learningPath{

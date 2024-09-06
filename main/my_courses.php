@@ -110,7 +110,7 @@ if(isset($_GET['term'])){
                                 if(!empty($course->course_image)){
                                     $courseImage = "{$urlServer}courses/{$course->code}/image/{$course->course_image}";
                                 }else{
-                                    $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
+                                    $courseImage = "{$urlServer}resources/img/ph1.jpg";
                                 }
 
                       $html .= "<div class='card-header border-0'>

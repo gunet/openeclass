@@ -35,7 +35,7 @@
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                     @endif
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
                         <h1>{{ $toolName }}</h1>
@@ -120,7 +120,7 @@
                                                                 <div class='course-content mt-4'>
                                                                     <div class='col-12 d-flex justify-content-center align-items-start'>
                                                                         @if($mycourse->img == NULL)
-                                                                            <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
+                                                                            <img class='openCourseImg' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
                                                                         @else
                                                                             <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ trans('langCourseImage') }}" /></a>
                                                                         @endif

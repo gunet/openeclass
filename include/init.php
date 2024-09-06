@@ -246,7 +246,8 @@ if (get_config('maintenance') == 1 ) {
 }
 
 $theme = $_SESSION['theme'] = get_config('theme');
-$themeimg = $urlAppend . 'template/' . $theme . '/img';
+//$themeimg = $urlAppend . 'template/' . $theme . '/img';
+$themeimg = $urlAppend . 'resources/img';
 if (file_exists("template/$theme/settings.php")) {
     require_once "template/$theme/settings.php";
 }
@@ -862,7 +863,7 @@ $tool_content = $head_content = '';
 $tinymce_color_text = '#687DA3';
 get_tinymce_color_text();
 
-// Regarding the course reviewer in a session 
+// Regarding the course reviewer in a session
 if(isset($is_collaborative_course) and $is_collaborative_course){
     if($is_coordinator){
         $is_course_reviewer = true;

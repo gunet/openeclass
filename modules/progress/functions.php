@@ -2329,7 +2329,7 @@ function certificate_settings($element, $element_id = 0) {
     global $tool_content, $head_content, $course_code,
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
-           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, 
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline,
            $urlServer, $urlAppend, $langImgFormsDes, $langSelect;
 
     load_js('bootstrap-datetimepicker');
@@ -2739,7 +2739,7 @@ function student_view_progress() {
                         <i class='fa fa-check-circle fa-inverse state_success'></i>
                     </div>
                     <div class='col-sm-12 d-flex justify-content-center ertificate_panel_badge mt-3'>
-                        <img src='" . $urlServer . "template/modern/img/game/badge.png' width='100' height='100'>
+                        <img src='" . $urlServer . "resources/img/game/badge.png' width='100' height='100'>
                     </div>";
                     $tool_content .= "</div>";
                 } else {
