@@ -254,8 +254,6 @@ if ($autoinstall) {
     $_POST['install7'] = true; // Move to final installation steps
 }
 
-$data['autoinstall'] = $autoinstall;
-
 if (isset($_POST['install1'])) { // step 1 requirements
     $data['StepTitle'] = $langRequirements;
     $_SESSION['step'] = 1;
