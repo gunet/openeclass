@@ -274,7 +274,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "      <th>$langRecipients</th>
                    <th style='width:15%;'>$langDate</th>
-                   <th style='width:10%;'><i class='fa fa-cogs'></i></th>
+                   <th style='width:10%;' aria-label='$langDelete'><i class='fa fa-cogs'></i></th>
                  </tr>
                </thead>
                <tbody>
