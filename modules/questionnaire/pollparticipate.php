@@ -121,7 +121,7 @@ function printPollForm() {
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5, $langDescription, $langSelect;
+    $pageName, $lang_rate1, $lang_rate5, $langDescription, $langSelect, $typeyourmessage;
 
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     $head_content .= "
@@ -308,7 +308,7 @@ function printPollForm() {
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>
                             <div class='col-sm-12 margin-top-thin'>
-                                <textarea class='form-control' name='answer[$pqid]'></textarea>
+                                <textarea class='form-control' name='answer[$pqid]' aria-label='$typeyourmessage'></textarea>
                             </div>
                         </div>";
                 }

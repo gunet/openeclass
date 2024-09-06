@@ -189,13 +189,15 @@ if(isset($_POST['submit'])){
 
         $emailPlainBody = html2text($emailbody);
 
-        if(isset($_POST['session_type']) and $_POST['session_type']=='one'){
+        if(isset($_POST['session_type']) and $_POST['session_type']=='one' and get_user_email_notification($_POST['one_participant'])){
           $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$_POST['one_participant'])->email;
           send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
         }elseif(isset($_POST['session_type']) and $_POST['session_type']=='group'){
           foreach($_POST['many_participants'] as $m){
-            $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
-            send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+            if(get_user_email_notification($m)){
+              $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id = ?d",$m)->email;
+              send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+            }
           }
         }
       }

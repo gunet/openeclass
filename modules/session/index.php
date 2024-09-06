@@ -98,7 +98,9 @@ if(isset($_POST['user_registration'])){
   
         $emailPlainBody = html2text($emailbody);
   
-        send_mail_multipart('', '', '', $emailConsultant, $emailsubject, $emailPlainBody, $emailbody);
+        if(get_user_email_notification($consultant_id)){
+            send_mail_multipart('', '', '', $emailConsultant, $emailsubject, $emailPlainBody, $emailbody);
+        }
 
         Session::flash('message',$langCompleteRegistration);
         Session::flash('alert-class', 'alert-success');
