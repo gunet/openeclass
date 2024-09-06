@@ -85,7 +85,7 @@ foreach ($q as $l) {
 $Position = '';
 $PositionForm = 'd-lg-block';
 $themeId = get_config('theme_options_id');
-$login_img = $urlAppend . 'template/modern/img/loginIMG.png';
+$login_img = $urlAppend . 'resources/img/loginIMG.png';
 if($themeId > 0) {
   $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $themeId);
   $theme_options_styles = unserialize($theme_options->styles);

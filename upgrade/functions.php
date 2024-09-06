@@ -272,7 +272,7 @@ function installTheme($themesDir, $file_name) {
  * @brief install ready to use certificate templates
  */
 function installCertTemplates($root_dir) {
-    $cert_default_dir = $root_dir . "/template/modern/img/game";
+    $cert_default_dir = $root_dir . "/resources/img/game";
     foreach (glob("$cert_default_dir/*.zip") as $zipfile) {
         $archive = new ZipArchive;
         if (!$archive->open($zipfile) or !$archive->extractTo($root_dir . CERT_TEMPLATE_PATH)) {
@@ -292,7 +292,7 @@ function installCertTemplates($root_dir) {
  * install ready to use badge icons
  */
 function installBadgeIcons($root_dir) {
-    $cert_default_dir = $root_dir . "/template/modern/img/game";
+    $cert_default_dir = $root_dir . "/resources/img/game";
     foreach (glob("$cert_default_dir/*.png") as $icon) {
         $iconname = preg_replace('|.*/(.*)\.png|', '$1', $icon);
         $filename = $iconname . '.png';

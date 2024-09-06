@@ -3680,7 +3680,7 @@ body .delThemeBtn{
 }
 
 .card-login-img{
-  background: url(../img/loginIMG.png);
+  background: url(../../../resources/img/loginIMG.png);
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: 50% 50% !important;
@@ -3688,7 +3688,7 @@ body .delThemeBtn{
 }
 
 .card-manual-img{
-  background: url(../img/manuals.jpeg);
+  background: url(../../../resources/img/manuals.jpeg);
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: 50% 50% !important;
@@ -4730,7 +4730,7 @@ body .delThemeBtn{
 .tree-units summary::before,
 .tree-sessions summary::before{
   z-index    : 1;
-  background : #0073E6 url('../img/units-expand-collapse.svg') 0 0;
+  background : #0073E6 url('../../../resources/img/units-expand-collapse.svg') 0 0;
 }
 
 .tree-units details[open] > summary::before,

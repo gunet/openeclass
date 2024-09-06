@@ -135,7 +135,7 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
             $newData = $bladeData;
             $newData['urlAppend'] .= '../';
             $newData['template_base'] = $newData['urlAppend'] . 'template/modern';
-            $newData['themeimg'] = $newData['urlAppend'] . 'template/modern/img';
+            $newData['themeimg'] = $newData['urlAppend'] . 'resources/img';
             if (!empty($theme_data['logo_img'])) {
                 $newData['logo_img'] = $newData['urlAppend'] . $theme_data['logo_img'];
             } else {
@@ -188,16 +188,16 @@ function offline_announcements($bladeData) {
 
     $bladeData['urlAppend'] = '../';
     $bladeData['template_base'] = '../template/modern';
-    $bladeData['themeimg'] = '../template/modern/img';
+    $bladeData['themeimg'] = '../resources/img';
     if (!empty($theme_data['logo_img'])) {
         $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
     } else {
-        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
     }
     if (!empty($theme_data['logo_img_small'])) {
         $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
     } else {
-        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
     }
 
     $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
@@ -221,16 +221,16 @@ function offline_announcements($bladeData) {
         foreach ($announcements as $a) {
             $bladeData['urlAppend'] = '../../';
             $bladeData['template_base'] = '../../template/modern';
-            $bladeData['themeimg'] = '../../template/modern/img';
+            $bladeData['themeimg'] = '../../resources/img';
             if (!empty($theme_data['logo_img'])) {
                 $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
             } else {
-                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
             }
             if (!empty($theme_data['logo_img_small'])) {
                 $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
             } else {
-                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
             }
             $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
             $bladeData['ann_title'] = $a->title;
@@ -308,16 +308,16 @@ function offline_unit_resources($bladeData, $downloadDir) {
 
     $bladeData['urlAppend'] = '../../';
     $bladeData['template_base'] = '../../template/modern';
-    $bladeData['themeimg'] = '../../template/modern/img';
+    $bladeData['themeimg'] = '../../resources/img';
     if (!empty($theme_data['logo_img'])) {
         $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
     } else {
-        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
     }
     if (!empty($theme_data['logo_img_small'])) {
         $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
     } else {
-        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
     }
     $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
@@ -400,16 +400,16 @@ function offline_exercises($bladeData) {
         foreach ($exercises as $e) {
             $bladeData['urlAppend'] = '../../';
             $bladeData['template_base'] = '../../template/modern';
-            $bladeData['themeimg'] = '../../template/modern/img';
+            $bladeData['themeimg'] = '../../resources/img';
             if (!empty($theme_data['logo_img'])) {
                 $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
             } else {
-                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
             }
             if (!empty($theme_data['logo_img_small'])) {
                 $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
             } else {
-                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.svg';
+                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'resources/img/eclass-new-logo.svg';
             }
             $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
@@ -1051,7 +1051,7 @@ function get_theme_options() {
         }else{
             $styles_str .= " 
                 #bgr-cheat-header{ box-shadow: 1px 2px 6px rgba(43,57,68,0.04); }
-            "; 
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -1318,7 +1318,7 @@ function get_theme_options() {
                     padding-left: 0px;
                     padding-right: 0px;
                 }
-            "; 
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -1985,7 +1985,7 @@ function get_theme_options() {
  
             ";
         }
-  
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////// USERNAME COLOR CONTEXTUAL MENU /////////////////////////
@@ -2107,7 +2107,7 @@ function get_theme_options() {
             ";
         }
 
-        
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////////// BACKGROUND COLOR TO CHECKBOX COMPONENT ///////////////////////
@@ -2780,7 +2780,7 @@ function get_theme_options() {
         ////////////////////////// LABEL COLOR IN FORM COMPONENT /////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clLabelForms'])){
             $styles_str .= "
                 form label,
@@ -2794,14 +2794,14 @@ function get_theme_options() {
                 }
             ";
         }
-        
-            
+
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////// BACKGROUND COLOR TO MODAL COMPONONENT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgModal'])){
             $styles_str .= "
                 .bootbox.show .bootbox-close-button{
@@ -2830,7 +2830,7 @@ function get_theme_options() {
         /////////////////////// BORDER COLOR TO MODAL COMPONONENT ///////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clBorderModal'])){
             $styles_str .= "
                 .modal-content {
@@ -2847,7 +2847,7 @@ function get_theme_options() {
         ///////////////////////// TEXT COLOR TO MODAL COMPONONENT ///////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clTextModal'])){
             $styles_str .= "
                 .bootbox.show .modal-header .modal-title, 
@@ -2884,7 +2884,7 @@ function get_theme_options() {
         //////////////////// BACKGROUND COLOR TO AGENDA COMPONONENT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['bgAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar,
@@ -2994,7 +2994,7 @@ function get_theme_options() {
         /////////////////// BACKGROUND COLOR TO OF AGENDA'S HEADER //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgColorHeaderAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar .panel-heading, 
@@ -3109,7 +3109,7 @@ function get_theme_options() {
         //////////////////////// TEXT COLOR OF AGENDA'S HEADER //////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clColorHeaderAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar .panel-heading, #cal-header {
@@ -3202,7 +3202,7 @@ function get_theme_options() {
         ///////////////////////// TEXT COLOR OF AGENDA'S BODY ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['clColorBodyAgenda'])){
             $styles_str .= "
             
@@ -3273,7 +3273,7 @@ function get_theme_options() {
         /////////////////////// BORDER COLOR TO AGENDA COMPONENT ////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgBorderColorAgenda'])){
             $styles_str .= "
                 .panel-admin-calendar,
@@ -3305,7 +3305,7 @@ function get_theme_options() {
         ////////////////// BACKGROUND HOVERED COLOR TO AGENDA COMPONENT /////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['bgColorHoveredBodyAgenda'])){
             $styles_str .= "
                 .datetimepicker-years .table-condensed thead tr th:hover,
@@ -3381,7 +3381,7 @@ function get_theme_options() {
         //////////////////// BACKGROUND COLOR TO ACTIVE DATETIME SLOT ///////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['bgColorActiveDateTime'])){
             $styles_str .= "
                 .datetimepicker table tr td span.active:active, 
@@ -3437,7 +3437,7 @@ function get_theme_options() {
         //////////////////////// TEXT COLOR TO ACTIVE DATETIME SLOT /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['TextColorActiveDateTime'])){
             $styles_str .= "
                 .datetimepicker table tr td span.active:active, 
@@ -3983,7 +3983,7 @@ function get_theme_options() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) && 
+        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) &&
                             !empty($theme_options_styles['BgColorProgressBarAndText'])){
 
             $styles_str .= "
@@ -4217,7 +4217,7 @@ function get_theme_options() {
 
 
                 .tree-units summary::before {
-                    background: $theme_options_styles[linkColor] url(../../template/modern/img/units-expand-collapse.svg) 0 0;
+                    background: $theme_options_styles[linkColor] url(../../resources/img/units-expand-collapse.svg) 0 0;
                 }
 
                 .prev-next-learningPath{
@@ -4905,7 +4905,7 @@ function get_theme_options() {
 
         if(!empty($theme_options_styles['view_platform']) && $theme_options_styles['view_platform'] == 'boxed'){
 
-            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1200px');    
+            $maxWidthPlatform = (isset($theme_options_styles['fluidContainerWidth']) ? "$theme_options_styles[fluidContainerWidth]px" : '1200px');
             $styles_str .= "
 
                 @media (min-width: 992px) {
@@ -4962,8 +4962,8 @@ function get_theme_options() {
 
         $data['styles'] = $styles_str;
 
-        
+
     }
-    
+
     return $data;
 }

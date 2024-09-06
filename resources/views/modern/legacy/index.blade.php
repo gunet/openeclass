@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-  
+
 <div class="col-12 main-section">
 <div class="{{ $container }} @if($course_code and $currentCourseName and !isset($_GET['fromFlipped'])) module-container py-lg-0 @else main-container @endif">
     <div class="@if($course_code and $currentCourseName and !isset($_GET['fromFlipped'])) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
@@ -16,21 +16,21 @@
             <div class="col-12">
         @endif
                 <div class="row">
-                
+
                     @if(isset($_SESSION['uid']))
-                        
+
                              @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                        
+
                     @else
-                        
+
                             @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']))
                                 <nav class="me-lg-0 me-2">
                                     <a class="btn d-lg-none p-0" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
-                                        <img src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' alt="Open Course Tools"/>
+                                        <img src='{{ $urlAppend }}resources/img/Icons_menu-collapse.svg' alt="Open Course Tools"/>
                                     </a>
                                 </nav>
                             @endif
-                        
+
                     @endif
 
                     @if($course_code and $currentCourseName)
@@ -43,13 +43,13 @@
                         </div>
                     </div>
                     @endif
-                    
+
                     @include('layouts.partials.legend_view')
 
-                    @include('layouts.partials.show_alert') 
-                    
+                    @include('layouts.partials.show_alert')
+
                     <div class='col-12'>{!! $tool_content !!}</div>
-                </div>    
+                </div>
         </div>
     </div>
 </div>

@@ -6,16 +6,16 @@
 <link href="../template/modern/css/font-awesome-6.4.0/css/all.css?v=4.0-dev" rel="stylesheet"/>
 <link rel="stylesheet" href="../template/modern/css/default.css">
 <!-- fav icons -->
-<link rel="shortcut icon" href="../template/modern/favicon/favicon.ico" />
-<link rel="apple-touch-icon-precomposed" href="../template/modern/favicon/openeclass_128x128.png" />
-<link rel="icon" type="image/png" href="../template/modern/favicon/openeclass_128x128.png" />
+<link rel="shortcut icon" href="../resources/favicon/favicon.ico" />
+<link rel="apple-touch-icon-precomposed" href="../resources/favicon/openeclass_128x128.png" />
+<link rel="icon" type="image/png" href="../resources/favicon/openeclass_128x128.png" />
 
 <div class="d-flex flex-column min-vh-100 container-lg bg-light">
     <div class="header_container bg-light d-flex justify-content-center align-items-center">
         <div id="header_section" class="row">
             <div class="col-12 nav-container pt-3 pb-0">
                 <a href='' class="navbar-brand">
-                    <img style="margin-top: 25px; max-width: 350px;" class="img-responsive hidden-md hidden-lg ms-2" src="../template/modern/img/eclass-new-logo.svg" alt=''>
+                    <img style="margin-top: 25px; max-width: 350px;" class="img-responsive hidden-md hidden-lg ms-2" src="../resources/img/eclass-new-logo.svg" alt=''>
                 </a>
             </div>
         </div>

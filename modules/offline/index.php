@@ -73,8 +73,8 @@ $real_filename = remove_filename_unsafe_chars($public_code . '-offline.zip');
 /////////////////////////////
 // generic and course data //
 /////////////////////////////
-$logo_img = "./template/modern/img/eclass-new-logo.svg";
-$logo_img_small = "./template/modern/img/eclass-new-logo.svg";
+$logo_img = "./resources/img/eclass-new-logo.svg";
+$logo_img_small = "./resources/img/eclass-new-logo.svg";
 
 $theme_data = get_theme_options();
 
@@ -179,7 +179,7 @@ mkdir($downloadDir . '/modules');
 $bladeData['lessonStatus'] = '../../';
 $bladeData['urlAppend'] = '../';
 $bladeData['template_base'] = $bladeData['urlAppend'] . 'template/modern';
-$bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/modern/img';
+$bladeData['themeimg'] = $bladeData['urlAppend'] . 'resources/img';
 
 if (!empty($theme_data['logo_img'])) {
     $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];

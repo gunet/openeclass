@@ -205,7 +205,7 @@ function profile_init() {
         if (confirm(lang.confirmDelete)) {
             var delBtn = $(this).closest("div");
             delBtn.find('span').remove();
-            $("img.user-icon-filename").attr("src", urlAppend + "template/modern/img/default_32.png");
+            $("img.user-icon-filename").attr("src", urlAppend + "resources/img/default_32.png");
             $.post('profile.php', { delimage: true });
         }
     });

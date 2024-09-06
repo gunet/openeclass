@@ -663,12 +663,12 @@
                                                                         if(!empty($course->course_image)){
                                                                             $courseImage = "{$urlServer}courses/$course->code/image/$course->course_image";
                                                                         }else{
-                                                                            $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
+                                                                            $courseImage = "{$urlServer}resources/img/ph1.jpg";
                                                                         }
                                                                     @endphp
 
                                                                     @if($course->course_image == NULL)
-                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" />
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" />
                                                                     @else
                                                                         <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ trans('langCourseImage') }}" />
                                                                     @endif

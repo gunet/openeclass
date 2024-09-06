@@ -53,10 +53,10 @@
                                                 @if(get_config('enable_mobileapi'))
                                                     <div class='d-flex gap-3 pe-3'>
                                                         <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
-                                                            <img style='width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
+                                                            <img style='width:150px;' src='resources/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
                                                         </a>
                                                         <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
-                                                            <img style='width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Download on the App Store'>
+                                                            <img style='width:150px;' src='resources/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Download on the App Store'>
                                                         </a>
                                                     </div>
                                                 @endif
@@ -387,7 +387,7 @@
                                                                     @if($pop_course->course_image)
                                                                         <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='This is the images of popular course'/>
                                                                     @else
-                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg' alt='This is the images of popular course'/>
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt='This is the images of popular course'/>
                                                                     @endif
                                                                 </a>
                                                                 <div class='card-body'>
