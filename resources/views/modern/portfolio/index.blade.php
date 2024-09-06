@@ -14,7 +14,7 @@
             langTill: '{{ js_escape(trans('langTill')) }}',
             langFrom2: '{{ js_escape(trans('langFrom2')) }}',
             langTotalResults: '{{ js_escape(trans('langTotalResults')) }}',
-            dataTablesDomParam: "{{ get_config('show_always_collaboration')? "<'all_courses float-end px-0'>frtip" : "" }}" };
+            dataTablesDomParam: @if(get_config('show_always_collaboration')) '<"all_courses float-end px-0">frtip' @else '' @endif };
 
         $(function() {
             $('#consentModal').modal('show');
