@@ -76,7 +76,7 @@
                                                 <div class='modal-content'>
                                                     <div class='modal-header'>
                                                         <div class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</div>
-                                                        <button type='button' class='close treeCourseModalClose' aria-label='Close'>
+                                                        <button type='button' class='close treeCourseModalClose' aria-label="{{ trans('langClose') }}">
                                                         </button>
                                                         
                                                     </div>

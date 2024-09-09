@@ -112,7 +112,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
         $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
         $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend, $langImgFormsDes,
-        $langSettingSelect, $langSelect, $langForm;
+        $langSettingSelect, $langSelect, $langForm, $langOpenNewTab;
 
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
@@ -267,7 +267,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'googlemeet') { // google meet
             $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToGoogleMeetLink</span></div>";
-            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToGoogleMeetLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank' aria-label='$langOpenNewTab'>$langGoToGoogleMeetLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
                 <label for='title_id' class='col-12 control-label-notes'>$langLink:</label>
@@ -279,7 +279,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'microsoftteams') { // Microsoft Teams
             $tool_content .= "<div class='alert alert-info'>$langGoToMicrosoftTeamsLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://teams.live.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToMicrosoftTeamsLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://teams.live.com/' target='_blank' aria-label='$langOpenNewTab'>$langGoToMicrosoftTeamsLinkText</a></div>";
 
             $tool_content .= "<div class='form-group mt-4'>
                             <label for='microsoft_teams_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
@@ -311,7 +311,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             } else {
                 if ($hostname != 'zoom') { // zoom url supplied by end user
                     $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
-                    $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToZoomLinkText</a></div>";
+                    $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToZoomLinkText</a></div>";
                 }
                 $tool_content .= "<div class='form-group'>
                     <label for='zoom_link_id' class='col-12 control-label-notes'>$langLink:</label>
@@ -325,7 +325,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         if ($tc_type == 'webex') { // webex
             if ($hostname != 'webex') { // webex url supplied by end user
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
-                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToWebexLinkText</a></div>";
+                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToWebexLinkText</a></div>";
             }
             $tool_content .= "<div class='form-group'>
                 <label for='webex_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
@@ -1335,7 +1335,7 @@ function tc_session_details() {
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
         $langBBBNotServerAvailableTeacher,
         $langBBBImportRecordings, $langAllUsers, $langDuration, $langBBBNoServerForRecording,
-        $langFrom, $langTill, $langBBBHideParticipants, $langSettingSelect;
+        $langFrom, $langTill, $langBBBHideParticipants, $langSettingSelect, $langOpenNewTab;
 
     $options = [];
     if (!is_enabled_tc_server($course_id)) { // check availability
@@ -1443,15 +1443,15 @@ function tc_session_details() {
             if ($canJoin) {
                 if($is_editor) {
                     if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom' or $tc_type == 'webex') {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($title) . "</a>";
                     } else {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank' aria-label='$langOpenNewTab'>" . q($title) . "</a>";
                     }
                 } else {
                     if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom' or $tc_type == 'webex') {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($title) . "</a>";
                     } else {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank' aria-label='$langOpenNewTab'>" . q($title) . "</a>";
                     }
                 }
             } else {

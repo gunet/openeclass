@@ -44,7 +44,7 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <div class='modal-title' id='view_themes_screensLabel'>{{ trans('langAvailableThemes') }}</div>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
             </div>
             <div class='modal-body'>
                 <div class='row row-cols-1 g-4'>

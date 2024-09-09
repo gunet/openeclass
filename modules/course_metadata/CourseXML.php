@@ -182,7 +182,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return string
      */
     private function appendLeafFormField($fullKey, $parent) {
-        global $currentCourseLanguage;
+        global $currentCourseLanguage, $langOpenNewTab;
 
         // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
@@ -217,7 +217,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div class='form-group mt-4'><label $helptitle class='control-label-notes col-12'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
-            $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($keyLbl . $lang) . "</a>";
+            $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($keyLbl . $lang) . "</a>";
         } else {
             $fieldStart .= q($keyLbl . $lang);
         }

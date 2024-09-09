@@ -24,7 +24,7 @@
                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
             @endif
             
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ trans('langClose') }}"></button>
         </div>
     </div>
 @endif

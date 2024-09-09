@@ -583,7 +583,7 @@ jContent;
      * @return string  $html - The returned HTML code
      */
     private function buildHtmlNodePicker($options) {
-        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect, $langClose;
 
         $params = (array_key_exists('params', $options)) ? $options['params'] : '';
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
@@ -645,7 +645,7 @@ jContent;
             <div class="modal-content">
                 <div class="modal-header"> 
                     <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
-                    <button type="button" class="close treeModalClose" aria-label="close"></button>
+                    <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
                    
                 </div>
                 <div class="modal-body">
@@ -725,7 +725,7 @@ jContent;
             <div class="modal-content">
                 <div class="modal-header">
                      <div class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</div>
-                    <button type="button" class="close treeModalClose" aria-label="close"></button>
+                    <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
                    
                 </div>
                 <div class="modal-body">

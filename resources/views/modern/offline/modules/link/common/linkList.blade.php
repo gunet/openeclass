@@ -4,7 +4,7 @@
             $title = empty($data->title) ? $data->url : $data->title;
         ?>
        <td class='nocategory-link'>
-           <a href='{{ $data->url }}' target='_blank' aria-label='(opens in a new tab)'> {{ $title }}
+           <a href='{{ $data->url }}' target='_blank' aria-label="{{ trans('langOpenNewTab') }}"> {{ $title }}
                <i class='fa fa-external-link'></i>
            </a>
        @if (!empty($data->description))

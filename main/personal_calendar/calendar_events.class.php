@@ -1495,7 +1495,7 @@ class Calendar_Events {
    }
 
    public static function small_month_bootstrap_calendar() {
-       global $langNextMonth, $langPreviousMonth, $course_code;
+       global $langNextMonth, $langPreviousMonth, $course_code, $langCurrentMonth;
 
        if($course_code){
             $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
@@ -1507,7 +1507,7 @@ class Calendar_Events {
                                         </div>
                                         <span class='d-none sr-only'>$langPreviousMonth</span>
                                     </button>
-                                    <button id='current-month' type='button' class='btn btn-transparent pe-none' aria-label='Current month'></button>
+                                    <button id='current-month' type='button' class='btn btn-transparent pe-none' aria-label='$langCurrentMonth'></button>
                                     <button type='button' aria-label='$langNextMonth' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='next'>
                                         <div class='btn-calendar-next d-flex justify-content-end align-items-center'>
                                             <i class='fa-solid fa-chevron-right fa-lg'></i>
@@ -1527,7 +1527,7 @@ class Calendar_Events {
                                         </div>
                                         <span class='d-none sr-only'>$langPreviousMonth</span>
                                     </button>
-                                    <button id='current-month' type='button' class='btn btn-transparent pe-none' aria-label='Current month'></button>
+                                    <button id='current-month' type='button' class='btn btn-transparent pe-none' aria-label='$langCurrentMonth'></button>
                                     <button type='button' aria-label='$langNextMonth' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='next'>
                                         <div class='btn-calendar-next d-flex justify-content-end align-items-center'>
                                             <i class='fa-solid fa-chevron-right fa-lg'></i>

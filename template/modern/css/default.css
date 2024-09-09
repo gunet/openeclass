@@ -1846,8 +1846,9 @@ select.form-select {
 }
 
 select.form-select:focus {
-  box-shadow: none;
-  outline: none;
+  /* box-shadow: none;
+  outline: none; */
+  border-color: #0073E6;
   background-color: #ffffff;
 }
 
@@ -5336,4 +5337,15 @@ body:has(.fixed-announcement) .btn-quick-note{
   min-height: 150px;
   max-width: 650px;
   max-height: 500px;
+}
+
+/* For accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline: 0 !important;
+  box-shadow: none !important;
+  border: solid 1px #FBAC66 !important;
 }

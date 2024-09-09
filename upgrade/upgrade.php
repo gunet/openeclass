@@ -508,7 +508,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
             <div class='modal-content'>
                 <div class='modal-header'>
                     <div class='modal-title' id='view_themes_screensLabel'>$langAvailableThemes</div>
-                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'></button>
                 </div>
                 <div class='modal-body'>
                     <div class='row row-cols-1 g-4'>";

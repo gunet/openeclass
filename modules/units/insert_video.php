@@ -28,7 +28,7 @@ require_once 'include/lib/multimediahelper.class.php';
 function list_videos() {
     global $id, $tool_content, $course_id,
             $langVideo, $langDate, $langChoice, $langAddModulesButton,
-            $langNoVideo, $course_code, $langSelect;
+            $langNoVideo, $course_code, $langSelect, $langOpenNewTab;
 
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
@@ -88,7 +88,7 @@ function list_videos() {
                         }
                         $tool_content .= "<tr>";
                         $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
-                        $tool_content .= "<td>" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
+                        $tool_content .= "<td>" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
                         $tool_content .= $linkvideocat_description_text . "</td>";
                         $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";

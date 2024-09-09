@@ -1603,7 +1603,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
 
     global $tool_content, $themeimg, $course_id,
             $langTitle, $langDate, $langChoice,
-            $langAddModulesButton, $langNoVideo, $course_code, $langSelect;
+            $langAddModulesButton, $langNoVideo, $course_code, $langSelect, $langOpenNewTab;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $video_found = FALSE;
@@ -1698,7 +1698,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                     foreach ($sql2 as $linkvideocat) {
                         $linkvideocat_description = empty($linkvideocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($linkvideocat->description). "</div>";
                         $tool_content .= "<tr>";
-                        $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
+                        $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
                         $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'><span class='checkmark'></span></label></td>";
@@ -1730,7 +1730,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
 
   global $course_id, $course_code, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoEBook,
-    $langEBook, $langSelect;
+    $langEBook, $langSelect, $langOpenNewTab;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1820,7 +1820,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
                 }
                 $tool_content .= "<tr>
                                 <td class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
-                                <a href='" . q($surl) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($row->subsection_title) . "</a></td>
+                                <a href='" . q($surl) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($row->subsection_title) . "</a></td>
                                 <td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='subsection[]' value='$ssid' /><span class='checkmark'></span></label>
                                    <input type='hidden' name='subsection_title[$ssid]'
                                           value='" . q($row->subsection_title) . "'></td>

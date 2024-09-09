@@ -42,7 +42,7 @@ function getUserCourseInfo($uid): string
            $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty,
-           $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage;
+           $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage, $langClose;
 
     if(!get_config('show_always_collaboration')){
         $myCourses = $mine_courses = getUserCourses($uid);
@@ -109,7 +109,7 @@ function getUserCourseInfo($uid): string
                             <div class='col-12 portfolio-tools'>
                                 <div class='d-inline-flex'>";
 
-                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
+                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
                                     <i class='fa-solid fa-display'></i>
                                 </a>
 
@@ -126,7 +126,7 @@ function getUserCourseInfo($uid): string
                                                 <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                             </div>
                                             <div>
-                                                <button aria-label='Close' type='button' class='close'></button>
+                                                <button aria-label='$langClose' type='button' class='close'></button>
                                             </div>
 
                                         </div>
@@ -273,7 +273,7 @@ function getUserCourseInfo($uid): string
                                 <div class='col-12 portfolio-tools'>
                                     <div class='d-inline-flex'>";
 
-                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
+                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
                                         <i class='fa-solid fa-display'></i>
                                     </a>
 
@@ -290,7 +290,7 @@ function getUserCourseInfo($uid): string
                                                     <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                                 </div>
                                                 <div>
-                                                    <button aria-label='Close' type='button' class='close'></button>
+                                                    <button aria-label='$langClose' type='button' class='close'></button>
                                                 </div>
 
                                             </div>

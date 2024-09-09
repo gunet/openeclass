@@ -99,7 +99,7 @@ if (isset($_GET['add_course_to_tc'])) {
         }
         $code = course_id_to_code($course_data->course_id);
         $tbl_cnt .= "<tr>";
-        $tbl_cnt .= "<td><a href='{$urlServer}courses/$code/' target='_blank' aria-label='(opens in a new tab)'>" . course_id_to_title($course_data->course_id) . "</a>
+        $tbl_cnt .= "<td><a href='{$urlServer}courses/$code/' target='_blank' aria-label='$langOpenNewTab'>" . course_id_to_title($course_data->course_id) . "</a>
                                     &nbsp;<small>(" . course_id_to_code($course_data->course_id). ")</small>
                                     <div style='margin-top: 5px;'><small>". course_id_to_prof($course_data->course_id) . "</small></div>
                           </td>";

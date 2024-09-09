@@ -25,7 +25,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 
 function list_videos($id = NULL) {
     global $themeimg, $course_id, $langTitle, $langDescription, $langDate,
-    $langChoice, $langCatVideoDirectory, $langNoVideo, $course_code, $langSelect;
+    $langChoice, $langCatVideoDirectory, $langNoVideo, $course_code, $langSelect, $langOpenNewTab;
 
     $ret_string = '';
     $count = 0;
@@ -104,7 +104,7 @@ function list_videos($id = NULL) {
                                 }
                             }
                             $ret_string .= "<tr>";
-                            $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
+                            $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                                     q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
                             $ret_string .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
                             $ret_string .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";

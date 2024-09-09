@@ -3,7 +3,7 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <div class='modal-title' id='consentModalLabel'>{{ trans('langUserConsent') }}</div>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                 
             </div>
             <div class='modal-body' style='margin-left:20px; margin-right:20px;'>

@@ -1326,7 +1326,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
  */
 function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_name) {
 
-    global $is_editor, $langWasDeleted, $course_id;
+    global $is_editor, $langWasDeleted, $course_id, $langOpenNewTab;
 
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
@@ -1343,7 +1343,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
         } else {
             $title = q($title);
         }
-        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='(opens in a new tab)'>";
+        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
         $exlink = $link . "$title</a>";
         $imagelink = icon('fa-link');
     }
@@ -1373,7 +1373,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
  */
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility, $act_name) {
 
-    global $is_editor, $langWasDeleted, $course_id;
+    global $is_editor, $langWasDeleted, $course_id, $langOpenNewTab;
 
     $content = $linkcontent = $comment_box = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
@@ -1403,7 +1403,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             foreach ($sql2 as $l) {
                 $imagelink = icon('fa-link');
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
-                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank' aria-label='(opens in a new tab)'>$ltitle</a>";
+                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank' aria-label='$langOpenNewTab'>$ltitle</a>";
             }
         }
         if (!empty($comments)) {

@@ -225,7 +225,7 @@ $tool_content .= "
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <h3 class='title_reports mb-0'>$langUserReferences</h3>
                             <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                <a class='btn successAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank' aria-label='(opens in a new tab)'>$langDumpPDF</a>
+                                <a class='btn successAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank' aria-label='$langOpenNewTab'>$langDumpPDF</a>
                                 <a class='btn submitAdminBtn docs-pdf-btn gap-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected'>
                                     <i class='fa-solid fa-download'></i>
                                     $langDocsUser

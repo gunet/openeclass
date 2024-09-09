@@ -6,8 +6,7 @@
                 <h3>{{ trans('langNewEclassVersion') }}</h3>
             </div>
             <div class='card-body'>
-                {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
-                            "<a href='https://www.openeclass.org/' aria-label='(opens in a new tab)' target='_blank'>www.openeclass.org</a>") !!}
+                {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>", "<a href='https://www.openeclass.org/' aria-label='trans('langOpenNewTab')' target='_blank'>www.openeclass.org</a>") !!}
             </div>
         </div>
     </div>

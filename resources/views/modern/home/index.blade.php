@@ -11,7 +11,7 @@
                     <div class="modal-content shadow-sm border-0 p-0">
                         <div class="modal-header d-flex justify-content-between align-items-center">
                             <div class="modal-title">{{ trans('langError') }}</div>
-                            <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
+                            <button aria-label="{{ trans('langClose') }}" type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -119,7 +119,7 @@
                                                                                                 <div class='modal-content'>
                                                                                                     <div class='modal-header'>
                                                                                                         <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
-                                                                                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                                                                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class='modal-body'>
@@ -253,7 +253,7 @@
                                                                                                                             {{ trans('langLogin') }}
                                                                                                                         @endif
                                                                                                                     </div>
-                                                                                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                                                                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                                                                                                     </button>
                                                                                                                 </div>
                                                                                                                 <div class='modal-body d-flex justify-content-center align-items-center'>
@@ -385,9 +385,9 @@
                                                             <div class='card border-card h-100'>
                                                                 <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                     @if($pop_course->course_image)
-                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='This is the images of popular course'/>
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt="{{ trans('langCourseImage') }}" />
                                                                     @else
-                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt='This is the images of popular course'/>
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt="{{ trans('langCourseImage') }}" />
                                                                     @endif
                                                                 </a>
                                                                 <div class='card-body'>

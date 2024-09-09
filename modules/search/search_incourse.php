@@ -485,7 +485,7 @@ if (empty($search_terms)) {
                     <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank' aria-label='(opens in a new tab)'> " . q($link->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank' aria-label='$langOpenNewTab'> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";

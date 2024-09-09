@@ -113,7 +113,7 @@
                                                                         <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
                                                                     </div>
                                                                     <div>
-                                                                        <button type='button' class="close" aria-label="Close"></button>
+                                                                        <button type='button' class="close" aria-label="{{ trans('langClose') }}"></button>
                                                                     </div>
                                                                 </div>
 

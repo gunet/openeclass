@@ -96,7 +96,7 @@
                     @endif
                     <!-- rss for announcements - blog -->
                     @if (defined('RSS'))
-                        <a class='btn btn-default text-decoration-none' href="{{RSS}}"
+                        <a class='btn btn-default text-decoration-none' href="{{RSS}}" role="button" 
                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
                            <span class="fa-solid fa-rss"></span>
                         </a>
@@ -104,7 +104,7 @@
                     @if ($require_help)
                         <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}' 
                             class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip' data-bs-placement='bottom' 
-                            title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" tabindex="-1">
+                            title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" tabindex="-1" role="button">
                             <i class="fas fa-question-circle"></i>
                         </a>
                     @endif

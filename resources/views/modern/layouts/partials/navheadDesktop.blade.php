@@ -6,7 +6,7 @@
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
-                        <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label='Homepage'>
+                        <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
                         @if(!get_config('show_only_loginScreen'))
@@ -59,11 +59,11 @@
                                         <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px gap-2" action='{{ $urlAppend }}modules/search/search.php' method='post' role='search'>
                                     @endif
                                     <div>
-                                        <a id="btn-search" role="button" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" name="quickSearch" aria-label="Quick search">
+                                        <a id="btn-search" role="button" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" name="quickSearch" aria-label="{{ trans('langSearch') }}">
                                             <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                                         </a>
                                     </div>
-                                    <input id="search_terms" type="text" class="inputSearch form-control rounded-0 px-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
+                                    <input id="search_terms" type="text" class="inputSearch form-control rounded-0 px-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="{{ trans('langSearch') }}"/>
                                     </form>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                 @endif
                                 @if(isset($_SESSION['uid']))
                                     <div class='d-flex justify-content-end p-0 h-80px'>
-                                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                        <div class="btn-group" role="group" aria-label="{{ trans('langMenu') }}">
                                             <div class="btn-group" role="group">
                                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
@@ -295,11 +295,11 @@
 
                     <div class='d-flex justify-content-start align-items-center gap-2'>
 
-                        <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrollingTools" aria-label="Registration and available courses">
+                        <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrollingTools" aria-label="{{ trans('langCoursesAndRegistration') }}">
                             <i class="fa-solid fa-ellipsis-vertical fa-lg"></i>
                         </a>
 
-                        <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}" aria-label='Homepage'>
+                        <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}" alt="{{ trans('langLogo') }}">
                         </a>
                     </div>
@@ -433,7 +433,7 @@
 
             <div class="offcanvas offcanvas-start d-lg-none offCanvas-Tools" tabindex="-1" id="offcanvasScrollingTools">
                 <div class="offcanvas-header">
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
                 </div>
                 <div class="offcanvas-body px-4">
                     <div class='col-12 d-flex justify-content-center align-items-center' aria-label="{{ trans('langLogo') }}">
@@ -448,8 +448,8 @@
                             @endif
                                     <div class="input-group gap-2">
                                         <input id='search-mobile' type="text" class="form-control mt-0 rounded-2"
-                                                placeholder="{{ trans('langSearch')}}..." name="search_terms" aria-label="Search terms">
-                                        <button class="btn btn-primary btn-mobile-quick-search rounded-2" type="submit" id="search-btn-mobile" name="quickSearch" aria-label='Quick search'>
+                                                placeholder="{{ trans('langSearch')}}..." name="search_terms" aria-label="{{ trans('langSearch') }}">
+                                        <button class="btn btn-primary btn-mobile-quick-search rounded-2" type="submit" id="search-btn-mobile" name="quickSearch" aria-label="{{ trans('langSearch') }}">
                                             <i class="fa-solid fa-magnifying-glass-arrow-right fa-lg"></i>
                                         </button>
                                     </div>
@@ -461,7 +461,7 @@
 
                             @if(!get_config('hide_login_link'))
                                 <p class='py-2 px-0'>
-                                    <a id='homeId' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}?show_home=true" aria-label='Homepage'>
+                                    <a id='homeId' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}?show_home=true" aria-label="{{ trans('langHomePage') }}">
                                         <i class="fa-solid fa-home"></i>{{ trans('langHome') }}
                                     </a>
                                 </p>
@@ -477,7 +477,7 @@
                             @endif
                             @if (isset($_SESSION['uid']))
                                 <p class='py-2 px-0'>
-                                    <a id='portfolioId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}main/portfolio.php" aria-label='Registration'>
+                                    <a id='portfolioId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}main/portfolio.php" aria-label="{{ trans('langRegistration') }}">
                                         <i class="fa-solid fa-pencil"></i>{{ trans('langPortfolio') }}
                                     </a>
                                 </p>
@@ -485,7 +485,7 @@
 
                             @if(!get_config('dont_display_courses_menu'))
                                 <p class='py-2 px-0'>
-                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label='List of courses'>
+                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label="{{ trans('langOtherCourses') }}">
                                         <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                     </a>
                                 </p>
@@ -493,7 +493,7 @@
 
                             @if (faq_exist())
                                 <p class='py-2 px-0'>
-                                    <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label='Frequent questions'>
+                                    <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label="{{ trans('langFaq') }}">
                                         <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
                                     </a>
                                 </p>
