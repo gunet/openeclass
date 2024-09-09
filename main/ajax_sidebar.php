@@ -27,44 +27,9 @@ $require_login = true;
 
 require_once '../include/baseTheme.php';
 require_once 'portfolio_functions.php';
-require_once 'template/template.inc.php';
 require_once 'main/notifications/notifications.inc.php';
 
 header('Content-Type: application/json; charset=UTF-8');
-
-function getSidebarNotifications() {
-    global $modules, $theme_settings, $urlAppend;
-
-    $notifications_html = array();
-    if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
-        $t = new Template();
-        $t->set_var('sideBarCourseNotifyBlock', $_SESSION['template']['sideBarCourseNotifyBlock']);
-        foreach ($_GET['courseIDs'] as $id) {
-            $t->set_var('sideBarCourseNotify', '');
-            $notifications = get_course_notifications($id);
-            $course_code = course_id_to_code($id);
-            foreach ($notifications as $n) {
-                $modules_array = (isset($modules[$n->module_id]))? $modules : '';
-                if (isset($modules_array[$n->module_id]) &&
-                    (!is_module_visible($n->module_id, $id))) {
-                        continue;
-                }
-                if (isset($modules_array[$n->module_id]) &&
-                    isset($modules_array[$n->module_id]['image']) &&
-                    isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
-                    $t->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
-                    $t->set_var('sideBarCourseNotifyCount', $n->notcount);
-                    $t->set_var('sideBarCourseNotifyTitle', q($modules_array[$n->module_id]['title']));
-                    $t->set_var('sideBarCourseNotifyURL', $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
-                                                    '/index.php?course=' . $course_code);
-                    $t->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
-                }
-            }
-            $notifications_html[$id] = $t->get_var('sideBarCourseNotify');
-        }
-    }
-    return $notifications_html;
-}
 
 function getCoursesNotifications() {
     global $modules, $icons_map, $urlAppend, $langNoExistNotifications;
@@ -195,7 +160,6 @@ function is_module_visible($mid, $cid) {
 
 $json_obj = array(
     'messages' => getSidebarMessages(),
-    //'notifications' => getSidebarNotifications(),
     'notifications_courses' => getCoursesNotifications(),
     'langNotificationsExist' => $langNotificationsExist,
 );
