@@ -372,16 +372,16 @@ if (isset($_GET['mid'])) {
                                                 <div class='action-bar-title text-center'>$langForward</div>
 
                                                 <div class='form-group mt-4'>
-                                                    <div class='col-sm-12 control-label-notes'>$langSender</div>
+                                                    <label for='forward_senderName' class='col-sm-12 control-label-notes'>$langSender</label>
                                                     <div class='col-sm-12'>
-                                                        <input aria-label='$langSender' name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
+                                                        <input aria-label='$langSender' name='senderName' type='text' class='form-control' id='forward_senderName' value='" . q(uid_to_name($uid)) . "' disabled>
                                                     </div>
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <div class='col-sm-12 control-label-notes'>$langSendTo</div>
+                                                    <label for='select-recipients-forward' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                     <div class='col-sm-12'>
-                                                        <select aria-label='$langSendTo' name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
+                                                        <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
 
                                                 addRecipientOptions();
 
@@ -390,9 +390,9 @@ if (isset($_GET['mid'])) {
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <div class='col-sm-12 control-label-notes'>$langSubject</div>
+                                                    <label for='forward_message_title' class='col-sm-12 control-label-notes'>$langSubject</label>
                                                     <div class='col-sm-12'>
-                                                        <input aria-label='$langSubject' name='message_title' type='text' class='form-control' id='message_title' value='" .
+                                                        <input name='message_title' type='text' class='form-control' id='forward_message_title' value='" .
                                                             q($langMsgFw . ' ' . $msg->subject) . "'>
                                                     </div>
                                                 </div>
@@ -426,10 +426,10 @@ if (isset($_GET['mid'])) {
                                             enableCheckFileSize();
 
                                         $out .= "<div class='form-group mt-4'>
-                                                    <div class='col-sm-12 control-label-notes'>$langFileName</div>
+                                                    <label for='forward_fileID' class='col-sm-12 control-label-notes'>$langFileName</label>
                                                     <div class='col-sm-12'>" .
                                                         fileSizeHidenInput() . "
-                                                        <input aria-label='$langFileName' id='fileID' type='file' name='file' size='35'>
+                                                        <input aria-label='$langFileName' id='forward_fileID' type='file' name='file' size='35'>
                                                     </div>
                                                 </div>";
                                         }
