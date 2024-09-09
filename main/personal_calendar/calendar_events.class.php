@@ -1461,7 +1461,7 @@ class Calendar_Events {
    }
 
    public static function bootstrap_events($from, $to) {
-       global $urlServer, $uid, $course_id, $status;
+       global $urlServer, $course_id;
 
        $fromdatetime = date("Y-m-d H:i:s",$from/1000);
        $todatetime = date("Y-m-d H:i:s",$to/1000);
@@ -1488,7 +1488,7 @@ class Calendar_Events {
                 if ($event->event_type != 'personal' && $event->event_type != 'admin') {
                     $event->url = str_replace('thiscourse', $event->course, $event->url);
                 }
-                array_push($events, $event);
+                $events[] = $event;
             }
        }
        return json_encode(array('success'=>1, 'result'=>$events, 'cid'=>$course_id));
@@ -1497,7 +1497,7 @@ class Calendar_Events {
    public static function small_month_bootstrap_calendar() {
        global $langNextMonth, $langPreviousMonth, $course_code, $langCurrentMonth;
 
-       if($course_code){
+       if($course_code) {
             $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
                             <div id='cal-header' class='cal-header-course d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
@@ -1517,7 +1517,7 @@ class Calendar_Events {
                                 </div>
                             </div>
                         </div>";
-       }else{
+       } else {
             $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
                             <div id='cal-header' class='cal-header-Portfolio d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
@@ -1538,7 +1538,7 @@ class Calendar_Events {
                             </div>
                         </div>";
        }
-       
+
 
        $calendar .= '<div class="panel-body-calendar panel-border-calendar pt-2 pb-3"><div id="bootstrapcalendar"></div></div>';
 

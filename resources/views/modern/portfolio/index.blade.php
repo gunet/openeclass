@@ -39,18 +39,6 @@
                 }
             });
 
-            var calendar = $("#bootstrapcalendar").calendar({
-                tmpl_path: '{{ $urlAppend }}js/bootstrap-calendar-master/tmpls/',
-                events_source: '{{ $urlAppend }}main/calendar_data.php',
-                language: '{{ js_escape(trans('langLanguageCode')) }}',
-                views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
-                onAfterViewLoad: function(view) {
-                    $("#current-month").text(this.getTitle());
-                    $(".btn-group button").removeClass("active");
-                    $("button[data-calendar-view=\'" + view + "\']").addClass("active");
-                }
-            });
-
             $(".btn-group button[data-calendar-nav]").each(function() {
                 var $this = $(this);
                 $this.click(function() {
@@ -65,14 +53,6 @@
                 });
             });
 
-            function show_month(day,month,year) {
-                $.get("calendar_data.php",{
-                        caltype:"small", day:day, month: month, year: year
-                    }, function(data){
-                        $("#smallcal").html(data);
-                    }
-                );
-            }
 
         var idCoursePortfolio = '';
         var btnPortfolio = '';

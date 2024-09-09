@@ -312,7 +312,8 @@ class QueryPath implements IteratorAggregate, Countable {
   }
 
 
-  public function count() {
+  public function count(): int
+  {
     return $this->matches->count();
   }
 
@@ -2158,7 +2159,8 @@ class QueryPath implements IteratorAggregate, Countable {
 
 
 
-  public function getIterator() {
+  public function getIterator(): Traversable
+  {
     $i = new QueryPathIterator($this->matches);
     $i->options = $this->options;
     return $i;
@@ -2276,7 +2278,8 @@ class QueryPathIterator extends IteratorIterator {
   public $options = array();
   private $qp = NULL;
 
-  public function current() {
+  public function current(): mixed
+  {
     if (!isset($this->qp)) {
       $this->qp = qp(parent::current(), NULL, $this->options);
     }

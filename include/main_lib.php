@@ -3190,6 +3190,14 @@ function token_validate($info, $token, $ts_valid_time = 0) {
  */
 class HtmlCutString {
 
+    public $tempDiv;
+    public $newDiv;
+    public $charCount;
+    public $postfix;
+    public $limit;
+    public $postfix_text;
+    public $encoding;
+
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DOMDocument('1.0', 'UTF-8');
