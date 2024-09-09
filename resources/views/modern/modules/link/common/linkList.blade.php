@@ -1,7 +1,7 @@
                             @foreach ($category->links as $key => $link)                                
                                 <tr>    
                                     <td class='nocategory-link'>
-                                        <a href='{!! $link->url !!}' {!! $is_in_tinymce ? " class='fileURL' " : '' !!} target='_blank' aria-label='(opens in a new tab)'>
+                                        <a href='{!! $link->url !!}' {!! $is_in_tinymce ? " class='fileURL' " : '' !!} target='_blank' aria-label="{{ trans('langOpenNewTab') }}">
                                             {{ $link->title ?: $link->url }}
                                             <i class='fa fa-external-link' style='color:#444'></i>
                                         </a>

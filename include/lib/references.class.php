@@ -371,7 +371,7 @@ class References {
      */
     public static function item_link($module_id, $item_type, $item_id, $course_id){
 
-        global $urlServer;
+        global $urlServer, $langOpenNewTab;
         $itemurl = $urlServer;
         if(is_null($item_type) || empty($item_type)){
             return false;
@@ -411,7 +411,7 @@ class References {
                 }
             }
 
-            $itemlink = "<a href='$itemurl' target='_blank' aria-label='(opens in a new tab)'>" . q($itemattributes->title) . "</a>";
+            $itemlink = "<a href='$itemurl' target='_blank' aria-label='$langOpenNewTab'>" . q($itemattributes->title) . "</a>";
             return $itemlink;
         }
         return false;

@@ -47,7 +47,7 @@ if ($language == 'el') {
         <div class='alert alert-info'>
           <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
           <span>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
-                $langUpgRead <a href='$upgrade_info_file' target='_blank' aria-label='(opens in a new tab)'>$langUpgMan</a> $langUpgLastStep
+                $langUpgRead <a href='$upgrade_info_file' target='_blank' aria-label='$langOpenNewTab'>$langUpgMan</a> $langUpgLastStep
           </span>
         </div> 
         <div class='card panelCard px-lg-4 py-lg-3'>

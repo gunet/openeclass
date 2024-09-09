@@ -389,7 +389,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         <div class='modal-content'>
                                             <div class='modal-header border-0'>
                                                 <div class='modal-title'>$langAddEvent</div> 
-                                                <button aria-label='Close' type='button' class='close' data-bs-dismiss='modal'>
+                                                <button aria-label='$langClose' type='button' class='close' data-bs-dismiss='modal'>
                                                 </button>
                                             </div>
                                             <div class='modal-body'>
@@ -800,7 +800,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
                                                     <div class='modal-title'>$langAddEvent</div> 
-                                                    <button aria-label='Close' type='button' class='close' data-bs-dismiss='modal'>
+                                                    <button aria-label='$langClose' type='button' class='close' data-bs-dismiss='modal'>
                                                     </button>
                                                 </div>
                                                 <div class='modal-body'>
@@ -1168,7 +1168,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 <div class='modal-content'>
                     <div class='modal-header'>
                         <div class='modal-title'>$langiCalFeed</div> 
-                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='close'>
+                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'>
                         </button>
                     </div>
                     <div class='modal-body'>

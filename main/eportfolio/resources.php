@@ -81,7 +81,7 @@ if ($userdata) {
         }
 
         $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                            <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='close'>&times;</a>
+                            <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='$langClose'>&times;</a>
                             $langePortfolioCollectionUserInfo</span>
                           </div></div>";
 
@@ -165,7 +165,7 @@ if ($userdata) {
                             $tool_content .= "
                                               <div class='col-12'>
                                                   <div class='alert alert-success alert-dismissible fade show' role='alert'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langePortfolioResourceAdded</span></div>
-                                                  <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                                  <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='$langClose'></button>
                                               </div>";
                             redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }

@@ -22,7 +22,7 @@
 require_once 'include/course_settings.php';
 
 function list_links($id = NULL) {
-    global $course_id, $langNoCategory, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory, $langSelect;
+    global $course_id, $langNoCategory, $langDescription, $langChoice, $langNoLinksExist, $langLinks, $langSocialCategory, $langSelect, $langOpenNewTab;
 
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
@@ -60,7 +60,7 @@ function list_links($id = NULL) {
                         $checked = 'checked';
                     }
                     $ret_string .= "<tr>";
-                    $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
+                    $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                         q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a></td>";
                     $ret_string .= "<td>" . standard_text_escape($linkcatrow->description) . "</td>";
                     $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='link[]' value='$linkcatrow->id' /><span class='checkmark'></span></label></td>";

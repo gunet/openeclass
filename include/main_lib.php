@@ -2807,7 +2807,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs aria-label='$title'>$img</a>";
+        return "<a href='$link'$link_attrs aria-label='$title' role='button'>$img</a>";
     } else {
         return $img;
     }
@@ -3326,7 +3326,7 @@ function faq_exist() {
 function copyright_info($id, $noImg = 1, $type = 'course'): string
 {
 
-    global $language, $license, $langCopyrightedNotFree;
+    global $language, $license, $langCopyrightedNotFree, $langOpenNewTab;
 
     $lang = langname_to_code($language);
     $link = '';
@@ -3343,7 +3343,7 @@ function copyright_info($id, $noImg = 1, $type = 'course'): string
             } else {
                 $link_suffix = '';
             }
-            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='(opens in a new tab)'>
+            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='$langOpenNewTab'>
                         <span class='" . $license[$lic]['image'] . "'></span>
                     </a>";
         } else if ($lic == 10) {

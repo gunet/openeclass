@@ -215,7 +215,7 @@
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                         <div class="offcanvas-header">
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
                         </div>
                         <div class="offcanvas-body">
                             @include('layouts.partials.sidebar',['is_editor' => $is_editor])
@@ -347,11 +347,11 @@
                                     </h3>
 
                                     <div class='d-flex gap-2 flex-wrap'>
-                                        <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
+                                        <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
                                             <i class="fa-solid fa-circle-info"></i>
                                         </a>
                                         @if($is_editor)
-                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}">
+                                            <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}" role="button">
                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                                             </button>
 
@@ -759,7 +759,7 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <div class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</div>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                 </button>
 
             </div>

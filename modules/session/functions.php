@@ -630,7 +630,7 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
  */
 function show_session_link($title, $comments, $resource_id, $link_id, $visibility) {
 
-    global $is_consultant, $langWasDeleted, $course_id;
+    global $is_consultant, $langWasDeleted, $course_id, $langOpenNewTab;
 
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
@@ -647,7 +647,7 @@ function show_session_link($title, $comments, $resource_id, $link_id, $visibilit
         } else {
             $title = q($title);
         }
-        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='(opens in a new tab)'>";
+        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
         $exlink = $link . "$title</a>";
         $imagelink = icon('fa-link');
     }
@@ -837,7 +837,7 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
 function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
     global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id, 
             $urlServer, $course_code, $langTcNotStartedYet, $langHasExpired, 
-            $langInProgress, $langResourceBelongsToSessionPrereq;
+            $langInProgress, $langResourceBelongsToSessionPrereq, $langOpenNewTab;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
 
@@ -889,7 +889,7 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
             $has_expired = "&nbsp;<span class='TextBold text-danger'>($langHasExpired)</span>";
         }
         $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
-        $tclink = "<a class='$locked' href='$bbblink' target='_blank' aria-label='(opens in a new tab)'>";
+        $tclink = "<a class='$locked' href='$bbblink' target='_blank' aria-label='$langOpenNewTab'>";
         if (!$module_visible) {
             $tclink .= " <i>($langInactiveModule)</i>&nbsp;";
         }

@@ -277,7 +277,7 @@ if ($is_editor) {
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
                                                     <div class='modal-title'>$langAddEvent</div>
-                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'>
                                                     </button>
                                                 </div>
                                                 <div class='modal-body'>
@@ -666,7 +666,7 @@ if ($is_editor) {
                                 <div class='modal-content'>
                                     <div class='modal-header border-0'>
                                         <div class='modal-title'>$langAddEvent</div>
-                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'>
                                         </button>
                                     </div>
                                     <div class='modal-body'>

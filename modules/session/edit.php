@@ -263,7 +263,7 @@ if(isset($_POST['modify'])){
               <div id='mail-body-inner'>
                   <div class='mb-4'>
                     <p>$langSessionAcceptance</p>
-                    <a href='$link_acceptance' target='_blank' aria-label='(opens in a new tab)'>$link_acceptance</a>
+                    <a href='$link_acceptance' target='_blank' aria-label='$langOpenNewTab'>$link_acceptance</a>
                   </div>
                   <ul id='forum-category'>
                       <li>

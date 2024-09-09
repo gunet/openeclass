@@ -177,7 +177,7 @@ if (isset($_GET['mid'])) {
                                                             </div>
                                                             <div>
                                                                 <a href='message_download.php?course=" .
-                                                                    course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank' aria-label='(opens in a new tab)'>" .
+                                                                    course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank' aria-label='$langOpenNewTab'>" .
                                                                     q($msg->real_filename) . "
                                                                 </a>
                                                                 &nbsp;<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
@@ -413,7 +413,7 @@ if (isset($_GET['mid'])) {
                                                         <p class='form-control-static'>
                                                             <input type='hidden' name='keepAttachment' value='{$msg->id}'>
                                                             <a href='message_download.php?course=" .
-                                                            course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank' aria-label='(opens in a new tab)'>" .
+                                                            course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank' aria-label='$langOpenNewTab'>" .
                                                             q($msg->real_filename) . "</a>&nbsp;<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
                                                             format_file_size($msg->filesize) . ")
                                                         </p>

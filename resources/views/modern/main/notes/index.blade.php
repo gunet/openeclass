@@ -53,7 +53,7 @@
                                                                                 $courses_notes = Database::get()->querySingle("SELECT title FROM course WHERE id={$note->reference_obj_id}; ");
                                                                         ?>
                                                                         <div class="modal-title" id="ModalNote{{$i}}"><strong>Μάθημα</strong><small style="color:orange;"><{{$courses_notes->title}}></small><br><strong>{{trans('langHomePageIntroTitle')}}</strong><small style="color:orange;"><<{{$note->title}}>></small></div>
-                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         {!! $note->content !!}
@@ -86,7 +86,7 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <div class="modal-title" id="DeleteModalLabel{{$note->id}}">{{trans('langDelete')}}</div>
-                                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
                                                             </div>
                                                             <div class="modal-body">
                                                                 {{trans('langCorfimeDelete')}} <strong class="unregCourseStrong">{{$note->title}}</strong>;

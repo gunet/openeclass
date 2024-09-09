@@ -30,7 +30,7 @@
                         <div class='modal-content'>
                             <div class='modal-header'>
                                 <div class='modal-title' id='infoEventsLabel'>{{ trans('langInfoColourEvent') }}</div>
-                                <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
+                                <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                 </button>
                             </div>
                             <div class='modal-body'>
@@ -62,7 +62,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <div class="modal-title">{{ trans('langAdd') }}</div>
-                                <button type="button" class='close' data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" class='close' data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}">
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -96,7 +96,7 @@
                     <div class="modal-header">
                         
                         <div class="modal-title">{{ trans('langDeleteRentezvous') }}</div>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
                     </div>
                     <div class="modal-body">
 

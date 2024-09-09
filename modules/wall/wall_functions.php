@@ -671,7 +671,7 @@ function show_video($table, $title, $resource_id, $video_id) {
 }
 
 function show_link($title, $resource_id, $link_id) {
-    global $course_id, $is_editor;
+    global $course_id, $is_editor, $langOpenNewTab;
     $row = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
     if ($row) {
         $visibility = 1;
@@ -680,7 +680,7 @@ function show_link($title, $resource_id, $link_id) {
         } else {
             $title = q($title);
         }
-        $linktitle = "<a href='" . q($row->url) . "' target='_blank' aria-label='(opens in a new tab)'>$title</a>";
+        $linktitle = "<a href='" . q($row->url) . "' target='_blank' aria-label='$langOpenNewTab'>$title</a>";
         $imagelink = 'fa-link';
     } else {
         if (!$is_editor) {

@@ -22,7 +22,7 @@
                     @if($course_code)
                         <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                             <div class="offcanvas-header">
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
                             </div>
                             <div class="offcanvas-body">
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])

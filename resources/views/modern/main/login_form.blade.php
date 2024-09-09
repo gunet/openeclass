@@ -39,7 +39,7 @@
                                                                             <div class='modal-content'>
                                                                                 <div class='modal-header'>
                                                                                     <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
-                                                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                 </div>
                                                                                 <div class='modal-body'>
                                                                                     <div class='col-12'>
@@ -111,7 +111,7 @@
                                                                                             <div class='modal-title' id='LoginFormAnotherOptionLabel-{{ $loop->index }}'>
                                                                                                 {{ $authLink[count($authLink)-1][2] }}
                                                                                             </div>
-                                                                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                                                            <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                         </div>
                                                                                         <div class='modal-body d-flex justify-content-center align-items-center'>
                                                                                             <div>
@@ -137,7 +137,7 @@
                                                                 <div class='modal-content border-0 p-0'>
                                                                     <div class='modal-header d-flex justify-content-between align-items-center'>
                                                                         <div class='modal-title'>{{ trans('langError') }}</div>
-                                                                        <button aria-label='Close' type='button' class='close close-error' data-bs-dismiss='modal'></button>
+                                                                        <button aria-label="{{ trans('langClose') }}" type='button' class='close close-error' data-bs-dismiss='modal'></button>
                                                                     </div>
                                                                     <div class='modal-body'>
                                                                         {!! Session::get('login_error') !!}

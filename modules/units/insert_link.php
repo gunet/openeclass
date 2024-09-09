@@ -27,7 +27,7 @@ require_once 'include/course_settings.php';
 function list_links() {
     global $id, $course_id, $tool_content,
             $langNoCategory, $langAddModulesButton,
-            $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory, $langSelect;
+            $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory, $langSelect, $langOpenNewTab;
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
     if (count($result) == 0) {
@@ -61,7 +61,7 @@ function list_links() {
                     }
                     $tool_content .= "<tr>";
                     $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='link[]' value='$linkcatrow->id'><span class='checkmark'></span></label></td>";
-                    $tool_content .= "<td>".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
+                    $tool_content .= "<td>".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                             q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a>$cat_description_text</td>";
                     $tool_content .= "</tr>";
                 }
@@ -86,7 +86,7 @@ function list_links() {
                     $link_description_text = '';
                 }
                 $tool_content .= "<tr><td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
-                $tool_content .= "<td>&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($entry['title']) . "</a>$link_description_text</td>";
+                $tool_content .= "<td>&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($entry['title']) . "</a>$link_description_text</td>";
                 $tool_content .= "</tr>";
             }
         }

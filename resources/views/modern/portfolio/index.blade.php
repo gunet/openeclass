@@ -22,10 +22,10 @@
             initialize_lesson_display();
 
             $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap gap-2'>" +
-                "<a class='btn showCoursesBars active' aria-label='{{ js_escape(trans('langShowCoursesInTable')) }}'>" +
+                "<a class='btn showCoursesBars active' role='button' aria-label='{{ js_escape(trans('langShowCoursesInTable')) }}'>" +
                 "<i class='fa-solid fa-table-list'></i>" +
                 "</a>" +
-                "<a class='btn showCoursesPics' aria-label='{{ js_escape(trans('langShowCoursesInPics')) }}'><i class='fa-solid fa-table-cells-large'></i></a>" +
+                "<a class='btn showCoursesPics' role='button' aria-label='{{ js_escape(trans('langShowCoursesInPics')) }}'><i class='fa-solid fa-table-cells-large'></i></a>" +
                 "</div>");
 
             jQuery('.panel_title').click(function()
@@ -608,7 +608,7 @@
                                                         @else
                                                             {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                                         @endif
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ trans('langClose') }}"></button>
                                                     </div>
                                                 </div>
                                             @endif
@@ -622,10 +622,10 @@
                                             <div id="cources-pics">
 
                                                 <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
-                                                    <a class="btn showCoursesBars">
+                                                    <a class="btn showCoursesBars" role='button' aria-label="{{ js_escape(trans('langShowCoursesInTable')) }}">
                                                         <i class="fa-solid fa-table-list"></i>
                                                     </a>
-                                                    <a class="btn showCoursesPics">
+                                                    <a class="btn showCoursesPics" role='button' aria-label="{{ js_escape(trans('langShowCoursesInPics')) }}">
                                                         <i class="fa-solid fa-table-cells-large"></i>
                                                     </a>
                                                 </div>
@@ -751,7 +751,7 @@
                                                 <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
 
                                                 <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent solidPanel mt-4'>
-                                                    <nav aria-label='Page navigation w-100'>
+                                                    <nav aria-label="{{ trans('langPagination') }}">
                                                         <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                             <li class='page-item page-item-previous'>
                                                                 <a class='page-link' aria-label="{{ trans('langPreviousPage') }}"><span class='fa-solid fa-chevron-left'></span></a>
