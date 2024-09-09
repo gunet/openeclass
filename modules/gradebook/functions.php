@@ -449,7 +449,7 @@ function user_gradebook_settings() {
            $langAttendanceUpdate, $langGradebookInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $gradebook, $urlAppend, $langImgFormsDes;
+           $langStudents, $langMove, $langParticipate, $gradebook, $urlAppend, $langImgFormsDes, $langForm;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -472,8 +472,10 @@ function user_gradebook_settings() {
     <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook->id) . "&editUsers=1'>
+                    <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='form-group'>
-                        <h3>$langGradebookInfoForUsers</h3>
+                        <div class='action-bar-title'>$langGradebookInfoForUsers</div>
                     </div>
                     <div class='form-group mt-4'>
                     <div class='col-sm-12 control-label-notes mb-2'>$langUserDuration</div>
@@ -572,6 +574,7 @@ function user_gradebook_settings() {
                         </div>
                     </div>
                 ". generate_csrf_token_form_field() ."
+                </fieldset>
                 </form>
             </div>
         </div><div class='d-none d-lg-block'>

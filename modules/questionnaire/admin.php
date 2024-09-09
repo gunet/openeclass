@@ -390,7 +390,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='flex-grow-1'>
     <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>
-            
+            <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
               <label for='PollName' class='col-sm-12 control-label-notes'>$langTitle:</label>
               <div class='col-sm-12'>
@@ -673,6 +674,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             ."
               </div>
             </div>
+            </fieldset>
         </form>
     </div>
     </div>

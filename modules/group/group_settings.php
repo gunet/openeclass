@@ -70,6 +70,8 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+                    <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='form-group'>
                         <div class='col-sm-12'>
                             <div class='radio mb-2'>
@@ -121,6 +123,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                 ". generate_csrf_token_form_field() ."
+                </fieldset>
                 </form>
               </div></div><div class='d-none d-lg-block'>
               <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
