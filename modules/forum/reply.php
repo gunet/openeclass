@@ -190,7 +190,7 @@ if (isset($_POST['submit'])) {
     }
     if (isset($_GET['parent_post'])) {
         $parent_post_text = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $parent_post)->post_text;
-        $tool_content .= "<blockquote><h5>$parent_post_text</h5></blockquote>";
+        $tool_content .= "<blockquote><div class='text-heading-h5'>$parent_post_text</div></blockquote>";
     }
 
     $reply = '';
