@@ -222,11 +222,13 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <html>
  <head>
      <meta http-equiv='Content-Type' content='text/html' charset='" . $charset . "'>
-     <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
-     <link href='{$urlAppend}template/$theme/css/all.css' rel='stylesheet'>
+     <link href='{$urlAppend}template/modern/css/bootstrap.min.css' rel='stylesheet'>
+     <link href='{$urlAppend}template/modern/css/font-Manrope/css/Manrope.css?" . time() . "' rel='stylesheet'>
+     
+     <link href='{$urlAppend}template/modern/css/all.css' rel='stylesheet'>
 
-     <link href='{$urlAppend}template/$theme/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
-     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default.css?".time()."'>";
+     <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
+     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".time()."'>";
      if($theme_id > 0){
         echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
      }

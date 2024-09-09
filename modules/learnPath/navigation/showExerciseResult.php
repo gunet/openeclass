@@ -51,11 +51,12 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
-    <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
-    <link href='{$urlAppend}template/$theme/css/lp.css?".time()."' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/css/default.css?".time()."' rel='stylesheet'>\n"
+    <link href='{$urlAppend}template/modern/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='{$urlAppend}template/modern/css/font-Manrope/css/Manrope.css?" . time() . "' rel='stylesheet'>
+    <link href='{$urlAppend}template/modern/css/lp.css?" . time() . "' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/modern/css/default.css?" . time() . "' rel='stylesheet'>\n"
  . "$cssFile\n"
- . "<link href='{$urlAppend}template/$theme/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>\n"
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
