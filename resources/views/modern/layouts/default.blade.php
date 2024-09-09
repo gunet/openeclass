@@ -211,5 +211,6 @@
             $(".sp-input-container .sp-input").attr("aria-label","{{ trans('langOptForColor') }}");
         });
     </script>
+    @stack('bottom_scripts')
  </body>
 </html>
