@@ -49,8 +49,6 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-$body_action = '';
-
 $pageName = $langLearningObject;
 if (!add_units_navigation()) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
@@ -362,4 +360,4 @@ if ($module->contentType != CTLABEL_) { //
 
 $tool_content .= "</ul></div></div>";
 
-draw($tool_content, 2, null, $head_content, $body_action);
+draw($tool_content, 2, null, $head_content);

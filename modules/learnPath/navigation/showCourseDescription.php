@@ -42,14 +42,15 @@ $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
-        <link href='../../../template/modern/css/bootstrap.min.css' rel='stylesheet' type="text/css">
-        <link href="../../../template/modern/css/lp.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" />
-        <link href="../../../template/modern/css/default.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" />
+        <link href="../../../template/modern/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="../../../template/modern/css/font-Manrope/css/Manrope.css?<?php echo time(); ?>" type="text/css">
+        <link href="../../../template/modern/css/lp.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
+        <link href="../../../template/modern/css/default.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
 
         <?php if($theme_id > 0){ ?>
             <link href="../../../courses/theme_data/<?php echo $theme_id; ?>/style_str.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" />
         <?php } ?>
-        
+
         <title><?php echo $langCourseProgram ?></title>
     </head>
     <body class='body-learningPath' style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">

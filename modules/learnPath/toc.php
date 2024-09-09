@@ -54,6 +54,8 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <!-- Latest compiled and minified css -->
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css'>
 
+    <link rel='stylesheet' href='{$urlAppend}template/modern/css/font-Manrope/css/Manrope.css?" . time() . "'>
+
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>  
         
