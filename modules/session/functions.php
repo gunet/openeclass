@@ -222,14 +222,14 @@ function session_edit_participants_ids($sid){
  */
 function participation_in_session($sid){
     global $uid;
-    
+
     $res = Database::get()->queryArray("SELECT * FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$sid,$uid,1);
     if(count($res) > 0){
         return true;
     }else{
         return false;
     }
-    
+
 }
 
 /**
@@ -317,7 +317,7 @@ function insert_session_work($sid) {
                                     `date` = " . DBHelper::timeAfter() . ",
                                     res_id = ?d", $sid, $work->title, $work->description, $visibility, $order, $work->id);
         }
-       
+
     }
 
     header('Location: session_space.php?course=' . $course_code . '&session=' . $sid);
@@ -500,7 +500,7 @@ function show_session_resources($sid)
                       </div>";
         }
 
-    
+
 
     return $html;
 }
@@ -540,7 +540,7 @@ function show_sessionResource($info) {
         default:
             $html .= $langUnknownResType;
     }
-   
+
     return $html;
 }
 
@@ -573,8 +573,8 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
         $query = "SELECT * FROM poll WHERE course_id = ?d AND pid = ?d";
         $query .= " AND
                     (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
-                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d 
-                        UNION 
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d
+                        UNION
                        SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
                     )";
         $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
@@ -673,7 +673,7 @@ function show_session_link($title, $comments, $resource_id, $link_id, $visibilit
  */
 function show_session_doc($title, $comments, $resource_id, $file_id) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID, 
+           $id, $course_code, $langResourceBelongsToSessionPrereq, $sessionID,
            $is_consultant, $uid, $is_course_admin;
 
     $can_upload = $can_upload || $is_consultant;
@@ -681,10 +681,10 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
     // We get only the files which belong to user consultant or tutor in order to show them to simple users.
     $ids_simple_users = array();
-    $idsNotConsultant = Database::get()->queryArray("SELECT user_id FROM course_user 
-                                                        WHERE course_id = ?d AND status = ?d AND tutor = ?d 
+    $idsNotConsultant = Database::get()->queryArray("SELECT user_id FROM course_user
+                                                        WHERE course_id = ?d AND status = ?d AND tutor = ?d
                                                         AND editor = ?d AND course_reviewer = ?d AND reviewer = ?d
-                                                        AND user_id IN (SELECT participants FROM mod_session_users 
+                                                        AND user_id IN (SELECT participants FROM mod_session_users
                                                                         WHERE session_id = ?d AND is_accepted = ?d)", $course_id, USER_STUDENT, 0, 0, 0, 0, $sessionID, 1);
     foreach($idsNotConsultant as $u){
         $ids_simple_users[] = $u->user_id;
@@ -766,7 +766,7 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
         } else {
             $gids_sql_ready = "''";
         }
-        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d 
+        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d
                                  AND
                                 (assign_to_specific = 0 OR id IN
                                     (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
@@ -806,7 +806,7 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a href='${urlServer}modules/work/index.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;session=$_GET[session]' $class>";
+        $link = "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;session=$_GET[session]' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
@@ -835,8 +835,8 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
  * @return string
  */
 function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
-    global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id, 
-            $urlServer, $course_code, $langTcNotStartedYet, $langHasExpired, 
+    global  $is_consultant, $langWasDeleted, $langInactiveModule, $course_id,
+            $urlServer, $course_code, $langTcNotStartedYet, $langHasExpired,
             $langInProgress, $langResourceBelongsToSessionPrereq, $langOpenNewTab;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
@@ -870,7 +870,7 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
         $new_meeting_id = $tc->meeting_id;
         $new_att_pw = $tc->att_pw;
         $unlock_interval = $tc->unlock_interval;
-        $start_datetime = new DateTime(date('Y-m-d H:i:s')); 
+        $start_datetime = new DateTime(date('Y-m-d H:i:s'));
         $diff = $start_datetime->diff(new DateTime($tc->start_date));
         $total_minutes = ($diff->days * 24 * 60);
         $total_minutes += ($diff->h * 60);
@@ -968,7 +968,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_consultant, $langEditChange, $langDelete, $uid,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
-    $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload, 
+    $langNeverBrowsed, $langAddToUnitCompletion, $urlAppend, $langDownload,
     $sessionID, $is_course_reviewer, $is_simple_user;
 
     $res_types_sessions_completion = ['work', 'doc', 'poll', 'tc'];
@@ -1219,14 +1219,14 @@ function upload_session_empty_doc($sid){
     Session::flash('message',$langDeliverableInserted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
-        
+
 }
 
 function upload_session_doc($sid){
-    global $webDir, $course_code, $course_id, $language, $uid, 
-            $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile, 
-            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant, 
-            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName, 
+    global $webDir, $course_code, $course_id, $language, $uid,
+            $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile,
+            $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant,
+            $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName,
             $langNotExistUsers, $langResourceNoExists;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -1245,7 +1245,7 @@ function upload_session_doc($sid){
         redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']."&upload_for_user=true");
     }
 
-    if($_FILES['file-upload']['error'] > 0) { 
+    if($_FILES['file-upload']['error'] > 0) {
         // cover_image is empty (and not an error), or no file was uploaded
         Session::flash('message',$langEmptyUploadFile);
         Session::flash('alert-class', 'alert-danger');
@@ -1262,13 +1262,13 @@ function upload_session_doc($sid){
         redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
     }
 
-    // If uploaded file exists do not continue. 
+    // If uploaded file exists do not continue.
     // This uploaded file does not refer to deliverable but refers to resource of a session.
     if($is_consultant && !isset($_POST['for_deliverable']) && !isset($_POST['for_file'])){
         $path_exists = Database::get()->queryArray("SELECT * FROM document
-                                                    WHERE course_id = ?d 
-                                                    AND subsystem = ?d 
-                                                    AND subsystem_id = ?d 
+                                                    WHERE course_id = ?d
+                                                    AND subsystem = ?d
+                                                    AND subsystem_id = ?d
                                                     AND filename = ?s",
                                                     $course_id, MYSESSIONS, $sid, $_FILES['file-upload']['name']);
 
@@ -1305,7 +1305,7 @@ function upload_session_doc($sid){
             }else{
                 mkdir("$webDir/courses/$course_code/session/session_$sid/$uid/", 0755, true);
             }
-            
+
         }
         if($is_consultant && !isset($_POST['onBehalfOfUserID'])){
             $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
@@ -1315,7 +1315,7 @@ function upload_session_doc($sid){
         }else{
             $spathfile = "$webDir/courses/$course_code/session/session_$sid/$uid/$safe_session_filename";
         }
-        
+
         if (move_uploaded_file($_FILES['file-upload']['tmp_name'], $spathfile)) {
             @chmod($spathfile, 0644);
             $session_real_filename = $_FILES['file-upload']['name'];
@@ -1374,8 +1374,8 @@ function upload_session_doc($sid){
         $uUserId = isset($_POST['fromUser']) ? $_POST['fromUser'] : 0;
         // if exists then update uploaded file else upload it for simple user.
         $checkExist = Database::get()->querySingle("SELECT * FROM session_resources
-                                                        WHERE session_id = ?d 
-                                                        AND type = ?s 
+                                                        WHERE session_id = ?d
+                                                        AND type = ?s
                                                         AND doc_id = ?d
                                                         AND from_user = ?d
                                                         AND doc_id <> ?d
@@ -1400,17 +1400,17 @@ function upload_session_doc($sid){
                                         AND session_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID, $doc_id, $uUserId, 0, $doc_id, $uUserId, $sid);
 
             // Delete criterion for the user for whom the deliverable has deleted.
-            Database::get()->query("DELETE FROM user_badge_criterion 
-                                    WHERE user = ?d 
-                                    AND badge_criterion IN 
-                                    (SELECT id FROM badge_criterion WHERE activity_type = ?s AND resource = ?d 
+            Database::get()->query("DELETE FROM user_badge_criterion
+                                    WHERE user = ?d
+                                    AND badge_criterion IN
+                                    (SELECT id FROM badge_criterion WHERE activity_type = ?s AND resource = ?d
                                     AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d))",$uUserId,'document-submit',$doc_id,$course_id,$sid);
 
             // Now we must delete the resource file from document table in db.
             if($q){
                 $target_userdir = "$webDir/courses/$course_code/session/session_$sid/$uUserId/";
-                $oldFilePath = Database::get()->querySingle("SELECT path FROM document 
-                                                                WHERE id = ?d 
+                $oldFilePath = Database::get()->querySingle("SELECT path FROM document
+                                                                WHERE id = ?d
                                                                 AND course_id = ?d
                                                                 AND subsystem = ?d
                                                                 AND subsystem_id = ?d
@@ -1419,8 +1419,8 @@ function upload_session_doc($sid){
                     unlink($target_userdir.$oldFilePath->path);
                 }
 
-                Database::get()->query("DELETE FROM document 
-                                        WHERE id = ?d 
+                Database::get()->query("DELETE FROM document
+                                        WHERE id = ?d
                                         AND course_id = ?d
                                         AND subsystem = ?d
                                         AND subsystem_id = ?d
@@ -1451,10 +1451,10 @@ function upload_session_doc($sid){
         }else{ // for not deliverable
             redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
         }
-        
-        
-    } 
-    
+
+
+    }
+
 }
 
 /**
@@ -1526,7 +1526,7 @@ function display_session_settings($element, $element_id, $session_id = 0): void
         $tool_content .= "
                 <div class='col-12'>
                     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>
                                     $langProgressBasicInfo
                                 </h3>";
@@ -1623,12 +1623,12 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langAdd, $langBack, $langUsers,
            $langValue, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langSessionPrerequisites, $langNewUnitPrerequisite,
-           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource, 
-           $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel, 
-           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument, 
-           $langWithSubmittedUploadedFile, $langWithTCComplited, 
-           $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria, 
-           $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting, 
+           $langNoSessionPrerequisite, $langSessionCompletion, $langWithoutCompletedResource,
+           $langCompletedSession, $langNotCompletedSession, $langSubmit, $langCancel,
+           $langContinueToCompletetionWithoutAct, $langOfSubmitAssignment, $langOfSubmitDocument,
+           $langWithSubmittedUploadedFile, $langWithTCComplited,
+           $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria,
+           $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting,
            $langWithAttendanceRegistrationByConsultant, $langSettingSelect;
 
     if ($session_id) {
@@ -1703,8 +1703,8 @@ function display_session_activities($element, $id, $session_id = 0) {
             }
 
             $checkActivityType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE badge = ?d",$badge_id);
-            if($checkActivityType && ($checkActivityType->activity_type == 'document' or 
-                $checkActivityType->activity_type == 'assignment-submit' or 
+            if($checkActivityType && ($checkActivityType->activity_type == 'document' or
+                $checkActivityType->activity_type == 'assignment-submit' or
                 $checkActivityType->activity_type == 'document-submit' or
                 $checkActivityType->activity_type == 'meeting-completed' or
                 $checkActivityType->activity_type == 'consultant-completion' or
@@ -1726,7 +1726,7 @@ function display_session_activities($element, $id, $session_id = 0) {
             }
 
         }
-        
+
     } else {
         redirect_to_home_page("courses/$course_code/");
     }
@@ -2148,7 +2148,7 @@ function display_session_available_assignments($element, $element_id, $activity_
                                 AND visible = 1";
             $result = Database::get()->queryArray("$sessionWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $session_id, $element_id);
         }
-    } 
+    }
 
     if (count($result) == 0) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
@@ -2222,7 +2222,7 @@ function display_session_available_documents($element, $element_id, $session_id 
     }else{
         $basedir = $webDir . '/courses/' . $course_code . '/document';
     }
-    
+
     $path = get_dir_path('path');
     $dir_param = get_dir_path('dir');
     $dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
@@ -2263,7 +2263,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                                                 $sql_only_not_selected_resources", $session_id,0,0);
         }
 
-    } 
+    }
 
 
     $fileinfo = array();
@@ -2318,7 +2318,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                                 <i class='fa-solid fa-circle-info fa-lg'></i>
                                 <span>$langNotFolders</span>
                             </div>";
-        
+
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>";
@@ -2354,7 +2354,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                     }else{
                         $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
                     }
-                    
+
 
                     $dObj = $entry['object'];
                     $dObj->setAccessURL($file_url);
@@ -2363,7 +2363,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                     }else{
                         $dObj->setPlayURL(file_playurl($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code));
                     }
-                    
+
 
                     $link_href = MultimediaHelper::chooseMediaAhref($dObj);
                 }
@@ -2402,7 +2402,7 @@ function display_session_available_documents($element, $element_id, $session_id 
         }else{
             $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
         }
-        
+
     }
 }
 
@@ -2416,20 +2416,20 @@ function display_session_available_documents($element, $element_id, $session_id 
 function session_completion_by_consultant($element, $element_id, $session_id = 0, $session_resource_id = 0){
     global $course_code, $course_id, $langResourceAddedWithSuccess, $langResourceExists;
 
-    if($session_id){    
+    if($session_id){
         $check = Database:: get()->querySingle("SELECT * FROM {$element}_criterion WHERE $element = ?d AND activity_type = ?s",$element_id,'consultant-completion');
         if(!$check){
             Database::get()->query("INSERT INTO {$element}_criterion
                         SET $element = ?d,
                         activity_type = 'consultant-completion'",$element_id);
-            
+
             Session::flash('message',$langResourceAddedWithSuccess);
             Session::flash('alert-class', 'alert-success');
         }else{
             Session::flash('message',$langResourceExists);
             Session::flash('alert-class', 'alert-warning');
-        }          
-        
+        }
+
     }
 
     redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
@@ -2448,7 +2448,7 @@ function session_completion_without_resources($element, $element_id, $session_id
 
     if($session_id){
 
-        $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users 
+        $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
                                                      WHERE session_id = ?d AND is_accepted = ?d",$session_id,1);
         if(count($participants) == 0){
             Session::flash('message',$langForbidden.'</br>'.$langNotExistUsers);
@@ -2459,7 +2459,7 @@ function session_completion_without_resources($element, $element_id, $session_id
         // Initially we should check if a session has completed prequisite session
         $check_completion_badge = false;
         $has_completed_prerequisite_session = false;
-        $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
+        $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite
                                                     WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
         if(isset($has_prereq->prerequisite_session) and $has_prereq->prerequisite_session){
             // Now we must check if prerequisite session is completed in order to continue
@@ -2471,7 +2471,7 @@ function session_completion_without_resources($element, $element_id, $session_id
         }elseif(!isset($has_prereq->prerequisite_session)){
             $has_completed_prerequisite_session = true;
         }
-        
+
         if(isset($has_completed_prerequisite_session) and $has_completed_prerequisite_session){
             // Now we have to check if badge contains activities for completing.
             $res = Database::get()->querySingle("SELECT activity_type FROM {$element}_criterion
@@ -2494,12 +2494,12 @@ function session_completion_without_resources($element, $element_id, $session_id
                 redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
             }
         }
-        
+
         if($has_completed_prerequisite_session){
             $crit = Database::get()->query("INSERT INTO {$element}_criterion SET $element = ?d, activity_type = ?s",$element_id,'noactivity');
             $par = Database::get()->queryArray("SELECT participants FROM mod_session_users
                                                         WHERE session_id = ?d AND is_accepted = ?d",$session_id,1);
-    
+
             if($crit && count($par) > 0){
                 foreach ($par as $p) {
                     Database::get()->query("INSERT INTO user_{$element} SET
@@ -2510,8 +2510,8 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                 completed = ?d,
                                                 completed_criteria = ?d,
                                                 total_criteria = ?d",$p->participants,$element_id,1,1,1);
-    
-                    Database::get()->query("INSERT INTO user_{$element}_criterion SET 
+
+                    Database::get()->query("INSERT INTO user_{$element}_criterion SET
                                                 user = ?d,
                                                 created = " . DBHelper::timeAfter() . ",
                                                 {$element}_criterion = ?d",$p->participants, $crit->lastInsertID);
@@ -2544,14 +2544,14 @@ function session_completion_with_meeting_completed($element, $element_id, $sessi
         $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE course_id = ?d AND type_remote = ?d AND id = ?d", $course_id, 0, $session_id);
         // check if badge exists
         $ch = Database::get()->querySingle("SELECT id FROM {$element}_criterion
-                                            WHERE badge = ?d 
+                                            WHERE badge = ?d
                                             AND activity_type = ?s", $element_id,'meeting-completed');
 
         if(!$ch){
             Database::get()->query("INSERT INTO {$element}_criterion
                                     SET $element = ?d,
                                     activity_type = ?s",$element_id, 'meeting-completed');
-            
+
             Session::flash('message',$langResourceAddedWithSuccess);
             Session::flash('alert-class', 'alert-success');
         }else{
@@ -2559,8 +2559,8 @@ function session_completion_with_meeting_completed($element, $element_id, $sessi
             Session::flash('alert-class', 'alert-danger');
         }
 
-        redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);                     
-        
+        redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+
     }else{
         redirect_to_home_page("courses/$course_code/");
     }
@@ -2582,14 +2582,14 @@ function session_completion_with_tc_completed($element, $element_id, $session_id
         $res = Database::get()->querySingle("SELECT start,finish FROM mod_session WHERE course_id = ?d AND type_remote = ?d AND id = ?d", $course_id, 1, $session_id);
         $tc = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND start_date = ?t AND end_date = ?t AND id_session = ?d",$course_id, $res->start, $res->finish, $session_id);
         //check if exists
-        $ch = Database::get()->querySingle("SELECT id FROM {$element}_criterion 
+        $ch = Database::get()->querySingle("SELECT id FROM {$element}_criterion
                                             WHERE badge = ?d AND activity_type = ?s AND module = ?d AND resource = ?d",$element_id,'tc-completed',MODULE_ID_TC,$tc->id);
         if($tc && !$ch){
 
             // Check if tc has been added as a session resource.
-            $exists_as_resource_session = Database::get()->querySingle("SELECT id FROM session_resources 
-                                                                        WHERE session_id = ?d 
-                                                                        AND type = ?s 
+            $exists_as_resource_session = Database::get()->querySingle("SELECT id FROM session_resources
+                                                                        WHERE session_id = ?d
+                                                                        AND type = ?s
                                                                         AND res_id = ?d",$session_id,'tc',$tc->id);
             if($exists_as_resource_session){
                 Database::get()->query("INSERT INTO {$element}_criterion
@@ -2597,7 +2597,7 @@ function session_completion_with_tc_completed($element, $element_id, $session_id
                         module= " . MODULE_ID_TC . ",
                         resource = ?d,
                         activity_type = 'tc-completed'",$element_id, $tc->id);
-            
+
                 Session::flash('message',$langResourceAddedWithSuccess);
                 Session::flash('alert-class', 'alert-success');
             }else{
@@ -2615,8 +2615,8 @@ function session_completion_with_tc_completed($element, $element_id, $session_id
             }
 
         }
-        redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);                     
-        
+        redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
+
     }else{
         redirect_to_home_page("courses/$course_code/");
     }
@@ -2633,8 +2633,8 @@ function check_session_completion_by_meeting_completed($session_id = 0, $forUid 
 
     if($session_id){
         $badge_criterion = Database::get()->querySingle("SELECT * FROM badge_criterion
-                                                            WHERE badge IN (SELECT id FROM badge 
-                                                                            WHERE course_id = ?d 
+                                                            WHERE badge IN (SELECT id FROM badge
+                                                                            WHERE course_id = ?d
                                                                             AND session_id = ?d)
                                                             AND activity_type = ?s",$course_id, $session_id,'meeting-completed');
 
@@ -2644,7 +2644,7 @@ function check_session_completion_by_meeting_completed($session_id = 0, $forUid 
 
             // Initially we should check if a session has completed prequisite session
             $per = 100;
-            $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
+            $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite
                                                         WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
 
             if($has_prereq){
@@ -2653,7 +2653,7 @@ function check_session_completion_by_meeting_completed($session_id = 0, $forUid 
                     $per = get_cert_percentage_completion_by_user('badge',$badge_prerequisite->id,$forUid);
                 }
             }
-            
+
             if($per < 100){
                 return;
             }
@@ -2663,27 +2663,27 @@ function check_session_completion_by_meeting_completed($session_id = 0, $forUid 
                 // When meeting has expired then update db
                 $check_meeting = Database::get()->querySingle("SELECT finish,start FROM mod_session WHERE id = ?d AND course_id = ?d AND type_remote = ?d",$session_id,$course_id,0);
                 if($check_meeting->finish < date("Y-m-d H:i:s") && $check_meeting->start < date("Y-m-d H:i:s")){
-                    Database::get()->query("INSERT INTO user_badge_criterion 
+                    Database::get()->query("INSERT INTO user_badge_criterion
                                             SET user = ?d,
                                             created = " . DBHelper::timeAfter() . ",
                                             badge_criterion = ?d",$forUid,$badge_criterion_id);
 
                     Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria + 1,
                                             updated = " . DBHelper::timeAfter() . ",
-                                            assigned = " . DBHelper::timeAfter() . " 
+                                            assigned = " . DBHelper::timeAfter() . "
                                             WHERE user = ?d AND badge = ?d",$forUid,$badge_id);
                 }
             }elseif($res){
                 $check_meeting = Database::get()->querySingle("SELECT finish FROM mod_session WHERE id = ?d AND course_id = ?d",$session_id,$course_id);
                 // meeting not completed
                 if($check_meeting->finish > date("Y-m-d H:i:s")){
-                    Database::get()->query("DELETE FROM user_badge_criterion 
+                    Database::get()->query("DELETE FROM user_badge_criterion
                                             WHERE user = ?d
                                             AND badge_criterion = ?d",$forUid,$badge_criterion_id);
 
                     Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria - 1,
                                             updated = " . DBHelper::timeAfter() . ",
-                                            assigned = " . DBHelper::timeAfter() . " 
+                                            assigned = " . DBHelper::timeAfter() . "
                                             WHERE user = ?d AND badge = ?d",$forUid,$badge_id);
                 }
             }
@@ -2701,8 +2701,8 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
 
     if($session_id){
         $badge_criterion = Database::get()->queryArray("SELECT * FROM badge_criterion
-                                                            WHERE badge IN (SELECT id FROM badge 
-                                                                            WHERE course_id = ?d 
+                                                            WHERE badge IN (SELECT id FROM badge
+                                                                            WHERE course_id = ?d
                                                                             AND session_id = ?d)
                                                             AND activity_type = ?s",$course_id, $session_id,'tc-completed');
 
@@ -2718,12 +2718,12 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
                     break;
                 }
             }
-            
+
             if($badge_criterion_id > 0){
-                
+
                 // Initially we should check if a session has completed prequisite session
                 $per = 100;
-                $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite 
+                $has_prereq = Database::get()->querySingle("SELECT prerequisite_session FROM session_prerequisite
                                                             WHERE course_id = ?d AND session_id = ?d",$course_id,$session_id);
 
                 if($has_prereq){
@@ -2732,7 +2732,7 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
                         $per = get_cert_percentage_completion_by_user('badge',$badge_prerequisite->id,$forUid);
                     }
                 }
-                
+
                 if($per < 100){
                     return;
                 }
@@ -2742,27 +2742,27 @@ function check_session_completion_by_tc_completed($session_id = 0, $forUid = 0){
                     // When tc has expired then update db
                     $check_tc = Database::get()->querySingle("SELECT end_date,start_date FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$tc_id,$course_id,$session_id);
                     if($check_tc->end_date < date("Y-m-d H:i:s") && $check_tc->start_date < date("Y-m-d H:i:s")){
-                        Database::get()->query("INSERT INTO user_badge_criterion 
+                        Database::get()->query("INSERT INTO user_badge_criterion
                                                 SET user = ?d,
                                                 created = " . DBHelper::timeAfter() . ",
                                                 badge_criterion = ?d",$forUid,$badge_criterion_id);
 
                         Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria + 1,
                                                 updated = " . DBHelper::timeAfter() . ",
-                                                assigned = " . DBHelper::timeAfter() . " 
+                                                assigned = " . DBHelper::timeAfter() . "
                                                 WHERE user = ?d AND badge = ?d",$forUid,$badge_id);
                     }
                 }elseif($res){
                     $check_tc = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$tc_id,$course_id,$session_id);
                     // tc not completed
                     if($check_tc->end_date > date("Y-m-d H:i:s")){
-                        Database::get()->query("DELETE FROM user_badge_criterion 
+                        Database::get()->query("DELETE FROM user_badge_criterion
                                                 WHERE user = ?d
                                                 AND badge_criterion = ?d",$forUid,$badge_criterion_id);
 
                         Database::get()->query("UPDATE user_badge SET completed_criteria = completed_criteria - 1,
                                                 updated = " . DBHelper::timeAfter() . ",
-                                                assigned = " . DBHelper::timeAfter() . " 
+                                                assigned = " . DBHelper::timeAfter() . "
                                                 WHERE user = ?d AND badge = ?d",$forUid,$badge_id);
                     }
                 }
@@ -2805,7 +2805,7 @@ function display_session_available_polls($element, $element_id, $session_id = 0,
                                                 AND visible = 1", $session_id);
         }
 
-    } 
+    }
 
     $pollinfo = array();
     foreach ($result as $row) {
@@ -3191,7 +3191,7 @@ function add_submitted_document_to_certificate($element, $element_id) {
 function passage_insertion($sid){
     global $course_code, $course_id, $tool_content, $langInsertPassage, $langSubmit, $langImgFormsDes, $langForm;
 
-    $tool_content .= "  
+    $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
@@ -3210,7 +3210,7 @@ function passage_insertion($sid){
                             </div>
                         </div>
 
-                        " . generate_csrf_token_form_field() . "    
+                        " . generate_csrf_token_form_field() . "
 
                     </fieldset>
                 </form>
@@ -3233,18 +3233,18 @@ function passage_insertion($sid){
 function insert_session_passage($sid) {
     global $course_code, $course_id, $langText;
 
-    
+
     if($sid){
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
         $order++;
-        $q =  Database::get()->query("INSERT INTO session_resources SET 
-                                        session_id = ?d, 
-                                        type = 'passage', 
-                                        title = '$langText', 
-                                        visible = 1, 
-                                        `order` = ?d, 
+        $q =  Database::get()->query("INSERT INTO session_resources SET
+                                        session_id = ?d,
+                                        type = 'passage',
+                                        title = '$langText',
+                                        visible = 1,
+                                        `order` = ?d,
                                         `date` = " . DBHelper::timeAfter() . ", passage = ?s", $sid, $order, $_POST['add_passage']);
-        
+
 
     }
 
@@ -3263,15 +3263,15 @@ function user_badge_deletion($u,$sid){
     global $course_id;
 
     Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND from_user = ?d", $sid, $u);
-    
-    Database::get()->query("DELETE FROM user_badge_criterion 
-                            WHERE user = ?d 
+
+    Database::get()->query("DELETE FROM user_badge_criterion
+                            WHERE user = ?d
                             AND badge_criterion IN
                                 (SELECT id FROM badge_criterion WHERE badge IN
                                 (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d))", $u, $course_id, $sid);
 
-    Database::get()->query("DELETE FROM user_badge 
-                            WHERE user = ?d 
+    Database::get()->query("DELETE FROM user_badge
+                            WHERE user = ?d
                             AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d)", $u, $course_id, $sid);
 }
 
@@ -3299,7 +3299,7 @@ function session_completed_resources_by_user($sid,$cid,$user){
     global $langResourceAsActivity, $langCompletedSessionMeeting, $langCompletedSessionWithoutActivity, $langCommentsByConsultant, $langAttendance;
 
     $html = "";
-    $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion 
+    $criteria = Database::get()->queryArray("SELECT * FROM badge_criterion
                                                         WHERE badge IN (SELECT id FROM badge
                                                                     WHERE course_id = ?d AND session_id = ?d)",$cid,$sid);
 
@@ -3308,13 +3308,13 @@ function session_completed_resources_by_user($sid,$cid,$user){
         foreach($criteria as $c){
             $resource_info = "";
             if($c->activity_type == 'document-submit'){
-                $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
-                    WHERE session_id = ?d 
+                $info_cr = database::get()->querySingle("SELECT title FROM session_resources
+                    WHERE session_id = ?d
                     AND res_id = ?d
                     AND type = ?s",$sid,$c->resource,'doc');
 
-                $completed_cr = database::get()->querySingle("SELECT * FROM session_resources 
-                                                                WHERE session_id = ?d 
+                $completed_cr = database::get()->querySingle("SELECT * FROM session_resources
+                                                                WHERE session_id = ?d
                                                                 AND doc_id = ?d
                                                                 AND from_user = ?d
                                                                 AND type = ?s
@@ -3326,85 +3326,85 @@ function session_completed_resources_by_user($sid,$cid,$user){
                         $comments_by_consultant = "<div style='margin-left:20px; margin-top:5px;'><strong style='text-decoration: underline;'>$langCommentsByConsultant</strong><ul><li>" . $completed_cr->deliverable_comments . "</li></ul></div>";
                     }
                     $resource_info = "<div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            <div class='Success-200-cl'>&#10004;</div>" .
                                             "<div>" . $info_cr->title . $comments_by_consultant . "</div>
                                       </div>";
                 }else{
                     $resource_info = "<div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            <div class='Accent-200-cl'>&#x2718;</div>" .
                                             "<div>" . $info_cr->title . $comments_by_consultant . "</div>
                                       </div>";
                 }
 
             }elseif($c->activity_type == 'tc-completed'){
-                $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
-                    WHERE session_id = ?d 
+                $info_cr = database::get()->querySingle("SELECT title FROM session_resources
+                    WHERE session_id = ?d
                     AND type = ?s
                     AND res_id = ?d",$sid,'tc',$c->resource);
 
-                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
-                                                                WHERE user = ?d 
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
+                                                                WHERE user = ?d
                                                                 AND badge_criterion = ?d",$user,$c->id);
 
                 if($completed_cr){
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            <div class='Success-200-cl'>&#10004;</div>" .
                                             "<div>" . $info_cr->title . "</div>
                                         </div>";
                 }else{
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            <div class='Accent-200-cl'>&#x2718;</div>" .
                                             "<div>" . $info_cr->title . "</div>
                                         </div>";
                 }
 
             }elseif($c->activity_type == 'meeting-completed'){
-                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
-                                                                WHERE user = ?d 
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
+                                                                WHERE user = ?d
                                                                 AND badge_criterion = ?d",$user,$c->id);
 
                 if($completed_cr){
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            <div class='Success-200-cl'>&#10004;</div>" .
                                             "<div>" . "$langCompletedSessionMeeting" . "</div>
                                         </div>";
                 }else{
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            <div class='Accent-200-cl'>&#x2718;</div>" .
                                             "<div>" . "$langCompletedSessionMeeting" . "</div>
                                         </div>";
                 }
 
             }elseif($c->activity_type == 'noactivity'){
-                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
-                                                                WHERE user = ?d 
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
+                                                                WHERE user = ?d
                                                                 AND badge_criterion = ?d",$user,$c->id);
 
                 if($completed_cr){
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            <div class='Success-200-cl'>&#10004;</div>" .
                                             "<div>" . "$langCompletedSessionWithoutActivity" . "</div>
                                         </div>";
                 }else{
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            <div class='Accent-200-cl'>&#x2718;</div>" .
                                             "<div>" . "$langCompletedSessionWithoutActivity" . "</div>
                                         </div>";
                 }
 
             }elseif($c->activity_type == 'consultant-completion'){
-                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion 
-                                                                WHERE user = ?d 
+                $completed_cr = database::get()->querySingle("SELECT * FROM user_badge_criterion
+                                                                WHERE user = ?d
                                                                 AND badge_criterion = ?d",$user,$c->id);
 
                 if($completed_cr){
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Success-200-cl'>&#10004;</div>" . 
+                                            <div class='Success-200-cl'>&#10004;</div>" .
                                             "<div>" . "$langAttendance" . "</div>
                                         </div>";
                 }else{
                     $resource_info = "  <div class='d-flex justify-content-start align-items-start gap-2'>
-                                            <div class='Accent-200-cl'>&#x2718;</div>" . 
+                                            <div class='Accent-200-cl'>&#x2718;</div>" .
                                             "<div>" . "$langAttendance" . "</div>
                                         </div>";
                 }
@@ -3433,7 +3433,7 @@ function show_completed_resources($sid,$cid,$user){
     if($badge){
 
         // Completed criteria by a user
-        $completed_criteria = Database::get()->queryArray("SELECT * FROM badge_criterion 
+        $completed_criteria = Database::get()->queryArray("SELECT * FROM badge_criterion
                                                             WHERE badge = ?d
                                                             AND id IN (SELECT badge_criterion FROM user_badge_criterion
                                                                         WHERE user = ?d)",$badge->id,$user);
@@ -3445,8 +3445,8 @@ function show_completed_resources($sid,$cid,$user){
             foreach($completed_criteria as $c){
                 $resource_info = "";
                 if($c->activity_type == 'document-submit'){
-                    $info_cr = database::get()->querySingle("SELECT doc_id FROM session_resources 
-                                                                WHERE session_id = ?d 
+                    $info_cr = database::get()->querySingle("SELECT doc_id FROM session_resources
+                                                                WHERE session_id = ?d
                                                                 AND doc_id = ?d
                                                                 AND from_user = ?d
                                                                 AND type = ?s
@@ -3455,8 +3455,8 @@ function show_completed_resources($sid,$cid,$user){
                     $resource_info = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d",$info_cr->doc_id)->title;
 
                 }elseif($c->activity_type == 'tc-completed'){
-                    $info_cr = database::get()->querySingle("SELECT title FROM session_resources 
-                                                                WHERE session_id = ?d 
+                    $info_cr = database::get()->querySingle("SELECT title FROM session_resources
+                                                                WHERE session_id = ?d
                                                                 AND doc_id = ?d
                                                                 AND from_user = ?d
                                                                 AND type = ?s
