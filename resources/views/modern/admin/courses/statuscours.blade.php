@@ -22,7 +22,9 @@
                     <div class='col-lg-6 col-12'>
                       <div class='form-wrapper form-edit border-0 px-0'>
                           
-                          <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?c={{$course->code}}" method='post'>                
+                          <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?c={{$course->code}}" method='post'> 
+                              <fieldset>
+                              <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>               
                               <div class='form-group'>
                                       <label for='localize' class='col-sm-6 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</label>
                                       <div class='radio mb-4'>
@@ -73,6 +75,7 @@
                                       <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                   </div>
                               </div>
+                            </fieldset>
                           </form>
                       </div>
                     </div>

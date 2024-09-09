@@ -974,151 +974,157 @@ $tool_content .= "
             <!-- GENERAL SETTINGS -->
             <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
                 <div class='form-wrapper form-edit form-create-theme rounded'>
-                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
-                        <div>
-                            <h3 class='theme_options_legend text-decoration-underline'>$langViewPlatform</h3>
-                            <div class='form-group'>
-                                <div class='checkbox'>
-                                    <label class='label-container' aria-label='$langSettingSelect'>
-                                        <input type='checkbox' name='view_platform' id='view_platform_boxed' value='boxed' ".(($theme_options_styles['view_platform'] == 'boxed')? 'checked' : '').">
-                                        <span class='checkmark'></span>
-                                        $langViewBoxedType
-                                    </label>
-                                    <small class='ms-5'>$langHelpBoxedWidthInfo</small>
+                    <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
+                        <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                            <div>
+                                <h3 class='theme_options_legend text-decoration-underline'>$langViewPlatform</h3>
+                                <div class='form-group'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='view_platform' id='view_platform_boxed' value='boxed' ".(($theme_options_styles['view_platform'] == 'boxed')? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langViewBoxedType
+                                        </label>
+                                        <small class='ms-5'>$langHelpBoxedWidthInfo</small>
+                                    </div>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='view_platform' id='view_platform_fluid' value='fluid' ".(($theme_options_styles['view_platform'] == 'fluid')? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langViewFluidType
+                                        </label>
+                                        <small class='ms-5'>$langHelpFluidWidthInfo</small>
+                                    </div>
                                 </div>
-                                <div class='checkbox'>
-                                    <label class='label-container' aria-label='$langSettingSelect'>
-                                        <input type='checkbox' name='view_platform' id='view_platform_fluid' value='fluid' ".(($theme_options_styles['view_platform'] == 'fluid')? 'checked' : '').">
-                                        <span class='checkmark'></span>
-                                        $langViewFluidType
-                                    </label>
-                                    <small class='ms-5'>$langHelpFluidWidthInfo</small>
-                                </div>
-                            </div>
-                            <hr>
-                            <h3 class='theme_options_legend text-decoration-underline'>$langLayoutConfig</h3>
-                            <div class='form-group'>
-                                <div class='col-sm-12 control-label-notes mb-2'>$langLayout:</div>
-                                <div class='form-inline col-sm-12'>
-                                    <div class='row'>
-                                        <div class='col-sm-3'>
-                                            <div class='radio'>
-                                                <label>
-                                                <input type='radio' name='containerType' value='boxed' ".(($theme_options_styles['containerType'] == 'boxed')? 'checked' : '').">
-                                                    $langBoxed &nbsp;
-                                                </label>
+                                <hr>
+                                <h3 class='theme_options_legend text-decoration-underline'>$langLayoutConfig</h3>
+                                <div class='form-group'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langLayout:</div>
+                                    <div class='form-inline col-sm-12'>
+                                        <div class='row'>
+                                            <div class='col-sm-3'>
+                                                <div class='radio'>
+                                                    <label>
+                                                    <input type='radio' name='containerType' value='boxed' ".(($theme_options_styles['containerType'] == 'boxed')? 'checked' : '').">
+                                                        $langBoxed &nbsp;
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class='col-sm-9'>
-                                            <div class='radio'>
-                                                <label>
-                                                <input type='radio' name='containerType' value='fluid' ".(($theme_options_styles['containerType'] == 'fluid')? 'checked' : '').">
-                                                    $langFluid &nbsp;
-                                                </label>
+                                            <div class='col-sm-9'>
+                                                <div class='radio'>
+                                                    <label>
+                                                    <input type='radio' name='containerType' value='fluid' ".(($theme_options_styles['containerType'] == 'fluid')? 'checked' : '').">
+                                                        $langFluid &nbsp;
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')." mt-4'>
-                                <label for='fluidContainerWidth' class='col-sm-6 control-label-notes mb-2'>$langFluidContainerWidth:</label>
-                                <div class='col-sm-12'>
-                                    <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1140' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
-                                    <span style='margin-left:10px;' id='pixelCounter'></span>
+                                <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')." mt-4'>
+                                    <label for='fluidContainerWidth' class='col-sm-6 control-label-notes mb-2'>$langFluidContainerWidth:</label>
+                                    <div class='col-sm-12'>
+                                        <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1140' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
+                                        <span style='margin-left:10px;' id='pixelCounter'></span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLogoConfig</h3>
+                                <div class='form-group'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
+                                    <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                                        $logo_field
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</div>
+                                    <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                                        $small_logo_field
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
+                                    <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                                        $faviconUpload
+                                    </div>
                                 </div>
                             </div>
-                            <hr>
-                            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLogoConfig</h3>
-                            <div class='form-group'>
-                                <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</div>
-                                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                                    $logo_field
-                                </div>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <div class='col-sm-12 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</div>
-                                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                                    $small_logo_field
-                                </div>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <div class='col-sm-12 control-label-notes mb-2'>$langFavicon </div>
-                                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                                    $faviconUpload
-                                </div>
+                            <div class='d-flex justify-content-center align-items-start flex-wrap gap-4'>
+                                <figure class='figure'>
+                                    <img src='$urlServer/template/modern/images/theme_settings/general_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                    <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                                </figure>
+                                <figure class='figure'>
+                                    <img src='$urlServer/template/modern/images/theme_settings/general_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                    <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                                </figure>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-center align-items-start flex-wrap gap-4'>
-                            <figure class='figure'>
-                                <img src='$urlServer/template/modern/images/theme_settings/general_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
-                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
-                            </figure>
-                            <figure class='figure'>
-                                <img src='$urlServer/template/modern/images/theme_settings/general_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
-                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
-                            </figure>
-                        </div>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
 
             <!-- BODY SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsBody'>
                 <div class='form-wrapper form-edit form-create-theme rounded'>
-                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
-                        <div>
-                            <h3 class='theme_options_legend text-decoration-underline'>$langConfig (Body)</h3>
-                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
-                                <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
+                    <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
+                        <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                            <div>
+                                <h3 class='theme_options_legend text-decoration-underline'>$langConfig (Body)</h3>
+                                <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                    <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                    <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langBgImg:</div>
+                                    <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                                        $bg_field
+                                    </div>
+                                    <div class='form-inline col-sm-9 col-sm-offset-3 mt-2'>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
+                                                $langRepeatedImg &nbsp;
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='bgType' value='fix' ".(($theme_options_styles['bgType'] == 'fix')? 'checked' : '').">
+                                                $langFixedImg &nbsp;
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
+                                                $langStretchedImg &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='bgOpacityImage' value='1' ".((isset($theme_options_styles['bgOpacityImage']))? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langAddOpacityImage
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class='form-group mt-4'>
-                                <div class='col-sm-12 control-label-notes mb-2'>$langBgImg:</div>
-                                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                                    $bg_field
-                                </div>
-                                <div class='form-inline col-sm-9 col-sm-offset-3 mt-2'>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
-                                            $langRepeatedImg &nbsp;
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='bgType' value='fix' ".(($theme_options_styles['bgType'] == 'fix')? 'checked' : '').">
-                                            $langFixedImg &nbsp;
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
-                                            $langStretchedImg &nbsp;
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <div class='checkbox'>
-                                    <label class='label-container' aria-label='$langSettingSelect'>
-                                        <input type='checkbox' name='bgOpacityImage' value='1' ".((isset($theme_options_styles['bgOpacityImage']))? 'checked' : '').">
-                                        <span class='checkmark'></span>
-                                        $langAddOpacityImage
-                                    </label>
-                                </div>
+                            <div class='d-flex justify-content-center align-items-start flex-wrap gap-4'>
+                                <figure class='figure'>
+                                    <img src='$urlServer/template/modern/images/theme_settings/body_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                    <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                                </figure>
+                                <figure class='figure'>
+                                    <img src='$urlServer/template/modern/images/theme_settings/body_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                    <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                                </figure>
                             </div>
                         </div>
-                        <div class='d-flex justify-content-center align-items-start flex-wrap gap-4'>
-                            <figure class='figure'>
-                                <img src='$urlServer/template/modern/images/theme_settings/body_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
-                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
-                            </figure>
-                            <figure class='figure'>
-                                <img src='$urlServer/template/modern/images/theme_settings/body_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
-                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
-                            </figure>
-                        </div>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
 
@@ -1493,69 +1499,72 @@ $tool_content .= "
             <!-- HOMEPAGE SETTINGS -->
             <div role='tabpanel' class='tab-pane fade' id='navsettingsLoginHomepage'>
                 <div class='form-wrapper form-edit rounded'>
-                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
-                        <div>
-                            <h3 class='theme_options_legend text-decoration-underline'>$langBasicOptions</h3>
-                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient (jumbotron):</label>
-                                <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
-                                <i class='fa fa-arrow-right ms-3 me-3'></i>
-                                <input aria-label='$langBgColor' name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <div class='col-sm-12'>
-                                $login_image_field
+                    <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
+                        <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                            <div>
+                                <h3 class='theme_options_legend text-decoration-underline'>$langBasicOptions</h3>
+                                <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                    <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient (jumbotron):</label>
+                                    <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
+                                    <i class='fa fa-arrow-right ms-3 me-3'></i>
+                                    <input aria-label='$langBgColor' name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
                                 </div>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor (jumbotron):</label>
-                                <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
-                                <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
-                            </div>
-                            <div class='form-group mt-4'>
-                                <div class='col-sm-12'>
-                                $login_image_fieldL
-                                </div>
-                            </div>";
-                            $tool_content .= "<div class='form-group mt-4'>
-                                <div class='form-inline col-sm-9 col-sm-offset-3'>
-                                    <div class='radio'>
-                                        <label>
-                                        <input type='radio' name='FormLoginPlacement' value='center-position' " . ((isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement'] == 'center-position') ? 'checked' : '') . ">
-                                        $langFormLoginPlacementCenter
-                                        </label>
-                                    </div>
-                                    <div class='radio'>
-                                        <label>
-                                        <input type='radio' name='FormLoginPlacement' value='right-position' " . ((isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement'] == 'right-position') ? 'checked' : '') . ">
-                                        $langFormLoginPlacementLeft &nbsp;
-                                        </label>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12'>
+                                    $login_image_field
                                     </div>
                                 </div>
-                            </div>";
-                            $tool_content .= "<div class='form-group mt-4'>
-                                <div class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</div>
-                                <div class='col-sm-12'>
-                                    <div class='checkbox'>
-                                        <label class='label-container' aria-label='$langSettingSelect'>
-                                        <input type='checkbox' name='openeclassBanner' value='1' ".((isset($theme_options_styles['openeclassBanner']))? 'checked' : '').">
-                                        <span class='checkmark'></span>
-                                        $langDeactivate
-                                        </label>
+                                <div class='form-group mt-4'>
+                                    <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor (jumbotron):</label>
+                                    <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
+                                    <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12'>
+                                    $login_image_fieldL
+                                    </div>
+                                </div>";
+                                $tool_content .= "<div class='form-group mt-4'>
+                                    <div class='form-inline col-sm-9 col-sm-offset-3'>
+                                        <div class='radio'>
+                                            <label>
+                                            <input type='radio' name='FormLoginPlacement' value='center-position' " . ((isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement'] == 'center-position') ? 'checked' : '') . ">
+                                            $langFormLoginPlacementCenter
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                            <input type='radio' name='FormLoginPlacement' value='right-position' " . ((isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement'] == 'right-position') ? 'checked' : '') . ">
+                                            $langFormLoginPlacementLeft &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>";
+                                $tool_content .= "<div class='form-group mt-4'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</div>
+                                    <div class='col-sm-12'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='openeclassBanner' value='1' ".((isset($theme_options_styles['openeclassBanner']))? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langDeactivate
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class='d-flex justify-content-center align-items-start'>
-                            <figure class='figure'>
-                                <img src='$urlServer/template/modern/images/theme_settings/homepage_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
-                                <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
-                            </figure>
-                        </div>
-                    </div>
+                            <div class='d-flex justify-content-center align-items-start'>
+                                <figure class='figure'>
+                                    <img src='$urlServer/template/modern/images/theme_settings/homepage_1.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
+                                    <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
+                                </figure>
+                            </div>
+                        </div> 
+                    </fieldset>
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
                         <div>

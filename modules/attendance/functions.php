@@ -1148,7 +1148,7 @@ function user_attendance_settings($attendance_id) {
            $langAttendanceUpdate, $langAttendanceInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $attendance, $urlAppend, $langImgFormsDes;
+           $langStudents, $langMove, $langParticipate, $attendance, $urlAppend, $langImgFormsDes, $langForm;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1173,6 +1173,8 @@ function user_attendance_settings($attendance_id) {
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
+                    <fieldset>
+                    <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='form-group'>
                         <div class='col-12'><span class='help-block'>$langAttendanceInfoForUsers</span></div>
                     </div>
@@ -1270,6 +1272,7 @@ function user_attendance_settings($attendance_id) {
                         )
                     ))."</div>
                     </div>
+                </fieldset>
                 </form>
             </div>
         </div>

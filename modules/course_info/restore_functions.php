@@ -323,7 +323,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes,$langSelect;
+    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes, $langSelect, $langForm;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -351,7 +351,8 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
-
+                    <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='col-12'>
                             <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfo1 <br> $langInfo2</span></div>
                         </div>
@@ -441,6 +442,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
 
                         </div>
                     " . generate_csrf_token_form_field() . "
+                    </fieldset>
                 </form>
             </div>
         </div>

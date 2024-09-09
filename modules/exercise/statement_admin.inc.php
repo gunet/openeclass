@@ -217,7 +217,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>                              
+            <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'> 
+            <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>                             
             <div class='row form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
                 <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion</label>
                 <div class='col-12'>

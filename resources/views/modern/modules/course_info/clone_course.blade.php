@@ -63,7 +63,8 @@
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded' >
                                 <form class='form-horizontal' role='form' action='{{ $formAction }}' method='post' onsubmit='return validateNodePickerForm();' >
-
+                                    <fieldset>
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group'>
                                         <label for='course_code' class='col-sm-12 control-label-notes'>{{ trans('langCourseCode') }}:</label>
                                         <div class='col-sm-12'>
@@ -139,6 +140,7 @@
                                         </div>
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}
+                                </fieldset>
                                 </form>
                             </div>
                         </div>

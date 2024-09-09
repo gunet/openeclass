@@ -294,7 +294,8 @@ if (isset($_GET['action'])) {
             <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
-
+                        <fieldset>
+                            <legend class='mb-0' aria-label='$langForm'></legend>
                             <div class='form-group'>
                                 <label for='filename_id' class='col-sm-12 control-label-notes'>$langZipFile</label>
                                 <input id='filename_id' type='file' class='' name='filename' value=''>
@@ -371,6 +372,7 @@ if (isset($_GET['action'])) {
                                 <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
                                 <a class='btn cancelAdminBtn' href='index.php'>$langCancel</a>
                             </div>
+                        </fieldset>
                     </form>
                 </div>
             </div>
