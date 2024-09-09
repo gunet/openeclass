@@ -602,8 +602,9 @@ function group_secret($gid) {
  * @return string
  */
 function selection($entries, $name, $default = '', $extra = '') {
+    global $langSelect;
     $retString = "";
-    $retString .= "\n<select class='form-select' name='$name' $extra>\n";
+    $retString .= "\n<select class='form-select' name='$name' $extra aria-label='$langSelect'>\n";
     foreach ($entries as $value => $label) {
         if (isset($default) && ($value == $default)) {
             $retString .= "<option selected value='" . q($value) . "'>" .

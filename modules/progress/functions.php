@@ -897,7 +897,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
            $langAddModulesButton, $langChoice, $langParticipateSimple,
-           $langOperator, $langGradebookGrade, $urlServer, $langSelect;
+           $langOperator, $langGradebookGrade, $urlServer, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $form_submit_name = 'add_assignment';
@@ -962,7 +962,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $tool_content .=
                 "<td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
-                "<td><input class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
+                "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
             }
             $tool_content .=
                 "<td><label class='label-container' aria-label='$langSelect'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
@@ -987,7 +987,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
             $langNoExercises, $langChoice, $langAddModulesButton,
-            $langOperator, $langGradebookGrade, $langSelect;
+            $langOperator, $langGradebookGrade, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1047,7 +1047,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
-            $tool_content .= "<td><input class='form-control' type='text' name='threshold[$exercise_id]' value=''></td>";
+            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$exercise_id]' value=''></td>";
             $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='exercise[]' value='$exercise_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
@@ -1243,7 +1243,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langNumOfBlogs,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langOperator, $langSelect;
+           $langChoice, $langOperator, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1274,7 +1274,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
             $tool_content .= "<tr>" .
                     "<td>$langNumOfBlogs</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td><input class='form-control' type='text' name='threshold' value=''></td>" .
+                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>" .
                     "<td><label class='label-container' aria-label='$langSelect'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
@@ -1293,7 +1293,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langBlogEmpty,
            $urlServer, $course_code, $langTitle, $langValue,
-           $langChoice, $langDate, $course_id, $langOperator, $langSelect;
+           $langChoice, $langDate, $course_id, $langOperator, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1329,7 +1329,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                     "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
                     "<td>" . format_locale_date(strtotime($row->time), 'short') . "</td>
                     <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
-                    "<td><input class='form-control' type='text' name='threshold[$blog_id]' value=''></td>" .
+                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$blog_id]' value=''></td>" .
                     "<td><label class='label-container' aria-label='$langSelect'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
@@ -1358,7 +1358,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langAddModulesButton, $langNumInForum,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langOperator, $langSelect;
+           $langChoice, $langOperator, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1390,7 +1390,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
             $tool_content .= "<tr>" .
                     "<td>$langNumInForum</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td><input class='form-control' type='text' name='threshold' value=''></td>" .
+                    "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>" .
                     "<td><label class='label-container' aria-label='$langSelect'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
@@ -1410,7 +1410,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
 
     global $tool_content, $urlServer, $course_id,
            $langAddModulesButton, $langChoice, $langNoForumTopic,
-           $langTopics, $course_code, $langOperator, $langValue, $langSelect;
+           $langTopics, $course_code, $langOperator, $langValue, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1474,7 +1474,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
-            $tool_content .= "<td><input class='form-control' type='text' name='threshold[$topic_id]' value=''></td>";
+            $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$topic_id]' value=''></td>";
             $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='forumtopic[]' value='$topic_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
@@ -1496,7 +1496,7 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
 
     global $course_id, $course_code, $urlServer, $tool_content,
            $langNoLearningPath, $langLearningPaths, $langPercentage, $langHours,
-           $langChoice, $langAddModulesButton, $langOperator, $langSelect;
+           $langChoice, $langAddModulesButton, $langOperator, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate') ? 'certificate_id' : 'badge_id';
     $threshold_col_title = $langPercentage;
@@ -1571,7 +1571,7 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
                 $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
-                $tool_content .= "<td><input class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
+                $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
                 $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='lp[]' value='$lp_id'><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
             }
@@ -1924,7 +1924,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $langResourceAlreadyAdded,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
-    $course_code, $langOperator, $langValue, $langSelect;
+    $course_code, $langOperator, $langValue, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -1955,7 +1955,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
         $tool_content .= "<tr>
                             <td>$langWikiPages</td>
                             <td>". selection(get_operators(), "operator") . "</td>
-                            <td><input class='form-control' type='text' name='threshold' value=''></td>
+                            <td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>
                             <td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
                         </tr>";
 
@@ -1977,7 +1977,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
 
     global $tool_content, $course_code, $langHours,
            $langTitle, $langChoice, $langAddModulesButton,
-           $langOperator, $langCourseParticipation, $langResourceAlreadyAdded, $langSelect;
+           $langOperator, $langCourseParticipation, $langResourceAlreadyAdded, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -2007,7 +2007,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
         $tool_content .= "<tr>
                             <td>$langCourseParticipation</td>
                             <td>". selection(get_operators(), "operator") . "</td>
-                            <td><input class='form-control' type='text' name='threshold' value=''></td>
+                            <td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>
                             <td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='participation' value='1'><span class='checkmark'></span></label></td>
                         </tr>";
 
@@ -2028,7 +2028,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
 
     global $course_id, $tool_content, $langNoGradeBooks, $course_code, $urlServer,
            $langAvailableGradebooks, $langStart, $langFinish, $langChoice,
-           $langAddModulesButton, $langOperator, $langGradebookGrade, $langSelect;
+           $langAddModulesButton, $langOperator, $langGradebookGrade, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -2072,7 +2072,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
                 "<td>" . $start_date . "</td>" .
                 "<td>" . $end_date . "</td>" .
                 "<td>". selection(get_operators(), "operator[$gradebook_id]") . "</td>".
-                "<td><input class='form-control' type='text' name='threshold[$gradebook_id]' value=''></td>" .
+                "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$gradebook_id]' value=''></td>" .
                 "<td><label class='label-container' aria-label='$langSelect'><input name='gradebook[]' value='$gradebook_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                 "</tr>";
         }
@@ -2092,7 +2092,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
 
     global $tool_content, $langAddModulesButton, $langCourseCompletion,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langPercentage, $langSelect;
+           $langChoice, $langPercentage, $langSelect, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -2122,7 +2122,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
         $tool_content .= "<tr>" .
             "<td>" . $langCourseCompletion . "</td>" .
             "<td>". selection(get_operators(), "operator") . "</td>".
-            "<td><input class='form-control' type='text' name='threshold' value=''></td>" .
+            "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold' value=''></td>" .
             "<td><label class='label-container' aria-label='$langSelect'><input name='" . CourseCompletionEvent::ACTIVITY . "' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
             "</tr>";
 
@@ -2141,7 +2141,7 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
 
     global $course_id, $tool_content, $langNoAttendances, $course_code, $urlServer,
            $langAvailableAttendances, $langStart, $langFinish, $langChoice,
-           $langAddModulesButton, $langOperator, $langAttendanceAbsences;
+           $langAddModulesButton, $langOperator, $langAttendanceAbsences, $langPollFillText;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
@@ -2185,7 +2185,7 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
                 "<td class='text-center'>" . $start_date . "</td>" .
                 "<td class='text-center'>" . $end_date . "</td>" .
                 "<td>". selection(get_operators(), "operator[$attendance_id]") . "</td>".
-                "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$attendance_id]' value=''></td>" .
+                "<td class='text-center'><input aria-label='$langPollFillText' class='form-control' style='width:50px;' type='text' name='threshold[$attendance_id]' value=''></td>" .
                 "<td class='text-center'><input name='attendance[]' value='$attendance_id' type='checkbox'></td>" .
                 "</tr>";
         }
