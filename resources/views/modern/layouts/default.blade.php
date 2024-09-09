@@ -209,6 +209,7 @@
             $(".table-default thead tr th:last-child:not(:has(.fa-gears))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
             $(".table-default thead tr th:last-child:not(:has(.fa-cogs))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
             $(".sp-input-container .sp-input").attr("aria-label","{{ trans('langOptForColor') }}");
+            $('.select2-container--default .select2-search--inline .select2-search__field').attr("aria-label","{{ trans('langSearch') }}");
         });
     </script>
     @stack('bottom_scripts')

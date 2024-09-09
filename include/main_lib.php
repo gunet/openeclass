@@ -541,7 +541,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
         }
         if ($format == 'html') {
             $groups .= ((count($q) > 1) ? '<li>' : '') .
-                    "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' class='$visibility' title='" .
+                    "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' class='$visibility' aria-label='" .
                     q($r->name) . "'>" .
                     q(ellipsize($r->name, 40)) . "</a>" .
                     ((count($q) > 1) ? '</li>' : '');
@@ -2183,7 +2183,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options = []) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text, $langInputTextEditor;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -2372,7 +2372,7 @@ tinymce.init({
     } else {
         $textarea_text = '';
     }
-    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols'>" . $textarea_text . "</textarea>\n";
+    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols' aria-label='$langInputTextEditor'>" . $textarea_text . "</textarea>\n";
 }
 
 // Display a simple textarea with name $name
