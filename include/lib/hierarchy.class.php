@@ -663,14 +663,14 @@ jContent;
 
 
     private function buildHtmlNodePickerIndirect($options) {
-        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect, $langClose;
 
         $params = (array_key_exists('params', $options)) ? $options['params'] : '';
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
         $exclude = (array_key_exists('exclude', $options)) ? $options['exclude'] : null;
         $tree_array = (array_key_exists('tree', $options)) ? $options['tree'] : array('0' => 'Top');
         $where = (array_key_exists('where', $options)) ? $options['where'] : '';
-        $multiple = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
+        $multiple = array_key_exists('multiple', $options) && $options['multiple'];
         $skip_preloaded_defaults = (array_key_exists('skip_preloaded_defaults', $options)) ? $options['skip_preloaded_defaults'] : false;
 
 
