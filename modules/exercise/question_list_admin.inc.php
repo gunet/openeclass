@@ -432,7 +432,7 @@ $tool_content .= "<div>";
             'level' => 'primary-label',
             'button-class' => 'btn-success'),
         array('title' => $langRandomQuestionsWithCriteria,
-            'class' => 'randomWithCriteria',
+            'modal-class' => 'randomWithCriteria',
             'url' => "#",
             'level' => 'primary-label',
             'icon' => 'fa-random',
@@ -443,9 +443,9 @@ $tool_content .= "<div>";
             'icon' => 'fa-bank'),
         array('title' => $langWithCriteria,
             'url' => "#",
-            'class' => 'questionSelection',
+            'modal-class' => 'questionSelection',
             'level' => 'primary-label',
-            'icon' => 'fa-bank')),
+            'icon' => 'fa-building-flag')),
         false);
 $tool_content .= "</div>";
 
