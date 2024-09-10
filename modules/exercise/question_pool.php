@@ -244,7 +244,6 @@ if ($fromExercise) {
           'url' => "question_pool.php?course=$course_code&amp;dup=yes",
           'icon' => 'fa-copy',
           'level' => 'primary-label',
-          'class' => 'warnDup',
           'modal-class' => 'warnDup',
           'button-class' => 'btn-success' ],
         [ 'title' => $langDumpPDF,
