@@ -22,9 +22,9 @@
 
 // form select about visibility
 function visibility_select($current) {
-    global $langOpenCourse, $langRegCourse, $langClosedCourse, $langInactiveCourse;
+    global $langOpenCourse, $langRegCourse, $langClosedCourse, $langInactiveCourse, $langCourseVis;
 
-    $ret = "<select class='form-select' name='course_vis'>\n";
+    $ret = "<select class='form-select' name='course_vis' aria-label='$langCourseVis'>\n";
     foreach (array($langOpenCourse => COURSE_OPEN,
             $langRegCourse => COURSE_REGISTRATION,
             $langClosedCourse => COURSE_CLOSED,
@@ -364,7 +364,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='course_lang' class='col-12 control-label-notes'>$langLanguage</label>
+                            <div class='col-12 control-label-notes'>$langLanguage</div>
                             <div class='col-sm-12'>
                                 " . lang_select_options('course_lang') . "
                             </div>

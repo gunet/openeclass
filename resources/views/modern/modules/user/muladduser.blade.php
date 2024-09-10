@@ -25,6 +25,7 @@
                                 </div>
                                 <div class='form-wrapper form-edit rounded'>
                                     <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}'>
+                                        <fieldset>
                                         <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
                                         <div class='form-group'>
                                             <div class='col-sm-12 radio mb-2'>
@@ -50,6 +51,7 @@
                                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                         </div>
                                         {!! generate_csrf_token_form_field() !!}
+                                    </fieldset>
                                     </form>
                                 </div>
                             </div>
