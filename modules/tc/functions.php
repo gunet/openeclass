@@ -67,7 +67,7 @@ function select_tc_server($course_id) {
                   <tr>
                     <td>
                       <div>
-                        <img height='50' width='89' src='{$urlAppend}template/icons/$icon.png' alt=''>
+                        <img height='50' width='89' src='{$urlAppend}resources/icons/$icon.png' alt=''>
                         $title
                       </div>
                     </td>
