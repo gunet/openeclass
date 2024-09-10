@@ -277,8 +277,10 @@ if(isset($_POST['group_id'])){
 
 // Display groups by result
 $tool_content .= "<div class='col-12'>
-                    <form id='formId' class='form-wrapper' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
-
+                    <form id='formId' class='form-wrapper' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+                        <fieldset>
+                        <legend class='mb-0' aria-label='$langForm'></legend>";
+                    
                             if($num_of_groups > 0){
 
                 $tool_content .="<div class='table-responsive mt-0'>
@@ -547,7 +549,7 @@ $tool_content .= "<div class='col-12'>
 
 $tool_content .= "
 
-
+                        </fieldset>
                     </form>
                   </div>";
 

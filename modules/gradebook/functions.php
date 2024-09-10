@@ -34,7 +34,7 @@ function display_user_grades($gradebook_id) {
            $langGradebookWeight, $langGradebookBooking, $langGradebookNoActMessage1,
            $langGradebookNoActMessage2, $langGradebookNoActMessage3, $langGradebookActCour,
            $langGradebookAutoGrade, $langGradebookNoAutoGrade, $langGradebookActAttend,
-           $langGradebookOutRange, $langGradebookUpToDegree, $langGradeNoBookAlert, $langGradebookGrade;
+           $langGradebookOutRange, $langGradebookUpToDegree, $langGradeNoBookAlert, $langGradebookGrade, $langAddGrade;
 
     $gradebook_range = get_gradebook_range($gradebook_id);
     if(weightleft($gradebook_id, 0) == 0) {
@@ -51,7 +51,7 @@ function display_user_grades($gradebook_id) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
         $actNumber = count($result);
         if ($actNumber > 0) {
-            $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
+            $tool_content .= "<div class='text-heading-h5'>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</div>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
             $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>";
@@ -110,7 +110,7 @@ function display_user_grades($gradebook_id) {
                 }
                 $tool_content .= "<td>" . $activity->weight . "%</td>";
                 @$tool_content .= "<td>
-                <input class='form-control' type='text' value='".$userGrade."' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
+                <input class='form-control' aria-label='$langAddGrade' type='text' value='".$userGrade."' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
                 $tool_content .= ">
                 <input type='hidden' value='" . $gradebook_range . "' name='degreerange'>
                 <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>

@@ -325,8 +325,8 @@
                                         </div>
 
                                         <div class='form-group mt-4'>
-                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</p>
-                                            <select class='form-select' name='type_remote'>
+                                            <label for='typeRemoteId' class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }}</label>
+                                            <select class='form-select' name='type_remote' id='typeRemoteId'>
                                                 <option value='0'>{{ trans('langNotRemote') }}</option>
                                                 <option value='1'>{{ trans('langRemote') }}</option>
                                             </select>

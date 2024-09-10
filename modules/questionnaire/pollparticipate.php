@@ -121,7 +121,7 @@ function printPollForm() {
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5, $langDescription, $langSelect, $typeyourmessage;
+    $pageName, $lang_rate1, $lang_rate5, $langDescription, $langSelect, $typeyourmessage, $langAnswer, $langForm;
 
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     $head_content .= "
@@ -197,6 +197,8 @@ function printPollForm() {
         $tool_content .= "
 
             <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
+            <fieldset>
+            <legend class='mb-0' aria-label='$langForm'></legend>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";
         if (isset($_REQUEST['unit_id'])) {
@@ -301,7 +303,7 @@ function printPollForm() {
                     }
                     $tool_content .= "<div class='form-group d-flex justify-content-center mb-5'>
                         <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
-                            <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                            <input aria-label='$langAnswer' name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
                         </div>
                     </div>";
                 } elseif ($qtype == QTYPE_FILL) {
@@ -331,7 +333,7 @@ function printPollForm() {
                 $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
             }
         }
-        $tool_content .= "</div></form>";
+        $tool_content .= "</div></fieldset></form>";
     } else {
         //Session::Messages($langPollInactive);
         Session::flash('message',$langPollInactive);

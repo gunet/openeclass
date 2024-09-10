@@ -376,11 +376,11 @@ if (isset($_GET['delete'])) {
                        $tool_content .= "
                             <tr>
                                 <td><a href='show.php?$course_code/$ebook_id/$display_id/' target='_blank' aria-label='$langOpenNewTab'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
-                                <td><input class='form-control' type='text' name='title[$file_id]' value='" . q($r->subsection_title) . "'></td>
-                                <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
+                                <td><input aria-label='$langTitle' class='form-control' type='text' name='title[$file_id]' value='" . q($r->subsection_title) . "'></td>
+                                <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-select"') . "</td>
                                 <td>
                                     <input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
-                                    <input type='text' class='form-control' name='ssid[$file_id]' value='" . q($r->pssid) . "'>
+                                    <input aria-label='$langReorder' type='text' class='form-control' name='ssid[$file_id]' value='" . q($r->pssid) . "'>
                                 </td>
                             </tr>";
                        unset($files[$id_map[$file_id]]);
@@ -392,10 +392,10 @@ if (isset($_GET['delete'])) {
                        $tool_content .= "
                         <tr class='not_visible'>
                             <td><a href='show.php?$course_code/$ebook_id/_" . q($file) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($file) . "</a></td>
-                            <td><input type='text' name='title[$file_id]' value='" . q($title) . "' /></td>
-                            <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
+                            <td><input aria-label='$langTitle' type='text' name='title[$file_id]' value='" . q($title) . "' /></td>
+                            <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-select"') . "</td>
                             <td class='center'>
-                               <input class='form-control' type='text' name='ssid[$file_id]'>
+                               <input aria-label='$langReorder' class='form-control' type='text' name='ssid[$file_id]'>
                            </td>
                         </tr>";
                    }

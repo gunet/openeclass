@@ -42,7 +42,7 @@
                                         <th>{{ trans('langNewBBBSessionStatus') }}</th>
                                         <th>{{ trans('langOpenedOn') }}</th>
                                         <th>{{ trans('langUpdatedOn') }}</th>
-                                        <th class='text-end'><span class='fa fa-cogs'></span></th>
+                                        <th class='text-end' aria-label="{{ trans('langSettingSelect') }}"><span class='fa fa-cogs'></span></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

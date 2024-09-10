@@ -3754,6 +3754,11 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clColorBodyAgenda] !important;
                 }
 
+                .datetimepicker table tr td.old,
+                .datetimepicker table tr td.new{
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+
 
             ";
         }
@@ -4076,7 +4081,9 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         if(!empty($theme_options_styles['bgColorDeactiveDateTime'])){
             $styles_str .= "
-                .cal-day-outmonth{
+                .cal-day-outmonth,
+                .datetimepicker table tr td.old, 
+                .datetimepicker table tr td.new{
                     background-color: $theme_options_styles[bgColorDeactiveDateTime] !important;
                 }
             ";

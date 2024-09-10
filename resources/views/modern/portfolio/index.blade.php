@@ -633,9 +633,9 @@
                                                                     @endphp
 
                                                                     @if($course->course_image == NULL)
-                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" />
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }} : {{ $course->title }}" />
                                                                     @else
-                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ trans('langCourseImage') }}" />
+                                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ trans('langCourseImage') }} : {{ $course->title }}" />
                                                                     @endif
 
                                                                     <div class='card-body'>
