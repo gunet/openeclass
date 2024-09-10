@@ -205,7 +205,14 @@ function generate_single_post_html($post) {
         $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'" aria-label="'.$langDelete.'">
                           <span class="fa-solid fa-xmark link-delete float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
         if ($is_editor) { //add link for pin post
-            $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
+            $msgLabel = "";
+            if ($pinned == 0) {
+                $msgLabel = "$langWallPinPost";
+            }
+            elseif ($pinned == 1){
+                $msgLabel = "$langWallUnPinPost";
+            }
+            $post_actions .= '<a aria-label="'.$msgLabel.'" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
             if ($pinned == 0) {
                 $post_actions .= '<span class="fa fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             } elseif ($pinned == 1) {
