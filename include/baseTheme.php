@@ -579,6 +579,9 @@ function view($view_file, $view_data = array()) {
                 .control-label-notes,
                 .title-default,
                 .modal-title-default,
+                .text-heading-h2,
+                .text-heading-h3,
+                .text-heading-h4,
                 .text-heading-h5,
                 .text-heading-h6,
                 .action-bar-title,
@@ -6532,7 +6535,7 @@ function array2html($TheArray) {
  */
 function lang_selections_Desktop($idLanguage) {
 
-    global $session, $native_language_names_init;
+    global $session, $native_language_names_init, $langSelectedLang;
 
     if (isset($_SESSION['uid'])) { //ignore language selection for logged-in users
         return;
@@ -6547,7 +6550,7 @@ function lang_selections_Desktop($idLanguage) {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="'.$idLanguage.'" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Link to language">
+                        <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="'.$idLanguage.'" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="'.$langSelectedLang.'">
                             <span class="d-none d-lg-block">'. $Selected_Language .'</span>
                             <span class="fa-solid fa-earth-europe d-block d-lg-none"></span>
                             <i class="fa-solid fa-chevron-down" role="presentation"></i>

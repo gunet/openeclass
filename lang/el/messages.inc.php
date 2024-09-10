@@ -6875,3 +6875,4 @@ $langCurrentMonth = "Τρέχων μήνα";
 $langPagination = "Σελιδοποίηση";
 $langOpenCloseTools = "Άνοιγμα - κλείσιμο εργαλείων";
 $langBreadcrumb = "Πλοήγηση";
+$langSelectedLang = "Επιλογή γλώσσας";

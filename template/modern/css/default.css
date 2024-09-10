@@ -593,7 +593,9 @@ caption{
   font-style: normal;
 } */
 
-h1,h2{
+h1,
+h2,
+.text-heading-h2{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 24px;
@@ -605,7 +607,8 @@ h1,h2{
 h3,
 .portofolio-text-intro,
 .action-bar-title,
-.modal-title-default{
+.modal-title-default,
+.text-heading-h3{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 18px;
@@ -614,7 +617,8 @@ h3,
   font-style: normal;
 }
 
-h4{
+h4,
+.text-heading-h4{
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 16px;
@@ -644,7 +648,8 @@ h6,
   font-style: normal;
 }
 
-p,span{
+p,
+span{
   font-family: 'Manrope', sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -668,8 +673,11 @@ a:hover{
 }
 
 #leftnav a:hover,
-.dropdown_menu_user a:hover, .submitAdminBtn:hover,
-.cancelAdminBtn:hover, .deleteAdminBtn:hover, .menu-popover a:hover,
+.dropdown_menu_user a:hover, 
+.submitAdminBtn:hover,
+.cancelAdminBtn:hover, 
+.deleteAdminBtn:hover, 
+.menu-popover a:hover,
 #bgr-cheat-header a:hover{
   text-decoration: none;
   cursor:  url(../images/pointer.png), auto;

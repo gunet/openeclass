@@ -154,13 +154,13 @@ if ($total_topics > TOPICS_PER_PAGE) { // navigation
         <nav class='clearfix'>
           <ul class='pagination float-end'>
             <li $privurlclass>
-                <a href='$prevurl' aria-label='Previous'>
+                <a href='$prevurl' aria-label='$langPrevious'>
                     <span aria-hidden='true'>&laquo;</span>
                 </a>
             </li>
             ".implode($paging)."
             <li $nexturlclass>
-              <a href='$nexturl' aria-label='Next'>
+              <a href='$nexturl' aria-label='$langNext'>
                 <span aria-hidden='true'>&raquo;</span>
               </a>
             </li>

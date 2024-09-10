@@ -6408,3 +6408,4 @@ $langCurrentMonth = "Current month";
 $langPagination = "Pagination";
 $langOpenCloseTools = "Open - close tools";
 $langBreadcrumb = "Navigation";
+$langSelectedLang = "Language selection";
