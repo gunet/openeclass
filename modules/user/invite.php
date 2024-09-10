@@ -259,11 +259,11 @@ $tool_content .= "
         </tbody>
         <tfoot>
             <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th aria-label='$langSurnameName'></th>
+                <th aria-label='$langDate'></th>
+                <th aria-label='$langExpirationDate'></th>
+                <th aria-label='$langRegistration'></th>
+                <th aria-label='$langSettingSelect'></th>
             </tr>
         </tfoot>
     </table>";

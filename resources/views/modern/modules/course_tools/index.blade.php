@@ -58,8 +58,8 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('inactive_box','active_box')" aria-label="Right"><span class="fa fa-arrow-right"></span></button><br><br>
-                                                    <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('active_box','inactive_box')" aria-label="Left"><span class="fa fa-arrow-left"></span></button>
+                                                    <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('inactive_box','active_box')" aria-label="{{ trans('langMove') }}"><span class="fa fa-arrow-right"></span></button><br><br>
+                                                    <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('active_box','inactive_box')" aria-label="{{ trans('langMove') }}"><span class="fa fa-arrow-left"></span></button>
                                                 </td>
                                                 <td class="text-center">
                                                     <select aria-label="{{ trans('langActiveTools') }}" class="form-select h-100 rounded-0" name="toolStatActive[]" id='active_box' size='17' multiple>
