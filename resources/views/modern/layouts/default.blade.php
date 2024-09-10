@@ -203,7 +203,6 @@
             $("#cboxPrevious").attr("aria-label","{{ trans('langPrevious') }}");
             $("#cboxNext").attr("aria-label","{{ trans('langNext') }}");
             $("#cboxSlideshow").attr("aria-label","{{ trans('langShowTo') }}");
-            $(".select2-search__field").attr("aria-label","{{ trans('langSearch') }}");
             $(".table-default thead tr th:last-child:has(.fa-gears)").attr("aria-label","{{ trans('langCommands') }}");
             $(".table-default thead tr th:last-child:has(.fa-cogs)").attr("aria-label","{{ trans('langCommands') }}");
             $(".table-default thead tr th:last-child:not(:has(.fa-gears))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");

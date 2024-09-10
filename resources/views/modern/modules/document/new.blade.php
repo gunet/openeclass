@@ -49,7 +49,7 @@
                                             @endif
                                             @if ($sections)
                                                 <div class='form-group mb-4'>
-                                                    <label for='section' class='col-sm-12 control-label-notes'>{{ trans('langSection') }}</label>
+                                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langSection') }}</div>
                                                     <div class='col-sm-12'>
                                                         {!! selection($sections, 'section_id', $section_id) !!}
                                                     </div>
@@ -58,7 +58,7 @@
 
                                             @if ($filename)
                                                 <div class='form-group mb-4'>
-                                                    <label for='file_name' class='col-sm-12 control-label-notes'>{{ trans('langFileName') }}</label>
+                                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langFileName') }}</div>
                                                     <div class='col-sm-12'>
                                                         <p class='form-control-static'>{{ $filename }}</p>
                                                     </div>

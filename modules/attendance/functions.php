@@ -883,7 +883,7 @@ function display_user_presences($attendance_id) {
         $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
         $actNumber = count($result);
         if ($actNumber > 0) {
-            $tool_content .= "<h5>". display_user($userID) ."</h5>";
+            $tool_content .= "<div class='text-heading-h5'>". display_user($userID) ."</div>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
             $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDate</th><th>$langType</th>";

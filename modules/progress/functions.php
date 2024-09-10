@@ -2505,7 +2505,7 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <div class='col-sm-12 control-label-notes'>$langCertificateDeadline:</div>
+                    <label for='enddatepicker' class='col-sm-12 control-label-notes'>$langCertificateDeadline:</label>
                     <div class='col-sm-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>

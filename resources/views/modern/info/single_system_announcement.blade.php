@@ -17,7 +17,7 @@
                     <div class="col-12">
                         <div class="card panelCard px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>{!! $title !!}</h3>
+                                <div class='text-heading-h3'>{!! $title !!}</div>
                             </div>
                         
                             <div class="card-body">

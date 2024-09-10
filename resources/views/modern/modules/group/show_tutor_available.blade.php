@@ -46,14 +46,14 @@
                                                                 <div class="text-center">
                                                                     @php $image_tutor = profile_image($tutor->user_id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
                                                                     {!! $image_tutor !!}
-                                                                    <h4 class='mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</h4>
+                                                                    <div class='text-heading-h4 mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</div>
                                                                     <p class="badge Success-200-bg vsmall-text TextBold rounded-pill px-2 py-1 mb-3">{{ trans('langGroupTutor')}}</p></br>
                                                                     @if(count($nextAvDate) > 0)
                                                                         @foreach($nextAvDate as $d)
                                                                             @foreach(array_keys($d) as $key)
                                                                                 @if($key == $tutor->user_id)
-                                                                                    <h5 class='mt-2 mb-0 text-decoration-underline'>{{ trans('langNextAvailableDate')}}</h5>
-                                                                                    <h5>{{ format_locale_date(strtotime($d[$key]['start']), 'short') }} </h5>
+                                                                                    <div class='text-heading-h5 mt-2 mb-0 text-decoration-underline'>{{ trans('langNextAvailableDate')}}</div>
+                                                                                    <div class='text-heading-h5'>{{ format_locale_date(strtotime($d[$key]['start']), 'short') }} </div>
                                                                                 @endif
                                                                             @endforeach
                                                                         @endforeach

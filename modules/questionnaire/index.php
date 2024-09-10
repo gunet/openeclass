@@ -324,7 +324,7 @@ function printPolls() {
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
-        $langUserDuration, $m, $langQuickSurvey;
+        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -536,7 +536,7 @@ function printPolls() {
                     </div>
                     <div class='modal-body'>
                         <div class='form-group'>
-                          <select class='form-select' id='course_id' name='clone_to_course_id'>
+                          <select class='form-select' id='course_id' name='clone_to_course_id' aria-label='$langChoiceLesson'>
                             <option value='$course_id' selected>--- $langCurrentCourse ---</option>
                           </select>
                         </div>
