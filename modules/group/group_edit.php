@@ -289,7 +289,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
         <fieldset>
         <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
-            <label for='name_Id' class='col-sm-12 control-label-notes'>$langGroupName</label>
+            <label for='name_Id' class='col-sm-12 control-label-notes'>$langGroupName <span class='Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
                 <input id='name_Id' class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>
                 <span class='help-block Accent-200-cl'>".Session::getError('name')."</span>
@@ -302,7 +302,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
         
             
                 <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")." mt-4'>
-                    <label for='maxStudent_id' class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis</label>
+                    <label for='maxStudent_id' class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis <span class='Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         <input id='maxStudent_id' class='form-control' type='text' name='maxStudent' size=2 value='$max_members'>
                         <span class='help-block Accent-200-cl'>".Session::getError('maxStudent')."</span>

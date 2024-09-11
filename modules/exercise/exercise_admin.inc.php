@@ -321,7 +321,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
              <fieldset>
                 <legend class='mb-0' aria-label='$langForm'></legend>
                  <div class='row form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
-                   <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>$langExerciseName</label>
+                   <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>$langExerciseName <span class='Accent-200-cl'>(*)</span></label>
                    <div class='col-12'>
                      <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='" . q($exerciseTitle) . "' placeholder='$langExerciseName'>
                      <span class='help-block Accent-200-cl'>".Session::getError('exerciseTitle')."</span>
@@ -606,14 +606,14 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
                 <div id='CheckAccess' class='collapse'>
                     <div class='row form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
-                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode</label>
+                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode <span class='Accent-200-cl'>(*)</span></label>
                         <div class='col-12'>
                             <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
                             <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
                         </div>
                     </div>
                     <div class='row form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
-                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock</label>
+                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock <span class='Accent-200-cl'>(*)</span></label>
                         <div class='col-12'>
                             <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
                                 $exerciseIPLockOptions

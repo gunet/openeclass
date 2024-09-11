@@ -49,7 +49,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle')}}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle')}} <span class='Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>
                                                 <input id='title' type='text' name='title' class='form-control' value='{{ $title }}'>
                                                 @if(Session::getError('title'))

@@ -122,7 +122,7 @@ class CourseXMLConfig {
      */
     public static function getInjectValue($key) {
         $valArr = array(
-            'course_instructor_registrationCode' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add'><i class='fa-solid fa-plus'></i></a></div></div>"
+            'course_instructor_registrationCode' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add' aria-label='add'><i class='fa-solid fa-plus'></i></a></div></div>"
         );
 
         if (isset($valArr[$key])) {

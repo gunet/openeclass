@@ -60,7 +60,7 @@
                                     @endif
 
                                     <div class='row form-group'>
-                                        <label for='unitTitle' class='col-12 control-label-notes'>{{ trans('langTitle') }}</label>
+                                        <label for='unitTitle' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
                                         <div class='col-12'>
                                             <input type='text' class='form-control' id='unitTitle' name='unittitle' value='{{ $unitTitle }}'>
                                         </div>

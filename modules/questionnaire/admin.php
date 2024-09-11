@@ -393,7 +393,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <fieldset>
             <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
-              <label for='PollName' class='col-sm-12 control-label-notes'>$langTitle:</label>
+              <label for='PollName' class='col-sm-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
               <div class='col-sm-12'>
                 <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='" . q($PollName) . "'>
                 <span class='help-block Accent-200-cl'>".Session::getError('PollName')."</span>
@@ -401,7 +401,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
-                <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langStart:</label>
+                <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langStart <span class='Accent-200-cl'>(*)</span></label>
                 <div class='input-group'>
                         <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                         <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
@@ -411,7 +411,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
-                <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd</label>
+                <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd <span class='Accent-200-cl'>(*)</span></label>
                 <div class='input-group'>
                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                     <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
@@ -421,14 +421,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4'>
-              <label for='PollDescription' class='col-sm-12 control-label-notes'>$langDescription:</label>
+              <label for='PollDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
             </div>
 
             <div class='form-group mt-4'>
-              <label for='PollEndMessage' class='col-sm-12 control-label-notes'>$langPollEndMessage:</label>
+              <label for='PollEndMessage' class='col-sm-12 control-label-notes'>$langPollEndMessage</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
@@ -456,7 +456,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langAnswers:</div>
+                <div class='col-sm-12 control-label-notes'>$langAnswers</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
@@ -478,7 +478,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:</div>
+                <div class='col-sm-12 control-label-notes'>$m[WorkAssignTo]</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
@@ -529,7 +529,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group" . (Session::getError('survey_type') ? ' has-error' : '')." mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langType:</div>
+                <div class='col-sm-12 control-label-notes'>$langType</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
@@ -569,7 +569,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group mt-4 display_position ".($PollSurveyType == POLL_QUICK ? "" : "hide")." '>
-                <div class='col-sm-12 control-label-notes'>$langShowFront:</div>
+                <div class='col-sm-12 control-label-notes'>$langShowFront</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
@@ -726,10 +726,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$action_url' method='post'>
             <div class='form-group $questionNameErrorClass'>
-                <label for='questionName' class='col-sm-12 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
+                <label for='questionName' class='col-sm-12 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)." <span class='Accent-200-cl'>(*)</span></label>
                 <div class='col-sm-12'>
                   ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
-                  <span class='help-block'>$questionNameError</span>
+                  <span class='help-block Accent-200-cl'>$questionNameError</span>
                 </div>
             </div>";
     if (isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL) {
@@ -750,7 +750,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </script>";
         $tool_content .= "
             <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$langType:</div>
+                <div class='col-sm-12 control-label-notes'>$langType</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>

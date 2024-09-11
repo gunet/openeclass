@@ -575,7 +575,7 @@ elseif (isset($_GET['forumgodel'])) {
         <fieldset>
         <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group'>
-            <label for='categories' class='col-sm-6 control-label-notes'>$langCategory</label>
+            <label for='categories' class='col-sm-6 control-label-notes'>$langCategory <span class='Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
               <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCategory'>
             </div>

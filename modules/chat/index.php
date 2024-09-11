@@ -81,7 +81,7 @@ if ($is_editor) {
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>";
+        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />";
         $tool_content .= "</div>";
@@ -252,7 +252,7 @@ if ($is_editor) {
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>";
+        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
         $tool_content .= "</div>";

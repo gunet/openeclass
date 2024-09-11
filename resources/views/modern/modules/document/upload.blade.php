@@ -46,18 +46,18 @@
                                         @endif
                                         <div class='form-group'>
                                             @if ($pendingCloudUpload)
-                                                <label for='fileCloudInfo' class='col-12 control-label-notes'>{{ trans('langCloudFile') }}</label>
+                                                <label for='fileCloudInfo' class='col-12 control-label-notes'>{{ trans('langCloudFile') }} <span class='Accent-200-cl'>(*)</span></label>
                                                 <div class='col-12'>
                                                     <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='{{ $pendingCloudUpload }}'>
                                                     <input type='text' class='form-control' name='fileCloudName' value='{{ CloudFile::fromJSON($pendingCloudUpload)->name() }}' readonly>
                                                 </div>
                                             @elseif (isset($_GET['ext']))
-                                                <label for='fileURL' class='col-12 control-label-notes'>{{ trans('langExternalFileInfo') }}</label>
+                                                <label for='fileURL' class='col-12 control-label-notes'>{{ trans('langExternalFileInfo') }} <span class='Accent-200-cl'>(*)</span></label>
                                                 <div class='col-12'>
                                                     <input type='text' class='form-control' id='fileURL' name='fileURL'>
                                                 </div>
                                             @else
-                                                <label for='userFile' class='control-label-notes me-2 mt-1'>{{ trans('langPathUploadFile') }}</label>
+                                                <label for='userFile' class='control-label-notes me-2 mt-1'>{{ trans('langPathUploadFile') }} <span class='Accent-200-cl'>(*)</span></label>
                                                 <div class='col-12'>
                                                     {!! fileSizeHidenInput() !!}
                                                     {!! CloudDriveManager::renderAsButtons() !!}

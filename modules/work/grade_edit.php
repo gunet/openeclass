@@ -235,7 +235,7 @@ function show_edit_form($id, $sid, $assign) {
                                         </div>
                                     </div>
                                     <div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-                                        <div class='col-12 control-label-notes'>$langGradeRubric</div>
+                                        <div class='col-12 control-label-notes'>$langGradeRubric <span class='Accent-200-cl'>(*)</span></div>
                                         $grade_field
                                         <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
                                     </div>
@@ -427,7 +427,7 @@ function show_edit_form($id, $sid, $assign) {
 					$submission
 
 					<div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-						<div class='col-12 control-label-notes'>$langGradebookGrade</div>
+						<div class='col-12 control-label-notes'>$langGradebookGrade <span class='Accent-200-cl'>(*)</span></div>
 							$grade_field
 							<span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>

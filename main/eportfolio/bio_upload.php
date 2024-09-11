@@ -133,7 +133,7 @@ $tool_content .=
     "<div class='col-12'>
         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span></div></div>
             <div class='row'>
-                <label for='bio' class='control-label-notes text-uppercase'>$label</label>
+                <label for='bio' class='control-label-notes'>$label <span class='Accent-200-cl'>(*)</span></label>
                 <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>
                 <div class='col-12 mt-3'><input type='file' name='bio' id='bio' class='form-control'></div>
             </div>

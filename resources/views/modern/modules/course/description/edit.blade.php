@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                     <div class='form-group{{ $titleError ? " form-error" : ""}} mt-4'>
-                                        <label for='titleSel' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
+                                        <label for='titleSel' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                             <input type='text' name='editTitle' class='form-control' value='{{ $cdtitle }}' size='40' id='titleSel'>
                                             {!! Session::getError('editTitle', "<span class='help-block Accent-200-cl'>:message</span>") !!}
