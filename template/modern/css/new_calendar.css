@@ -36,11 +36,6 @@
   color:#ffffff; 
 }
 
-.number-day-cal{ 
-  font-size: 14px; 
-  color: #3E4965;
-}
-
 .cal-day-outmonth,
 .datetimepicker table tr td.old, 
 .datetimepicker table tr td.new,
@@ -53,20 +48,6 @@
 .datepicker table tr td.old,
 .datepicker table tr td.new{
   color: #2B3944 !important;
-}
-.cal-day-outmonth > .number-day-cal {
-  opacity: 1;
-}
-
-/* .cal-day-today > .number-day-cal{ color:white; padding:3px 6px 2px 6px; border-radius: 50%; background-color: #005ad9;} */
-.cal-day-today > .number-day-cal{  
-  background-color: #0073E6;
-  padding: 4px 4px 3px 3px;
-  border-radius: 50% ;
-  color: #ffffff;
-  width: 32px;
-  height: 32px;
-  text-align: center; 
 }
 
 .btn-calendar-prev, .btn-calendar-next{
@@ -93,7 +74,7 @@
   height:5px;
 }
 
-.cal-day-today.cal-day-holiday .number-day-cal {
+.cal-day-today.cal-day-holiday .pull-right {
   background-color: #0073E6;
   padding: 4px 4px 3px 3px;
   border-radius: 50% ;
@@ -103,8 +84,91 @@
   text-align: center;
 }
 
+/****************************************************************************************************/
+/****************************************************************************************************/
+
+#cal-slide-content ul{
+  padding: 12px;
+  border: solid 1px #EFF2FB;
+}
+#cal-slide-content ul li{
+ margin-bottom: 12px;
+}
+#cal-slide-content ul li .event-item{
+  font-size: 13px;
+  font-weight: 700;
+  font-style: normal;
+}
+.cal-month-day{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cal-month-day .pull-right,
+.cal-day-weekend span[data-cal-date]{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  font-size: 14px;
+  font-style: normal;
+  color: #2B3944;
+  margin: 0;
+  opacity: 1;
+}
+.cal-day-today span[data-cal-date],
+.cal-day-holiday span[data-cal-date]{
+  border-radius: 50%;
+  background-color: #0073E6;
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 14px;
+  height: 32px;
+  width: 32px;
+}
+.cal-month-day .events-list{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.cal-row-fluid.cal-row-head .cal-cell1{
+  font-size: 14px;
+  font-weight: 700;
+  font-style: normal;
+  color: #2B3944;
+}
+.cal-month-box{
+  border: 0px !important;
+}
+.cal-month-box .cal-row-fluid{
+  border: 0px !important;
+}
+.cal-month-box .cal-row-fluid .cal-cell1{
+  border: 0px !important;
+}
+.cal-day-outmonth span[data-cal-date] {
+  opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /************************************rgba(255, 255, 255, 0.5)**********************************************/
-/***************** this is mypersonal-calendar , courseHome-calendar *********************************/
+/***************** this is mypersonal-calendar *********************************/
 /****************************************************************************************************/
 
 .fc-view, .fc-view>table {
@@ -161,12 +225,20 @@
 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1:hover{
   background-color: transparent;
 }
-.myPersonalCalendar .number-day-cal{
-  color: #003e87;
-  font-size: 17px ;
+.myPersonalCalendar .cal-month-day{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.myPersonalCalendar .cal-day-today .number-day-cal{
-  color: #ffffff ;
+.myPersonalCalendar .cal-month-day .pull-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  margin: 0;
+  opacity: 1;
+  color: #ffffff;
+  font-size: 17px ;
 }
 .myPersonalCalendar .cal-cell{
   border: solid 0.5px #f5f4f4 ;
@@ -584,8 +656,3 @@
   font-weight: 700; 
   color:#212D37;
  }
- 
-.active-calendar-day{
-  background-color: #005ad9;
-  color: #ffffff;
-}
