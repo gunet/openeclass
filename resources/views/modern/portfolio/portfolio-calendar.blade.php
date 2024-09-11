@@ -1,20 +1,42 @@
 @push('bottom_scripts')
-    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/calendar.js?v=4.0-dev"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/components/underscore/underscore-min.js?v=4.0-dev"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v={{ CACHE_SUFFIX }}"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/calendar.js?v={{ CACHE_SUFFIX }}"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/components/underscore/underscore-min.js?v={{ CACHE_SUFFIX }}"></script>
 
     <script>
+        var events = [];
         $(function() {
             var calendar = $("#bootstrapcalendar").calendar({
                 tmpl_path: "{{ $urlAppend }}js/bootstrap-calendar-master/tmpls/",
-                events_source: "{{ $urlAppend }}main/calendar_data.php",
+                events_source: function() {
+                    return events;
+                },
                 language: "{{ js_escape(trans('langLanguageCode')) }}",
                 views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
                 onAfterViewLoad: function(view) {
                     $("#current-month").text(this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view='" + view + "']").addClass("active");
-                }
+                },
+                onBeforeEventsLoad: function(done) {
+                    var url = "{{ $urlAppend }}main/calendar_data.php";
+                    var params = {
+                        "from": this.options.position.start.getTime(),
+                        "to": this.options.position.end.getTime(),
+                    };
+                    $.get(url, params)
+                        .done(function(data) {
+                            if (data.success && data.result && (data.result instanceof Array)) {
+                                events = data.result;
+                            }
+                            done();
+                            calendar._render();
+                        }).fail(function() {
+                            events = [];
+                            done();
+                            calendar._render();
+                        });
+                },
             });
 
             $(".btn-group button[data-calendar-nav]").each(function() {
@@ -39,8 +61,8 @@
 @endpush
 
 @push('head_styles')
-    <link href="{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css?v=4.0-dev" rel="stylesheet" type="text/css">
-    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v=4.0-dev" rel="stylesheet" type="text/css">
+    <link href="{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
+    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
 @endpush
 
 <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-4'>
