@@ -57,6 +57,7 @@ window.calendar_languages['de-AT'] = {
 	d6: 'Samstag',
 
 	first_day: 1,
+	week_numbers_iso_8601: true,
 
 	holidays: {
 		'01-01':     'Neujahr',
@@ -74,6 +75,6 @@ window.calendar_languages['de-AT'] = {
 		'24-12':     'Heiliger Abend',
 		'25-12':     'Weihnachten',
 		'26-12':     'Stefanitag',
-		'31-12':     'Silvester',
+		'31-12':     'Silvester'
 	}
 };

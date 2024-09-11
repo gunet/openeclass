@@ -1,19 +1,11 @@
-<div class="cal-month-day <%= cls %> d-flex justify-content-center align-items-center">
-	<div class="number-day-cal d-flex justify-content-center align-items-center p-0" data-cal-date="<%= data_day %>" data-cal-view="day" data-bs-toggle="tooltip" title="<%= tooltip %>">
-		<% if (cls == 'cal-day-inmonth cal-day-today'){ %>
-			<span class="badge active-calendar-day rounded-pill d-flex justify-content-center align-items-center" style="height: 32px; width: 32px; font-size: 14px;"><%= day %></span>
-		<% }else{ %>
-			<%= day %>
-		<% } %>
-	</div>
-
+<div class="cal-month-day <%= cls %>">
+	<span class="pull-right" data-cal-date="<%= data_day %>" data-cal-view="day" data-toggle="tooltip" title="<%= tooltip %>"><%= day %></span>
 	<% if (events.length > 0) { %>
-		<div class="events-list w-100 d-flex justify-content-center align-items-center flex-wrap" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
+		<div class="events-list" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
 			<% _.each(events, function(event) { %>
-				<a aria-label="<%= event.title %>" href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
-					class="event <%= event['class'] %>" data-bs-toggle="tooltip"
-					title="<%= event.title %>" aria-label="Event">
-				</a>
+				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
+					class="pull-left event <%= event['class'] %>" data-toggle="tooltip"
+					title="<%= event.title %>"></a>
 			<% }); %>
 		</div>
 	<% } %>

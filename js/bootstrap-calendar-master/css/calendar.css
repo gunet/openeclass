@@ -135,7 +135,6 @@
   top: -1px;
   padding: 8px 5px;
   cursor: pointer;
-  z-index:-1;
 }
 #cal-day-tick {
   position: absolute;
@@ -251,7 +250,6 @@
   text-wrap: none;
 }
 #cal-day-box .cal-day-hour-part {
-  /*height: 13px;*/
   height: 30px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -259,7 +257,6 @@
   border-bottom: thin dashed #e1e1e1;
 }
 #cal-day-box .cal-day-hour .day-highlight {
-  /*height: 13px;*/
   height: 30px;
 }
 #cal-day-box .cal-hours {
@@ -283,7 +280,6 @@
   overflow: hidden;
 }
 #cal-day-box .day-highlight {
-  /*line-height: 13px;*/
   line-height: 30px;
   padding-left: 8px;
   padding-right: 8px;
@@ -454,7 +450,7 @@ span[data-cal-date]:hover {
   cursor: default;
 }
 .cal-day-today {
-  background-color: #ffffff;
+  background-color: #e8fde7;
 }
 .cal-day-today span[data-cal-date] {
   color: darkgreen;
@@ -513,7 +509,6 @@ span[data-cal-date]:hover {
 a.cal-event-week {
   text-decoration: none;
   color: #151515;
- 
 }
 .badge-important {
   background-color: #b94a48;
