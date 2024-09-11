@@ -1,6 +1,6 @@
 @push('head_scripts')
-<script src="{{ $urlServer }}/js/autosize/autosize.min.js"></script>
-<link href="{{ $urlServer }}/js/jstree3/themes/proton/style.min.css?v=4.0-dev" rel="stylesheet" type="text/css">
+<script src="{{ $urlServer }}/js/autosize/autosize.min.js?v={{ CACHE_SUFFIX }}"></script>
+<link href="{{ $urlServer }}/js/jstree3/themes/proton/style.min.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
 <script src="{{ $urlServer }}/js/jstree3/jstree.js"></script>
 <script type='text/javascript'>
     function expand_form() {
@@ -12,7 +12,7 @@
 
 @if (allow_to_post($course_id, $uid, $is_editor))
 
-    @php 
+    @php
         $content = Session::has('content')? Session::get('content'): '';
         $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
     @endphp
@@ -20,14 +20,14 @@
     <div class="col-12 mt-5">
         <div class='card panelCard card-transparent border-0'>
             <div class='card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center'>
-               
+
                     <h3>{{trans('langWall')}}</h3>
-                
+
             </div>
             <div class='card-body card-body-default px-0 py-0'>
                 <div class="form-wrapper form-edit rounded">
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
-                        <fieldset> 
+                        <fieldset>
                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class="form-group">
                                 <textarea aria-label="{{ trans('langTypeOutMessage') }}" id="textr" onfocus="expand_form();" class="form-control" placeholder="{{ trans('langTypeOutMessage') }}" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
@@ -81,7 +81,7 @@
                                                 <input type="hidden" name="doc_ids" id="docs">
                                                 {!! list_docs() !!}
                                             </div>
-                                        
+
                                         @endif
 
                                         @if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))
@@ -123,7 +123,7 @@
                                             </div>
                                         @endif
 
-                                        @if ($is_editor || visible_module(MODULE_ID_FORUM)) 
+                                        @if ($is_editor || visible_module(MODULE_ID_FORUM))
                                             <div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_forums" style="padding:10px">
                                                 {!! list_forums() !!}
                                             </div>
@@ -141,9 +141,9 @@
                                             'value' =>  trans('langSubmit')
                                         )
                                     ))
-                                !!} 
-                            </div>  
-                        </fieldset>      
+                                !!}
+                            </div>
+                        </fieldset>
                     </form>
                 </div>
             </div>
@@ -155,10 +155,10 @@
 
 @push('head_scripts')
 
-<script type="text/javascript" src="{{ $urlServer }}/js/waypoints/jquery.waypoints.min.js?v=4.0-dev"></script>
-<script type="text/javascript" src="{{ $urlServer }}/js/waypoints/shortcuts/infinite.min.js?v=4.0-dev"></script>
-<link rel="stylesheet" type="text/css" href="{{ $urlServer }}/modules/rating/style.css">
-<script src="{{ $urlServer }}/modules/rating/js/thumbs_up/rating.js" type="text/javascript"></script>
+<script type="text/javascript" src="{{ $urlServer }}/js/waypoints/jquery.waypoints.min.js?v={{ CACHE_SUFFIX }}"></script>
+<script type="text/javascript" src="{{ $urlServer }}/js/waypoints/shortcuts/infinite.min.js?v={{ CACHE_SUFFIX }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ $urlServer }}/modules/rating/style.css?v={{ CACHE_SUFFIX }}">
+<script src="{{ $urlServer }}/modules/rating/js/thumbs_up/rating.js?v={{ CACHE_SUFFIX }}" type="text/javascript"></script>
 <script>
     var infinite = new Waypoint.Infinite({
         element: $(".infinite-container")[0]
@@ -236,7 +236,7 @@
 
 </script>
 @endpush
-@php 
+@php
     $posts_per_page = 10;
     $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
 @endphp

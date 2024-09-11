@@ -3,13 +3,13 @@
 
 @push('head_styles')
     <link href="{{ $urlAppend }}js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" type='text/css' rel='stylesheet'>
-    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v=4.0-dev" type='text/css' rel='stylesheet'>
+    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ CACHE_SUFFIX }}" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
-    <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
-    <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
-    <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/tools.js?v={{ CACHE_SUFFIX }}'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js?v={{ CACHE_SUFFIX }}'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js?v={{ CACHE_SUFFIX }}'></script>
 
     <script type='text/javascript'>
             $(function() {
@@ -48,7 +48,7 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
@@ -122,4 +122,3 @@
 </div>
 </div>
 @endsection
-
