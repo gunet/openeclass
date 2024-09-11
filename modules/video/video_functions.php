@@ -106,7 +106,7 @@ function submit_video_category($course_id, $course_code) {
         }
     } else {
         Session::flashPost()->Messages($GLOBALS['langFormErrors'])->Errors($v->errors());
-        redirect_to_home_page("modules/video/addCategory.php?course=" . $course_code);
+        redirect_to_home_page("modules/video/editCategory.php?course=" . $course_code);
     }
 }
 

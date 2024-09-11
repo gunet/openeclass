@@ -31,7 +31,7 @@
                         <fieldset>
                         <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                         <div class='form-group'>
-                            <label for='givenname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
+                            <label for='givenname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                             @if ($allow_name_change)
                                 <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
@@ -43,7 +43,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label for='surname_form' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
+                            <label for='surname_form' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }} <span class='Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                             @if ($allow_name_change)
                                 <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class='form-group mt-4'>
-                            <label for='username_form' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
+                            <label for='username_form' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                             @if ($allow_username_change)
                                 <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
@@ -164,7 +164,7 @@
 
                         @if (!get_config('restrict_owndep'))
                             <div class='form-group mt-4'>
-                                <label for='dialog-set-value' class='col-sm-12 control-label-notes mb-2'>{{ trans('langFaculty') }}</label>
+                                <label for='dialog-set-value' class='col-sm-12 control-label-notes mb-2'>{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12 form-control-static'>
                                         {!! $html !!}
                                 </div>
@@ -172,7 +172,7 @@
                         @endif
 
                         <div class='form-group mt-4'>
-                            <label for='selected_lang' class='col-sm-12 control-label-notes mb-2'>{{ trans('langLanguage') }}</label>
+                            <label for='selected_lang' class='col-sm-12 control-label-notes mb-2'>{{ trans('langLanguage') }} <span class='Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>{!! lang_select_options('userLanguage', "class='form-control' id='selected_lang'") !!}</div>
                         </div>
 

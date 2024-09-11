@@ -152,7 +152,7 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>$langExpirationDate:</label>
+                            <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>$langExpirationDate: <span class='Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                                 <div class='input-group'>
                                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>

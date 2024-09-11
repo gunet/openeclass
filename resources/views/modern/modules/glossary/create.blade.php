@@ -40,7 +40,7 @@
 
 
                                                 <div class='form-group{{ Session::getError('term') ? " has-error" : "" }}'>
-                                                    <label for='term' class='col-sm-12 control-label-notes'>{{ trans('langGlossaryTerm') }} </label>
+                                                    <label for='term' class='col-sm-12 control-label-notes'>{{ trans('langGlossaryTerm') }} <span class='Accent-200-cl'>(*)</span></label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' class='form-control' placeholder="{{ trans('langGlossaryTerm') }}" id='term' name='term' placeholder='{{ trans('langGlossaryTerm') }}' value='{{ $term }}'>
                                                         <span class='help-block Accent-200-cl'>{{ Session::getError('term') }}</span>
@@ -48,7 +48,7 @@
                                                 </div>
 
                                                 <div class='form-group{{ Session::getError('definition') ? " has-error" : "" }} mt-4'>
-                                                    <label for='definition' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryDefinition') }} </label>
+                                                    <label for='definition' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryDefinition') }} <span class='Accent-200-cl'>(*)</span></label>
                                                     <div class='col-sm-12'>
                                                         <textarea id="definition" name="definition" placeholder="{{ trans('langGiveText') }}" rows="4" cols="60" class="form-control">{{ $definition }}</textarea>
                                                         <span class='help-block Accent-200-cl'>{{ Session::getError('definition') }}</span>
@@ -56,7 +56,7 @@
                                                 </div>
 
                                                 <div class='form-group{{ Session::getError('url') ? " has-error" : "" }} mt-4'>
-                                                    <label for='url' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryUrl') }} </label>
+                                                    <label for='url' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryUrl') }} <span class='Accent-200-cl'>(*)</span></label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' placeholder="{{ trans('langGlossaryUrl') }}" class='form-control' id='url' name='url' value='{{ $url }}'>
                                                         <span class='help-block Accent-200-cl'>{{ Session::getError('url') }}</span>

@@ -3755,7 +3755,9 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .datetimepicker table tr td.old,
-                .datetimepicker table tr td.new{
+                .datetimepicker table tr td.new,
+                .datepicker table tr td.old,
+                .datepicker table tr td.new{
                     color: $theme_options_styles[clColorBodyAgenda] !important;
                 }
 
@@ -4083,7 +4085,9 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .cal-day-outmonth,
                 .datetimepicker table tr td.old, 
-                .datetimepicker table tr td.new{
+                .datetimepicker table tr td.new,
+                .datepicker table tr td.old, 
+                .datepicker table tr td.new{
                     background-color: $theme_options_styles[bgColorDeactiveDateTime] !important;
                 }
             ";

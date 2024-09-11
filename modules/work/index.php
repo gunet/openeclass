@@ -2126,10 +2126,10 @@ function new_assignment() {
         <fieldset>
             <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='row form-group " . ($title_error ? "has-error" : "") . "'>
-                <label for='title' class='col-12 control-label-notes mb-1'>$langTitle</label>
+                <label for='title' class='col-12 control-label-notes mb-1'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
                 <div class='col-12'>
                   <input name='title' type='text' class='form-control' id='title' placeholder='$langTitle' value='" . q($title) . "'>
-                  <span class='help-block'>$title_error</span>
+                  <span class='help-block Accent-200-cl'>$title_error</span>
                 </div>
             </div>
             <div class='row form-group mt-4'>
@@ -3203,10 +3203,10 @@ function show_edit_assignment($id) {
     <fieldset>
             <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='row form-group ".($title_error ? "has-error" : "")."'>
-                <label for='title' class='col-12 control-label-notes'>$langTitle</label>
+                <label for='title' class='col-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
                 <div class='col-12'>
                   <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$langTitle'>
-                  <span class='help-block'>$title_error</span>
+                  <span class='help-block Accent-200-cl'>$title_error</span>
                 </div>
             </div>
             <div class='row form-group mt-4'>

@@ -164,19 +164,19 @@ $tool_content .= "
         <fieldset>
           <legend class='mb-0' aria-label='$langForm'></legend>
           <div class='form-group'>
-            <label for='givenname_form' class='col-sm-12 control-label-notes'>$langName:</label>
+            <label for='givenname_form' class='col-sm-12 control-label-notes'>$langName: <span class='Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'><input class='form-control' id='givenname_form' type='text' name='givenname_form' placeholder='$langName' $value_givenname></div>
           </div>
           <div class='form-group mt-4'>
-            <label for='surname_form' class='col-sm-12 control-label-notes'>$langSurname:</label>
+            <label for='surname_form' class='col-sm-12 control-label-notes'>$langSurname: <span class='Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'><input class='form-control' id='surname_form' type='text' name='surname_form' placeholder='$langSurname' $value_surname></div>
           </div>
           <div class='form-group mt-4'>
-            <label for='email_form' class='col-sm-12 control-label-notes'>e-mail:</label>
+            <label for='email_form' class='col-sm-12 control-label-notes'>e-mail: <span class='Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'><input class='form-control' id='email_form' type='text' name='email_form' placeholder='user@example.com' $value_email></div>
           </div>
           <div class='form-group mt-4'>
-            <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>$langExpirationDate:</label>
+            <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>$langExpirationDate: <span class='Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
               <div class='input-group'>
                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>

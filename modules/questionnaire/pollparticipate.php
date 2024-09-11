@@ -220,7 +220,7 @@ function printPollForm() {
                     </div>
                     <div class='card-body'>
                         <div class='form-group$email_error'>
-                            <label for='participantEmail' class='col-12  control-label-notes'>Email:</label>
+                            <label for='participantEmail' class='col-12  control-label-notes'>Email <span class='Accent-200-cl'>(*)</span></label>
                             <div class='col-12'>
                                 <input type='text' name='participantEmail' id='participantEmail' class='form-control' value='$email'>
                                 ".(Session::getError('participantEmail') ? "<span class='help-block Accent-200-cl'>" . Session::getError('participantEmail') . "</span>" : "")."

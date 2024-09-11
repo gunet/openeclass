@@ -221,7 +221,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             <fieldset>
             <legend class='mb-0' aria-label='$langForm'></legend>                             
             <div class='row form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
-                <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion</label>
+                <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion <span class='Accent-200-cl'>(*)</span></label>
                 <div class='col-12'>
                       <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
                       <span class='help-block Accent-200-cl'>".Session::getError('questionName')."</span>

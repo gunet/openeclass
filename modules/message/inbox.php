@@ -240,7 +240,7 @@ if (isset($_GET['mid'])) {
                                     $out .= "
 
                                             <div class='form-group mt-4'>
-                                                <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
+                                                <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo <span class='Accent-200-cl'>(*)</span></label>
                                                 <div class='col-sm-12'>
                                                     <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
@@ -390,7 +390,7 @@ if (isset($_GET['mid'])) {
                                                 </div>
 
                                                 <div class='form-group mt-4'>
-                                                    <label for='forward_message_title' class='col-sm-12 control-label-notes'>$langSubject</label>
+                                                    <label for='forward_message_title' class='col-sm-12 control-label-notes'>$langSubject <span class='Accent-200-cl'>(*)</span></label>
                                                     <div class='col-sm-12'>
                                                         <input name='message_title' type='text' class='form-control' id='forward_message_title' value='" .
                                                             q($langMsgFw . ' ' . $msg->subject) . "'>

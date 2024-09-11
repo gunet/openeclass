@@ -201,7 +201,7 @@ if (isset($_GET['from_other'])) {
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="row form-group mt-4">
-            <label for="id_u_module_id" class="col-12 control-label-notes">' . $langLogModules . '</label>
+            <label for="id_u_module_id" class="col-12 control-label-notes">' . $langLogModules . ' <span class="Accent-200-cl">(*)</span></label>
             <div class="col-12"><select name="u_module_id" class="form-select" id="id_u_module_id">';
     $tool_content .= "<option value='-1'>$langAllModules</option>";
     foreach ($modules as $m => $mid) {
@@ -228,7 +228,7 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="row form-group mt-4">
-        <label for="log_typeID" class="col-12 control-label-notes">' . $langLogTypes . '</label>        
+        <label for="log_typeID" class="col-12 control-label-notes">' . $langLogTypes . ' <span class="Accent-200-cl">(*)</span></label>        
          <div class="col-12">';
 
 if (isset($_GET['from_other'])) {   // system actions
@@ -245,7 +245,7 @@ $tool_content .= selection($log_types, 'logtype', $logtype, "class='row form-con
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='row input-append date form-group mt-4' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     
-        <label class='col-12 control-label-notes' for='user_date_start'>$langStartDate</label>
+        <label class='col-12 control-label-notes' for='user_date_start'>$langStartDate <span class='Accent-200-cl'>(*)</span></label>
         <div class='col-12'> 
             <div class='input-group'>            
                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
@@ -257,7 +257,7 @@ $tool_content .= "<div class='row input-append date form-group mt-4' data-date =
 </div>";
 $tool_content .= "<div class='row input-append date form-group mt-4' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
     
-        <label class='col-12 control-label-notes' for='user_date_end'>$langEndDate</label>
+        <label class='col-12 control-label-notes' for='user_date_end'>$langEndDate <span class='Accent-200-cl'>(*)</span></label>
         <div class='col-12'>
             <div class='input-group'>   
                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
@@ -277,7 +277,7 @@ if (!isset($_GET['from_other'])) {
         <div class="col-12">' . $letterlinks . '</div>
       </div>
       <div class="row form-group mt-4">  
-        <label for="usId" class="col-12 control-label-notes">' . $langUser . '</label>
+        <label for="usId" class="col-12 control-label-notes">' . $langUser . ' <span class="Accent-200-cl">(*)</span></label>
         <div class="col-12"><select name="u_user_id" class="form-select" id="usId">' . $user_opts . '</select></div>
       </div>';
 }

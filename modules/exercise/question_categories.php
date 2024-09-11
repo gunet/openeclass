@@ -85,7 +85,7 @@ if (isset($_POST['submitCat'])) {
         <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' action='$form_action_url' method='post'>
                 <div class='row form-group ".(Session::getError('questionCatName') ? "has-error" : "")."'>
-                    <label for='questionCatName' class='col-12 control-label-notes mb-1'>$langTitle</label>
+                    <label for='questionCatName' class='col-12 control-label-notes mb-1'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
                     <div class='col-12'>
                       <input name='questionCatName' type='text' class='form-control' id='questionCatName' placeholder='$langTitle' value='" . q($questionCatName) . "'>
                       <span class='help-block Accent-200-cl'>".Session::getError('questionCatName')."</span>

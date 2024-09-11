@@ -56,7 +56,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                     <fieldset>
                                         <legend class='mb-0' aria-label='$langForm'></legend>
                                         <div class='form-group'>
-                                            <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
+                                            <label for='title' class='col-sm-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
                                             </div>
@@ -70,7 +70,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
        
             
                                         <div class='form-group mt-4'>
-                                            <label for='lti_url' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
+                                            <label for='lti_url' class='col-sm-12 control-label-notes'>$langLTIProviderUrl <span class='Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' $urldefault />
                                             </div>
@@ -238,7 +238,7 @@ function edit_lti_app($session_id) {
                     <fieldset>
                     <legend class='mb-0' aria-label='$langForm'></legend>
                     <div class='form-group'>
-                        <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>
                         </div>
@@ -253,7 +253,7 @@ function edit_lti_app($session_id) {
         <div class='row'>
             <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
-                    <label for='lti_url' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
+                    <label for='lti_url' class='col-sm-12 control-label-notes'>$langLTIProviderUrl <span class='Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='lti_url' id='lti_url' value='$row->lti_provider_url' size='50' />
                     </div>

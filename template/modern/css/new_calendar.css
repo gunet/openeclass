@@ -43,11 +43,15 @@
 
 .cal-day-outmonth,
 .datetimepicker table tr td.old, 
-.datetimepicker table tr td.new{
+.datetimepicker table tr td.new,
+.datepicker table tr td.old, 
+.datepicker table tr td.new{
   background-color: #FAFBFC;
 }
 .datetimepicker table tr td.old,
-.datetimepicker table tr td.new{
+.datetimepicker table tr td.new,
+.datepicker table tr td.old,
+.datepicker table tr td.new{
   color: #2B3944 !important;
 }
 .cal-day-outmonth > .number-day-cal {

@@ -182,7 +182,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return string
      */
     private function appendLeafFormField($fullKey, $parent) {
-        global $currentCourseLanguage, $langOpenNewTab;
+        global $currentCourseLanguage, $langOpenNewTab, $langFillInField, $langDownloadFile;
 
         // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
@@ -215,16 +215,16 @@ class CourseXMLElement extends SimpleXMLElement {
                         <div class='panel-body'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div class='form-group mt-4'><label $helptitle class='control-label-notes col-12'>";
+        $fieldStart .= "<div class='form-group mt-4'><div $helptitle class='control-label-notes col-12'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank' aria-label='$langOpenNewTab'>" . q($keyLbl . $lang) . "</a>";
         } else {
             $fieldStart .= q($keyLbl . $lang);
         }
         if (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || in_array($fullKey, CourseXMLConfig::$asteriskedFields)) {
-            $fieldStart .= "(<span style='color:red'>*</span>)";
+            $fieldStart .= "(<span class='Accent-200-cl'>*</span>)";
         }
-        $fieldStart .= ":</label><div class='col-sm-12'>";
+        $fieldStart .= ":</div><div class='col-sm-12'>";
         $fieldEnd = "</div>";
 
         $fieldEnd .= "</div>";
@@ -284,7 +284,7 @@ class CourseXMLElement extends SimpleXMLElement {
             if (empty($value)) {
                 $value = 0;
             }
-            return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
+            return $fieldStart . "<input aria-label='".$langFillInField."' class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
         }
 
         // float fields
@@ -293,12 +293,12 @@ class CourseXMLElement extends SimpleXMLElement {
             if (empty($value)) {
                 $value = 0;
             }
-            return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . CourseXMLConfig::getFloat($value) . "' $readonly>" . $fieldEnd;
+            return $fieldStart . "<input aria-label='".$langFillInField."' class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . CourseXMLConfig::getFloat($value) . "' $readonly>" . $fieldEnd;
         }
 
         // textarea fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$textareaFields)) {
-            return $fieldStart . "<textarea rows='5' class='form-control' name='" . q($fullKey) . "' $readonly>" . q((string) $this) . "</textarea>" . $fieldEnd;
+            return $fieldStart . "<textarea aria-label='".$langFillInField."' rows='5' class='form-control' name='" . q($fullKey) . "' $readonly>" . q((string) $this) . "</textarea>" . $fieldEnd;
         }
 
         // binary (file-upload) fields
@@ -325,7 +325,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     $html .= "<input " . $idorclass . "='" . $fullKey . "_hidden' type='hidden' name='" . q($fullKey) . $multiplicity . "'>
                               <input " . $idorclass . "='" . $fullKey . "_hidden_mime' type='hidden' name='" . q($fullKey) . "_mime" . $multiplicity . "'>";
                 }
-                $html .= "<input type='file' size='30' name='" . q($fullKey) . $multiplicity . "'>";
+                $html .= "<input aria-label='".$langDownloadFile."' type='file' size='30' name='" . q($fullKey) . $multiplicity . "'>";
                 $html .= $fieldEnd;
             } else {
                 // do nothing if field already walked/processed
@@ -373,11 +373,11 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // array fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$arrayFields) || in_array($fullKeyNoLang, CourseXMLConfig::$unitFields)) {
-            return $fieldStart . "<input class='form-control' type='text' name='" . q($fullKey) . "[]' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
+            return $fieldStart . "<input aria-label='".$langFillInField."' class='form-control' type='text' name='" . q($fullKey) . "[]' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
         }
 
         // all others get a typical input type box
-        return $fieldStart . "<input type='text' class='form-control' name='" . q($fullKey) . "' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
+        return $fieldStart . "<input aria-label='".$langFillInField."' type='text' class='form-control' name='" . q($fullKey) . "' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
     }
 
     /**

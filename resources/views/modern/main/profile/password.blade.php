@@ -39,7 +39,7 @@
                         <fieldset>
                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group{{ $old_pass_error ? " has-error" : "" }}'>
-                                <label for='old_pass' class='col-sm-12 control-label-notes'>{{ trans('langOldPass') }} </label>
+                                <label for='old_pass' class='col-sm-12 control-label-notes'>{{ trans('langOldPass') }} <span class='Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input type='password' class='form-control' placeholder="{{ trans('langOldPass') }}..." id='old_pass' name='old_pass' value='{{ $old_pass }}' autocomplete='off'>
                                     <span class='help-block'>{{ $old_pass_error }}</span>
@@ -48,7 +48,7 @@
 
 
                             <div class='form-group{{ $password_form_error ? " has-error" : "" }} mt-4'>
-                                <label for='password_form' class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }} </label>
+                                <label for='password_form' class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }} <span class='Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input type='password' class='form-control' placeholder="{{ trans('langNewPass1') }}" id='password_form' name='password_form' value='{{ $password_form }}' autocomplete='off'>
                                     <span class='help-block'>{{ $password_form_error }}</span>
@@ -59,7 +59,7 @@
                             </div>
 
                             <div class='form-group{{ $password_form1_error ? " has-error" : "" }} mt-4'>
-                                <label for='password_form1' class='col-sm-12 control-label-notes'>{{ trans('langNewPass2') }} </label>
+                                <label for='password_form1' class='col-sm-12 control-label-notes'>{{ trans('langNewPass2') }} <span class='Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input type='password' class='form-control' placeholder="{{ trans('langNewPass2') }}" id='password_form1' name='password_form1' value='{{ $password_form1 }}' autocomplete='off'>
                                     <span class='help-block'>{{ $password_form1_error }}</span>
