@@ -10,7 +10,7 @@
 				<% _.each(all_day, function(event){ %>
 					<div class="day-highlight dh-<%= event['class'] %>">
 						<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
-						   data-event-class="<%= event['class'] %>" class="event-item" aria-label="Event">
+						   data-event-class="<%= event['class'] %>" class="event-item">
 							<%= event.title %></a>
 					</div>
 				<% }); %>
@@ -25,7 +25,7 @@
 					<div class="day-highlight dh-<%= event['class'] %>">
 						<span class="cal-hours pull-right"><%= event.end_hour %></span>
 						<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
-						   data-event-class="<%= event['class'] %>" class="event-item" aria-label="Event">
+						   data-event-class="<%= event['class'] %>" class="event-item">
 							<%= event.title %></a>
 					</div>
 				<% }); %>
@@ -47,10 +47,10 @@
 		</div>
 		
 		<% _.each(by_hour, function(event){ %>
-			<div class="pull-left day-event day-highlight dh-<%= event['class'] %>" style="position:absolute; left: <%= (100+event.col * 200) %>px; top: <%= (event.top * 30) %>px;">
+			<div class="pull-left day-event day-highlight dh-<%= event['class'] %>" style="margin-top: <%= (event.top * 30) %>px; height: <%= (event.lines * 30) %>px">
 				<span class="cal-hours"><%= event.start_hour %> - <%= event.end_hour %></span>
 				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
-				   data-event-class="<%= event['class'] %>" class="event-item" aria-label="Event">
+				   data-event-class="<%= event['class'] %>" class="event-item">
 					<%= event.title %></a>
 			</div>
 		<% }); %>
@@ -63,7 +63,7 @@
 			<div class="day-highlight dh-<%= event['class'] %>">
 				<span class="cal-hours"><%= event.start_hour %></span>
 				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
-				   data-event-class="<%= event['class'] %>" class="event-item" aria-label="Event">
+				   data-event-class="<%= event['class'] %>" class="event-item">
 					<%= event.title %></a>
 			</div>
 			<% }); %>

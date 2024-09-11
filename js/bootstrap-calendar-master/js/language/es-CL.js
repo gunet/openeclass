@@ -1,7 +1,7 @@
 if(!window.calendar_languages) {
 	window.calendar_languages = {};
 }
-window.calendar_languages['es-ES'] = {
+window.calendar_languages['es-CL'] = {
 	error_noview:     'Calendario: Vista {0} no encontrada',
 	error_dateformat: 'Calendario: Formato de fecha inválido {0}. Debe ser "now" o "yyyy-mm-dd"',
 	error_loadurl:    'Calendario: URL de carga de eventos no configurada',
@@ -62,19 +62,32 @@ window.calendar_languages['es-ES'] = {
 	first_day: 1,
 	week_numbers_iso_8601: true,
 
+	//Holidays from http://www.timeanddate.com/holidays/chile
 	holidays: {
 		'01-01':    "Año Nuevo",
-		'06-01':    "Día de Reyes",
-		'19-03':    "San José",
-		'easter-3': "Jueves Santo",
 		'easter-2': "Viernes Santo",
+		'easter-1': "Sábado Santo",
 		'easter':   "Pascua",
-		'easter+1': "Lunes de Pascua",
 		'01-05':    "Día del Trabajador",
-		'15-08':    "Asunción",
-		'12-10':    "Fiesta Nacional de España",
+		'21-05':    "Día de las Glorias Navales",
+		'19-06-2016':    "Elecciones Primarias Municipales",
+		//Saint Peter and Saint Paul varies according to the year
+		'27-06-2016':    "San Pedro y San Pablo",
+		'26-06-2017':    "San Pedro y San Pablo",
+		'02-07-2018':    "San Pedro y San Pablo",
+		'16-07':    "Día de la Virgen del Carmen",
+		'easter+39':    "Asunción de la Virgen",
+		'18-09':    "Independencia Nacional",
+		'19-09':    "Día de las Glorias del Ejército",
+		//Columbus day varies depending on the year 
+		'10-10-2016':    "Encuentro de Dos Mundos",
+		'09-10-2017':    "Encuentro de Dos Mundos",
+		'15-10-2018':    "Encuentro de Dos Mundos",
+		//Reformation day varies depending on the year 
+		'31-10':    "Día de las Iglesias Evangélicas y Protestantes",
+		'27-10-2017':    "Día de las Iglesias Evangélicas y Protestantes",	
+		'02-10-2018':    "Día de las Iglesias Evangélicas y Protestantes",
 		'01-11':    "Día de todos los Santos",
-		'06-12':    "Día de la Constitución",
 		'08-12':    "Inmaculada Concepción",
 		'25-12':    "Navidad"
 	}

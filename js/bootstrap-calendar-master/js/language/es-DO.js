@@ -1,12 +1,14 @@
 if(!window.calendar_languages) {
 	window.calendar_languages = {};
 }
-window.calendar_languages['es-MX'] = {
-	error_noview:     'Calendar: Vista {0} no encontrada',
-	error_dateformat: 'Calendar: Formato de Fecha Inválido {0}. Debe ser "now" o con el formato "yyyy-mm-dd"',
-	error_loadurl:    'Calendar: URL de datos no definida',
-	error_where:      'Calendar: Dirección de navegación errónea {0}. Valores válidos: "next" o "prev" o "today"',
+window.calendar_languages['es-DO'] = {
+	error_noview:     'Calendario: Vista {0} no encontrada',
+	error_dateformat: 'Calendario: Formato de Fecha Inválido {0}. Debe ser "now" o con el formato "yyyy-mm-dd"',
+	error_loadurl:    'Calendario: URL de datos no definida',
+	error_where:      'Calendario: Dirección de navegación errónea {0}. Valores válidos: "next" o "prev" o "today"',
 	error_timedevide: 'Calendario: parámetro para el separador de hora debe dividir 60 por un entero. Por ejemplo 10, 15, 30',
+
+  no_events_in_day: 'No hay eventos hoy',
 
 	title_year:  'Año {0}',
 	title_month: '{0} año {1}',
@@ -16,9 +18,9 @@ window.calendar_languages['es-MX'] = {
 	week:        'Semana {0}',
 	all_day:     'Todo el día',
 	time:        'Tiempo',
-	events:      'Desarrollos',
-	before_time: 'Tiempo antes de la cinta final',
-	after_time:  'Fin después de una cinta temporal',
+	events:      'Eventos',
+  before_time: 'Horas previas',
+  after_time:  'Horas posteriores',
 
 
 	m0:  'Enero',
@@ -62,12 +64,15 @@ window.calendar_languages['es-MX'] = {
 
 	holidays: {
 		'01-01': "Año Nuevo",
-		'05-02': "Día de la Constitución",
-		'21-03': "Natalicio de Benito Juárez",
-		'01-05': "Día del Trabajo",
-		'16-09': "Día de la Independencia",
-		'20-11': "Día de la Revolución",
-		'01-12': "Transmisión del Poder Ejecutivo Federal",
+    '06-01': "Día de los Santos Reyes",
+		'21-01': "Día de Nuestra Señora de la Altagracia",
+		'26-01': "Día de Duarte",
+    '27-02': "Día de la Independencia",
+		'01-05': "Viernes Santo",
+		'26-05': "Corpus Cristi",
+		'16-08': "Día de la Restauración",
+		'24-09': "Día de las Mercedes",
+    '06-11': "Día de la Constitución",
 		'25-12': "Navidad"
 	}
 };

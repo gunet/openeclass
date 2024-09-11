@@ -6,14 +6,14 @@ if(!window.calendar_languages) {
 // Here you define the language and Country code. Replace en-US with your own.
 // First letters: the language code (lower case). See http://www.loc.gov/standards/iso639-2/php/code_list.php
 // Last letters: the Country code (upper case). See http://www.iso.org/iso/home/standards/country_codes/country_names_and_code_elements.htm
-window.calendar_languages['fi-FI'] = {
-    error_noview: 'Kalenteri: {0} näkymää ei löytynyt',
-    error_dateformat: 'Kalenteri: väärä päivämääräformaatti {0}. Oikea formaatti on "yyyy-mm-dd"',
-    error_loadurl: 'Kalenteri: Tapahtuman osoitetta ei ole asetettu',
-    error_where: 'Kalenteri: Väärä navigointisuunta {0}. Suunta voi olla vain "seuraava" tai "edellinen" or "tänään"',
-    error_timedevide: 'Kalenteri: Aikajaon tulee olla alle 60 ja kokonaisluku, kuten 10, 15, 30',
+window.calendar_languages['lt-LT'] = {
+    error_noview: 'Kalendorius: Vaizdas {0} nerastas',
+    error_dateformat: 'Kalendorius: Blogas datos formatas {0}. Turėtų būti "now" arba "yyyy-mm-dd"',
+    error_loadurl: 'Kalendorius: Nenustatytas įvykio URL',
+    error_where: 'Kalendorius: Bloga perėjimo kryptis {0}. Gali būti "sekantis" or "kitas" arba "šiandien"',
+    error_timedevide: 'Kalendorius: Laiko išskirstymo parametras turėtu dalintis tvarkingai iš 60. Kažkas panašaus į 10, 15 arba 30.',
 
-    no_events_in_day: 'Ei tapahtumia.',
+    no_events_in_day: 'Šią dieną nenumatyti jokie įvykiai.',
 
     // {0} will be replaced with the year (example: 2013)
     title_year: '{0}',
@@ -22,57 +22,58 @@ window.calendar_languages['fi-FI'] = {
     title_month: '{0} {1}',
     // {0} will be replaced with the week number (example: 37)
     // {1} will be replaced with the year (example: 2013)
-    title_week: 'viikko {0}/{1}',
+    title_week: '{0} savaitė, {1}',
     // {0} will be replaced with the weekday name (example: Thursday)
     // {1} will be replaced with the day of the month (example: 12)
     // {2} will be replaced with the month name (example: September)
     // {3} will be replaced with the year (example: 2013)
     title_day: '{0} {1} {2}, {3}',
 
-    week:        'Viikko',
-    all_day:     'Koko päivä',
-    time:        'Aika',
-    events:      'Tapahtumat',
-    before_time: 'Loppu ennen aikajanaa',
-    after_time:  'Alkaa aikajanan jälkeen',
+    week:'{0} Savaitė',
+    all_day:     'Visa diena',
+    time:        'Laikas',
+    events:      'Įvykiai',
+    before_time: 'Baigiasi prieš šiandieną',
+    after_time:  'Prasideda po šiandienos',
 
-    m0: 'Tammikuu',
-    m1: 'Helmikuu',
-    m2: 'Maaliskuu',
-    m3: 'Huhtikuu',
-    m4: 'Toukokuu',
-    m5: 'Kesäkuu',
-    m6: 'Heinäkuu',
-    m7: 'Elokuu',
-    m8: 'Syyskuu',
-    m9: 'Lokakuu',
-    m10: 'Marraskuu',
-    m11: 'Joulukuu',
+    m0: 'Sausis',
+    m1: 'Vasaris',
+    m2: 'Kovas',
+    m3: 'Balandis',
+    m4: 'Gegužė',
+    m5: 'Birželis',
+    m6: 'Liepa',
+    m7: 'Rugpjūtis',
+    m8: 'Rugsėjis',
+    m9: 'Spalis',
+    m10: 'Lapkritis',
+    m11: 'Gruodis',
 
-    ms0: 'Tammi',
-    ms1: 'Helmi',
-    ms2: 'Maalis',
-    ms3: 'Huhti',
-    ms4: 'Touko',
-    ms5: 'Kesä',
-    ms6: 'Heinä',
-    ms7: 'Elo',
-    ms8: 'Syys',
-    ms9: 'Loka',
-    ms10: 'Marras',
-    ms11: 'Joulu',
+    ms0: 'Sau',
+    ms1: 'Vas',
+    ms2: 'Kov',
+    ms3: 'Bal',
+    ms4: 'Geg',
+    ms5: 'Bir',
+    ms6: 'Lie',
+    ms7: 'Rugp',
+    ms8: 'Rugs',
+    ms9: 'Spa',
+    ms10: 'Lap',
+    ms11: 'Gru',
 
-    d0: 'Sunnuntai',
-    d1: 'Maanantai',
-    d2: 'Tiistai',
-    d3: 'Keskiviikko',
-    d4: 'Torstai',
-    d5: 'Perjantai',
-    d6: 'Lauantai',
+    d0: 'Sekmadienis',
+    d1: 'Pirmadienis',
+    d2: 'Antradienis',
+    d3: 'Trečiadienis',
+    d4: 'Ketvirtadienis',
+    d5: 'Penktadienis',
+    d6: 'Šeštadienis',
 
     // Which is the first day of the week (2 for sunday, 1 for monday)
     first_day: 1,
-    week_numbers_iso_8601: true,
+    // Week numbering according to ISO 8601 (if false, week 1 starts with January 1st)
+    week_numbers_iso_8601: false,
 
     // The list of the holidays.
     // Each holiday has a date definition and a name (in your language)
@@ -104,20 +105,20 @@ window.calendar_languages['fi-FI'] = {
     //   For example:
     //   - From 1 January to 6 January: '01-01>06-01'
     //   - Easter and the day after Easter: 'easter>easter+1'
-    //   Limitations: currently the multi-day holydays can't cross an year. So, for example, you can't specify a range as '30-12>01-01'; as a workaround you can specify two distinct holidays (for instance '30-12>31-12' and '01-01'). 
+    //   Limitations: currently the multi-day holydays can't cross an year. So, for example, you can't specify a range as '30-12>01-01'; as a workaround you can specify two distinct holidays (for instance '30-12>31-12' and '01-01').
     holidays: {
-      // January 1, 6
-      '01-01': "Uudenvuodenpäivä",
-      '06-01': "Loppiainen",
-      'easter-2': "Pitkäperjantai",
-      'easter': "Pääsiäispäivä",
-      'easter+1': "2. pääsiäispäivä",
-      'easter+39': "Helatorstai",
-      'easter+49': "Helluntaipäivä",
-      '01-05': "Vappu",
-      '06-12': "Itsenäisyyspäivä",
-      '24-12': "Jouluaatto",
-      '25-12': "Joulupäivä",
-      '26-12': "Tapaninpäivä"
+        '01-01':        'Nauji metai',
+        '02-16':        'Lietuvos valstybės atkūrimo diena',
+        '03-11':        'Lietuvos nepriklausomybės atkūrimo diena',
+        '04-20':        'Kanapės legalizavimo diena (nuo 2016 metų)',
+        '05-01':        'Tarptautinė darbo diena',
+        '05+1*0':       'Motinos diena',
+        '06+1*0':       'Tėvo diena',
+        '06-24':        'Rasos (Joninės)',
+        '07-06':        'Valstybės (Lietuvos karaliaus Mindaugo karūnavimo) diena',
+        '08-15':        'Žolinė; Švč. Mergelės Marijos ėmimo į dangų diena',
+        '11-01':        'Visų šventųjų diena',
+        '12-24':        'Kūčios',
+        '12-25>12-26':  'Kalėdos',
     }
 };
