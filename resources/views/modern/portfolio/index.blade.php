@@ -1,7 +1,3 @@
-@push('head_styles')
-    <link rel='stylesheet' type='text/css' href='{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css' />
-@endpush
-
 @push('head_scripts')
     <script type='text/javascript'>
         var msg = {
