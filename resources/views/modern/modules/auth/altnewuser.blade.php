@@ -28,7 +28,7 @@
                                                 <div class='row'>
                                                     <div class='col-12 px-3'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
+                                                            <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
                                                             <div class='col-sm-12'>
                                                                 <input id='UserName' class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>
                                                             </div>
@@ -38,7 +38,7 @@
                                                 <div class='row'>
                                                     <div class='col-12 px-3'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='Pass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
+                                                            <label for='Pass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }} <span class='Accent-200-cl'>(*)</span></label>
                                                             <div class='col-sm-12'>
                                                                 <input id='Pass' class='form-control' type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='{{ trans('langPass') }}'>
                                                             </div>

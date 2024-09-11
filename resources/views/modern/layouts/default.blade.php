@@ -209,6 +209,8 @@
             $(".table-default thead tr th:last-child:not(:has(.fa-cogs))").attr("aria-label","{{ trans('langCommands') }} / {{ trans('langResults') }}");
             $(".sp-input-container .sp-input").attr("aria-label","{{ trans('langOptForColor') }}");
             $("ul").find(".select2-search__field").attr("aria-label","{{ trans('langSearch') }}");
+            $("#cal-slide-content ul li .event-item").attr("aria-label","{{ trans('langEvent') }}");
+            $("#cal-day-box .event-item").attr("aria-label","{{ trans('langEvent') }}");
         });
     </script>
     @stack('bottom_scripts')

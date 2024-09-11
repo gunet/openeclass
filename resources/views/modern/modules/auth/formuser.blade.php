@@ -75,7 +75,7 @@
 
                                                 <div class='col-12'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                                        <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
                                                         <div class='col-sm-12'>
                                                             {!! $buildusernode !!}
                                                         </div>

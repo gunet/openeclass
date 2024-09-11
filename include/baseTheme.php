@@ -3703,12 +3703,13 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
 
                 .cal-row-fluid.cal-row-head .cal-cell1,
-                .number-day-cal {
+                .cal-month-day .pull-right,
+                .cal-day-weekend span[data-cal-date] {
                     color: $theme_options_styles[clColorBodyAgenda];
                 }
 
                 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1,
-                .myPersonalCalendar .number-day-cal,
+                .myPersonalCalendar .cal-month-day .pull-right,
                 .myPersonalCalendar .cal-day-hour div,
                 #cal-day-box div,
                 .cal-year-box div,
@@ -4065,11 +4066,8 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
-                .active-calendar-day{
-                    background-color:$theme_options_styles[bgColorActiveDateTime] !important;
-                }
-
-                .cal-day-today .number-day-cal {
+                .cal-day-today span[data-cal-date],
+                .cal-day-holiday span[data-cal-date]{
                     background-color:$theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
@@ -4150,13 +4148,12 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
-                .active-calendar-day{
-                    color: $theme_options_styles[TextColorActiveDateTime] !important;;
-                }
-
-                .cal-day-today .number-day-cal,
-                .cal-day-today .number-day-cal:hover,
-                .cal-day-today .number-day-cal:focus{
+                .cal-day-today span[data-cal-date],
+                .cal-day-today span[data-cal-date]:hover,
+                .cal-day-today span[data-cal-date]:focus,
+                .cal-day-holiday span[data-cal-date],
+                .cal-day-holiday span[data-cal-date]:hover,
+                .cal-day-holiday span[data-cal-date]:focus{
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 

@@ -3207,12 +3207,13 @@ function get_theme_options() {
             $styles_str .= "
             
                 .cal-row-fluid.cal-row-head .cal-cell1,
-                .number-day-cal {
+                .cal-month-day .pull-right,
+                .cal-day-weekend span[data-cal-date] {
                     color: $theme_options_styles[clColorBodyAgenda];
                 }
 
                 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1,
-                .myPersonalCalendar .number-day-cal,
+                .myPersonalCalendar .cal-month-day .pull-right,
                 .myPersonalCalendar .cal-day-hour div,
                 #cal-day-box div,
                 .cal-year-box div,
