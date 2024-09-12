@@ -407,6 +407,7 @@ function common_doc_path($extra_path, $full = false) {
         }
         return ($full ? $webDir : '') . '/courses/commondocs' . $cpath;
     } else {
+        $common_doc_visible = true;
         return false;
     }
 }
