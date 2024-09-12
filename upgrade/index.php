@@ -36,44 +36,7 @@ if ($language == 'el') {
     $upgrade_info_file = 'https://docs.openeclass.org/en/upgrade';
     $link_changes_file = 'https://docs.openeclass.org/el/current';
 }
+$data['upgrade_info_file'] = $upgrade_info_file;
+$data['link_changes_file'] = $link_changes_file;
 
-  $tool_content .= "
-    <div class='row row-cols-lg-2 row-cols-1 g-4 mt-0'>
-      <div class='col'>
-        <div class='alert alert-warning mt-0'>
-          <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-          <span>$langExpl2Upgrade</span>
-        </div>
-        <div class='alert alert-info'>
-          <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-          <span>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
-                $langUpgRead <a href='$upgrade_info_file' target='_blank' aria-label='$langOpenNewTab'>$langUpgMan</a> $langUpgLastStep
-          </span>
-        </div> 
-        <div class='card panelCard px-lg-4 py-lg-3'>
-          <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h2>$langUpgDetails</h2>
-          </div>
-          <div class='card-body'>
-            <form role='form' action='upgrade.php' method='post'>
-              <div class='form-group'>
-                <label for='admin_username' class='control-label-notes'>$langUsername</label>
-                <input id='admin_username' class='form-control' name='login' placeholder='$langUsername' type='text'>
-              </div>
-              <div class='form-group mt-4'>
-                <label for='admin_password' class='control-label-notes'>$langPass</label>
-                <input id='admin_password' class='form-control' name='password' placeholder='$langPass' type='password'>
-              </div>
-              <div class='form-group mt-5'>
-                <button class='btn submitAdminBtn w-100' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class='col d-none d-lg-block text-end'>
-        <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
-      </div>
-    </div>";
-
-draw($tool_content, 0);
+view('upgrade.index', $data);
