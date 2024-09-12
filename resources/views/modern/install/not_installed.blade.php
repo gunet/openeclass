@@ -1,9 +1,9 @@
 <body>
     <!-- Bootstrap v5 -->
-    <link rel="stylesheet" type="text/css" href="../template/modern/css/bootstrap.min.css?v={{ CACHE_SUFFIX }}"/>
-    <script type="text/javascript" src="../js/bootstrap.bundle.min.js?v={{ CACHE_SUFFIX }}"></script>
-    <link href="../template/modern/css/font-Manrope/css/Manrope.css?v={{ CACHE_SUFFIX }}" rel="stylesheet"/>
-    <link href="../template/modern/css/font-awesome-6.4.0/css/all.css?v={{ CACHE_SUFFIX }}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="../template/modern/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+    <link href="../template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+    <link href="../template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
 
     <div class="d-flex flex-column min-vh-100 container-lg bg-light">
         <!-- BEGIN headerBlock -->
