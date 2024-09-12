@@ -336,7 +336,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         $tool_content .= "<div class='form-group mt-4'>
-            <label for='title' class='col-12 control-label-notes'>$langTitle: <span class='Accent-200-cl'>(*)</span></label>
+            <label for='title' class='col-12 control-label-notes'>$langTitle: <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
             </div>

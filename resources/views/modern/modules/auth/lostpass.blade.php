@@ -48,13 +48,13 @@
                                                 <input type='hidden' name='u' value='{{ $userUID }}'>
                                                 <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
                                                 <div class="form-group">
-                                                    <label  for='password' class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!} <span class='Accent-200-cl'>(*)</span></label>
+                                                    <label  for='password' class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                     <div class="col-sm-12">
                                                         <input type='password' placeholder="{!! trans('langNewPass1') !!}" class='form-control' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mt-3">
-                                                    <label for='new_pass_word' class="col-sm-12 control-label-notes">{!! trans('langNewPass2') !!} <span class='Accent-200-cl'>(*)</span></label>
+                                                    <label for='new_pass_word' class="col-sm-12 control-label-notes">{!! trans('langNewPass2') !!} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                     <div class="col-sm-12">
                                                         <input type='password' placeholder="{!! trans('langNewPass2') !!}" class='form-control' size='40' name='newpass1' value='' id='new_pass_word' autocomplete='off'>
                                                     </div>
@@ -87,7 +87,7 @@
                                     <form role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='form-group'>
                                             <div class='col-12'>
-                                                <label for='userName' class='form-label'>{{ trans('lang_username') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                <label for='userName' class='form-label'>{{ trans('lang_username') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             </div>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='{{ trans('lang_username') }}'>
@@ -95,7 +95,7 @@
                                         </div>
                                         <div class='form-group mt-4'>
                                             <div class='col-12'>
-                                                <label for='email' class='form-label'>{{ trans('lang_email') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                <label for='email' class='form-label'>{{ trans('lang_email') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             </div>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='{{ trans('lang_email') }}'>

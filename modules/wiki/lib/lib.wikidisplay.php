@@ -229,7 +229,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                         <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->
                         <input type='hidden' name='gid' value='$groupId'>
                         <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='wikiTitle' class='col-sm-6 control-label-notes'>$langWikiTitle <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='wikiTitle' class='col-sm-6 control-label-notes'>$langWikiTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                                 <input name='title' type='text' class='form-control' id='wikiTitle' value='".q($title) ."' placeholder='$langWikiTitle'>
                                 <span class='help-block Accent-200-cl'>".Session::getError('title')."</span>

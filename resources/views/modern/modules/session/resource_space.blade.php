@@ -307,7 +307,7 @@
                                                 </div>
 
                                                 <div class='form-group'>
-                                                    <label for='file-upload' class='col-12 control-label-notes'>{{ trans('langDownloadFile') }}&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                                    <label for='file-upload' class='col-12 control-label-notes'>{{ trans('langDownloadFile') }}&nbsp;<span class='asterisk Accent-200-cl'>(*)</span></label>
                                                     <input id='file-upload' type='file' name='file-upload'/>
                                                 </div>
 

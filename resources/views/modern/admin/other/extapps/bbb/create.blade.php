@@ -54,13 +54,13 @@
                     <fieldset>
                         <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                         <div class='form-group mt-4'>
-                            <label for='hostname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='hostname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                                 <input class='form-control' placeholder="{{ trans('langName') }}" type='text' id='hostname_form' name='hostname_form' value='{{ isset($server) ? $server->hostname : ""}}'>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='api_url_form' class='col-sm-12 control-label-notes'>API URL <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='api_url_form' class='col-sm-12 control-label-notes'>API URL <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                                 <input class='form-control' placeholder="api url..." type='text' id='api_url_form' name='api_url_form' value='{{ isset($server) ? $server->api_url : "" }}'>
                             </div>

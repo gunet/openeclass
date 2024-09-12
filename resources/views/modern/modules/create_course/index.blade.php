@@ -125,7 +125,7 @@
                         <fieldset>
                         <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                         <div class='form-group'>
-                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-12'>
                               <input name='title' id='title' type='text' class='form-control' value="{{ trans('title') }}" placeholder="{{ trans('langTitle') }}">
                             </div>
@@ -137,7 +137,7 @@
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                            <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                               {!! $buildusernode !!}
                             </div>

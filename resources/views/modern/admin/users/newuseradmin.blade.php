@@ -108,7 +108,7 @@
                     @else
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] . $params }}' method='post' onsubmit='return validateNodePickerForm();'>
                             <div class="form-group{{ Session::hasError('givenname_form') ? ' has-error' : '' }}">
-                                <label for="givenname_form" class="col-sm-12 control-label-notes">{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for="givenname_form" class="col-sm-12 control-label-notes">{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class="col-sm-12">
                                     <input class='form-control' placeholder="{{ trans('langName') }}..." id='givenname_form' type='text' name='givenname_form' value='{{ getValue('givenname_form', $pn) }}'>
                                     @if (Session::hasError('givenname_form'))
@@ -118,7 +118,7 @@
                             </div>
 
                             <div class="form-group{{ Session::hasError('surname_form') ? ' has-error' : '' }} mt-4">
-                                <label for="surname_form" class="col-sm-12 control-label-notes">{{ trans('langSurname') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for="surname_form" class="col-sm-12 control-label-notes">{{ trans('langSurname') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class="col-sm-12">
                                     <input class='form-control' id='surname_form' type='text' name='surname_form' value='{{ getValue('surname_form', $ps) }}' placeholder="{{ trans('langSurname') }}...">
                                     @if (Session::hasError('surname_form'))
@@ -128,7 +128,7 @@
                             </div>
 
                             <div class="form-group{{ Session::hasError('uname_form') ? ' has-error' : '' }} mt-4">
-                                <label for="uname_form" class="col-sm-12 control-label-notes">{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for="uname_form" class="col-sm-12 control-label-notes">{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class="col-sm-12">
                                     <input class='form-control' id='uname_form' type='text' name='uname_form' value='{{ getValue('uname_form', $pu) }}' placeholder="{{ trans('langUsername') }}...">
                                     @if (Session::hasError('uname_form'))
@@ -140,7 +140,7 @@
                                 <input type='hidden' name='auth_form' value='1'>
                             @else
                                 <div class="form-group{{ Session::hasError('auth_selection') ? ' has-error' : '' }} mt-4">
-                                    <label for="auth_selection" class="col-sm-12 control-label-notes">{{ trans('langEditAuthMethod') }} <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for="auth_selection" class="col-sm-12 control-label-notes">{{ trans('langEditAuthMethod') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class="col-sm-12">
                                     {!! selection($auth_m, 'auth_form', $auth, "id='auth_selection' class='form-control'") !!}
                                         @if (Session::hasError('auth_selection'))
@@ -150,7 +150,7 @@
                                 </div>
                             @endif
                             <div class="form-group{{ Session::hasError('password') ? ' has-error' : '' }} mt-4">
-                                <label for="password" class="col-sm-12 control-label-notes">{{ trans('langPass') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for="password" class="col-sm-12 control-label-notes">{{ trans('langPass') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class="col-sm-12">
                                     <input class='form-control' id='password' type='text' name='password' value='{{ getValue('password', choose_password_strength()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}...">
                                     @if (Session::hasError('password'))
@@ -190,7 +190,7 @@
                             </div>
 
                             <div class="form-group{{ Session::hasError('faculty') ? ' has-error' : '' }} mt-4">
-                                <label for="dialog-set-value" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for="dialog-set-value" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class="col-sm-12">
                                     {!! $tree_html !!}
                                     @if (Session::hasError('faculty'))

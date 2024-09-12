@@ -174,7 +174,7 @@ function show_form($id, $sid, $assign) {
                     </div>
                     $submission
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-                        <div class='col-sm-6 control-label-notes'>$langGradebookGrade <span class='Accent-200-cl'>(*)</span></div>                        
+                        <div class='col-sm-6 control-label-notes'>$langGradebookGrade <span class='asterisk Accent-200-cl'>(*)</span></div>                        
                             $grade_field
                             <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
                     </div>

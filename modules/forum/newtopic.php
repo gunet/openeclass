@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
         <fieldset>
             <legend class='mb-0' aria-label='$langForm'></legend>
             <div class='form-group'>
-              <label for='subject' class='col-sm-12 control-label-notes'>$langSubject <span class='Accent-200-cl'>(*)</span></label>
+              <label for='subject' class='col-sm-12 control-label-notes'>$langSubject <span class='asterisk Accent-200-cl'>(*)</span></label>
               <div class='col-sm-12'>
                 <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
               </div>

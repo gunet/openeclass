@@ -48,14 +48,14 @@
                         <fieldset>
                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
-                                <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input id='username' class='form-control' type='text' name='username' size='30' maxlength='30' placeholder="{{ trans('langUsername') }}..." {!! $usernameValue !!}>
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }} <span class='Accent-200-cl'>(*)</span></div>
+                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }} <span class='asterisk Accent-200-cl'>(*)</span></div>
                                     <div class='col-sm-12'>
                                         <div class='radio mb-4'>
                                             <label>

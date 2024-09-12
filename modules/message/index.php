@@ -283,7 +283,7 @@ $tool_content .= "<div class='col-12'>
                                 if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
                                     $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                             <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
@@ -431,7 +431,7 @@ $tool_content .= "<div class='col-12'>
 
                                 $tool_content .= "
                                     <div class='form-group mt-4'>
-                                        <label for='message_title_id' class='col-sm-12 control-label-notes'>$langSubject <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='message_title_id' class='col-sm-12 control-label-notes'>$langSubject <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='message_title' id='message_title_id'>
                                         </div>

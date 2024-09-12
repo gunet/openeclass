@@ -62,7 +62,7 @@
                                     
                                    
                                         <div class='form-group mt-4'>
-                                            <label for='requestTitle' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='requestTitle' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='requestTitle' name='requestTitle' required>
                                             </div>

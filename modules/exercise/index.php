@@ -533,7 +533,7 @@ if (!$nbrExercises) {
             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='Accent-200-cl'>$langHasExpiredS</span>)";
+                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='asterisk Accent-200-cl'>$langHasExpiredS</span>)";
             }
             if (has_user_participate_in_exercise($row->id)) {
                 $tool_content .= "&nbsp; <span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";

@@ -6878,3 +6878,4 @@ $langBreadcrumb = "Πλοήγηση";
 $langSelectedLang = "Επιλογή γλώσσας";
 $langCourseSelection = "Επιλογή μαθήματος";
 $langFillInField = "Συμπληρώστε το πεδίο";
+$langColorRequiredField = "Προειδοποίηση υποχρεωτικού πεδίου";

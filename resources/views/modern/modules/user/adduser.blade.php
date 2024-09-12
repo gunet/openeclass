@@ -21,19 +21,19 @@
                             <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}'>
                                     <div class='form-group'>
-                                        <label for='surname' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }} <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='surname' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                             <input class='form-control' id='surname' type='text' name='search_surname' value='{!! q($search_surname) !!}' placeholder='{{ trans('langSurname') }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='name' class='col-sm-6 control-label-notes'>{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='name' class='col-sm-6 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                             <input class='form-control' id='name' type='text' name='search_givenname' value='{!! q($search_givenname) !!}' placeholder='{{ trans('langName') }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                             <input class='form-control' id='username' type='text' name='search_username' value='{!! q($search_username)  !!}' placeholder='{{ trans('langUsername') }}'>
                                         </div>

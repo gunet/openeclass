@@ -67,14 +67,14 @@
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
-                                            <label for='password' class='col-12 control-label-notes'>{{ trans('langPass') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='password' class='col-12 control-label-notes'>{{ trans('langPass') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>
                                                 <input class='form-control' type='text' name='guestpassword' value='' id='password' autocomplete='off' placeholder='{{ trans('langAskGuest') }}'>
                                                 <span id='result'></span>
                                             </div>
                                         </div>
                                         <div class='input-append date form-group mt-4'>
-                                            <label for='user_date_expires_at' class='col-12 control-label-notes'>{{ trans('langExpirationDate') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='user_date_expires_at' class='col-12 control-label-notes'>{{ trans('langExpirationDate') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>
                                                 <div class='input-group'>
                                                     <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>

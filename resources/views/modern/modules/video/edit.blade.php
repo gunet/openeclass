@@ -108,7 +108,7 @@
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='Title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='Title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 @if (isset($edititem))
                                                     <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ $edititem->title }}' id='Title'>

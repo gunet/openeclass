@@ -154,7 +154,7 @@ if (isset($_GET['scale_id'])) {
                         $hidden_input
                         
                         <div class='row form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='title' class='col-12 control-label-notes mb-1'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='title' class='col-12 control-label-notes mb-1'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
                               ".(Session::getError('title') ? "<span class='help-block Accent-200-cl'>" . Session::getError('title') . "</span>" : "")."

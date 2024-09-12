@@ -153,7 +153,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <fieldset>
                 <legend class='mb-0' aria-label='$langForm'></legend>
                 <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
-                    <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
                         <span class='help-block Accent-200-cl'>".Session::getError('newTitle')."</span>

@@ -44,7 +44,7 @@
                             <fieldset>
                                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <div class='form-group'>
-                                    <label for='code' class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }} <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='code' class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class='col-sm-12'>
                                         <input id='code' class='form-control' placeholder="{{ trans('langNodeCode1') }}" type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}' maxlength="30">
                                         &nbsp;<i>{{ trans('langCodeFaculte2') }}</i>
@@ -52,7 +52,7 @@
                                 </div>
                                 @foreach ($session->active_ui_languages as $key => $langcode)
                                     <div class='form-group mt-4'>
-                                        <label for='nodename-{{ $key }}' class='col-sm-12 control-label-notes'>{{ trans('langNodeName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='nodename-{{ $key }}' class='col-sm-12 control-label-notes'>{{ trans('langNodeName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
                                                 @if (isset($is_serialized) && $is_serialized && isset($names[$langcode]))
                                                     <input id='nodename-{{ $key }}' class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $names[$langcode] }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
@@ -114,7 +114,7 @@
                                     </div>
                                 @endforeach
                                 <div class='form-group mt-4'>
-                                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langNodeParent') }} <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langNodeParent') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class='col-sm-12'>
                                         {!! $html !!}
                                         <span class='help-block'>

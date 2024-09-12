@@ -234,7 +234,7 @@
                                     <fieldset>
                                         <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                         <div class="form-group">
-                                            <label for='creators' class='control-label-notes'>{{ trans('langResponsibleOfSession') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='creators' class='control-label-notes'>{{ trans('langResponsibleOfSession') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <select class='form-select' name='creators' id='creators'>
                                                 @if($is_coordinator)
                                                     <option value=''>
@@ -259,7 +259,7 @@
                                         </div>
 
                                         <div class="form-group mt-4">
-                                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle')}} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle')}} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>
                                                 <input id='title' type='text' name='title' class='form-control' value='{{ $title }}'>
                                                 @if(Session::getError('title'))
@@ -287,7 +287,7 @@
                                                 </label>
                                             </div>
 
-                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langSessionParticipants') }} <span class='Accent-200-cl'>(*)</span></p>
+                                            <p class='control-label-notes mb-0 mt-3'>{{ trans('langSessionParticipants') }} <span class='asterisk Accent-200-cl'>(*)</span></p>
                                             <div id='select_one_session' class='d-block mt-1'>
                                                 <select name='one_participant' class='form-select' aria-label="{{ trans('langSessionParticipants') }}">
                                                     <option value=''>{{ trans('langSelectUser') }}</option>
@@ -318,7 +318,7 @@
                                         </div>
 
                                         <div class='form-group mt-4'>
-                                            <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }} <span class='Accent-200-cl'>(*)</span></p>
+                                            <p class='control-label-notes mb-2'>{{ trans('langStartEndSessionDateTime') }} <span class='asterisk Accent-200-cl'>(*)</span></p>
                                             <div class="input-group mb-3 rounded-2 border-0 gap-2">
                                                 <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
                                                     <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
@@ -343,7 +343,7 @@
                                         </div>
 
                                         <div class='form-group mt-4'>
-                                            <label for='typeRemoteId' class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='typeRemoteId' class='control-label-notes mb-0 mt-3'>{{ trans('langTypeRemote') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <select class='form-select' name='type_remote' id='typeRemoteId'>
                                                 <option value='0' {!! $type_remote==0 ? 'selected' : '' !!} {{ $tc_disabled }}>{{ trans('langNotRemote') }}</option>
                                                 <option value='1' {!! $type_remote==1 ? 'selected' : '' !!} {{ $meeting_disabled }}>{{ trans('langRemote') }}</option>

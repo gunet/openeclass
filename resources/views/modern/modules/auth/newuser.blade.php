@@ -85,7 +85,7 @@
                                             <div class='row'>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group'>
-                                                        <label for='NameID' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                        <label for='NameID' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                         <div class='col-sm-12'>
                                                             <input id="NameID" class='form-control' type='text' name='givenname_form' size='30' maxlength='100' value = '{{ $user_data_firstname }}'  placeholder='{{ trans('langName') }}...'>
                                                         </div>
@@ -93,7 +93,7 @@
                                                 </div>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-lg-0 mt-4'>
-                                                        <label for='SurNameID' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                        <label for='SurNameID' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                         <div class='col-sm-12'>
                                                             <input id="SurNameID" class='form-control' type='text' name='surname_form' size='30' maxlength='100' value = '{{ $user_data_lastname }}' placeholder='{{ trans('langSurname') }}...'>
                                                         </div>
@@ -104,7 +104,7 @@
                                             <div class='row'>
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='UserNameID' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                        <label for='UserNameID' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                         <div class='col-sm-12'>
                                                             <input id="UserNameID" class='form-control' type='text' name='uname' value = '{{ $user_data_displayName }}' accept="" size='30' maxlength='100' autocomplete='off' placeholder='{{ trans('langUserNotice') }}...'>
                                                         </div>
@@ -124,7 +124,7 @@
                                                 <div class='row'>
                                                     <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
-                                                            <label for='UserPassID' class='col-sm-12 control-label-notes'>{{ trans('langPass') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                            <label for='UserPassID' class='col-sm-12 control-label-notes'>{{ trans('langPass') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                             <div class='col-sm-12'>
                                                                 <input id="UserPassID" class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='{{ trans('langUserNotice') }}...'><span id='result'></span>
                                                             </div>
@@ -168,7 +168,7 @@
 
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                         <div class='col-sm-12'>
                                                             {!! $buildusernode !!}
                                                         </div>

@@ -6410,3 +6410,4 @@ $langOpenCloseTools = "Open - close tools";
 $langBreadcrumb = "Navigation";
 $langSelectedLang = "Language selection";
 $langCourseSelection = "Course selection";
+$langColorRequiredField = "Mandatory field warning";

@@ -302,7 +302,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     <fieldset>
                     <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='row form-group".(Session::getError('name') ? " has-error" : "")."'>
-                            <label for='name' class='col-12 control-label-notes mb-1'>$langTitleRubric <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='name' class='col-12 control-label-notes mb-1'>$langTitleRubric <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-12'>
                               <input name='name' type='text' class='form-control' id='name' value='$name'>
                               ".(Session::getError('name') ? "<span class='help-block Accent-200-cl'>" . Session::getError('name') . "</span>" : "")."

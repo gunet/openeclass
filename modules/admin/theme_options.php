@@ -58,7 +58,7 @@ $defaults = array(
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes', 'bgHelpButtonColor'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
-                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent', 'bgAlertDanger'),
+                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent', 'bgAlertDanger', 'clRequiredFieldForm'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
                 "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess', 'bgAlertSuccess'),
@@ -2251,6 +2251,10 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clLabelForms' class='control-label-notes mb-2 me-2'>$langColorLabel:</label>
                                 <input name='clLabelForms' type='text' class='form-control colorpicker' id='clLabelForms' value='$theme_options_styles[clLabelForms]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clRequiredFieldForm' class='control-label-notes mb-2 me-2'>$langColorRequiredField:</label>
+                                <input name='clRequiredFieldForm' type='text' class='form-control colorpicker' id='clRequiredFieldForm' value='$theme_options_styles[clRequiredFieldForm]'>
                             </div>
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12'>

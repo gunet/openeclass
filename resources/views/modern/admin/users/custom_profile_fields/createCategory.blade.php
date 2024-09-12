@@ -27,7 +27,7 @@
                             <input type='hidden' name='cat_id' value='{{ getIndirectReference($catid) }}'>
                             @endif
                             <div class='form-group'>
-                                <label for='catname' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='catname' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input id='catname' placeholder="{{ trans('langName') }}" class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
                                 </div>
