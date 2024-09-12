@@ -2,11 +2,11 @@
     <!-- jQuery -->
     <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap v5 -->
-    <link rel="stylesheet" type="text/css" href="../template/modern/css/bootstrap.min.css?v={{ CACHE_SUFFIX }}"/>
-    <script type="text/javascript" src="../js/bootstrap.bundle.min.js?v={{ CACHE_SUFFIX }}"></script>
-    <link href="../template/modern/css/font-Manrope/css/Manrope.css?v={{ CACHE_SUFFIX }}" rel="stylesheet"/>
-    <link href="../template/modern/css/font-awesome-6.4.0/css/all.css?v={{ CACHE_SUFFIX }}" rel="stylesheet"/>
-    <link rel="stylesheet" href="../template/modern/css/default.css?v={{ CACHE_SUFFIX }}">
+    <link rel="stylesheet" type="text/css" href="../template/modern/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+    <link href="../template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+    <link href="../template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../template/modern/css/default.css">
     <!-- fav icons -->
     <link rel="shortcut icon" href="../resources/favicon/favicon.ico" />
     <link rel="apple-touch-icon-precomposed" href="../resources/favicon/openeclass_128x128.png" />
