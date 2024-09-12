@@ -2388,7 +2388,7 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['clListMenuLogout'])) {
             $styles_str .= "
                 .contextual-menu-user .logout-list-item *{
-                    color:$theme_options_styles[clListMenuLogout];
+                    color:$theme_options_styles[clListMenuLogout] !important;
                 }
 
             ";
