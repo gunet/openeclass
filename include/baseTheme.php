@@ -6439,7 +6439,7 @@ function view($view_file, $view_data = array()) {
     }
 
     $views = $webDir . '/resources/views/' . get_config('theme');
-    $cache = $webDir . '/storage/views/' . get_config('theme');
+    $cache = $webDir . '/storage/views/';
     $blade = new Blade($views, $cache);
 
     $cache_suffix = CACHE_SUFFIX;
@@ -6472,7 +6472,7 @@ function widget_view($view_file, $view_data = array()) {
     global $webDir;
 
     $views = $webDir . "/$view_data[widget_folder]/views/";
-    $cache = $webDir . '/storage/views/' . get_config('theme');
+    $cache = $webDir . '/storage/views/';
     $blade = new Blade($views, $cache);
 
     $global_data = [];
