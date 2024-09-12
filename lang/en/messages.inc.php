@@ -6411,3 +6411,7 @@ $langBreadcrumb = "Navigation";
 $langSelectedLang = "Language selection";
 $langCourseSelection = "Course selection";
 $langColorRequiredField = "Mandatory field warning";
+$langRedText = "Text in red";
+$langGreenText = "Text in green";
+$langBlueText = "Text in blue";
+$langOrangeText = "Text in orange";

@@ -625,6 +625,43 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        if(!empty($theme_options_styles['ColorRedText'])){
+            $styles_str .= "
+                .text-danger,
+                .Accent-200-cl,
+                .label.label-danger{
+                    color: $theme_options_styles[ColorRedText] !important;
+                }
+            ";
+        }
+        if(!empty($theme_options_styles['ColorGreenText'])){
+            $styles_str .= "
+                .text-success,
+                .Success-200-cl,
+                .label.label-success{
+                    color: $theme_options_styles[ColorGreenText] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['ColorBlueText'])){
+            $styles_str .= "
+                .text-primary,
+                .Primary-600-cl{
+                    color: $theme_options_styles[ColorBlueText] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['ColorOrangeText'])){
+            $styles_str .= "
+                .text-warning,
+                .Warning-200-cl,
+                .label.label-warning{
+                    color: $theme_options_styles[ColorOrangeText] !important;
+                }
+            ";
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
