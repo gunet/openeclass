@@ -36,7 +36,8 @@ $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
 if (!$command_line) {
     if (isset($_POST['login']) and isset($_POST['password'])) {
         if (!is_admin($_POST['login'], $_POST['password'])) {
-            Session::Messages($langUpgAdminError, 'alert-warning');
+            Session::flash('message',"$langUpgAdminError");
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page('upgrade/');
         }
     }
@@ -52,98 +53,15 @@ if ($ajax_call and (!isset($_POST['token']) or !validate_csrf_token($_POST['toke
 stop_output_buffering();
 $error_message = null;
 set_time_limit(0);
-    $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
+$tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
 
 load_global_messages();
 
-function fatal_error($message) {
-    global $command_line, $ajax_call, $error_message;
-
-    set_config('upgrade_begin', '');
-    if ($command_line) {
-        if ($error_message) {
-            $message .= "\n\n$error_message\n";
-        }
-        die("$message\n");
-    } elseif ($ajax_call) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => $message,
-            'error' => $error_message
-        ], JSON_UNESCAPED_UNICODE);
-        flush();
-    } else {
-        if ($error_message) {
-            $message .= "<br>\n$error_message";
-        }
-        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$message</span></div>";
-        draw($tool_content, 0);
-    }
-    exit;
-}
-
-function message($message, $tag, $status = 'ok') {
-    global $command_line, $ajax_call, $error_message;
-
-    if ($command_line) {
-        // On the command line, just display the message
-        if ($error_message) {
-            $message .= "\n\n$error_message\n";
-        }
-        echo("$message\n");
-    } elseif ($ajax_call) {
-        // When called from the front-end...
-        // If this message has already been seen, continue with upgrade
-        if (isset($_SESSION['upgrade_tag']) and $_SESSION['upgrade_tag'] == $tag) {
-            unset($_SESSION['upgrade_tag']);
-            return;
-        }
-        // Else display message and wait to be called again
-        $_SESSION['upgrade_tag'] = $tag;
-        echo json_encode([
-            'status' => $status,
-            'message' => $message,
-            'error' => $error_message
-        ], JSON_UNESCAPED_UNICODE);
-        flush();
-        exit;
-    }
-}
-
-function steps_finished() {
-    global $step, $ajax_call, $version;
-    // all steps finished for this version, record current version in the DB
-    unset($step);
-    unset($_SESSION['upgrade_step']);
-    set_config('version', $version);
-
-    if ($ajax_call) {
-        echo json_encode([
-            'status' => 'ok',
-            'message' => null,
-            'error' => null]);
-        exit;
-    }
-}
-
-function break_on_step() {
-    global $ajax_call, $step;
-    $step += 1;
-    if ($ajax_call) {
-        $_SESSION['upgrade_step'] = $step;
-        echo json_encode([
-            'status' => 'ok',
-            'message' => null,
-            'error' => null]);
-        exit;
-    }
-}
-
-if(isset($_POST['action']) and $_POST['action'] == 'preview_theme'){
-    if(get_config('theme_options_id') != $_POST['selected_theme_id']){
+if (isset($_POST['action']) and $_POST['action'] == 'preview_theme') {
+    if (get_config('theme_options_id') != $_POST['selected_theme_id']) {
         set_config('theme_options_id',$_POST['selected_theme_id']);
         echo 1;
-    }else{
+    } else {
         echo 0;
     }
     exit();
@@ -161,7 +79,6 @@ if (!isset($_SESSION['upgrade_logfile_path'])) {
     $_SESSION['upgrade_logfile_path'] = "$logfile_path/$logfile";
     $_SESSION['upgrade_logfile_name'] = $logfile;
     $logfile_begin = true;
-    set_config('upgrade_begin', time());
 }
 $upgrade_logfile_path = $_SESSION['upgrade_logfile_path'];
 $logfile = $_SESSION['upgrade_logfile_name'];
@@ -363,23 +280,18 @@ $pageName = $langUpgrade;
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
-// upgrade from versions < 3.0 is not possible
-if (!defined('ECLASS_VERSION') or !DBHelper::tableExists('config') or version_compare(ECLASS_VERSION, '3.0', '<')) {
-    fatal_error($langUpgTooOld);
-}
-
 if (!check_engine()) {
-    fatal_error($langInnoDBMissing);
+    $error_message = $langInnoDBMissing;
 }
 
 // Make sure 'video' subdirectory exists and is writable
 $videoDir = $webDir . '/video';
 if (!file_exists($videoDir)) {
     if (!make_dir($videoDir)) {
-        fatal_error($langUpgNoVideoDir);
+        $error_message = $langUpgNoVideoDir;
     }
 } elseif (!is_dir($videoDir)) {
-    fatal_error($langUpgNoVideoDir2);
+    $error_message = $langUpgNoVideoDir2;
 }
 
 mkdir_or_error('storage');
@@ -406,169 +318,58 @@ mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
 
 if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
+    $mail_settings_form = $theme_images = $homepage_intro = '';
     unset($_SESSION['upgrade_logfile_path']);
     unset($_SESSION['upgrade_logfile_name']);
-    if (!in_array(get_config('email_transport'), array('smtp', 'sendmail')) and !get_config('email_announce')) {
-        $tool_content .= "<div class='alert alert-info'>$langEmailSendWarn</div>";
+
+    if (get_config('email_transport', 'mail') == 'mail' and !get_config('email_announce')) {
+        $mail_settings_form = mail_settings_form();
     }
 
-    $tool_content .= "<div class='row row-cols-lg-3 row-cols-1 g-3 mt-1'>";
-    $tool_content .= "<div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langPHPVersion</h3></div><div class='card-body'>";
-    $tool_content .= "<ul class='list-group list-group-flush'>";
-    $tool_content .= checkPHPVersion('8.0');
-    $tool_content .= "</ul>";
-    $tool_content .= "</div></div></div>";
-    $tool_content .= "<div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langRequiredPHP</h3></div><div class='card-body'>";
-    $tool_content .= "<ul class='list-group list-group-flush'>";
-    $tool_content .= warnIfExtNotLoaded('pdo_mysql');
-    $tool_content .= warnIfExtNotLoaded('gd');
-    $tool_content .= warnIfExtNotLoaded('mbstring');
-    $tool_content .= warnIfExtNotLoaded('xml');
-    $tool_content .= warnIfExtNotLoaded('zlib');
-    $tool_content .= warnIfExtNotLoaded('pcre');
-    $tool_content .= warnIfExtNotLoaded('curl');
-    $tool_content .= warnIfExtNotLoaded('zip');
-    $tool_content .= warnIfExtNotLoaded('intl');
-    $tool_content .= "</ul></div></div></div><div class='col'><div class='card panelCard px-lg-4 py-lg-3 h-100'>
-    <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langOptionalPHP</h3></div><div class='card-body'>";
-    $tool_content .= "<ul class='list-group list-group-flush'>";
-    $tool_content .= warnIfExtNotLoaded('soap');
-    $tool_content .= warnIfExtNotLoaded('ldap');
-    $tool_content .= "</ul></div></div></div>";
-    $tool_content .= "</div>";
+    setGlobalContactInfo();
 
-    $tool_content .= "
-    <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
-        <div class='col'>
-            <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-
-        if (get_config('email_transport', 'mail') == 'mail' and
-                !get_config('email_announce')) {
-            $head_content .= '<script>$(function () {' . $mail_form_js . '});</script>';
-            $tool_content .= mail_settings_form();
+    $theme_id = get_config('theme_options_id') ?? 0;
+    $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
+    $themes_arr[0] = 'Default';
+    foreach ($all_themes as $row) {
+        $themes_arr[$row->id] = $row->name;
+        if($row->id == $theme_id){
+            $active_theme = $row->id;
         }
+    }
+    // Get all images from dir screenshots
+    $dir_screens = getcwd();
+    $dir_screens = $dir_screens . '/template/modern/images/screenshots';
+    $dir_themes_images = scandir($dir_screens);
+    $data['active_theme'] = $themes_arr[$active_theme];
+    $data['theme_selection'] = selection($themes_arr, 'theme_selection', $theme_id, 'class="form-select" id="themeSelection"');
 
-        setGlobalContactInfo();
-
-        $theme_id = get_config('theme_options_id') ?? 0;
-        $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
-        $themes_arr[0] = 'Default';
-        foreach ($all_themes as $row) {
-            $themes_arr[$row->id] = $row->name;
-            if($row->id == $theme_id){
-                $active_theme = $row->id;
-            }
-        }
-        // Get all images from dir screenshots
-        $dir_screens = getcwd();
-        $dir_screens = $dir_screens . '/template/modern/images/screenshots';
-        $dir_themes_images = scandir($dir_screens);
-
-        $tool_content .= "
-
-                    <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langThemeSettings</h2>
-                        </div>
-                        <div class='card-body'>
-                            <fieldset>
-                                <div class='form-group'>
-                                    <label class='col-sm-12 control-label-notes' for='id_Institution'>$langHomePageIntroText:</label>
-                                    <div class='col-sm-12'>" . rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro')) . "</div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <div class='col-sm-12'>
-                                        <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>$langViewScreensThemes</a>
-                                        <p class='mb-3'><span class='control-label-notes'>$langActiveTheme:&nbsp;</span>" . $themes_arr[$active_theme] . "</p>
-                                        <label for='themeSelection' class='control-label-notes'>$langAvailableThemes:</label>
-                                        ".  selection($themes_arr, 'theme_selection', $theme_id, 'class="form-select" id="themeSelection"')."
-                                    </div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <div class='col-12 d-flex justify-content-end'>
-                                        <input class='btn btn-primary' name='submit2' value='$langContinue &raquo;' type='submit'>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class='col d-none d-lg-block text-end'>
-            <img class='form-image-modules' src='" . get_form_image() . "' alt='form-image'>
-        </div>
-    </div>
-    
-    <div class='modal fade' id='view_themes_screens' tabindex='-1' aria-labelledby='view_themes_screensLabel' aria-hidden='true'>
-        <div class='modal-dialog modal-fullscreen' style='margin-top:0px;'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <div class='modal-title' id='view_themes_screensLabel'>$langAvailableThemes</div>
-                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'></button>
-                </div>
-                <div class='modal-body'>
-                    <div class='row row-cols-1 g-4'>";
-                            foreach($dir_themes_images as $image) {
-                                $extension = pathinfo($image, PATHINFO_EXTENSION);
-                                $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
-                                if(in_array($extension, $imgExtArr)){
-                                    $tool_content .= "
-                                        <div class='col-lg-8 col-md-10 m-auto py-4'>
-                                            <div class='card panelCard h-100'>
-                                                <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
-                                                <div class='card-footer'>
-                                                    <p> " . strtok($image, '.') . " </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ";
-                                }
-                            }
-    $tool_content .= "
+    foreach($dir_themes_images as $image) {
+        $extension = pathinfo($image, PATHINFO_EXTENSION);
+        $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
+        if (in_array($extension, $imgExtArr)) {
+        $theme_images =
+            "<div class='col-lg-8 col-md-10 m-auto py-4'>
+                <div class='card panelCard h-100'>
+                    <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
+                    <div class='card-footer'>
+                        <p> " . strtok($image, '.') . " </p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>";
+            </div>";
+        }
+    }
 
+    $data['theme_images'] = $theme_images;
+    $data['mail_settings_form'] = $mail_settings_form;
+    $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
+    $data['error_message'] = $error_message;
 
-    $head_content .= "
-        <script type='text/javascript'>
-            $(document).ready(function() {
-                $('#themeSelection').on('click',function(e){
-                    e.preventDefault();
-                    var selectedThemeId = $(this).val();
-                    $.ajax({
-                        url: '$_SERVER[SCRIPT_NAME]',
-                        data: 'action=preview_theme&selected_theme_id='+selectedThemeId+'&token=$_SESSION[csrf_token]',
-                        type: 'POST',
-                        success: function(response) {
-                            if(response == 1){
-                                window.location.href = '$_SERVER[SCRIPT_NAME]';
-                            }
-                        },
-                        error:function(error){
-                            console.log(error)
-                        },
-                    });
-                })  
-            });
-        </script>
-    ";
+    view('upgrade.upgrade_form', $data);
 
-} else {
-
-    // Main part of upgrade starts here
+} else { // Main part of upgrade starts here
     set_config('upgrade_begin', time());
     setGlobalContactInfo();
-    // $_POST['Institution'] = $Institution;
-    // $_POST['postaddress'] = $postaddress;
-    // $_POST['telephone'] = $telephone;
-    // $_POST['fax'] = $fax;
 
     if (!isset($_SERVER['SERVER_NAME'])) {
         $_SERVER['SERVER_NAME'] = parse_url($urlServer, PHP_URL_HOST);
@@ -577,11 +378,6 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     if (isset($_POST['email_transport'])) {
         store_mail_config();
     }
-
-    // set_config('institution', $_POST['Institution']);
-    // set_config('postaddress', $_POST['postaddress']);
-    // set_config('phone', $_POST['telephone']);
-    // set_config('fax', $_POST['fax']);
 
     set_config('homepage_intro', $_POST['homepage_intro']);
     set_config('theme_options_id', $_POST['theme_selection']);
@@ -596,69 +392,105 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     unset($_SESSION['upgrade_step']);
     unset($_SESSION['upgrade_tag']);
 
-    // Display upgrade feedback screen
-    $head_content .= "
-        <style>
-            #upgrade-container { padding: 1em; overflow-y: scroll; width: 100%;}
-            .upgrade-header { font-weight: bold; border-bottom: 1px solid black; }
-        </style>";
-    $tool_content .= "
-        <div class='col-sm-12'>
-            <div class='alert alert-info text-center'>
-                $langUpgradeBase<br>
-                <em>$langPreviousVersion: " . get_config('version') . "</em>
-            </div>
-            <div class='text-center'>
-                <button class='btn btn-success' id='submit_upgrade'>
-                    <span class='fa fa-refresh space-after-icon'></span> $langUpgrade
-                </button>
-            </div>
-        </div>
-        <div class='col-sm-12' id='upgrade-container'>
-        </div>
-        <script>
-            $(document).ready(function() {
-                $('#submit_upgrade').click(function (e) {
-                    var upgradeContainer = $('#upgrade-container');
-                    e.preventDefault();
-                    $('#submit_upgrade').prop('disabled', true);
-                    $('#submit_upgrade').find('.fa').addClass('fa-spin');
-                    upgradeContainer.html('<div class=\"text-center upgrade-header\">$langUpgradeStart</div>');
-                    var maxHeight = $('#background-cheat').height() - upgradeContainer.position().top;
-                    upgradeContainer.height(maxHeight - 100);
-                    var feedback = function () {
-                        $.post('upgrade.php', {
-                            token: '$_SESSION[csrf_token]'
-                        }, function (data) {
-                            if (!data) {
-                                setTimeout(feedback, 100);
-                            } else {
-                                if (data.error) {
-                                    data.message += '<br><em>' + data.error + '</em>';
-                                }
-                                if (data.status == 'ok' || data.status == 'wait') {
-                                    if (data.message) {
-                                        upgradeContainer.append('<p>' + data.message + '</p>');
-                                    }
-                                    setTimeout(feedback, (data.status == 'ok')? 100: 1000);
-                                } else if (data.status == 'error') {
-                                    upgradeContainer.append('<div class=\"alert alert-danger\">' + data.message + '</div>');
-                                    $('#submit_upgrade').find('.fa').removeClass('fa-spin');
-                                } else if (data.status == 'done') {
-                                    upgradeContainer.append('<div class=\"alert alert-success\">$langUpgradeSuccess<br>$langUpgReady</div>');
-                                    upgradeContainer.append('<p>$langLogOutput: <a href=\"{$urlAppend}courses/$logfile\">$logfile</a></p>');
-                                    $('#submit_upgrade').find('.fa').removeClass('fa-spin');
-                                }
-                            }
-                            upgradeContainer.scrollTop(upgradeContainer.prop('scrollHeight'));
-                        }, 'json');
-                    };
-                    feedback();
-                });
-            });
-        </script>";
+    $data['logfile'] = $_SESSION['upgrade_logfile_name'];
+    $data['previous_version'] = get_config('version');
 
+    // Display upgrade feedback screen
+    view('upgrade.upgrade_process', $data);
 } // end of if not submit
 
 
-draw($tool_content, 0, null, $head_content);
+/**
+ * @brief display fatal error
+ * @param $message
+ * @return void
+ */
+function fatal_error($message) {
+    global $command_line, $ajax_call, $error_message;
+
+    set_config('upgrade_begin', '');
+    if ($command_line) {
+        if ($error_message) {
+            $message .= "\n\n$error_message\n";
+        }
+        die("$message\n");
+    } elseif ($ajax_call) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $message,
+            'error' => $error_message
+        ], JSON_UNESCAPED_UNICODE);
+        flush();
+    } else {
+        if ($error_message) {
+            $message .= "<br>\n$error_message";
+        }
+        $data['message'] = $message;
+        view('upgrade.upgrade_fatal_error', $data);
+    }
+    exit;
+}
+
+/**
+ * @brief display message
+ * @param $message
+ * @param $tag
+ * @param $status
+ * @return void
+ */
+function message($message, $tag, $status = 'ok') {
+    global $command_line, $ajax_call, $error_message;
+
+    if ($command_line) {
+        // On the command line, just display the message
+        if ($error_message) {
+            $message .= "\n\n$error_message\n";
+        }
+        echo("$message\n");
+    } elseif ($ajax_call) {
+        // When called from the front-end...
+        // If this message has already been seen, continue with upgrade
+        if (isset($_SESSION['upgrade_tag']) and $_SESSION['upgrade_tag'] == $tag) {
+            unset($_SESSION['upgrade_tag']);
+            return;
+        }
+        // Else display message and wait to be called again
+        $_SESSION['upgrade_tag'] = $tag;
+        echo json_encode([
+            'status' => $status,
+            'message' => $message,
+            'error' => $error_message
+        ], JSON_UNESCAPED_UNICODE);
+        flush();
+        exit;
+    }
+}
+
+function steps_finished() {
+    global $step, $ajax_call, $version;
+    // all steps finished for this version, record current version in the DB
+    unset($step);
+    unset($_SESSION['upgrade_step']);
+    set_config('version', $version);
+
+    if ($ajax_call) {
+        echo json_encode([
+            'status' => 'ok',
+            'message' => null,
+            'error' => null]);
+        exit;
+    }
+}
+
+function break_on_step() {
+    global $ajax_call, $step;
+    $step += 1;
+    if ($ajax_call) {
+        $_SESSION['upgrade_step'] = $step;
+        echo json_encode([
+            'status' => 'ok',
+            'message' => null,
+            'error' => null]);
+        exit;
+    }
+}

@@ -307,7 +307,7 @@ function installBadgeIcons($root_dir) {
 
 
 function setGlobalContactInfo() {
-    global $Institution, $postaddress, $telephone, $fax;
+    global $Institution, $postaddress, $telephone;
 
     if (!isset($Institution)) {
         $Institution = get_config('institution');
@@ -317,9 +317,6 @@ function setGlobalContactInfo() {
     }
     if (!isset($telephone)) {
         $telephone = get_config('phone');
-    }
-    if (!isset($fax)) {
-        $fax = get_config('fax');
     }
 }
 
@@ -3651,7 +3648,6 @@ function finalize_upgrade(): void
         // set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
         set_config('theme_options_id', 0);
     }
-
     set_config('version', ECLASS_VERSION);
     set_config('upgrade_begin', '');
 }

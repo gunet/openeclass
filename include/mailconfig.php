@@ -235,15 +235,7 @@ function mail_settings_form() {
                                 <span class='help-text'>$langEG <code>/usr/sbin/sendmail -t -i</code></span>
                            </div>
                         </div>
-                        <hr>";
-                        if (!$install) { // not to be displayed in install screen
-                            $content .= "
-                            <div class='form-group mt-3'>
-                                <div class='col-sm-12'>
-                                    <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
-                                </div>
-                            </div>";
-                        }
+                        ";
     if (!$install) {
         $content .= "
                     </fieldset>
