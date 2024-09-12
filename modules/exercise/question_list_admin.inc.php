@@ -642,7 +642,7 @@ if ($nbrQuestions) {
 }
 $tool_content .= "
 <!-- Modal -->
-<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
+<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
