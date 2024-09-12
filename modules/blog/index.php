@@ -384,7 +384,7 @@ if ($action == "createPost") {
         $commenting_setting = '';
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-4'>
-                                       <div class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting <span class='Accent-200-cl'>(*)</span></div>
+                                       <div class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting <span class='asterisk Accent-200-cl'>(*)</span></div>
 
                                            <div class='radio mb-2'>
                                                 <label>
@@ -427,7 +427,7 @@ if ($action == "createPost") {
 
                         <legend class='mb-0' aria-label='$langForm'></legend>
                         <div class='form-group'>
-                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
                             </div>

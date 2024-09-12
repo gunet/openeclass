@@ -142,7 +142,7 @@ if (isset($_POST['submit'])) {
     if ($first_post) {
         $subject_field .= "
             <div class='form-group'>
-                <label for='title' class='col-sm-6 control-label-notes'>$langSubject <span class='Accent-200-cl'>(*)</span></label>
+                <label for='title' class='col-sm-6 control-label-notes'>$langSubject <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='col-sm-12'>
                     <input id='title' type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
                 </div>

@@ -234,7 +234,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group mb-4'><label for='code_$langcode' class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . " <span class='Accent-200-cl'>(*)</span></label>";
+        $html .= "<div class='form-group mb-4'><label for='code_$langcode' class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . " <span class='asterisk Accent-200-cl'>(*)</span></label>";
         $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategory2'] . $langSuffix;
         $html .= $tdpre . "<input id='code_$langcode' class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";

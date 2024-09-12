@@ -53,7 +53,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='Accent-200-cl'>(*)</span></label>
+    $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>";
     $tool_content .= "</div><div class='row p-2'>";
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
@@ -104,7 +104,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='Accent-200-cl'>(*)</span></label>
+    $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
@@ -139,7 +139,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype <span class='Accent-200-cl'>(*)</span></label>
+    $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype <span class='asterisk Accent-200-cl'>(*)</span></label>
                       <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control" id="datatype"')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
@@ -176,11 +176,11 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName <span class='Accent-200-cl'>(*)</span></label>
+    $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
                       <div class='col-sm-12'><input id='name' class='form-control' type='text' name='field_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group mt-4'>";
-    $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small> <span class='Accent-200-cl'>(*)</span></label>
+    $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small> <span class='asterisk Accent-200-cl'>(*)</span></label>
                       <div class='col-sm-12'><input id='shortname' class='form-control' type='text' name='field_shortname'></div>";
     $tool_content .= "</div>";
 
@@ -348,11 +348,11 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";
         $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName <span class='Accent-200-cl'>(*)</span></label>
+        $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
                           <div class='col-sm-12'><input id='name' class='form-control' type='text' name='field_name' value='$name'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'>";
-        $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small> <span class='Accent-200-cl'>(*)</span></label>
+        $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small> <span class='asterisk Accent-200-cl'>(*)</span></label>
                           <div class='col-sm-12'><input id='shortname' class='form-control' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langDescription</label>

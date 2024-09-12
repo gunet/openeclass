@@ -857,7 +857,7 @@ function edit_analytics_settings ($analytics_id = 0)
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                     <div class='form-group'>
-                        <label for='title' class='col-sm-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
                             <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                         </div>

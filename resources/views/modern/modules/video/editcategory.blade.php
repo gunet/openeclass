@@ -56,7 +56,7 @@
                                         <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
 
                                         <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
-                                            <label for='CatName' class='col-sm-12 control-label-notes'>{{ trans('langCategoryName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                            <label for='CatName' class='col-sm-12 control-label-notes'>{{ trans('langCategoryName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 <input id='CatName' class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />
                                                 <span class='help-block Accent-200-cl'>{{ Session::getError('categoryname') }}</span>

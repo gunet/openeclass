@@ -27,7 +27,7 @@
                             <input type='hidden' name='id' value='{{ $announcement->id }}'>
                         @endif
                         <div class='form-group{{ Session::hasError('title') ? " has-error" : "" }}'>
-                            <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-sm-12'>
                                 <input id='title' class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
                                 {!! Session::getError('title', "<span class='help-block Accent-200-cl'>:message</span>") !!}

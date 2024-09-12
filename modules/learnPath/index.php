@@ -255,7 +255,7 @@ if ($is_editor) {
                             <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>                        
                            
                                 <div class='form-group'>
-                                    <label for='newPathName' class='col-sm-6 control-label-notes'>$langName <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='newPathName' class='col-sm-6 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class='col-sm-12'>
                                     <input name='newPathName' placeholder='$langName' type='text' class='form-control' id='newPathName'>
                                     </div>

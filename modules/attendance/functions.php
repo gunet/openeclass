@@ -792,7 +792,7 @@ function new_attendance() {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
-                    <label for='titleID' class='col-12 control-label-notes'>$langNewAttendance2 <span class='Accent-200-cl'>(*)</span></label></div>
+                    <label for='titleID' class='col-12 control-label-notes'>$langNewAttendance2 <span class='asterisk Accent-200-cl'>(*)</span></label></div>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <div class='col-12'>
                             <input id='titleID' class='form-control' type='text' placeholder='$langTitle' name='title'>
@@ -803,7 +803,7 @@ function new_attendance() {
                         
                             <div class='form-group mt-4".($start_date_error ? " has-error" : "")."'>
                                 <div class='col-12'>
-                                    <label for='start_date' class='control-label-notes'>$langStart <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
@@ -814,7 +814,7 @@ function new_attendance() {
                       
                             <div class='form-group mt-4".($end_date_error ? " has-error" : "")."'>
                                 <div class='col-12'>
-                                    <label for='end_date' class='control-label-notes'>$langEnd <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
@@ -824,7 +824,7 @@ function new_attendance() {
                        
                    
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
-                        <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='limit_id' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
                             <input id='limit_id' class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
                             <span class='help-block Accent-200-cl'>$limit_error</span>
@@ -1070,7 +1070,7 @@ function attendance_settings($attendance_id) {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <label for='title_id' class='col-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='title_id' class='col-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-12'>
                             <input id='title_id' class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
                             <span class='help-block Accent-200-cl'>$title_error</span>
@@ -1080,7 +1080,7 @@ function attendance_settings($attendance_id) {
                        
                             <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
-                                    <label for='start_date' class='control-label-notes'>$langStart <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
@@ -1091,7 +1091,7 @@ function attendance_settings($attendance_id) {
                        
                             <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
-                                    <label for='end_date' class='control-label-notes'>$langEnd <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 </div>
                                 <div class='col-12'>
                                     <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
@@ -1101,7 +1101,7 @@ function attendance_settings($attendance_id) {
                         
                     
                     <div class='form-group".($limit_error ? " has-error" : "")." mt-4'>
-                        <label for='limitId' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='limitId' class='col-12 control-label-notes'>$langAttendanceLimitNumber <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
                             <input id='limitId' class='form-control' type='text' name='limit' value='$limit'/>
                             <span class='help-block Accent-200-cl'>$limit_error</span>

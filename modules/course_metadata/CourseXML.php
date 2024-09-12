@@ -222,7 +222,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldStart .= q($keyLbl . $lang);
         }
         if (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || in_array($fullKey, CourseXMLConfig::$asteriskedFields)) {
-            $fieldStart .= "(<span class='Accent-200-cl'>*</span>)";
+            $fieldStart .= "(<span class='asterisk Accent-200-cl'>*</span>)";
         }
         $fieldStart .= ":</div><div class='col-sm-12'>";
         $fieldEnd = "</div>";

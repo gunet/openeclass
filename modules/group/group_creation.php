@@ -75,14 +75,14 @@ if (isset($_GET['all'])) {
         <fieldset>
         <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
-            <label for='group_quantity' class='col-sm-12 control-label-notes'>$langNewGroups <span class='Accent-200-cl'>(*)</span></label>
+            <label for='group_quantity' class='col-sm-12 control-label-notes'>$langNewGroups <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
                 <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
                 <span class='help-block Accent-200-cl'>".Session::getError('group_quantity')."</span>
             </div>
         </div>
         <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-4'>
-            <label for='group_max' class='col-sm-12 control-label-notes'>$langNewGroupMembers <span class='Accent-200-cl'>(*)</span></label>
+            <label for='group_max' class='col-sm-12 control-label-notes'>$langNewGroupMembers <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
                 <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
                 <span class='help-block Accent-200-cl'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
@@ -149,7 +149,7 @@ if (isset($_GET['all'])) {
         <fieldset>
         <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
-            <label for='group_name_id' class='col-sm-12 control-label-notes'>$langGroupName <span class='Accent-200-cl'>(*)</span></label>
+            <label for='group_name_id' class='col-sm-12 control-label-notes'>$langGroupName <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
                 <input id='group_name_id' class='form-control' type=text name='group_name' size='40'>
                 <span class='help-block Accent-200-cl'>".Session::getError('group_name')."</span>

@@ -21,7 +21,7 @@
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
 
                                 <div class='form-group'>
-                                <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class='col-sm-12'>
                                         <input id='username' class='form-control' type='text' name='username' placeholder='{{ trans('langUsername') }}...'>
                                     </div>

@@ -222,7 +222,7 @@ function upload_file($sid){
                                                 if(!$is_consultant){
                                                     $tool_content .= "
                                                         <div class='form-group mt-4'>
-                                                            <label for='refers_to_resource' class='col-12 control-label-notes'>$langReferencedObject&nbsp;<span class='Accent-200-cl'>(*)</span></label>
+                                                            <label for='refers_to_resource' class='col-12 control-label-notes'>$langReferencedObject&nbsp;<span class='asterisk Accent-200-cl'>(*)</span></label>
                                                             <select class='form-select' name='refers_to_resource' id='refers_to_resource'>";
                                                                 foreach($resources as $r){
                                                                     $tool_content .= "

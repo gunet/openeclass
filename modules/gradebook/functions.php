@@ -167,7 +167,7 @@ function new_gradebook() {
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group".($title_error ? " has-error" : "")."'>
                     <div class='col-12'>
-                        <label for='title' class='control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='title' class='control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                     </div>
                     <div class='col-12'>
                         <input id='title' class='form-control' placeholder='$langTitle' type='text' name='title' value='$title'>
@@ -178,7 +178,7 @@ function new_gradebook() {
                    
                         <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                             <div class='col-12'>
-                                <label for='start_date' class='control-label-notes'>$langStart <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                             </div>
                             <div class='col-12'>
                                 <div class='input-group'>
@@ -193,7 +193,7 @@ function new_gradebook() {
                     
                         <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                             <div class='col-12'>
-                                <label for='end_date' class='control-label-notes'>$langEnd <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
                             </div>
                             <div class='col-12'>
                                 <div class='input-group'>
@@ -207,7 +207,7 @@ function new_gradebook() {
                  
                 
                 <div class='form-group".($degreerange_error ? " has-error" : "")." mt-4'>
-                    <label for='degree_range_id' class='col-12 control-label-notes'>$langGradebookRange <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='degree_range_id' class='col-12 control-label-notes'>$langGradebookRange <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-12'>
                         <select name='degreerange' class='form-select' id='degree_range_id'>
                             <option value".($degreerange == 0 ? ' selected' : '').">-- $langGradeScalesSelect --</option>
@@ -359,7 +359,7 @@ function gradebook_settings($gradebook_id) {
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <label for='title' class='col-12 control-label-notes'>$langTitle <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='title' class='col-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-12'>
                             <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                             <span class='help-block Accent-200-cl'>$title_error</span>
@@ -369,7 +369,7 @@ function gradebook_settings($gradebook_id) {
                        
                             <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
-                                    <label for='start_date' class='control-label-notes'>$langStart <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 </div>
                                 <div class='col-12'>
                                     <div class='input-group'>

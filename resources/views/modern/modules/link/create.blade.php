@@ -42,7 +42,7 @@
                                 <fieldset>
                                     <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                     <div class='form-group{{ $urlLinkError ? " has-error" : "" }}'>
-                                        <label for='urllink' class='col-sm-6 control-label-notes'>URL <span class='Accent-200-cl'>(*)</span></label>
+                                        <label for='urllink' class='col-sm-6 control-label-notes'>URL <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' id='urllink' name='urllink' value="{{ isset($link) ? $link->url : "" }}">
                                                 {!! Session::getError('urllink', "<span class='help-block Accent-200-cl'>:message</span>") !!}

@@ -67,7 +67,7 @@
 
 
                                             <div class="form-group{{ Session::getError('file_title') ? ' has-error' : '' }}">
-                                                <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
+                                                <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                                 <div class='col-sm-12'>
                                                     <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='file_title' name='file_title' value='{{ $title }}'>
                                                     <span class='help-block Accent-200-cl'>{{ Session::getError('file_title') }}</span>

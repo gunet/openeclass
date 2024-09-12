@@ -54,14 +54,14 @@
                 <fieldset>
                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                 <div class='form-group mt-4'>
-                    <label for='userfile' class='col-sm-12 control-label-notes mb-2'>{{ trans('langFileUserData') }} <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='userfile' class='col-sm-12 control-label-notes mb-2'>{{ trans('langFileUserData') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>
 
                 <div class='form-group mt-4'>
-                    <label for='type' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegType') }} <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='type' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegType') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         <select class='form-select' name='type' id='type'>
                             <option value='stud'>
@@ -75,7 +75,7 @@
                 </div>
                 @if (!$eclass_method_unique)
                     <div class='form-group mt-4'>
-                        <label for='passsword' class='col-sm-12 control-label-notes'>{{ trans('langMethods') }} <span class='Accent-200-cl'>(*)</span></label>
+                        <label for='passsword' class='col-sm-12 control-label-notes'>{{ trans('langMethods') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
                             {!! selection($auth_m, "auth_methods_form", '', "class='form-control' id='passsword'") !!}
                         </div>
@@ -83,38 +83,38 @@
                 @endif
 
                 <div class='form-group mt-4'>
-                    <label for='prefix' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegPrefix') }} <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='prefix' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegPrefix') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
                     </div>
                 </div>
 
                 <div class='form-group mt-4'>
-                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>
                         {!! $html !!}
                     </div>
                 </div>
 
                 <div class='form-group mt-4'>
-                    <label for='lang' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }} <span class='Accent-200-cl'>(*)</span></label>
+                    <label for='lang' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>{!! lang_select_options('lang', 'class="form-control" id="lang"') !!}</div>
                 </div>
 
                 <div class='form-group mt-4'>
-                <label for='email_public' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }} <span class='Accent-200-cl'>(*)</span></label>
+                <label for='email_public' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control" id="email_public"') !!}</div>
                 </div>
 
 
                 <div class='form-group mt-4'>
-                <label for='am_public' class='col-sm-12 control-label-notes'>{{ trans('langAm') }} <span class='Accent-200-cl'>(*)</span></label>
+                <label for='am_public' class='col-sm-12 control-label-notes'>{{ trans('langAm') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control" id="am_public"') !!}</div>
                 </div>
 
 
                 <div class='form-group mt-4'>
-                <label for='phone_public' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }} <span class='Accent-200-cl'>(*)</span></label>
+                <label for='phone_public' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-sm-12'>{!! selection($access_options, 'phone_public', ACCESS_PROFS, 'class="form-control" id="phone_public"') !!}</div>
                 </div>
 

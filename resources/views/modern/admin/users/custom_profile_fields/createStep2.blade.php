@@ -32,7 +32,7 @@
                             @endif
                             <input type='hidden' name='datatype' value='{{ $datatype }}'>
                             <div class='form-group'>
-                                <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input id='name' type='text' name='field_name' class="form-control" value="{{ isset($name) ? $name : '' }}">
                                 </div>
@@ -40,7 +40,7 @@
 
                             <div class='form-group mt-4'>
                                 <label for='shortname' class='col-sm-12 control-label-notes'>
-                                    {{ trans('langCPFShortName') }} <small>({{ trans('langCPFUniqueShortname') }}) <span class='Accent-200-cl'>(*)</span></small>
+                                    {{ trans('langCPFShortName') }} <small>({{ trans('langCPFUniqueShortname') }}) <span class='asterisk Accent-200-cl'>(*)</span></small>
                                 </label>
                                 <div class='col-sm-12'>
                                     <input id='shortname' type='text' name='field_shortname' class="form-control" value="{{ isset($shortname) ? $shortname : '' }}">

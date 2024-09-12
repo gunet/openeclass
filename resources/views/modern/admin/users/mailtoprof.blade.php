@@ -22,28 +22,28 @@
                         <fieldset>
                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                             <div class='form-group'>
-                                <label for='email_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='email_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     <input id='email_title' class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='email_title' value=''>
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                            <label for='body_mail' class='col-sm-12 control-label-notes'>{{ trans('typeyourmessage') }} <span class='Accent-200-cl'>(*)</span></label>
+                            <label for='body_mail' class='col-sm-12 control-label-notes'>{{ trans('typeyourmessage') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                 {!! $body_mail_rich_text !!}
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='Accent-200-cl'>(*)</span></label>
+                                <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                     {!! $buildusernode !!}
                                 </div>
                             </div>
 
                             <div class='form-group mt-4'>
-                                <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langSendMessageTo') }} <span class='Accent-200-cl'>(*)</span></div>
+                                <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langSendMessageTo') }} <span class='asterisk Accent-200-cl'>(*)</span></div>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label class='label-container' aria-label="{{ trans('langSelect') }}">

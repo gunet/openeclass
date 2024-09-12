@@ -25,7 +25,7 @@
                                 <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                                 <input type='hidden' name='catid' value='{{ getIndirectReference($catid) }}'>
                                 <div class='form-group'>
-                                    <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }} <span class='Accent-200-cl'>(*)</span></label>
+                                    <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                     <div class='col-sm-12'>
                                         {!! selection($field_types, 'datatype', 1, 'class="form-control" id="datatype"') !!}
                                     </div>
