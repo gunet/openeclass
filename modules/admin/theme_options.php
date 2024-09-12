@@ -174,7 +174,7 @@ if (isset($_POST['import'])) {
                 }
             }
             $archive = new ZipArchive();
-            if ($archive->open("courses/theme_data/$file_name") == TRUE) {
+            if ($archive->open("courses/theme_data/$file_name")) {
                 $archive->extractTo('courses/theme_data/temp');
                 unlink("$webDir/courses/theme_data/$file_name");
                 $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
@@ -204,7 +204,7 @@ if (isset($_POST['optionsSave'])) {
     upload_images();
 
     //jumbotron image
-    if(isset($_POST['choose_from_jumbotronlist']) && !empty($_POST['choose_from_jumbotronlist'])){
+    if(!empty($_POST['choose_from_jumbotronlist'])) {
         $imageName = $_POST['choose_from_jumbotronlist'];
         $imagePath = "$webDir/template/modern/images/jumbotron_images/$imageName";
         $newPath = "$webDir/courses/theme_data/$theme_id/";
@@ -223,7 +223,7 @@ if (isset($_POST['optionsSave'])) {
     }
 
     //login image
-    if(isset($_POST['choose_from_loginlist']) && !empty($_POST['choose_from_loginlist'])){
+    if(!empty($_POST['choose_from_loginlist'])) {
         $imageName = $_POST['choose_from_loginlist'];
         $imagePath = "$webDir/template/modern/images/login_images/$imageName";
         $newPath = "$webDir/courses/theme_data/$theme_id/";
@@ -242,7 +242,7 @@ if (isset($_POST['optionsSave'])) {
     }
 
     //form image
-    if(isset($_POST['choose_from_formlist']) && !empty($_POST['choose_from_formlist'])){
+    if(!empty($_POST['choose_from_formlist'])) {
         $imageName = $_POST['choose_from_formlist'];
         $imagePath = "$webDir/template/modern/images/form_images/$imageName";
         $newPath = "$webDir/courses/theme_data/$theme_id/";
@@ -261,7 +261,7 @@ if (isset($_POST['optionsSave'])) {
     }
 
     //registration image
-    if(isset($_POST['choose_from_registrationlist']) && !empty($_POST['choose_from_registrationlist'])){
+    if(!empty($_POST['choose_from_registrationlist'])) {
         $imageName = $_POST['choose_from_registrationlist'];
         $imagePath = "$webDir/template/modern/images/registration_images/$imageName";
         $newPath = "$webDir/courses/theme_data/$theme_id/";
@@ -280,7 +280,7 @@ if (isset($_POST['optionsSave'])) {
     }
 
     //FAQ image
-    if(isset($_POST['choose_from_faqlist']) && !empty($_POST['choose_from_faqlist'])){
+    if(!empty($_POST['choose_from_faqlist'])) {
         $imageName = $_POST['choose_from_faqlist'];
         $imagePath = "$webDir/template/modern/images/faq_images/$imageName";
         $newPath = "$webDir/courses/theme_data/$theme_id/";
@@ -841,7 +841,7 @@ if (isset($_POST['optionsSave'])) {
     }
 
 
-    $tool_content .= action_bar(array(
+    $action_bar .= action_bar(array(
         array('title' => $langImport,
             'url' => "#",
             'icon' => 'fa-upload',
@@ -849,6 +849,8 @@ if (isset($_POST['optionsSave'])) {
             'button-class' => 'btn-success',
             'level' => 'primary-label')
         ),false);
+
+    $tool_content .= $action_bar;
 
     if (isset($preview_theme)) {
         $tool_content .= "

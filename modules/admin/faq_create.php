@@ -38,16 +38,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 }
 
 if (isset($_POST['submitFaq'])) {
-    $question = $_POST['question'];
-    $answer = $_POST['answer'];
-
-    $top = Database::get()->querySingle("SELECT MAX(`order`) as max FROM `faq`")->max;
-
-    Database::get()->query("INSERT INTO faq (title, body, `order`) VALUES (?s, ?s, ?d)", $question, $answer, $top + 1);
-
-    Session::flash('message',"$langFaqAddSuccess");
-    Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/admin/faq_create.php");
+    if (empty(trim($_POST['question'])) or empty(trim($_POST['answer']))) {
+        Session::flash('message', "$langEmptyFaculte");
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/admin/faq_create.php");
+    } else {
+        $question = $_POST['question'];
+        $answer = $_POST['answer'];
+        $top = Database::get()->querySingle("SELECT MAX(`order`) as max FROM `faq`")->max;
+        Database::get()->query("INSERT INTO faq (title, body, `order`) VALUES (?s, ?s, ?d)", $question, $answer, $top + 1);
+        Session::flash('message', "$langFaqAddSuccess");
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/admin/faq_create.php");
+    }
 }
 
 if (isset($_POST['modifyFaq'])) {
@@ -74,8 +77,7 @@ if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $toolName = $langAdminCreateFaq;
-$pageName = $langAdminCreateFaq;
-
+$pageName = $toolName;
 
 $data['action_bar'] = action_bar(
     [
@@ -101,7 +103,6 @@ $data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` 
 
 $data['new'] = isset($_GET['faq']) && $_GET['faq'] == 'new';
 $data['modify'] = isset($_GET['faq']) && $_GET['faq'] == 'modify';
-
 
 if ($data['modify']) {
     $data['id'] = $_GET['id'];
