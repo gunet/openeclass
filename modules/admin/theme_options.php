@@ -40,7 +40,7 @@ $defaults = array(
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
-                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement'),
+                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
@@ -58,11 +58,11 @@ $defaults = array(
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes', 'bgHelpButtonColor'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
-                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent', 'bgAlertDanger', 'clRequiredFieldForm'),
+                "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent', 'bgAlertDanger', 'clRequiredFieldForm', 'ColorRedText'),
                 "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
-                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess', 'bgAlertSuccess'),
-                "rgba(245, 118, 0, 1)" => array('BgBadgeWarning', 'bgAlertWarning'),
+                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess', 'bgAlertSuccess', 'ColorGreenText'),
+                "rgba(245, 118, 0, 1)" => array('BgBadgeWarning', 'bgAlertWarning', 'ColorOrangeText'),
                 "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
@@ -1862,6 +1862,22 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='ColorHyperTexts' class='control-label-notes mb-2 me-2'>$langPHyperTextColor:</label>
                                 <input name='ColorHyperTexts' type='text' class='form-control colorpicker' id='ColorHyperTexts' value='$theme_options_styles[ColorHyperTexts]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='ColorRedText' class='control-label-notes mb-2 me-2'>$langRedText:</label>
+                                <input name='ColorRedText' type='text' class='form-control colorpicker' id='ColorRedText' value='$theme_options_styles[ColorRedText]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='ColorGreenText' class='control-label-notes mb-2 me-2'>$langGreenText:</label>
+                                <input name='ColorGreenText' type='text' class='form-control colorpicker' id='ColorGreenText' value='$theme_options_styles[ColorGreenText]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='ColorBlueText' class='control-label-notes mb-2 me-2'>$langBlueText:</label>
+                                <input name='ColorBlueText' type='text' class='form-control colorpicker' id='ColorBlueText' value='$theme_options_styles[ColorBlueText]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='ColorOrangeText' class='control-label-notes mb-2 me-2'>$langOrangeText:</label>
+                                <input name='ColorOrangeText' type='text' class='form-control colorpicker' id='ColorOrangeText' value='$theme_options_styles[ColorOrangeText]'>
                             </div>
                         </div>
                         <div class='d-flex justify-content-center align-items-start'>

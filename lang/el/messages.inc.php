@@ -6879,3 +6879,7 @@ $langSelectedLang = "Επιλογή γλώσσας";
 $langCourseSelection = "Επιλογή μαθήματος";
 $langFillInField = "Συμπληρώστε το πεδίο";
 $langColorRequiredField = "Προειδοποίηση υποχρεωτικού πεδίου";
+$langRedText = "Κείμενο με κόκκινο χρώμα";
+$langGreenText = "Κείμενο με πράσινο χρώμα";
+$langBlueText = "Κείμενο με μπλε χρώμα";
+$langOrangeText = "Κείμενο με πορτοκαλί χρώμα";
