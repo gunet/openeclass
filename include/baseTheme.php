@@ -1364,10 +1364,10 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
-                .submitAdminBtn .fa-solid::before:hover,
-                .submitAdminBtn .fa-regular::before:hover,
-                .submitAdminBtn .fa-brands::before:hover,
-                .submitAdminBtn span.fa::before:hover{
+                .submitAdminBtn:hover .fa-solid::before,
+                .submitAdminBtn:hover .fa-regular::before,
+                .submitAdminBtn:hover .fa-brands::before,
+                .submitAdminBtn:hover span.fa::before{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
