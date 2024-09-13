@@ -688,16 +688,13 @@ if ($is_editor) {
             } elseif ($choice == 'do_delete') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if(delete_assignment($id)) {
-                       // Session::Messages($langDeleted, 'alert-success');
                         Session::flash('message',$langDeleted);
                         Session::flash('alert-class', 'alert-success');
                     } else {
-                        //Session::Messages($langDelError, 'alert-danger');
                         Session::flash('message',$langDelError);
                         Session::flash('alert-class', 'alert-danger');
                     }
                 } else {
-                    //Session::Messages($langResourceBelongsToCert, 'alert-warning');
                     Session::flash('message',$langResourceBelongsToCert);
                     Session::flash('alert-class', 'alert-warning');
                 }
@@ -1272,7 +1269,6 @@ function edit_assignment($id) {
                   'deadline' => $deadline,
                   'group' => $group_submissions));
 
-       // Session::Messages($langEditSuccess,'alert-success');
         Session::flash('message',$langEditSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
@@ -1357,7 +1353,6 @@ function submit_work($id, $on_behalf_of = null) {
                 $submission_text = purify($_POST['submission_text']);
                 $success_msgs[] = $langUploadSuccess;
             } else {
-                //Session::Messages($langEmptyFaculte, 'alert-warning');
                 Session::flash('message',$langEmptyFaculte);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
@@ -1661,8 +1656,8 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
         // End Auto-judge
-
-        Session::Messages($success_msgs, 'alert-success');
+        Session::flash('message', $success_msgs);
+        Session::flash('alert-class', 'alert-success');
         if (isset($unit)) {
             redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
         } else {
@@ -1670,7 +1665,6 @@ function submit_work($id, $on_behalf_of = null) {
         }
 
     } else { // not submit_ok
-        //Session::Messages($langExerciseNotPermit);
         Session::flash('message',$langExerciseNotPermit);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/work/index.php?course=$course_code");
@@ -1684,7 +1678,7 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id, $langAssignmentStartHelpBlock,
            $desc, $language, $head_content, $langGradeRubrics,
-           $langBack, $langSubmit, $langStudents, $langMove, $langWorkFile, $langWorkMultipleFiles,
+           $langSubmit, $langStudents, $langMove, $langWorkFile, $langWorkMultipleFiles,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
            $langGradeNumbers, $langGradeType, $langGradeScales,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
@@ -1701,7 +1695,7 @@ function new_assignment() {
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
-           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend, $langImgFormsDes,
+           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $langImgFormsDes,
            $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
@@ -2712,7 +2706,7 @@ function show_edit_assignment($id) {
 
     global $tool_content, $m, $course_code,
         $langModify, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
-        $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
+        $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $langStartDate,
         $langWorkOnlineText, $langWorkSubType, $langGradeRubrics, $langWorkMultipleFiles,
         $langGradeType, $langGradeNumbers, $langGradeScales, $langNoGradeScales, $langNoGradeRubrics,
         $langAutoJudgeInputNotSupported, $langTitle, $autojudge, $langGroupWorkDeadline_of_Submission,
@@ -2728,7 +2722,7 @@ function show_edit_assignment($id) {
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
-        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend ,$langImgFormsDes,
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $langImgFormsDes,
         $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
@@ -4021,7 +4015,8 @@ function show_student_assignment($id) {
     if ($row) {
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
             $_SESSION['has_unlocked'][$id] = false;
-            Session::Messages($langWrongPassword, 'alert-warning');
+            Session::flash('message',$langWrongPassword);
+            Session::flash('alert-class', 'alert-warning');
             if (isset($unit)) {
                 redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
             } else {
@@ -4032,8 +4027,7 @@ function show_student_assignment($id) {
         if ($row->ip_lock) {
             $user_ip = Log::get_client_ip();
             if (!match_ip_to_ip_or_cidr($user_ip, explode(',', $row->ip_lock))) {
-                //Session::Messages($langIPHasNoAccess);
-                Session::flash('message',$langIPHasNoAccess);
+                Session::flash('message', $langIPHasNoAccess);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/work/index.php?course=' . $course_code);
             }
@@ -6032,8 +6026,7 @@ function submit_grade_comments($args) {
         if (isset($args['email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
         }
-        //Session::Messages($langGrades, 'alert-success');
-        Session::flash('message',$langGrades);
+        Session::flash('message', $langGrades);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
@@ -6119,7 +6112,8 @@ function submit_review_per_ass($id) {
 				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id)
 				VALUES (?d, ?d, ?d, ?s, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->file_path, $row1->file_name, $row1->submission_date, $row1->group_id, $row2->uid)->lastInsertID;
 			} else if ($assignment->submission_type == 2) { // multiple file submission
-                Session::Messages($langNoPeerReviewMultipleFiles);
+                Session::flash('message', $langNoPeerReviewMultipleFiles);
+                Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             }
 		}
@@ -6135,15 +6129,15 @@ function submit_review_per_ass($id) {
 					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id)
 					VALUES (?d, ?d, ?d, ?s, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->file_path, $row1->file_name, $row1->submission_date, $row1->group_id, $row3->uid)->lastInsertID;
 				} else if ($assignment->submission_type == 2) { // multiple file submission
-                    Session::Messages($langNoPeerReviewMultipleFiles);
+                    Session::flash('message', $langNoPeerReviewMultipleFiles);
+                    Session::flash('alert-class', 'alert-warning');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                 }
 			}
 		}
 		$value++;
 	}
-	//Session::Messages($success_msgs, 'alert-success');
-    Session::flash('message',$success_msgs);
+    Session::flash('message', $success_msgs);
     Session::flash('alert-class', 'alert-success');
 	redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
 }
@@ -6219,14 +6213,12 @@ function submit_grades($grades_id, $grades, $email = false) {
                         if ($email) {
                             grade_email_notify($grades_id, $sid, $grade, '');
                         }
-                       // Session::Messages($langGrades, 'alert-success');
                         Session::flash('message',$langGrades);
                         Session::flash('alert-class', 'alert-success');
                 }
             }
         }
 
-        //Session::Messages($langGrades, 'alert-success');
         Session::flash('message',$langGrades);
         Session::flash('alert-class', 'alert-success');
     } else {
