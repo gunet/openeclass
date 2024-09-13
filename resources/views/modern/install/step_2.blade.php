@@ -16,7 +16,7 @@
             </div>
             <div class='form-group mt-3'>
                 <div class='col-sm-12'><i class="fa-solid fa-print"></i>
-                    <a href='../info/license/gpl_print.txt'>{{ trans('langPrintVers') }}</a>
+                    <a href='../info/license/gpl_print.txt' target="_blank">{{ trans('langPrintVers') }}</a>
                 </div>
             </div>
             <div class='form-group mt-5'>

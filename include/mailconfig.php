@@ -174,20 +174,7 @@ function mail_settings_form() {
                                     </label>
                                 </div>
                            </div>
-                        </div>
-                        <div class='form-group mt-3' id='formEmailAnnounceGroup'>
-                           <label for='formEmailAnnounce' class='col-sm-12 control-label-notes'>$langEmailAnnounce:</label>
-                           <div class='col-sm-12'>
-                                <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value='".q(get_var('email_announce'))."'>
-                                <span class='help-block' id='emailSendWarn'>$langEmailSendWarn</span>
-                           </div>
-                        </div>
-                        <div class='form-group mt-3'>
-                           <label for='formEmailBounces' class='col-sm-12 control-label-notes'>$langEmailBounces:</label>
-                           <div class='col-sm-12'>
-                                <input type='text' class='form-control' name='email_bounces' id='formEmailBounces' value='".q(get_var('email_bounces'))."'>
-                           </div>
-                        </div>
+                        </div>                        
                         <div class='form-group mt-3'>
                            <label for='formEmailTransport' class='col-sm-12 control-label-notes'>$langEmailTransport:</label>
                            <div class='col-sm-12'>" .
@@ -233,6 +220,19 @@ function mail_settings_form() {
                            <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value='".q(get_var('sendmail_command', ini_get('sendmail_path')))."'>
                                 <span class='help-text'>$langEG <code>/usr/sbin/sendmail -t -i</code></span>
+                           </div>
+                        </div>
+                        <div class='form-group mt-4' id='formEmailAnnounceGroup'>
+                           <label for='formEmailAnnounce' class='col-sm-12 control-label-notes'>$langEmailAnnounce:</label>
+                           <div class='col-sm-12'>
+                                <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value='".q(get_var('email_announce'))."'>
+                                <span class='help-block' id='emailSendWarn'>$langEmailSendWarn</span>
+                           </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                           <label for='formEmailBounces' class='col-sm-12 control-label-notes'>$langEmailBounces:</label>
+                           <div class='col-sm-12'>
+                                <input type='text' class='form-control' name='email_bounces' id='formEmailBounces' value='".q(get_var('email_bounces'))."'>
                            </div>
                         </div>
                         ";
