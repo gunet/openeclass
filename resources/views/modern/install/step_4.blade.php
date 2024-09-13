@@ -9,6 +9,13 @@
         </div>
 
         <div class='form-group mt-3'>
+            <label for='campusForm' class='col-sm-12 control-label-notes'>{{ trans('langCampusName') }}</label>
+            <div class='col-sm-12'>
+                <input class='form-control' type='text' size='40' name='campusForm' value='{{ $GLOBALS['campusForm'] }}'>
+            </div>
+        </div>
+
+        <div class='form-group mt-3'>
             <label for='nameForm' class='col-sm-12 control-label-notes'>{{ trans('langAdminName') }} (*)</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' size='40' name='nameForm' value='{{ $GLOBALS['nameForm'] }}'>
@@ -37,13 +44,6 @@
         </div>
 
         <div class='form-group mt-3'>
-            <label for='campusForm' class='col-sm-12 control-label-notes'>{{ trans('langCampusName') }}</label>
-            <div class='col-sm-12'>
-                <input class='form-control' type='text' size='40' name='campusForm' value='{{ $GLOBALS['campusForm'] }}'>
-            </div>
-        </div>
-
-        <div class='form-group mt-3'>
             <label for='helpdeskForm' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskPhone') }}</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' size='40' name='helpdeskForm' value='{{ $GLOBALS['helpdeskForm'] }}'>
@@ -51,9 +51,9 @@
         </div>
 
         <div class='form-group mt-3'>
-            <label for='helpdeskmail' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskEmail') }} (**)</label>
+            <label for='helpdeskmail' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskEmail') }} </label>
             <div class='col-sm-12'>
-                <input class='form-control' type='text' size='40' name='helpdeskmail' value='{{ $GLOBALS['helpdeskmail'] }}'>
+                <input class='form-control' type='text' size='40' name='helpdeskmail' placeholder="{{ trans('langWarnHelpDesk') }}" value='{{ $GLOBALS['helpdeskmail'] }}'>
             </div>
         </div>
 
@@ -85,7 +85,11 @@
             </div>
         </div>
 
-        <div class='form-group mt-5'>
+        <div class='form-group mt-3 help-block'>
+            {{ trans('langRequiredFields') }}
+        </div>
+
+        <div class='form-group mt-3'>
             <div class='col-12'>
                 <div class='row'>
                     <div class='col-lg-6 col-12'>
@@ -98,10 +102,6 @@
             </div>
         </div>
 
-        <div class='form-group mt-3'>
-            <div class='col-sm-12'>{{ trans('langRequiredFields') }}</div>
-            <div class='col-sm-12'>(**) {{ trans('langWarnHelpDesk') }}</div>
-        </div>
     {!! hidden_vars($all_vars, [ 'urlForm',
                                 'nameForm',
                                 'emailForm',

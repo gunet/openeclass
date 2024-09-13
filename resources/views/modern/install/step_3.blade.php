@@ -35,7 +35,7 @@
 <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
     <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
     <div class='form-group'>
-        <label for='dbHostForm' class='col-sm-12 control-label-notes'>{{ trans('langdbhost') }}</label>
+        <label for='dbHostForm' class='col-sm-12 control-label-notes'>{{ trans('langdbhost') }} (*)</label>
         <div class='row'>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' size='25' name='dbHostForm' value='{{ $GLOBALS['dbHostForm'] }}'>
@@ -45,7 +45,7 @@
     </div>
 
     <div class='form-group mt-3'>
-        <label for='dbUsernameForm' class='col-sm-12 control-label-notes'>{{ trans('langDBLogin') }}</label>
+        <label for='dbUsernameForm' class='col-sm-12 control-label-notes'>{{ trans('langDBLogin') }} (*)</label>
         <div class='row'>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' size='25' name='dbUsernameForm' value='{{ $GLOBALS['dbUsernameForm'] }}'>
@@ -55,14 +55,14 @@
     </div>
 
     <div class='form-group mt-3'>
-        <label for='dbPassForm' class='col-sm-12 control-label-notes'>{{ trans('langDBPassword') }}</label>
+        <label for='dbPassForm' class='col-sm-12 control-label-notes'>{{ trans('langDBPassword') }} (*)</label>
         <div class='col-sm-12'>
             <input class='form-control' type='text' size='25' name='dbPassForm' value='{{ $GLOBALS['dbPassForm'] }}'>
         </div>
     </div>
 
     <div class='form-group mt-3'>
-        <label for='dbNameForm' class='col-sm-12 control-label-notes'>{{ trans('langMainDB') }}</label>
+        <label for='dbNameForm' class='col-sm-12 control-label-notes'>{{ trans('langMainDB') }} (*)</label>
         <div class='row'>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' size='25' name='dbNameForm' value='{{ $GLOBALS['dbNameForm'] }}'>
@@ -72,17 +72,21 @@
     </div>
 
     <div class='form-group mt-3'>
-        <label for='dbMyAdmin' class='col-sm-12 control-label-notes'>{{ trans('langphpMyAdminURL') }}</label>
+        <label for='dbMyAdmin' class='col-sm-12 control-label-notes'>
+            {{ trans('langphpMyAdminURL') }}<span class="help-block p-2">{{ trans('langOptional') }}</span>
+        </label>
         <div class='row'>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' size='25' name='dbMyAdmin' value='{{ $GLOBALS['dbMyAdmin'] }}'>
             </div>
-            <div class='col-sm-12 help-block'>{{ trans('langOptional') }}</div>
         </div>
-
     </div>
 
-    <div class='form-group mt-5'>
+    <div class='form-group mt-3 help-block'>
+        {{ trans('langRequiredFields') }}
+    </div>
+
+    <div class='form-group mt-4'>
         <div class='col-12'>
             <div class='row'>
                 <div class='col-lg-6 col-12'>
@@ -94,11 +98,6 @@
             </div>
         </div>
 
-    </div>
-    <div class='form-group mt-3'>
-        <div class='col-sm-12'>
-            {{ trans('langAllFieldsRequired') }}
-        </div>
     </div>
     {!! hidden_vars($all_vars, [ 'dbHostForm', 'dbUsernameForm', 'dbPassForm', 'dbNameForm', 'dbMyAdmin' ]) !!}
 </form>
