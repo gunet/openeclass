@@ -460,52 +460,56 @@
             <div class='{{ $container }} padding-default'>
             <h1 aria-label="{{ trans('langPortfolio') }}"></h1>
                 <div class='row row-cols-xl-3 row-cols-md-2 row-cols-1'>
-                        <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
-                            <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
-                                <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
-                                <div>
-                                    <div class='mb-0 portofolio-text-intro TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
-                                    <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                        {!! $_SESSION['uname'] !!}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4'>
+                    <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
+                        <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
+                            <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                             <div>
-                                @if(!get_config('show_always_collaboration'))
-                                <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
-                                    <div>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
-                                </div>
-                                @endif
-                                @if(get_config('show_collaboration'))
-                                <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
-                                    <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
-                                </div>
-                                @endif
+                                <div class='mb-0 portofolio-text-intro TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
                                 <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                    {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                    {!! $_SESSION['uname'] !!}
                                 </p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4'>
-                            <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                                {{ trans('langMyProfile') }}
-                            </a>
-                            <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
-                                {{ trans('langMyStats') }}
-                            </a>
-                            @if ((isset($is_admin) and $is_admin) or
-                                (isset($is_power_user) and $is_power_user) or
-                                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                                (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                    <a class="btn myProfileBtn" type="button" href="{{ $urlAppend }}modules/admin/index.php">
-                                        {{ trans('langAdminTool') }}
-                                    </a>
+                    <div class='col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4'>
+                        <div>
+                            @if(!get_config('show_always_collaboration'))
+                            <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
+                                <div>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
+                            </div>
                             @endif
+                            @if(get_config('show_collaboration'))
+                            <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
+                                <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
+                            </div>
+                            @endif
+                            <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
+                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                            </p>
                         </div>
+                    </div>
+
+                    <div class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4'>
+                        <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                            {{ trans('langMyProfile') }}
+                        </a>
+                        <a class='btn myProfileBtn' type='button' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
+                            {{ trans('langMyStats') }}
+                        </a>
+                        @if ((isset($is_admin) and $is_admin) or
+                            (isset($is_power_user) and $is_power_user) or
+                            (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                            (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                                <a class="btn myProfileBtn" type="button" href="{{ $urlAppend }}modules/admin/index.php">
+                                    {{ trans('langAdminTool') }}
+                                </a>
+                        @elseif ($_SESSION['status'] == USER_STUDENT)
+                            <a class="btn myProfileBtn" type="button" href="{{ $urlAppend }}modules/auth/formuser.php">
+                                {{ trans('langMyRequests') }}
+                            </a>
+                        @endif
+                    </div>
 
                 </div>
             </div>
@@ -523,10 +527,10 @@
                                     <div class='card card-transparent border-0 bg-transparent'>
                                         <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
                                             <h2>{{ trans('langMyCoursesSide') }}&nbsp;
-                                                @if(!get_config('show_always_collaboration'))
-                                                ({{ $num_of_courses }})
+                                                @if (!get_config('show_always_collaboration'))
+                                                    ({{ $num_of_courses }})
                                                 @else
-                                                ({{ $num_of_collaborations }})
+                                                    ({{ $num_of_collaborations }})
                                                 @endif
 
                                             </h2>
