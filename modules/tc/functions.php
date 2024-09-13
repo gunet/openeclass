@@ -107,12 +107,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
         $langBBBMaxPartPerRoom, $langBBBHideParticipants, $langDelete,
-        $langInsertUserInfo, $langSurnameName, $langProfEmail, $langSelect,
+        $langInsertUserInfo, $langSurnameName, $langProfEmail,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
         $langGoToZoomLink, $langGoToZoomLinkText, $langZoomUserNotRegistered, $langGoToWebexLinkText,
-        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $urlAppend, $langImgFormsDes,
-        $langSettingSelect, $langSelect, $langForm, $langOpenNewTab;
+        $langGoToWebexLink, $urlServer, $langZoomUserNotFound, $langImgFormsDes,
+        $langSelect, $langForm, $langOpenNewTab;
 
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
@@ -128,6 +128,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $bbb_max_part_per_room_limit = true;
     }
     $found_selected = false;
+
+    if (isset($_GET['for_session'])) {
+        $for_session_module = $_GET['for_session'];
+    } else {
+        $for_session_module = 0;
+    }
 
     if ($session_id > 0 ) { // edit existing TC session
         $row = Database::get()->querySingle("SELECT * FROM tc_session WHERE id = ?d", $session_id);
@@ -191,10 +197,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $value_message = $langModify;
         $meeting_id_input = $row->meeting_id;
     } else { // new TC meeting
-        $for_session_module = 0;
-        if(isset($_GET['for_session'])){
-            $for_session_module = $_GET['for_session'];
-        }
         $meeting_id_input = '';
         $status = 1;
         $unlock_interval = '10';
@@ -566,97 +568,98 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>";
     // bbb specific additional options
-    if ($tc_type != 'jitsi' and $tc_type != 'googlemeet') {
+    if ($tc_type == 'bbb') {
         $tool_content .= "<div class='clearfix mt-4'>
                             <a role='button' data-bs-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
                                  <div class='panel-heading' style='margin-bottom: 0px;'>
                                        <span class='fa fa-chevron-down fa-fw'></span> $langReadMore
                                  </div>
                             </a>
-                          </div>";
-        $tool_content .= "<div class='collapse $options_show' id='MoreInfo'>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'><span class='checkmark'></span>$langBBBmuteOnStart
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='lockSettingsDisableMic' $checked_lockSettingsDisableMic value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableMic
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='lockSettingsDisableCam' $checked_lockSettingsDisableCam value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableCam
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'><span class='checkmark'></span>$langBBBwebcamsOnlyForModerator
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='lockSettingsDisablePrivateChat' $checked_lockSettingsDisablePrivateChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePrivateChat
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='lockSettingsDisablePublicChat' $checked_lockSettingsDisablePublicChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePublicChat
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='lockSettingsDisableNote' $checked_lockSettingsDisableNote value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableNote
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='lockSettingsHideUserList' $checked_lockSettingsHideUserList value='1'><span class='checkmark'></span>$langBBBlockSettingsHideUserList
-                      </label>
-                    </div>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                     <div class='checkbox'>
-                     <label class='label-container' aria-label='$langSelect'>
-                        <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'><span class='checkmark'></span>$langBBBHideParticipants
-                      </label>
-
-                    </div>
-                </div>
-            </div>";
+                          </div>
+                        <div class='collapse $options_show' id='MoreInfo'>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'><span class='checkmark'></span>$langBBBmuteOnStart
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='lockSettingsDisableMic' $checked_lockSettingsDisableMic value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableMic
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='lockSettingsDisableCam' $checked_lockSettingsDisableCam value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableCam
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'><span class='checkmark'></span>$langBBBwebcamsOnlyForModerator
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='lockSettingsDisablePrivateChat' $checked_lockSettingsDisablePrivateChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePrivateChat
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='lockSettingsDisablePublicChat' $checked_lockSettingsDisablePublicChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePublicChat
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='lockSettingsDisableNote' $checked_lockSettingsDisableNote value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableNote
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                         <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='lockSettingsHideUserList' $checked_lockSettingsHideUserList value='1'><span class='checkmark'></span>$langBBBlockSettingsHideUserList
+                                          </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                     <div class='checkbox'>
+                                         <label class='label-container' aria-label='$langSelect'>
+                                            <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'><span class='checkmark'></span>$langBBBHideParticipants
+                                         </label>        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ";
         }
 
     $tool_content .= "
@@ -672,6 +675,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='d-none d-lg-block'>
                     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div></div>";
+
     $tool_content .= "<script type='text/javascript'>
         //<![CDATA[
             var chkValidator  = new Validator('sessionForm');
