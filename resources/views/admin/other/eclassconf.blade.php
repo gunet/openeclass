@@ -1,44 +1,3 @@
-<?php
-
-    //////////////////////////////////// five ///////////////////////////////////////
-    $install = isset($GLOBALS['input_fields']);
-
-    $emailTransports = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
-    $email_transport = get_var('email_transport');
-    if (!is_numeric($email_transport)) {
-        if ($email_transport == 'smtp') {
-            $email_transport = 1;
-        } elseif ($email_transport == 'sendmail') {
-            $email_transport = 2;
-        } else {
-            $email_transport = 0;
-        }
-    }
-    $emailEncryption = array(0 => 'Όχι', 1 => 'SSL', 2 => 'TLS');
-    $smtp_encryption = get_var('smtp_encryption');
-    if ($smtp_encryption == 'ssl') {
-        $smtp_encryption = 1;
-    } elseif ($smtp_encryption == 'tls') {
-        $smtp_encryption = 2;
-    } else {
-        $smtp_encryption = 0;
-    }
-    $cbox_dont_mail_unverified_mails = get_var('dont_mail_unverified_mails') ? 'checked' : '';
-    $cbox_email_from = get_var('email_from') ? 'checked' : '';
-
-    //////////////////////////////////// four ///////////////////////////////////////
-    $defaultHomepage = $toolboxHomepage = $externalHomepage = '';
-    $homepageSet = get_config('homepage');
-    if ($homepageSet == 'toolbox') {
-        $toolboxHomepage = 'checked';
-    } elseif ($homepageSet == 'external') {
-        $externalHomepage = 'checked';
-    } else {
-        $defaultHomepage = 'checked';
-    }
-?>
-
-
 @extends('layouts.default')
 
 @section('content')
@@ -54,7 +13,7 @@
 
                     <div class='mt-4'></div>
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     @if (Session::get('scheduleIndexing'))
                         <!--schedule indexing if necessary-->
@@ -257,15 +216,12 @@
                                                     </div>
                                                 </div>
 
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='formdurationAccount' class='col-sm-12 control-label-notes'>{{ trans('langUserDurationAccount') }} ({{ trans('langMonthsUnit') }}): </label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control form-control-admin' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='{{ get_config('account_duration') / MONTHS }}'>
                                                     </div>
                                                 </div>
-
 
 
                                                 <div class='form-group mt-4'>
@@ -280,7 +236,24 @@
                                                     </div>
                                                 </div>
 
+                                                <div class='form-group mt-4'>
+                                                    <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langRequiredFieldUserRegistration') }}:</div>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                            <input type='checkbox' name='am_required' value='1' {{ $cbox_am_required }}>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langAm') }}
+                                                        </label>
+                                                    </div>
 
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                            <input type='checkbox' name='email_required' value='1' {{ $cbox_email_required }}>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langEmail') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
 
 
                                                 <div class='form-group mt-4'>
@@ -371,7 +344,7 @@
                                                 <div class='landing-default'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label class='d-inline-flex align-items-top'>
-                                                            <input {{$defaultHomepage}} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span>{{trans('langHomePageDefault')}}</span>
+                                                            <input {{ $defaultHomepage }} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span>{{trans('langHomePageDefault')}}</span>
                                                         </label>
                                                     </div>
                                                     <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat show'>
@@ -461,7 +434,7 @@
 
 
 
-                                    @if(!$install)
+
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='five'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -470,7 +443,7 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset><legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
-                                    @endif
+
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                             <div class='checkbox'>
@@ -560,17 +533,15 @@
                                                     </div>
                                                 </div>
 
-                                    @if(!$install)
+
                                             </fieldset>
                                         </div>
                                     </div>
-                                    @endif
 
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='six'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-
-                                                <h3>{{ trans('langCourseSettings') }}</h3>
+                                            <h3>{{ trans('langCourseSettings') }}</h3>
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
@@ -635,10 +606,19 @@
                                                         </div>
                                                         <div class='checkbox'>
                                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                                <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' {{ $cbox_disable_student_unregister_cours }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langUnsubscribeCourse') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='show_modal_openCourses' value='1' {{ $cbox_allow_modal_courses }}>
                                                                 <span class='checkmark'></span>
-                                                                {!! trans('lang_openCourse_inModal') !!}
+                                                                    {{ trans('lang_openCourse_inModal') }}
+
                                                             </label>
+                                                            <span class="help-block">{{ trans('lang_openCourse_inModal_Info') }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -649,44 +629,44 @@
 
 
                                     @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='seven'>
+                                        <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='seven'>
 
-                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                              <h3>{{ trans('langMetaCommentary') }}</h3>
+                                                  <h3>{{ trans('langMetaCommentary') }}</h3>
 
-                                        </div>
-                                        <div class='card-body'>
-                                            <fieldset>
-                                                <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
-                                                <div class='form-group'>
-                                                    <div class='col-sm-12'>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                                <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('lang_insert_xml_metadata') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                                <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('lang_course_metadata') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                                <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('lang_opencourses_enable') }}
-                                                            </label>
+                                            </div>
+                                            <div class='card-body'>
+                                                <fieldset>
+                                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                                    <div class='form-group'>
+                                                        <div class='col-sm-12'>
+                                                            <div class='checkbox'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                                    <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{ trans('lang_insert_xml_metadata') }}
+                                                                </label>
+                                                            </div>
+                                                            <div class='checkbox'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                                    <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{ trans('lang_course_metadata') }}
+                                                                </label>
+                                                            </div>
+                                                            <div class='checkbox'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                                    <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{ trans('lang_opencourses_enable') }}
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </fieldset>
+                                                </fieldset>
+                                            </div>
                                         </div>
-                                    </div>
                                     @endif
 
 
@@ -711,24 +691,10 @@
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                                <input type='checkbox' name='email_required' value='1' {{ $cbox_email_required }}>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('lang_email_required') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input type='checkbox' name='email_verification_required' value='1' {{ $cbox_email_verification_required }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_email_verification_required') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                                <input type='checkbox' name='am_required' value='1' {{ $cbox_am_required }}>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('lang_am_required') }}
                                                             </label>
                                                         </div>
 
@@ -843,13 +809,6 @@
                                                                 <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {{ $cbox_enable_strong_passwords }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableStrongPasswords') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                                <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' {{ $cbox_disable_student_unregister_cours }}>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('langUnsubscribeCourse') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
@@ -1319,7 +1278,6 @@
 
 <script>
 
-
     function loginFailPanel(e) {
         duration = null;
         if (e) {
@@ -1339,6 +1297,8 @@
     }
 
     $(function() {
+
+        $('body').scrollspy({ target: '#affixedSideNav' });
 
         /* Check if we are in safari and fix Bootstrap Affix*/
         if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {

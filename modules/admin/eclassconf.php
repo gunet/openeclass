@@ -32,7 +32,7 @@ require_once 'include/mailconfig.php';
 $toolName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-define('MONTHS', 30 * 24 * 60 * 60);
+const MONTHS = 30 * 24 * 60 * 60;
 
 $data['mail_form_js'] = $mail_form_js;
 $data['registration_link_options'] = $registration_link_options = [
@@ -175,7 +175,6 @@ if (isset($_POST['submit'])) {
         'dont_display_about_menu' => true,
         'dont_display_contact_menu' => true,
         'dont_display_manual_menu' => true,
-        'course_invitation' => true,
         'allow_rec_video' => true,
         'allow_rec_audio' => true,
         'course_invitation' => true,
@@ -253,29 +252,8 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page('modules/admin/eclassconf.php');
 
 } // end of if($submit)
-else {
-    // Display config.php edit form
-    $head_content .= "
-        <script>
-        $(function() {
-            $('body').scrollspy({ target: '#affixedSideNav' });
-        });
-        </script>
-    ";
-    $head_content .= "
-        <script>
-        $(function() {
-            // $('#floatMenu').affix({
-            //   offset: {
-            //     top: 230,
-            //     bottom: function () {
-            //       return (this.bottom = $('.footer').outerHeight(true))
-            //     }
-            //   }
-            // })
-        });
-        </script>";
-    // Display link to index.php
+else {     // Display config.php edit form
+
     $data['registration_info_textarea'] = rich_text_editor('registration_info', 4, 80, get_config('registration_info', ''));
     if (function_exists('imagettfbbox')) {
         $data['cbox_display_captcha'] = get_config('display_captcha') ? 'checked' : '';
@@ -311,6 +289,18 @@ else {
         }
     }
 
+
+    $defaultHomepage = $toolboxHomepage = $externalHomepage = '';
+    $homepageSet = get_config('homepage');
+    if ($homepageSet == 'toolbox') {
+        $toolboxHomepage = 'checked';
+    } elseif ($homepageSet == 'external') {
+        $externalHomepage = 'checked';
+    } else {
+        $defaultHomepage = 'checked';
+    }
+    $data['defaultHomepage'] = $defaultHomepage;
+
     $data['cbox_course_multidep'] = get_config('course_multidep') ? 'checked' : '';
     $data['cbox_user_multidep']  = get_config('user_multidep') ? 'checked' : '';
     $data['cbox_restrict_owndep']  = get_config('restrict_owndep') ? 'checked' : '';
@@ -324,6 +314,8 @@ else {
     $data['cbox_case_insensitive_usernames'] = get_config('case_insensitive_usernames') ? 'checked' : '';
     $data['cbox_email_required'] = get_config('email_required') ? 'checked' : '';
     $data['cbox_email_verification_required'] = get_config('email_verification_required') ? 'checked' : '';
+    $data['cbox_email_from'] = get_var('email_from') ? 'checked' : '';
+    $data['cbox_dont_mail_unverified_mails'] = get_var('dont_mail_unverified_mails') ? 'checked' : '';
     $data['cbox_am_required'] = get_config('am_required') ? 'checked' : '';
     $data['cbox_dropbox_allow_student_to_student'] = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $data['cbox_dropbox_allow_personal_messages'] = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
@@ -368,6 +360,31 @@ else {
     $data['cbox_course_invitation'] = get_config('course_invitation') ? 'checked' : '';
     $data['cbox_individual_group_bookings'] = get_config('individual_group_bookings') ? 'checked' : '';
     $data['cbox_enable_quick_note'] = get_config('enable_quick_note') ? 'checked' : '';
+
+    $data['emailTransports'] = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
+    $email_transport = get_var('email_transport');
+    if (!is_numeric($email_transport)) {
+        if ($email_transport == 'smtp') {
+            $email_transport = 1;
+        } elseif ($email_transport == 'sendmail') {
+            $email_transport = 2;
+        } else {
+            $email_transport = 0;
+        }
+    }
+    $data['email_transport'] = $email_transport;
+
+    $data['emailEncryption'] = array(0 => 'Όχι', 1 => 'SSL', 2 => 'TLS');
+    $smtp_encryption = get_var('smtp_encryption');
+    if ($smtp_encryption == 'ssl') {
+        $smtp_encryption = 1;
+    } elseif ($smtp_encryption == 'tls') {
+        $smtp_encryption = 2;
+    } else {
+        $smtp_encryption = 0;
+    }
+    $data['smtp_encryption'] = $smtp_encryption;
+
 }
 
 view('admin.other.eclassconf', $data);
