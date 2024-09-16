@@ -773,10 +773,6 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
         }
         exit;
     } else {
-        // Session::Messages($langScoreDiffers .
-        //     "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
-        //         <button class='btn btn-secondary' type='submit' name='regrade' value='true'>$langRegrade</button>
-        //      </form>", 'alert-warning');
 
              Session::flash('message',$langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>

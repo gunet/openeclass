@@ -37,7 +37,7 @@ require_once 'upgrade/functions.php';
 require_once 'install/functions.php';
 require_once 'modules/h5p/classes/H5PHubUpdater.php';
 
-$viewsDir = 'resources/views/modern/install';
+$viewsDir = 'resources/views/install';
 $cacheDir = 'storage/views/';
 if (!is_dir($cacheDir)) {
     mkdir($cacheDir, 0755, true);
