@@ -1200,15 +1200,6 @@ function view($view_file, $view_data = array()) {
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
 
-                .showCoursesBars,
-                .showCoursesBars:hover,
-                .showCoursesBars:focus,
-                .showCoursesPics,
-                .showCoursesPics:hover,
-                .showCoursesPics:focus{
-                    background-color:  $theme_options_styles[bgWhiteButtonColor];
-                }
-
                 .pagination-glossary .page-item .page-link{
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
@@ -1279,6 +1270,15 @@ function view($view_file, $view_data = array()) {
 
                 .pagination-glossary .page-item .page-link{
                     color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
+                .showCoursesBars,
+                .showCoursesBars:hover,
+                .showCoursesBars:focus,
+                .showCoursesPics,
+                .showCoursesPics:hover,
+                .showCoursesPics:focus{
+                    color: $theme_options_styles[whiteButtonTextColor];
                 }
 
             ";
@@ -1402,15 +1402,6 @@ function view($view_file, $view_data = array()) {
                 .bookingCalendarByUser .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-prev-button:hover .fc-icon::after,
                 .myCalendarEvents .fc-header-toolbar .fc-button-group .fc-next-button:hover .fc-icon::after{
-                    color: $theme_options_styles[whiteButtonHoveredTextColor];
-                }
-
-                .showCoursesBars,
-                .showCoursesBars:hover,
-                .showCoursesBars:focus,
-                .showCoursesPics,
-                .showCoursesPics:hover,
-                .showCoursesPics:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
