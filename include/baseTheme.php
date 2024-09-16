@@ -622,6 +622,10 @@ function view($view_file, $view_data = array()) {
                 .panel-action-btn-default .panel-heading {
                     color:$theme_options_styles[ColorHyperTexts] ;
                 }
+
+                .text-muted{
+                    color:$theme_options_styles[ColorHyperTexts] !important;
+                }
             ";
         }
 
@@ -1350,7 +1354,10 @@ function view($view_file, $view_data = array()) {
                 .opencourses_btn:hover,
                 .submitAdminBtn:focus,
                 .cancelAdminBtn:focus,
-                .opencourses_btn:focus {
+                .opencourses_btn:focus,
+                .submitAdminBtn:active,
+                .cancelAdminBtn:active,
+                .opencourses_btn:active {
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
@@ -1367,17 +1374,30 @@ function view($view_file, $view_data = array()) {
                 .submitAdminBtn:hover .fa-solid::before,
                 .submitAdminBtn:hover .fa-regular::before,
                 .submitAdminBtn:hover .fa-brands::before,
-                .submitAdminBtn:hover span.fa::before{
+                .submitAdminBtn:hover span.fa::before,
+                .submitAdminBtn:focus .fa-solid::before,
+                .submitAdminBtn:focus .fa-regular::before,
+                .submitAdminBtn:focus .fa-brands::before,
+                .submitAdminBtn:focus span.fa::before,
+                .submitAdminBtn:active .fa-solid::before,
+                .submitAdminBtn:active .fa-regular::before,
+                .submitAdminBtn:active .fa-brands::before,
+                .submitAdminBtn:active span.fa::before{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
                 .quickLink:hover,
-                .quickLink:hover .fa-solid{
+                .quickLink:hover .fa-solid,
+                .quickLink:focus,
+                .quickLink:focus .fa-solid,
+                .quickLink:active,
+                .quickLink:active .fa-solid{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
 
                 .menu-popover:hover,
-                .menu-popover:focus{
+                .menu-popover:focus,
+                .menu-popover:active{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
 
