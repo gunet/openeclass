@@ -6449,7 +6449,7 @@ function view($view_file, $view_data = array()) {
         }
     }
 
-    $views = $webDir . '/resources/views/' . get_config('theme');
+    $views = $webDir . '/resources/views/';
     $cache = $webDir . '/storage/views/';
     $blade = new Blade($views, $cache);
 
@@ -6470,7 +6470,7 @@ function view($view_file, $view_data = array()) {
             'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
             'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator', 'is_simple_user');
     $data = array_merge($global_data, $view_data);
-    //echo '  '.get_config('theme').'  -  '.$view_file;
+
     echo $blade->make($view_file, $data)->render();
 }
 

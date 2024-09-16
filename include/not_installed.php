@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
 
-$viewsDir = '../resources/views/modern/install';
+$viewsDir = '../resources/views/install';
 $cacheDir = '../storage/views/';
 if (!is_dir($cacheDir)) {
     mkdir($cacheDir, 0755, true);

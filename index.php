@@ -344,7 +344,5 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
         $data['home_page_sidebar_widgets'] .= $widget->run($key);
     }
 
-    $data['menuTypeID'] = 0;
-
     view('home.index', $data);
 }

@@ -59,7 +59,7 @@ $course = new Course();
 /************************************ */
 /* ViewDir for modern offline course */
 /*********************************** */
-$viewsDir = $webDir . '/resources/views/modern/offline';
+$viewsDir = $webDir . '/resources/views/offline';
 /************************************* */
 /************************************* */
 
