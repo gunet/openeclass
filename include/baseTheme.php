@@ -426,7 +426,7 @@ function view($view_file, $view_data = array()) {
                     .jumbotron.jumbotron-login{
                         background: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str;
                         border:0px;
-                        background-size: 100% 100%;
+                        background-size: cover;
                         background-repeat: no-repeat;
                         background-position: 50% 50%;
                     }
