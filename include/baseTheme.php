@@ -6404,7 +6404,27 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgColorContentPlatform];
                 }
             ";
-         }
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// COLOR FOCUS IN TEXT AREA  ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ColorFocus'])){
+            $styles_str .= "
+                button:focus-visible,
+                a:focus-visible,
+                input:focus-visible,
+                select:focus-visible,
+                textarea:focus-visible{
+                    outline: 0 !important;
+                    box-shadow: none !important;
+                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                }
+            ";
+        }
 
 
 

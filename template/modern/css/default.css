@@ -5057,7 +5057,7 @@ body .delThemeBtn{
 }
 
 .form-image-modules{
-  padding: 16px 0px 16px 16px;
+  padding: 0px 0px 16px 16px;
 }
 
 /* personal docs */
@@ -5355,5 +5355,5 @@ select:focus-visible,
 textarea:focus-visible{
   outline: 0 !important;
   box-shadow: none !important;
-  border: solid 1px #FBAC66 !important;
+  border: solid 1px #0073E6 !important;
 }
