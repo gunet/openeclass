@@ -59,12 +59,14 @@
   -webkit-box-shadow:none  ;
   box-shadow: none  ;
   background: #ffffff ;
-  background-image: none ;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: solid 1px #EFF2FB;
 }
 
 
 #cal-slide-content a.event-item {
-  color: #005ad9;
+  color: #005ad9 !important;
   font-weight: bold;
   line-height: 22px;
 }
@@ -89,7 +91,7 @@
 
 #cal-slide-content ul{
   padding: 12px;
-  border: solid 1px #EFF2FB;
+  border: 0px;
 }
 #cal-slide-content ul li{
  margin-bottom: 12px;
@@ -240,8 +242,14 @@
   padding: 0px;
   margin: 0;
   opacity: 1;
-  color: #ffffff;
+  color: #2B3944;
   font-size: 17px ;
+}
+.myPersonalCalendar .cal-month-box .cal-day-today span[data-cal-date]{
+  color: #ffffff; font-size: 17px !important;
+}
+.myPersonalCalendar .cal-day-holiday span[data-cal-date]{
+  color: #ffffff;
 }
 .myPersonalCalendar .cal-cell{
   border: solid 0.5px #f5f4f4 ;
@@ -251,8 +259,6 @@
   justify-content: center ;
   align-items: center ;
 }
-
-
 
 /********************************************* DATES TUTOR CALENDAR VIEW **********************************************/
 

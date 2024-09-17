@@ -6883,3 +6883,4 @@ $langGreenText = "Κείμενο με πράσινο χρώμα";
 $langBlueText = "Κείμενο με μπλε χρώμα";
 $langOrangeText = "Κείμενο με πορτοκαλί χρώμα";
 $langColorFocus = "Χρώμα εστίασης (Focus) σε περιοχές κειμένων και κουμπιά";
+$langbgPanelEvents = "Χρώμα φόντου (Panel event)";
