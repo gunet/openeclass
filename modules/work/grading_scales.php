@@ -34,7 +34,7 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langW
 if (isset($_GET['delete'])) { // delete scale
     Database::get()->query("DELETE FROM `grading_scale` WHERE id = ?d", $_GET['delete']);
     //Session::Messages($langGradeScalesDeleted, 'alert-success');
-    Session::flash('message',$langGradeScalesDeleted); 
+    Session::flash('message',$langGradeScalesDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/work/grading_scales.php");
 }
@@ -135,18 +135,9 @@ if (isset($_GET['scale_id'])) {
     if ($scale_used) {
         $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGradeScaleNotEditable</span></div></div>";
     }
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => "grading_scales.php?course=$course_code"
-        ),
-    ));
-    $tool_content .= "
-        
-    <div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'>
+
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+            <div class='flex-grow-1'>
                 <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
@@ -182,7 +173,7 @@ if (isset($_GET['scale_id'])) {
                                 </div>
                             </div>";
     if (!$scale_used) {
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-start'>
                              <a class='btn submitAdminBtn' id='addScale'>$langAdd</a>
                          </div>";
     }
@@ -223,13 +214,7 @@ if (isset($_GET['scale_id'])) {
         </div>";
 
 } else {
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => "index.php?course=$course_code"
-        ),
+    $action_bar = action_bar(array(
         array(
             'title' => $langNewGradeScale,
             'level' => 'primary-label',
@@ -237,8 +222,10 @@ if (isset($_GET['scale_id'])) {
             'url' => "grading_scales.php?course=$course_code&amp;scale_id=0",
             'button-class' => 'btn-success'
         )
-        
+
     ),false);
+
+    $tool_content .= $action_bar;
 
     $grading_scales = Database::get()->queryArray("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);
     if ($grading_scales) {
