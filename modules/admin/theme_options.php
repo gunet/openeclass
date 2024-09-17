@@ -40,7 +40,7 @@ $defaults = array(
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
-                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText'),
+                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
@@ -2743,6 +2743,11 @@ $tool_content .= "
                                 <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                             </figure>
                         </div>
+                    </div>
+                    <hr>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ColorFocus' class='control-label-notes mb-2 me-2'>$langColorFocus:</label>
+                        <input name='ColorFocus' type='text' class='form-control colorpicker' id='ColorFocus' value='$theme_options_styles[ColorFocus]'>
                     </div>
                 </div>
             </div>

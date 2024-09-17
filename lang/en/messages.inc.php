@@ -6415,3 +6415,4 @@ $langRedText = "Text in red";
 $langGreenText = "Text in green";
 $langBlueText = "Text in blue";
 $langOrangeText = "Text in orange";
+$langColorFocus = "Focus color (Focus) in text areas and buttons";

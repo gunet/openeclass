@@ -127,7 +127,7 @@
   width: 32px;
 }
 .cal-month-box .cal-day-today span[data-cal-date] {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .cal-month-day .events-list{
   width: 100%;
