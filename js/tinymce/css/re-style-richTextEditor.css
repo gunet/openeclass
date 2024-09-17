@@ -28,3 +28,7 @@
 .mce-statusbar.mce-container.mce-panel.mce-stack-layout-item.mce-last{
     border: 0px !important;
 }
+
+.mce-container, .mce-container *, .mce-widget, .mce-widget *, .mce-reset {
+    color: #333;
+}

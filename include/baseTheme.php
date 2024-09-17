@@ -3539,14 +3539,6 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgAgenda];
                 }
 
-
-
-                #cal-slide-content {
-                    background: $theme_options_styles[bgAgenda] !important;
-                    box-shadow: none !important;
-                }
-
-
                 .datetimepicker.dropdown-menu,
                 .datepicker.dropdown-menu{
                     background: $theme_options_styles[bgAgenda] !important;
@@ -4220,6 +4212,24 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////// BACKGROUND COLOR OF PANEL EVENTS IN AGENDA COMPONENT ///////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgPanelEvents'])) {
+            $styles_str .= "
+                #cal-slide-content {
+                    background: $theme_options_styles[bgPanelEvents];
+                }
+
+                #cal-slide-content:hover {
+                    background-color: $theme_options_styles[bgPanelEvents] !important;
+                }
             ";
         }
 
@@ -5197,7 +5207,7 @@ function view($view_file, $view_data = array()) {
 
 
                 #cal-slide-content a.event-item {
-                    color: $theme_options_styles[linkColor];
+                    color: $theme_options_styles[linkColor] !important;
                 }
 
 

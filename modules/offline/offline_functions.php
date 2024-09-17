@@ -4213,7 +4213,7 @@ function get_theme_options() {
 
 
                 #cal-slide-content a.event-item {
-                    color: $theme_options_styles[linkColor];
+                    color: $theme_options_styles[linkColor] !important;
                 }
 
 
