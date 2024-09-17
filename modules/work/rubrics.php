@@ -286,14 +286,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
             $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langRubricNotEditable</span></div>";
         }
     }
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => "rubrics.php?course=$course_code"
-        ),
-    ));
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
@@ -502,13 +495,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
         </div>";
 
 } else {
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'level' => 'primary',
-            'icon' => 'fa-reply',
-            'url' => (isset($_GET['preview'])?"rubrics":"index").".php?course=$course_code"
-        ),
+    $action_bar = action_bar(array(
         array(
             'title' => $langNewGradeRubric,
             'level' => 'primary-label',
@@ -518,6 +505,8 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
 
         )
     ), false);
+
+    $tool_content .= $action_bar;
 
     if (isset($_GET['preview'])) { // preview rubric
         $rubric_id = $_GET['preview'];
