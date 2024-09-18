@@ -18,7 +18,7 @@
                 @include('layouts.partials.legend_view')
 
                 <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
-                    <div class='col-8'>
+                    <div class='col-md-7 col-lg-8'>
                         <div class='alert alert-info text-center'>
                             {{ trans('langUpgradeBase') }}<br>
                             <em>{{ trans('langPreviousVersion') }} {{ $previous_version }} </em>
@@ -33,7 +33,6 @@
                     </div>
 
                     @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu() ] )
-
                 </div>
 
                 <script>

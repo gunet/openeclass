@@ -15,78 +15,80 @@
     <div class='card panelCard px-lg-4 py-lg-3'>
         <div class='card-body'>
             <form class='form-wrapper' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-
-                <h4 class="mt-2">
-                    {{ trans('langCheckReq') }}
-                </h4>
-
-                <ul class='list-group list-group-flush'>
-                    <li class='list-group-item element'><i class="fa-solid fa-check" style="color: green"></i> <strong>Webserver</strong>
-                        <em> {{ ($_SERVER['SERVER_SOFTWARE']) }} </em>
-                    </li>
-                </ul>
-
-                <ul class='list-group list-group-flush'>
-                    <h4 class="mt-2">
-                        {{ trans('langPHPVersion') }}
-                    </h4>
-                    {!! checkPHPVersion('8.0'); !!}
-                </ul>
-
-                <h4 class="mt-2">
-                    {{ trans('langRequiredPHP') }}
-                </h4>
-                <ul class='list-group list-group-flush'>
-                     {!! warnIfExtNotLoaded('pdo_mysql') !!}
-                     {!! warnIfExtNotLoaded('gd') !!}
-                     {!! warnIfExtNotLoaded('mbstring') !!}
-                     {!! warnIfExtNotLoaded('xml'); !!}
-                     {!! warnIfExtNotLoaded('zlib') !!}
-                     {!! warnIfExtNotLoaded('pcre') !!}
-                     {!! warnIfExtNotLoaded('curl') !!}
-                     {!! warnIfExtNotLoaded('zip') !!}
-                     {!! warnIfExtNotLoaded('intl') !!}
-                </ul>
-
-                <h4 class="mt-2">
-                    {{ trans('langOptionalPHP') }}
-                </h4>
-                <ul class='list-group list-group-flush'>
-                    {!! warnIfExtNotLoaded('soap'); !!}
-                    {!! warnIfExtNotLoaded('ldap'); !!}
-                </ul>
-
-                @if (ini_get('register_globals'))
-                    <div class='caution'>
-                        {{ trans('langWarningInstall1') }}
+                <fieldset>
+                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                    <div class="text-heading-h4 mt-2">
+                        {{ trans('langCheckReq') }}
                     </div>
-                @endif
 
-                @if (ini_get('short_open_tag'))
-                    <div class='caution'>
-                        {{ trans('langWarningInstall2') }}
+                    <ul class='list-group list-group-flush'>
+                        <li class='list-group-item element'><i class="fa-solid fa-check Success-200-cl"></i> <strong>Webserver</strong>
+                            <em> {{ ($_SERVER['SERVER_SOFTWARE']) }} </em>
+                        </li>
+                    </ul>
+
+                    <ul class='list-group list-group-flush'>
+                        <div class="text-heading-h4 mt-2">
+                            {{ trans('langPHPVersion') }}
+                        </div>
+                        {!! checkPHPVersion('8.0'); !!}
+                    </ul>
+
+                    <div class="text-heading-h4 mt-2">
+                        {{ trans('langRequiredPHP') }}
                     </div>
-                @endif
+                    <ul class='list-group list-group-flush'>
+                        {!! warnIfExtNotLoaded('pdo_mysql') !!}
+                        {!! warnIfExtNotLoaded('gd') !!}
+                        {!! warnIfExtNotLoaded('mbstring') !!}
+                        {!! warnIfExtNotLoaded('xml'); !!}
+                        {!! warnIfExtNotLoaded('zlib') !!}
+                        {!! warnIfExtNotLoaded('pcre') !!}
+                        {!! warnIfExtNotLoaded('curl') !!}
+                        {!! warnIfExtNotLoaded('zip') !!}
+                        {!! warnIfExtNotLoaded('intl') !!}
+                    </ul>
 
-                <h3 class="mt-2">
-                    {{ trans('langOtherReq') }}
-                </h3>
-                <ul>
-                    <li>
-                        {{ trans('langInstallBullet1') }}
-                    </li>
-                    <li>
-                        {{ trans('langInstallBullet3') }}
-                    </li>
-                </ul>
+                    <div class="text-heading-h4 mt-2">
+                        {{ trans('langOptionalPHP') }}
+                    </div>
+                    <ul class='list-group list-group-flush'>
+                        {!! warnIfExtNotLoaded('soap'); !!}
+                        {!! warnIfExtNotLoaded('ldap'); !!}
+                    </ul>
 
-                <div class='info'>{{ trans('langBeforeInstall1') }}<a href='{{ $install_info_file }}' target=_blank>{{ trans('langInstallInstr') }}</a>.
-                <div class='smaller'>{{ trans('langBeforeInstall2') }}<a href='{{ $readme_file }}' target=_blank>{{ trans('langHere') }}</a>.</div></div><br>
+                    @if (ini_get('register_globals'))
+                        <div class='caution'>
+                            {{ trans('langWarningInstall1') }}
+                        </div>
+                    @endif
 
-                <div class='col-12 d-flex justify-content-center mt-5'>
-                    <input type='submit' class='btn w-100' name='install2' value='{{ trans('langNextStep') }} &raquo;' />
-                </div>
-                {!! hidden_vars($all_vars) !!}
+                    @if (ini_get('short_open_tag'))
+                        <div class='caution'>
+                            {{ trans('langWarningInstall2') }}
+                        </div>
+                    @endif
+
+                    <div class="text-heading-h3 mt-2">
+                        {{ trans('langOtherReq') }}
+                    </div>
+                    <ul>
+                        <li>
+                            {{ trans('langInstallBullet1') }}
+                        </li>
+                        <li>
+                            {{ trans('langInstallBullet3') }}
+                        </li>
+                    </ul>
+
+                    <div class='info'>{{ trans('langBeforeInstall1') }}<a href='{{ $install_info_file }}' target=_blank>{{ trans('langInstallInstr') }}</a>.
+                    <div class='smaller'>{{ trans('langBeforeInstall2') }}<a href='{{ $readme_file }}' target=_blank>{{ trans('langHere') }}</a>.</div></div><br>
+
+                    <div class='col-12 d-flex justify-content-center mt-5'>
+                        <input aria-label="{{ trans('langNextStep') }}" type='submit' class='btn w-100' name='install2' value='{{ trans('langNextStep') }} &raquo;' />
+                    </div>
+                    {!! hidden_vars($all_vars) !!}
+                </fieldset>
             </form>
         </div>
     </div>
