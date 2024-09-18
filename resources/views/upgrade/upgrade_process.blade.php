@@ -17,18 +17,23 @@
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                 @include('layouts.partials.legend_view')
 
-                <div class='col-sm-12'>
-                    <div class='alert alert-info text-center'>
-                        {{ trans('langUpgradeBase') }}<br>
-                        <em>{{ trans('langPreviousVersion') }} {{ $previous_version }} </em>
+                <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
+                    <div class='col-8'>
+                        <div class='alert alert-info text-center'>
+                            {{ trans('langUpgradeBase') }}<br>
+                            <em>{{ trans('langPreviousVersion') }} {{ $previous_version }} </em>
+                        </div>
+                        <div class='text-center'>
+                            <button class='btn btn-success' id='submit_upgrade'>
+                                <span class='fa fa-refresh space-after-icon'></span> {{ trans('langUpgrade') }}
+                            </button>
+                        </div>
+
+                        <div class='col-sm-12' id='upgrade-container'></div>
                     </div>
-                    <div class='text-center'>
-                        <button class='btn btn-success' id='submit_upgrade'>
-                            <span class='fa fa-refresh space-after-icon'></span> {{ trans('langUpgrade') }}
-                        </button>
-                    </div>
-                </div>
-                <div class='col-sm-12' id='upgrade-container'>
+
+                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu() ] )
+
                 </div>
 
                 <script>

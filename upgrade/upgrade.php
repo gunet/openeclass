@@ -317,90 +317,98 @@ touch_or_error('courses/eportfolio/work_submissions/index.php');
 mkdir_or_error('courses/eportfolio/mydocs');
 touch_or_error('courses/eportfolio/mydocs/index.php');
 
-if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
-    $mail_settings_form = $theme_images = $homepage_intro = '';
-    unset($_SESSION['upgrade_logfile_path']);
-    unset($_SESSION['upgrade_logfile_name']);
+if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
-    if (get_config('email_transport', 'mail') == 'mail' and !get_config('email_announce')) {
-        $mail_settings_form = mail_settings_form();
-    }
+    if (isset($_POST['submit_1'])) {
+        $_SESSION['step'] = 1;
+        view('upgrade.upgrade_step_1');
 
-    setGlobalContactInfo();
+    } else if (isset($_POST['submit_2'])) {
+        $_SESSION['step'] = 2;
+        $mail_settings_form = $theme_images = $homepage_intro = '';
+        unset($_SESSION['upgrade_logfile_path']);
+        unset($_SESSION['upgrade_logfile_name']);
 
-    $theme_id = get_config('theme_options_id') ?? 0;
-    $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
-    $themes_arr[0] = 'Default';
-    foreach ($all_themes as $row) {
-        $themes_arr[$row->id] = $row->name;
-        if($row->id == $theme_id){
-            $active_theme = $row->id;
+        if (get_config('email_transport', 'mail') == 'mail' and !get_config('email_announce')) {
+            $mail_settings_form = mail_settings_form();
         }
-    }
-    // Get all images from dir screenshots
-    $dir_screens = getcwd();
-    $dir_screens = $dir_screens . '/template/modern/images/screenshots';
-    $dir_themes_images = scandir($dir_screens);
-    $data['active_theme'] = $themes_arr[$active_theme];
-    $data['theme_selection'] = selection($themes_arr, 'theme_selection', $theme_id, 'class="form-select" id="themeSelection"');
 
-    foreach($dir_themes_images as $image) {
-        $extension = pathinfo($image, PATHINFO_EXTENSION);
-        $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
-        if (in_array($extension, $imgExtArr)) {
-        $theme_images =
-            "<div class='col-lg-8 col-md-10 m-auto py-4'>
-                <div class='card panelCard h-100'>
-                    <h3 class='alert alert-secondary'>
-                      " . strtok($image, '.') . " 
-                    </h3>
-                    <div class='card-body'>
-                        <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
+        setGlobalContactInfo();
+
+        $theme_id = get_config('theme_options_id') ?? 0;
+        $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
+        $themes_arr[0] = 'Default';
+        foreach ($all_themes as $row) {
+            $themes_arr[$row->id] = $row->name;
+            if ($row->id == $theme_id) {
+                $active_theme = $row->id;
+            }
+        }
+        // Get all images from dir screenshots
+        $dir_screens = getcwd();
+        $dir_screens = $dir_screens . '/template/modern/images/screenshots';
+        $dir_themes_images = scandir($dir_screens);
+        $data['active_theme'] = $themes_arr[$active_theme];
+        $data['theme_selection'] = selection($themes_arr, 'theme_selection', $theme_id, 'class="form-select" id="themeSelection"');
+
+        foreach ($dir_themes_images as $image) {
+            $extension = pathinfo($image, PATHINFO_EXTENSION);
+            $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
+            if (in_array($extension, $imgExtArr)) {
+                $theme_images =
+                    "<div class='col-lg-8 col-md-10 m-auto py-4'>
+                    <div class='card panelCard h-100'>
+                        <h3 class='alert alert-secondary'>
+                          " . strtok($image, '.') . " 
+                        </h3>
+                        <div class='card-body'>
+                            <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
+                        </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
+            }
         }
+
+        $data['theme_images'] = $theme_images;
+        $data['mail_settings_form'] = $mail_settings_form;
+        $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
+        $data['error_message'] = $error_message;
+
+        view('upgrade.upgrade_step_2', $data);
+
+    } else { // Main part of upgrade starts here
+        $_SESSION['step'] = 3;
+        set_config('upgrade_begin', time());
+        setGlobalContactInfo();
+
+        if (!isset($_SERVER['SERVER_NAME'])) {
+            $_SERVER['SERVER_NAME'] = parse_url($urlServer, PHP_URL_HOST);
+        }
+
+        if (isset($_POST['email_transport'])) {
+            store_mail_config();
+        }
+
+        set_config('homepage_intro', $_POST['homepage_intro']);
+        set_config('theme_options_id', $_POST['theme_selection']);
+        set_config('dont_display_statistics', 1);
+        set_config('dont_display_popular_courses', 1);
+        set_config('dont_display_testimonials', 1);
+        set_config('dont_display_texts', 1);
+        set_config('dont_display_open_courses', 1);
+        set_config('dont_display_login_form', 0);
+        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title <> 'announcements'");
+
+        unset($_SESSION['upgrade_step']);
+        unset($_SESSION['upgrade_tag']);
+
+        $data['logfile'] = $_SESSION['upgrade_logfile_name'];
+        $data['previous_version'] = get_config('version');
+
+        // Display upgrade feedback screen
+        view('upgrade.upgrade_process', $data);
     }
-
-    $data['theme_images'] = $theme_images;
-    $data['mail_settings_form'] = $mail_settings_form;
-    $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
-    $data['error_message'] = $error_message;
-
-    view('upgrade.upgrade_form', $data);
-
-} else { // Main part of upgrade starts here
-    set_config('upgrade_begin', time());
-    setGlobalContactInfo();
-
-    if (!isset($_SERVER['SERVER_NAME'])) {
-        $_SERVER['SERVER_NAME'] = parse_url($urlServer, PHP_URL_HOST);
-    }
-
-    if (isset($_POST['email_transport'])) {
-        store_mail_config();
-    }
-
-    set_config('homepage_intro', $_POST['homepage_intro']);
-    set_config('theme_options_id', $_POST['theme_selection']);
-    set_config('dont_display_statistics',1);
-    set_config('dont_display_popular_courses',1);
-    set_config('dont_display_testimonials',1);
-    set_config('dont_display_texts',1);
-    set_config('dont_display_open_courses',1);
-    set_config('dont_display_login_form',0);
-    Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title <> 'announcements'");
-
-    unset($_SESSION['upgrade_step']);
-    unset($_SESSION['upgrade_tag']);
-
-    $data['logfile'] = $_SESSION['upgrade_logfile_name'];
-    $data['previous_version'] = get_config('version');
-
-    // Display upgrade feedback screen
-    view('upgrade.upgrade_process', $data);
-} // end of if not submit
-
+}
 
 /**
  * @brief display fatal error
@@ -495,4 +503,34 @@ function break_on_step() {
             'error' => null]);
         exit;
     }
+}
+
+
+/**
+ * @brief display upgrade steps menu
+ * @return string
+ */
+function upgrade_menu()
+{
+    global $langRequirements, $langThemeSettings, $langUpgradeBase;
+
+
+    $step_messages = [
+        1 => $langRequirements,
+        2 => $langThemeSettings,
+        3 => $langUpgradeBase,
+    ];
+
+    $menu = '';
+    foreach ($step_messages as $step => $title) {
+        if (isset($_SESSION['step']) and $step == $_SESSION['step']) {
+            $class = 'active';
+        } else {
+            $class = '';
+        }
+        $menu .= "<a href='#' class='list-group-item $class'>";
+        $menu .= "<span>$title</span>";
+        $menu .= "</a>";
+    }
+    return $menu;
 }

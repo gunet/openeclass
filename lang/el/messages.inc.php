@@ -2635,7 +2635,7 @@ $langOptionalPHP = "Προαιρετικά PHP modules";
 $langOtherReq = "Άλλες απαιτήσεις συστήματος";
 $langInstallBullet1 = "Μια βάση δεδομένων MySQL.";
 $langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το Open eClass έχει αποσυμπιεστεί.";
-$langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του Open eClass";
+$langCheckReq = "Έλεγχος προαπαιτούμενων για τη λειτουργία του Open eClass";
 $langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια <a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html' target='_blank' aria-label='(opens in a new tab)'>GNU General Public Licence (GPL). </a><br />
                 Παρακαλούμε διαβάστε την άδεια και κάνετε κλικ στο 'Αποδοχή'";
 $langAccept = "Αποδοχή";
@@ -4092,7 +4092,7 @@ $langChangeDBCharset = "Αλλαγή κωδικοποίησης βάσης δε�
 $langToUTF = "σε UTF-8";
 $langEncryptPass = "Κωδικοποίηση των συνθηματικών των χρηστών";
 $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δεν μπόρεσε να κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί να λειτουργήσει. Αφαιρέστε τη γραμμή «\$encryptedPasswd = true;» από το αρχείο ρυθμίσεων config.php";
-$langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass';
+$langUpgradeStart = 'Έναρξη αναβάθμισης';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';
 $langUpgradeMulUsernames = "Βρέθηκαν χρήστες με πολλαπλά usernames οπότε πραγματοποιήθηκαν οι παρακάτω αλλαγές:";
 $langUpgradeChangeUsername = "Αλλαγή του ονόματος χρήστη από %s σε %s";
@@ -4115,6 +4115,8 @@ $langUpgFinished = 'Ολοκληρώθηκε';
 $langUpgUTF8MB4 = 'Μετατροπή πινάκων σε πλήρες εύρος Unicode';
 $langEncodeUserProfilePics = 'Κωδικοποίηση εικόνων προφίλ χρηστών';
 $langPreviousVersion = 'Προηγούμενη έκδοση';
+$langUpgradeFinished = "Ολοκλήρωση αναβάθμισης";
+$langUpgradeProcess = "Πορεία αναβάθμισης";
 
 /* * *****************************************************************
  * course_tools.php

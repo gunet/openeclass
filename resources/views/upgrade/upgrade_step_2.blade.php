@@ -24,58 +24,6 @@
                     </div>
                 @endif
 
-                <div class='row row-cols-lg-3 row-cols-1 g-3 mt-1'>
-                    <div class='col'>
-                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>{{ trans('langPHPVersion') }}</h3>
-                            </div>
-                            <div class='card-body'>
-                                <ul class='list-group list-group-flush'>
-                                    {!! checkPHPVersion('8.0') !!}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col'>
-                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>
-                                    {{ trans('langRequiredPHP') }}
-                                </h3>
-                            </div>
-                            <div class='card-body'>
-                                <ul class='list-group list-group-flush'>
-                                    {!! warnIfExtNotLoaded('pdo_mysql') !!}
-                                    {!! warnIfExtNotLoaded('gd') !!}
-                                    {!! warnIfExtNotLoaded('mbstring') !!}
-                                    {!! warnIfExtNotLoaded('xml'); !!}
-                                    {!! warnIfExtNotLoaded('zlib') !!}
-                                    {!! warnIfExtNotLoaded('pcre') !!}
-                                    {!! warnIfExtNotLoaded('curl') !!}
-                                    {!! warnIfExtNotLoaded('zip') !!}
-                                    {!! warnIfExtNotLoaded('intl') !!}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col'>
-                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>
-                                    {{ trans('langOptionalPHP') }}
-                                </h3>
-                            </div>
-                            <div class='card-body'>
-                                <ul class='list-group list-group-flush'>
-                                    {!! warnIfExtNotLoaded('soap'); !!}
-                                    {!! warnIfExtNotLoaded('ldap'); !!}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
                     <div class='col'>
                         <div class='form-wrapper'>
@@ -109,7 +57,7 @@
 
                                             <div class='form-group mt-4'>
                                                 <div class='col-12 d-flex justify-content-end'>
-                                                    <input class='btn btn-primary' name='submit2' value='{{ trans('langContinue') }} &raquo;' type='submit'>
+                                                    <input class='btn btn-primary' name='do_upgrade' value='{{ trans('langContinue') }} &raquo;' type='submit'>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -118,9 +66,9 @@
                             </form>
                         </div>
                     </div>
-                    <div class='col d-none d-lg-block text-end'>
-                        <img class='form-image-modules' src='{!! get_form_image() !!}' alt='form-image'>
-                    </div>
+
+                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu() ] )
+
                 </div>
 
                 <div class='modal fade' id='view_themes_screens' tabindex='-1' aria-labelledby='view_themes_screensLabel' aria-hidden='true'>
