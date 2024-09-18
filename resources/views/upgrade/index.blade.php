@@ -40,7 +40,7 @@
                                             <input id='admin_password' class='form-control' name='password' placeholder='{{ trans('langPass') }}' type='password'>
                                         </div>
                                         <div class='form-group mt-5'>
-                                            <button class='btn submitAdminBtn w-100' type='submit' name='submit_upgrade2' value='{{ trans('langUpgrade') }}'>{{ trans('langUpgrade') }}</button>
+                                            <button class='btn submitAdminBtn w-100' type='submit' name='submit_1' value='{{ trans('langUpgrade') }}'>{{ trans('langUpgrade') }}</button>
                                         </div>
                                     </form>
                                 </div>
