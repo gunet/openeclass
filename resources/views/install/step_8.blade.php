@@ -13,7 +13,7 @@
     <br>
 
     <form action='../'>
-        <input class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' type='submit' value='{{ trans('langEnterFirstTime') }}'>
+        <input aria-label="{{ trans('langEnterFirstTime') }}" class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' type='submit' value='{{ trans('langEnterFirstTime') }}'>
     </form>
 
     <div class="help-block pt-2">

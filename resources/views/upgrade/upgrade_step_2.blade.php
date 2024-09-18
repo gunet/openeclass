@@ -25,44 +25,46 @@
                 @endif
 
                 <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
-                    <div class='col'>
+                    <div class='col-md-7 col-lg-8'>
                         <div class='form-wrapper'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                                <fieldset>
+                                    <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                    {!! $mail_settings_form !!}
 
-                                 {!! $mail_settings_form !!}
+                                    <div class='card panelCard px-lg-4 py-lg-3'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                            <h3>
+                                                {{ trans('langThemeSettings') }}
+                                            </h3>
+                                        </div>
+                                        <div class='card-body'>
+                                            <fieldset>
+                                                <div class='form-group'>
+                                                    <label class='col-sm-12 control-label-notes' for='homepage_intro'>{{ trans('langHomePageIntroText') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        {!! $homepage_intro !!}
+                                                    </div>
+                                                </div>
 
-                                <div class='card panelCard px-lg-4 py-lg-3'>
-                                    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>
-                                            {{ trans('langThemeSettings') }}
-                                        </h3>
+                                                <div class='form-group mt-4'>
+                                                    <div class='col-sm-12'>
+                                                        <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>{{ trans('langViewScreensThemes') }}</a></br></br>
+                                                        <p class='mb-3'><span class='control-label-notes'>{{ trans('langActiveTheme') }}:&nbsp;</span>{{ $active_theme }}</p>
+                                                        <label for='themeSelection' class='control-label-notes'>{{ trans('langAvailableThemes') }}:</label>
+                                                        {!! $theme_selection !!}
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <div class='col-12 d-flex justify-content-end'>
+                                                        <input aria-label="{{ trans('langContinue') }}" class='btn btn-primary' name='do_upgrade' value='{{ trans('langContinue') }} &raquo;' type='submit'>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
                                     </div>
-                                    <div class='card-body'>
-                                        <fieldset>
-                                            <div class='form-group'>
-                                                <label class='col-sm-12 control-label-notes' for='id_Institution'>{{ trans('langHomePageIntroText') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    {!! $homepage_intro !!}
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12'>
-                                                    <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>{{ trans('langViewScreensThemes') }}</a></br></br>
-                                                    <p class='mb-3'><span class='control-label-notes'>{{ trans('langActiveTheme') }}:&nbsp;</span>{{ $active_theme }}</p>
-                                                    <label for='themeSelection' class='control-label-notes'>{{ trans('langAvailableThemes') }}:</label>
-                                                    {!! $theme_selection !!}
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-12 d-flex justify-content-end'>
-                                                    <input class='btn btn-primary' name='do_upgrade' value='{{ trans('langContinue') }} &raquo;' type='submit'>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
+                                </fieldset>
                             </form>
                         </div>
                     </div>
