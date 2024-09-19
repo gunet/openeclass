@@ -353,6 +353,12 @@ if (isset($_POST['optionsSave'])) {
                     $('#pixelCounter').text(value + 'px');
                 }
             });
+            $('#maxHeightJumbotron').slider({
+                tooltip: 'hide',
+                formatter: function(value) {
+                    $('#pixelCounterHeightJumbotron').text(value + 'px');
+                }
+            });
             $('input[name=\'containerType\']').change(function(){
                 if($(this).val()=='fluid') {
                     $('#fluidContainerWidth').slider('enable');
@@ -1517,6 +1523,29 @@ $tool_content .= "
                                     $login_image_field
                                     </div>
                                 </div>
+
+
+
+                                <div class='form-group mt-4'>
+                                    <label for='maxHeightJumbotron' class='col-sm-6 control-label-notes mb-2'>$langMaxHeight (jumbotron):</label>
+                                    <div class='col-sm-12'>
+                                        <input id='maxHeightJumbotron' name='maxHeightJumbotron' data-slider-id='ex1Slider' type='text' data-slider-min='270' data-slider-max='1080' data-slider-step='10' data-slider-value='$theme_options_styles[maxHeightJumbotron]'>
+                                        <span style='margin-left:10px;' id='pixelCounterHeightJumbotron'></span>
+                                    </div>
+                                    <div class='col-sm-12 mt-4'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label='$langSettingSelect'>
+                                                <input type='checkbox' name='MaxHeightMaxScreenJumbotron' value='1' ".((isset($theme_options_styles['MaxHeightMaxScreenJumbotron']))? 'checked' : '').">
+                                                <span class='checkmark'></span>
+                                                $langMaxHeightMaxScreenJumbotron
+                                            </label>
+                                        </div>
+                                        <small>$langHelpJumbotronInfoText</small>
+                                    </div>
+                                </div>
+
+
+
                                 <div class='form-group mt-4'>
                                     <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor (jumbotron):</label>
                                     <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
@@ -1525,6 +1554,37 @@ $tool_content .= "
                                     <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
                                     <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
                                 </div>
+
+
+
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12 control-label-notes mb-2'>$langPositionJumbotronText (jumbotron):</div>
+                                    <div class='radio mb-2'>
+                                        <label>
+                                            <input type='radio' name='PositionJumbotronText' value='0' ".(($theme_options_styles['PositionJumbotronText'] == '0')? 'checked' : '').">
+                                            $langTopPositionJumbotronText 
+                                        </label>
+                                    </div>
+
+                                    <div class='radio mb-2'>
+                                        <label>
+                                            <input type='radio' name='PositionJumbotronText' value='1' ".(($theme_options_styles['PositionJumbotronText'] == '1')? 'checked' : '').">
+                                            $langCenterPositionJumbotronText 
+                                        </label>
+                                    </div>
+
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' name='PositionJumbotronText' value='2' ".(($theme_options_styles['PositionJumbotronText'] == '2')? 'checked' : '').">
+                                            $langBottomPositionJumbotronText
+                                        </label>
+                                    </div>
+                                </div>
+
+
+
+
+
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12'>
                                     $login_image_fieldL
