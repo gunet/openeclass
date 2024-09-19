@@ -72,10 +72,6 @@ class H5PHubUpdater {
         $framework = $this->factory->getFramework();
 
         foreach ($contentTypes->contentTypes as $type) {
-            // Don't fetch content types that require a higher H5P core API version.
-            if (!$this->isRequiredCoreApi($type->coreApiVersionNeeded)) {
-                continue;
-            }
 
             $library = [
                 'machineName' => $type->id,
@@ -83,6 +79,13 @@ class H5PHubUpdater {
                 'minorVersion' => $type->version->minor,
                 'patchVersion' => $type->version->patch,
             ];
+
+            // Don't fetch content types that require a higher H5P core API version.
+            if (!$this->isRequiredCoreApi($type->coreApiVersionNeeded)) {
+                error_log("skip fetching: " .  H5PCore::libraryToString($library)); // log for backtracking purposes
+                continue;
+            }
+
             // Add example and tutorial to the library, to store this information too.
             if (isset($type->example)) {
                 $library['example'] = $type->example;
@@ -133,7 +136,7 @@ class H5PHubUpdater {
         $libraryKey = H5PCore::libraryToString($library);
         $libraryId = $this->h5pStorage->h5pC->librariesJsonData[$libraryKey]["libraryId"] ?? null;
         if ($libraryId) {
-            error_log("endpoint: " . $endpoint . ", librarykey: " . $libraryKey . ", libraryid: " . $libraryId); // TODO: remove
+            error_log("endpoint: " . $endpoint . ", librarykey: " . $libraryKey . ", libraryid: " . $libraryId); // log for backtracking purposes
 
             // Update example and tutorial (if any of them are defined in $library).
             $example = $library['example'] ?? null;

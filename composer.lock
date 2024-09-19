@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82a6d731c2b8e9ba0e2d63014b3d9e08",
+    "content-hash": "7e5eb902367012814f15b8a3d7a9d76b",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -1000,20 +1000,20 @@
         },
         {
             "name": "h5p/h5p-core",
-            "version": "1.24.4",
+            "version": "1.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/h5p/h5p-php-library.git",
-                "reference": "52b1ae5556d0f846b004f8cedc01a1a3cea7bdf8"
+                "reference": "f3579c0d28205bf34490ee151c07d43a2ffc3507"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h5p/h5p-php-library/zipball/52b1ae5556d0f846b004f8cedc01a1a3cea7bdf8",
-                "reference": "52b1ae5556d0f846b004f8cedc01a1a3cea7bdf8",
+                "url": "https://api.github.com/repos/h5p/h5p-php-library/zipball/f3579c0d28205bf34490ee151c07d43a2ffc3507",
+                "reference": "f3579c0d28205bf34490ee151c07d43a2ffc3507",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.0.0"
             },
             "type": "library",
             "autoload": {
@@ -1055,26 +1055,26 @@
             ],
             "support": {
                 "issues": "https://github.com/h5p/h5p-php-library/issues",
-                "source": "https://github.com/h5p/h5p-php-library/tree/1.24.4"
+                "source": "https://github.com/h5p/h5p-php-library/tree/1.26"
             },
-            "time": "2022-12-14T11:44:31+00:00"
+            "time": "2023-12-12T09:27:24+00:00"
         },
         {
             "name": "h5p/h5p-editor",
-            "version": "1.24.4",
+            "version": "1.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/h5p/h5p-editor-php-library.git",
-                "reference": "dd70892f9e28c99f13bee2881601329d5c6c4a8e"
+                "reference": "53dc7bdc57b17f5a0d55a8871a36d1b1bd631e70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h5p/h5p-editor-php-library/zipball/dd70892f9e28c99f13bee2881601329d5c6c4a8e",
-                "reference": "dd70892f9e28c99f13bee2881601329d5c6c4a8e",
+                "url": "https://api.github.com/repos/h5p/h5p-editor-php-library/zipball/53dc7bdc57b17f5a0d55a8871a36d1b1bd631e70",
+                "reference": "53dc7bdc57b17f5a0d55a8871a36d1b1bd631e70",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.0.0"
             },
             "type": "library",
             "autoload": {
@@ -1116,9 +1116,9 @@
             ],
             "support": {
                 "issues": "https://github.com/h5p/h5p-editor-php-library/issues",
-                "source": "https://github.com/h5p/h5p-editor-php-library/tree/1.24.4"
+                "source": "https://github.com/h5p/h5p-editor-php-library/tree/1.25"
             },
-            "time": "2022-01-20T10:17:49+00:00"
+            "time": "2022-08-22T09:01:47+00:00"
         },
         {
             "name": "hiqdev/hoa-file",
