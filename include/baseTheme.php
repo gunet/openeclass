@@ -428,10 +428,36 @@ function view($view_file, $view_data = array()) {
                         border:0px;
                         background-size: cover;
                         background-repeat: no-repeat;
-                        background-position: 50% 50%;
+                        background-position: 50% 0%;
                     }
                 ";
 
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// MAX HEIGHT OF JUMBOTRON ////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['maxHeightJumbotron'])){
+            $styles_str .= "
+                @media(min-width:992px){
+                    .jumbotron.jumbotron-login{
+                        min-height: $theme_options_styles[maxHeightJumbotron]px;
+                    }
+                }
+            ";
+        }
+
+        if (isset($theme_options_styles['MaxHeightMaxScreenJumbotron'])){
+            $styles_str .= "
+                @media(min-width:992px){
+                    .jumbotron.jumbotron-login{
+                        min-height: calc(100vh - 80px + 80px - 80px);
+                    }
+                }
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -502,6 +528,43 @@ function view($view_file, $view_data = array()) {
 
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// POSITION OF HOMEPAGE_INTRO //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['PositionJumbotronText'])){
+            if($theme_options_styles['PositionJumbotronText'] == 0){
+                $styles_str .= "
+                    @media(min-width:992px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: top;
+                        }
+                    }
+                ";
+            }elseif($theme_options_styles['PositionJumbotronText'] == 1){
+                $styles_str .= "
+                    @media(min-width:992px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                ";
+            }elseif($theme_options_styles['PositionJumbotronText'] == 2){
+                $styles_str .= "
+                    @media(min-width:992px){
+                        .jumbotron.jumbotron-login{
+                            display: flex;
+                            align-items: end;
+                        }
+                    }
+                ";
+            }
+
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -1336,6 +1399,10 @@ function view($view_file, $view_data = array()) {
 
                 .pagination-glossary .page-item .page-link{
                     border-color: $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .showSettings{
+                    border-color: $theme_options_styles[whiteButtonBorderTextColor] !important;
                 }
 
             ";
