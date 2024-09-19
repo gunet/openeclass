@@ -26,7 +26,7 @@ class H5PFramework implements H5PFrameworkInterface {
         return $info;
     }
 
-    public function fetchExternalData($url, $data = NULL, $blocking = TRUE, $stream = NULL) {
+    public function fetchExternalData($url, $data = NULL, $blocking = TRUE, $stream = NULL, $fullData = FALSE, $headers = array(), $files = array(), $method = 'POST') {
     }
 
     public function setLibraryTutorialUrl($machineName, $tutorialUrl) {
@@ -445,7 +445,7 @@ class H5PFramework implements H5PFrameworkInterface {
      *     - majorVersion: Major version for a library this library is depending on
      *     - minorVersion: Minor for a library this library is depending on
      */
-    public function loadLibrary($machineName, $majorVersion, $minorVersion): array {
+    public function loadLibrary($machineName, $majorVersion, $minorVersion): bool|array {
         global $webDir;
 
         $sql = "SELECT * FROM h5p_library WHERE machine_name = ?s AND major_version = ?s AND minor_version = ?s";
@@ -780,6 +780,22 @@ class H5PFramework implements H5PFrameworkInterface {
     }
 
     public function libraryHasUpgrade($library) {
+        return false;
+    }
+
+    public function replaceContentHubMetadataCache($metadata, $lang) {
+        return null;
+    }
+
+    public function getContentHubMetadataCache($lang = 'en') {
+        return null;
+    }
+
+    public function getContentHubMetadataChecked($lang = 'en') {
+        return null;
+    }
+
+    public function setContentHubMetadataChecked($time, $lang = 'en') {
         return false;
     }
 
