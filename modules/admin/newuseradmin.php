@@ -37,11 +37,13 @@ $tree = new Hierarchy();
 $user = new User();
 
 if (isset($_POST['submit'])) {
-    print_a($_REQUEST);
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
         csrf_token_error();
     }
-    $rid = intval($_POST['rid']);
+    if (isset($_POST['rid'])) {
+        $rid = intval($_POST['rid']);
+    }
+
     if (isset($_POST['type']) and $_POST['type'] == 'prof') { // change user rights
         $q = Database::get()->query("UPDATE user SET status = " . USER_TEACHER . " WHERE id = ?d", $_POST['u']);
         $depid = intval($_POST['department'] ?? 0);
@@ -147,6 +149,12 @@ if (isset($_POST['submit'])) {
                 $disable_course_registration = 1;
             }
 
+            if (isset($_POST['force_password_change'])) {
+                $options = json_encode(['force_password_change' => 1]);
+            } else {
+                $options = json_encode(['force_password_change' => 0]);
+            }
+
             if (isset($_POST['user_date_expires_at'])) {
                 $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
                 $user_expires_at = $expires_at->format("Y-m-d H:i");
@@ -156,12 +164,12 @@ if (isset($_POST['submit'])) {
                 $user_expires_at = $expires_at->format("Y-m-d H:i");
             }
             $uid = Database::get()->query("INSERT INTO user
-                    (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist, disable_course_registration)
-                    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '', ?d)",
+                    (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist, disable_course_registration, options)
+                    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '', ?d, ?s)",
                 $surname_form, $givenname_form, $uname_form,
                 $password_encrypted, $email_form,
                 $pstatus, $phone_form, $am_form,
-                $user_expires_at, $language_form, $verified_mail, $disable_course_registration)->lastInsertID;
+                $user_expires_at, $language_form, $verified_mail, $disable_course_registration, $options)->lastInsertID;
             // update personal calendar info table
             // we don't check if trigger exists since it requires `super` privilege
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);

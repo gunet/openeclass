@@ -20,13 +20,15 @@
                 if (state == true) {
                     $('#password').prop({
                         'disabled': true,
-                        'class': 'form-control bg-light text-muted'}
-                        );
+                        'class': 'form-control bg-light text-muted'
+                        });
+                    $('#force_password_change_checkbox').prop({ 'disabled' : true });
                 } else {
                     $('#password').prop({
                         'disabled': false,
                         'class': 'form-control'
                     });
+                    $('#force_password_change_checkbox').prop({ 'disabled': false });
                 }
             }).change();
 
@@ -58,7 +60,7 @@
                     <div class='mt-4'></div>
                 @endif
 
-                @include('layouts.partials.show_alert') 
+                @include('layouts.partials.show_alert')
 
                 <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit border-0 px-0'>
@@ -149,6 +151,7 @@
                                     </div>
                                 </div>
                             @endif
+
                             <div class="form-group{{ Session::hasError('password') ? ' has-error' : '' }} mt-4">
                                 <label for="password" class="col-sm-12 control-label-notes">{{ trans('langPass') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class="col-sm-12">
@@ -159,6 +162,14 @@
                                     <span id='result'></span >
                                 </div>
                             </div>
+
+                            <div class='checkbox mb-2 mt-2'>
+                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                    <input type='checkbox' id='force_password_change_checkbox' name='force_password_change'>
+                                    <span class='checkmark'></span>{{ trans('langForcePasswordChange') }}
+                                </label>
+                            </div>
+
                             <div class="form-group{{ Session::hasError('email_form') ? ' has-error' : '' }} mt-4">
                                 <label for="email_form" class="col-sm-12 control-label-notes">{{ trans('langEmail') }}</label>
                                 <div class="col-sm-12">

@@ -285,10 +285,19 @@ if (!isset($guest_allowed) || $guest_allowed != true) {
         $toolContent_ErrorExists = $langCheckGuest;
     }
 }
+
+// mail verification required
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded)) {
     // don't redirect to mail verification on logout
     if (!isset($_GET['logout'])) {
         redirect_to_home_page('modules/auth/mail_verify_change.php');
+    }
+}
+
+// force password change
+if (isset($_SESSION['force_password_change']) && !isset($force_password_excluded)) {
+    if (!isset($_GET['logout'])) {
+        redirect_to_home_page('modules/auth/password_change.php');
     }
 }
 

@@ -2755,24 +2755,18 @@ function upgrade_to_4_0($tbl_options): void {
             `order` int(11) NOT NULL) $tbl_options");
     }
 
-    if (!DBHelper::fieldExists('course','view_units')) {
+    if (!DBHelper::fieldExists('course', 'view_units')) {
         Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
     }
 
-    if (!DBHelper::fieldExists('course','popular_course')) {
+    if (!DBHelper::fieldExists('course', 'popular_course')) {
         Database::get()->query("ALTER table course ADD `popular_course` INT(11) NOT NULL DEFAULT 0");
     }
 
-    $checkKeyTestimonials = get_config('dont_display_testimonials');
-    if (is_null($checkKeyTestimonials)) {
-        set_config('dont_display_testimonials', 0);
+    if (!DBHelper::fieldExists('user', 'options')) {
+        Database::get()->query("ALTER TABLE `user` ADD `options` text");
     }
 
-    // themes
-    $current_theme = get_config('theme');
-    if (!$current_theme or $current_theme == 'default') {
-        set_config('theme', 'modern');
-    }
     if (!DBHelper::fieldExists('theme_options', 'version')) {
         Database::get()->query("ALTER TABLE theme_options ADD version TINYINT");
     }
@@ -2847,22 +2841,6 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER table homepageTexts ADD `type` INT(11) NOT NULL DEFAULT 1");
     }
 
-    $total_courses = get_config('total_courses');
-    if (is_null($total_courses)) {
-        set_config('total_courses', 0);
-    }
-
-    $visits_per_week = get_config('visits_per_week');
-    if (is_null($visits_per_week)) {
-        set_config('visits_per_week', 0);
-    }
-
-    $show_only_loginScreen = get_config('show_only_loginScreen');
-    if (is_null($show_only_loginScreen)) {
-        set_config('show_only_loginScreen', 0);
-    }
-
-
     //priorities homepage
     if (!DBHelper::tableExists('homepagePriorities')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `homepagePriorities` (
@@ -2881,8 +2859,6 @@ function upgrade_to_4_0($tbl_options): void {
 
     }
 
-
-
     //quick poll
     if (!DBHelper::fieldExists('poll', 'display_position')) {
         Database::get()->query("ALTER TABLE poll ADD `display_position` INT(1) NOT NULL DEFAULT 0 AFTER show_results");
@@ -2890,12 +2866,6 @@ function upgrade_to_4_0($tbl_options): void {
 
     if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
         Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
-    }
-
-
-    $show_modal_openCourses = get_config('show_modal_openCourses');
-    if (is_null($show_modal_openCourses)) {
-        set_config('show_modal_openCourses', 0);
     }
 
     if (!DBHelper::tableExists('course_invitation')) {
@@ -2913,11 +2883,6 @@ function upgrade_to_4_0($tbl_options): void {
             UNIQUE KEY `identifier` (`identifier`),
             UNIQUE KEY `course_email` (`course_id`,`email`),
             CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
-    }
-
-    $course_invitationn = get_config('course_invitation');
-    if (is_null($course_invitationn)) {
-        set_config('course_invitation', 0);
     }
 
     if (!DBHelper::fieldExists('group_properties', 'booking')) {

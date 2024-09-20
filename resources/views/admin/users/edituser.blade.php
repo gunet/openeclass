@@ -8,7 +8,6 @@
 
         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-
         @include('layouts.partials.legend_view')
 
         @if(isset($action_bar))
@@ -17,8 +16,7 @@
             <div class='mt-4'></div>
         @endif
 
-
-        @include('layouts.partials.show_alert') 
+        @include('layouts.partials.show_alert')
 
             <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
@@ -53,6 +51,16 @@
                                     </div>
                                 @endif
                             </div>
+
+                            @if (!in_array($info->password, $auth_ids))
+                                <div class='checkbox mb-2 mt-2'>
+                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                        <input type='checkbox' name='force_password_change' {!! $checked_force_password_change !!}>
+                                        <span class='checkmark'></span>{{ trans('langForcePasswordChange') }}
+                                    </label>
+                                </div>
+                            @endif
+
                             <div class='form-group mt-4'>
                                 <label for='email' class='col-sm-12 control-label-notes'>e-mail</label>
                                 <div class='col-sm-12'>

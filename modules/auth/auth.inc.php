@@ -651,7 +651,7 @@ function process_login() {
                 $sqlLogin = "COLLATE utf8mb4_bin = ?s";
             }
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                    username, status, email, lang, verified_mail, am
+                                    username, status, email, lang, verified_mail, am, options
                                 FROM user WHERE username $sqlLogin", $posted_uname);
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
@@ -733,10 +733,17 @@ function process_login() {
             }
         } else {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                    VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
+                    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
-            //triggerGame($_SESSION['uid'], $is_admin);
-            if (get_config('email_verification_required') and
+
+            if (!is_null($myrow->options)) {
+                $options = json_decode($myrow->options, true);
+                $option_force_password_change = $options['force_password_change'];
+                if ($option_force_password_change == 1) {
+                    $_SESSION['force_password_change'] = 1;
+                    $next = 'modules/auth/password_change.php';
+                }
+            } elseif (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
                 $next = 'modules/auth/mail_verify_change.php';
@@ -885,7 +892,6 @@ function hybridauth_login() {
             if (in_array($auth_id, $auth_methods)) {
                 $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
-                //Session::Messages($langInvalidAuth, 'alert-danger');
                 Session::flash('message',$langInvalidAuth);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page();
@@ -965,7 +971,6 @@ function hybridauth_login() {
                     $userObj->refresh($_SESSION['uid'], $options['departments']);
                     user_hook($_SESSION['uid']);
                 } else {
-                   // Session::Messages($langGeneralError, 'alert-danger');
                     Session::flash('message',$langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page();
@@ -1350,7 +1355,6 @@ function shib_cas_login($type) {
             unset_shib_cas_session();
             $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
                             token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
-            //Session::Messages($message, 'alert-warning');
             Session::flash('message',$message);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page();
@@ -1360,7 +1364,6 @@ function shib_cas_login($type) {
         if ($info->password != $type) {
             // has different auth method - redirect to home page
             unset_shib_cas_session();
-            //Session::Messages($langUserAltAuth, 'alert-danger');
             Session::flash('message',$langUserAltAuth);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page();

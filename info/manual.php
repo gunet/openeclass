@@ -19,6 +19,7 @@
  * ======================================================================== */
 
 $mail_ver_excluded = true;
+$force_password_excluded = true;
 require_once '../include/baseTheme.php';
 
 if (get_config('dont_display_manual_menu')) {
