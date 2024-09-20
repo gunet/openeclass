@@ -5357,3 +5357,9 @@ textarea:focus-visible{
   box-shadow: none !important;
   border: solid 1px #0073E6 !important;
 }
+.input-group:focus-within .input-group-text{
+  outline: 0 !important;
+  box-shadow: none !important;
+  border: solid 1px #0073E6 !important;
+  border-left: 0px !important;
+}

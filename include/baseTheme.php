@@ -6514,6 +6514,13 @@ function view($view_file, $view_data = array()) {
                     box-shadow: none !important;
                     border: solid 1px $theme_options_styles[ColorFocus] !important;
                 }
+
+                .input-group:focus-within .input-group-text{
+                    outline: 0 !important;
+                    box-shadow: none !important;
+                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border-left: 0px !important;
+                }
             ";
         }
 
