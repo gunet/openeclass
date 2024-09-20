@@ -41,9 +41,6 @@ if (!$command_line) {
             redirect_to_home_page('upgrade/');
         }
     }
-    if (!$is_admin) {
-        redirect_to_home_page('upgrade/');
-    }
 }
 
 $ajax_call = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
@@ -276,9 +273,6 @@ if ($command_line or $ajax_call) {
 }
 
 $pageName = $langUpgrade;
-
-// Coming from the admin tool or stand-alone upgrade?
-$fromadmin = !isset($_POST['submit_upgrade']);
 
 if (!check_engine()) {
     $error_message = $langInnoDBMissing;
