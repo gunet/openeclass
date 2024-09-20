@@ -51,40 +51,9 @@ $toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => $backUrl, 'name' => $langEditUser);
 
-// javascript
-load_js('pwstrength.js');
-$head_content .= <<<hContent
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    var lang = {
-hContent;
-$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
-$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
-$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
-$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
-$head_content .= <<<hContent
-    };
-
-    $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
-        });
-    });
-
-/* ]]> */
-</script>
-hContent;
-
 check_uid();
 
 $passurl = $urlServer . 'modules/admin/password.php';
-$data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode(($_REQUEST['userid'])),
-                'icon' => 'fa-reply',
-                'level' => 'primary')
-                ));
 
 if (isset($_POST['changePass'])) {
     $userid = intval($_POST['userid']);
@@ -92,13 +61,11 @@ if (isset($_POST['changePass'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
     if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-        //Session::Messages($langFieldsMissing);
         Session::flash('message',$langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
     }
     if ($_POST['password_form1'] !== $_POST['password_form']) {
-        //Session::Messages($langPassTwo);
         Session::flash('message',$langPassTwo);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
@@ -106,10 +73,10 @@ if (isset($_POST['changePass'])) {
     // All checks ok. Change password!
     $new_pass = password_hash($_POST['password_form'], PASSWORD_DEFAULT);
     Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
-    //Session::Messages($langPassChanged);
+
     Session::flash('message',$langPassChanged);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));
 }
 
-view('admin.users.password', $data);
+view('admin.users.password');
