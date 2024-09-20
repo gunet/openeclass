@@ -6894,3 +6894,4 @@ $langCenterPositionJumbotronText = "Κεντρική στοίχηση";
 $langBottomPositionJumbotronText = "Στοίχηση κειμένου στο κάτω μέρος";
 $langMaxHeightMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται ανάλογα με ύψος της τρέχουσας οθόνης.";
 $langHelpJumbotronInfoText = "Σε περίπτωση που το επίλέξετε, το μέγιστο ύψος που είναι καταχωρημένο παύει να ισχύει.";
+$langMaxWidthTextJumbotron = "Μέγιστο πλάτος κειμένου";

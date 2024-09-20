@@ -359,6 +359,12 @@ if (isset($_POST['optionsSave'])) {
                     $('#pixelCounterHeightJumbotron').text(value + 'px');
                 }
             });
+            $('#maxWidthTextJumbotron').slider({
+                tooltip: 'hide',
+                formatter: function(value) {
+                    $('#pixelCounterWidthTextJumbotron').text(value + 'px');
+                }
+            });
             $('input[name=\'containerType\']').change(function(){
                 if($(this).val()=='fluid') {
                     $('#fluidContainerWidth').slider('enable');
@@ -1529,7 +1535,7 @@ $tool_content .= "
                                 <div class='form-group mt-4'>
                                     <label for='maxHeightJumbotron' class='col-sm-6 control-label-notes mb-2'>$langMaxHeight (jumbotron):</label>
                                     <div class='col-sm-12'>
-                                        <input id='maxHeightJumbotron' name='maxHeightJumbotron' data-slider-id='ex1Slider' type='text' data-slider-min='270' data-slider-max='1080' data-slider-step='10' data-slider-value='$theme_options_styles[maxHeightJumbotron]'>
+                                        <input id='maxHeightJumbotron' name='maxHeightJumbotron' data-slider-id='ex2Slider' type='text' data-slider-min='270' data-slider-max='1080' data-slider-step='10' data-slider-value='$theme_options_styles[maxHeightJumbotron]'>
                                         <span style='margin-left:10px;' id='pixelCounterHeightJumbotron'></span>
                                     </div>
                                     <div class='col-sm-12 mt-4'>
@@ -1549,6 +1555,13 @@ $tool_content .= "
                                 <div class='form-group mt-4'>
                                     <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor (jumbotron):</label>
                                     <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='maxWidthTextJumbotron' class='control-label-notes mb-2'>$langMaxWidthTextJumbotron (jumbotron):</label>
+                                    <div class='col-sm-12'>
+                                        <input id='maxWidthTextJumbotron' name='maxWidthTextJumbotron' data-slider-id='ex3Slider' type='text' data-slider-min='260' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[maxWidthTextJumbotron]'>
+                                        <span style='margin-left:10px;' id='pixelCounterWidthTextJumbotron'></span>
+                                    </div>
                                 </div>
                                 <div class='form-group mt-4'>
                                     <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
