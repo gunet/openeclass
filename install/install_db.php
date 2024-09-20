@@ -326,7 +326,8 @@ $db->query("CREATE TABLE `user` (
     whitelist TEXT,
     eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0,
     last_passreminder DATETIME DEFAULT NULL,
-    disable_course_registration TINYINT NULL DEFAULT 0) $tbl_options");
+    disable_course_registration TINYINT NULL DEFAULT 0,
+    options TEXT DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE `login_failure` (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1221,7 +1222,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `password_lock` VARCHAR(255) NULL DEFAULT NULL,
     `continue_time_limit` INT(11) NOT NULL DEFAULT 0,
     `calc_grade_method` TINYINT DEFAULT 1,
-    `general_feedback` TEXT DEFAULT NULL                                      
+    `general_feedback` TEXT DEFAULT NULL,
+    'options' TEXT DEFAULT NULL
     ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (

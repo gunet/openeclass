@@ -21,6 +21,7 @@
 
 
 $mail_ver_excluded = true;
+$force_password_excluded = true;
 require_once '../include/baseTheme.php';
 $toolName = $contactpoint;
 

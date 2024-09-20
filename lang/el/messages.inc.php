@@ -3789,6 +3789,7 @@ $langHybridAuthSetup4 = " target='_blank' aria-label='(opens in a new tab)'>εδ
 $langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 $langCustomEmailBody = "Προσαρμοσμένο email";
 $langInfoEnableCourseRegistration = "Ο χρήστης μπορεί να εγγραφεί σε $langsCourses";
+$langForcePasswordChange = "Αλλαγή του συνθηματικού κατά την είσοδο στην πλατφόρμα.";
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
@@ -3882,8 +3883,8 @@ $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαρι
 $langRequestWithMailVerify = "Η αίτηση σας έχει σταλεί. Σημειώστε ότι θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε";
 $langRegistrationWithMailVerify = "Η εγγραφή σας έχει ολοκληρωθεί. Σημειώστε ότι θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε";
 $langMailVerificationSuccess = "Θα πρέπει να επιβεβαιώσετε την ηλεκτρονική διεύθυνση που δηλώσατε.";
-$langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail
-                                από την ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τα στοιχεία σας.";
+$langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. 
+                                Μόλις η επιβεβαίωση ολοκληρωθεί, θα σας σταλεί δεύτερο e-mail με τα στοιχεία σας.";
 $langMailVerificationNote = "(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)";
 $langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.<br><br>$langMailVerificationSuccess<br>$langMailVerificationClick<br>%s";
 $langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.<br><br>$langMailVerificationClick<br>%s";

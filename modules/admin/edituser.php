@@ -74,7 +74,7 @@ if ($u) {
 
     $data['info'] = $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am, lang,
-                              verified_mail, whitelist, disable_course_registration
+                              verified_mail, whitelist, disable_course_registration, options
                          FROM user WHERE id = ?s", $u);
     if (!$info) {
         Session::messages($langNoUsersFound2, 'alert-danger');
@@ -168,6 +168,15 @@ if ($u) {
         $data['verified_mail_data'][1] = $langYes;
         $data['verified_mail_data'][2] = $langNo;
 
+        $checked_force_password_change = '';
+        if (!is_null($info->options)) {
+            $options = json_decode($info->options, true);
+            $option_force_password_change = $options['force_password_change'];
+            if ($option_force_password_change == 1) {
+                $checked_force_password_change = 'checked';
+            }
+        }
+        $data['checked_force_password_change'] = $checked_force_password_change;
 
         if (isDepartmentAdmin()) {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
@@ -199,6 +208,7 @@ if ($u) {
                             LEFT JOIN course_user AS b ON a.id = b.course_id
                             WHERE b.user_id = ?s ORDER BY b.status", $u);
         $data['auth_ids'] = $auth_ids;
+
         view('admin.users.edituser', $data);
         exit();
     } else { // if the form was submitted then update user
@@ -232,7 +242,13 @@ if ($u) {
             $disable_course_registration = 1;
         }
 
-        $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
+        if (isset($_POST['force_password_change'])) {
+            $options = json_encode(['force_password_change' => 1]);
+        } else {
+            $options = json_encode(['force_password_change' => 0]);
+        }
+
+        $user_upload_whitelist = $_POST['user_upload_whitelist'] ?? '';
         $user_exist = FALSE;
         // check if username is free
         if (Database::get()->querySingle("SELECT username FROM user
@@ -302,8 +318,10 @@ if ($u) {
                                 am = ?s,
                                 verified_mail = ?d,
                                 whitelist = ?s,
-                                disable_course_registration = ?d
-                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $user_language, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $u);
+                                disable_course_registration = ?d,
+                                options = ?s
+                          WHERE id = ?d",
+                $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $user_language, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $options, $u);
             //update custom profile fields
             $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
             if ($qry->affectedRows > 0 || $cpf_updated === true) {
