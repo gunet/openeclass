@@ -74,8 +74,7 @@ if (isset($_GET['rev'])) {
 $data['order'] = $order;
 
 if ($is_editor && !$is_in_tinymce) { // admin actions
-
-    if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+    if (isset($_GET['showQuota']) and $_GET['showQuota']) {
         $pageName = $langQuotaBar;
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
         $data = array();
@@ -135,7 +134,44 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
     }
 } // end of admin actions
 
-// list data
+
+$display_tools = $is_editor && !$is_in_tinymce;
+$colspan = $display_tools ? 2 : 3;
+$embedParam = ((isset($_REQUEST['embedtype'])) ? '&amp;embedtype=' . urlencode($_REQUEST['embedtype']) : '') .
+    ((isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . urlencode($_REQUEST['docsfilter']) : '');
+$expand_all = isset($_GET['d']) && $_GET['d'] == '1';
+
+if ($display_tools) {
+    $actionBarArray = array(
+        array('title' => $langAddV,
+            'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=file",
+            'icon' => 'fa-regular fa-file-video',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'),
+        array('title' => $langAddVideoLink,
+            'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=url",
+            'icon' => 'fa-link',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'),
+        array('title' => $langCategoryAdd,
+            'url' => $urlAppend . "modules/video/editCategory.php?course=" . $course_code,
+            'icon' => 'fa-plus-circle'),
+        array('title' => $langQuotaBar,
+            'url' => $urlAppend . "modules/video/index.php?course=" . $course_code . "&amp;showQuota=true",
+            'icon' => 'fa-pie-chart')
+    );
+    if (isDelosEnabled()) {
+        $actionBarArray[] = array('title' => $langAddOpenDelosVideoLink,
+            'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success');
+    }
+    $action_bar = action_bar($actionBarArray);
+}
+
+$data['display_tools'] = $display_tools;
+$data['action_bar'] = $action_bar;
 $data['count_video'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d", $course_id)->count;
 $data['count_video_links'] = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
 $data['num_of_categories'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
@@ -149,4 +185,5 @@ if ($is_in_tinymce) {
 }
 add_units_navigation(TRUE); // TODO: test
 ModalBoxHelper::loadModalBox(true);
+
 view('modules.video.index', $data);

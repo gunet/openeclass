@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 require_once 'modules/admin/extconfig/externals.php';
@@ -102,13 +102,13 @@ $(document).ready(function() {
             $(':checkbox', this).trigger('click');
         }
     });
-    
+
     $('.fileModal').click(function (e) {
         e.preventDefault();
-        
+
         var fileURL = $(this).attr('href');
         var fileTitle = $(this).attr('title');
-        
+
         bootbox.dialog({
             size: 'large',
             title: fileTitle,
@@ -283,11 +283,11 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
     $submittedCategory = $_POST['selectcategory'];
 
     foreach ($submittedResources as $rid) {
-        $stored = Database::get()->querySingle("SELECT id 
-            FROM videolink 
-            WHERE course_id = ?d 
-            AND category = ?d 
-            AND url LIKE '%rid=" . $rid . "'", $course_id, $submittedCategory);
+        $stored = Database::get()->querySingle("SELECT id
+            FROM videolink
+            WHERE course_id = ?d
+            AND category = ?d
+            AND url LIKE ?s", $course_id, $submittedCategory, "%rid=$rid");
 
         // public
         if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources")) {
@@ -303,10 +303,10 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
 
                     if ($stored) {
                         $id = $stored->id;
-                        Database::get()->query("UPDATE videolink SET 
-                        url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
-                        WHERE course_id = ?d 
-                        AND category = ?d 
+                        Database::get()->query("UPDATE videolink SET
+                        url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t
+                        WHERE course_id = ?d
+                        AND category = ?d
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                     } else {
                         $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
@@ -337,10 +337,10 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
 
                     if ($stored) {
                         $id = $stored->id;
-                        Database::get()->query("UPDATE videolink SET 
-                            url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
-                            WHERE course_id = ?d 
-                            AND category = ?d 
+                        Database::get()->query("UPDATE videolink SET
+                            url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t
+                            WHERE course_id = ?d
+                            AND category = ?d
                             AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                     } else {
                         $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)

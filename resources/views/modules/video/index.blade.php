@@ -1,59 +1,18 @@
-<?php
-    $display_tools = $is_editor && !$is_in_tinymce;
-    $colspan = $display_tools ? 2 : 3;
-    $embedParam = ((isset($_REQUEST['embedtype'])) ? '&amp;embedtype=' . urlencode($_REQUEST['embedtype']) : '') .
-        ((isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . urlencode($_REQUEST['docsfilter']) : '');
-    $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
-
-    if ($display_tools) {
-        $actionBarArray = array(
-            array('title' => $GLOBALS['langAddV'],
-                  'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=file",
-                  'icon' => 'fa-regular fa-file-video',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $GLOBALS['langAddVideoLink'],
-                  'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=url",
-                  'icon' => 'fa-link',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $GLOBALS['langCategoryAdd'],
-                  'url' => $urlAppend . "modules/video/editCategory.php?course=" . $course_code,
-                  'icon' => 'fa-plus-circle'),
-            array('title' => $GLOBALS['langQuotaBar'],
-                  'url' => $urlAppend . "modules/video/index.php?course=" . $course_code . "&amp;showQuota=true",
-                  'icon' => 'fa-pie-chart')
-        );
-        if (isDelosEnabled()) {
-            $actionBarArray[] = array('title' => $GLOBALS['langAddOpenDelosVideoLink'],
-                'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
-                'icon' => 'fa-plus-circle',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success');
-        }
-        $action_bar = action_bar($actionBarArray);
-    }
-?>
-
 @extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
 
-
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-
                 <div class="row">
 
                     @if(!$is_in_tinymce)
-
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
                         <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                             <div class="offcanvas-header">
                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
@@ -66,29 +25,28 @@
                         @include('layouts.partials.legend_view')
                     @endif
 
-                    {!! isset($action_bar)? $action_bar: '' !!}
+                    {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     @if ($count_video > 0 or $count_video_links > 0)
                         @if (count($items))
-                        <div class='col-sm-12'>
-                            <div class='table-responsive'>
-                                <table class='table-default nocategory-links'>
-                                    <thead>
-                                        <tr class='list-header'>
-                                            <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
-                                            <th style='width:15%;'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
-                                            @if (!$is_in_tinymce)
-                                                <th style='width:10%;'></th>
-                                            @endif
-                                        </tr>
-                                    </thead>
-                                    @include('modules.video.common.videoList')
-                                </table>
+                            <div class='col-sm-12'>
+                                <div class='table-responsive'>
+                                    <table class='table-default nocategory-links'>
+                                        <thead>
+                                            <tr class='list-header'>
+                                                <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
+                                                <th style='width:15%;'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
+                                                @if (!$is_in_tinymce)
+                                                    <th style='width:10%;'></th>
+                                                @endif
+                                            </tr>
+                                        </thead>
+                                        @include('modules.video.common.videoList')
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-
                         @endif
 
                         @if ($num_of_categories > 0)
@@ -158,7 +116,6 @@
                                     </table>
                                 </div>
                             </div>
-
                         @endif
                     @else
                         <div class='col-sm-12'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></div>
@@ -166,9 +123,7 @@
 
                 </div>
             </div>
-
         </div>
-
-</div>
+    </div>
 </div>
 @endsection
