@@ -3,17 +3,16 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                         <div class="offcanvas-header">
@@ -24,9 +23,7 @@
                         </div>
                     </div>
 
-
                     @include('layouts.partials.legend_view')
-
                     {!!
                         action_bar(array(
                             array('title' => $GLOBALS['langBack'],
@@ -37,8 +34,8 @@
                         )
                     !!}
 
-                    @include('layouts.partials.show_alert') 
-                    
+                    @include('layouts.partials.show_alert')
+
                     <div class='col-sm-12'>
                         <form method='POST' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
                             <div class="table-responsive">
@@ -86,7 +83,9 @@
                                             <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
                                         @endif
                                         <tr class="list-header">
-                                            <th colspan="6">{{ trans('langOpenDelosPrivateVideos') }}</th>
+                                            <th colspan="6">{{ trans('langOpenDelosPrivateVideos') }}
+                                                <span class="help-block">({{ trans('langOpenDelosRequireAuth') }})</span>
+                                            </th>
                                         </tr>
                                         @if (!$checkAuth)
                                             <?php
@@ -128,7 +127,11 @@
                                                 <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
                                             @endif
                                         @endif
-                                        <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langOpenDelosPrivateNote') }}</span></div></td></tr>
+                                        <tr>
+                                            <td colspan='6'>
+                                                <div class='alert alert-info' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langOpenDelosPrivateNote') }}</span></div>
+                                            </td>
+                                        </tr>
                                         <tr class="list-header">
                                             <th colspan="4">
                                                 <div class='form-group'>
@@ -161,8 +164,7 @@
                 </div>
             </div>
         </div>
-   
-</div>
+    </div>
 </div>
 
 @endsection
