@@ -281,9 +281,19 @@ function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentV
     global $course_id, $course_code, $langTitle, $langDescription, $langCreator, $langpublisher, $langDate,
            $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory, $langNoVideo,
            $langOpenDelosPublicVideos, $langOpenDelosPrivateVideos, $urlServer, $langOpenDelosAuth,
-           $langOpenDelosRequireAuth, $langOpenDelosRequireAuthHere, $langOpenDelosPrivateNote;
+           $langOpenDelosRequireAuth, $langOpenDelosRequireAuthHere, $langOpenDelosPrivateNote, $pageName;
 
     $html = '';
+
+    if (!$checkAuth) {
+        $pageName = '';
+        $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
+        $authUrl .= "?token=" . getDelosSignedToken();
+        $html .= action_bar(array(array('title' => $langOpenDelosAuth,
+            'url' => "$authUrl",
+            'icon' => 'fa-film',
+            'level' => 'primary-label')));
+    }
     $html .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
     $html .= <<<delosform
 <div class="table-responsive">
@@ -346,16 +356,11 @@ delosform;
 
     $html .= <<<delosform
             <tr class="list-header">
-                <th colspan="6">$langOpenDelosPrivateVideos</th>
+                <th colspan="6">$langOpenDelosPrivateVideos <span class="help-block">($langOpenDelosRequireAuth)</span></th>
             </tr>
 delosform;
 
-    if (!$checkAuth) {
-        $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
-        $authUrl .= "?token=" . getDelosSignedToken();
-        $authHref = "<a href='$authUrl' title='$langOpenDelosAuth'>$langOpenDelosRequireAuthHere</a>";
-        $html .= "<tr><td colspan='6'><div class='alert alert-warning' role='alert'>" . $langOpenDelosRequireAuth . " " .  $authHref . "</div></td></tr>";
-    } else {
+    if ($checkAuth) {
         if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0) {
             $i = 1;
             foreach ($jsonPrivateObj->resources as $resource) {
@@ -400,7 +405,7 @@ delosform;
     }
 
     $html .= <<<delosform
-            <tr><td colspan='6'><div class='alert alert-warning' role='alert'>$langOpenDelosPrivateNote</div></td></tr>
+            <tr><td colspan='6'><div class='alert alert-info' role='alert'>$langOpenDelosPrivateNote</div></td></tr>
             <tr>
                 <th colspan="4">
                     <div class='form-group'>
