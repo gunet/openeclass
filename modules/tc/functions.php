@@ -175,10 +175,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $options = NULL;
             $options_show = "";
         }
-        $google_meet_link = $microsoft_teams_link = $row->meeting_id;
-        if ($tc_type == 'zoom') {
-            $zoom_link = $row->meeting_id . "?pwd=" . $row->mod_pw;
-        }
+        $google_meet_link = $microsoft_teams_link = $zoom_link = $row->meeting_id;
 
         $webex_link = ($tc_type == 'webex') ? $row->meeting_id : '';
 
@@ -292,11 +289,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
-
             $client = new Client();
             $db = Database::get();
             $zoomApiRepo = new Repository($client);
-
             if ($zoomApiRepo->isEnabled()) {
                 $zoomUserRepo = new ZoomUserRepository($client, $zoomApiRepo);
                 $user = $db->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
@@ -311,7 +306,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
                 }
             } else {
-                if ($hostname != 'zoom') { // zoom url supplied by end user
+                if (isset($_GET['add'])) {
                     $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
                     $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToZoomLinkText</a></div>";
                 }
@@ -1137,9 +1132,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                     $meeting->id, $meeting->encrypted_password, '' ,
                     $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $session_module_id);
             } else {
-                $data = parse_url($options);
-                $meeting_id = $data['path'];
-                $mod_pw = preg_replace('/pwd=/','', $data['query']);
+                $meeting_id = $options;
                 $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1159,7 +1152,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             id_session = ?d",
                     $course_id, $title, $desc, $start_session, $BBBEndDate,
                     $status, $server_id,
-                    $meeting_id, $mod_pw, '' ,
+                    $meeting_id, '', '' ,
                     $minutes_before, $external_users, $r_group, $record, $sessionUsers, $session_module_id);
             }
 

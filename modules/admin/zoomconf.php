@@ -230,27 +230,6 @@ if (isset($_POST['submit'])) {
                 $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
                 $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
                 $boolean_field .= "</div></div></div>";
-            } else if ($param->name() == ZoomApp::ZOOMURL) {
-                $extra = '';
-                $q = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE type = 'zoom'");
-                if ($q) {
-                    $zoom_host = $q->hostname;
-                    if ($zoom_host == 'zoom') {
-                        $extra = 'disabled';
-                    } else {
-                        $extra = '';
-                    }
-                }
-                $tool_content .= "<div class='form-group mt-4'>";
-                $tool_content .= "<label for='default_zoom_url' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
-                $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langZoomUrl'></span></label>";
-                $tool_content .= "<div class='col-sm-12'><input class='form-control' id='default_zoom_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . ZoomApp::ZOOMDEFAULTURL . " ' $extra></div>";
-                $tool_content .= "</div>";
-            } else if ($param->name() == ZoomApp::ZOOMCUSTOMURL) {
-                $checked = $param->value() == 1 ? "checked" : "";
-                $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $tool_content .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' id='custom_zoom_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
-                $tool_content .= "</div></div></div>";
             } elseif ($param->name() == ZoomApp::ENABLEDCOURSES) {
                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE visible != " . COURSE_INACTIVE . "
