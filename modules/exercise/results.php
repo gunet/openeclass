@@ -119,7 +119,7 @@ $showScore = $displayScore == 1
     ]);
     $tool_content .= $action_bar;
 
-$tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
+$tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>" . q_math($exerciseTitle) . "</h3></div>";
 if ($exerciseDescription_temp) {
@@ -182,7 +182,7 @@ foreach ($result as $row) {
                 ORDER BY a.record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
-        $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
+        $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'><div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
         $tool_content .= "<thead><tr><td colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";

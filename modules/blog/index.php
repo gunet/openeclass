@@ -723,7 +723,7 @@ if ($action == "showPost") {
 
         $tool_content .= "
                     <div class='col-12'>
-                        <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
                                 <h3>
@@ -863,7 +863,7 @@ if ($action == "showBlog") {
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
-            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3 mt-2' style='border-radius:3px !important;'>
+            $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-3 mt-2' style='border-radius:3px !important;'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
 

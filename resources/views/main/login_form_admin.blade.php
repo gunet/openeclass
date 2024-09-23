@@ -6,7 +6,7 @@
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
                 <div class='col-lg-6 col-12 ms-auto me-auto'>
-                    <div class="card panelCard px-lg-4 py-lg-3 h-100">
+                    <div class="card panelCard card-default px-lg-4 py-lg-3 h-100">
                         <div class="card-header border-0 d-flex justify-content-between align-items-center">
                             <h3>{{ trans('langUpgDetails') }} </h3>
                         </div>

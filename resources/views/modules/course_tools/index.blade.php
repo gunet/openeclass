@@ -36,7 +36,7 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class='col-12'>
-                        <div class="card panelCard px-lg-4 py-lg-3">
+                        <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 
                                 <h3>
@@ -123,7 +123,7 @@
 
                     @if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course))
                     <div class='col-12 mt-5'>
-                        <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 
                                 <h3>

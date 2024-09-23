@@ -129,7 +129,7 @@ $tool_content .= "
         </table>
     </div></div></div>";
 
-$tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+$tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
   <div class='card-header border-0 d-flex justify-content-between align-items-center'>
     <h3 class='mb-0'>" . $langOpenQuestionPageTitle . "</h3>
   </div>

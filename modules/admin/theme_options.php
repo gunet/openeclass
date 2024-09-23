@@ -31,12 +31,13 @@ $defaults = array(
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
-                                                    'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow', 'BoxShadowRowTables', 'bgPanelEvents'),
+                                                    'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow', 
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
-                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral'),
+                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
@@ -66,6 +67,7 @@ $defaults = array(
                 "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
+                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels'),
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "rgba(62, 73, 101, 1)" => array('clOptionSelect', 'ClTextEditor', 'clInputText', 'clTabs', 'clAccordions', 'clColorBodyAgenda'),
                 "rgba(0, 74, 148, 1)" => array('leftMenuSelectedLinkColor'),
@@ -1979,6 +1981,18 @@ $tool_content .= "
                                 <label for='clBorderPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
                                 <input name='clBorderPanels' type='text' class='form-control colorpicker' id='clBorderPanels' value='$theme_options_styles[clBorderPanels]'>
                             </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgBorderHoveredPanels' class='control-label-notes mb-2 me-2'>$langBgHoveredPanels:</label>
+                                <input name='bgBorderHoveredPanels' type='text' class='form-control colorpicker' id='bgBorderHoveredPanels' value='$theme_options_styles[bgBorderHoveredPanels]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clHoveredTextPanels' class='control-label-notes mb-2 me-2'>$langHoverTextColor:</label>
+                                <input name='clHoveredTextPanels' type='text' class='form-control colorpicker' id='clHoveredTextPanels' value='$theme_options_styles[clHoveredTextPanels]'>
+                            </div>
+                             <div class='form-group d-flex justify-content-start align-items-center mt-4'>
+                                <label for='bgHoveredBoxShadowPanels' class='control-label-notes mb-2 me-2'>$langHoveredBoxShadowPanels:</label>
+                                <input name='bgHoveredBoxShadowPanels' type='text' class='form-control colorpicker' id='bgHoveredBoxShadowPanels' value='$theme_options_styles[bgHoveredBoxShadowPanels]'>
+                            </div>
                         </div>
                         <div class='d-flex justify-content-center align-items-start gap-3 flex-wrap'>
                             <figure class='figure'>
@@ -2863,7 +2877,7 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card panelCard h-100'>
+                                        <div class='card panelCard card-default h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/jumbotron_images/$image' alt='image jumbotron'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
@@ -2901,7 +2915,7 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card panelCard h-100'>
+                                        <div class='card panelCard card-default h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/login_images/$image' alt='image login'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
@@ -2938,7 +2952,7 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card panelCard h-100'>
+                                        <div class='card panelCard card-default h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/form_images/$image' alt='$langFormImg'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
@@ -2976,7 +2990,7 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card panelCard h-100'>
+                                        <div class='card panelCard card-default h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/registration_images/$image' alt='$langRegistration'/>
                                             <div class='card-body'>
                                                 <p>$image</p>
@@ -3012,7 +3026,7 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card panelCard h-100'>
+                                        <div class='card panelCard card-default h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/faq_images/$image' alt='$langFaq'/>
                                             <div class='card-body'>
                                                 <p>$image</p>

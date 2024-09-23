@@ -4,7 +4,7 @@
         {!! trans('langInfoLicence') !!}
     </span>
 </div>
-<div class='card panelCard px-lg-4 py-lg-3'>
+<div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-body'>
         <form class='form-horizontal form-wrapper' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
             <fieldset>

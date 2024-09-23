@@ -34,7 +34,7 @@
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-card-affixed" data-bs-offset="0" tabindex="0">
-                                    <div class='card panelCard px-lg-4 py-lg-3' id='one'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3' id='one'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langBasicCfgSetting') }}</h3>
 
@@ -96,7 +96,7 @@
 
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='two'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='two'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langUpgReg') }}</h3>
                                         </div>
@@ -299,7 +299,7 @@
 
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='three'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='three'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langSupportedLanguages') }}</h3>
                                         </div>
@@ -330,7 +330,7 @@
                                     </div>
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='four'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='four'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -435,7 +435,7 @@
 
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='five'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='five'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langEmailSettings') }}</h3>
@@ -539,7 +539,7 @@
                                     </div>
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='six'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='six'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langCourseSettings') }}</h3>
                                         </div>
@@ -629,7 +629,7 @@
 
 
                                     @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                        <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='seven'>
+                                        <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='seven'>
 
                                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -672,7 +672,7 @@
 
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='eight'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='eight'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{ trans('langOtherOptions') }}</h3>
@@ -856,7 +856,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='nine'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='nine'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -928,7 +928,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='ten'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='ten'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langDefaultQuota') }}</h3>
@@ -966,7 +966,7 @@
                                     </div>
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='eleven'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='eleven'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -997,7 +997,7 @@
 
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='twelve'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='twelve'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -1055,7 +1055,7 @@
 
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='thirteen'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='thirteen'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
@@ -1108,7 +1108,7 @@
                                     </div>
 
 
-                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='fourteen'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4' id='fourteen'>
 
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langMaintenance') }}</h3>

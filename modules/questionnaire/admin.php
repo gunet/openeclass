@@ -839,7 +839,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     );
     $tool_content .= "
     <div class='col-12 mt-4'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>$langQuestion&nbsp;"
                     . icon('fa-edit fa-lg', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
@@ -853,7 +853,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $tool_content .= "
     <div class='col-12 mt-4'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>$langQuestionAnswers</h3>
             </div>

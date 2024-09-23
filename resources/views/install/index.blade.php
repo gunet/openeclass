@@ -61,7 +61,7 @@
                                                 {{ trans('langWelcomeWizard') }}
                                             </h3>
                                             <div class='col-12 col-md-6 m-auto d-block mt-3'>
-                                                <div class='card panelCard px-lg-4 py-lg-3'>
+                                                <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                                         <h3>
                                                             {{ trans('langThisWizard') }}
@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                             <div class='col-12 col-md-6 m-auto d-block mt-3'>
-                                                <div class='card panelCard px-lg-4 py-lg-3'>
+                                                <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                                     <div class='card-body'>
                                                         <form class='form-horizontal form-wrapper' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                                             <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>

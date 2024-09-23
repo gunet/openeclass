@@ -359,7 +359,7 @@ if (isset($_POST['submit'])) {
 } else {
     $tool_content .= "  <div class='row'>
                             <div class='col-lg-6 col-12'>
-                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                         <h3>$langZoomConnect</h3>
                                     </div>

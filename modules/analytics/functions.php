@@ -68,7 +68,7 @@ function display_learning_analytics() {
     $tool_content .= "
 
             <div class='col-12'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                         
                            
@@ -178,7 +178,7 @@ function display_general_lists($analytics_id) {
 
         $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>      
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>      
                         <div class='card-body'>         
                             <div class='panel'>
                                 <div class='panel-group group-section px-0' id='accordionDes$module_id'>
@@ -308,7 +308,7 @@ function display_analytics_elements($analytics_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     
                        
@@ -349,7 +349,7 @@ function display_analytics_information($analytics_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     
                         <h3>
@@ -509,7 +509,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
 
     $tool_content .= "
         <div class='col-12 mt-4'>                 
-            <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>             
                     <h3>$analytics_title->title</h3>
                 </div>
@@ -668,7 +668,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$analytics_title->title</h3>
                         </div>
@@ -701,7 +701,7 @@ function display_user_info($user_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                     <h3>
                         $givenname $surname

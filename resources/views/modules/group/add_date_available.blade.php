@@ -62,7 +62,7 @@
                     </div>
                     
                     <div class="col-12 mt-3">
-                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                             <div class='card-body'>
                                 <div id='calendarAddDays' class='calendarAddDaysCl'></div> 
                             </div>

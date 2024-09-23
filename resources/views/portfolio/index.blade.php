@@ -622,7 +622,7 @@
                                                             @endphp
 
                                                             <div class="col cardCourse{{ $pagesPag }}">
-                                                                <div class="card h-100 card{{ $pagesPag }} Borders border-card">
+                                                                <div class="card h-100 card{{ $pagesPag }} Borders border-card card-default">
                                                                     @php
                                                                         $courseImage = '';
                                                                         if(!empty($course->course_image)){

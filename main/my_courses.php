@@ -104,7 +104,7 @@ if(isset($_GET['term'])){
                     $temp_pages++;
 
                   $html .= "<div class='col cardCourse$pagesPag'>
-                        <div class='card h-100 card$pagesPag Borders border-card px-2 py-3'>";
+                        <div class='card h-100 card$pagesPag Borders border-card card-default px-2 py-3'>";
 
                                 $courseImage = '';
                                 if(!empty($course->course_image)){

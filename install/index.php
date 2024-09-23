@@ -322,10 +322,12 @@ if (isset($_POST['install1'])) { // step 1 requirements
           if (in_array($extension, $imgExtArr)) {
               $theme_images .= "
                   <div class='col-lg-8 col-md-10 m-auto py-4'>
-                      <div class='card panelCard h-100'>
-                          <h3 class='alert alert-secondary'>
-                              " . strtok($image, '.') . " 
-                          </h3>
+                      <div class='card panelCard card-default h-100'>
+                          <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                <h3>
+                                    " . strtok($image, '.') . " 
+                                </h3>
+                          </div>
                           <div class='card-body'>
                               <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='../template/modern/images/screenshots/$image' alt='Image for current theme'/>
                           </div>

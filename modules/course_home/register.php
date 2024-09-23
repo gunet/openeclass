@@ -165,7 +165,7 @@ $tool_content .= action_bar(array(
           'button-class' => 'btn-default')),false) . "
         
 <div class='row m-auto'>
-    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
         <div class='card-body'>
             <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>" .
                 generate_csrf_token_form_field() . "

@@ -196,7 +196,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $pageName = q($note->title);
     $tool_content .= "
     <div class='col-12'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                 <h3>".q($note->title)."</h3>
                 <div>

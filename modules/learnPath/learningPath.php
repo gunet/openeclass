@@ -201,7 +201,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 
 
 // comment
-$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
+$tool_content .= "<div class='col-sm-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>";
 //$tool_content .= "<div class='card-body'>";
 $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
 

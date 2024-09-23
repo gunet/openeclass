@@ -1,4 +1,4 @@
-                <div class="panel panelCard px-lg-4 py-lg-3 mt-3">
+                <div class="panel panelCard card-default px-lg-4 py-lg-3 mt-3">
                     <div class="panel-heading border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
                         <h3 class='mb-0'>
                             {{ trans('langHomePageSidebarContent') }}

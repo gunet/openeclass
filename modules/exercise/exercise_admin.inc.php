@@ -595,7 +595,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
                 <div class='course-info-title clearfix mt-4'>
                     <a class='TextBold text-decoration-none'role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                        <div class='card panelCard px-0 py-1 h-100'>
+                        <div class='card panelCard card-default px-0 py-1 h-100'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 $langCheckAccess
                                 <span class='fa fa-chevron-down fa-fw'></span> 

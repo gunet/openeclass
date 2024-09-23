@@ -95,7 +95,7 @@ $tool_content .= "
         </div>
     </div>
     <div class='d-lg-flex gap-4 mt-4'>
-        <div class='card panelCard px-lg-4 py-lg-3 p-3 w-100'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3 p-3 w-100'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>$langCheckResults</h3>
             </div>

@@ -245,7 +245,7 @@ if (isset($_GET['group_as'])) {
         <div class='col-12'>
             <div class='row row-cols-1 row-cols-lg-2 g-4'>
                 <div class='col-xl-7 col-lg-6 col-12'>
-                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>" . q($group_name) . "</h3>
                         </div>
@@ -273,7 +273,7 @@ if (isset($_GET['group_as'])) {
                     $tool_content .= "</div>
                 </div>
                 <div class='col-xl-5 col-lg-6 d-none d-lg-block'>
-                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langTools</h3>
                         </div>
@@ -372,7 +372,7 @@ if (isset($_GET['group_as'])) {
         if (count($members) > 0) {
             $tool_content .= "
                         <div class='col-12 mt-4'>
-                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                            <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>$langGroupMembersInfo</h3>
                             </div>

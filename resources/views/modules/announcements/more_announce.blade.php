@@ -15,7 +15,7 @@
                         @include('layouts.partials.show_alert') 
 
                         <div class='col-12'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                     <h3>
                                        {!! $announcement->title !!}

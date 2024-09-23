@@ -168,7 +168,7 @@ if (!isset($_POST['final_submit'])) {
             <div class='col-lg-6 col-12 px-0'>
                 <div class='form-wrapper '>
                     <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
-                    <div class='card cardPanel border-0'>
+                    <div class='card panelCard card-default border-0'>
                         <div class='card-header px-0 border-0'>
                             $langActSelect
                         </div>

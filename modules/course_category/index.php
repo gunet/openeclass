@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
 
 $tool_content .= "
 <div class='col-sm-12'>
-<div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>" . $langCourseCategoryActions . "</h3>
 

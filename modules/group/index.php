@@ -545,7 +545,7 @@ if ($is_editor) {
                                         $visibility_url = 'choice=enable';
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
-                                                        <div class='card panelCard $link_class card$pagesPag px-lg-4 py-lg-3 h-100'>
+                                                        <div class='card panelCard $link_class card$pagesPag card-default px-lg-4 py-lg-3 h-100'>
                                                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                 <a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                                                                 <div>
@@ -741,7 +741,7 @@ if ($is_editor) {
                                         continue;
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
-                                                      <div class='card panelCard card$pagesPag px-lg-4 py-lg-3 h-100'>
+                                                      <div class='card panelCard card$pagesPag card-default px-lg-4 py-lg-3 h-100'>
                                                         <div class='card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-3'>";
                                                                 if ($is_member or $is_tutor) {
                                                                 $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .

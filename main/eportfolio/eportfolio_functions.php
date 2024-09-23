@@ -175,7 +175,7 @@ function render_eportfolio_fields_form() {
 
             $return_string['panels'] .= '
            
-            <div class="card panelCard px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
+            <div class="card panelCard card-default px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
                                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                            <h3>' . q($c->name) .'</h3>
                                        </div>

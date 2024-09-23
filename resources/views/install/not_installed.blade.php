@@ -27,9 +27,9 @@
                                         <div class='col-sm-12 text-center'>
                                             <h3 class='mt-3'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</h3>
                                             <div class='col-12 col-md-10 m-auto d-block mt-3'>
-                                                <div class='card panelCard px-lg-4 py-lg-3'>
+                                                <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                        <h4>Πιθανοί λόγοι:</h4>
+                                                        <h3>Πιθανοί λόγοι:</h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         <ul class='list-group list-group-flush'>

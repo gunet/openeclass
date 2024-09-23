@@ -5904,6 +5904,102 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BACHGROUND HOVERED COLOR TO THE PANELS ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgBorderHoveredPanels'])){
+            $styles_str .= "
+                .card-default:hover{
+                    background-color: $theme_options_styles[bgBorderHoveredPanels];
+                    -webkit-transition: background-color 2s ease-out;
+                    -moz-transition: background-color 2s ease-out;
+                    -o-transition: background-color 2s ease-out;
+                    transition: background-color 2s ease-out;
+                }
+
+                .testimonial.slick-current.slick-active.slick-center:hover{
+                    background-color: $theme_options_styles[bgBorderHoveredPanels] !important;
+                    -webkit-transition: background-color 2s ease-out;
+                    -moz-transition: background-color 2s ease-out;
+                    -o-transition: background-color 2s ease-out;
+                    transition: background-color 2s ease-out;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BACHGROUND HOVERED COLOR TO THE PANELS ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clHoveredTextPanels'])){
+            $styles_str .= "
+
+                .card-default:hover caption,
+                .card-default:hover h1,
+                .card-default:hover h2,
+                .card-default:hover h3,
+                .card-default:hover h4,
+                .card-default:hover h5,
+                .card-default:hover h6,
+                .card-default:hover p,
+                .card-default:hover strong,
+                .card-default:hover small,
+                .card-default:hover .Neutral-900-cl,
+                .card-default:hover .form-label,
+                .card-default:hover .default-value,
+                .card-default:hover label,
+                .card-default:hover th,
+                .card-default:hover td,
+                .card-default:hover .panel-body,
+                .card-default:hover .card-body,
+                .card-default:hover div,
+                .card-default:hover .visibleFile,
+                .card-default:hover .help-block,
+                .card-default:hover .control-label-notes,
+                .card-default:hover .title-default,
+                .card-default:hover .modal-title-default,
+                .card-default:hover .text-heading-h2,
+                .card-default:hover .text-heading-h3,
+                .card-default:hover .text-heading-h4,
+                .card-default:hover .text-heading-h5,
+                .card-default:hover .text-heading-h6,
+                .card-default:hover .action-bar-title{
+                    color: $theme_options_styles[clHoveredTextPanels];
+                    -webkit-transition: background-color 2s ease-out;
+                    -moz-transition: background-color 2s ease-out;
+                    -o-transition: background-color 2s ease-out;
+                    transition: background-color 2s ease-out;
+                }
+
+                .card-default:hover .text-muted{
+                    color: $theme_options_styles[clHoveredTextPanels] !important;
+                    -webkit-transition: background-color 2s ease-out;
+                    -moz-transition: background-color 2s ease-out;
+                    -o-transition: background-color 2s ease-out;
+                    transition: background-color 2s ease-out;
+                }
+
+                .testimonial.slick-current.slick-active.slick-center:hover *{
+                    color: $theme_options_styles[clHoveredTextPanels] !important;
+                    -webkit-transition: background-color 2s ease-out;
+                    -moz-transition: background-color 2s ease-out;
+                    -o-transition: background-color 2s ease-out;
+                    transition: background-color 2s ease-out;
+                }
+
+                .card-default:hover .circle-img-contant{
+                    border: solid 1px $theme_options_styles[clHoveredTextPanels];
+                }
+
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////// BOX SHADOW TO THE PANELS ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -5975,6 +6071,23 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// HOVERED BOX SHADOW TO THE DEFAULT PANELS ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgHoveredBoxShadowPanels'])){
+            $styles_str .= "
+                .card-default:hover{
+                    transition: .3s ease;
+                    box-shadow: 0px 0 30px $theme_options_styles[bgHoveredBoxShadowPanels];
+                }
+
+            ";
+        }
+        
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////

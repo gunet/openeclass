@@ -49,9 +49,7 @@ $tool_content .= $action_bar;
 $hits = course_hits($course_id);
 $tool_content .= "
     <div class='col-12'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 d-flex justify-content-between align-items-center'>            
-            </div>
+        <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-body'>
                 <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
                     <div class='col'>
