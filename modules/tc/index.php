@@ -32,10 +32,9 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 // For creating bbb urls & params
 require_once 'bbb-api.php';
-//require_once 'om-api.php';
 require_once 'functions.php';
-
 require_once 'include/lib/modalboxhelper.class.php';
+
 ModalBoxHelper::loadModalBox();
 
 /* * ** The following is added for statistics purposes ** */
@@ -388,20 +387,14 @@ elseif(isset($_GET['choice']))
                 $course_user = Database::get()->querySingle("SELECT * FROM course_user 
                                                                 WHERE user_id = " . $uid . " 
                                                                 AND course_id = " . $course_id);
-                if (
-                    !empty($serv->webapp)
-                    && $serv->webapp == 'api'
-                ) {
-                    if (
-                        $course_user
-                        && $course_user->editor
-                    ) {
+                if (!empty($serv->webapp) && $serv->webapp == 'api') {
+                    if ($course_user && $course_user->editor) {
                         header("Location: " . unserialize($sess->options));
                     } else {
                         header("Location: " . rtrim($serv->hostname, '/') . '/j/'. $sess->meeting_id . '?pwd=' . $sess->mod_pw);
                     }
                 } else {
-                    header("Location: " . rtrim($serv->hostname, '/') . $sess->meeting_id  . '/?pwd=' . $sess->mod_pw);
+                    header("Location: " . $sess->meeting_id);
                 }
             } elseif ($serv->type == 'webex' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // WebEx or 'Google Meet' or 'Microsoft Teams'
                 header("Location: " . $sess->meeting_id);
