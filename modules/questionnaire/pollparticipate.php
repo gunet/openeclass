@@ -179,7 +179,7 @@ function printPollForm() {
 
         if ($thePoll->description) {
             $tool_content .= "<div class='col-12 mb-4'>
-                                <div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                         <h3>$langDescription</h3>
                                     </div>
@@ -214,7 +214,7 @@ function printPollForm() {
             $email = Session::has('participantEmail') ? Session::get('participantEmail') : '';
             $email_error = Session::getError('participantEmail') ? " has-error" : "";
             $tool_content .= "
-                <div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>$langPollParticipantInfo</h3>
                     </div>

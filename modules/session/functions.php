@@ -1597,7 +1597,7 @@ function display_session_settings($element, $element_id, $session_id = 0): void
         if (!$session_id) {
             $tool_content .= "
             <div class='col-12'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-body'>
 
                         <h3 class='mb-0 text-center'>$langCourseCompletion</h3>
@@ -1790,7 +1790,7 @@ function display_session_activities($element, $id, $session_id = 0) {
     if($session_id) {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-12'>
-                                    <div class='card panelCard px-lg-4 py-lg-3'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                             <h3>
                                                 $langSessionCompletion </br>
@@ -1895,7 +1895,7 @@ function display_session_activities($element, $id, $session_id = 0) {
                             ));
         $tool_content .= "
 
-                        <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>
                                     $langSessionPrerequisites

@@ -1,7 +1,7 @@
 
 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
     <div class='col-12 mb-4'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>{{ trans('langNewEclassVersion') }}</h3>
             </div>

@@ -135,7 +135,7 @@ if (isset($_GET['u'])) { //  stats per user
                     'level' => 'primary-label')
             ), false);
             $tool_content .= $action_bar;
-            $tool_content .= "<p class='Neutral-900-cl TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
+            $tool_content .= "<p class='TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
             if($_GET['u'] > 0){
                 $tool_content .= "<p class='small-text text-start mb-1'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</p>";
@@ -147,7 +147,7 @@ if (isset($_GET['u'])) { //  stats per user
             }
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</p>";
         } else {
-            $tool_content .= "<p class='Neutral-900-cl TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
+            $tool_content .= "<p class='TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
             if($_GET['u'] > 0){
                 $tool_content .= "<p class='small-text text-start mb-1'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</p>";

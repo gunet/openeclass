@@ -382,7 +382,7 @@
                                                 <div class='row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-lg-5 g-4'>
                                                     @foreach ($popular_courses as $pop_course)
                                                         <div class="col mb-lg-0 mb-4">
-                                                            <div class='card border-card h-100'>
+                                                            <div class='card border-card h-100 card-default'>
                                                                 <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                     @if($pop_course->course_image)
                                                                         <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt="{{ trans('langCourseImage') }}" />
@@ -499,7 +499,7 @@
                                             <div class='col-12'>
                                                 <div class='row row-cols-1 row-cols-md-3 g-lg-5 g-3'>
                                                     <div class='col mb-lg-0 mb-4'>
-                                                        <div class='card statistics-card drop-shadow'>
+                                                        <div class='card statistics-card drop-shadow card-default'>
                                                             <div class='card-body d-flex justify-content-center align-items-center'>
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>
@@ -518,7 +518,7 @@
                                                         </div>
                                                     </div>
                                                     <div class='col mb-lg-0 mb-4'>
-                                                        <div class='card statistics-card drop-shadow'>
+                                                        <div class='card statistics-card drop-shadow card-default'>
                                                             <div class='card-body d-flex justify-content-center align-items-center'>
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>
@@ -531,7 +531,7 @@
                                                         </div>
                                                     </div>
                                                     <div class='col mb-lg-0 mb-4'>
-                                                        <div class='card statistics-card drop-shadow'>
+                                                        <div class='card statistics-card drop-shadow card-default'>
                                                             <div class='card-body d-flex justify-content-center align-items-center'>
                                                                 <div>
                                                                     <div class='d-flex justify-content-center'>

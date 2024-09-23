@@ -143,7 +143,7 @@ $export_box = "";
 if ($is_editor) {
     $export_box .= "
     <div class='col-12 mb-4'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>                   
                 <h3>$langDumpUserDurationToFile</h3>
             </div>
@@ -169,7 +169,7 @@ $tool_content .= action_bar(array(
         ))."
 $export_box
 <div class='col-12 mb-4'>
-<div class='card panelCard px-lg-4 py-lg-3'>
+<div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
     </div>
@@ -284,7 +284,7 @@ $this_chart_data = array();
 
 $tool_content .= "
 <div class='col-12 mt-4'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lcolles1</h3>
     </div>
@@ -314,7 +314,7 @@ $tool_content .= "
 
 $tool_content .= "
 <div class='col-12 mt-4'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lcolles2</h3>
     </div>
@@ -344,7 +344,7 @@ $tool_content .= "
 
 $tool_content .= "
 <div class='col-12 mt-4'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lcolles3</h3>
     </div>
@@ -374,7 +374,7 @@ $this_chart_data = array();
 
 $tool_content .= "
 <div class='col-12 mt-4'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lcolles4</h3>
     </div>
@@ -404,7 +404,7 @@ $tool_content .= "
     $tool_content .= "
 
 <div class='col-12 mt-4'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lcolles5</h3>
     </div>
@@ -435,7 +435,7 @@ $tool_content .= "
     $tool_content .= "
 
 <div class='col-12 mt-4'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard card-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lcolles6</h3>
     </div>

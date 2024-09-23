@@ -32,7 +32,7 @@
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
                                 <div class='col-12 mb-4'>      
-                                    <div class='card panelCard px-lg-4 py-lg-3'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>                                 
                                             <h3>
                                                 {{ $course_desc->title}}

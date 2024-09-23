@@ -13,7 +13,7 @@
                     <div class='col-12'>
                         <div class='row row-cols-md-2 row-cols-1 g-4'>
                             <div class='col'>
-                                <div class='card panelCard px-lg-4 py-lg-3 w-100 h-100'>
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
                                     <div class='card-body'>
                                         <div class='col-12 d-flex justify-content-center mb-2'>
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             <div class='col'>
-                                <div class='card panelCard px-lg-4 py-lg-3 w-100 h-100'>
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
                                     <div class='card-body'>
                                         <div class='col-12 d-flex justify-content-center mb-2'>
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class='col'>
-                                <div class='card panelCard px-lg-4 py-lg-3 w-100 h-100'>
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
                                     <div class='card-body'>
                                         <div class='col-12 d-flex justify-content-center mb-2'>
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <div class='col'>
-                                <div class='card panelCard px-lg-4 py-lg-3 w-100 h-100'>
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
                                     <div class='card-body'>
                                         <div class='col-12 d-flex justify-content-center mb-2'>
                                             <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>

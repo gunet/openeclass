@@ -2,7 +2,7 @@
     <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
             <fieldset>
-                <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>{{ trans('langThemeSettings') }}</h3>
                     </div>

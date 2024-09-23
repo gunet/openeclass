@@ -85,7 +85,7 @@ if ($userdata) {
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
-                            <div class='card card panelCard border-card-left-default px-3 py-2 mt-4'>
+                            <div class='card panelCard border-card-left-default px-3 py-2 mt-4'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>$langPageLink</h3>
                                     <button class='btn submitAdminBtn' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
@@ -223,7 +223,7 @@ if ($userdata) {
         $tool_content .= "
                         
                             <div class='col-sm-12'>
-                                <div class='card panelCard h-100'>
+                                <div class='card panelCard card-default h-100'>
                                     <div class='card-body text-center'>".$langNoInfoAvailable."</div>
                                 </div>";
     } else {

@@ -255,7 +255,7 @@ function generate_single_post_html($post) {
                                             '.$post_actions.'
                                         </div>
                                         <div class="card-body bubble overflow-auto Borders">
-                                            <p class="Neutral-900-cl TextBold">'.$datetime.'</p>
+                                            <p class="TextBold">'.$datetime.'</p>
 
 
                                             <div class="margin-top-thin" style="padding:20px">

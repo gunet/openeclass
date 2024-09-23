@@ -370,7 +370,7 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
-$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
+$tool_content .= "<div class='col-sm-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>";
 
 if ($cmd == "updateName") {
     $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
@@ -468,7 +468,7 @@ $lp_action_button = action_button(array(
 );
 
 $tool_content .= "<div class='col-12 mt-4'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>                     
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>                     
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                           
                            <h3>
                                $langLearningPathStructure

@@ -164,7 +164,7 @@
                             <div id='orderTexts'>
                                 @foreach($priorities as $p)
                                     @php $urlEdit = ''; @endphp
-                                    <div class='card panelCard px-lg-4 py-lg-3 p-3 mb-4' data-id='{{ $p->id }}'>
+                                    <div class='card panelCard card-default px-lg-4 py-lg-3 p-3 mb-4' data-id='{{ $p->id }}'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center p-0 gap-3 flex-wrap'>
                                             <h3 class='mb-0'>
                                                 @if($p->title == 'announcements')

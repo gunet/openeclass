@@ -13,7 +13,7 @@
 
                 <div class='row row-cols-lg-2 row-cols-1 g-4 mt-4 mb-3'>
                     <div class='col-md-7 col-lg-8'>
-                        <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-body'>
                                 <form class='form-wrapper' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
 

@@ -4060,7 +4060,7 @@ function setOpenCoursesExtraHTML() {
                         </div>
                     </div>
                     <div class='card-body p-0'>
-                        <div class='card panelCard px-lg-4 py-lg-3 h-100 '>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3 h-100 '>
                             <div class='card-body'>
                                 <div class='row row-cols-1 row-cols-md-2 g-4'>
 

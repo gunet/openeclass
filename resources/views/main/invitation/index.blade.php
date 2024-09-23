@@ -11,7 +11,7 @@
             <h2>{{ $toolName }}</h2>
           </div>
 
-          <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+          <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
             <div class='card-body'>
               <form class='register_form form-horizontal' method='post' action='invite.php?id={{ $invitation->identifier }}'>
                 @if (!$cas)
@@ -65,7 +65,7 @@
           </div>
 
           @if ($cas)
-            <div class='card panelCard px-lg-4 py-lg-3 my-4'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3 my-4'>
               <div class='card-body'>
                 <form class='register_form form-horizontal' method='post' action='invite.php?id={{ $invitation->identifier }}'>
                   {!! generate_csrf_token_form_field() !!}

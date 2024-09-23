@@ -232,7 +232,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
         } else {
             $tool_content .= "
             <div class='col-12 mt-4'>
-            <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                     <h3>$langQuestion $j</h3>
                 </div>

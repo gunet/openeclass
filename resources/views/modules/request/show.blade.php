@@ -32,7 +32,7 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class='col-12'>
-                        <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
 
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>
@@ -201,7 +201,7 @@
                             @endif
                                     @foreach ($comments as $comment)
                                         <div class="col">
-                                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                            <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                                 <div class='panel-body'>
 
 

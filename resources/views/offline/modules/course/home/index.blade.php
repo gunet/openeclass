@@ -29,7 +29,7 @@
 
 
                         <div class='col-12'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card panelCard card-default px-lg-4 py-lg-3'>
 
                                 <div class='card-body'>
                                     <div id='course-title-wrapper' class='course-info-title d-flex justify-content-between align-items-start'>
@@ -103,7 +103,7 @@
                     
                    
                         <div class='col-12 mt-5'>
-                            <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+                            <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
                                 <div class='card-body'>
                                     <div class='col-12 d-flex justify-content-between align-items-start'>
                                         <h3>

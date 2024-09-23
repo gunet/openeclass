@@ -37,7 +37,7 @@
                         @include('layouts.partials.show_alert')
 
                         <div class='col-12'>
-                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                            <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                 <div class='card-body'>
                                     <form class='form-horizontal' role='form'>
                                         <div class='form-group'>

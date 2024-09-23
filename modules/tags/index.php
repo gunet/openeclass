@@ -49,7 +49,7 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         if ($tag->module_id !== $latest_module_id){
             $tool_content .= "
             <div class='col-12 mt-3'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>" .
 				$modules[$tag->module_id]['title'] . "

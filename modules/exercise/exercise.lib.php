@@ -316,7 +316,7 @@ function display_exercise($exercise_id): void
 
     $tool_content .= $action_bar;
     $tool_content .= "
-    <div class='col-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='col-12 mb-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
               <h3>" . q_math($exercise->selectTitle());
               if ($is_editor) {

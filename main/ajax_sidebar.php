@@ -49,7 +49,7 @@ function getCoursesNotifications() {
                 $course_title = course_id_to_title($id);
 
                 $notification_content['notification_content'] = "
-                    <div class='panel panelCard border-0 mt-2'>
+                    <div class='panel panelCard card-default border-0 mt-2'>
                         <div class='card-body p-lg-2 p-3'>
                             <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>";
                 foreach ($notifications as $n) {

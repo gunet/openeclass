@@ -360,7 +360,7 @@ if ($userdata) {
             } else {
                 $post->course_title = $langUserBlog;
             }
-            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3'>
+            $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-3'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                                                                 
                                             <h3>".q($data['title'])."</h3>
                                             <div>
@@ -460,7 +460,7 @@ if ($userdata) {
                 } else {
                     $post->course_title = $langUserBlog;
                 }
-                $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-3 h-100'>
+                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h3>".q($data['title'])."</h3>                                    
                                         <div>
@@ -530,7 +530,7 @@ if ($userdata) {
                 $submission_footer = "<div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'>$submission->course_title</div>                                          
                                       </div>";
-                $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                        
                                             $submission_header_content                                           
                                             <div>

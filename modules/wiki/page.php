@@ -954,7 +954,7 @@ switch ($action) {
 $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title));
 if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
         $tool_content .= "<div class='col-12'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                     
                                         <h3>

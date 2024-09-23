@@ -241,7 +241,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <body class='body-learningPath' style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto;'>
  <div id='content' style='padding:20px;'>";
 
-echo "<div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+echo "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3 class='mb-0'>" . q_math($exerciseTitle) . "</h3>
     </div>";
@@ -285,7 +285,7 @@ foreach ($questionList as $questionId) {
     }
 
     // shows the question and its answers
-    echo "<div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+    echo "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3 class='mb-0'>" . $langQuestion . ": " . $i .
                ($exerciseType == 2 ?  " / $nbrQuestions" : '') .

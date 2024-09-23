@@ -1663,7 +1663,7 @@ function headlink($label, $this_sort) {
         $this_reverse = $reverse;
         $icon = '';
     }
-    return "<a class='Neutral-900-cl TextBold text-decoration-none' href='{$base_url}openDir=$path&amp;sort=$this_sort" . ($this_reverse ? '&amp;rev=1' : '') . "'>
+    return "<a class='TextBold text-decoration-none' href='{$base_url}openDir=$path&amp;sort=$this_sort" . ($this_reverse ? '&amp;rev=1' : '') . "'>
                 <i class='$icon'></i>  $label</a>";
 }
 

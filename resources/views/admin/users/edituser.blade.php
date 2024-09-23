@@ -209,7 +209,7 @@
 
             @if (count($sql) > 0)
                 <div class='col-12 mt-3'>
-                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class="card-header border-0 d-flex justify-content-start">
                             <h3>{{ trans('langStudentParticipation') }}</h3>
                         </div>

@@ -35,7 +35,7 @@
                                     <div class='row row-cols-1 g-4'>
                                         @foreach($group_tutors as $tutor)
                                             <div class='col'>
-                                                <div class="card panelCard px-lg-4 py-lg-3 h-100 mb-3">
+                                                <div class="card panelCard card-default px-lg-4 py-lg-3 h-100 mb-3">
                                                     <div class='card-body'>
                                                         <div class='col-12'>
                                                             <div class="row m-auto g-4">
@@ -43,8 +43,8 @@
                                                                     <div class="text-center">
                                                                         @php $image_tutor = profile_image($tutor->user_id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
                                                                         {!! $image_tutor !!}
-                                                                        <div class='text-heading-h4 mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</div>
-                                                                        <p class="badge Success-200-bg vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p></br>
+                                                                        <div class='text-heading-h4 mt-2'>{{ $tutor->givenname }}&nbsp;{{ $tutor->surname }}</div></br>
+                                                                        <span class="badge Success-200-bg vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</span></br>
                                                                         @if(count($nextAvDate) > 0)
                                                                             @foreach($nextAvDate as $d)
                                                                                 @foreach(array_keys($d) as $key)
@@ -86,7 +86,7 @@
                             @else
                                 <div class='row row-cols-1 g-4'>
                                     <div class='col'>
-                                        <div class="card panelCard px-lg-4 py-lg-3 mb-3">
+                                        <div class="card panelCard card-default px-lg-4 py-lg-3 mb-3">
                                             <div class='card-body'>
                                                 <div class='col-12'>
                                                     <div class="row m-auto g-4">
@@ -94,8 +94,8 @@
                                                             <div class="text-center">
                                                                 @php $image_tutor = profile_image($uid, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile'); @endphp
                                                                 {!! $image_tutor !!}
-                                                                <div class='text-heading-h4 mt-2'>{{ $tutor_name }}&nbsp;{{ $surname_name }}</div>
-                                                                <p class="badge Success-200-bg vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</p></br>
+                                                                <div class='text-heading-h4 mt-2'>{{ $tutor_name }}&nbsp;{{ $surname_name }}</div></br>
+                                                                <span class="badge Success-200-bg vsmall-text TextBold rounded-pill px-2 py-1">{{ trans('langGroupTutor')}}</span></br>
                                                                 @if(count($nextAvDate) > 0)
                                                                     @foreach($nextAvDate as $d)
                                                                         @foreach(array_keys($d) as $key)

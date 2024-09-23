@@ -168,7 +168,7 @@ function show_post_form() {
                                 <div class="form-group">
                                     <textarea aria-label="'.$langTypeOutMessage.'" style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
                                 </div>
-                                <div id="resources_panel" class="card cardPanel collapse mt-3 border-0">
+                                <div id="resources_panel" class="card panelCard collapse mt-3 border-0">
                                     <div class="card-body border-0">
                                         <ul class="nav nav-tabs border-0">
                                             <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
