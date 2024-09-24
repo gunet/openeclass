@@ -32,8 +32,8 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow', 
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage'),
-                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr'),
+                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
@@ -1647,8 +1647,10 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAnnouncements</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='BgColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <label for='BgColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container) - linear gradient:</label>
                                 <input name='BgColorAnnouncementHomepage' type='text' class='form-control colorpicker' id='BgColorAnnouncementHomepage' value='$theme_options_styles[BgColorAnnouncementHomepage]'>
+                                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                                <input aria-label='$langBgColor' name='BgColorAnnouncementHomepage_gr' type='text' class='form-control colorpicker' id='BgColorAnnouncementHomepage_gr' value='$theme_options_styles[BgColorAnnouncementHomepage_gr]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='TextColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
@@ -1693,8 +1695,10 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langVisitsStats</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='BgColorStatisticsHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <label for='BgColorStatisticsHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container) - linear gradient:</label>
                                 <input name='BgColorStatisticsHomepage' type='text' class='form-control colorpicker' id='BgColorStatisticsHomepage' value='$theme_options_styles[BgColorStatisticsHomepage]'>
+                                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                                <input aria-label='$langBgColor' name='BgColorStatisticsHomepage_gr' type='text' class='form-control colorpicker' id='BgColorStatisticsHomepage_gr' value='$theme_options_styles[BgColorStatisticsHomepage_gr]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='TextColorStatisticsHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
@@ -1707,8 +1711,10 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPopularCourse</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='BgColorPopularCoursesHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <label for='BgColorPopularCoursesHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container) - linear gradient:</label>
                                 <input name='BgColorPopularCoursesHomepage' type='text' class='form-control colorpicker' id='BgColorPopularCoursesHomepage' value='$theme_options_styles[BgColorPopularCoursesHomepage]'>
+                                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                                <input aria-label='$langBgColor' name='BgColorPopularCoursesHomepage_gr' type='text' class='form-control colorpicker' id='BgColorPopularCoursesHomepage_gr' value='$theme_options_styles[BgColorPopularCoursesHomepage_gr]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='TextColorPopularCoursesHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
@@ -1721,8 +1727,10 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHomepageTexts</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='BgColorTextsHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <label for='BgColorTextsHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container) - linear gradient:</label>
                                 <input name='BgColorTextsHomepage' type='text' class='form-control colorpicker' id='BgColorTextsHomepage' value='$theme_options_styles[BgColorTextsHomepage]'>
+                                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                                <input aria-label='$langBgColor' name='BgColorTextsHomepage_gr' type='text' class='form-control colorpicker' id='BgColorTextsHomepage_gr' value='$theme_options_styles[BgColorTextsHomepage_gr]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='TextColorTextsHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
@@ -1948,8 +1956,10 @@ $tool_content .= "
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline'>$langPortFolioProfileContainer</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langPortFolioProfileContainer:</label>
+                                <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langPortFolioProfileContainer - radial gradient:</label>
                                 <input name='BriefProfilePortfolioBgColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor' value='$theme_options_styles[BriefProfilePortfolioBgColor]'>
+                                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                                <input aria-label='$langBgColor' name='BriefProfilePortfolioBgColor_gr' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor_gr' value='$theme_options_styles[BriefProfilePortfolioBgColor_gr]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='BriefProfilePortfolioTextColor' class='control-label-notes mb-2 me-2'>$langBriefProfilePortfolioTextColor:</label>
