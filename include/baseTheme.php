@@ -703,6 +703,11 @@ function view($view_file, $view_data = array()) {
                 .text-muted{
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
+
+                .showCoursesBars:not(:has(.active)) i,
+                .showCoursesPics:not(:has(.active)) i {
+                    color:$theme_options_styles[ColorHyperTexts] ;
+                }
             ";
         }
 
@@ -1990,6 +1995,15 @@ function view($view_file, $view_data = array()) {
                 .showCoursesPics.active:hover,
                 .showCoursesPics.active:focus{
                     color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                .showCoursesBars.active i,
+                .showCoursesBars.active:hover i,
+                .showCoursesBars.active:focus i,
+                .showCoursesPics.active i,
+                .showCoursesPics.active:hover i,
+                .showCoursesPics.active:focus i {
+                    color:$theme_options_styles[buttonTextColor] ;
                 }
 
                 .mce-btn,
