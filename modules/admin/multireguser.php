@@ -134,7 +134,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 $email = '';
             }
 
-            $user_am = isset($info['id']) ? $info['id'] : '';
+            $user_am = $info['id'] ?? '';
             if (!empty($_POST['am'])) {
                 if (!isset($info['id']) or empty($info['id'])) {
                     $user_am = $_POST['am'];
@@ -143,9 +143,9 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 }
             }
 
-            $surname = isset($info['last']) ? $info['last'] : '';
-            $givenname = isset($info['first']) ? $info['first'] : '';
-            $phone = isset($info['phone']) ? $info['phone'] : '' ;
+            $surname = $info['last'] ?? '';
+            $givenname = $info['first'] ?? '';
+            $phone = $info['phone'] ?? '';
             $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
             if (isset($_POST['emailNewSubject'])) {
                 $emailNewSubject = $_POST['emailNewSubject'];
@@ -266,14 +266,21 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $mail_message = $password;
     }
 
+    if (isset($_POST['force_password_change'])) {
+        $options = json_encode(['force_password_change' => 1]);
+    } else {
+        $options = json_encode(['force_password_change' => 0]);
+    }
+
     $id = Database::get()->query("INSERT INTO user
                     (surname, givenname, username, password, email,
                      status, registered_at, expires_at, lang, am, phone,
-                     email_public, phone_public, am_public, description, verified_mail, whitelist)
+                     email_public, phone_public, am_public, description, verified_mail, whitelist, options)
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . ",
                     DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
-                    ?s,?s,?s,?d,?d,?d,'',".EMAIL_VERIFIED.",'')"
-                , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
+                    ?s, ?s, ?s, ?d, ?d, ?d, '', " . EMAIL_VERIFIED . ", '', ?s)"
+                , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)),
+                  $status, $lang, $am, $phone, $email_public, $phone_public, $am_public, $options)->lastInsertID;
     // update personal calendar info table
     // we don't check if trigger exists since it requires `super` privilege
     Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $id);
