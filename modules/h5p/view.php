@@ -30,7 +30,7 @@ $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_
 if ($content) {
     if (showContent($_GET['id'])) {
         if (isset($unit)) {
-            redirect($urlServer . 'modules/units/view.php?course=' . $course_code . '&res_type=h5p_show&unit=' . $unit . '&id=' . intval($_GET['id']));;
+            redirect($urlServer . 'modules/units/view.php?course=' . $course_code . '&res_type=h5p_show&unit=' . $unit . '&id=' . intval($_GET['id']));
         } else {
             redirect($urlAppend . 'modules/h5p/show.php?course=' . $course_code . '&id=' . intval($_GET['id']));
         }
