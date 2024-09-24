@@ -1737,6 +1737,10 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
+                .list-group-upgrade .list-group-item.element.active{
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
+
 
             ";
 
@@ -2003,6 +2007,10 @@ function view($view_file, $view_data = array()) {
 
                 .calendarAddDaysCl .exist_event_session .fc-time span{
                     color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .list-group-upgrade .list-group-item.element.active span{
+                   color: $theme_options_styles[buttonTextColor] !important;
                 }
             ";
         }
