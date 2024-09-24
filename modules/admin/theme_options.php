@@ -32,12 +32,12 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow', 
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
-                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels'),
+                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels', 'TextColorStatisticsHomepage', 'TextColorPopularCoursesHomepage', 'TextColorTextsHomepage'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
@@ -1686,6 +1686,48 @@ $tool_content .= "
                                 <img src='$urlServer/template/modern/images/theme_settings/homepage_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
                                 <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                             </figure>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langVisitsStats</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgColorStatisticsHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <input name='BgColorStatisticsHomepage' type='text' class='form-control colorpicker' id='BgColorStatisticsHomepage' value='$theme_options_styles[BgColorStatisticsHomepage]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='TextColorStatisticsHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
+                                <input name='TextColorStatisticsHomepage' type='text' class='form-control colorpicker' id='TextColorStatisticsHomepage' value='$theme_options_styles[TextColorStatisticsHomepage]'>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPopularCourse</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgColorPopularCoursesHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <input name='BgColorPopularCoursesHomepage' type='text' class='form-control colorpicker' id='BgColorPopularCoursesHomepage' value='$theme_options_styles[BgColorPopularCoursesHomepage]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='TextColorPopularCoursesHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
+                                <input name='TextColorPopularCoursesHomepage' type='text' class='form-control colorpicker' id='TextColorPopularCoursesHomepage' value='$theme_options_styles[TextColorPopularCoursesHomepage]'>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHomepageTexts</h3>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgColorTextsHomepage' class='control-label-notes mb-2 me-2'>$langBgColor(Container):</label>
+                                <input name='BgColorTextsHomepage' type='text' class='form-control colorpicker' id='BgColorTextsHomepage' value='$theme_options_styles[BgColorTextsHomepage]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='TextColorTextsHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
+                                <input name='TextColorTextsHomepage' type='text' class='form-control colorpicker' id='TextColorTextsHomepage' value='$theme_options_styles[TextColorTextsHomepage]'>
+                            </div>
                         </div>
                     </div>
                 </div>

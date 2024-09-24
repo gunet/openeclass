@@ -156,7 +156,9 @@
 .cal-day-outmonth span[data-cal-date] {
   opacity: 1;
 }
-
+.day-event.day-highlight{
+  margin-top: 0px !important;
+}
 
 
 
