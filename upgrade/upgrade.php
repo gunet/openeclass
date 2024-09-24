@@ -516,15 +516,17 @@ function upgrade_menu()
     ];
 
     $menu = '';
+    $menu .= "<ul class='list-group list-group-flush list-group-upgrade'>";
     foreach ($step_messages as $step => $title) {
         if (isset($_SESSION['step']) and $step == $_SESSION['step']) {
             $class = 'active';
         } else {
             $class = '';
         }
-        $menu .= "<a href='#' class='list-group-item $class'>";
+        $menu .= "<li class='list-group-item element $class'><a href='#'>";
         $menu .= "<span>$title</span>";
-        $menu .= "</a>";
+        $menu .= "</a></li>";
     }
+    $menu .= "</ul>";
     return $menu;
 }
