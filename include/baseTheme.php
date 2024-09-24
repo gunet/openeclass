@@ -338,10 +338,11 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BriefProfilePortfolioBgColor'])){
+        if(!empty($theme_options_styles['BriefProfilePortfolioBgColor']) && !empty($theme_options_styles['BriefProfilePortfolioBgColor_gr'])){
+            $new_gradient_str_bpr = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[BriefProfilePortfolioBgColor], $theme_options_styles[BriefProfilePortfolioBgColor_gr])";
             $styles_str .= "
                 .portfolio-profile-container{
-                    background-color: $theme_options_styles[BriefProfilePortfolioBgColor];
+                    background: $new_gradient_str_bpr;
                   }
             ";
         }
@@ -5592,10 +5593,11 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BgColorAnnouncementHomepage'])){
+        if(!empty($theme_options_styles['BgColorAnnouncementHomepage']) && !empty($theme_options_styles['BgColorAnnouncementHomepage_gr'])){
+            $new_gradient_str1 = "linear-gradient(105deg, $theme_options_styles[BgColorAnnouncementHomepage] 40%, $theme_options_styles[BgColorAnnouncementHomepage_gr] 60%)";
             $styles_str .= "
                 .homepage-annnouncements-container{
-                    background-color: $theme_options_styles[BgColorAnnouncementHomepage];
+                    background: $new_gradient_str1;
                 }
 
             ";
@@ -5706,10 +5708,11 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BgColorStatisticsHomepage'])){
+        if(!empty($theme_options_styles['BgColorStatisticsHomepage']) && !empty($theme_options_styles['BgColorStatisticsHomepage_gr'])){
+            $new_gradient_str2 = "linear-gradient(105deg, $theme_options_styles[BgColorStatisticsHomepage] 40%, $theme_options_styles[BgColorStatisticsHomepage_gr] 60%)";
             $styles_str .= "
                 .homepage-statistics-container{
-                    background-color: $theme_options_styles[BgColorStatisticsHomepage];
+                    background: $new_gradient_str2;
                 }
 
             ";
@@ -5736,10 +5739,11 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BgColorPopularCoursesHomepage'])){
+        if(!empty($theme_options_styles['BgColorPopularCoursesHomepage']) && !empty($theme_options_styles['BgColorPopularCoursesHomepage_gr'])){
+            $new_gradient_str3 = "linear-gradient(105deg, $theme_options_styles[BgColorPopularCoursesHomepage] 40%, $theme_options_styles[BgColorPopularCoursesHomepage_gr] 60%)";
             $styles_str .= "
                 .homepage-popoular-courses-container{
-                    background-color: $theme_options_styles[BgColorPopularCoursesHomepage];
+                    background: $new_gradient_str3;
                 }
 
             ";
@@ -5766,10 +5770,11 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BgColorTextsHomepage'])){
+        if(!empty($theme_options_styles['BgColorTextsHomepage']) && !empty($theme_options_styles['BgColorTextsHomepage_gr'])){
+            $new_gradient_str4 = "linear-gradient(105deg, $theme_options_styles[BgColorTextsHomepage] 40%, $theme_options_styles[BgColorTextsHomepage_gr] 60%)";
             $styles_str .= "
                 .homepage-texts-container{
-                    background-color: $theme_options_styles[BgColorTextsHomepage];
+                    background: $new_gradient_str4;
                 }
 
             ";
