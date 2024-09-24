@@ -20,6 +20,16 @@
                     $('.emailNewBodyInput').val(0);
                 }
             });
+
+            $('#auth_selection').change(function () {
+                var state = $(this).find(':selected').attr('value') != '1';
+                if (state == true) {
+                    $('#force_password_change_checkbox').prop({ 'disabled' : true });
+                } else {
+                    $('#force_password_change_checkbox').prop({ 'disabled': false });
+                }
+            }).change();
+
         });
     </script>
 @endpush
@@ -42,7 +52,7 @@
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             <div class='col-12'>
                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{!! trans('langMultiRegUserInfo') !!}</span></div>
@@ -75,9 +85,9 @@
                 </div>
                 @if (!$eclass_method_unique)
                     <div class='form-group mt-4'>
-                        <label for='passsword' class='col-sm-12 control-label-notes'>{{ trans('langMethods') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                        <label for='auth_selection' class='col-sm-12 control-label-notes'>{{ trans('langMethods') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                         <div class='col-sm-12'>
-                            {!! selection($auth_m, "auth_methods_form", '', "class='form-control' id='passsword'") !!}
+                            {!! selection($auth_m, "auth_methods_form", '', "class='form-control' id='auth_selection'") !!}
                         </div>
                     </div>
                 @endif
@@ -87,6 +97,13 @@
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
                     </div>
+                </div>
+
+                <div class='checkbox mb-2 mt-2'>
+                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                        <input type='checkbox' id='force_password_change_checkbox' name='force_password_change'>
+                        <span class='checkmark'></span>{{ trans('langForcePasswordChange') }}
+                    </label>
                 </div>
 
                 <div class='form-group mt-4'>
