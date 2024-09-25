@@ -98,11 +98,6 @@ if (isset($_POST['submit'])) {
         } else {
             $all_courses = 0;
         }
-        if (isset($_POST['custom_webex_url'])) {
-            $hostname = 'webex';
-        } else {
-            $hostname = $_POST['url'];
-        }
 
         $tc_sql = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'webex'");
         if ($tc_sql) {
@@ -112,7 +107,7 @@ if (isset($_POST['submit'])) {
         } else {
             $tc_sql = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
                                             VALUES('webex', ?s, ?s, ?s, ?s)",
-                $hostname, $hostname, $enabled, $all_courses);
+                $app::WEBEXDEFAULURL, $app::WEBEXDEFAULURL, $enabled, $all_courses);
             $tc_id = $tc_sql->lastInsertID;
         }
 
@@ -144,27 +139,6 @@ foreach ($app->getParams() as $param) {
         $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
         $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
-    } else if ($param->name() == WebexApp::WEBEXURL) {
-        $extra = '';
-        $q = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE type = 'webex'");
-        if ($q) {
-            $webex_host = $q->hostname;
-            if ($webex_host == 'webex') {
-                $extra = 'disabled';
-            } else {
-                $extra = '';
-            }
-        }
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='default_webex_url' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
-        $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langWebexUrl'></span></label>";
-        $tool_content .= "<div class='col-sm-12'><input class='form-control' id='default_webex_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . WebexApp::WEBEXDEFAULURL . "' $extra></div>";
-        $tool_content .= "</div>";
-    } else if ($param->name() == WebexApp::WEBEXCUSTOMURL) {
-        $checked = $param->value() == 1 ? "checked" : "";
-        $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $tool_content .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' id='custom_webex_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "<span class='checkmark'></span></label>";
-        $tool_content .= "</div></div></div>";
     } else if ($param->name() == WebexApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                 WHERE visible != " . COURSE_INACTIVE . "
@@ -188,11 +162,6 @@ foreach ($app->getParams() as $param) {
         }
         $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
-    } else {
-        $tool_content .= "<div class='form-group mt-4'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-12'><input id='" . $param->name() . "' class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
-        $tool_content .= "</div>";
     }
 }
 

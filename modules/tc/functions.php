@@ -175,9 +175,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $options = NULL;
             $options_show = "";
         }
-        $google_meet_link = $microsoft_teams_link = $zoom_link = $row->meeting_id;
-
-        $webex_link = ($tc_type == 'webex') ? $row->meeting_id : '';
+        $google_meet_link = $microsoft_teams_link = $zoom_link = $webex_link = $row->meeting_id;
 
         $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
         $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
@@ -320,7 +318,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'webex') { // webex
-            if ($hostname != 'webex') { // webex url supplied by end user
+            if (isset($_GET['add'])) {
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
                 $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToWebexLinkText</a></div>";
             }
