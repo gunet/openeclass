@@ -1227,7 +1227,7 @@ function upload_session_doc($sid){
             $langFormErrors, $langTheField , $langTitle, $langEmptyUploadFile,
             $langUploadDocCompleted, $sessionID, $langFileExists, $is_consultant,
             $langDoNotChooseResource, $langPreviousDocDeleted, $langFileExistsWithSameName,
-            $langNotExistUsers, $langResourceNoExists;
+            $langNotExistUsers, $langResourceNoExists, $langDoNotOverrideDeliverable;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -1236,6 +1236,18 @@ function upload_session_doc($sid){
             Session::flash('message',$langResourceNoExists);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sid");
+        }else{
+            if(isset($_POST['for_file']) && isset($_POST['fromUser'])){
+                $is_completed_deliverable = database::get()->querySingle("SELECT is_completed FROM session_resources 
+                                                                        WHERE session_id = ?d
+                                                                        AND doc_id = ?d
+                                                                        AND from_user = ?d", $sid, $_POST['for_file'], $_POST['fromUser']);
+                if($is_completed_deliverable->is_completed){
+                    Session::flash('message',$langDoNotOverrideDeliverable);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
+                }
+            }
         };
     }
 
