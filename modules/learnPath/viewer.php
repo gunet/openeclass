@@ -50,14 +50,14 @@ require_once 'include/lib/learnPathLib.inc.php';
 define('FULL_SCREEN', 1);
 
 // override session vars if get args are present
-if (isset($_GET['path_id'])) {
+if (!empty($_GET['path_id'])) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
 }
-if (isset($_GET['module_id'])) {
+if (!empty($_GET['module_id'])) {
     $_SESSION['lp_module_id'] = intval($_GET['module_id']);
 }
 $_SESSION['lp_attempt_clean'] = false;
-if (isset($_GET['cleanattempt'])) {
+if (!empty($_GET['cleanattempt'])) {
     $_SESSION['lp_attempt_clean'] = true;
 }
 
@@ -108,7 +108,7 @@ if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen'])) {
     $displayFull = FULL_SCREEN;
 }
 if ($displayFull == 0) {
-    $tool_content .= "<iframe title='$langFrameOpens' src='$startModuleLink' name='mainFrame' "
+    $tool_content .= "<iframe src='$startModuleLink' name='mainFrame' "
             . "width='100%' height='550' scrolling='no' frameborder='0'"
             . $langBrowserCannotSeeFrames
             . "<br />" . "\n"
@@ -131,14 +131,7 @@ if ($displayFull == 0) {
        }, $action_period);</script>"
     . "</head>"
     . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
-    . "<frame title='$langFrameOpens' src='$startModuleLink' name='mainFrame' />" . "\n"
+    . "<frame src='$startModuleLink' name='mainFrame' />" . "\n"
     . "</frameset>"
-    . "<noframes>"
-    . "<body>"
-    . $langBrowserCannotSeeFrames
-    . "<br />"
-    . "<a href=\"module.php?course=$course_code\">" . $langBack . "</a>"
-    . "</body>"
-    . "</noframes>"
     . "</html>";
 }
