@@ -1576,21 +1576,21 @@ $tool_content .= "
                                     <div class='col-sm-12 control-label-notes mb-2'>$langPositionJumbotronText (jumbotron):</div>
                                     <div class='radio mb-2'>
                                         <label>
-                                            <input type='radio' name='PositionJumbotronText' value='0' ".(($theme_options_styles['PositionJumbotronText'] == '0')? 'checked' : '').">
-                                            $langTopPositionJumbotronText 
+                                            <input type='radio' name='PositionJumbotronText' value='0' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '0')? 'checked' : '').">
+                                            $langTopPositionJumbotronText  
                                         </label>
                                     </div>
 
                                     <div class='radio mb-2'>
                                         <label>
-                                            <input type='radio' name='PositionJumbotronText' value='1' ".(($theme_options_styles['PositionJumbotronText'] == '1')? 'checked' : '').">
+                                            <input type='radio' name='PositionJumbotronText' value='1' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '1')? 'checked' : '').">
                                             $langCenterPositionJumbotronText 
                                         </label>
                                     </div>
 
                                     <div class='radio'>
                                         <label>
-                                            <input type='radio' name='PositionJumbotronText' value='2' ".(($theme_options_styles['PositionJumbotronText'] == '2')? 'checked' : '').">
+                                            <input type='radio' name='PositionJumbotronText' value='2' ".((isset($theme_options_styles['PositionJumbotronText']) and $theme_options_styles['PositionJumbotronText'] == '2')? 'checked' : '').">
                                             $langBottomPositionJumbotronText
                                         </label>
                                     </div>

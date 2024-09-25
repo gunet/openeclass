@@ -6430,3 +6430,4 @@ $langMaxWidthTextJumbotron = "Max width of text";
 $langEnableContactInfo = "Activate contact form";
 $langHelpDeskEmailDoesNotExist = "No e-mail address was found on the platform to send a message to.";
 $langFormContactMessage = "Contact form - message from";
+$langDoNotOverrideDeliverable = "The user's deliverable has been reviewed by the consultant and cannot be replaced.";
