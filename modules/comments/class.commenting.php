@@ -90,7 +90,7 @@ Class Commenting {
                                 </a>";
             $out = "$comments_title
                     <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
-                      <div class='modal-dialog modal-md'>
+                      <div class='modal-dialog modal-lg'>
                         <div class='modal-content'>
                           <div class='modal-header'>
                             <div class='modal-title'>
@@ -100,7 +100,7 @@ Class Commenting {
                            
                               
                           </div>
-                          <div class='modal-body px-0' id='comments-$this->rid'>";
+                          <div class='modal-body px-lg-5 px-0' id='comments-$this->rid'>";
         } else {
             $comments_title = "<h3 id='comments_title'>$langComments (<span class='fs-5' id='commentsNum-$this->rid'>$commentsNum</span>)</h3>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
@@ -184,7 +184,11 @@ Class Commenting {
             }
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
-                $out .= '<div class="col-12 pb-5"><div class="form-wrapper form-edit Borders px-0"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $space_textarea = "";
+                if(!isset($_GET['action'])) {
+                    $space_textarea = "px-lg-5";
+                } 
+                $out .= '<div class="col-12 '.$space_textarea.' px-0 pb-5"><div class="form-wrapper form-edit Borders px-0"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" aria-label="'.$langTypeOutMessage.'" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn submitAdminBtn" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
                 $out .= '</form></div></div>';

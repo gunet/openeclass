@@ -1614,6 +1614,7 @@ $default_config = array(
     'restrict_owndep', 0,
     'restrict_teacher_owndep', 0,
     'allow_teacher_clone_course', 0,
+    'contact_form_activation', 1,
     'max_glossary_terms', '250',
     'phpSysInfoURL', $phpSysInfoURL,
     'email_sender', $emailForm,
