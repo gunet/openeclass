@@ -40,7 +40,13 @@
  */
 
 $require_current_course = true;
-require_once '../../../include/init.php';
+
+if (isset($_GET['unit'])) {
+    require_once '../../../include/init.php';
+} else {
+    require_once '../../../include/baseTheme.php';
+}
+
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/multimediahelper.class.php';
@@ -91,7 +97,7 @@ if ($uid) { // if not anonymous
          WHERE `learnPath_id` = ?d
            AND `module_id` = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id'])->learnPath_module_id;
 
-    // if never intialised : create an empty user_module_progress line
+    // if never initialized : create an empty user_module_progress line
     if ($num == 0) {
         Database::get()->query("INSERT INTO `lp_user_module_progress`
                 ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data`, `attempt`, `started`, `accessed` )
@@ -210,8 +216,4 @@ echo "<frameset border='0' cols='250,*' frameborder='0' id='colFrameset'>";
 echo "<frame src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>";
-echo "</frameset>";
-echo "<noframes>";
-echo "<body>";
-echo $langBrowserCannotSeeFrames;
-echo "</body></noframes></html>";
+echo "</html>";

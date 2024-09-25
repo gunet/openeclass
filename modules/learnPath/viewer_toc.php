@@ -39,8 +39,13 @@
  */
 
 $require_current_course = TRUE;
-require_once '../../include/init.php';
-require_once 'include/constants.php';
+
+if (isset($_GET['unit'])) {
+    require_once '../../include/init.php';
+    require_once 'include/constants.php';
+} else {
+    require_once '../../include/baseTheme.php';
+}
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/gradebook/functions.php';

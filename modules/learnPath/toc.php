@@ -28,9 +28,15 @@
  */
 
 $require_current_course = TRUE;
+if (isset($_GET['unit'])) {
+    require_once '../../include/init.php';
+    require_once 'include/constants.php';
+} else {
+    require_once '../../include/baseTheme.php';
+}
 
-require_once '../../include/init.php';
-require_once 'include/constants.php';
+//require_once '../../include/init.php';
+//require_once 'include/constants.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 

@@ -6,7 +6,7 @@
  * Time: 2:38 μμ
  */
 
-$res_type = isset($_REQUEST['res_type'])? $_REQUEST['res_type']: null;
+$res_type = $_REQUEST['res_type'] ?? null;
 $unit = isset($_REQUEST['unit'])? intval($_REQUEST['unit']): null;
 
 switch ($res_type) {
