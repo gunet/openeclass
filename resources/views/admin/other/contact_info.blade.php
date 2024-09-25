@@ -33,6 +33,16 @@
                                     </div>
                                 </div>
 
+                                <div class='form-group mt-4'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
+                                            <input type='checkbox' name='enable_form_contact' {!! get_config('contact_form_activation') ? 'checked' : '' !!}>
+                                            <span class='checkmark'></span>
+                                            {{ trans('langEnableContactInfo') }}
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>

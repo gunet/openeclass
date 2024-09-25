@@ -6427,3 +6427,6 @@ $langBottomPositionJumbotronText = "Align text to bottom";
 $langMaxHeightMaxScreenJumbotron = "Alternatively, the height is configured according to the height of the current screen";
 $langHelpJumbotronInfoText = "In case you choose it, the maximum height ceases to apply.";
 $langMaxWidthTextJumbotron = "Max width of text";
+$langEnableContactInfo = "Activate contact form";
+$langHelpDeskEmailDoesNotExist = "No e-mail address was found on the platform to send a message to.";
+$langFormContactMessage = "Contact form - message from";

@@ -46,7 +46,7 @@ if (!isset($_GET['id'])) {
 }
 
 /****   Datatables   ****/
-$tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer px-lg-4 py-lg-3'>";
 $tschema = "<thead><tr class='list-header'>"
     . "<th>$langDate</th>"
     . "<th>$langModule</th>"
@@ -62,7 +62,7 @@ $tool_content .= table_placeholder("cdetails1", "table-default table-striped tab
 $tool_content .= "</div></div>";
 
 if (!isset($_GET['id'])) {
-    $tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
+    $tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer px-lg-4 py-lg-3'>";
     $tschema = "<thead><tr class='list-header'>"
         . "<th>$langDate</th>"
         . "<th>$langUser</th>"
@@ -75,7 +75,7 @@ if (!isset($_GET['id'])) {
     $tool_content .= "</div></div>";
 }
 
-$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default logscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default logscontainer px-lg-4 py-lg-3'>";
 $tschema = "<thead><tr>"
     . "<th>$langDate - $langHour</th>"
     . "<th>$langUser</th>"
