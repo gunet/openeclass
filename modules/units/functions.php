@@ -1731,18 +1731,20 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
     global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
-
+    $class_vis = '';
     if (!$module_visible and !$is_editor) {
         return '';
     }
 
     $tc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d AND id = ?d", $course_id, $tc_id);
+
     if (!$tc) { // check if it was deleted
         if (!$is_editor) {
             return '';
         } else {
             $imagelink = icon('fa-xmark link-delete');
             $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
+            $class_vis = "class='not_visible'";
         }
     } else {
         if (!$is_editor and !$tc->active) {
@@ -1760,10 +1762,9 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
     } else {
         $comment_box = '';
     }
-    $class_vis = (!$tc->active or !$module_visible) ?
-        ' class="not_visible"' : ' ';
+
     return "
-        <tr$class_vis data-id='$resource_id'>
+        <tr $class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-start'>$act_name</td>
           <td>$tclink $comment_box</td>" .
