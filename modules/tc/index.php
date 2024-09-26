@@ -364,7 +364,7 @@ elseif(isset($_GET['choice']))
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                 } else {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $mod_pw);
-                    if (($sess->sessionUsers > 0) && ($sess->sessionUsers < $ssUsers)) { // session is full
+                    if (!is_null($sess->sessionUsers) && $sess->sessionUsers > 0 && $sess->sessionUsers < $ssUsers) { // session is full
                         $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBMaxUsersJoinError</span></div>";
                     } else { // join users
                         header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
