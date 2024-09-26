@@ -52,7 +52,7 @@ $data['action_bar'] = "";
 $user_pdf = "";
 $user_selected = 0;
 if(isset($_GET['user_rep'])){
-    $sql_consultant = "";
+    //$sql_consultant = "";
     $user_pdf = "&amp;session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
     $forUser = "AND user_id = " . $_GET['user_rep'];
     $user_selected = $_GET['user_rep'];
@@ -68,7 +68,7 @@ if(isset($_POST['form_user_report'])){
     if($_POST['form_user_report'] == 0){
         redirect_to_home_page("modules/session/consulting_completion.php?course=".$course_code);
     }elseif($_POST['form_user_report'] > 0){
-        $sql_consultant = "";
+        //$sql_consultant = "";
         $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
         $forUser = "AND user_id = " . $_POST['form_user_report'];
         $user_selected = $_POST['form_user_report'];
@@ -78,12 +78,13 @@ if(isset($_POST['form_user_report'])){
 if(isset($_GET['user_docs'])){
     $userid = $_GET['user_docs'];
     if($userid > 0){
-        $sql_consultant = "";
+        //$sql_consultant = "";
         $user_pdf = "&amp;user_rep=$_GET[user_docs]";
         $forUser = "AND user_id = " . $_GET['user_docs'];
         $user_selected = $_GET['user_docs'];
         $sessions_user = Database::get()->queryArray("SELECT id,title FROM mod_session
                                                         WHERE course_id = ?d
+                                                        $sql_consultant
                                                         AND id IN (SELECT session_id FROM mod_session_users
                                                                     WHERE participants = ?d AND is_accepted = ?d)",$course_id,$userid,1);
 
@@ -168,7 +169,7 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
 
                                         $userID = $result->user_id;
                                         if(isset($_GET['user_rep'])){
-                                            $sql_consultant = "";
+                                            //$sql_consultant = "";
                                             $userID = $_GET['user_rep'];
                                         }
 
