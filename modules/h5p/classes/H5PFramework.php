@@ -76,6 +76,11 @@ class H5PFramework implements H5PFrameworkInterface {
      * Translated string
      */
     public function t($message, $replacements = array()): string {
+        if ($replacements !== NULL && is_array($replacements) && count($replacements) > 0) {
+            foreach ($replacements as $key => $value) {
+                $message = str_replace($key, $value, $message);
+            }
+        }
         return $message;
     }
 
