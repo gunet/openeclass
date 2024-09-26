@@ -386,13 +386,18 @@ function delete_session($sid = 0){
 function show_session_resources($sid)
 {
 
-    global $max_resource_id,
+    global $max_resource_id, $is_simple_user, 
            $head_content, $langDownload, $langPrint, $langCancel,
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code, $langNoAvailableSessionRecourses;
 
         $html = '';
 
-        $req = Database::get()->queryArray("SELECT * FROM session_resources WHERE session_id = ?d AND `order` >= 0 ORDER BY `order`", $sid);
+        $visible_sql = "";
+        if($is_simple_user){
+            $visible_sql = "AND visible = 1";
+        }
+
+        $req = Database::get()->queryArray("SELECT * FROM session_resources WHERE session_id = ?d $visible_sql AND `order` >= 0 ORDER BY `order`", $sid);
 
         if (count($req) > 0) {
             load_js('sortable/Sortable.min.js');
@@ -515,7 +520,7 @@ function show_sessionResource($info) {
     global $langUnknownResType, $is_consultant;
 
     $html = '';
-    if ($info->visible == 0 and $info->type != 'doc' and ! $is_consultant) { // special case handling for old unit resources with type 'doc' .
+    if ($info->visible == 0 and $info->type != 'doc' and !$is_consultant) { // special case handling for old unit resources with type 'doc' .
         return;
     }
     switch ($info->type) {
@@ -532,10 +537,10 @@ function show_sessionResource($info) {
             $html .= show_session_passage($info->title, $info->id, $info->passage, $info->visible);
             break;
         case 'link':
-            $html .= show_session_link($info->title, $info->comments, $info->id, $info->res_id,1);
+            $html .= show_session_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'poll':
-            $html .= show_session_poll($info->title, $info->comments, $info->id, $info->res_id,1);
+            $html .= show_session_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         default:
             $html .= $langUnknownResType;
@@ -732,7 +737,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
     }
 
     return "
-        <tr$class_vis data-id='$resource_id'>
+        <tr $class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-start'>$download_hidden_link $link $res_prereq_icon $comment</td>
           <td>$file->creator</td>" .
@@ -901,10 +906,10 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
         }
     }
 
-    $class_vis = (!$tc->active or !$module_visible) ?
+    $class_vis = (!$tc->active or !$module_visible or !$visibility) ?
         ' class="not_visible"' : ' ';
     return "
-        <tr$class_vis data-id='$resource_id'>
+        <tr $class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$tclink $res_prereq_icon $comment_box $help_info $has_expired $langProgress</td>
           <td></td>" .
@@ -924,9 +929,11 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 function show_session_passage($title, $resource_id, $passage, $visibility){
     global  $is_consultant, $course_id, $urlServer, $course_code;
 
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
+
     $image = icon('fa-solid fa-keyboard');
     return "
-        <tr data-id='$resource_id'>
+        <tr $class_vis data-id='$resource_id'>
             <td width='1'>$image</td>
             <td>$passage</td>
             <td></td>" .
@@ -1066,6 +1073,17 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
             }
         }
 
+        $status_visible = Database::get()->querySingle("SELECT visible FROM session_resources WHERE id = ?d",$resource_id);
+        if($status_visible->visible){
+            $vis_res_val = 0;
+            $showorhideIcon = "fa-solid fa-eye-slash";
+            $showorhideMessage = "$langViewHide";
+        }else{
+            $vis_res_val = 1;
+            $showorhideIcon = "fa-solid fa-eye";
+            $showorhideMessage = "$langViewShow";
+        }
+
         $content = "<td>
                         <div class='d-flex justify-content-end align-items-center gap-3 w-100'>
                             <div class='reorder-btn d-flex justify-content-center align-items-center'>
@@ -1081,6 +1099,9 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                                         'url' => "$download_url",
                                         'icon' => 'fa-download',
                                         'show' => $res_type == 'doc'),
+                                    array('title' => $showorhideMessage,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$_GET[session]&amp;res_id=$resource_id&amp;vis_res=$vis_res_val",
+                                        'icon' => $showorhideIcon),
                                     array('title' => $langDelete,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
                                         'icon' => 'fa-xmark',

@@ -71,6 +71,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     exit;
 }
 
+
+// Hide or show resource
+if(isset($_GET['vis_res'])){
+    $infoResource = Database::get()->querySingle("SELECT res_id,type FROM session_resources WHERE id = ?d AND session_id = ?d", $_GET['res_id'], $_GET['session']);
+    if($infoResource->type == 'doc'){
+        Database::get()->query("UPDATE document SET visible = ?d 
+                                WHERE id = ?d
+                                AND course_id = ?d
+                                AND subsystem_id = ?d", $_GET['vis_res'], $infoResource->res_id, $course_id, $_GET['session']);
+    }
+    Database::get()->query("UPDATE session_resources SET visible = ?d WHERE id = ?d AND session_id = ?d", $_GET['vis_res'], $_GET['res_id'], $_GET['session']);
+    Session::flash('message',$langDocCompletionSuccess);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$_GET['session']);
+}
+
 // ---------------------------
 // download directory or file
 // ---------------------------
