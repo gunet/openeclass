@@ -78,8 +78,7 @@ if(isset($_GET['vis_res'])){
     if($infoResource->type == 'doc'){
         Database::get()->query("UPDATE document SET visible = ?d 
                                 WHERE id = ?d
-                                AND course_id = ?d
-                                AND subsystem_id = ?d", $_GET['vis_res'], $infoResource->res_id, $course_id, $_GET['session']);
+                                AND course_id = ?d", $_GET['vis_res'], $infoResource->res_id, $course_id);
     }
     Database::get()->query("UPDATE session_resources SET visible = ?d WHERE id = ?d AND session_id = ?d", $_GET['vis_res'], $_GET['res_id'], $_GET['session']);
     Session::flash('message',$langDocCompletionSuccess);
