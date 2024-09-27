@@ -182,12 +182,16 @@
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0'>
                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3>{{ $pageName }}</h3>
+                                    <h3>{{ $pageName }} 
+                                        @if($finish_session->finish < $current_time) 
+                                            &nbsp;<span class='Accent-200-cl TextBold text-decoration-underline'>{{ trans('langSessionHasExpired') }}</span>
+                                        @endif
+                                    </h3>
                                     <a class='link-color' data-bs-toggle='modal' data-bs-target='#session-participants'>
                                         {{ trans('langParticipants') }}
                                     </a>
                                 </div>
-                                <div class='mt-2'>{!! $is_session_completed_message !!}</div>
+                                {{-- <div class='mt-2'>{!! $is_session_completed_message !!}</div> --}}
                                 @if($prereq_session)
                                     <p class='TextBold'>{{ trans('langSessionPrerequisites') }}:&nbsp;<span>{{ $prereq_session->title }}</span></p>
                                 @endif
