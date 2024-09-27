@@ -54,6 +54,12 @@
                                 'button-class' => 'btn-success',
                                 'show' => $is_consultant
                             ),
+                            array('title' => trans('langCreateReference'),
+                                'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_reference',
+                                'icon' => 'fa-regular fa-file-lines',
+                                'level' => 'secondary',
+                                'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
+                            ),
                             array('title' => trans('langCreateDeliverable'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=doc_upload',
                                 'icon' => 'fa-solid fa-file-arrow-up',

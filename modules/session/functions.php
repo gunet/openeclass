@@ -527,6 +527,9 @@ function show_sessionResource($info) {
         case 'doc':
             $html .= show_session_doc($info->title, $info->comments, $info->id, $info->res_id);
             break;
+        case 'doc_reference':
+            $html .= show_session_reference_doc($info->title, $info->comments, $info->id, $info->res_id);
+            break;
         case 'work':
             $html .= show_session_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
@@ -742,6 +745,64 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
           <td class='text-start'>$download_hidden_link $link $res_prereq_icon $comment</td>
           <td>$file->creator</td>" .
           session_actions('doc', $resource_id, $status, $file->id) .
+            "</tr>";
+}
+
+/**
+ * @brief display resource documents
+ * @return string
+ */
+function show_session_reference_doc($title, $comments, $resource_id, $file_id) {
+    global $can_upload, $course_id, $langWasDeleted, $urlServer,
+           $id, $course_code, $sessionID,
+           $is_consultant, $uid, $langReference;
+
+    $can_upload = $can_upload || $is_consultant;
+
+    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
+
+    $res_prereq_icon = '';
+    if (!$file) {
+        $download_hidden_link = '';
+        if (!$can_upload) {
+            return '';
+        }
+        $status = 'del';
+        $image = 'fa-xmark link-delete';
+        $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+    } else {
+        $status = $file->visible;
+        if (!$can_upload and (!resource_access($file->visible, $file->public))) {
+            return '';
+        }
+        if ($file->format == '.dir') {
+            $image = 'fa-folder-open';
+            $download_hidden_link = '';
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=$_GET[session]'>" .
+                q($title) . "</a>";
+        } else {
+            $image = choose_image('.' . $file->format);
+            //$download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path) . "&userID=" .$file->lock_user_id;
+            $file_obj = MediaResourceFactory::initFromDocument($file);
+            $file_obj->setAccessURL(session_file_reference_uploaded_url($file->path, $file->filename, $file->lock_user_id));
+            $file_obj->setPlayURL(session_file_reference_playurl($file->path, $file->filename));
+            $link = MultimediaHelper::chooseMediaAhref($file_obj);
+            $download_hidden_link = '';
+        }
+    }
+    $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
+    if (!empty($comments)) {
+        $comment = '<br />' . $comments;
+    } else {
+        $comment = '';
+    }
+
+    return "
+        <tr $class_vis data-id='$resource_id'>
+          <td width='1'>" . icon($image, '') . "</td>
+          <td class='text-start'>$download_hidden_link $link ($langReference) $res_prereq_icon $comment</td>
+          <td>$file->creator</td>" .
+          session_actions('doc_reference', $resource_id, $status, $file->id) .
             "</tr>";
 }
 
@@ -987,7 +1048,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
 
     $downloadPath = "";
     $fromSystem = 0;
-    if($res_type == 'doc' && $res_id){
+    if(($res_type == 'doc' or $res_type == 'doc_reference') && $res_id){
         $res = Database::get()->querySingle("SELECT path,subsystem,lock_user_id FROM document WHERE id = ?d",$res_id);
         $downloadPath = $res->path;
         $fromSystem = $res->subsystem;
@@ -995,6 +1056,8 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
 
     if($fromSystem == MYSESSIONS){
         $download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;download=" . getIndirectReference($downloadPath);
+    }elseif($fromSystem == SESSION_REFERENCE){
+        $download_url = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;session=$sessionID&amp;downloadReference=true&amp;download=" . getIndirectReference($downloadPath);
     }else{
         $download_url = $urlAppend . "modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($downloadPath);
     }
@@ -1098,10 +1161,11 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                                     array('title' => $langDownload,
                                         'url' => "$download_url",
                                         'icon' => 'fa-download',
-                                        'show' => $res_type == 'doc'),
+                                        'show' => ($res_type == 'doc' or $res_type == 'doc_reference')),
                                     array('title' => $showorhideMessage,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$_GET[session]&amp;res_id=$resource_id&amp;vis_res=$vis_res_val",
-                                        'icon' => $showorhideIcon),
+                                        'icon' => $showorhideIcon,
+                                        'show' => ($res_type != 'doc_reference')),
                                     array('title' => $langDelete,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[session]&amp;del=$resource_id",
                                         'icon' => 'fa-xmark',
@@ -3589,4 +3653,225 @@ function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable
         send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
 
     }
+}
+
+
+/**
+ * @brief Reference creation from a counselor in a session using file uploading.
+ * @param integer $sid
+ */
+function reference_creation_by_uploaded_file($sid){
+    
+    global $webDir, $course_id, $is_consultant, $langEmptyUploadFile, $course_code, 
+            $langFileExists, $uid, $language, $langDownloadEnd;
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    if($_FILES['file_reference_upload']['error'] > 0) {
+        // cover_image is empty (and not an error), or no file was uploaded
+        Session::flash('message',$langEmptyUploadFile);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_reference");
+    }
+
+    // If uploaded file exists do not continue.
+    // This uploaded file does not refer to deliverable but refers to resource of a session.
+    if(isset($_FILES['file_reference_upload']['name'])){
+        $path_exists = Database::get()->queryArray("SELECT * FROM document
+                                                    WHERE course_id = ?d
+                                                    AND subsystem = ?d
+                                                    AND subsystem_id = ?d
+                                                    AND filename = ?s",
+                                                    $course_id, SESSION_REFERENCE, $sid, $_FILES['file_reference_upload']['name']);
+
+        if (count($path_exists) > 0) {
+            Session::flash('message',$langFileExists);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_reference");
+        }
+    }
+
+
+    // upload attached file
+    if (isset($_FILES['file_reference_upload']) and is_uploaded_file($_FILES['file_reference_upload']['tmp_name'])) { // upload comments file
+        $session_filename = $_FILES['file_reference_upload']['name'];
+        validateUploadedFile($session_filename); // check file type
+        $session_filename = add_ext_on_mime($session_filename);
+        // File name used in file system and path field
+        $safe_session_filename = safe_filename(get_file_extension($session_filename));
+        $session_dir = "$webDir/courses/$course_code/session/session_$sid/";
+        if (!file_exists($session_dir)) {
+            mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
+        }
+
+        $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
+        
+        if (move_uploaded_file($_FILES['file_reference_upload']['tmp_name'], $spathfile)) {
+            @chmod($spathfile, 0644);
+            $session_real_filename = $_FILES['file_reference_upload']['name'];
+            $session_filepath = '/' . $safe_session_filename;
+        }
+
+        $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+        $file_date = date('Y-m-d G:i:s');
+
+        $info_file = pathinfo($session_filename);
+        $title = $info_file['filename'];
+        $comments = null;
+
+        $doc_inserted = Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = ?s,
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0,
+            lock_user_id = ?d",
+                $course_id, SESSION_REFERENCE, $sid, $session_filepath,
+                $session_real_filename, $comments, $title, $file_creator,
+                $file_date, $file_date, $file_creator, get_file_extension($session_filename),
+                $language, $uid);
+
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
+        $order = $order+1;
+
+        $q = Database::get()->query("INSERT INTO session_resources SET
+                                    session_id = ?d,
+                                    type = 'doc_reference',
+                                    title = ?s,
+                                    comments = ?s,
+                                    visible = 0,
+                                    `order` = ?d,
+                                    `date` = " . DBHelper::timeAfter() . ",
+                                    res_id = ?d", $sid, $title, $comments, $order, $doc_inserted->lastInsertID);
+
+        Session::flash('message',$langDownloadEnd);
+        Session::flash('alert-class', 'alert-success');
+        
+    }else {
+        Session::flash('message',$langDownloadNotEnd);
+        Session::flash('alert-class', 'alert-danger');
+    }
+    
+    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
+}
+
+
+/**
+ * @brief Reference creation from a counselor in a session using fields.
+ * @param integer $sid
+ */
+function reference_creation_by_fields($sid){
+
+    global $webDir, $course_id, $is_consultant, $langEmptyUploadFile, $course_code, 
+            $langFileExists, $uid, $language, $langDownloadEnd, $langFieldsMissing;
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    if(empty($_POST['title_reference']) or empty($_POST['content_reference'])){
+        Session::flash('message',$langFieldsMissing);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_reference");
+    }
+
+    // If uploaded file exists do not continue.
+    // This uploaded file does not refer to deliverable but refers to resource of a session.
+    $checkfilename = q($_POST['title_reference']) . ".txt";
+    $path_exists = Database::get()->queryArray("SELECT * FROM document
+                                                WHERE course_id = ?d
+                                                AND subsystem = ?d
+                                                AND subsystem_id = ?d
+                                                AND filename = ?s",
+                                                $course_id, SESSION_REFERENCE, $sid, $checkfilename);
+
+    if (count($path_exists) > 0) {
+        Session::flash('message',$langFileExists);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/session/resource.php?course=".$course_code."&session=".$sid."&type=doc_reference");
+    }
+
+
+    $sdir = "$webDir/courses/$course_code/session/session_$sid/";
+    if (!file_exists($sdir)) {
+        mkdir("$webDir/courses/$course_code/session/session_$sid/", 0755, true);
+    }
+
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM session_resources WHERE session_id = ?d", $sid)->maxorder;
+    $order = $order+1;
+    $title = q($_POST['title_reference']);
+    if(empty($title)){
+        $title = "$langTool" . "_$sid";
+    }
+    $comments = strip_tags($_POST['content_reference']) ?? '';
+    $textfile = fopen("$webDir/courses/$course_code/session/session_$sid/$title.txt", "w") or die("Unable to open file!");
+    $txt = "$comments";
+    fwrite($textfile, $txt);
+    fclose($textfile);
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    $file_date = date('Y-m-d G:i:s');
+
+    $safe_filename = safe_filename(get_file_extension("$title.txt"));
+    $s_real_filename = "$title.txt";
+    $sfilepath = '/' . $safe_filename;
+    $ses_filename = add_ext_on_mime($s_real_filename);
+    rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
+    $comments = null;
+    
+    $upload_file = Database::get()->query("INSERT INTO document SET
+        course_id = ?d,
+        subsystem = ?d,
+        subsystem_id = ?d,
+        path = ?s,
+        extra_path = '',
+        filename = ?s,
+        visible = 1,
+        comment = ?s,
+        category = 0,
+        title = ?s,
+        creator = ?s,
+        date = ?s,
+        date_modified = ?s,
+        subject = '',
+        description = '',
+        author = ?s,
+        format = ?s,
+        language = ?s,
+        copyrighted = 0,
+        editable = 0,
+        lock_user_id = ?d",
+            $course_id, SESSION_REFERENCE, $sid, $sfilepath,
+            $s_real_filename, $comments, $title, $file_creator,
+            $file_date, $file_date, $file_creator, get_file_extension($ses_filename),
+            $language, $uid);
+
+
+    Database::get()->query("INSERT INTO session_resources SET
+                            session_id = ?d,
+                            type = 'doc_reference',
+                            title = ?s,
+                            comments = ?s,
+                            visible = 0,
+                            `order` = ?d,
+                            `date` = " . DBHelper::timeAfter() . ",
+                            res_id = ?d", $sid, $title, $comments, $order, $upload_file->lastInsertID);
+
+    Session::flash('message',$langDownloadEnd);
+    Session::flash('alert-class', 'alert-success');
+        
+    redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
 }

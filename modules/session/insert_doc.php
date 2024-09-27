@@ -259,3 +259,102 @@ function upload_file($sid){
     return $tool_content;
 
 }
+
+
+
+function upload_file_reference($sid){
+    global $webDir, $tool_content, $head_content, $course_code, $langTitle, $langComments, 
+           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, 
+           $uid, $langDescription, $langImgFormsDes, $langForm, $langInfoUploadReference, 
+           $langContent, $langFileCreation, $langCPFMenu;
+
+        $head_content .= "
+            <script type='text/javascript'>
+                $('.create-file').css('display','none');
+                $('.uploadFile').css('display','block');
+                function chooseMethod() {
+                    var selectBox = document.getElementById('selectBox');
+                    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+                    document.getElementById('method-uploading').value = selectedValue;
+                   
+                    if(selectedValue == 2){
+                        $('.create-file').css('display','block');
+                        $('.uploadFile').css('display','none');
+                    }else{
+                        $('.create-file').css('display','none');
+                        $('.uploadFile').css('display','block');
+                    }
+                }
+
+            </script>
+        
+        ";
+
+        $tool_content .= "  
+                            <div class='d-lg-flex gap-4 mt-4'>
+                                <div class='flex-grow-1'>
+                                    <div class='form-wrapper form-edit rounded'>
+                                        <form role='form' class='form-horizontal' action='resource.php?course=$course_code&session=$sid' method='post' enctype='multipart/form-data'>
+                                            <fieldset>
+                                                <legend class='mb-0' aria-label='$langForm'></legend>
+                                                <input type='hidden' name='id' value='$sid' />
+
+                                                <div class='col-12'>
+                                                    <div class='alert alert-info'>
+                                                        <i class='fa-solid fa-circle-info fa-lg'></i>
+                                                        <span>$langInfoUploadReference</span>
+                                                    </div>
+                                                </div>
+
+                                                <input id='method-uploading' type='hidden' name='method-uploading' value='1' />
+
+                                                <div class='col-12 mt-4'>
+                                                    <label for='selectBox' class='control-label-notes mb-1'>$langCPFMenu</label>
+                                                    <select id='selectBox' class='form-select' onchange='chooseMethod();'>
+                                                        <option value='1' selected>$langDownloadFile</option>
+                                                        <option value='2'>$langFileCreation</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class='uploadFile form-group mt-4'>
+                                                    <label for='file-upload' class='col-12 control-label-notes'>$langDownloadFile <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                                    <input id='file-upload' type='file' name='file_reference_upload'/>
+                                                </div>
+
+                                                <div class='create-file form-group mt-4' style='display:none;'>
+                                                    <label for='title' class='col-12 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                                    <div class='col-12'>
+                                                        <input id='title' type='text' name='title_reference' class='form-control'>";
+                                  $tool_content .= "</div>
+                                                </div>
+
+                                                <div class='create-file form-group mt-4' style='display:none;'>
+                                                    <label for='content_reference' class='col-12 control-label-notes'>$langContent <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                                    " . rich_text_editor('content_reference', 5, 40, '') . "
+                                                </div>";
+
+
+                              $tool_content .= "<div class='form-group mt-5'>
+                                                    <div class='col-12 d-flex justify-content-end aling-items-center'>
+                                                        <input class='btn submitAdminBtn' type='submit' name='submit_reference' value='$langSubmit'>
+                                                    </div>
+                                                </div>
+
+                                                " . generate_csrf_token_form_field() . "    
+
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class='d-none d-lg-block'>
+                                    <img class='form-image-modules' src='" . get_form_image() . "' alt='$langImgFormsDes'>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            ";
+
+    return $tool_content;
+
+}
