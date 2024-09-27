@@ -1157,7 +1157,7 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                                     array('title' => $langEditChange,
                                         'url' => $edit_link,
                                         'icon' => 'fa-edit',
-                                        'show' => $status != 'del'),
+                                        'show' => ($status != 'del' && $res_type != 'doc_reference')),
                                     array('title' => $langDownload,
                                         'url' => "$download_url",
                                         'icon' => 'fa-download',
@@ -3831,7 +3831,7 @@ function reference_creation_by_fields($sid){
     $ses_filename = add_ext_on_mime($s_real_filename);
     rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
     $comments = null;
-    
+
     $upload_file = Database::get()->query("INSERT INTO document SET
         course_id = ?d,
         subsystem = ?d,

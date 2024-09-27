@@ -352,4 +352,6 @@ $data['prereq_session'] = Database::get()->querySingle("SELECT title FROM mod_se
                                                                      WHERE course_id = ?d
                                                                      AND session_id = ?d)",$course_id,$sessionID);
 
+$data['finish_session'] = Database::get()->querySingle("SELECT finish FROM mod_session WHERE id = ?d",$sessionID);
+
 view('modules.session.session_space', $data);
