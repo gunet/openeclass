@@ -265,7 +265,7 @@ function show_submission_details($id) {
 
     global $uid, $m, $course_id, $langSubmittedAndGraded, $tool_content, $course_code, $autojudge,
            $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langQuestionView, $urlAppend,
-           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria, $urlServer,
+           $langGradebookGrade, $langWorkOnlineText, $langFileName, $head_content, $langCriteria,
            $langOpenCoursesFiles, $langDownload, $langPrint, $langFullScreen, $langNewTab, $langCancel;
 
     load_js('tools.js');
@@ -504,7 +504,7 @@ function show_submission_details($id) {
     $tool_content .= "";
 
     if ($assignment->auto_judge and $autojudge->isEnabled()) {
-        $reportlink = $urlServer."modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
+        $reportlink = $urlAppend."modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
         $tool_content .= "
                 <li class='list-group-item element'>
                     <div class='row row-cols-1 row-cols-md-2 g-1'>

@@ -71,7 +71,7 @@ if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
 }
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
-$works_url = array('url' => "{$urlServer}modules/work/index.php?course=$course_code", 'name' => $langWorks);
+$works_url = array('url' => "{$urlAppend}modules/work/index.php?course=$course_code", 'name' => $langWorks);
 $toolName = $langWorks;
 
 // Auto Judge settings (if any)
@@ -170,7 +170,7 @@ $head_content .= "<script type='text/javascript'>
                   'class' : 'form-control input-sm ms-0 mb-3',
                   'placeholder' : '$langSearch...'
             });
-            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
+            $('.dataTables_filter label').attr('aria-label', '$langSearch');
 
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
@@ -707,7 +707,7 @@ if ($is_editor) {
                     Session::flash('message',$langDelF);
                     Session::flash('alert-class', 'alert-danger');
                 }
-                redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");
             } elseif ($choice == 'do_purge') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if (purge_assignment_subs($id)) {
@@ -4298,7 +4298,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
     $langNotice3, $langNotice3Multiple, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $langComments, $urlServer, $langImgFormsDes, $langSelect, $langForm;
+    $langGradebookGrade, $langComments, $langImgFormsDes, $langSelect, $langForm;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -4458,7 +4458,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $back_link = "../units/index.php?course=$course_code&id=$_GET[unit]";
                 $form_link = "../units/view.php?course=$course_code";
             } else {
-                $back_link = $form_link = "{$urlServer}modules/work/index.php?course=$course_code";
+                $back_link = $form_link = "{$urlAppend}modules/work/index.php?course=$course_code";
             }
         }
         $tool_content .= action_bar(array(
@@ -4587,7 +4587,7 @@ function assignment_details($id, $row, $x =false) {
     global $tool_content, $head_content, $is_editor, $course_code, $m, $langDaysLeft, $course_id, $uid,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags, $langNoDeadline,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langGradeType, $langGradeNumber,
-           $langGradeScale, $langGradeRubric, $langCriteria, $langDetail, $urlServer, $langBack,
+           $langGradeScale, $langGradeRubric, $langCriteria, $langDetail, $urlAppend, $langBack,
            $langEditChange, $langExportGrades, $langDescription, $langTitle, $langWarnAboutDeadLine,
            $langReviewStart, $langReviewEnd, $langGradeReviews, $langImportGrades, $langGroupWorkDeadline_of_Submission;
 
@@ -4695,7 +4695,7 @@ function assignment_details($id, $row, $x =false) {
                 array(
                     'title' => $langBack,
                     'icon' => 'fa-reply',
-                    'url' => "{$urlServer}modules/work/?course=$course_code&amp;id=$id",
+                    'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$id",
                     'level' => 'primary-label'
                 )
             ));
@@ -4704,20 +4704,20 @@ function assignment_details($id, $row, $x =false) {
             array(
                 'title' => $langZipDownload,
                 'icon' => 'fa-file-zipper',
-                'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;download=$id",
+                'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;download=$id",
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ),
             array(
                 'title' => $langExportGrades,
                 'icon' => 'fa-file-excel',
-                'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=export",
+                'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=export",
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ),
             array(
                 'title' => $langAddGrade,
-                'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=add",
+                'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=add",
                 'icon' => 'fa-plus-circle'
             ),
             array(
@@ -4729,17 +4729,17 @@ function assignment_details($id, $row, $x =false) {
             array(
                 'title' => $langGraphResults,
                 'icon' => 'fa-bar-chart',
-                'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;disp_results=true"
+                'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;disp_results=true"
             ),
             array(
                 'title' => $m['WorkUserGroupNoSubmission'],
-                'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
+                'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;disp_non_submitted=true",
                 'icon' => 'fa-minus-square'
             ),
             array(
                 'title' => $langDelAssign,
                 'icon' => 'fa-xmark',
-                'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=do_delete",
                 'text-class' => 'text-danger',
                 'button-class' => "deleteAdminBtn",
                 'confirm' => "$langWorksDelConfirm"
@@ -4763,10 +4763,10 @@ function assignment_details($id, $row, $x =false) {
                 $m[WorkInfo]
             </h3>
                 ". (($is_editor) ?
-                "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit' aria-label='$langEditChange'>
+                "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit' aria-label='$langEditChange'>
                     <span class='fa-solid fa-edit fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
-            
+
         </div>
         <div class='card-body'>
         <ul class='list-group list-group-flush'>
@@ -4806,9 +4806,9 @@ function assignment_details($id, $row, $x =false) {
         }
         if (isset($_GET['unit'])) {
             $unit = intval($_GET['unit']);
-            $fileUrl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
+            $fileUrl = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$row->id&amp;file_type=1&amp;id=$unit";
         } else {
-            $fileUrl = "{$urlServer}modules/work/index.php?course=$course_code&amp;get=$row->id&amp;file_type=1";
+            $fileUrl = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$row->id&amp;file_type=1";
         }
         if (!empty($row->file_name)) {
             $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
@@ -4968,7 +4968,7 @@ function show_assignment($id) {
     global $tool_content, $head_content, $langNoSubmissions, $langSubmissions, $langGradebookGrade, $langEdit,
     $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished, $langMailToUsers,
     $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
-    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer, $langTransferGrades,
+    $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlAppend, $langTransferGrades,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent,
     $autojudge, $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
@@ -4991,16 +4991,6 @@ function show_assignment($id) {
            })
         });
     </script>";
-
-    // $head_content .= '
-    // <style>
-    //     .count-col { width: 3em; }
-    //     .user-col { width: 40%; }
-    //     .tools-col { width: 5em; }
-    //     .date-col, .grade-col { width: 7em; }
-    //     .filename-col { min-width: 4em; max-width: 20%; overflow-wrap: break-word; }
-    //     td pre { overflow: scroll; }
-    // </style>';
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
@@ -5078,7 +5068,7 @@ function show_assignment($id) {
             .table-responsive { width: 100%; }
             .table-responsive td { word-break: break-word; }
           </style>";
-        $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
+        $tool_content .= "<form action='{$urlAppend}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
             <input type='hidden' name='grades_id' value='$id' />
             <br>
             <div class='alert alert-success'>
@@ -5123,7 +5113,7 @@ function show_assignment($id) {
                             continue;
                         }
                         $subContentGroup = "$m[groupsubmit] " .
-                                "<a href='{$urlServer}/modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
+                                "<a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
                     } else {
                         if (isset($seen[$row->uid])) {
@@ -5266,7 +5256,7 @@ function show_assignment($id) {
                 } else {
                     $icon_field = '';
                     if ($is_editor) {
-                        $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
+                        $grade_field = "<a class='link' href='{$urlAppend}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
                                     <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
                     } else {
                         $grade_field = "";
@@ -5312,7 +5302,7 @@ function show_assignment($id) {
             }
             $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
             if($autojudge->isEnabled() and $auto_judge_enabled_assign) {
-                $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                $reportlink = "{$urlAppend}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
             }
 
@@ -5327,7 +5317,7 @@ function show_assignment($id) {
                     } else {
                         $icon_field = '';
                         if ($is_editor) {
-                            $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
+                            $grade_field = "<a class='link' href='{$urlAppend}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
                                     <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
                         } else {
                             $grade_field = "";
@@ -5372,7 +5362,7 @@ function show_assignment($id) {
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
                 if($autojudge->isEnabled() and $auto_judge_enabled_assign) {
-                    $reportlink = "{$urlServer}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                    $reportlink = "{$urlAppend}modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
             }
@@ -5780,7 +5770,7 @@ function show_assignments() {
 
     $action_bar = action_bar(array(
             array('title' => $langNewAssign,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
+                  'url' => "{$urlAppend}modules/work/?course=$course_code&amp;add=1",
                   'button-class' => 'btn-success',
                   'icon' => 'fa-plus-circle',
                   'level' => 'primary-label'),
@@ -5862,7 +5852,7 @@ function show_assignments() {
                 $deadline = '';
             }
             $tool_content .= "<tr class='".((!$row->active or $not_started)? "not_visible":"")."'>";
-            $tool_content .= "<td style='width:40%;'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+            $tool_content .= "<td style='width:40%;'><a href='{$urlAppend}modules/work/?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
                                 $turnitin_message
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
@@ -5883,21 +5873,21 @@ function show_assignments() {
               if ($is_editor) {
                   $tool_content .= action_button(array(
                       array('title' => $langEditChange,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
+                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
                       array('title' => $m['WorkUserGroupNoSubmission'],
                           'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;disp_non_submitted=true",
                           'icon' => 'fa-minus-square'),
                       array('title' => $row->active == 1 ? $langDeactivate : $langActivate,
-                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
+                          'url' => $row->active == 1 ? "{$urlAppend}modules/work/?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye-slash' : 'fa-eye'),
                       array('title' => $m['WorkSubsDelete'],
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
+                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                           'icon' => 'fa-eraser',
                           'confirm' => "$langWarnForSubmissions $langDelSure",
                           'show' => $num_submitted > 0),
                       array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                           'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'confirm' => $langWorksDelConfirm)));
