@@ -318,14 +318,19 @@ function get_option($options, $name) {
  * @param string $desc
  * @param mixed $faculty - can be null
  */
-function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty) {
+function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty, $allowables = null) {
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
     $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes, $langSelect, $langForm;
 
-    list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
+    if (isset($allowables) and $allowables) {
+        list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker(['allowables' => $allowables]);
+    } else {
+        list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
+    }
+
     if ($type) {
         if (isset($GLOBALS['lang' . $type])) {
             $type_label = ' (' . $GLOBALS['lang' . $type] . ')';

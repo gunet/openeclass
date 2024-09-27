@@ -24,19 +24,41 @@ $require_current_course = true;
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-
-// access control
-if (!get_config('allow_teacher_clone_course') && !$is_admin) {
-    header("Location:" . $urlServer . "index.php");
-    exit();
-}
-
 require_once 'include/lib/hierarchy.class.php';
 require_once 'archive_functions.php';
 require_once 'restore_functions.php';
 
-$toolName = $langCloneCourse;
 $treeObj = new Hierarchy();
+$allow_clone = false;
+$allowables = null;
+// $atleastone is set to true by init when a department admin can admin this course
+if (get_config('allow_teacher_clone_course') and $is_course_admin) {
+    $allow_clone = true;
+} elseif ($is_power_user or $is_admin) {
+    $allow_clone = true;
+} elseif ($is_departmentmanage_user and $atleastone) {
+    $allow_clone = true;
+    if (get_config('restrict_teacher_owndep')) {
+        // Department admin can create course only in own departments
+        $user = new User();
+        $userdeps = $user->getDepartmentIds($uid);
+        $subs = $treeObj->buildSubtreesFull($userdeps);
+        $allowables = [];
+        foreach ($subs as $node) {
+            if (intval($node->allow_course) === 1) {
+                $allowables[] = $node->id;
+            }
+        }
+    }
+}
+
+// access control
+if (!$allow_clone) {
+    header("Location:" . $urlServer . "index.php");
+    exit();
+}
+
+$toolName = $langCloneCourse;
 $_POST['restoreThis'] = null; // satisfy course_details_form()
 $_POST['create_users'] = null; // no need to try recreating accounts while cloning
 
@@ -69,7 +91,7 @@ if (isset($_POST['create_restored_course'])) {
             $old_deps[] = array('name' => $treeObj->getFullPath($dep->department));
         }, $course_id);
 
-    $tool_content = course_details_form($public_code, $currentCourseName, $course_prof_names, $currentCourseLanguage, null, $visible, $desc, $old_deps);
+    $tool_content = course_details_form($public_code, $currentCourseName, $course_prof_names, $currentCourseLanguage, null, $visible, $desc, $old_deps, $allowables);
 }
 
 load_js('jstree3');
