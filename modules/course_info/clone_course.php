@@ -28,6 +28,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'archive_functions.php';
 require_once 'restore_functions.php';
 
+load_js('jstree3');
 $treeObj = new Hierarchy();
 $allow_clone = false;
 $allowables = null;
@@ -94,7 +95,4 @@ if (isset($_POST['create_restored_course'])) {
     $tool_content = course_details_form($public_code, $currentCourseName, $course_prof_names, $currentCourseLanguage, null, $visible, $desc, $old_deps, $allowables);
 }
 
-load_js('jstree3');
-list($js, $html) = $treeObj->buildCourseNodePicker();
-$head_content .= $js;
 draw($tool_content, 2, null, $head_content);

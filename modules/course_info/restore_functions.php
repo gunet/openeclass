@@ -320,16 +320,17 @@ function get_option($options, $name) {
  */
 function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty, $allowables = null) {
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
-    $langCourseDescription, $langFaculty, $langCourseVis,
-    $langTeacher, $langUsersWillAdd,
+    $langCourseDescription, $langFaculty, $langCourseVis, $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $course_code, $urlAppend, $langImgFormsDes, $langSelect, $langForm;
+    $langNone, $langOldValue, $treeObj, $langImgFormsDes, $langSelect, $langForm, $head_content;
+
 
     if (isset($allowables) and $allowables) {
         list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker(['allowables' => $allowables]);
     } else {
         list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     }
+    $head_content .= $tree_js;
 
     if ($type) {
         if (isset($GLOBALS['lang' . $type])) {
