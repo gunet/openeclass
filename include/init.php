@@ -358,6 +358,20 @@ if(isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isse
     unset($_SESSION['userId_uploader']);
 }
 
+// Regarding uploaded reference docs by coulselor in a session
+$user_counselor_uploader = 0;
+$uploaded_reference_docs_by_users = false;
+if(isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReferenceSessionId'] && isset($require_current_course) && $require_current_course){
+    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['CurrentReferenceSessionId']);
+    $course_id = $q->course_id;
+    $_SESSION['dbname'] = course_id_to_code($course_id);
+    $sessionID = $_SESSION['CurrentReferenceSessionId'];
+    $uploaded_reference_docs_by_users = true;
+    $user_counselor_uploader = $_SESSION['userId__reference_uploader'];
+    unset($_SESSION['CurrentReferenceSessionId']);
+    unset($_SESSION['userId__reference_uploader']);
+}
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 $is_editor = false;
