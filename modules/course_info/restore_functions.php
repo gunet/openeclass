@@ -320,13 +320,14 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd, $langSubmit, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $langBack, $course_code;
+    $langNone, $langOldValue, $treeObj, $langBack, $course_code, $head_content;
 
     if (isset($allowables) and $allowables) {
         list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker(['allowables' => $allowables]);
     } else {
         list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     }
+    $head_content .= $tree_js;
 
     if ($type) {
         if (isset($GLOBALS['lang' . $type])) {

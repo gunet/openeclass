@@ -83,7 +83,7 @@ $head_content .= <<<hContent
     function hideCCFields() {
         $('#cc').hide();
     }
-	
+
 	function hoursSum() {
         var lecthours = parseInt(document.getElementById('lecthours').value);
         var homehours = parseInt(document.getElementById('homehours').value);
@@ -164,7 +164,6 @@ if (!$deps_valid) {
     draw($tool_content, 1, null, $head_content);
     exit();
 }
-
 
 // display form
 if (!isset($_POST['create_course'])) {
@@ -265,7 +264,7 @@ if (!isset($_POST['create_course'])) {
                       </label>
                     </div>
                 </div>
-            </div>			
+            </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
                 <div class='col-sm-10'>
