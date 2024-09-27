@@ -30,10 +30,10 @@ if (get_config('dont_display_contact_menu')) {
 }
 
 $data['postaddress'] = nl2br(q(get_config('postaddress')));
-$data['phone'] = q(get_config('phone'));
+$data['phone'] = get_config('phone');
 $data['emailhelpdesk'] = $emailhelpdesk = get_config('email_helpdesk');
 if(!empty($data['emailhelpdesk'])){
-    $data['emailhelpdesk'] = "<a href='mailto:$emailhelpdesk'>".str_replace('@', ' &lt;at> ', $emailhelpdesk)."</a>";
+    $data['emailhelpdesk'] = "<a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>";
 }
 
 $data['action_bar'] = action_bar(
