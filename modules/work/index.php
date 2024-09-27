@@ -4143,21 +4143,12 @@ function submission_count($sub_id) {
 
 /**
  *sunarthsh foithth
- * @global type $course_id
- * @global array $works_url
- * @global type $course_code
- * @global type $langWorkOnlineText
- * @global type $langGradeOk
- * @global type $langSurnameName
- * @global type $m
- * @global type $langQuestionView
- * @global type $langSGradebookBook
  * @param type $id
  * @param type $display_graph_results
  */
 function show_assignment_review($id, $display_graph_results = false) {
-    global $tool_content, $head_content, $course_id, $works_url, $course_code, $uid,
-        $langWorkOnlineText, $m, $langGradebookGrade,
+    global $tool_content, $head_content, $course_id, $works_url, $course_code, $uid, $langProgress,
+        $langWorkOnlineText, $m, $langGradebookGrade, $langDownloadToPDF, $langPlagiarismCheck, $langPlagiarismResult,
         $langQuestionView, $langSGradebookBook, $langEdit, $langPeerSubmissions, $langSelect;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -4969,7 +4960,7 @@ function show_assignment($id) {
     $langWorkOnlineText, $langGradeOk, $langPlagiarismResult, $langHasAssignmentPublished, $langMailToUsers,
     $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlAppend, $langTransferGrades,
-    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
+    $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent,
     $autojudge, $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
     $langQuestionCorrectionTitle2, $langFrom2, $langOpenCoursesFiles, $is_editor, $langSelect, $langSettingSelect;
@@ -5298,7 +5289,7 @@ function show_assignment($id) {
                 }
                 $fileUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=" . $row->id;
                 $fileLink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->grade_comments_filename, $row->grade_comments_filename);
-                $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "<span class='small'>$fileLink</span>";
+                $comments = '<strong>'.$m['gradecomments'] . '</strong>:' . $grade_comments . "<div>$fileLink</div>";
             }
             $tool_content .= "<div style='padding-top: .5em;'>$comments $label</div>";
             if($autojudge->isEnabled() and $auto_judge_enabled_assign) {
