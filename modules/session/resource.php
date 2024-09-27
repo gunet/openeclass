@@ -98,6 +98,12 @@ if(isset($_POST['submit_doc'])){
     insert_session_poll($sessionID);
 }elseif(isset($_POST['submit_attend'])){
     insert_session_attendance($sessionID);
+}elseif(isset($_POST['submit_reference'])){
+    if(isset($_POST['method-uploading']) and $_POST['method-uploading'] == 1){
+        reference_creation_by_uploaded_file($sessionID);
+    }else{
+        reference_creation_by_fields($sessionID);
+    }
 }
 
 $type_resource = '';
@@ -110,6 +116,8 @@ if(isset($_GET['type'])){
         $type_resource = list_teleconferences($sessionID);
     }elseif($_GET['type'] == 'doc_upload'){
         $type_resource = upload_file($sessionID);
+    }elseif($_GET['type'] == 'doc_reference'){
+        $type_resource = upload_file_reference($sessionID);
     }elseif($_GET['type'] == 'add_tc'){
         $is_created_tc = session_tc_creation($sessionID,$course_id,'bbb',$_GET['token']);
         if($is_created_tc){

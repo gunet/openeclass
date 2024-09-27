@@ -6433,3 +6433,9 @@ $langFormContactMessage = "Contact form - message from";
 $langDoNotOverrideDeliverable = "The user's deliverable has been reviewed by the consultant and cannot be replaced.";
 $langUploadDeliverableFromUser = "A deliverable has been submitted by the beneficiary. See the details below:";
 $langAboutDeliverable = "About";
+$langCreateReference = "Reference creation";
+$langInfoUploadReference = "To create a report you can either upload an archive from your computer
+ or create a .txt file by filling in its title and content.";
+$langDownloadNotEnd = "The file was not uploaded. Try again.";
+$langReference = "Reference";
+$langFileCreation = "File creation";

@@ -240,6 +240,27 @@ function session_file_uploaded_url($path, $filename = null, $userId = 0) {
 }
 
 /**
+ * @brief Generate download URL for documents
+ * @global type $urlServer
+ * @param type $path
+ * @param type $filename
+ * @param type $courseCode
+ * @return type
+ */
+function session_file_reference_uploaded_url($path, $filename = null, $userId = 0) {
+    global $urlServer, $sessionID;
+
+    // For session docs without constant
+    $courseCode = 'reference_doc';
+    $gid = ",$sessionID,$userId";
+
+    return htmlspecialchars($urlServer .
+            "modules/document/file.php?$courseCode$gid" .
+            public_file_path($path, $filename), ENT_QUOTES);
+    
+}
+
+/**
  * @global type $course_code
  * @global type $urlServer
  * @global type $group_id
@@ -280,6 +301,26 @@ function session_file_playurl($path, $filename = null) {
 
     // For session docs without constant
     $courseCode = 'session';
+    $gid = ",$sessionID";
+
+    return htmlspecialchars($urlServer .
+            "modules/document/play.php?$courseCode$gid" .
+            public_file_path($path, $filename), ENT_QUOTES);
+    
+}
+
+/**
+ * @global type $urlServer
+ * @param type $path
+ * @param type $filename
+ * @param type $courseCode
+ * @return type
+ */
+function session_file_reference_playurl($path, $filename = null) {
+    global $urlServer, $sessionID;
+
+    // For session docs without constant
+    $courseCode = 'reference_session';
     $gid = ",$sessionID";
 
     return htmlspecialchars($urlServer .

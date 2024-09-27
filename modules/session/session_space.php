@@ -97,9 +97,14 @@ if (isset($_GET['download'])) {
         $format = '.dir';
         $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $public_code);
     } else {
+
+        $subSystem = MYSESSIONS;
+        if(isset($_GET['downloadReference'])){
+            $subSystem = SESSION_REFERENCE;
+        }
         $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
                         WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND
-                        path = ?s", $course_id, MYSESSIONS, $sessionID, $downloadDir);
+                        path = ?s", $course_id, $subSystem, $sessionID, $downloadDir);
                         
         
         if (!$q) {
@@ -205,6 +210,9 @@ if(isset($_GET['del'])){
         }
         if($q->type == 'doc'){
             Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,MYSESSIONS);
+        }
+        if($q->type == 'doc_reference'){
+            Database::get()->query("DELETE FROM document WHERE id = ?d AND subsystem = ?d",$q->res_id,SESSION_REFERENCE);
         }
         if($q->type == 'tc'){
             Database::get()->query("DELETE FROM tc_session WHERE id = ?d AND course_id = ?d AND id_session = ?d",$q->res_id,$course_id,$sessionID);

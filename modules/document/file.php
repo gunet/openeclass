@@ -91,6 +91,10 @@ if ($cinfo_components[0] == 'common') {
     $require_current_course = true;
     $_SESSION['CurrentSessionId'] = $cinfo_components[1];
     $_SESSION['userId_uploader'] = $cinfo_components[2];
+} elseif ($cinfo_components[0] == 'reference_doc') {
+    $require_current_course = true;
+    $_SESSION['CurrentReferenceSessionId'] = $cinfo_components[1];
+    $_SESSION['userId__reference_uploader'] = $cinfo_components[2];
 } else {
     $require_current_course = true;
     $_SESSION['dbname'] = $cinfo_components[0];
