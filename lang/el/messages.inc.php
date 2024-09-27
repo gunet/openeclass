@@ -6901,3 +6901,5 @@ $langEnableContactInfo = "Ενεργοποίηση φόρμας επικοινω
 $langHelpDeskEmailDoesNotExist = "Δεν βρέθηκε διεύθυνση e-mail στην πλατφόρμα για την αποστολή μηνύματος.";
 $langFormContactMessage = "Φόρμα επικοινωνίας - μήνυμα από";
 $langDoNotOverrideDeliverable = "Το παραδοτέο σας έχει ελεγχθεί από τον σύμβουλο και δεν μπορεί να αντικατασταθεί.";
+$langUploadDeliverableFromUser = "Έχει γίνει υποβολή παραδοτέου από τον ωφελούμενο. Δείτε τα στοιχεία παρακάτω:";
+$langAboutDeliverable = "Σχετικά με";

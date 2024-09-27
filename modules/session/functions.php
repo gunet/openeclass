@@ -1480,6 +1480,9 @@ function upload_session_doc($sid){
 
         // for uploading of deliverable
         if(isset($_POST['for_deliverable']) and isset($_POST['for_file'])){
+            if(!$is_consultant && !isset($_POST['onBehalfOfUserID'])){
+                informConsultantAboutDeliverable($sid,$_POST['fromUser'],$_POST['for_deliverable']);
+            }
             redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sid."&resource_id=".$_POST['for_deliverable']."&file_id=".$_POST['for_file']);
         }else{ // for not deliverable
             redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
@@ -3513,5 +3516,77 @@ function show_completed_resources($sid,$cid,$user){
         }
     }else{
         return;
+    }
+}
+
+
+function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable){
+
+    require_once 'include/sendMail.inc.php';
+
+    global $course_id, $course_code, $langSubmittedUploadedFile,
+            $langUploadDeliverableFromUser, $langStudent, $langProblem, 
+            $langManager, $siteName, $langEmail, $langAboutDeliverable, $langTel;
+
+    $consultantInfo = Database::get()->querySingle("SELECT email,verified_mail FROM user 
+                                                    WHERE id IN (SELECT creator FROM mod_session 
+                                                    WHERE id = ?d AND course_id = ?d)", $sid, $course_id);
+
+    if($consultantInfo->verified_mail){
+        $course_title = course_id_to_title($course_id);
+        $session_title = title_session($course_id,$sid);
+
+        $simpleUsertInfo = Database::get()->querySingle("SELECT givenname,surname FROM user 
+                                                     WHERE id = ?d", $fromSimpleUser);
+
+        $deliverableInfo = Database::get()->querySingle("SELECT title FROM session_resources WHERE id = ?d AND session_id = ?d", $aboutDeliverable, $sid);
+
+        $emailHeader = "
+                <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>$langSubmittedUploadedFile&nbsp;&nbsp;<span>($session_title&nbsp; | &nbsp;$course_title)</span></div>
+                    </div>
+                </div>";
+
+        $emailMain = "
+                <!-- Body Section -->
+                <div id='mail-body'>
+                    <br>
+                    <div>$langUploadDeliverableFromUser</div>
+                    <div id='mail-body-inner'>
+                        <ul id='forum-category'>
+                            <li>
+                                <span><b>$langStudent: </b></span> 
+                                <span>$simpleUsertInfo->givenname&nbsp;$simpleUsertInfo->surname</span>
+                            </li>
+                            <li>
+                                <span><b>$langAboutDeliverable: </b></span> 
+                                <span>$deliverableInfo->title</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <br>
+                        <p>$langProblem</p><br>" . get_config('admin_name') . "
+                        <ul id='forum-category'>
+                            <li>$langManager: $siteName</li>
+                            <li>$langTel: -</li>
+                            <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                        </ul>
+                    </div>
+                </div>";
+
+        $emailsubject = $siteName;
+
+        $emailbody = $emailHeader.$emailMain;
+
+        $emailPlainBody = html2text($emailbody);
+
+        $emailUser = $consultantInfo->email;
+        
+        send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
+
     }
 }
