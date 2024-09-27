@@ -58,7 +58,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
     }
     $res = Database::get()->querySingle($qry);
     if ($res) {
-            $username = strtolower($res->username);
+            $username = $res->username;
             $email = $res->email;
             // success
             if (token_validate($username . $email . $id, $code)) {
