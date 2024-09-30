@@ -3100,6 +3100,18 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('mod_session_users', 'is_accepted')) {
         Database::get()->query("ALTER TABLE mod_session_users ADD `is_accepted` int(11) NOT NULL DEFAULT 1");
     }
+
+    if (!DBHelper::tableExists('session_user_material')) {
+        Database::get()->query("CREATE TABLE `session_user_material` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `course_id` int(11) NOT NULL,
+              `session_id` int(11) NOT NULL,
+              `user_id` int(11) NOT NULL,
+              `content` MEDIUMTEXT,
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+              FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
 }
 
 

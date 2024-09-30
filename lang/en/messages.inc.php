@@ -6439,3 +6439,5 @@ $langInfoUploadReference = "To create a report you can either upload an archive 
 $langDownloadNotEnd = "The file was not uploaded. Try again.";
 $langReference = "Reference";
 $langFileCreation = "File creation";
+$langMaterialForUser = "User registration form";
+$langAddMaterialForUser = "Add your comment";

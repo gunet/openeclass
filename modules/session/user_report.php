@@ -51,6 +51,39 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 $pageName = $langUserReferences;
 
+if(isset($_GET['material_pdf'])){
+    $m = Database::get()->querySingle("SELECT content FROM session_user_material 
+                                        WHERE course_id = ?d
+                                        AND session_id = ?d
+                                        AND user_id = ?d", $course_id, $sessionID, $_GET['uMaterial']);
+
+    pdf_user_material_output($sessionID, $m->content, $_GET['uMaterial']);
+}
+
+if(isset($_POST['add_material'])){
+
+    $c = Database::get()->querySingle("SELECT * FROM session_user_material 
+                                        WHERE course_id = ?d
+                                        AND session_id = ?d
+                                        AND user_id = ?d", $course_id, $_POST['aboutSession'], $_POST['aboutU']);
+    if(!$c){
+        Database::get()->query("INSERT INTO session_user_material 
+                                SET content = ?s,
+                                course_id = ?d,
+                                session_id = ?d,
+                                user_id = ?d",$_POST['addContent'], $course_id, $_POST['aboutSession'], $_POST['aboutU']);
+    }else{
+        Database::get()->query("UPDATE session_user_material SET content = ?s
+                                WHERE course_id = ?d
+                                AND session_id = ?d
+                                AND user_id = ?d",$_POST['addContent'], $course_id, $_POST['aboutSession'], $_POST['aboutU']);
+    }
+
+    Session::flash('message',$langRegDone);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/user_report.php?course=$course_code&session=$sessionID");
+}
+
 
 if (isset($_GET['u'])) { //  stats per user
     if ($is_simple_user) { // security check
@@ -188,6 +221,7 @@ if (isset($_GET['u'])) { //  stats per user
                             <th>$langSurnameName</th>
                             <th>$langPercentageSessionCompletion</th>
                             <th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                            <th aria-label='$langSettingSelect'></th>
                         </tr>
                     </thead>";
     
@@ -205,8 +239,57 @@ if (isset($_GET['u'])) { //  stats per user
                                     </a>
                                  </td>";
                 $tool_content .= "<td>$row->percentage</td>";
-                $tool_content .= "<td class='text-end'>" . icon('fa-line-chart', $langShowReportUserCurrentSession, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id&amp;session=$sessionID") . "</td>";
+                $tool_content .= "<td class='text-center'>" . icon('fa-line-chart', $langShowReportUserCurrentSession, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id&amp;session=$sessionID") . "</td>";
+                $tool_content .= "<td class='text-center'>
+                                    <a class='link-color' data-bs-toggle='modal' href='#materialForUser{$row->id}' aria-label='$langMaterialForUser'>
+                                        <span class='fa-solid fa-newspaper' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langMaterialForUser'>
+                                    </a>
+                                  </td>";
             $tool_content .= "</tr>";
+
+
+            $contentToModify = "";
+            $contentInfo = Database::get()->querySingle("SELECT content FROM session_user_material 
+                                                                WHERE course_id = ?d
+                                                                AND session_id = ?d
+                                                                AND user_id = ?d", $course_id, $sessionID, $row->id);
+
+            $action_msg = "$langAdd";
+            $materialToPdf = "";
+            if(!empty($contentInfo->content)){
+                $contentToModify = $contentInfo->content;
+                $action_msg = "$langModify";
+                $materialToPdf = "<a class='btn successAdminBtn' href='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}&material_pdf=true&uMaterial={$row->id}' target='_blank'>$langDumpPDF</a>";
+            }
+                
+            $tool_content .= "
+            <div class='modal fade' id='materialForUser{$row->id}' tabindex='-1' aria-labelledby='materialForUser{$row->id}Label' aria-hidden='true'>
+                <form method='post' action='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}'>
+                    <div class='modal-dialog modal-lg modal-success'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <div class='modal-title'>
+                                    <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                    <div class='modal-title-default text-center mb-0 mt-2' id='materialForUser{$row->id}Label'>$langMaterialForUser</div>
+                                </div>
+                            </div>
+                            <div class='modal-body text-center'>
+                                <input type='hidden' name='aboutU' value='{$row->id}' />
+                                <input type='hidden' name='aboutSession' value='{$sessionID}' />
+                                " . rich_text_editor('addContent', 4, 20, $contentToModify) . "
+                            </div>
+                            <div class='modal-footer d-flex justify-content-center align-items-center'>
+                                <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
+                                <button type='submit' class='btn submitAdminBtnDefault' name='add_material'>$action_msg</button>
+                                $materialToPdf
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>";
+
+
+
         }
  $tool_content .= "</table>
             </div>
@@ -452,5 +535,72 @@ function pdf_session_output($sid) {
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);
     $mpdf->Output("$course_code user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
+    exit;
+}
+
+
+/**
+ * @brief output to pdf file for materials
+ * @return void
+ * @throws \Mpdf\MpdfException
+ */
+function pdf_user_material_output($sid,$content_m,$user_n) {
+    global $currentCourseName, $webDir, $course_id, $course_code, $language, $langMaterialForUser;
+
+    $sessionTitle = title_session($course_id,$sid);
+    $nameUser = participant_name($user_n);
+
+    $pdf_mcontent = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+          </style>
+        </head>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <h2> " . q($sessionTitle) . "</h2>
+        <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
+
+    $pdf_mcontent .= $content_m;
+   
+    $pdf_mcontent .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_mcontent);
+    $mpdf->Output("$course_code user_material.pdf", 'I'); // 'D' or 'I' for download / inline display
     exit;
 }

@@ -6909,3 +6909,5 @@ $langInfoUploadReference = "Για την δημιουργία αναφοράς 
 $langDownloadNotEnd = "Το αρχείο δεν ανέβηκε. Δοκιμάστε πάλι.";
 $langReference = "Αναφορά";
 $langFileCreation = "Δημιουργία αρχείου";
+$langMaterialForUser = "Έντυπο καταγραφής χρήστη";
+$langAddMaterialForUser = "Προσθέτε το σχόλιο σας";

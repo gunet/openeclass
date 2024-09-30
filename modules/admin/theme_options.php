@@ -76,7 +76,7 @@ $defaults = array(
                 "boxed" => array('containerType'),
                 "fluid" => array('view_platform'),
                 "small-right" => array("loginImgPlacement"),
-                "" => array('fluidContainerWidth')
+                "" => array('fluidContainerWidth','maxHeightJumbotron','maxWidthTextJumbotron')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
