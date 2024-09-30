@@ -51,6 +51,26 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $sessionID , 'name' => $sessionTitle);
 $pageName = $langUserReferences;
 
+if(isset($_POST['delete_material'])){
+    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session 
+                                                WHERE course_id = ?d
+                                                AND creator = ?d
+                                                AND id IN (SELECT session_id FROM mod_session_users 
+                                                            WHERE participants = ?d 
+                                                            AND is_accepted = ?d)", $course_id, $_POST['aboutTutor'], $_POST['aboutU'], 1);
+    foreach($session_ids as $s){
+            Database::get()->query("DELETE FROM session_user_material 
+                                    WHERE course_id = ?d
+                                    AND session_id = ?d
+                                    AND user_id = ?d", $course_id, $s->id, $_POST['aboutU']);
+    }
+    
+    Session::flash('message',$langDelMaterialSuccess);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/session/user_report.php?course=$course_code&session=$sessionID");
+
+}
+
 if(isset($_GET['material_pdf'])){
     $m = Database::get()->querySingle("SELECT content FROM session_user_material 
                                         WHERE course_id = ?d
@@ -61,29 +81,37 @@ if(isset($_GET['material_pdf'])){
 }
 
 if(isset($_POST['add_material'])){
+    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session 
+                                                WHERE course_id = ?d
+                                                AND creator = ?d
+                                                AND id IN (SELECT session_id FROM mod_session_users 
+                                                            WHERE participants = ?d 
+                                                            AND is_accepted = ?d)", $course_id, $_POST['aboutTutor'], $_POST['aboutU'], 1);
 
-    $c = Database::get()->querySingle("SELECT * FROM session_user_material 
-                                        WHERE course_id = ?d
-                                        AND session_id = ?d
-                                        AND user_id = ?d", $course_id, $_POST['aboutSession'], $_POST['aboutU']);
-    if(!$c){
-        Database::get()->query("INSERT INTO session_user_material 
-                                SET content = ?s,
-                                course_id = ?d,
-                                session_id = ?d,
-                                user_id = ?d",$_POST['addContent'], $course_id, $_POST['aboutSession'], $_POST['aboutU']);
-    }else{
-        Database::get()->query("UPDATE session_user_material SET content = ?s
-                                WHERE course_id = ?d
-                                AND session_id = ?d
-                                AND user_id = ?d",$_POST['addContent'], $course_id, $_POST['aboutSession'], $_POST['aboutU']);
+    foreach($session_ids as $s){
+        $existsMaterial = Database::get()->querySingle("SELECT * FROM session_user_material
+                                                        WHERE course_id = ?d
+                                                        AND session_id = ?d
+                                                        AND user_id = ?d", $course_id, $s->id, $_POST['aboutU']);
+        
+        if(!$existsMaterial){
+            Database::get()->query("INSERT INTO session_user_material 
+                                    SET content = ?s,
+                                    course_id = ?d,
+                                    session_id = ?d,
+                                    user_id = ?d",$_POST['addContent'], $course_id, $s->id, $_POST['aboutU']);
+        }else{
+            Database::get()->query("UPDATE session_user_material SET content = ?s
+                                    WHERE course_id = ?d
+                                    AND session_id = ?d
+                                    AND user_id = ?d",$_POST['addContent'], $course_id, $s->id, $_POST['aboutU']);
+        }
     }
-
+    
     Session::flash('message',$langRegDone);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/user_report.php?course=$course_code&session=$sessionID");
 }
-
 
 if (isset($_GET['u'])) { //  stats per user
     if ($is_simple_user) { // security check
@@ -249,19 +277,38 @@ if (isset($_GET['u'])) { //  stats per user
 
 
             $contentToModify = "";
-            $contentInfo = Database::get()->querySingle("SELECT content FROM session_user_material 
-                                                                WHERE course_id = ?d
-                                                                AND session_id = ?d
-                                                                AND user_id = ?d", $course_id, $sessionID, $row->id);
-
-            $action_msg = "$langAdd";
             $materialToPdf = "";
-            if(!empty($contentInfo->content)){
-                $contentToModify = $contentInfo->content;
+            $materialToDelete = "";
+            $tutorSession = 0;
+            $action_msg = "$langAdd";
+
+            if($is_consultant && !$is_coordinator){
+                $tutorSession = $uid;
+            }elseif($is_coordinator){
+                $tutorSession = Database::get()->querySingle("SELECT creator FROM mod_session WHERE id = ?d", $sessionID)->creator;
+            }
+
+            $contentInfo = Database::get()->queryArray("SELECT content FROM session_user_material 
+                                                        WHERE course_id = ?d
+                                                        AND session_id IN (SELECT id FROM mod_session WHERE creator = ?d)
+                                                        AND user_id = ?d", $course_id, $tutorSession, $row->id);
+
+            if(count($contentInfo) > 0){
+                foreach($contentInfo as $c){
+                    if(!empty($c->content)){
+                        $contentToModify = $c->content;
+                    }
+                }
+            }
+           
+ 
+            
+            if(!empty($contentToModify)){
                 $action_msg = "$langModify";
                 $materialToPdf = "<a class='btn successAdminBtn' href='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}&material_pdf=true&uMaterial={$row->id}' target='_blank'>$langDumpPDF</a>";
+                $materialToDelete = "<a class='btn deleteAdminBtn' href='#deleteMaterialForUser{$row->id}' data-bs-toggle='modal' target='_blank'>$langDelete</a>";
             }
-                
+
             $tool_content .= "
             <div class='modal fade' id='materialForUser{$row->id}' tabindex='-1' aria-labelledby='materialForUser{$row->id}Label' aria-hidden='true'>
                 <form method='post' action='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}'>
@@ -276,12 +323,38 @@ if (isset($_GET['u'])) { //  stats per user
                             <div class='modal-body text-center'>
                                 <input type='hidden' name='aboutU' value='{$row->id}' />
                                 <input type='hidden' name='aboutSession' value='{$sessionID}' />
+                                <input type='hidden' name='aboutTutor' value='{$tutorSession}' />
                                 " . rich_text_editor('addContent', 4, 20, $contentToModify) . "
                             </div>
                             <div class='modal-footer d-flex justify-content-center align-items-center'>
                                 <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
                                 <button type='submit' class='btn submitAdminBtnDefault' name='add_material'>$action_msg</button>
                                 $materialToPdf
+                                $materialToDelete
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>";
+
+            $tool_content .= "
+            <div class='modal fade' id='deleteMaterialForUser{$row->id}' tabindex='-1' aria-labelledby='deleteMaterialForUser{$row->id}Label' aria-hidden='true'>
+                <form method='post' action='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}'>
+                    <div class='modal-dialog modal-md modal-danger'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <div class='modal-title'>
+                                    <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
+                                    <div class='modal-title-default text-center mb-0' id='deleteMaterialForUser{$row->id}Label'>$langConfirmDelete</div>
+                                </div>
+                            </div>
+                            <div class='modal-body text-center'>
+                                <input type='hidden' name='aboutU' value='{$row->id}' />
+                                <input type='hidden' name='aboutTutor' value='{$tutorSession}' />
+                            </div>
+                            <div class='modal-footer d-flex justify-content-center align-items-center'>
+                                <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
+                                <button type='submit' class='btn deleteAdminBtn' name='delete_material'>$langDelete</button>
                             </div>
                         </div>
                     </div>
@@ -291,6 +364,7 @@ if (isset($_GET['u'])) { //  stats per user
 
 
         }
+        
  $tool_content .= "</table>
             </div>
         </div>";
