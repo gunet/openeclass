@@ -4686,7 +4686,7 @@ function assignment_details($id, $row, $x =false) {
                 array(
                     'title' => $langBack,
                     'icon' => 'fa-reply',
-                    'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$id",
+                    'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id",
                     'level' => 'primary-label'
                 )
             ));
@@ -5761,7 +5761,7 @@ function show_assignments() {
 
     $action_bar = action_bar(array(
             array('title' => $langNewAssign,
-                  'url' => "{$urlAppend}modules/work/?course=$course_code&amp;add=1",
+                  'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;add=1",
                   'button-class' => 'btn-success',
                   'icon' => 'fa-plus-circle',
                   'level' => 'primary-label'),
@@ -5843,7 +5843,7 @@ function show_assignments() {
                 $deadline = '';
             }
             $tool_content .= "<tr class='".((!$row->active or $not_started)? "not_visible":"")."'>";
-            $tool_content .= "<td style='width:40%;'><a href='{$urlAppend}modules/work/?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+            $tool_content .= "<td style='width:40%;'><a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
                                 $turnitin_message
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
@@ -5864,21 +5864,21 @@ function show_assignments() {
               if ($is_editor) {
                   $tool_content .= action_button(array(
                       array('title' => $langEditChange,
-                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;choice=edit",
+                          'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
                       array('title' => $m['WorkUserGroupNoSubmission'],
                           'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;disp_non_submitted=true",
                           'icon' => 'fa-minus-square'),
                       array('title' => $row->active == 1 ? $langDeactivate : $langActivate,
-                          'url' => $row->active == 1 ? "{$urlAppend}modules/work/?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
+                          'url' => $row->active == 1 ? "{$urlAppend}modules/work/index.php?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye-slash' : 'fa-eye'),
                       array('title' => $m['WorkSubsDelete'],
-                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
+                          'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                           'icon' => 'fa-eraser',
                           'confirm' => "$langWarnForSubmissions $langDelSure",
                           'show' => $num_submitted > 0),
                       array('title' => $langDelete,
-                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                          'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                           'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'confirm' => $langWorksDelConfirm)));

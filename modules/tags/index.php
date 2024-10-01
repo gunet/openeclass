@@ -63,7 +63,7 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         }
         if ($tag->module_id == MODULE_ID_ASSIGN){
             $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='{$urlAppend}modules/work/?course=$course_code&amp;id={$tag->element_id}'>" . q($work->title) . "</a><br>";
+            $link = "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;id={$tag->element_id}'>" . q($work->title) . "</a><br>";
         }
         if ($tag->module_id == MODULE_ID_EXERCISE){
             $exercise = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);

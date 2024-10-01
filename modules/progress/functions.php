@@ -957,7 +957,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
-                "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
+                "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
                 "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>";
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $tool_content .=
