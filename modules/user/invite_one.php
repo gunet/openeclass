@@ -34,7 +34,7 @@ require_once 'modules/user/invite_functions.php';
 load_js('bootstrap-datetimepicker');
 
 if (!get_config('course_invitation')) {
-    redirect_to_home_page('modules/user/?course=' . $course_code);
+    redirect_to_home_page('modules/user/index.php?course=' . $course_code);
 }
 
 if (isset($_POST['submit'])) {
@@ -144,7 +144,7 @@ if (!isset($exp_date)) {
 $value_date_expires = " value='" . $exp_date->format("d-m-Y H:i") . "'";
 
 $toolName = $langCourseInviteOne;
-$navigation[] = ['url' => "{$urlAppend}modules/user/?course=$course_code", 'name' => $langUsers];
+$navigation[] = ['url' => "{$urlAppend}modules/user/index.php?course=$course_code", 'name' => $langUsers];
 $navigation[] = ['url' => "invite.php?course=$course_code", 'name' => $langCourseUsersInvitation];
 
 $tool_content .= action_bar([

@@ -35,9 +35,9 @@ if (!$content) {
 }
 
 if (!$res_type) {
-    $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
+    $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
 } else {
-    $backUrl = $urlAppend . 'modules/units/?course=' . $course_code . '&id=' . $unit;
+    $backUrl = $urlAppend . 'modules/units/index.php?course=' . $course_code . '&id=' . $unit;
 }
 
 $toolName = $langImport;

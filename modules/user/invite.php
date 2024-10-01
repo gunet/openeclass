@@ -27,7 +27,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
 if (!get_config('course_invitation')) {
-    redirect_to_home_page('modules/user/?course=' . $course_code);
+    redirect_to_home_page('modules/user/index.php?course=' . $course_code);
 }
 
 if (isset($_POST['delete'])) {
