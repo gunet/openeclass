@@ -34,7 +34,7 @@ require_once 'modules/user/invite_functions.php';
 load_js('bootstrap-datetimepicker');
 
 if (!get_config('course_invitation')) {
-    redirect_to_home_page('modules/user/?course=' . $course_code);
+    redirect_to_home_page('modules/user/index.php?course=' . $course_code);
 }
 
 if (isset($_POST['emailNewBodyInput']) and $_POST['emailNewBodyInput']) {

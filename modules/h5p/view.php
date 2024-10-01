@@ -36,7 +36,7 @@ if ($content) {
         }
     }
 } else {
-    redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
+    redirect($urlAppend . 'modules/h5p/index.php?course=' . $course_code);
 }
 
 /**

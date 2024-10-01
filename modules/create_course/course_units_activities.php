@@ -310,7 +310,7 @@ if (!isset($_POST['final_submit'])) {
         $toolName = $langCourseEdit;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "{$urlServer}modules/units/?course=$course_code&id=$unit_id",
+                'url' => "{$urlServer}modules/units/index.php?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
                 'level' => 'primary')),false);
 
@@ -472,7 +472,7 @@ if (!isset($_POST['final_submit'])) {
                 </div>
                 <div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>
-                        <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn me-2'>$langCancel</a>
+                        <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn me-2'>$langCancel</a>
                         <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                     </div>
                 </div>

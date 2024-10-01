@@ -341,7 +341,7 @@ if (!$conference_activity) {
             // Redirect student to colMOOC chat
             $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/?session_id=" . $sessionId . "&session_token=" . $sessionToken;
             if ($unit) {
-                $chatindex_url = $urlAppend . "modules/units/?course=$course_code&id=$unit";
+                $chatindex_url = $urlAppend . "modules/units/index.php?course=$course_code&id=$unit";
             } else {
                 $chatindex_url = $urlAppend . "modules/chat/index.php";
             }
