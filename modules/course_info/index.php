@@ -64,11 +64,8 @@ if ($depadmin_mode) {
 }
 
 $allow_clone = false;
-if ($is_power_user or $is_admin) {
-    $allow_clone = true;
-}
 // $atleastone is set to true by init when a department admin can admin this course
-if ($is_departmentmanage_user and $atleastone) {
+if ($is_power_user or $is_admin or ($is_departmentmanage_user and $atleastone))  {
     $allow_clone = true;
 }
 
