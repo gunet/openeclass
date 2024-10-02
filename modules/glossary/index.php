@@ -19,6 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
 $require_help = true;
@@ -94,6 +96,42 @@ if ($glossary_data) {
 
 if ($is_editor) {
 
+    if (isset($_GET['dump'])) { // dump to excel
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle($langGlossary);
+        $sheet->getDefaultColumnDimension()->setWidth(30);
+        $filename = $course_code . '_glossary.xlsx';
+        $course_title = course_id_to_title($course_id);
+
+        $cnt[] = [ $course_title ];
+        $cnt[] = [];
+        $cnt[] = [ $langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl ];
+
+        $sql = Database::get()->queryFunc("SELECT term, definition, url FROM glossary
+                            WHERE course_id = ?d
+                            ORDER BY `order`",
+            function ($item) use (&$cnt) {
+                $cnt[] = [ $item->term, $item->definition, $item->url ];
+            }, $course_id);
+
+        $sheet->mergeCells("A1:C1");
+        $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+        for ($i = 1; $i <= 3; $i++) {
+            $cells = [$i, 3];
+            $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
+        }
+        // create spreadsheet
+        $sheet->fromArray($cnt, NULL);
+
+        // file output
+        $writer = new Xlsx($spreadsheet);
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        set_content_disposition('attachment', $filename);
+        $writer->save("php://output");
+        exit;
+    }
+
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -119,8 +157,8 @@ if ($is_editor) {
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",
                       'icon' => 'fa-gear'),
-                array('title' => $langDumpUser,
-                      'url' => "dumpglossary.php?course=$course_code",
+                array('title' => $langDumpExcel,
+                      'url' => "$base_url&amp;dump=1",
                       'icon' => 'fa-download'),
                 array('title' => $langCategories,
                       'url' => "categories.php?course=$course_code",

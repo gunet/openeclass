@@ -72,9 +72,6 @@ if ($is_editor) {
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",
                       'icon' => 'fa-gear'),
-                array('title' => "$langDumpUser",
-                      'url' => "dumpglossary.php?course=$course_code",
-                      'icon' => 'fa-file-excel'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-tasks'
@@ -111,7 +108,6 @@ if ($is_editor) {
                 $success_message = $langCategoryAdded;
             }
             if ($q and $q->affectedRows) {
-                //Session::Messages($success_message, 'alert-success');
                 Session::flash('message',$success_message);
                 Session::flash('alert-class', 'alert-success');
             }
@@ -132,7 +128,6 @@ if ($is_editor) {
             Database::get()->query("UPDATE glossary SET category_id = NULL
                                                   WHERE course_id = ?d AND
                                                         category_id = ?d", $course_id, $cat_id);
-            //Session::Messages($langCategoryDeletedGlossary, 'alert-success');
             Session::flash('message',$langCategoryDeletedGlossary);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
