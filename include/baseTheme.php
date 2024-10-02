@@ -5851,6 +5851,25 @@ function view($view_file, $view_data = array()) {
                     }
                 }
             ";
+
+            if(isset($LinearGr)){
+                $bg_image_course = "url('$urlThemeData/$theme_options_styles[RightColumnCourseBgImage]')";
+                $styles_str .= "
+                    .col_maincontent_active{
+                        background: $LinearGr$bg_image_course;
+                        background-size: 100% 100%;
+                        background-attachment: fixed;
+                    }
+
+                    @media(max-width:991px){
+                        .module-container:has(.course-wrapper){
+                            background: $LinearGr$bg_image_course;
+                            background-size: 100% 100%;
+                            background-attachment: fixed;
+                        }
+                    }
+                ";
+            }
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
