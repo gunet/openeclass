@@ -138,7 +138,7 @@
 
                                     <div class='row row-cols-1 justify-content-center g-4 mb-3'>
                                         <div class='col'>
-                                            <button class="btn submitAdminBtn w-25 @if(empty($emailhelpdesk)) pe-none opacity-help @endif" name='send_message'>{{ trans('langSend') }}</button>
+                                            <button class="btn submitAdminBtn d-inline-flex @if(empty($emailhelpdesk)) pe-none opacity-help @endif" name='send_message'>{{ trans('langSend') }}</button>
                                         </div>
                                     </div>
 
