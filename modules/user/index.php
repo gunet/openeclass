@@ -403,7 +403,7 @@ $data['action_bar'] = action_bar([
     ['title' => $langGroupUserManagement,
       'url' => "../group/index.php?course=$course_code",
       'icon' => 'fa-solid fa-user-group'],
-    ['title' => $langDumpUser,
+    ['title' => $langDumpExcel,
       'url' => "dumpuser.php?course=$course_code",
       'icon' => 'fa-file-zipper'],
     ['title' => $langDelUsers,

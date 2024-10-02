@@ -120,10 +120,6 @@ if ($is_editor) {
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
         $action_bar = action_bar(array(
-            array('title' => $langBack,
-                  'url' => "{$urlServer}courses/$course_code/index.php",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'),
             array('title' => $langCourseCompletion,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
                   'icon' => 'fa-navicon',
@@ -380,10 +376,6 @@ if ($is_editor) {
     }
 } elseif (isset($_GET['u'])) { // student view
         $action_bar = action_bar(array(
-            array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary'),
 	        array('title' => $langPrint,
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
 	              'icon' => 'fa-print',
@@ -393,7 +385,7 @@ if ($is_editor) {
         $tool_content .= $action_bar;
 }
 
-if (isset($display) and $display == TRUE) {
+if (isset($display) and $display) {
     if ($is_course_reviewer) {
         if (isset($element_id)) {
             $pageName = $element_title;

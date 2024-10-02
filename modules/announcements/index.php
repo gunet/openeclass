@@ -44,13 +44,9 @@ load_js('datatables');
 if ($is_editor) {
 
     if (isset($_POST['bulk_submit'])) {
-
         if ($_POST['selectedcbids']) {
-
             $cbids = explode(',', $_POST['selectedcbids']);
-
             if ($_POST['bulk_action'] == 'delete') {
-
                 foreach ($cbids as $row_id) {
                     $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
                     $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
@@ -60,7 +56,6 @@ if ($is_editor) {
                         'title' => $announce->title,
                         'content' => $txt_content));
                 }
-
             }
             if ($_POST['bulk_action'] == 'visible') {
                 foreach ($cbids as $row_id) {
@@ -74,11 +69,8 @@ if ($is_editor) {
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
                 }
             }
-
         }
-
     }
-
 
     // Pin sticky announcement
     if (isset($_POST['pin_announce'])) {
