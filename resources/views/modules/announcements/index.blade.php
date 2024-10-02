@@ -294,10 +294,6 @@
             var row_id = temp_id.split("|")[0];
             var vis = temp_id.split("|")[1];
 
-            console.log('the id:'+temp_id);
-            console.log('the row_id:'+row_id);
-            console.log('the vis:'+vis);
-
             $.ajax({
                 type: 'POST',
                 url: '',
@@ -391,7 +387,7 @@
                         </div>
                     </div>
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     @if ($showSubscribeWarning)
                         <div class='col-sm-12'>
@@ -417,8 +413,9 @@
                                                     <option value="visible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
                                                     <option value="invisible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
                                                 </select>
-                                                <div class='d-flex justify-content-end align-items-center'>
-                                                    <input type="submit" class="btn submitAdminBtn mt-4" name="bulk_submit" value="{{ trans('langSubmit') }}">
+                                                <div class='d-flex justify-content-end align-items-center gap-2 mt-4'>
+                                                    <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
+                                                    <input type="submit" class="btn submitAdminBtn" name="bulk_submit" value="{{ trans('langSubmit') }}">
                                                     <input type="hidden" id="selectedcbids" name="selectedcbids" value="">
                                                 </div>
                                             </form>

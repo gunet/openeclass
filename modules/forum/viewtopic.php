@@ -289,7 +289,7 @@ if ($topic_locked == 1) {
     $action_bar = action_bar(array(
                 array('title' => $langReply,
                     'url' => "$reply_url",
-                    'icon' => 'fa-reply-all',
+                    'icon' => 'fa-regular fa-comments',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')
                 ));

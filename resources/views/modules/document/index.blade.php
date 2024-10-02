@@ -220,9 +220,9 @@
                                                                 {!! generate_csrf_token_form_field() !!}
                                                             </div>
 
-
-                                                            <div class='d-flex justify-content-end align-items-center'>
-                                                                <input type='submit' class='btn btn-submit submitAdminBtn mt-4' name='bulk_submit' value='{{ trans('langSubmit') }}'>
+                                                            <div class='d-flex justify-content-end align-items-center gap-2 mt-4'>
+                                                                <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
+                                                                <input type='submit' class='btn btn-submit submitAdminBtn' name='bulk_submit' value='{{ trans('langSubmit') }}'>
                                                                 <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
                                                                 <input type='hidden' id='filepaths' name='filepaths' value=''>
                                                                 <input type='hidden' id='source_path' name='source_path' value=''>

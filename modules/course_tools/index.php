@@ -104,7 +104,7 @@ $data['csrf'] = generate_csrf_token_form_field();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $link = isset($_POST['link']) ? $_POST['link'] : '';
+    $link = $_POST['link'] ?? '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
     if ((trim($link) == 'http://') or ( trim($link) == 'ftp://') or empty($link) or empty($name_link) or ! is_url_accepted($link)) {
         Session::flash('message',$langInvalidLink);
@@ -124,43 +124,34 @@ if (isset($_POST['submit'])) {
 } elseif (isset($_GET['action'])) { // add external link
     $pageName = $langAddExtLink;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
-
-    $data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'
-                 )));
-
     view('modules.course_tools.external_link_store', $data);
-}elseif(!isset($_GET['action'])){
+} elseif(!isset($_GET['action'])) {
 
-$data['toolSelection'][0] = $data['toolSelection'][1] = array();
-$module_list = Database::get()->queryArray('SELECT module_id, visible
-                                FROM course_module WHERE course_id = ?d
-                                AND module_id NOT IN (SELECT module_id FROM '.$table_modules.')', $course_id);
+    $data['toolSelection'][0] = $data['toolSelection'][1] = array();
+    $module_list = Database::get()->queryArray('SELECT module_id, visible
+                                    FROM course_module WHERE course_id = ?d
+                                    AND module_id NOT IN (SELECT module_id FROM '.$table_modules.')', $course_id);
 
-foreach ($module_list as $item) {
-    if ($item->module_id == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
-        // hide teleconference when no tc servers are enabled
-        continue;
+    foreach ($module_list as $item) {
+        if ($item->module_id == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
+            // hide teleconference when no tc servers are enabled
+            continue;
+        }
+        if (!isset($modules[$item->module_id]['title'])) {
+            // hide deprecated modules with no title
+            continue;
+        }
+        $mid = getIndirectReference($item->module_id);
+        $data['toolSelection'][$item->visible][] = (object) array('id' => $mid, 'title' => $modules[$item->module_id]['title']);
     }
-    if (!isset($modules[$item->module_id]['title'])) {
-        // hide deprecated modules with no title
-        continue;
-    }
-    $mid = getIndirectReference($item->module_id);
-    $mtitle = q($modules[$item->module_id]['title']);
-    $data['toolSelection'][$item->visible][] = (object) array('id' => $mid, 'title' => $mtitle);
-}
 
-$data['q'] = Database::get()->queryArray("SELECT id, url, title FROM link
-                        WHERE category = -1 AND
-                        course_id = ?d", $course_id);
+    $data['q'] = Database::get()->queryArray("SELECT id, url, title FROM link
+                            WHERE category = -1 AND
+                            course_id = ?d", $course_id);
 
-// check if LTI Provider is enabled (global config) and available for the current course
-$ltipublishapp = ExtAppManager::getApp('ltipublish');
-$data['ltiPublishIsEnabledForCurrentCourse'] = $ltipublishapp->isEnabledForCurrentCourse();
+    // check if LTI Provider is enabled (global config) and available for the current course
+    $ltipublishapp = ExtAppManager::getApp('ltipublish');
+    $data['ltiPublishIsEnabledForCurrentCourse'] = $ltipublishapp->isEnabledForCurrentCourse();
 
-view('modules.course_tools.index', $data);
+    view('modules.course_tools.index', $data);
 }

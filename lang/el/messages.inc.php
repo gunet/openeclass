@@ -6376,7 +6376,7 @@ $langRemovePrerequisite = "Διαγραφή Προαπαιτούμενου";
 $langDelWarnCoursePrerequisite = "Επιβεβαίωση διαγραφής προαπαιτούμενου";
 $langNewCoursePrerequisiteSuccess = "Το προαπαιτούμενο δημιουργήθηκε με επιτυχία!";
 $langDelCoursePrerequisiteSuccess = "Το προαπαιτούμενο διαγράφηκε με επιτυχία!";
-$langNewCoursePrerequisiteHelp2 = "Για να προστεθεί ένα $langsCourse ως προαπαιτούμενο, θα πρέπει να διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος. Αν δεν διαθέτει, παρακαλούμε επικοινωνήστε με τον $langsOfTeacher του $langsOfCourse.";
+$langNewCoursePrerequisiteHelp2 = "Για να προστεθεί ένα $langsCourse ως προαπαιτούμενο, θα πρέπει να διαθέτει Επιβράβευση Ολοκλήρωσης μαθήματος.";
 $langNewCoursePrerequisiteFailInvalid = "Αδυναμία προσθήκης, παρακαλούμε επιλέξτε ένα έγκυρο $langsCourse.";
 $langNewCoursePrerequisiteFailSelf = "Αδυναμία προσθήκης, το $langsCourse σας δεν μπορεί να επιλεχθεί ως προαπαιτούμενο του εαυτού του.";
 $langNewCoursePrerequisiteFailAlreadyIn = "Αδυναμία προσθήκης, το $langsCourse που επιλέξατε υπάρχει ήδη στη λίστα με τα προαπαιτούμενα.";
@@ -6903,8 +6903,9 @@ $langFormContactMessage = "Φόρμα επικοινωνίας - μήνυμα α
 $langDoNotOverrideDeliverable = "Το παραδοτέο σας έχει ελεγχθεί από τον σύμβουλο και δεν μπορεί να αντικατασταθεί.";
 $langUploadDeliverableFromUser = "Έχει γίνει υποβολή παραδοτέου από τον ωφελούμενο. Δείτε τα στοιχεία παρακάτω:";
 $langAboutDeliverable = "Σχετικά με";
+
 $langCreateReference = "Δημιουργία αναφοράς";
-$langInfoUploadReference = "Για την δημιουργία αναφοράς μπορείτε είτε να ανεβάσετε ένα άρχειο από τον υπολογιστή σας 
+$langInfoUploadReference = "Για την δημιουργία αναφοράς μπορείτε είτε να ανεβάσετε ένα αρχείο από τον υπολογιστή σας 
                             είτε να δημιουργήσετε ένα αρχείο .txt συμπληρώνοντας τον τίτλο και το περιεχόμενο του.";
 $langDownloadNotEnd = "Το αρχείο δεν ανέβηκε. Δοκιμάστε πάλι.";
 $langReference = "Αναφορά";

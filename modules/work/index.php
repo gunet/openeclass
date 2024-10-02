@@ -1054,15 +1054,6 @@ function add_assignment() {
 
 /**
  * @brief edit assignment
- * @global type $langEditSuccess
- * @global type $m
- * @global type $langTheField
- * @global type $course_code
- * @global type $course_id
- * @global type $uid
- * @global string $workPath
- * @global type $langFormErrors
- * @global type $langTitle
  * @param type $id
  * @return type
  */
@@ -5782,11 +5773,11 @@ function show_assignments() {
                     <table id='assignment_table' class='table-default'>
                     <thead>
                     <tr class='list-header'>
-                      <th style='width:40%;'>$langTitle</th>
+                      <th style='width:45%;'>$langTitle</th>
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>
-                      <th style='width:25%;'>$langGroupWorkDeadline_of_Submission</th>
-                      <th style='width:10%;' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                      <th style='width:20%;'>$langGroupWorkDeadline_of_Submission</th>
+                      <th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                     </tr>
                     </thead>
                     <tbody>";
@@ -5850,7 +5841,7 @@ function show_assignments() {
                                 $assign_to_users_message
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
-                            <td data-sort='$sort_id' style='width:25%;'>$deadline";
+                            <td data-sort='$sort_id' style='width:20%;'>$deadline";
 
             if ($not_started) {
                 $tool_content .= "<small><span class='Warning-200-cl'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
