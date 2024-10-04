@@ -61,9 +61,9 @@
                                                         <input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='{{ trans('langCourseCode_Descr') }}'>
                                                     </div>
                                                 </div>
-                                                <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
+                                                <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                                                     <input class='btn submitAdminBtn' type='submit' name='submit' value='{{  trans('langDoSearch') }}'>
-                                                    <input class='btn submitAdminBtn ms-1' type='reset' name='reset' value='{{ trans('langNewSearch') }}'>
+                                                    <input class='btn cancelAdminBtn' type='reset' name='reset' value='{{ trans('langNewSearch') }}'>
                                                 </div>
                                             </fieldset>
                                         </form>
