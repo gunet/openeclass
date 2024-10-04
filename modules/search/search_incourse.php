@@ -45,12 +45,6 @@ require_once 'unitresourceindexer.class.php';
 
 $pageName = $langSearch;
 
-if (!get_config('enable_search')) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSearchDisabled</span></div></div>";
-    draw($tool_content, 2);
-    exit;
-}
-
 $found = false;
 register_posted_variables(array('announcements' => true,
     'agenda' => true,
@@ -64,7 +58,7 @@ register_posted_variables(array('announcements' => true,
 if (isset($_GET['all'])) {
     $all = intval($_GET['all']);
     $announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1;
-    if(isset($is_collaborative_course) and $is_collaborative_course){
+    if (isset($is_collaborative_course) and $is_collaborative_course) {
         $exercises = 0;
     }
 }
@@ -74,114 +68,7 @@ if (isset($_REQUEST['search_terms'])) {
 }
 
 if (empty($search_terms)) {
-
-    // display form
-    $langSearchCriteria;
-    $tool_content .= "
-    <div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'>
-    <div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <fieldset>
-        <legend class='mb-0' aria-label='$langForm'></legend>
-        <div class='row form-group'>
-            <label for='search_terms_id' class='col-12 control-label-notes'>$langOR</label>
-            <div class='col-12'>
-                <input name='search_terms' type='text' class='form-control' id='search_terms_id'>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <div class='col-sm-6 control-label-notes mb-2'>$langSearchIn</div>
-            <div class='col-12'>
-                <div class='row'>
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                            <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='announcements' checked>
-                            <span class='checkmark'></span>
-                            $langAnnouncements
-                          </label>
-                        </div>
-                    </div>
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='agenda' checked>
-                            <span class='checkmark'></span>
-                            $langAgenda
-                          </label>
-                        </div>
-                    </div>
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='course_units' checked>
-                            <span class='checkmark'></span>
-                            $langCourseUnits
-                          </label>
-                        </div>
-                    </div>
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='documents' checked>
-                            <span class='checkmark'></span>
-                            $langDoc
-                          </label>
-                        </div>
-                    </div>
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='forums' checked>
-                            <span class='checkmark'></span>
-                            $langForums
-                          </label>
-                        </div>
-                    </div>";
-                    if(!$is_collaborative_course){
-                    $tool_content .=" <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='exercises' checked>
-                            <span class='checkmark'></span>
-                            $langExercices
-                          </label>
-                        </div>
-                    </div>";}
-                    $tool_content .= "
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='video' checked>
-                            <span class='checkmark'></span>
-                            $langVideo
-                          </label>
-                        </div>
-                    </div>
-                    <div class='col-6 col-sm-4'>
-                        <div class='checkbox'>
-                        <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='links' checked>
-                            <span class='checkmark'></span>
-                            $langLinks
-                          </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-end align-items-center'>
-                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langDoSearch'>
-            </div>
-        </div>
-       </fieldset>
-       </form>
-    </div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-</div>
-</div>";
+    view('modules.search_incourse.index');
 } else {
     // prepare data in POST for feeding Indexer
     $_POST['course_id'] = $course_id;
@@ -189,10 +76,10 @@ if (empty($search_terms)) {
 
     $idx = new Indexer();
     if (!$idx->getIndex()) {
-        draw($tool_content, 2);
-        exit;
+        view('modules.search_incourse.index');
+        exit();
     }
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
                     array('title' => $langAdvancedSearch,
                           'url' => $_SERVER['SCRIPT_NAME'],
                           'icon' => 'fa-search',
@@ -367,7 +254,7 @@ if (empty($search_terms)) {
             $numLine = 0;
             foreach ($documents as $document) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $search_results .= "<tr class='$class'>                        
+                $search_results .= "<tr class='$class'>
                         <td width='1'><i class='fa-solid fa-caret-right'></i></td>
                         <td>";
                 $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . q($document->comment) . ")</span>";
@@ -598,17 +485,18 @@ if (empty($search_terms)) {
             $found = true;
         }
     }
-    $tool_content .= "
-        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langDoSearch:&nbsp;<label> '" . q($search_terms) . "'</label><br><small>$results_count $langResults2</small></span></div>
-    ";
-    $tool_content .= $search_results;
-    // else ... no results found
-    if ($found == false) {
-        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoResult</span></div>";
-    }
-} // end of search
-draw($tool_content, 2);
+    $data['results_count'] = $results_count;
+    $data['search_terms'] = $search_terms;
+    $data['search_results'] = $search_results;
+    $data['found'] = $found;
 
+    view('modules.search_incourse.results', $data);
+} // end of search
+
+/**
+ * @param $hits
+ * @return string
+ */
 function inIdsFromHits($hits) {
     $hitIds = array();
     foreach ($hits as $hit) {
@@ -617,6 +505,10 @@ function inIdsFromHits($hits) {
     return "(" . implode(",", $hitIds) . ")";
 }
 
+/**
+ * @param $hits
+ * @return array
+ */
 function urlsFromHits($hits) {
     $hitUrls = array();
     foreach ($hits as $hit) {
