@@ -178,7 +178,7 @@
 
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
-                                                        <label for='UserLang' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
+                                                        <label for='UserLang' class='col-sm-12 control-label-notes mb-2'>{{ trans('langLanguage') }}</label>
                                                         <div class='col-sm-12'>
                                                             {!! $lang_select_options !!}
                                                         </div>

@@ -5,7 +5,7 @@
         <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-                <div class="col_maincontent_active">
+                <div class="col_maincontent_active @if(!isset($course_code)) search-content @endif">
 
                     <div class="row">
 
