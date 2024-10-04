@@ -80,6 +80,10 @@
     padding: 24px 24px 24px 32px;
   }
 
+  .col_maincontent_active.search-content {
+      border-left: none;
+  }
+
 }
 @media(max-width:991px){
   .container-fluid .course-wrapper .col_maincontent_active{

@@ -5884,6 +5884,10 @@ function view($view_file, $view_data = array()) {
                     .col_maincontent_active {
                         border-left: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor];
                     }
+
+                    .col_maincontent_active.search-content {
+                        border-left: none;
+                    }
                 }
 
             ";
