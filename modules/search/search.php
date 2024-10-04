@@ -22,33 +22,17 @@
 $require_current_course = FALSE;
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
 require_once 'indexer.class.php';
 require_once 'courseindexer.class.php';
+
 $pageName = $langSearch;
 $courses_list = array();
-
-
-if (isset($uid) and $uid) {
-    $menuTypeId = 1;
-} else {
-    $menuTypeId = 0;
-}
-
-// exit if search is disabled
-if (!get_config('enable_search')) {
-    $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-secondary')
-                            ),false);
-    $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSearchDisabled</span></div>";
-    draw($tool_content, $menuTypeId, null, $head_content);
-    exit();
-}else{
-    $tool_content .= "<div class='mt-4'></div>";
-}
+$tree = new Hierarchy();
+$c = new Course();
+$user = new User();
 
 // exit if no POST data
 if (!register_posted_variables(array('search_terms' => false,
@@ -57,29 +41,26 @@ if (!register_posted_variables(array('search_terms' => false,
             'search_terms_instructor' => false,
             'search_terms_coursecode' => false,
             'search_terms_description' => false), 'any')) {
-    $tool_content .= CourseIndexer::getDetailedSearchForm();
-    draw($tool_content, $menuTypeId, null, $head_content);
+    view('modules.search.index');
     exit();
 }
 
-// search in the index
 $idx = new Indexer();
 if (!$idx->getIndex()) {
-    draw($tool_content, $menuTypeId, null, $head_content);
+    view('modules.search.index');
     exit();
 }
 
 $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_POST));
-
 // exit if not results
 if (count($hits) <= 0) {
-    Session::flash('message',$langNoResult);
+    Session::flash('message', $langNoResult);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/search/search.php');
 }
 
 // Additional Access Rights
-$anonymous = (isset($uid) && $uid) ? false : true;
+$anonymous = !((isset($uid) && $uid));
 $cnthits = count($hits);
 foreach ($hits as $hit) {
     if ($hit->visible == 3 && $uid != 1) {
@@ -108,32 +89,16 @@ $courses = Database::get()->queryArray("select c.*, cd.department "
         . " from course c left "
         . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
         . " where c.id in (" . $inIds . ") order by field(id," . $inIds . ")");
+$data['count_courses'] = $count_courses = count($courses);
 
-//////// PRINT RESULTS ////////
-$tool_content .= generate_csrf_token_form_field() .
-    action_bar(array(
+$data['action_bar'] = action_bar(array(
         array('title' => $langAdvancedSearch,
               'url' => "search.php",
               'icon' => 'fa-search',
               'level' => 'primary-label',
               'button-class' => 'btn-success')));
 
-$tool_content .= "
-    <div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langDoSearch";
-if (isset($_POST['search_terms'])) {
-    $tool_content .= ":&nbsp;<label> '". q($_POST['search_terms']) ."'</label>";
-}
-$tool_content .= "<br><small>" . count($courses) . " $langResults2</small></span></div></div>
-    <div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
-    <thead><tr class='list-header'>";
-if ($uid > 0) {
-    $tool_content .= "<th width='50' align='center'>$langRegistration</th>";
-}
-$tool_content .= "<th class='text-start ps-1'>" . $langCourse . " ($langCode)</th>
-      <th class='text-start'>$langTeacher</th>
-      <th class='text-start'>$langKeywords</th>
-      <th class='text-start'>$langType</th>
-    </tr></thead>";
+$search_result_content = '';
 
 foreach ($courses as $course) {
     $courseHref = "../../courses/" . q($course->code) . "/";
@@ -173,10 +138,10 @@ foreach ($courses as $course) {
     }
     // courses with password
     $requirepassword = '';
-    $tool_content .= "<tr>";
+    $search_result_content .= "<tr>";
     if ($uid > 0) {
         if (in_array($course->id, $subscribed)) {
-            $tool_content .= "<td align='center'><i class='fa-solid fa-check' title='$langAlreadySubscribe' alt='$langAlreadySubscribe' ></i></td>";
+            $search_result_content .= "<td align='center'><i class='fa-solid fa-check' title='$langAlreadySubscribe' alt='$langAlreadySubscribe' ></i></td>";
         } else {
             if (!empty($course->password) && ($course->visible == COURSE_REGISTRATION || $course->visible == COURSE_OPEN)) {
                 $requirepassword = "<br />$m[code]: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
@@ -184,7 +149,7 @@ foreach ($courses as $course) {
 
             $disabled = (!is_enabled_course_registration($uid) or $course->visible == COURSE_CLOSED) ? 'disabled' : '';
             $vis_class = ($course->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
-            $tool_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class /><span class='checkmark'></span></label>"
+            $search_result_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class /><span class='checkmark'></span></label>"
                     . "<input type='hidden' name='changeCourse[]' value='" . $course->id . "' /></td>";
         }
     }
@@ -208,30 +173,27 @@ foreach ($courses as $course) {
         $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
     }
 
-    $tool_content .= "<td>" . $courseUrl . $requirepassword . $coursePrerequisites . "</td>
+    $departments = $c->getDepartmentIds($course->id);
+    $i = 1;
+    $dep = '';
+    foreach ($departments as $department) {
+        $br = ($i < count($departments)) ? '<br/>' : '';
+        $dep .= $tree->getFullPath($department) . $br;
+        $i++;
+    }
+
+    $course_faculty = "<div class='text-muted'>$dep</div";
+    $search_result_content .= "<td>" . $courseUrl . $course_faculty . $requirepassword . $coursePrerequisites . "</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
                       <td>";
-    $tool_content .= course_access_icon($course->visible);
-    $tool_content .= "</td></tr>";
+    $search_result_content .= course_access_icon($course->visible);
+    $search_result_content .= "</td></tr>";
 }
-$tool_content .= "</table></div></div>";
 
-$tool_content .= "<script type='text/javascript'>$(course_list_init);
-var themeimg = '" . js_escape($themeimg) . "';
-var urlAppend = '".js_escape($urlAppend)."';
-var lang = {
-        unCourse: '" . js_escape($langUnCourse) . "',
-        cancel: '" . js_escape($langCancel) . "',
-        close: '" . js_escape($langClose) . "',
-        unregCourse: '" . js_escape($langUnregCourse) . "',
-        reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
-        invalidCode: '" . js_escape($langInvalidCode) . "',
-        prereqsNotComplete: '" . js_escape($langPrerequisitesNotComplete) . "',
-};
-var courses = ".(json_encode($courses_list)).";
-</script>";
+$data['courses_list'] = json_encode($courses_list);
+$data['search_result_content'] = $search_result_content;
 
 load_js('tools.js');
 
-draw($tool_content, $menuTypeId, null, $head_content);
+view('modules.search.results', $data);
