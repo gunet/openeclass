@@ -1223,8 +1223,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `continue_time_limit` INT(11) NOT NULL DEFAULT 0,
     `calc_grade_method` TINYINT DEFAULT 1,
     `general_feedback` TEXT DEFAULT NULL,
-    'options' TEXT DEFAULT NULL
-    ) $tbl_options");
+    'options' TEXT DEFAULT NULL,
+    'is_exam' INT DEFAULT 0 NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -246,8 +246,8 @@ if (get_config('maintenance') == 1 ) {
 }
 
 $theme = $_SESSION['theme'] = get_config('theme');
-//$themeimg = $urlAppend . 'template/' . $theme . '/img';
 $themeimg = $urlAppend . 'resources/img';
+
 if (file_exists("template/$theme/settings.php")) {
     require_once "template/$theme/settings.php";
 }
@@ -358,7 +358,7 @@ if(isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isse
     unset($_SESSION['userId_uploader']);
 }
 
-// Regarding uploaded reference docs by coulselor in a session
+// Regarding uploaded reference docs by counselor in a session
 $user_counselor_uploader = 0;
 $uploaded_reference_docs_by_users = false;
 if(isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReferenceSessionId'] && isset($require_current_course) && $require_current_course){

@@ -81,10 +81,10 @@ if (isset($_POST['submitExercise'])) {
             $objExercise->updateIPLock('');
         }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
-        $startDateTime_obj = isset($_POST['exerciseStartDate']) && !empty($_POST['exerciseStartDate']) ?
+        $startDateTime_obj = !empty($_POST['exerciseStartDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateStartDate($startDateTime_obj);
-        $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
+        $endDateTime_obj = !empty($_POST['exerciseEndDate']) ?
             DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
         $objExercise->updateTempSave($_POST['exerciseTempSave']);
@@ -103,6 +103,12 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $objExercise->setOption('jsPreventCopy', true);
         }
+        if (!isset($_POST['isExam'])) {
+            $objExercise->setisExam(0);
+        } else {
+            $objExercise->setisExam(1);
+        }
+
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
@@ -153,6 +159,7 @@ if (isset($_POST['submitExercise'])) {
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
     $continueTimeLimit = Session::has('continueTimeLimit') ? Session::get('continueTimeLimit') : $objExercise->continueTimeLimit();
+    $isExam = Session::has('isExam') ? Session::get('isExam') : $objExercise->isExam();
     $continueTimeField = str_replace('[]',
         "<input type='text' class='form-control' name='continueTimeLimit' value='$continueTimeLimit' aria-label='$langminutes'>",
         $langContinueAttemptTime);
@@ -562,6 +569,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                 </tr>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <div class='row form-group mt-4'>
+                    <div class='col-12 control-label-notes mb-1'>$langExerciseType</div>
+                        <div class='col-12'>
+                            <div class='checkbox'>
+                                <label class='label-container' aria-label='$langSelect'>
+                                    <input name='isExam' type='checkbox' " . ($isExam? 'checked' : '') . ">
+                                    <span class='checkmark'></span>
+                                    $langExam
+                                </label>
+                                <div class='help-block'>$langRequireCourseUserLogin</div>
+                            </div>
                     </div>
                 </div>
 

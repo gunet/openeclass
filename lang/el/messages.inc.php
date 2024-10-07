@@ -2201,6 +2201,8 @@ $langContinueAttemptExplanation = 'Ενεργοποίηση δυνατότητα
     του χρήστη.';
 $langContinueAttemptTime = 'Χρονικό περιθώριο: [] λεπτά.';
 $langWarnOneWayExercise = "Προσοχή: οι ερωτήσεις εμφανίζονται μία ανά σελίδα και δεν έχετε δυνατότητα επιστροφής σε προηγούμενες σελίδες.";
+$langExam = "Εξέταση";
+$langRequireCourseUserLogin = "Οι χρήστες πρέπει να είναι συνδεδεμένοι στη πλατφόρμα και εγγεγραμμένοι στο $langsCourse.";
 
 // exercise result.php
 $langStart = "Έναρξη";

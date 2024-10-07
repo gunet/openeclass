@@ -2488,10 +2488,6 @@ function units_get_maxorder() {
 
 /**
  *
- * @global type $course_id
- * @global type $course_code
- * @global type $langCourseUnitModified
- * @global type $langCourseUnitAdded
  * @return type
  */
 function handle_unit_info_edit() {
@@ -2551,7 +2547,6 @@ function handle_unit_info_edit() {
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
-    //Session::Messages($successmsg, 'alert-success');
     Session::flash('message',$successmsg);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
