@@ -89,7 +89,7 @@ if (isset($_GET['mid'])) {
         }
         $out .= "
                 <div id='del_msg'></div>
-                <div id='msg_area'>
+                <div id='msg_area' class='col-12'>
                         <div class='row row-cols-1 g-4'>
                             <div class='col'>
                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
@@ -209,10 +209,8 @@ if (isset($_GET['mid'])) {
             $out .= "<div class='row mt-4'>
                         <div class='col-lg-6 col-12'>";
             }else{
-            $out .= "
-                <div class='d-lg-flex gap-4 mt-4'>
-                    <div class='flex-grow-1'>
-                        <div class='col-12 mt-4'>";
+            $out .= "<div class='row mt-4'>
+                        <div class='col-lg-6 col-12 m-auto'>";
             }
 
                     $out .= "<div class='form-wrapper form-edit rounded' id='replyBox' style='display:none;'>";
@@ -328,11 +326,7 @@ if (isset($_GET['mid'])) {
 
             if(isset($_GET['course'])){
                 $out .= "</div> <!-- end col-12 -->
-                    </div> <!-- end flex-grow -->
-                    <div class='form-content-modules d-none message-reply'>
-                        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-                    </div>
-                </div>"; // end d-lg-flex
+                </div>"; // end row
             }
 
             if (!isset($_GET['course'])) {
@@ -342,18 +336,17 @@ if (isset($_GET['mid'])) {
                         <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                     </div>
                 ";
-        $out .= "</div>"; // end row
+            $out .= "</div>"; // end row
             }
 
 
             // forward form
             if(!isset($_GET['course'])){
-                $out .= "<div class='row'>
-                            <div class='col-lg-6 col-12'>";
+            $out .= "<div class='row'>
+                        <div class='col-lg-6 col-12'>";
             }else{
-            $out .= "<div class='d-lg-flex gap-4 mt-4'>
-                        <div class='flex-grow-1'>
-                            <div class='col-12 mt-4'>";
+            $out .= "<div class='row'>
+                        <div class='col-lg-6 col-12 m-auto'>";
             }
 
                         $out .= "<div class='form-wrapper form-edit rounded' id='forwardBox' style='display:none;'>";
@@ -474,12 +467,8 @@ if (isset($_GET['mid'])) {
                                         </form>
                                     </div> <!-- end form-wrapper --> ";
                 if(isset($_GET['course'])){
-                    $out .= "</div> <!--  end col-12 -->
-                        </div> <!--  end flex-grow -->
-                        <div class='form-content-modules d-none message-forward'>
-                            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-                        </div>
-                    </div>"; // end d-lg-flex
+                    $out .= "</div> <!--  end col-12 -->   
+                    </div>"; // end row
                 }
 
 

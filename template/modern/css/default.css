@@ -4415,6 +4415,12 @@ body .delThemeBtn{
   background-color: #EFF6FF;
   height: auto;
 }
+@media(max-width:767px){
+  .bodyChat{
+    padding: 8px 0px 8px 0px !important;
+  }
+}
+
 
 .bodyChat::-webkit-scrollbar {
   width: 8px;
@@ -5362,4 +5368,9 @@ textarea:focus-visible{
   box-shadow: none !important;
   border: solid 1px #0073E6 !important;
   border-left: 0px !important;
+}
+
+.uppy-Dashboard-inner{
+  width: auto !important;
+  max-height: 300px !important;
 }

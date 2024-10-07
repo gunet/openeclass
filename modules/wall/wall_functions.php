@@ -246,7 +246,7 @@ function generate_single_post_html($post) {
     $ret = '
     <div class="col-12">
         <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">
-                                  <div class="card panelCard px-lg-4 py-lg-3">
+                                  <div class="card panelCard px-lg-4 py-lg-3 p-0">
                                         <div class="card-header border-0">
                                             <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                 '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') .'

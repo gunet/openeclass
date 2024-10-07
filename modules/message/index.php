@@ -586,7 +586,7 @@ $tool_content .= "<div class='col-12'>
                     </script>";
 
     $tool_content .= "
-                      <div id='dropboxTabs' class='mt-3'>
+                      <div id='dropboxTabs' class='col-12 mt-3'>
                         <ul class='nav nav-tabs' role='tablist'>
                             <li class='nav-item' role='presentation'><a class='nav-link' id='inboxA' data-bs-target='#inbox' role='tab' data-bs-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><i class='fa-solid fa-inbox pe-1'></i>$langDropBoxInbox</a></li>
                             <li class='nav-item' role='presentation'><a class='nav-link' id='outboxA' data-bs-target='#outbox' role='tab' data-bs-toggle='tab' href='outbox.php" . $courseParam . "'><i class='fa-solid fa-paper-plane pe-1'></i>$langDropBoxOutbox</a></li>

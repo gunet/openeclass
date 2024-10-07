@@ -222,7 +222,7 @@ if (isset($_GET['store']) && $is_editor) {
                 <div class='row m-auto d-flex $column_position align-items-center g-3'>
 
                         <div class='col-md-6 col-12'>
-                            <h6 class='px-1'>$datetime</h6>
+                            <div class='text-heading-h6 mb-1' class='px-1'>$datetime</div>
                             <div class='card panelCard card-default p-3' style='border-radius:10px;'>
                                 <div class='card-header p-0 border-0 d-flex justify-content-start align-items-center'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
