@@ -66,6 +66,7 @@ if (!class_exists('Exercise')) {
         private $continueTimeLimit;
         private $totalweight;
         private $options;
+        private $is_exam;
 
         /**
          * constructor of the class
@@ -98,6 +99,7 @@ if (!class_exists('Exercise')) {
             $this->continueTimeLimit = 5; // minutes
             $this->calc_grade_method = 1;
             $this->options = [];
+            $this->is_exam = 0;
         }
 
         /**
@@ -113,7 +115,7 @@ if (!class_exists('Exercise')) {
 
             $object = Database::get()->querySingle("SELECT title, description, general_feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
                                                     attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock,
-                                                    assign_to_specific, calc_grade_method, continue_time_limit, options
+                                                    assign_to_specific, calc_grade_method, continue_time_limit, options, is_exam
                                                 FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -141,6 +143,7 @@ if (!class_exists('Exercise')) {
                 $this->calc_grade_method = $object->calc_grade_method;
                 $this->continueTimeLimit = $object->continue_time_limit;
                 $this->options = $object->options? json_decode($object->options, true): [];
+                $this->is_exam = $object->is_exam;
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
                     FROM `exercise_with_questions`
@@ -347,6 +350,10 @@ if (!class_exists('Exercise')) {
             return $this->questionList;
         }
 
+        public function isExam()
+        {
+            return $this->is_exam;
+        }
 
         /**
          * @brief get questions (with dynamic criteria or not)
@@ -728,6 +735,11 @@ if (!class_exists('Exercise')) {
             }
         }
 
+        public function setisExam($is_exam)
+        {
+            $this->is_exam = $is_exam;
+        }
+
         /**
          * @brief updates the exercise in the database
          *
@@ -763,6 +775,7 @@ if (!class_exists('Exercise')) {
             $assign_to_specific = $this->assign_to_specific;
             $calc_grade_method = $this->calc_grade_method;
             $options = $this->options? json_encode($this->options): '';
+            $is_exam = $this->is_exam;
             // exercise already exists
             if ($id) {
                 $q = Database::get()->query("UPDATE `exercise`
@@ -771,14 +784,14 @@ if (!class_exists('Exercise')) {
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d,
-                        general_feedback = ?s, options = ?s
+                        general_feedback = ?s, options = ?s, is_exam = ?d
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit,
-                    $calc_grade_method, $general_feedback, $options,
+                    $calc_grade_method, $general_feedback, $options, $is_exam,
                     $course_id, $id)->affectedRows;
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
@@ -789,13 +802,13 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback, options)
-                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s)",
+                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback, options, is_exam)
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s, ?d)",
                     $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
-                    $general_feedback, $options)->lastInsertID;
+                    $general_feedback, $options, $is_exam)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                                                                               'title' => $exercise,
@@ -1306,12 +1319,13 @@ if (!class_exists('Exercise')) {
             $assign_to_specific = $this->assign_to_specific;
             $range = $this->range;
             $calc_grade_method = 1;
+            $is_exam = $this->is_exam;
             $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, `type`, `range`, start_date,
                                     end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock,
-                                    assign_to_specific, calc_grade_method)
-                                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
+                                    assign_to_specific, calc_grade_method, is_exam)
+                                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d)",
                 $clone_course_id, $exercise, $description, $type, $range, $startDate, $endDate, $tempSave,
-                $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific, $calc_grade_method)->lastInsertID;
+                $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific, $calc_grade_method, $is_exam)->lastInsertID;
             if ($assign_to_specific) {
                 Database::get()->query("INSERT INTO `exercise_to_specific` (user_id, group_id, exercise_id)
                                         SELECT user_id, group_id, ?d FROM `exercise_to_specific`

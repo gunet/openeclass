@@ -329,8 +329,7 @@ if (!$nbrExercises) {
         $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
         $cf_result_data[] = ['id' => $row->id];
         $row->description = standard_text_escape($row->description);
-        $exclamation_icon = '';
-        $lock_icon = '';
+        $exclamation_icon = $exam_icon = $lock_icon = '';
         $tr_class = $link_class = '';
         $answer_exists = Database::get()->querySingle('SELECT question_id
             FROM exercise_with_questions WHERE exercise_id = ?d LIMIT 1',
@@ -389,8 +388,11 @@ if (!$nbrExercises) {
             if ($temp_EndDate and $temp_EndDate < $currentDate) { // exercise has expired
                 $exclamation_icon .= "&nbsp;&nbsp;<span class='text-danger'>($langHasExpiredS)</span>";
             }
+            if ($row->is_exam == 1) {
+                $exam_icon .= "&nbsp;&nbsp;" . icon('fa-solid fa-chalkboard-user', $langExam);
+            }
             $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>
-                        $lock_icon$exclamation_icon$descr
+                        $lock_icon$exclamation_icon$exam_icon$descr
                         $assign_to_users_message
                         </td>";
             $tool_content .= "<td data-sort='$sort_date'><small>";

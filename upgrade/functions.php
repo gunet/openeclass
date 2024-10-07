@@ -2885,6 +2885,10 @@ function upgrade_to_4_0($tbl_options): void {
             CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('exercise', 'is_exam')) {
+        Database::get()->query("ALTER TABLE exercise ADD is_exam INT DEFAULT 0 NULL");
+    }
+
     if (!DBHelper::fieldExists('group_properties', 'booking')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
     }
@@ -3053,11 +3057,9 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `certificate_template` ADD `all_courses` tinyint(1) NOT NULL DEFAULT 1");
     }
 
-
     if (!DBHelper::fieldExists('hierarchy', 'faculty_image')) {
         Database::get()->query("ALTER TABLE hierarchy ADD faculty_image varchar(400) NULL");
     }
-
 
     if (!DBHelper::tableExists('mod_session_completion')) {
         Database::get()->query("CREATE TABLE `mod_session_completion` (
