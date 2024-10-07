@@ -64,21 +64,18 @@
                                                     {{--                                                    <input type='file' id='userFile' name='userFile'>--}}
 
                                                     <div>
-                                                        <!-- 1. Add CSS to `<head>` -->
                                                         <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
 
-                                                        <!-- 2. Add div for Uppy -->
                                                         <div id="uppy"></div>
 
-                                                        <!-- 4. Uppy Script with Custom Button Trigger -->
                                                         <script type="module">
                                                             console.log('backUrl:','{{$backUrl}}');
                                                             import { Uppy, Dashboard, XHRUpload } from "https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs"
 
                                                             const uppy = new Uppy({
-                                                                autoProceed: false,  // Don't upload automatically when file is added
+                                                                autoProceed: false,
                                                                 restrictions: {
-                                                                    maxNumberOfFiles: 1  // Limit to one file, similar to the input type="file"
+                                                                    maxNumberOfFiles: 1
                                                                 }
                                                             })
 
@@ -91,17 +88,12 @@
                                                                 note: 'Drag and drop a file or click to browse'
                                                             })
 
-
-                                                            // Retrieve the value of the hidden input field
-                                                            // const fileCreator = document.querySelector('input[name="file_creator"]').value;
-                                                            // Initial variable declarations
                                                             let uploadPath = document.querySelector('input[name="uploadPath"]').value;
                                                             let fileTitle = document.querySelector('input[name="file_title"]').value;
                                                             let fileComment = document.querySelector('input[name="file_comment"]').value;
                                                             let fileCreator = document.querySelector('input[name="file_creator"]').value;
                                                             let fileCopyrighted = document.querySelector('select[name="file_copyrighted"]').value;
 
-                                                            // Function to update variables on input change
                                                             function updateVariables() {
                                                                 uploadPath = document.querySelector('input[name="uploadPath"]').value;
                                                                 fileTitle = document.querySelector('input[name="file_title"]').value;
@@ -110,14 +102,12 @@
                                                                 fileCopyrighted = document.querySelector('select[name="file_copyrighted"]').value;
                                                             }
 
-                                                            // Add event listeners to input fields
                                                             document.querySelector('input[name="uploadPath"]').addEventListener('input', updateVariables);
                                                             document.querySelector('input[name="file_title"]').addEventListener('input', updateVariables);
                                                             document.querySelector('input[name="file_comment"]').addEventListener('input', updateVariables);
                                                             document.querySelector('input[name="file_creator"]').addEventListener('input', updateVariables);
                                                             document.querySelector('select[name="file_copyrighted"]').addEventListener('change', updateVariables);
 
-                                                            // Add the value to the meta property of the Uppy instance
                                                             uppy.setMeta({
                                                                 uploadPath: uploadPath,
                                                                 file_title: fileTitle,
@@ -126,11 +116,10 @@
                                                                 file_copyrighted: fileCopyrighted
                                                             });
 
-                                                            // Use XHRUpload for the actual file upload process
                                                             uppy.use(XHRUpload, {
-                                                                endpoint: '{{$backUrl}}',  // Your server-side upload URL
+                                                                endpoint: '{{$backUrl}}',
                                                                 formData: true,
-                                                                fieldName: 'userFile',  // Input Name for the uploaded file
+                                                                fieldName: 'userFile',
                                                                 allowedMetaFields: [
                                                                     'uploadPath',
                                                                     'maxFileSize',
@@ -138,16 +127,11 @@
                                                                     'file_comment',
                                                                     'file_creator',
                                                                     'file_copyrighted'
-                                                                ] // Include the variable in the upload
+                                                                ]
                                                             })
 
                                                             uppy.on('file-added', (file) => {
                                                                 console.log('File added:', file)
-                                                                console.log('uploadPath:', uploadPath);
-                                                                console.log('fileTitle:', fileTitle);
-                                                                console.log('fileComment:', fileComment);
-                                                                console.log('fileCreator:', fileCreator);
-                                                                console.log('fileCopyrighted:', fileCopyrighted);
                                                             })
 
                                                             uppy.on('complete', (result) => {
