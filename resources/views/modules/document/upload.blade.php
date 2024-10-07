@@ -140,10 +140,10 @@
                                                                 window.location.href = '{{$backUrl}}';
                                                             })
 
-                                                            {{--uppy.on('upload-success', (file, response) => {--}}
-                                                            {{--    console.log('Upload successful:', file, response)--}}
+                                                            {{--    uppy.on('upload-success', (file, response) => {   --}}
+                                                            {{--    console.log('Upload successful:', file, response)  --}}
                                                             {{--    window.location.href = '{{$backUrl}}';--}}
-                                                            {{--})--}}
+                                                            {{--    })   --}}
 
                                                         </script>
 
