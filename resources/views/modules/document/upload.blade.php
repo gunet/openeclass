@@ -150,10 +150,16 @@
                                                                 console.log('fileCopyrighted:', fileCopyrighted);
                                                             })
 
-                                                            uppy.on('upload-success', (file, response) => {
-                                                                console.log('Upload successful:', file, response)
-                                                                {{--window.location.href = '{{$backUrl}}';--}}
+                                                            uppy.on('complete', (result) => {
+                                                                console.log('complete');
+                                                                console.log(result);
+                                                                window.location.href = '{{$backUrl}}';
                                                             })
+
+                                                            {{--uppy.on('upload-success', (file, response) => {--}}
+                                                            {{--    console.log('Upload successful:', file, response)--}}
+                                                            {{--    window.location.href = '{{$backUrl}}';--}}
+                                                            {{--})--}}
 
                                                         </script>
 
