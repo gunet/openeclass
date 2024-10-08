@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2024-05-20 11:38:31
+// Generated 2024-10-08 17:49:13
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -5087,7 +5087,7 @@ $langNameOfLang['croatian'] = 'Croatian';
 $langNameOfLang['portuguese'] = 'Portuguese';
 $langOpenDelosPublicVideos = "Open multimedia files";
 $langOpenDelosPrivateVideos = "Restricted multimedia files";
-$langOpenDelosRequireAuth = "Authentication required via Delos, please click";
+$langOpenDelosRequireAuth = "Separate OpenDelos authentication required";
 $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos authentication";
 $langOpenDelosPrivateNote = "Note: If your course is open and you want to add multimedia files, then these will be visible to non logged-in users, too.";
@@ -5988,3 +5988,4 @@ $langNoEmptySeats = "No empty seats available";
 $langZoomErrorUserNotFound = "The user was not found in the Zoom account";
 $langFree = "Free";
 $langPaid = "Paid";
+$langPassShort = 'The password is too short.';
