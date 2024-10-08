@@ -21,7 +21,7 @@
         <div class='card panelCard card-transparent border-0'>
             <div class='card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center'>
 
-                    <h3>{{trans('langWall')}}</h3>
+                    <h3 class='mb-3'>{{trans('langWall')}}</h3>
 
             </div>
             <div class='card-body card-body-default px-0 py-0'>
