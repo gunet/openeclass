@@ -6916,3 +6916,4 @@ $langMaterialForUser = "Έντυπο καταγραφής χρήστη";
 $langAddMaterialForUser = "Προσθέτε το σχόλιο σας";
 $langDelMaterialSuccess = "Το έντυπο καταγραφής διαγράφηκε με επιτυχία.";
 $langLinkFooterImage = "Σύνδεσμος εικόνας footer";
+$langScrollToTop = "Κύληση προς τα πάνω";

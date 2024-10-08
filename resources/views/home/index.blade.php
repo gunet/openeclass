@@ -321,7 +321,7 @@
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
                                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                <h3>{{ trans('langAnnouncements') }}</h3>
+                                                <div class='text-heading-h3'>{{ trans('langAnnouncements') }}</div>
                                                 <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
                                             </div>
                                             @if(count($announcements) > 0)
@@ -373,9 +373,9 @@
                                         <div class='card card-transparent bg-transparent border-0'>
                                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                                 <div class='d-flex justify-content-start align-items-center'>
-                                                    <h3>
+                                                    <div class='text-heading-h3'>
                                                         {{trans('langPopularCourse')}}
-                                                    </h3>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class='card-body px-0 py-0'>
@@ -385,9 +385,9 @@
                                                             <div class='card border-card h-100 card-default'>
                                                                 <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                     @if($pop_course->course_image)
-                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt="{{ trans('langCourseImage') }}" />
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt="{{ $pop_course->title }}" />
                                                                     @else
-                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt="{{ trans('langCourseImage') }}" />
+                                                                        <img class='card-img-top popular_course_img' src='{{$urlAppend}}resources/img/ph1.jpg' alt="{{ $pop_course->title }}" />
                                                                     @endif
                                                                 </a>
                                                                 <div class='card-body'>
@@ -425,9 +425,9 @@
                                             <div class='card card-transparent bg-transparent border-0'>
                                                 <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                                     <div class='d-flex justify-content-start align-items-center'>
-                                                        <h3>
+                                                        <div class='text-heading-h3'>
                                                             {!! $text->title !!}
-                                                        </h3>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class='card-body px-0 py-0'>
@@ -451,13 +451,13 @@
                                 <div class='col'>
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                            <h3>
+                                            <div class='text-heading-h3'>
                                                 @if(get_config('homepage_testimonial_title'))
                                                     {!! get_config('homepage_testimonial_title') !!}
                                                 @else
                                                     {{ trans('langSaidForUs') }}
                                                 @endif
-                                            </h3>
+                                            </div>
                                         </div>
                                         <div class='card-body px-3'>
                                             <div class="d-flex justify-content-center">
@@ -492,7 +492,7 @@
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                             <div class='d-flex justify-content-start align-items-center'>
-                                                <h3>{{ trans('langViewStatics') }}</h3>
+                                                <div class='text-heading-h3'>{{ trans('langViewStatics') }}</div>
                                             </div>
                                         </div>
                                         <div class='card-body px-0 py-3'>

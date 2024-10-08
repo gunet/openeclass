@@ -186,7 +186,7 @@
             </div>
         </div>
     @endif
-    <button class="btnScrollToTop" data-bs-scroll="up">
+    <button class="btnScrollToTop" data-bs-scroll="up" aria-label="{{ trans('langScrollToTop') }}">
         <i class="fa-solid fa-arrow-up-from-bracket"></i>
     </button>
     <script>
