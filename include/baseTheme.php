@@ -6237,7 +6237,7 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-        
+
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6894,18 +6894,12 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 }
 
 // Simplified draw for pop-ups
-function draw_popup() {
-    global $language, $urlAppend, $theme, $pageName, $head_content, $tool_content;
+function draw_popup($tool_content = '', $head_content = '') {
 
-    $t = new Template('template/' . $theme);
-    $t->set_file('fh', 'popup.html');
-    $t->set_var('LANG', $language);
-    $t->set_var('ECLASS_VERSION', ECLASS_VERSION);
-    $t->set_var('template_base', $urlAppend . 'template/' . $theme);
-    $t->set_var('PAGE_TITLE', $pageName);
-    $t->set_var('HEAD_EXTRAS', $head_content);
-    $t->set_var('TOOL_CONTENT', $tool_content);
-    $t->pparse('Output', 'fh');
+    $data['tool_content'] = $tool_content;
+    $data['head_content'] = $head_content;
+
+    view('legacy.popup', $data);
 }
 
 /**

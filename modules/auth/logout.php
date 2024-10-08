@@ -71,7 +71,7 @@ if ($uid and isset($_POST['token']) and validate_csrf_token($_POST['token'])) {
             <input type='hidden' name='token' value='$_SESSION[csrf_token]'>
             <input type='submit' name='submit' value='$langLogout'>
         </form>";
-    draw_popup();
+    draw_popup($tool_content);
     exit;
 }
 
