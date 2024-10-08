@@ -342,17 +342,14 @@ elseif(isset($_GET['choice']))
                     }
                    $now = date('Y-m-d H:i:s');
                    if ($sess->active <> '1') {
-                        //Session::Messages($langBBBDisabled, 'alert-danger');
                         Session::flash('message',$langBBBDisabled);
                         Session::flash('alert-class', 'alert-danger');
                         redirect("index.php?course=$course_code");
                    } else if (date_diff_in_minutes($sess->start_date, $now) > $sess->unlock_interval) {
-                        //Session::Messages($langBBBNotStarted, 'alert-danger');
                         Session::flash('message',$langBBBNotStarted);
                         Session::flash('alert-class', 'alert-danger');
                         redirect("index.php?course=$course_code");
                    } else if (!empty($sess->end_date) and date_diff_in_minutes($now, $sess->end_date) > 0) {
-                       // Session::Messages($langBBBHasEnded, 'alert-danger');
                         Session::flash('message',$langBBBHasEnded);
                         Session::flash('alert-class', 'alert-danger');
                         redirect("index.php?course=$course_code");

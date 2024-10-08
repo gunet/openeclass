@@ -59,31 +59,33 @@ foreach($q as $server) {
     // read the XML format of bbb answer and ...
     $bbb = new BigBlueButton($salt, $bbb_url);
     $xml = $bbb->getMeetingInfo($xml_url);
-    // ... for each meeting room scan connected users
-    foreach ($xml->meetings->meeting as $row) {
-        $meet_id = $row->meetingID;
-        $moder_pw = $row->moderatorPW;
+    if ($xml) {
+        // ... for each meeting room scan connected users
+        foreach ($xml->meetings->meeting as $row) {
+            $meet_id = $row->meetingID;
+            $moder_pw = $row->moderatorPW;
 
-        $course = Database::get()->querySingle("SELECT code,course.title,tc_session.title as mtitle
+            $course = Database::get()->querySingle("SELECT code,course.title,tc_session.title as mtitle
             FROM course LEFT JOIN tc_session on course.id = tc_session.course_id
             WHERE tc_session.meeting_id = ?s", $meet_id);
-         // don't list meetings from other APIs
-         if (!$course) {
-            continue;
-         }
-         /****************************************************/
-         /*		write attendes in SQL database		*/
-         /****************************************************/
-         $joinParams = array(
-            'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
-            'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
-         );
-         // Get the URL to meeting info:
-         $room_xml = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
-         /****************************************************/
-         /*		XML read from URL and write to SQL	*/
-         /****************************************************/
-         xml2sql($room_xml, $bbb);
+            // don't list meetings from other APIs
+            if (!$course) {
+                continue;
+            }
+            /****************************************************/
+            /*		write attends in SQL database		*/
+            /****************************************************/
+            $joinParams = array(
+                'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
+                'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
+            );
+            // Get the URL to meeting info:
+            $room_xml = $bbb->getMeetingInfoUrl($bbb_url, $salt, $joinParams);
+            /****************************************************/
+            /*		XML read from URL and write to SQL	*/
+            /****************************************************/
+            xml2sql($room_xml, $bbb);
+        }
     }
 }
 // draws pop window
@@ -145,7 +147,7 @@ function xml2sql($room_xml, $bbb) {
             }
             $u = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
             if (!empty($u->id)) {
-                update_attendance_book($u, get_tc_id($meetingid),GRADEBOOK_ACTIVITY_TC);
+                update_attendance_book($u->id, get_tc_id($meetingid),GRADEBOOK_ACTIVITY_TC);
             }
         }
     }
