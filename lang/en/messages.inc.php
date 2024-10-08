@@ -6442,3 +6442,4 @@ $langFileCreation = "File creation";
 $langMaterialForUser = "User registration form";
 $langAddMaterialForUser = "Add your comment";
 $langDelMaterialSuccess = "Log form deleted successfully.";
+$langLinkFooterImage = "Footer image link";

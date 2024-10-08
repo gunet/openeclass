@@ -4,7 +4,7 @@
         <div class='d-none d-lg-block w-100'>
             @if($image_footer)
                 <div class='col-12 d-flex justify-content-center align-items-center gap-3 pt-3'>
-                    <img style='max-width:300px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                    <a href="{!! get_config('link_footer_image')!!}" target="_blank"><img style='max-width:300px; max-height:150px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}"></a>
                     <button class='footer-back-to-top' onclick="topFunction()" aria-label='Back to the top'><i class='fa-solid fa-chevron-up'></i></button>
                 </div>
                 @if(get_config('footer_intro'))
@@ -126,7 +126,7 @@
             <div class="d-flex align-items-start flex-column h-100">
                 @if($image_footer)
                     <div class='col-12 d-flex justify-content-center align-items-center pb-3 gap-3'>
-                        <img style='max-width:300px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <a href="{!! get_config('link_footer_image')!!}" target="_blank"><img style='max-width:300px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}"></a>
                         <button class='footer-back-to-top hidden-xs' onclick="topFunction()" aria-label='Back to the top'><i class='fa-solid fa-chevron-up'></i></button>
                     </div>
                 @endif
