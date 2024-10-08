@@ -60,7 +60,6 @@ $(document).ready(function(){
     popover_init();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
-    topFunction();
     nextAuthedicationMethod();
 
     //fix modal appearance
@@ -91,6 +90,24 @@ $(document).ready(function(){
         }else{
             $('.add-on2').css('background-color','#E8EDF8');
         }
+    });
+
+
+    // Regarding the scroll up button
+    const btnScrollToTop = document.querySelector(".btnScrollToTop");
+
+    // scroll to top of page when button clicked
+    btnScrollToTop.addEventListener("click", e => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
+    });
+
+    // toggle 'scroll to top' based on scroll position
+    window.addEventListener('scroll', e => {
+        btnScrollToTop.style.display = window.scrollY > 20 ? 'block' : 'none';
     });
 
 });
@@ -245,12 +262,6 @@ function validator_rubric(){
           form.classList.add('was-validated')
         }, false)
       })
-}
-
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
 }
 
 
