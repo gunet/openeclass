@@ -1747,6 +1747,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
+                .btnScrollToTop{
+                    border-color: $theme_options_styles[buttonBgColor] ;
+                    background-color: $theme_options_styles[buttonBgColor] ;
+                }
+
 
             ";
 
@@ -1887,6 +1892,13 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
+                .btnScrollToTop:hover,
+                .btnScrollToTop:focus{
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                    border-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+
             ";
         }
 
@@ -2004,7 +2016,7 @@ function view($view_file, $view_data = array()) {
                 .showCoursesPics.active i,
                 .showCoursesPics.active:hover i,
                 .showCoursesPics.active:focus i {
-                    color:$theme_options_styles[buttonTextColor] ;
+                    color:$theme_options_styles[buttonTextColor];
                 }
 
                 .mce-btn,
@@ -2027,6 +2039,14 @@ function view($view_file, $view_data = array()) {
                 .list-group-upgrade .list-group-item.element.active span{
                    color: $theme_options_styles[buttonTextColor] !important;
                 }
+
+                .btnScrollToTop i,
+                .btnScrollToTop:hover i,
+                .btnScrollToTop:focus i,
+                .btnScrollToTop:active i{
+                    color:$theme_options_styles[buttonTextColor];
+                }
+
             ";
         }
 

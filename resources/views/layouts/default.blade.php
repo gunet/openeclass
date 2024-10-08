@@ -186,6 +186,9 @@
             </div>
         </div>
     @endif
+    <button class="btnScrollToTop" data-bs-scroll="up">
+        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+    </button>
     <script>
         $(function() {
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
