@@ -3300,6 +3300,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
+                .dropdown-item.active, 
+                .dropdown-item:active {
+                    background-color:  $theme_options_styles[bgOptionSelected] !important;
+                }
+
             ";
         }
 
@@ -3341,6 +3346,11 @@ function view($view_file, $view_data = array()) {
 
                 .mce-menu-item:hover .mce-text,
                 .mce-menu-item.mce-selected .mce-text {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
+
+                .dropdown-item.active, 
+                .dropdown-item:active {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 

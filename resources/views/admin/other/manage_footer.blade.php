@@ -84,6 +84,10 @@
                                     <div class='col-sm-12'>
                                         <input type='url' name='link_ln' id='link_ln' class='form-control' value="{!! $link_ln !!}">
                                     </div>
+                                    <label for='link_footer_image' class='col-sm-12 control-label-notes mt-3'>{{ trans('langLinkFooterImage') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input type='url' name='link_footer_image' id='link_footer_image' class='form-control' value="{!! $link_footer_image !!}">
+                                    </div>
                                 </div>
 
 

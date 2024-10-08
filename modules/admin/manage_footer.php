@@ -32,6 +32,7 @@ if(isset($_POST['submit'])){
     set_config('link_fb', $_POST['link_fb']);
     set_config('link_tw', $_POST['link_tw']);
     set_config('link_ln', $_POST['link_ln']);
+    set_config('link_footer_image', $_POST['link_footer_image']);
 
     $config_vars = [
         'activate_privacy_policy_text' => true,
@@ -60,5 +61,6 @@ $data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('foot
 $data['link_fb'] = get_config('link_fb') ?? '';
 $data['link_tw'] = get_config('link_tw') ?? '';
 $data['link_ln'] = get_config('link_ln') ?? '';
+$data['link_footer_image'] = get_config('link_footer_image') ?? '';
 
 view('admin.other.manage_footer', $data);
