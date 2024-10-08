@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_admin = true;
@@ -25,10 +25,9 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/cronutil.class.php';
 
 $pageName = $logo;
-$tool_content .= "
-  <p>$langIndexingOptAlert1</p>
-  <p>$langIndexingOptAlert2</p>";
-draw_popup();
+$tool_content .= "<p>$langIndexingOptAlert1</p><p>$langIndexingOptAlert2</p>";
+
+draw_popup($tool_content);
 
 session_write_close();
 ignore_user_abort(true);

@@ -390,7 +390,7 @@ class LtiEnrolHelper {
         } else {
             $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msg</span></div>";
         }
-        draw_popup();
+        draw_popup($tool_content);
         exit;
     }
 

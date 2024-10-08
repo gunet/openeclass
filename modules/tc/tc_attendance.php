@@ -89,7 +89,7 @@ foreach($q as $server) {
     }
 }
 // draws pop window
-draw_popup();
+draw_popup($tool_content, $head_content);
 
 /**
  * @brief record users attendance in db
