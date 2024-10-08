@@ -954,10 +954,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
             $q = Database::get()->querySingle("SELECT options FROM tc_session 
                                                         WHERE id = " . $session_id);
 
-            if (
-                $q
-                && !empty($q->options)
-            ) {
+            if ($q && !empty($q->options)) {
                 $options = $q->options;
             }
         }
@@ -967,6 +964,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                         participants=?s, record=?s, sessionUsers=?d, options=?s WHERE id=?d",
                                 $title, $desc, $start_session, $BBBEndDate, 1, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $options, $session_id);
+
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_MODIFY, array('id' => $session_id,
                                                                 'title' => $title,
