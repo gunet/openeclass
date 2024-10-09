@@ -91,6 +91,18 @@ if(isset($_POST['submit'])){
     $consent = (isset($_POST['with_consent']) and $_POST['with_consent']=='on') ? 1 : 0;
     $is_user_accepted = (isset($_POST['with_consent']) and $_POST['with_consent']=='on') ? 0 : 1;
 
+    // if exists a session by a consultant in the same time then do not continue.
+    $sessionChecking = Database::get()->querySingle("SELECT * FROM mod_session 
+                                                      WHERE creator = ?d
+                                                      AND start = ?t
+                                                      AND finish = ?t
+                                                      AND course_id = ?d", $creator, $start_session, $end_session, $course_id);
+    if($sessionChecking){
+      Session::flash('message',$langExistsTheSameSession);
+      Session::flash('alert-class', 'alert-danger');
+      redirect_to_home_page("modules/session/new.php?course=".$course_code);
+    }
+
     $insert = Database::get()->query("INSERT INTO mod_session SET
                                         creator = ?d,
                                         title = ?s,
@@ -229,11 +241,26 @@ if($is_coordinator){// is the tutor course
                                                     AND course_user.tutor = ?d
                                                     AND course_user.editor = ?d
                                                     AND course_user.course_id = ?d", USER_STUDENT, 1, 0, $course_id);
+
+  $data['view_sessions'] = Database::get()->queryArray("SELECT mod_session.title,mod_session.creator,mod_session.start,mod_session.finish,user.givenname,user.surname FROM mod_session
+                                                LEFT JOIN user ON mod_session.creator = user.id
+                                                WHERE course_id = ?d",$course_id);
+
 }else{// is the consultant
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }
 
 $data['comments'] = rich_text_editor('comments', 5, 40, '' );
+
+
+$sql = "";
+if($is_consultant && !$is_coordinator){
+  $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members WHERE user_id = ?d AND is_tutor = ?d", $uid, 1);
+  if(count($consultant_as_tutor_group) > 0){
+    $sql = "AND course_user.user_id IN (SELECT user_id FROM group_members
+                                        WHERE group_id IN (SELECT group_id FROM group_members WHERE user_id = $uid AND is_tutor = 1))";
+  }
+}
 $data['simple_users'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                       LEFT JOIN user ON course_user.user_id=user.id
                                                       WHERE course_user.status = ?d
@@ -241,7 +268,8 @@ $data['simple_users'] = Database::get()->queryArray("SELECT course_user.user_id,
                                                       AND course_user.editor = ?d
                                                       AND course_reviewer = ?d
                                                       AND course_user.reviewer = ?d
-                                                      AND course_user.course_id = ?d", USER_STUDENT, 0, 0, 0, 0, $course_id);
+                                                      AND course_user.course_id = ?d
+                                                      $sql", USER_STUDENT, 0, 0, 0, 0, $course_id);
 
 $data['action_bar'] = action_bar([
     [ 'title' => $langBack,

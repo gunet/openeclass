@@ -413,10 +413,42 @@
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
             </div>
             <div class="modal-body">
+                @if($is_consultant && !$is_coordinator)
                 <div class='alert alert-info'>
                     <i class='fa-solid fa-circle-info fa-lg'></i>
                     <span>{!! trans('langInfoEditSession') !!}</span>
                 </div>
+                @endif
+                @if($is_coordinator)
+                    @if(count($view_sessions) > 0)
+                        <div class='panel'>
+                            <div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
+                                <ul class="list-group list-group-flush mt-4">
+                                    <li class="list-group-item px-0 mb-4 bg-transparent">
+                                        <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#showSession' aria-expanded='false'>
+                                            <span class='fa-solid fa-chevron-down'></span>
+                                            {{ trans('langViewAllSession') }}
+                                        </a>
+
+                                        <div id='showSession' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
+                                            <div class='panel-body bg-transparent Neutral-900-cl px-4'>
+                                                <ul class='list-group list-group-flush'>
+                                                    @foreach($view_sessions as $s)
+                                                        <li class='list-group-item element'>
+                                                            <div>{{ $s->givenname }}&nbsp;{{ $s->surname }}</div>
+                                                            <div>{{ $s->title }}</div>
+                                                            <div>{{ format_locale_date(strtotime($s->start), 'short') }}&nbsp;&nbsp;/&nbsp;&nbsp;{{ format_locale_date(strtotime($s->finish), 'short') }}</div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                @endif
                 <div id='calendarAddSessionDate' class='calendarAddDaysCl d-none'></div>
             </div>
         </div>
