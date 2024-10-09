@@ -609,7 +609,7 @@
 
 
                     <div>
-                        <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-4'>
+                        <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                 <h3 class='mb-0'>{{ trans('langAgenda') }}</h3>
                             </div>
@@ -719,12 +719,14 @@
                             @if (isset($level) && !empty($level))
                                 <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>{{ trans('langOpenCourseShort') }}</h3>
+                                        <h3 class='mb-3'>{{ trans('langOpenCourseShort') }}</h3>
                                     </div>
                                     <div class='card-body card-body-default px-0 py-0'>
-                                        {!! $opencourses_level !!}
-                                        <div class='mt-3 text-center'>
-                                            {!! $opencourses_level_footer !!}
+                                        <div class='card panelCard card-default px-lg-4 py-lg-3 p-3'>
+                                            {!! $opencourses_level !!}
+                                            <div class='mt-3 text-center'>
+                                                {!! $opencourses_level_footer !!}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

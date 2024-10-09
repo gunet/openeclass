@@ -65,7 +65,7 @@
     <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
 @endpush
 
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-4'>
+<div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3'>
     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
         <h3 class='mb-0'>
             {{ trans('langAgenda') }}
