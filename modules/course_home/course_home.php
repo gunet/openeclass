@@ -443,7 +443,7 @@ $data['level'] = $level;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $data['opencourses_level'] = "
-        <div class='row'>
+        <div class='row px-0'>
             <div class='col-12 d-flex justify-content-center'>
                 <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
             </div>
@@ -457,7 +457,7 @@ if (isset($level) && !empty($level)) {
             </div>
         </div>";
     $data['opencourses_level_footer'] = "
-        <div class='row'>
+        <div class='row px-0'>
             <div class='col-12 text-center'>
                 <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
             </div>
