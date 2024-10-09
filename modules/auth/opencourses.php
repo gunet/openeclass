@@ -21,6 +21,7 @@
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/course_metadata/CourseXML.php';
 
 $countCallback = null;
 $data['isInOpenCoursesMode'] = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
@@ -92,7 +93,7 @@ $queryExtraJoinWhere = '';
 $runQuery = true;
 
 if ($data['isInOpenCoursesMode']) {
-    // find subnode's certified opencourses
+    // find sub node's certified opencourses
     $opencourses = array();
     Database::get()->queryFunc("SELECT course.id, course.code
                                   FROM course, course_department, course_review
@@ -150,11 +151,8 @@ if ($runQuery) {
 
 $data['course_data'] = array();
 if (count($data['courses']) > 0) {
-
     $data['displayGuestLoginLinks'] = ($uid == 0) && (get_config('course_guest') == 'link');
-
     foreach ($data['courses'] as $mycours) {
-
         if ($data['displayGuestLoginLinks']) {
             $data['course_data'][$mycours->id]['userguest'] =  Database::get()->querySingle('SELECT username, password FROM course_user, user
                 WHERE course_user.user_id = user.id AND user.status = ?d and course_id = ?d',
@@ -163,7 +161,4 @@ if (count($data['courses']) > 0) {
     }
 }
 
-
-
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
 view('modules.auth.opencourses', $data);
