@@ -40,7 +40,17 @@ if(isset($_GET['course']) and isset($_GET['show_sessions'])){
 
     $sessionArr = array();
 
-    $result_sessions = Database::get()->queryArray("SELECT * FROM mod_session WHERE course_id = ?d",$course_id);
+    // ΣΗΜΑΝΤΙΚΗ ΣΗΜΕΙΩΣΗ ΕΠΙΛΥΣΗΣ ΠΡΟΒΛΗΜΑΤΟΣ
+
+    // Ο σύμβουλος ΒΛΕΠΕΙ στο ημερολόγιο τις καταχωρήμενες συνεδρίες του ώστε να μην μπορεί να καταχωρίσει νέα συνεδρία στην ίδια ημερομηνία.
+
+    // Ο συντονιστής ΔΕΝ ΒΛΕΠΕΙ στο ημερολόγιο τις καταχωριμένες συνεδρίες των συμβούλων ώστε να μπορεί να εισάγει νέα συνέδρια ενός συμβουλου
+    // στην ίδια ημερομηνία και ώρα ενός άλλου συμβούλου.
+    
+    // Αν γίνει καταχώριση συνεδρίας ίδιου συμβούλου σε ημερομήνια που έχει καταχωρίσει μία άλλη δική του συνεδρία, τότε το σύστημα
+    // δεν του επιτρέπει να δημιουργήσει την συγκεκριμένη συνεδρία.
+
+    $result_sessions = Database::get()->queryArray("SELECT * FROM mod_session WHERE course_id = ?d AND creator = ?d",$course_id, $uid);
 
     $session_edit_id = 0;
     if(isset($_GET['edit']) && isset($_GET['session'])){

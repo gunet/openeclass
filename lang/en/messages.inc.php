@@ -6444,3 +6444,5 @@ $langAddMaterialForUser = "Add your comment";
 $langDelMaterialSuccess = "Log form deleted successfully.";
 $langLinkFooterImage = "Footer image link";
 $langScrollToTop = "Scroll to top";
+$langExistsTheSameSession = "The session was not created as there is another registered session of this consultant at the same time.";
+$langViewAllSession = "View program of all available sessions";
