@@ -5710,6 +5710,7 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['TextColorAnnouncementHomepage'])){
             $styles_str .= "
                 .homepage-annnouncements-container .card h3,
+                .homepage-annnouncements-container .card .text-heading-h3,
                 .homepage-annnouncements-container .card .text-content{
                     color: $theme_options_styles[TextColorAnnouncementHomepage];
                 }
@@ -5756,7 +5757,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['TextColorStatisticsHomepage'])){
             $styles_str .= "
-                .homepage-statistics-container .card-header h3{
+                .homepage-statistics-container .card-header h3,
+                .homepage-statistics-container .card-header .text-heading-h3{
                     color: $theme_options_styles[TextColorStatisticsHomepage];
                 }
 
@@ -5787,7 +5789,8 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['TextColorPopularCoursesHomepage'])){
             $styles_str .= "
-                .homepage-popoular-courses-container .card-header h3{
+                .homepage-popoular-courses-container .card-header h3,
+                .homepage-popoular-courses-container .card-header .text-heading-h3{
                     color: $theme_options_styles[TextColorPopularCoursesHomepage];
                 }
 
