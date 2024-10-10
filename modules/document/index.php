@@ -515,7 +515,7 @@ if ($can_upload or $user_upload) {
 
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
-
+//    die(print_r($_POST));
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $uploaded = true;
@@ -1547,6 +1547,7 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
               'icon' => 'fa-upload',
               'level' => 'primary-label',
+              'text-class' => 'uploadBTN',
               'button-class' => 'btn-success'),
         array('title' => $langCreateDir,
             'url' => "{$base_url}createDir=$curDirPath",

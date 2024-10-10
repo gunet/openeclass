@@ -64,12 +64,14 @@
                                                     {{--                                                    <input type='file' id='userFile' name='userFile'>--}}
 
                                                     <div>
+                                                        <input type="hidden" name="uploadPath" value="<?php echo $openDir; ?>">
                                                         <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
 
                                                         <div id="uppy"></div>
 
                                                         <script type="module">
                                                             console.log('backUrl:','{{$backUrl}}');
+                                                            console.log('uploadPath:', '{{ $uploadPath }}')
                                                             import { Uppy, Dashboard, XHRUpload } from "https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs"
 
                                                             const uppy = new Uppy({
@@ -132,13 +134,14 @@
 
                                                             uppy.on('file-added', (file) => {
                                                                 console.log('File added:', file)
+                                                                console.log('uploadPath:', uploadPath)
                                                             })
 
-                                                            uppy.on('complete', (result) => {
-                                                                console.log('complete');
-                                                                console.log(result);
-                                                                window.location.href = '{{$backUrl}}';
-                                                            })
+                                                            {{--uppy.on('complete', (result) => {--}}
+                                                            {{--    console.log('complete');--}}
+                                                            {{--    console.log(result);--}}
+                                                            {{--    window.location.href = '{{$backUrl}}';--}}
+                                                            {{--})--}}
 
                                                             {{--    uppy.on('upload-success', (file, response) => {   --}}
                                                             {{--    console.log('Upload successful:', file, response)  --}}

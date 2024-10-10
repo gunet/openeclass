@@ -4,10 +4,28 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
+
+<?php
+    if (isset($_GET['openDir'])) {
+        $openDir = $_GET['openDir'];
+    } else {
+        $openDir = '';
+    }
+?>
+
 <script type='text/javascript'>
 
     $(document).ready(function(){
 
+
+        // Drag and drop
+        $('.uploadBTN').on('click', function(event) {
+            event.preventDefault();
+            console.log('clicked')
+            $('.drag_and_drop_container').toggleClass('d-none');
+        });
+
+        // Bulk processing
         let checkboxStates = [];
 
         $('li.bulk-processing a').on('click', function(event) {
@@ -161,10 +179,77 @@
                         </div>
                     @endif
 
+                        <div class="drag_and_drop_container d-none mb-3">
+                            <input type="hidden" name="uploadPath" value="<?php echo $openDir; ?>">
+                            <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
+                            <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
+
+                            <div id="uppy"></div>
+
+                            <script type="module">
+                                let backURL = '<?php echo htmlspecialchars_decode($backUrl); ?>';
+                                console.log('backUrl:',backURL);
+                                import { Uppy, Dashboard, XHRUpload } from "https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs"
+
+                                const uppy = new Uppy({
+                                    autoProceed: false,
+                                })
+
+                                uppy.use(Dashboard, {
+                                    target: '#uppy',
+                                    inline: true,
+                                    showProgressDetails: true,
+                                    proudlyDisplayPoweredByUppy: false,
+                                    height: 500,
+                                    thumbnailWidth: 100,
+                                    note: 'Drag and drop a file or click to browse'
+                                })
+
+                                let uploadPath = '<?php echo $openDir; ?>';
+                                let fileCreator = document.querySelector('input[name="file_creator"]').value;
+                                let fileCopyrighted = 0;
+
+                                uppy.setMeta({
+                                    uploadPath: uploadPath,
+                                    file_creator: fileCreator,
+                                    file_copyrighted: fileCopyrighted
+                                });
+
+                                uppy.use(XHRUpload, {
+                                    endpoint: backURL,
+                                    formData: true,
+                                    fieldName: 'userFile',
+                                    method: 'POST',
+                                    headers: {
+
+                                    },
+                                    allowedMetaFields: [
+                                        'uploadPath',
+                                        'file_creator',
+                                        'file_copyrighted'
+                                    ]
+                                })
+
+                                uppy.setMeta({
+                                    uploadPath: '<?php echo $openDir; ?>',
+                                });
+
+                                uppy.on('file-added', (file) => {
+                                    console.log('File added:', file)
+                                })
+
+                                uppy.on('complete', (result) => {
+                                    console.log('complete');
+                                    console.log(result);
+                                    window.location.href = backURL;
+                                })
+
+                            </script>
+                        </div>
+
                     @if (count($fileInfo) or $curDirName)
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
-
 
                                     <div class='d-flex justify-content-between gap-5'>
                                         <div class='d-flex justify-content-start align-items-center flex-wrap'>
