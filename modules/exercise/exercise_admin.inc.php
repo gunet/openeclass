@@ -722,11 +722,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         [ 'title' => $langExerciseExecute,
           'url' => "exercise_submit.php?course=$course_code&amp;exerciseId=$exerciseId",
           'icon' => 'fa-play-circle',
-          'level' => 'primary-label',
+          'level' => 'primary',
           'button-class' => 'btn-danger' ],
         [ 'title' => $langCourseInfo,
           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
           'icon' => 'fa-edit',
+          'level' => 'primary',
           'button-class' => 'btn btn-success' ]
     ]);
     $tool_content .= "</div>";

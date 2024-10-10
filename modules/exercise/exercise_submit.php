@@ -82,7 +82,7 @@ if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
 // setting a cookie in onBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh
 // (It is executed after page load in Chrome and Mozilla and before page load in IE).
-// In current functionality if user leaves the exercise for another module the cookie will expire anyway in 30 seconds
+// In current functionality if user leaves the exercise for another module the cookie will expire anyway in 30 seconds,
 // or it will be unset by the exercises page (index.php). If user who left an exercise for another module
 // visits through a direct link a specific execise page before the 30 seconds time frame
 // he will be redirected to the exercises page (index.php)
@@ -268,11 +268,28 @@ if ($exercisePreventCopy) {
     $questionOptions = [];
 }
 
+$is_exam = $objExercise->isExam();
+
+if ($is_exam) { // disallow links outside exercise frame. disallow button quick note
+    $head_content .= "
+        <script type='text/javascript'>
+            $(function() {
+                $('.btn-quick-note').remove();
+                $('a:not(#exercise_frame a)').css('cursor', 'not-allowed');
+                $('div:not(#exercise_frame)').css('cursor', 'not-allowed');
+                $('a:not(#exercise_frame a)').on('click', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+    </script>";
+}
+
 $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
-$choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+$choice = $_POST['choice'] ?? '';
 
 // If there are answers in the session get them
 if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
@@ -293,7 +310,6 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
     if ($is_editor) {
         // Allow editors to test expired or not yet started exercises, but warn them
         if (!isset($_POST['buttonFinish']) and !$autoSubmit) {
-            //Session::Messages($langExerciseExpired, 'alert-info');
             Session::flash('message',$langExerciseExpired);
             Session::flash('alert-class', 'alert-warning');
         }
@@ -426,7 +442,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                 <form action='$form_next_link' method='post'>
                     <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap' style='margin-top:70px;'>
                             <input class='btn successAdminBtn' style='float: right;' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                            <a href='$form_cancel_link' class='btn cancelAdminBtn'>$langCancel</a>             
+                            <a href='$form_cancel_link' class='btn cancelAdminBtn'>$langCancel</a>
                     </div>
                 </form>";
             unset_exercise_var($exerciseId);
@@ -606,7 +622,7 @@ if ($unit) {
     $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId";
 }
 
-$tool_content .= "
+$tool_content .= "<div id='exercise_frame'>
   <form class='form-horizontal exercise exercise-prevent-copy' role='form' method='post' action='$form_action_link' autocomplete='off'>
   <input type='hidden' name='formSent' value='1'>
   <input type='hidden' name='attempt_value' value='$attempt_value'>
@@ -789,6 +805,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= $tempSaveButton . "</div>";
 
 $tool_content .= "</form>";
+$tool_content .= "</div>";
 
 // In sequential exercise we save all questions in the DB
 // to avoid mixing up their order if user navigates non-sequentially
