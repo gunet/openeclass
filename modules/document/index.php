@@ -515,7 +515,7 @@ if ($can_upload or $user_upload) {
 
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
-//    die(print_r($_POST));
+
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $uploaded = true;
