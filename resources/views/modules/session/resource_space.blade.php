@@ -94,7 +94,7 @@
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
-                                                    <div class='title-default'>{{ trans('langReferencedObject') }}</div>
+                                                    <div class='title-default'>{{ trans('langUsersParticipants') }}</div>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
                                                     <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>
