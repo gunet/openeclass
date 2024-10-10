@@ -4,14 +4,7 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
-
-<?php
-    if (isset($_GET['openDir'])) {
-        $openDir = $_GET['openDir'];
-    } else {
-        $openDir = '';
-    }
-?>
+<?php $openDir = isset($_GET['openDir']) && $_GET['openDir'] !== '/' ? $_GET['openDir'] : ''; ?>
 
 <script type='text/javascript'>
 
