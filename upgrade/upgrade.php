@@ -367,6 +367,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
         $data['mail_settings_form'] = $mail_settings_form;
         $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
         $data['error_message'] = $error_message;
+        $data['webDir'] = $webDir;
 
         view('upgrade.upgrade_step_2', $data);
 

@@ -40,19 +40,28 @@
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
-                                                <div class='form-group'>
-                                                    <label class='col-sm-12 control-label-notes' for='homepage_intro'>{{ trans('langHomePageIntroText') }}:</label>
-                                                    <div class='col-sm-12'>
-                                                        {!! $homepage_intro !!}
-                                                    </div>
+                                                <div class='alert alert-info'>
+                                                    {{ trans('langOldThemeInfo') }}
                                                 </div>
 
-                                                <div class='form-group mt-4'>
+                                                <div class='alert alert-info'>
+                                                    {{ trans('langOldThemeInfoLocation') }}
+                                                    <br><strong>{{ $webDir }}/courses/theme_data/</strong>
+                                                </div>
+
+                                                <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <a class='link-color TextBold' type='button' href='#view_themes_screens' data-bs-toggle='modal'>{{ trans('langViewScreensThemes') }}</a></br></br>
                                                         <p class='mb-3'><span class='control-label-notes'>{{ trans('langActiveTheme') }}:&nbsp;</span>{{ $active_theme }}</p>
                                                         <label for='themeSelection' class='control-label-notes'>{{ trans('langAvailableThemes') }}:</label>
                                                         {!! $theme_selection !!}
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <label class='col-sm-12 control-label-notes' for='homepage_intro'>{{ trans('langHomePageIntroText') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        {!! $homepage_intro !!}
                                                     </div>
                                                 </div>
 
