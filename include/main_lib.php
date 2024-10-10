@@ -3798,11 +3798,16 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         }
         $iconTag = '';
         if ($level == 'primary' or $level == 'primary-label') {
+            if (isset($option['text-class'])) {
+                $text_class = $option['text-class'];
+            } else {
+                $text_class = '';
+            }
             if (isset($option['icon'])) {
                 $iconTag = "<span class='fa $option[icon] settings-icons'></span>";
             }
             array_unshift($out_primary,
-                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                "$form_begin<$primaryTag$confirm_extra class='$text_class btn $button_class$confirm_modal_class'" . $href .
                 ' ' . $dataAttrs .
                 " title='$title'$link_attrs>" . $iconTag . $caret .
                 "</$primaryTag>$subMenu$form_end");
