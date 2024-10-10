@@ -309,6 +309,13 @@ if (isset($_GET['u'])) { //  stats per user
                 $materialToDelete = "<a class='btn deleteAdminBtn' href='#deleteMaterialForUser{$row->id}' data-bs-toggle='modal' target='_blank'>$langDelete</a>";
             }
 
+            $not_display = "";
+            if($is_course_reviewer && !$is_consultant){
+                $materialToPdf = "";
+                $materialToDelete = "";
+                $not_display = "d-none";
+            }
+
             $tool_content .= "
             <div class='modal fade' id='materialForUser{$row->id}' tabindex='-1' aria-labelledby='materialForUser{$row->id}Label' aria-hidden='true'>
                 <form method='post' action='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}'>
@@ -328,7 +335,7 @@ if (isset($_GET['u'])) { //  stats per user
                             </div>
                             <div class='modal-footer d-flex justify-content-center align-items-center'>
                                 <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
-                                <button type='submit' class='btn submitAdminBtnDefault' name='add_material'>$action_msg</button>
+                                <button type='submit' class='btn submitAdminBtnDefault $not_display' name='add_material'>$action_msg</button>
                                 $materialToPdf
                                 $materialToDelete
                             </div>

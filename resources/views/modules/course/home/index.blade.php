@@ -528,18 +528,20 @@
                                                         <details open>
                                                             <summary><strong>{{ trans('langNextSession') }}</strong></summary>
                                                             <ul>
-                                                                <li>
-                                                                    @if($next_session)
-                                                                        <a class="link-color TextBold"
-                                                                            href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $next_session->id }}">
-                                                                            {{ $next_session->title }}
-                                                                        </a>
-                                                                        &nbsp;<span>({!! format_locale_date(strtotime($next_session->start), 'short', false) !!})</span>
-                                                                        <p>{!! participant_name($next_session->creator) !!}</p>
-                                                                    @else
-                                                                        {{ trans('langNoExistsNextSession') }}
-                                                                    @endif
-                                                                </li>
+                                                                @if(count($next_session) > 0)
+                                                                    @foreach($next_session as $n)
+                                                                        <li>
+                                                                            <a class="link-color TextBold"
+                                                                                href="{{ $urlAppend }}modules/session/session_space.php?course={{ $course_code }}&amp;session={{ $n->id }}">
+                                                                                {{ $n->title }}
+                                                                            </a>
+                                                                            &nbsp;<span>({!! format_locale_date(strtotime($n->start), 'short', false) !!})</span>
+                                                                            <p>{!! participant_name($n->creator) !!}</p>
+                                                                        </li>
+                                                                    @endforeach
+                                                                @else
+                                                                    <li>{{ trans('langNoExistsNextSession') }}</li>
+                                                                @endif
                                                             </ul>
                                                         </details>
                                                     </li>

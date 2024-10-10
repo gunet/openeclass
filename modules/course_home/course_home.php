@@ -943,6 +943,7 @@ if ($uid) {
 
 /////////////////////////////////////////////// Regarding course sessions ///////////////////////////////////////////////////
 
+$limit = "LIMIT 1";
 $sql_session = "";
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 if($is_consultant && !$is_coordinator){
@@ -952,12 +953,24 @@ if($is_consultant && !$is_coordinator){
                                 WHERE participants = $uid AND is_accepted = 1)";
 }
 
-$data['next_session'] = Database::get()->querySingle("SELECT * FROM mod_session 
-                                                        WHERE course_id = ?d
-                                                        AND start > NOW() 
-                                                        AND visible = 1
-                                                        $sql_session
-                                                        ORDER BY start ASC LIMIT 1",$course_id);
+if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
+    $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+                                                            WHERE course_id = ?d
+                                                            AND start > NOW() 
+                                                            AND visible = 1
+                                                            $sql_session
+                                                            ORDER BY start ASC $limit",$course_id);
+}elseif($is_coordinator){
+    // Get the minimum datetime from the current date
+    $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session 
+                                             WHERE course_id = ?d
+                                             AND start > NOW()
+                                             AND visible = 1", $course_id);
+
+    $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+                                                         WHERE course_id = ?d
+                                                         AND start = ?t", $course_id, $minDate->st);
+}
 
 $data['course_sessions'] = $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                         WHERE course_id = ?d

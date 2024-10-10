@@ -151,13 +151,22 @@ if(isset($_GET['user_docs'])){
     }
 }
 
+$sql_users = "";
+if($is_consultant && !$is_coordinator){
+  $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members WHERE user_id = ?d AND is_tutor = ?d", $uid, 1);
+  if(count($consultant_as_tutor_group) > 0){
+    $sql_users = "AND user_id IN (SELECT user_id FROM group_members
+                                    WHERE group_id IN (SELECT group_id FROM group_members WHERE user_id = $uid AND is_tutor = 1))";
+  }
+}
 $course_users = Database::get()->queryArray("SELECT user_id FROM course_user
                                                 WHERE course_id = ?d
                                                 AND status = ?d
                                                 AND tutor = ?d
                                                 AND editor = ?d
                                                 AND course_reviewer = ?d
-                                                AND user_id IN (SELECT participants FROM mod_session_users WHERE is_accepted = 1)",$course_id,USER_STUDENT,0,0,0);
+                                                AND user_id IN (SELECT participants FROM mod_session_users WHERE is_accepted = 1)
+                                                $sql_users",$course_id,USER_STUDENT,0,0,0);
 
 $res = Database::get()->queryFunc("SELECT user_id FROM course_user 
                                    WHERE course_id = ?d 
