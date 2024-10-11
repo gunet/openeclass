@@ -41,7 +41,12 @@ function uploadContent(): bool {
         H5PCore::deleteFileTree($upload_dir);
     }
     mkdir($upload_dir, 0755, true);
-    validateUploadedFile($_FILES['userFile']['name']);
+    if (getPureFileExtension($_FILES['userFile']['name']) != 'h5p') {
+        Session::flash('message', trans('langUploadedFileNotAllowed') . " <b>" .
+            q($_FILES['userFile']['name']) . "</b>");
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page('modules/h5p/index.php?course=' . $course_code);
+    }
     $target_file = $upload_dir . "/" . my_basename($_FILES["userFile"]["name"]);
     move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
 
@@ -75,7 +80,8 @@ function uploadContent(): bool {
         return true;
     } else {
         foreach ($framework->getMessages('error') as $errObj) {
-            Session::Messages($errObj->code . ": " . $errObj->message, 'alert-warning');
+            Session::flash('message', $errObj->code . ": " . $errObj->message);
+            Session::flash('alert-class', 'alert-warning');
         }
         return false;
     }
