@@ -341,17 +341,12 @@
                                                                     <div class='card card-announcement-date text-center'>
                                                                         <p class='TextBold largest-text'>{!! date('j', strtotime($announcement->date)) !!}</p>
                                                                         <p class='mt-2'>
-
                                                                             @php
-                                                                                $string_date = format_locale_date(strtotime(date('Y-m-d H:i:s',strtotime($announcement->date))),'',false);
-
-                                                                                $m_string = preg_replace('/^[^,]*,\s*/', '', $string_date);
-                                                                                $final_month = preg_replace('/[0-9]+/', '', $m_string);
-
-                                                                                $final_year = str_repeat('', strlen($string_date) - 4) . substr($string_date, -4);
+                                                                                $lg = $_GET['localize'] ?? $language;
+                                                                                $string_date = datefmt_format(datefmt_create($lg, IntlDateFormatter::LONG, IntlDateFormatter::NONE, 'Europe/Athens', IntlDateFormatter::TRADITIONAL), strtotime($announcement->date));
+                                                                                $finalDate = preg_replace('/^\d+\s+/', '', $string_date);
                                                                             @endphp
-
-                                                                            {!! $final_month !!} {!! $final_year !!}
+                                                                            {!! $finalDate !!} 
                                                                         </p>
                                                                     </div>
                                                                 </div>
