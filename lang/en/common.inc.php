@@ -74,3 +74,6 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
+$langCTeacher = "INSTRUCTOR";
+$langCStudent = "LEARNER";
+$langCStudent2 = "STUDENT";
