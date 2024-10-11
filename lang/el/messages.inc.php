@@ -6924,3 +6924,6 @@ $langScrollToTop = "Κύληση προς τα πάνω";
 $langExistsTheSameSession = "Η συνεδρία δεν δημιουργήθηκε καθώς υπάρχει άλλη καταχωριμένη συνεδρία του συγκεκριμένου συμβούλου την ίδια ώρα.";
 $langViewAllSession = "Προβολή προγράμματος όλων των καταχωρημένων συνεδρίων";
 $langUsersParticipants = "Συμμετέχουν";
+$langBgColorLinkBanner = "Χρώμα φόντου συνδέσμου banner";
+$langbgCardAnnouncementDate = "Χρώμα φόντου container ημερομηνίας";
+$langTextColorCardAnnouncementDate = "Χρώμα κειμένου ημερομηνίας";
