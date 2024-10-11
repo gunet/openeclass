@@ -9,7 +9,6 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -36,22 +35,23 @@
 
                     @include('layouts.partials.show_alert')
 
-                    <div class='col-sm-12'>
-                        <form method='POST' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
-                            <div class="table-responsive">
+                    <form class='form-horizontal' method='port' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
+                        <div class='col-12'>
+                            <div class='table-responsive mt-4'>
                                 <table class="table-default">
-                                    <tbody>
+                                    <thead>
                                         <tr class="list-header">
-                                            <th>{{ trans('langTitle') }}</th>
-                                            <th>{{ trans('langDescription') }}</th>
-                                            <th>{{ trans('langcreator') }}</th>
-                                            <th>{{ trans('langpublisher') }}</th>
-                                            <th>{{ trans('langDate') }}</th>
-                                            <th>{{ trans('langSelect') }}</th>
+                                            <th style='width:70%;'>{{ trans('langTitle') }}</th>
+                                            <th style='width:10%;'>{{ trans('langCreator') }}</th>
+                                            <th style='width:10%;'>{{ trans('langpublisher') }}</th>
+                                            <th style='width:10%;'>{{ trans('langDate') }}</th>
+                                            <th style='width:5%;'>&nbsp;</th>
                                         </tr>
                                         <tr>
-                                            <th colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
+                                            <th colspan="5">{{ trans('langOpenDelosPublicVideos') }}</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
                                         @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0)
                                             @foreach ($jsonPublicObj->resources as $resource)
                                                 <?php
@@ -67,23 +67,31 @@
                                                     }
                                                 ?>
                                                 <tr>
-                                                    <td align="left"><a href="{!! $url . $urltoken !!}" class="fileURL" target="_blank" title="{{ $resource->videoLecture->title }}">{{ $resource->videoLecture->title }}</a></td>
-                                                    <td>{{ $resource->videoLecture->description }}</td>
-                                                    <td>{{ $resource->videoLecture->rights->creator->name }}</td>
-                                                    <td>{{ $resource->videoLecture->organization->name }}</td>
-                                                    <td>{{ $resource->videoLecture->date }}</td>
-                                                    <td class="center" width="10">
+                                                    <td style='width:70%;'>
+                                                        <a href="{!! $url . $urltoken !!}" class="fileURL" target="_blank" title="{{ $resource->videoLecture->title }}">{{ $resource->videoLecture->title }}</a>
+                                                        <div class="help-block">{{ $resource->videoLecture->description }}</div>
+                                                    </td>
+                                                    <td style='width:10%;'>{{ $resource->videoLecture->rights->creator->name }}</td>
+                                                    <td style='width:10%;'>{{ $resource->videoLecture->organization->name }}</td>
+                                                    <td style='width:10%;'>{{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}</td>
+                                                    <td style='width:5%;'>
                                                         <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                            <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/><span class='checkmark'></span> {!! $alreadyAdded !!}
+                                                            <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"><span class='checkmark'></span> {!! $alreadyAdded !!}
                                                         </label>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         @else
-                                            <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
+                                            <tr>
+                                                <td colspan='5'>
+                                                    <div class='alert alert-warning' role='alert'>
+                                                        <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endif
                                         <tr class="list-header">
-                                            <th colspan="6">{{ trans('langOpenDelosPrivateVideos') }}
+                                            <th colspan="5">{{ trans('langOpenDelosPrivateVideos') }}
                                                 <span class="help-block">({{ trans('langOpenDelosRequireAuth') }})</span>
                                             </th>
                                         </tr>
@@ -92,9 +100,13 @@
                                                 $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
                                                 $authUrl .= "?token=" . getDelosSignedToken();
                                             ?>
-                                            <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                                                {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a></span>
-                                            </div></td></tr>
+                                            <tr>
+                                                <td colspan='5'>
+                                                    <div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                                                        {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a></span>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @else
                                             @if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0)
                                                 @foreach ($jsonPrivateObj->resources as $resource)
@@ -111,12 +123,14 @@
                                                         }
                                                     ?>
                                                     <tr>
-                                                        <td align="left"><a href="{!! $url . $urltoken !!}" class="fileURL" target="_blank" title="{{ $resource->videoLecture->title }}">{{ $resource->videoLecture->title }}</a></td>
-                                                        <td>{{ $resource->videoLecture->description }}</td>
+                                                        <td align="left">
+                                                            <a href="{!! $url . $urltoken !!}" class="fileURL" target="_blank" title="{{ $resource->videoLecture->title }}">{{ $resource->videoLecture->title }}</a>
+                                                            <div class="help-block">{{ $resource->videoLecture->description }}</div>
+                                                        </td>
                                                         <td>{{ $resource->videoLecture->rights->creator->name }}</td>
                                                         <td>{{ $resource->videoLecture->organization->name }}</td>
-                                                        <td>{{ $resource->videoLecture->date }}</td>
-                                                        <td class="center" width="10">
+                                                        <td>{{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}</td>
+                                                        <td class="center">
                                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                                 <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/><span class='checkmark'></span> {!! $alreadyAdded !!}
                                                             </label>
@@ -124,12 +138,22 @@
                                                     </tr>
                                                 @endforeach
                                             @else
-                                                <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
+                                                <tr>
+                                                    <td colspan='5'>
+                                                        <div class='alert alert-warning' role='alert'>
+                                                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                            <span>{{ trans('langNoVideo') }}</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             @endif
                                         @endif
                                         <tr>
-                                            <td colspan='6'>
-                                                <div class='alert alert-info' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langOpenDelosPrivateNote') }}</span></div>
+                                            <td colspan='5'>
+                                                <div class='alert alert-info' role='alert'>
+                                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                    <span>{{ trans('langOpenDelosPrivateNote') }}</span>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="list-header">
@@ -146,7 +170,7 @@
                                                     </div>
                                                 </div>
                                             </th>
-                                            <th colspan="2">
+                                            <th>
                                                 <div class="float-end">
                                                     <input class="btn submitAdminBtn" name="add_submit_delos" value="{{ trans('langAddModulesButton') }}" type="submit">
                                                 </div>
@@ -155,11 +179,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
 
-                    <div class='col-sm-12'>
-                        <div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{!! trans('langOpenDelosReplaceInfo') !!}</span></div>
+                    <div class='col-12'>
+                        <div class='alert alert-warning' role='alert'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>{!! trans('langOpenDelosReplaceInfo') !!}</span>
+                        </div>
                     </div>
                 </div>
             </div>
