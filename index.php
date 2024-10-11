@@ -163,12 +163,16 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     $hybridLinkId = null;
     $hybridProviders = array();
     $authLinks = array();
+    $primary_method = 0;
     if (!$upgrade_begin) {
         $loginFormEnabled = false;
         $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title, auth_instructions
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
         foreach ($q as $l) {
+            if($l->auth_name == 'eclass' && $l->auth_default == 2){
+                $primary_method = 2;
+            }
             if (in_array($l->auth_name, $extAuthMethods)) {
                 $authNameDefault = '';
                 if(!empty($l->auth_title)){
@@ -185,6 +189,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => "<a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a>");
+                $data['auth_url'] = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+                $data['auth_title'] = $authNameDefault;
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
@@ -263,6 +269,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
       </script>
       <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>";
     }
+    $data['primary_method'] = $primary_method;
 
     if (!($upgrade_begin or get_config('dont_display_login_form'))) {
         if (count($authLinks) > 3) {

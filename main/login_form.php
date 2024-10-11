@@ -63,6 +63,8 @@ foreach ($q as $l) {
                                   </div>",
                             $authTitle,
                             $authInstructions);
+        $data['auth_url'] = $authUrl;
+        $data['auth_title'] = (!empty($authTitle) ? $authTitle : $langEnter);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) { // hybrid auth methods
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
         $providerClass = $l->auth_name;
@@ -104,12 +106,19 @@ $Page = '';
 $class_login_img = '';
 $auth_enabled_method = 0;
 $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default IN (1, 2)");
+$primary_method = 0;
 if (count($active_method) > 0) {
     $auth_enabled_method = 1;
     if(count($authLink) > 1){
       $class_login_img = 'jumbotron-image-auth-default';
     }
+    foreach($active_method as $ac){
+      if($ac->auth_name == 'eclass' && $ac->auth_default == 2){
+        $primary_method = 2;
+      }
+    }
 }
+$data['primary_method'] = $primary_method;
 
 $data['authLink'] = $authLink;
 $data['auth_enabled_method'] = $auth_enabled_method;
