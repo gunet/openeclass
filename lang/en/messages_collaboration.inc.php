@@ -1659,3 +1659,14 @@ $langNotExistFilesForUser = "There are no files for this user";
 $langUserNotParticipatedInSessions = "The user does not participate in sessions";
 $langInfoIfTcExists = "The live mode option has been disabled as there is a video conference link in the session.";
 $langInfoIfMeetingExists = "The remote type option has been disabled as the live meeting completion criterion is active.";
+
+$langLocale = 'el_GR.UTF-8';
+$langNewPersoMessage = 'New personal message';
+$langBadFormData = 'File submission failure';
+$langNodeAllowUser = 'Users allowed';
+$langInfoUserDuration = 'The following participation times <b>do not</b> include time spent in <em>Teleconferences</em>.';
+$langPreviewCollaboration = ' collaboration';
+$langUnregCollaboration = 'Unregister from collaboration';
+$langDisableCollaborationModulesHelp = 'You can select which modules will be disabled for all collaborations platform-wide.';
+$langDefaultModulesCollaborationHelp = 'The following modules are enabled by default in all collaborations created on the platform.';
+$langInsertQuestionnaire = 'questionnaire';
