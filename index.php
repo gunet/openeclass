@@ -172,7 +172,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
             if (in_array($l->auth_name, $extAuthMethods)) {
                 $authNameDefault = '';
                 if(!empty($l->auth_title)){
-                    $authNameDefault = $l->auth_title;
+                    $authNameDefault = getSerializedMessage($l->auth_title);
                 }else{
                     $authNameDefault = $langEnter;
                 }
@@ -274,7 +274,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
 
     $data['total_collaboration_courses'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course WHERE is_collaborative = ?d",1)->total;
 
-    $data['popular_courses'] = Database::get()->queryArray('SELECT * FROM `course` 
+    $data['popular_courses'] = Database::get()->queryArray('SELECT * FROM `course`
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
 
 
