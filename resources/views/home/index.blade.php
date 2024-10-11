@@ -49,7 +49,7 @@
                                     </div>
                                     <div class='card-body px-0'>
                                         @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
-                                            <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
                                                 @if(get_config('enable_mobileapi'))
                                                     <div class='d-flex gap-3 pe-3'>
                                                         <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
@@ -62,8 +62,8 @@
                                                 @endif
                                                 @if($eclass_banner_value == 1)
                                                     <div>
-                                                        <a href="{!! get_config('banner_link') !!}" target="_blank" aria-label='Banner'>
-                                                            <img style='width:150px;' src="{{ $logo_img }}" alt="This is the banner of platform">
+                                                        <a class='banner-link' href="{!! get_config('banner_link') !!}" target="_blank" aria-label='Banner'>
+                                                            <img style='width:134px;' src="{{ $logo_img }}" alt="This is the banner of platform">
                                                         </a>
                                                     </div>
                                                 @endif
@@ -333,19 +333,39 @@
                                         <div class='card-body px-0 py-0'>
                                             @php $counterAn = 0; @endphp
                                             @if(count($announcements) > 0)
-                                                <ul class='list-group list-group-flush'>
+                                                
                                                     @foreach ($announcements as $announcement)
-                                                        @if($counterAn < 3)
-                                                            <li class='list-group-item element'>
-                                                                <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                                                    {{$announcement->title}}
-                                                                </a>
-                                                                <div class='TextRegular msmall-text Neutral-900-cl text-content mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
-                                                            </li>
+                                                        @if($counterAn < 6)
+                                                            <div class='row mt-4'>
+                                                                <div class='col-md-2'>
+                                                                    <div class='card card-announcement-date text-center'>
+                                                                        <p class='TextBold largest-text'>{!! date('j', strtotime($announcement->date)) !!}</p>
+                                                                        <p class='mt-2'>
+
+                                                                            @php
+                                                                                $string_date = format_locale_date(strtotime(date('Y-m-d H:i:s',strtotime($announcement->date))),'',false);
+
+                                                                                $m_string = preg_replace('/^[^,]*,\s*/', '', $string_date);
+                                                                                $final_month = preg_replace('/[0-9]+/', '', $m_string);
+
+                                                                                $final_year = str_repeat('', strlen($string_date) - 4) . substr($string_date, -4);
+                                                                            @endphp
+
+                                                                            {!! $final_month !!} {!! $final_year !!}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='col-md-10 mt-md-0 mt-2'>
+                                                                    <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                                        {!! $announcement->title !!}
+                                                                    </a>
+                                                                    <div class='truncate-announcement'>{!! $announcement->body !!}</div>
+                                                                </div>
+                                                            </div>
                                                         @endif
                                                         @php $counterAn++; @endphp
                                                     @endforeach
-                                                </ul>
+                                                
                                             @else
                                                 <ul class='list-group list-group-flush'>
                                                     <li class='list-group-item element'>

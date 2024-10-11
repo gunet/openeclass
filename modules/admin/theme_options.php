@@ -32,12 +32,12 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow', 
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
-                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels', 'TextColorStatisticsHomepage', 'TextColorPopularCoursesHomepage', 'TextColorTextsHomepage'),
+                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels', 'TextColorStatisticsHomepage', 'TextColorPopularCoursesHomepage', 'TextColorTextsHomepage', 'TextColorCardAnnouncementDate'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
@@ -49,7 +49,7 @@ $defaults = array(
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor','clLinkHoveredAlertInfo','clLinkHoveredAlertWarning','clLinkHoveredAlertSuccess','clLinkHoveredAlertDanger'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
-                "rgba(0,0,0,0)" => array('loginTextBgColor'),
+                "rgba(0,0,0,0)" => array('loginTextBgColor','loginTextBgColorSmallScreen','BgColorLinkBanner'),
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
                 "rgba(79, 104, 147, 1)" => array('clContainerImportantAnnouncement'),
                 "rgba(104, 125, 163, 1)" => array('ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clBorderSelect', 'clColorHoveredBodyAgenda', 'BgBorderTextEditor'),
@@ -1569,6 +1569,10 @@ $tool_content .= "
                                     <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
                                     <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
                                 </div>
+                                <div class='form-group mt-4'>
+                                    <label for='loginTextBgColorSmallScreen' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron) $langLogoSmall:</label>
+                                    <input name='loginTextBgColorSmallScreen' type='text' class='form-control colorpicker' id='loginTextBgColorSmallScreen' value='$theme_options_styles[loginTextBgColorSmallScreen]'>
+                                </div>
 
 
 
@@ -1605,7 +1609,8 @@ $tool_content .= "
                                     $login_image_fieldL
                                     </div>
                                 </div>";
-                                $tool_content .= "<div class='form-group mt-4'>
+                                $tool_content .= "
+                                <div class='form-group mt-4'>
                                     <div class='form-inline col-sm-9 col-sm-offset-3'>
                                         <div class='radio'>
                                             <label>
@@ -1621,7 +1626,8 @@ $tool_content .= "
                                         </div>
                                     </div>
                                 </div>";
-                                $tool_content .= "<div class='form-group mt-4'>
+                                $tool_content .= "
+                                <div class='form-group mt-4'>
                                     <div class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</div>
                                     <div class='col-sm-12'>
                                         <div class='checkbox'>
@@ -1631,6 +1637,12 @@ $tool_content .= "
                                             $langDeactivate
                                             </label>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12'>
+                                        <label for='BgColorLinkBanner' class='control-label-notes mb-2 me-2'>$langBgColorLinkBanner:</label>
+                                        <input name='BgColorLinkBanner' type='text' class='form-control colorpicker' id='BgColorLinkBanner' value='$theme_options_styles[BgColorLinkBanner]'>
                                     </div>
                                 </div>
                             </div>
@@ -1655,6 +1667,14 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='TextColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langTextColor(Container):</label>
                                 <input name='TextColorAnnouncementHomepage' type='text' class='form-control colorpicker' id='TextColorAnnouncementHomepage' value='$theme_options_styles[TextColorAnnouncementHomepage]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgCardAnnouncementDate' class='control-label-notes mb-2 me-2'>$langbgCardAnnouncementDate:</label>
+                                <input name='bgCardAnnouncementDate' type='text' class='form-control colorpicker' id='bgCardAnnouncementDate' value='$theme_options_styles[bgCardAnnouncementDate]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='TextColorCardAnnouncementDate' class='control-label-notes mb-2 me-2'>$langTextColorCardAnnouncementDate:</label>
+                                <input name='TextColorCardAnnouncementDate' type='text' class='form-control colorpicker' id='TextColorCardAnnouncementDate' value='$theme_options_styles[TextColorCardAnnouncementDate]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='BgColorAnnouncementHomepageLink' class='control-label-notes mb-2 me-2'>$langBgColorListItem:</label>

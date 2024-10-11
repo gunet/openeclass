@@ -5404,3 +5404,14 @@ textarea:focus-visible{
   text-decoration: none;
   cursor:  url(../images/pointer.png), auto;
 }
+
+.card-announcement-date{
+  padding: 16px 8px 16px 8px;
+}
+.truncate-announcement{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -458,6 +458,11 @@ function view($view_file, $view_data = array()) {
                         min-height: calc(100vh - 80px + 80px - 80px);
                     }
                 }
+                @media(max-width:991px){
+                    .jumbotron.jumbotron-login{
+                        min-height: calc(100vh - 56px - 122px);
+                    }
+                }
             ";
         }
 
@@ -517,10 +522,12 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['loginTextBgColor'])){
             $styles_str .= "
-                .jumbotron-intro-text{
-                    border-radius:8px;
-                    padding: 5px 15px 15px 15px;
-                    background-color: $theme_options_styles[loginTextBgColor];
+                @media(min-width:992px){
+                    .jumbotron-intro-text{
+                        border-radius:8px;
+                        padding: 5px 15px 15px 15px;
+                        background-color: $theme_options_styles[loginTextBgColor];
+                    }
                 }
             ";
             // If jumbotron-intro-text has rgba which contains zero at the end (a) then change padding(left-right) to zero
@@ -531,8 +538,10 @@ function view($view_file, $view_data = array()) {
                     foreach($match as $value){
                         if(count($match) == 4 && $counterRgb == 3 && $value == 0){
                             $styles_str .= "
-                                .jumbotron-intro-text{
-                                    padding: 5px 0px 15px 0px;
+                                @media(min-width:992px){
+                                    .jumbotron-intro-text{
+                                        padding: 5px 0px 15px 0px;
+                                    }
                                 }
                             ";
                         }
@@ -541,6 +550,43 @@ function view($view_file, $view_data = array()) {
                 }
             }
 
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND COLOR OF HOMEPAGE_INTRO FOR SMALL SCREENS /////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['loginTextBgColorSmallScreen'])){
+            $styles_str .= "
+                @media(max-width:991px){
+                    .jumbotron-intro-text{
+                        border-radius:8px;
+                        padding: 5px 15px 15px 15px;
+                        background-color: $theme_options_styles[loginTextBgColorSmallScreen];
+                    }
+                }
+            ";
+            // If jumbotron-intro-text has rgba which contains zero at the end (a) then change padding(left-right) to zero
+            preg_match_all('!\d+!', $theme_options_styles['loginTextBgColorSmallScreen'], $matches_small);
+            if(count($matches_small) > 0){
+                $counterRgbSmall = 0;
+                foreach($matches_small as $match_s){
+                    foreach($match_s as $value){
+                        if(count($match_s) == 4 && $counterRgbSmall == 3 && $value == 0){
+                            $styles_str .= "
+                                @media(max-width:991px){
+                                    .jumbotron-intro-text{
+                                        padding: 5px 0px 15px 0px;
+                                    }
+                                }
+                            ";
+                        }
+                        $counterRgbSmall++;
+                    }
+                }
+            }
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -627,6 +673,22 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['openeclassBanner'])){
             $styles_str .= "#openeclass-banner {display: none;}";
             $eclass_banner_value = 0;
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// LINK BACKGROUND OF BANNER //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['BgColorLinkBanner'])){
+            $styles_str .= "
+                .banner-link{
+                    background-color: $theme_options_styles[BgColorLinkBanner];
+                    padding: 10px 8px 14px 8px;
+                    border-radius: 6px;
+                }
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -5711,10 +5773,40 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 .homepage-annnouncements-container .card h3,
                 .homepage-annnouncements-container .card .text-heading-h3,
-                .homepage-annnouncements-container .card .text-content{
+                .homepage-annnouncements-container .card .text-content,
+                .homepage-annnouncements-container .card .truncate-announcement *{
                     color: $theme_options_styles[TextColorAnnouncementHomepage];
                 }
 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////// BACKGROUND COLOR OF HOMEPAGE CARD ANNOUNCEMENTS ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgCardAnnouncementDate'])){
+            $styles_str .= "
+                .card-announcement-date {
+                    background-color: $theme_options_styles[bgCardAnnouncementDate] !important;
+                    border: solid 1px $theme_options_styles[bgCardAnnouncementDate];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////// TEXT COLOR OF HOMEPAGE CARD ANNOUNCEMENTS /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['TextColorCardAnnouncementDate'])){
+            $styles_str .= "
+                .card-announcement-date * {
+                    color: $theme_options_styles[TextColorCardAnnouncementDate];
+                }
             ";
         }
 

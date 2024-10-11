@@ -6198,3 +6198,6 @@ $langScrollToTop = "Scroll to top";
 $langExistsTheSameSession = "The session was not created as there is another registered session of this consultant at the same time.";
 $langViewAllSession = "View program of all available sessions";
 $langUsersParticipants = "Participants";
+$langBgColorLinkBanner = "Background color of banner";
+$langbgCardAnnouncementDate = "Date container background color";
+$langTextColorCardAnnouncementDate = "Date text color";
