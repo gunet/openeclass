@@ -79,7 +79,7 @@
                                             }
                                         ?>
                                         <tr class='link-subcategory-title'>
-                                            <th class='category-link p-3' colspan='{{ $colspan }}'>
+                                            <td class='category-link p-3' colspan='{{ $colspan }}'>
                                                 {!! $folder_icon !!}&nbsp;
                                                 @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
                                                     <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
@@ -89,7 +89,8 @@
                                                 @if (!empty($description))
                                                     <br><br><span class='link-description'>{{ $description }}</span>
                                                 @endif
-                                            </th>
+                                            </td>
+                                            <td></td>
                                             @if ($display_tools)
                                                 <td class='option-btn-cell text-end'>
                                                     {!!
@@ -104,6 +105,8 @@
                                                             'confirm' => $GLOBALS['langCatDel'])))
                                                     !!}
                                                 </td>
+                                            @else
+                                            <td></td>
                                             @endif
                                         </tr>
                                         @if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id))
