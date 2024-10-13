@@ -109,13 +109,15 @@ $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_defa
 $primary_method = 0;
 if (count($active_method) > 0) {
     $auth_enabled_method = 1;
-    if(count($authLink) > 1){
-      $class_login_img = 'jumbotron-image-auth-default';
+    if (count($authLink) > 1) {
+        $class_login_img = 'jumbotron-image-auth-default';
     }
-    foreach($active_method as $ac){
-      if($ac->auth_name == 'eclass' && $ac->auth_default == 2){
-        $primary_method = 2;
-      }
+    foreach ($active_method as $ac) {
+        if ($ac->auth_name == 'eclass' && $ac->auth_default == 2) {
+            $primary_method = 2;
+        } elseif ($ac->auth_name == 'cas' && $ac->auth_default == 2) {
+            $primary_method = 3;
+        }
     }
 }
 $data['primary_method'] = $primary_method;

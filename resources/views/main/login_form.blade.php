@@ -55,8 +55,7 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
-
-                                                            <div class='col-12 align-self-center'>
+                                                            <div class='col-12 align-self-center' @if ($primary_method == 3) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
                                                                 <div class='text-center'>{!! $authInfo[1] !!}</div>
                                                             </div>
 
@@ -72,18 +71,11 @@
                                                                             </a>
                                                                         </div>
                                                                     @else
-                                                                        <div id='or' class='ms-auto me-auto mb-2'>
+                                                                        <div id='or' class='ms-auto me-auto mb-2' >
                                                                             {{ trans('langOr') }}
                                                                         </div>
-                                                                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
-                                                                            @if ($loop->first)
-                                                                                <button class='btn submitAdminBtn firstNext next'>
-                                                                                    <span class='TextBold'>{{ $authLink[1][2] }}</span>
-                                                                            @else
-                                                                                <button class='btn submitAdminBtn prev-{{ $loop->index }} next'>
-                                                                                    <span class='TextBold'>{{ $authLink[0][2] }}</span>
-                                                                            @endif
-                                                                            </button>
+                                                                        <div class='d-flex justify-content-center align-items-center'>
+                                                                            {!! $authLink[1][1] !!}
                                                                         </div>
                                                                     @endif
                                                                 @elseif (count($authLink) > 2)
@@ -163,7 +155,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @else  
+                                @else
                                     <div class='col-12 mt-3'>
                                         <div class='alert alert-danger'>
                                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
