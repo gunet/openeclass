@@ -110,8 +110,6 @@ if ($command_line or $ajax_call) {
 
     $oldversion = get_config('version');
     if (!isset($_SESSION['upgrade_started']) and version_compare($oldversion, '3.15', '>') and version_compare($oldversion, '4.0', '<')) {
-        // When upgrading 4.0 pre-releases, re-run all steps from 3.15+
-        $oldversion = '3.14';
         $_SESSION['upgrade_started'] = true;
     }
     $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0'];
@@ -353,7 +351,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
                     "<div class='col-lg-8 col-md-10 m-auto py-4'>
                     <div class='card panelCard h-100'>
                         <h3 class='alert alert-secondary'>
-                          " . strtok($image, '.') . " 
+                          " . strtok($image, '.') . "
                         </h3>
                         <div class='card-body'>
                             <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}template/modern/images/screenshots/$image' alt='Image for current theme'/>
