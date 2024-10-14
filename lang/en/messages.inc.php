@@ -6201,3 +6201,5 @@ $langUsersParticipants = "Participants";
 $langBgColorLinkBanner = "Background color of banner";
 $langbgCardAnnouncementDate = "Date container background color";
 $langTextColorCardAnnouncementDate = "Date text color";
+$langwidthOfForm = "The form's width spans 75% of the desktop</br>'s width
+ The height of the selected image spans the same height as the height of the form.";

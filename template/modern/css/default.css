@@ -5391,8 +5391,8 @@ textarea:focus-visible{
   letter-spacing: 0px;
   line-height: 16px;
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 10px;
+  bottom: 70px;
   z-index: 99;
   display: none;
   transition: 0.3s ease;
@@ -5414,4 +5414,11 @@ textarea:focus-visible{
   -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+
+@media(max-width: 767px){
+  .jumbotron-intro-text{
+    overflow-y: auto;
+  }
 }

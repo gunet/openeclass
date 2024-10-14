@@ -3497,6 +3497,28 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        if(isset($theme_options_styles['widthOfForm'])){
+            $WidthFormImg = $theme_options_styles['fluidContainerWidth'] ?? 1140;
+            $WidthFormImg = ($WidthFormImg - 300);
+            $WidthFormImg = $WidthFormImg*25/100;
+            $WidthFormImg = $WidthFormImg ."px";
+            $styles_str .= "
+                @media(min-width:992px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: $WidthFormImg;
+                        float:right;
+                        height:100%;
+                        padding-bottom: 0px;
+                    }
+                }
+                .main-section:not(:has(.course-wrapper)) .form-image-modules{
+                    width:100%;
+                    height:100%;
+                    padding-bottom: 0px;
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////// LABEL COLOR IN FORM COMPONENT /////////////////////////////

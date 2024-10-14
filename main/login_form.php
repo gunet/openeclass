@@ -117,6 +117,8 @@ if (count($active_method) > 0) {
             $primary_method = 2;
         } elseif ($ac->auth_name == 'cas' && $ac->auth_default == 2) {
             $primary_method = 3;
+        } elseif ($ac->auth_name == 'shibboleth' && $ac->auth_default == 2) {
+            $primary_method = 4;
         }
     }
 }
