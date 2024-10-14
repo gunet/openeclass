@@ -172,6 +172,10 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
         foreach ($q as $l) {
             if($l->auth_name == 'eclass' && $l->auth_default == 2){
                 $primary_method = 2;
+            }elseif($l->auth_name == 'cas' && $l->auth_default == 2){
+                $primary_method = 3;
+            }elseif($l->auth_name == 'shibboleth' && $l->auth_default == 2){
+                $primary_method = 4;
             }
             if (in_array($l->auth_name, $extAuthMethods)) {
                 $authNameDefault = '';
@@ -215,7 +219,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'showTitle' => false,
                     'class' => 'login-option',
                     'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => " <form action='$urlServer' method='post'>
+                    'html' => " <div class='col-12'><form action='$urlServer' method='post'>
                                     <div class='form-group text-start'>
                                         <label for='uname' class='form-label'>$langUsername</label>
                                         <input type='text' id='uname' name='uname' class='login-input w-100' placeholder='&#xf007' $autofocus>
@@ -230,7 +234,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                                         </div>
                                     </div>
                                     <button type='submit' name='submit' class='btn w-100 login-form-submit mt-4'>$langEnter</button>
-                                </form>
+                                </form></div>
                                 <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center mt-4'>
                                     <a class='text-decoration-underline' href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                                 </div>");

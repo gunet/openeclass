@@ -2442,6 +2442,17 @@ $tool_content .= "
                                     $form_image_fieldL
                                 </div>
                             </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='widthOfForm' value='1' ".((isset($theme_options_styles['widthOfForm']))? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langwidthOfForm
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class='d-flex justify-content-center align-items-start'>
                             <figure class='figure'>

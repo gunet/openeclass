@@ -138,7 +138,7 @@
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class='col-12 align-self-center'>
+                                                                            <div class='col-12 align-self-center' @if ($primary_method >= 3 && count($authLinks) == 2) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
                                                                                 <div class='text-center'>{!! $key['html'] !!}</div>
                                                                             </div>
 
@@ -150,28 +150,7 @@
                                                                                 @endif
                                                                                 @if(count($authLinks) == 2)
                                                                                     <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-                                                                                        @if($primary_method == 2)
-                                                                                            <a class='btn submitAdminBtnDefault d-inline-flex' href='{!! $auth_url !!}'>
-                                                                                                {!! $auth_title !!}
-                                                                                            </a>
-                                                                                        @else
-                                                                                            <button class="btn submitAdminBtn @if($i==0) firstNext @else prev-{{ $i }} @endif next">
-                                                                                                @if($i==0)
-                                                                                                    @if(!empty($authLinks[$i+1]['title']))
-                                                                                                        {!! $authLinks[$i+1]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                                @if($i==1)
-                                                                                                    @if(!empty($authLinks[$i-1]['title']))
-                                                                                                        {!! $authLinks[$i-1]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                            </button>
-                                                                                        @endif
+                                                                                        {!! $authLinks[1]['html'] !!}
                                                                                     </div>
                                                                                 @endif
 

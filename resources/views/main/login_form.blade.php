@@ -55,29 +55,18 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 align-self-center' @if ($primary_method == 3) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
+                                                            <div class='col-12 align-self-center' @if ($primary_method >= 3 && count($authLink) == 2) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
                                                                 <div class='text-center'>{!! $authInfo[1] !!}</div>
                                                             </div>
 
                                                             <div class='col-12 align-self-end'>
                                                                 @if (count($authLink) == 2)
-                                                                    @if($primary_method == 2)
-                                                                        <div id='or' class='ms-auto me-auto mb-2'>
-                                                                            {{ trans('langOr') }}
-                                                                        </div>
-                                                                        <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
-                                                                            <a class='btn submitAdminBtnDefault d-inline-flex' href='{!! $auth_url !!}'>
-                                                                                {!! $auth_title !!}
-                                                                            </a>
-                                                                        </div>
-                                                                    @else
-                                                                        <div id='or' class='ms-auto me-auto mb-2' >
-                                                                            {{ trans('langOr') }}
-                                                                        </div>
-                                                                        <div class='d-flex justify-content-center align-items-center'>
-                                                                            {!! $authLink[1][1] !!}
-                                                                        </div>
-                                                                    @endif
+                                                                    <div id='or' class='ms-auto me-auto mb-2' >
+                                                                        {{ trans('langOr') }}
+                                                                    </div>
+                                                                    <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
+                                                                        {!! $authLink[1][1] !!}
+                                                                    </div>
                                                                 @elseif (count($authLink) > 2)
                                                                     <div id='or' class='ms-auto me-auto mb-2'>
                                                                         {{ trans('langOr') }}
