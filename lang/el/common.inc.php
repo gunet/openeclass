@@ -73,7 +73,7 @@ $langOfStudent = "Εκπαιδευόμενου";
 $langStudents = "Εκπαιδευόμενοι";
 $langOfStudents = "Εκπαιδευόμενων";
 $langCStudent = "ΕΚΠΑΙΔΕΥΟΜΕΝΟΣ";
-$langCStudent2 = "ΜΑΘΗΤΗΣ";
+$langCStudent2 = "ΧΡΗΣΤΗΣ";
 
 $langsStudent = "εκπαιδευόμενος";
 $langsOfStudent = "εκπαιδευόμενου";
