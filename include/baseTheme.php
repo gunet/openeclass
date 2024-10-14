@@ -3507,21 +3507,22 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 @media(min-width:992px){
                     .main-section:has(.course-wrapper) .form-image-modules{
+                        display: block;
                         max-width: $WidthFormImg;
                         float:right;
-                        height:100%;
+                        flex-shrink: 0;
                         padding-bottom: 0px;
-                        object-fit:cover;
+                        min-height: 100%;
                         filter: blur(1px);
                     }
                 }
                 .main-section:not(:has(.course-wrapper)) .form-image-modules{
+                    display: block;
                     width:100%;
-                    height:100%;
+                    flex-shrink: 0;
+                    min-height: 100%;
                     padding-bottom: 0px;
-                    object-fit:cover;
                     filter: blur(1px);
-
                 }
             ";
         }
