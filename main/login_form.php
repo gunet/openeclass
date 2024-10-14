@@ -64,7 +64,6 @@ foreach ($q as $l) {
                             $authTitle,
                             $authInstructions);
         $data['auth_url'] = $authUrl;
-        $data['auth_title'] = (!empty($authTitle) ? $authTitle : $langEnter);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) { // hybrid auth methods
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
         $providerClass = $l->auth_name;
@@ -130,6 +129,5 @@ $data['Position'] = $Position;
 $data['PositionForm'] = $PositionForm;
 $data['login_img'] = $login_img;
 $data['class_login_img'] = $class_login_img;
-$data['menuTypeID'] = 0;
 
 view('main.login_form', $data);

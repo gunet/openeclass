@@ -28,7 +28,7 @@
                                                             <div class='col-12 align-self-start'>
                                                                 <div class='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                                                     <h2 class='mb-3'>
-                                                                        {{ $authInfo[2] }} {{-- Auth method title --}}
+                                                                        {{ $authInfo[2] }}
                                                                     </h2>
                                                                     @if (!empty($authInfo[3])) {{-- Optional auth instructions --}}
                                                                         <a href='#' class='text-decoration-underline mb-3' data-bs-toggle='modal' data-bs-target='#authInstruction{{ $loop->index }}'>
@@ -64,7 +64,10 @@
                                                                     <div id='or' class='ms-auto me-auto mb-2' >
                                                                         {{ trans('langOr') }}
                                                                     </div>
-                                                                    <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>
+                                                                    <div class='d-flex gap-3 flex-wrap'>
+                                                                        <h2 class='mb-3'>
+                                                                            {{ $authLink[1][2] }}
+                                                                        </h2>
                                                                         {!! $authLink[1][1] !!}
                                                                     </div>
                                                                 @elseif (count($authLink) > 2)
@@ -167,7 +170,7 @@
                             @endif
                         </div>
                         @if (count($authLink) > 0)
-                        <div class='col card-login-img d-none {!! $PositionForm !!}' role="img" aria-label="{{ trans('langLoginImg') }}" style="background: url({{ $login_img }});"></div>
+                            <div class='col card-login-img d-none {!! $PositionForm !!}' role="img" aria-label="{{ trans('langLoginImg') }}" style="background: url({{ $login_img }});"></div>
                         @endif
                     </div>
                 </div>
