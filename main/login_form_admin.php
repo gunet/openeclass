@@ -26,5 +26,4 @@ require_once '../include/baseTheme.php';
 
 $pageName = $langAdminLoginPage;
 
-$data['menuTypeID'] = 0;
-view('main.login_form_admin', $data);
+view('main.login_form_admin');
