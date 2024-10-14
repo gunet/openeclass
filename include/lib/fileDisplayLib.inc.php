@@ -176,7 +176,7 @@ function file_url($path, $filename = null, $courseCode = null) {
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .
-                "modules/ebook/show.php?$courseCode/$ebook_id/_" .
+                "modules/ebook/show.php/$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
         if (defined('COMMON_DOCUMENTS')) {
@@ -192,7 +192,7 @@ function file_url($path, $filename = null, $courseCode = null) {
         }
 
         return htmlspecialchars($urlServer .
-                "modules/document/file.php?$courseCode$gid" .
+                "modules/document/file.php/$courseCode$gid" .
                 public_file_path($path, $filename), ENT_QUOTES);
     }
 }
@@ -213,9 +213,9 @@ function session_file_url($path, $filename = null) {
     $gid = ",$sessionID";
 
     return htmlspecialchars($urlServer .
-            "modules/document/file.php?$courseCode$gid" .
+            "modules/document/file.php/$courseCode$gid" .
             public_file_path($path, $filename), ENT_QUOTES);
-    
+
 }
 
 /**
@@ -234,9 +234,9 @@ function session_file_uploaded_url($path, $filename = null, $userId = 0) {
     $gid = ",$sessionID,$userId";
 
     return htmlspecialchars($urlServer .
-            "modules/document/file.php?$courseCode$gid" .
+            "modules/document/file.php/$courseCode$gid" .
             public_file_path($path, $filename), ENT_QUOTES);
-    
+
 }
 
 /**
@@ -255,9 +255,9 @@ function session_file_reference_uploaded_url($path, $filename = null, $userId = 
     $gid = ",$sessionID,$userId";
 
     return htmlspecialchars($urlServer .
-            "modules/document/file.php?$courseCode$gid" .
+            "modules/document/file.php/$courseCode$gid" .
             public_file_path($path, $filename), ENT_QUOTES);
-    
+
 }
 
 /**
@@ -284,7 +284,7 @@ function file_playurl($path, $filename = null, $courseCode = null) {
             $courseCode = 'common';
 
         return htmlspecialchars($urlServer .
-                "modules/document/play.php?$courseCode$gid" .
+                "modules/document/play.php/$courseCode$gid" .
                 public_file_path($path, $filename), ENT_QUOTES);
     }
 }
@@ -304,9 +304,9 @@ function session_file_playurl($path, $filename = null) {
     $gid = ",$sessionID";
 
     return htmlspecialchars($urlServer .
-            "modules/document/play.php?$courseCode$gid" .
+            "modules/document/play.php/$courseCode$gid" .
             public_file_path($path, $filename), ENT_QUOTES);
-    
+
 }
 
 /**
@@ -324,9 +324,9 @@ function session_file_reference_playurl($path, $filename = null) {
     $gid = ",$sessionID";
 
     return htmlspecialchars($urlServer .
-            "modules/document/play.php?$courseCode$gid" .
+            "modules/document/play.php/$courseCode$gid" .
             public_file_path($path, $filename), ENT_QUOTES);
-    
+
 }
 
 /**
@@ -344,9 +344,9 @@ function session_file_uploaded_playurl($path, $filename = null, $userId = 0) {
     $gid = ",$sessionID,$userId";
 
     return htmlspecialchars($urlServer .
-            "modules/document/play.php?$courseCode$gid" .
+            "modules/document/play.php/$courseCode$gid" .
             public_file_path($path, $filename), ENT_QUOTES);
-    
+
 }
 
 /**
