@@ -20,6 +20,7 @@
  * ======================================================================== */
 
 define('UPGRADE', true);
+define('MAINTENANCE_PAGE', true);
 
 require_once '../include/baseTheme.php';
 
