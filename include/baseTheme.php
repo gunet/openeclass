@@ -267,16 +267,18 @@ function view($view_file, $view_data = array()) {
         }
     }
 
-    //Get important admin announcement
-    $pinned_announce_id = 0;
-    $pinned_announce_title = '';
-    $pinned_announce_body = '';
-    $important_announce = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE important = ?d AND visible = ?d",1,1);
-    if(count($important_announce) > 0){
-        foreach($important_announce as $an){
-            $pinned_announce_id = $an->id;
-            $pinned_announce_title = $an->title;
-            $pinned_announce_body = $an->body;
+    // Get important admin announcement
+    if (!defined('UPGRADE')) {
+        $pinned_announce_id = 0;
+        $pinned_announce_title = '';
+        $pinned_announce_body = '';
+        $important_announce = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE important = ?d AND visible = ?d",1,1);
+        if (count($important_announce) > 0) {
+            foreach ($important_announce as $an) {
+                $pinned_announce_id = $an->id;
+                $pinned_announce_title = $an->title;
+                $pinned_announce_body = $an->body;
+            }
         }
     }
 
@@ -680,7 +682,7 @@ function view($view_file, $view_data = array()) {
         //////////////////////////// LINK BACKGROUND OF BANNER //////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        
+
         if(!empty($theme_options_styles['BgColorLinkBanner'])){
             $styles_str .= "
                 .banner-link{
@@ -3382,7 +3384,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
-                .dropdown-item.active, 
+                .dropdown-item.active,
                 .dropdown-item:active {
                     background-color:  $theme_options_styles[bgOptionSelected] !important;
                 }
@@ -3431,7 +3433,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .dropdown-item.active, 
+                .dropdown-item.active,
                 .dropdown-item:active {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
@@ -4355,9 +4357,9 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['bgColorDeactiveDateTime'])){
             $styles_str .= "
                 .cal-day-outmonth,
-                .datetimepicker table tr td.old, 
+                .datetimepicker table tr td.old,
                 .datetimepicker table tr td.new,
-                .datepicker table tr td.old, 
+                .datepicker table tr td.old,
                 .datepicker table tr td.new{
                     background-color: $theme_options_styles[bgColorDeactiveDateTime] !important;
                 }
