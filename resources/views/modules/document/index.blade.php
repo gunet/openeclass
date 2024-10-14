@@ -10,7 +10,6 @@
 
     $(document).ready(function(){
 
-
         // Drag and drop
         $('.uploadBTN').on('click', function(event) {
             event.preventDefault();

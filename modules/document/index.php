@@ -58,6 +58,59 @@ doc_init();
 
 if ($is_editor) {
 
+    if (isset($_GET['unzip'])) {
+
+        $myFile = $basedir.$_GET['unzip'];
+
+        if (isset($_GET['openDir'])) {
+            $openDir = $_GET['openDir'];
+        } else {
+            $openDir = '';
+        }
+
+        /* ** Unzipping stage ** */
+        $files_in_zip = array();
+        $zipFile = new ZipArchive();
+        $realFileSize = 0;
+
+        if ($zipFile->open($myFile) === TRUE) {
+            // check for file type in zip contents
+            for ($i = 0; $i < $zipFile->numFiles; $i++) {
+                $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
+                $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), $menuTypeID);
+                }
+            }
+            // extract files
+            for ($i = 0; $i < $zipFile->numFiles; $i++) {
+                $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
+                $realFileSize += $stat["size"]; // check for free space
+//                if ($diskUsed + $realFileSize > $diskQuotaDocument) {
+//                    Session::flash('message', $langNoSpace);
+//                    Session::flash('alert-class', 'alert-danger');
+//                    redirect_to_current_dir();
+//                }
+                $extracted_file_name = process_extracted_file($stat);
+                if (!is_null($extracted_file_name)) {
+                    $zipFile->renameIndex($i, $extracted_file_name);
+                    $zipFile->extractTo($basedir, $extracted_file_name);
+                }
+            }
+            $zipFile->close();
+        } else {
+            Session::flash('message', $langErrorFileMustBeZip);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_current_dir();
+        }
+        $session->setDocumentTimestamp($course_id);
+        Session::flash('message', $langDownloadAndZipEnd);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_current_dir();
+
+
+    }
+
     if (isset($_POST['bulk_submit'])) {
 
         if ($_POST['selectedcbids']) {
@@ -1419,6 +1472,10 @@ foreach ($result as $row) {
         if ($can_upload) {
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
             $info['action_button'] = action_button(array(
+                array('title' => $langFileUnzipping,
+                    'url' => "{$base_url}unzip=" . $row->path,
+                    'icon' => 'fa-file-zipper',
+                    'show' => $row->format == 'zip'),
                 array('title' => $langEditChange,
                       'url' => "{$base_url}comment=" . $cmdDirName,
                       'icon' => 'fa-edit',
