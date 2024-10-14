@@ -28,7 +28,7 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.0-dev');
+define('ECLASS_VERSION', '4.0-beta1');
 
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
