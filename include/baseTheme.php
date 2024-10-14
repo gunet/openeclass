@@ -3511,12 +3511,16 @@ function view($view_file, $view_data = array()) {
                         float:right;
                         height:100%;
                         padding-bottom: 0px;
+                        background-size: 100% 100%;
+                        background-attachment: fixed;
                     }
                 }
                 .main-section:not(:has(.course-wrapper)) .form-image-modules{
                     width:100%;
                     height:100%;
                     padding-bottom: 0px;
+                    background-size: 100% 100%;
+                    background-attachment: fixed;
                 }
             ";
         }
