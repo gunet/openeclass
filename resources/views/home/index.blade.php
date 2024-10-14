@@ -24,6 +24,7 @@
             <input id='showWarningModal' type='hidden' value='0'>
         @endif
 
+        @include('layouts.partials.show_alert')
 
         @if(!get_config('show_only_loginScreen'))
             <div class='row m-auto'>
@@ -338,7 +339,7 @@
                                         <div class='card-body px-0 py-0'>
                                             @php $counterAn = 0; @endphp
                                             @if(count($announcements) > 0)
-                                                
+
                                                     @foreach ($announcements as $announcement)
                                                         @if($counterAn < 6)
                                                             <div class='row mt-4'>
@@ -351,7 +352,7 @@
                                                                                 $string_date = datefmt_format(datefmt_create($lg, IntlDateFormatter::LONG, IntlDateFormatter::NONE, 'Europe/Athens', IntlDateFormatter::TRADITIONAL), strtotime($announcement->date));
                                                                                 $finalDate = preg_replace('/^\d+\s+/', '', $string_date);
                                                                             @endphp
-                                                                            {!! $finalDate !!} 
+                                                                            {!! $finalDate !!}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -365,7 +366,7 @@
                                                         @endif
                                                         @php $counterAn++; @endphp
                                                     @endforeach
-                                                
+
                                             @else
                                                 <ul class='list-group list-group-flush'>
                                                     <li class='list-group-item element'>
