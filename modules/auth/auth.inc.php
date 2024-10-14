@@ -1287,6 +1287,7 @@ function shib_cas_login($type) {
         $is_departmentmanage_user, $langUserAltAuth,
         $langAccountInactive1, $langAccountInactive2;
 
+
     $_SESSION['canChangePassword'] = false;
     $autoregister = get_config('alt_auth_stud_reg') == 2;
     $verified_mail = EMAIL_UNVERIFIED;
@@ -1355,7 +1356,7 @@ function shib_cas_login($type) {
             unset_shib_cas_session();
             $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
                             token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
-            Session::flash('message',$message);
+            Session::flash('message', $message);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page();
         }
@@ -1364,8 +1365,9 @@ function shib_cas_login($type) {
         if ($info->password != $type) {
             // has different auth method - redirect to home page
             unset_shib_cas_session();
-            Session::flash('message',$langUserAltAuth);
-            Session::flash('alert-class', 'alert-danger');
+            $message = $langUserAltAuth;
+            Session::flash('message', $langUserAltAuth);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page();
         } else {
             // don't force email address from CAS/Shibboleth.
