@@ -19,6 +19,7 @@
  * ======================================================================== */
 
 define('UPGRADE', true);
+define('MAINTENANCE_PAGE', true);
 
 require_once '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
