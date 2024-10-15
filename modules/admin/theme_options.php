@@ -76,7 +76,7 @@ $defaults = array(
                 "boxed" => array('containerType'),
                 "fluid" => array('view_platform'),
                 "small-right" => array("loginImgPlacement"),
-                "" => array('fluidContainerWidth','maxHeightJumbotron','maxWidthTextJumbotron')
+                "" => array('fluidContainerWidth','maxHeightJumbotron','maxWidthTextJumbotron', 'sliderWidthImgForm')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
@@ -355,6 +355,28 @@ if (isset($_POST['optionsSave'])) {
                     $('#pixelCounter').text(value + 'px');
                 }
             });
+            $('#sliderWidthImgForm').slider({
+                tooltip: 'hide',
+                formatter: function(value) {
+                    $('#sliderWidthImgFormCounter').text(value + '%');
+                }
+            });
+
+
+            if($('#widthOfFormId').is(':checked')){
+                $('.sliderWidthImgFormClass').css('display','block');
+            }else{
+                $('.sliderWidthImgFormClass').css('display','none');
+            }
+            $('#widthOfFormId').change(function() {
+                if(this.checked) {
+                    $('.sliderWidthImgFormClass').css('display','block');
+                }else{
+                    $('.sliderWidthImgFormClass').css('display','none');
+                }
+            });
+
+
             $('#maxHeightJumbotron').slider({
                 tooltip: 'hide',
                 formatter: function(value) {
@@ -2446,11 +2468,17 @@ $tool_content .= "
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label class='label-container' aria-label='$langSettingSelect'>
-                                            <input type='checkbox' name='widthOfForm' value='1' ".((isset($theme_options_styles['widthOfForm']))? 'checked' : '').">
+                                            <input id='widthOfFormId' type='checkbox' name='widthOfForm' value='1' ".((isset($theme_options_styles['widthOfForm']))? 'checked' : '').">
                                             <span class='checkmark'></span>
                                             $langwidthOfForm
                                         </label>
                                     </div>
+                                </div>
+                            </div>
+                            <div class='form-group sliderWidthImgFormClass mt-4' style='display:none;'>
+                                <div class='col-sm-12'>
+                                    <input id='sliderWidthImgForm' name='sliderWidthImgForm' data-slider-id='exImgSlider' type='text' data-slider-min='50' data-slider-max='75' data-slider-step='1' data-slider-value='$theme_options_styles[sliderWidthImgForm]'>
+                                    <span style='margin-left:10px;' id='sliderWidthImgFormCounter'></span>
                                 </div>
                             </div>
                             <div class='form-group mt-4'>
