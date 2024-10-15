@@ -3513,7 +3513,6 @@ function view($view_file, $view_data = array()) {
                         flex-shrink: 0;
                         padding-bottom: 0px;
                         min-height: 100%;
-                        filter: blur(1px);
                     }
                 }
                 .main-section:not(:has(.course-wrapper)) .form-image-modules{
@@ -3522,7 +3521,6 @@ function view($view_file, $view_data = array()) {
                     flex-shrink: 0;
                     min-height: 100%;
                     padding-bottom: 0px;
-                    filter: blur(1px);
                 }
             ";
         }

@@ -927,7 +927,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
 
                    <div class="calendar-header">
 
-                           <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
+                           <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center">
 
                                    <div class="btn-group">
                                            <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="'.$langPrevious.'"><span class="fa fa-caret-left"></span>  ' . '' . '</button>

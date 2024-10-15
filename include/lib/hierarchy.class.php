@@ -1261,7 +1261,7 @@ jContent;
     public function buildRootsSelectForm($currentNode, $options = array('respectVisibility' => true)) {
         global $langSelectFac;
 
-        $ret = "<div class='col-12'>";
+        $ret = "<div class='col-12 mb-4'>";
         $ret .= "<div class='form-wrapper form-edit border-0'>
                     <form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
         $ret .= "<div class='form-group'>";
