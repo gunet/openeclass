@@ -648,22 +648,6 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['fluidContainerWidth'])){
             $container = 'container-fluid';
             $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
-            $middleWidthFormImg = $theme_options_styles['fluidContainerWidth'];
-            $middleWidthFormImg = ($middleWidthFormImg - 350)/2;
-            $middleWidthFormImg = $middleWidthFormImg ."px";
-            $styles_str .= "
-
-                @media(min-width:992px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: $middleWidthFormImg;
-                        float:right;
-                    }
-                }
-
-                .main-section:not(:has(.course-wrapper)) .form-image-modules{
-                    width:100%;
-                }
-            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////

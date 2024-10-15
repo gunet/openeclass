@@ -5073,55 +5073,19 @@ body .delThemeBtn{
 
 @media(min-width:992px) and (max-width:1199px){
   .main-section:has(.course-wrapper) .form-image-modules{
-    max-width:320px;
+    max-width:250px;
     float:right;
   }
 }
-@media(min-width:1200px) and (max-width:1299px){
+@media(min-width:1200px) and (max-width:1399px){
   .main-section:has(.course-wrapper) .form-image-modules{
-    max-width:360px;
+    max-width:280px;
     float:right;
   }
 }
-@media(min-width:1300px) and (max-width:1399px){
+@media(min-width:1400px){
   .main-section:has(.course-wrapper) .form-image-modules{
-    max-width:400px;
-    float:right;
-  }
-}
-@media(min-width:1400px) and (max-width:1500px){
-  .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 400px;
-    float:right;
-  }
-}
-@media(min-width:1501px) and (max-width:1600px){
-  .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 400px;
-    float:right;
-  }
-}
-@media(min-width:1601px) and (max-width:1700px){
-  .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 400px;
-    float:right;
-  }
-}
-@media(min-width:1701px) and (max-width:1800px){
-  .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 400px;
-    float:right;
-  }
-}
-@media(min-width:1801px){
-  .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 400px;
-    float:right;
-  }
-}
-@media(min-width:1901px){
-  .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 400px;
+    max-width: 310px;
     float:right;
   }
 }
