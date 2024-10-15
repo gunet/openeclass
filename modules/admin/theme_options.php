@@ -2453,6 +2453,17 @@ $tool_content .= "
                                     </div>
                                 </div>
                             </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='strechedImgOfForm' value='1' ".((isset($theme_options_styles['strechedImgOfForm']))? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langStrechedImgOfForm
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class='d-flex justify-content-center align-items-start'>
                             <figure class='figure'>
