@@ -44,6 +44,15 @@ zip_h5p_package($dload_filename, $contentDir, $libsDir);
 send_file_to_client($dload_filename, $real_filename, null, true, true);
 exit;
 
+function libToFolder($lib): string {
+    return $lib['machineName'] . '-' . $lib['majorVersion'] . '.' . $lib['minorVersion'];
+}
+
+function getDepJson(string $jsonpath): mixed {
+    $jsonfile = file_get_contents($jsonpath);
+    return json_decode($jsonfile, true);
+}
+
 function zip_h5p_package($zip_filename, $contentDir, $libsDir) {
     $zipFile = new ZipArchive();
     $zipFile->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -52,15 +61,36 @@ function zip_h5p_package($zip_filename, $contentDir, $libsDir) {
     zip_add_files($zipFile, $contentDir, strlen($contentDir . "/"));
 
     // handle dependencies
-    $jsonpath = $contentDir . "/h5p.json";
-    $jsonfile = file_get_contents($jsonpath);
-    $depjson = json_decode($jsonfile, true);
+    $depjson = getDepJson($contentDir . "/h5p.json");
+    $depsarray = [];
+
+    // handle preloadedDependencies and editorDependencies, until 2nd level of dependency tree
+    $depkeys = ['preloadedDependencies', 'editorDependencies'];
     foreach ($depjson['preloadedDependencies'] as $dep) {
-        $machinename = $dep['machineName'];
-        $majorVersion = $dep['majorVersion'];
-        $minorVersion = $dep['minorVersion'];
-        $libDir = $libsDir . $machinename . '-' . $majorVersion . '.' . $minorVersion;
-        zip_add_files($zipFile, $libDir, strlen($libsDir));
+        $depFolder = libToFolder($dep);
+        $depsarray[] = $depFolder;
+        $libdepjson = getDepJson($libsDir . $depFolder . "/library.json");
+        foreach ($depkeys as $depkey) {
+            if (isset($libdepjson[$depkey])) {
+                foreach ($libdepjson[$depkey] as $libdep) {
+                    $libdepFolder = libToFolder($libdep);
+                    $depsarray[] = $libdepFolder;
+                    $lib2depjson = getDepJson($libsDir . $libdepFolder . "/library.json");
+                    foreach ($depkeys as $dep2key) {
+                        if (isset($lib2depjson[$dep2key])) {
+                            foreach ($lib2depjson[$dep2key] as $lib2dep) {
+                                $depsarray[] = libToFolder($lib2dep);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // zip all resolved dependencies
+    foreach (array_unique($depsarray) as $dep) {
+        zip_add_files($zipFile, $libsDir . $dep, strlen($libsDir));
     }
 
     if (!$zipFile->close()) {
