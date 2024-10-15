@@ -3516,6 +3516,10 @@ function view($view_file, $view_data = array()) {
                         padding-bottom: 0px;
                         min-height: 100%;
                     }
+                    .form-image-registration,
+                    .form-image-faq{
+                        min-height: auto;
+                    }
                 }
             ";
         }
