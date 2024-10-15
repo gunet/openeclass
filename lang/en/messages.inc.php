@@ -6201,5 +6201,5 @@ $langUsersParticipants = "Participants";
 $langBgColorLinkBanner = "Background color of banner";
 $langbgCardAnnouncementDate = "Date container background color";
 $langTextColorCardAnnouncementDate = "Date text color";
-$langwidthOfForm = "The form's width spans 75% of the desktop.";
+$langwidthOfForm = "The form width spans % of the desktop width.";
 $langStrechedImgOfForm = "The height of the image spans the same height as the registration form.";

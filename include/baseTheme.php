@@ -3499,10 +3499,12 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        if(isset($theme_options_styles['widthOfForm'])){
+        if(isset($theme_options_styles['widthOfForm']) && isset($theme_options_styles['sliderWidthImgForm'])){
             $WidthFormImg = $theme_options_styles['fluidContainerWidth'] ?? 1140;
             $WidthFormImg = ($WidthFormImg - 300);
-            $WidthFormImg = $WidthFormImg*25/100;
+
+            $t_width = 100 - $theme_options_styles['sliderWidthImgForm'];
+            $WidthFormImg = $WidthFormImg*$t_width/100;
             $WidthFormImg = $WidthFormImg ."px";
             $styles_str .= "
                 @media(min-width:992px){
