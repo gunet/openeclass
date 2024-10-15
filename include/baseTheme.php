@@ -3507,20 +3507,29 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 @media(min-width:992px){
                     .main-section:has(.course-wrapper) .form-image-modules{
-                        display: block;
                         max-width: $WidthFormImg;
+                        float:right;
+                        padding-bottom: 0px;
+                    }
+                }
+                .main-section:not(:has(.course-wrapper)) .form-image-modules{
+                    width:100%;
+                    float:right;
+                    padding-bottom: 0px;
+                }
+            ";
+        }
+
+        if(isset($theme_options_styles['strechedImgOfForm'])){
+            $styles_str .= "
+                @media(min-width:992px){
+                    .form-image-modules{
+                        display: block;
                         float:right;
                         flex-shrink: 0;
                         padding-bottom: 0px;
                         min-height: 100%;
                     }
-                }
-                .main-section:not(:has(.course-wrapper)) .form-image-modules{
-                    display: block;
-                    width:100%;
-                    flex-shrink: 0;
-                    min-height: 100%;
-                    padding-bottom: 0px;
                 }
             ";
         }
