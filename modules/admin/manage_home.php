@@ -38,9 +38,14 @@ if(isset($_POST['submit'])){
     set_config('total_courses',$_POST['total_courses']);
     set_config('visits_per_week',$_POST['visits_per_week']);
     set_config('users_registered',$_POST['users_registered']);
-    set_config('homepage_title',$_POST['homepage_title']);
-    set_config('homepage_name',$_POST['homepage_name']);
-    set_config('homepage_intro', purify($_POST['homepage_intro']));
+
+    foreach ($session->active_ui_languages as $langCode) {
+        set_config('homepage_title_' . $langCode, $_POST['homepage_title_' . $langCode]);
+        set_config('homepage_testimonial_title_' . $langCode, $_POST['homepage_testimonial_title_' . $langCode]);
+        set_config('homepage_name_' . $langCode, $_POST['homepage_name_' . $langCode]);
+        set_config('homepage_intro_' . $langCode, $_POST['homepage_intro_' . $langCode]);
+    }
+
     set_config('homepage_testimonial_title',$_POST['homepage_testimonial_title']);
     set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
     set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
@@ -97,5 +102,18 @@ $data['action_bar'] = action_bar(
             'button-class' => 'btn-success'
         ],
     ],false);
+
+$active_ui_languages = explode(' ', get_config('active_ui_languages'));
+$langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
+$data['selectable_langs'] = [];
+foreach ($language_codes as $langcode => $langname) {
+    if (in_array($langcode, $langdirs)) {
+        $loclangname = $langNameOfLang[$langname];
+        if (in_array($langcode, $active_ui_languages)) {
+            $data['selectable_langs'][$langcode] = $loclangname;
+            $data['sel'][] = '<option value="' . $langcode . '">' . $loclangname . '</option>';
+        }
+    }
+}
 
 view('admin.other.manage_homepage', $data);
