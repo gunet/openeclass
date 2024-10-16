@@ -40,7 +40,17 @@ require_once 'modules/h5p/classes/H5PHubUpdater.php';
 $viewsDir = 'resources/views/install';
 $cacheDir = 'storage/views/';
 if (!is_dir($cacheDir)) {
-    mkdir($cacheDir, 0755, true);
+    $tempDir = $cacheDir;
+    $cacheDir = null;
+    if (mkdir($tempDir, 0755, true)) {
+        $cacheDir = $tempDir;
+    }
+}
+if (!is_writable($cacheDir) or !$cacheDir) {
+    $cacheDir = sys_get_temp_dir() . '/storage';
+    if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
+        die("Error: Unable to find a writable storage directory - tried '$cacheDir'.");
+    }
 }
 
 use Jenssegers\Blade\Blade;
@@ -325,7 +335,7 @@ if (isset($_POST['install1'])) { // step 1 requirements
                       <div class='card panelCard card-default h-100'>
                           <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>
-                                    " . strtok($image, '.') . " 
+                                    " . strtok($image, '.') . "
                                 </h3>
                           </div>
                           <div class='card-body'>

@@ -1,10 +1,20 @@
 <?php
-require '../vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 $viewsDir = '../resources/views/install';
 $cacheDir = '../storage/views/';
 if (!is_dir($cacheDir)) {
-    mkdir($cacheDir, 0755, true);
+    $tempDir = $cacheDir;
+    $cacheDir = null;
+    if (mkdir($tempDir, 0755, true)) {
+        $cacheDir = $tempDir;
+    }
+}
+if (!is_writable($cacheDir) or !$cacheDir) {
+    $cacheDir = sys_get_temp_dir() . '/storage';
+    if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
+        die("Error: Unable to find a writable storage directory - tried '$cacheDir'.");
+    }
 }
 
 use Jenssegers\Blade\Blade;
