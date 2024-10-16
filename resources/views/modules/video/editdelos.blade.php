@@ -35,7 +35,7 @@
 
                     @include('layouts.partials.show_alert')
 
-                    <form class='form-horizontal' method='port' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
+                    <form class='form-horizontal' method='post' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
                         <div class='col-12'>
                             <div class='table-responsive mt-4'>
                                 <table class="table-default">
