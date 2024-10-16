@@ -1,7 +1,7 @@
 
 <div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4 dialog_box'>
     <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
-        <div class='form-wrapper form-edit border-0 px-0'>
+        <div class='form-wrapper form-edit'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
 				<fieldset>
 					<legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>

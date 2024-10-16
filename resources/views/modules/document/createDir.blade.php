@@ -1,6 +1,6 @@
 <div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4 dialog_box'>
     <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
-        <div class='form-wrapper form-edit p-0 mt-2 mb-3'>
+        <div class='form-wrapper form-edit'>
             <form action='{{ $base_url }}' method='post' class='form-horizontal' role='form'>
                 {!! $group_hidden_input !!}
                 <input type='hidden' name='newDirPath' value='{{ $curDirPath }}'>

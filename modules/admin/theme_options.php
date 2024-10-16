@@ -376,6 +376,20 @@ if (isset($_POST['optionsSave'])) {
                 }
             });
 
+            
+            if($('#strechedImgOfFormId').is(':checked')){
+                $('.streched_repeaded_img_form_class').css('display','block');
+            }else{
+                $('.streched_repeaded_img_form_class').css('display','none');
+            }
+            $('#strechedImgOfFormId').change(function() {
+                if(this.checked) {
+                    $('.streched_repeaded_img_form_class').css('display','block');
+                }else{
+                    $('.streched_repeaded_img_form_class').css('display','none');
+                }
+            });
+
 
             $('#maxHeightJumbotron').slider({
                 tooltip: 'hide',
@@ -2477,7 +2491,7 @@ $tool_content .= "
                             </div>
                             <div class='form-group sliderWidthImgFormClass mt-4' style='display:none;'>
                                 <div class='col-sm-12'>
-                                    <input id='sliderWidthImgForm' name='sliderWidthImgForm' data-slider-id='exImgSlider' type='text' data-slider-min='50' data-slider-max='75' data-slider-step='1' data-slider-value='$theme_options_styles[sliderWidthImgForm]'>
+                                    <input id='sliderWidthImgForm' name='sliderWidthImgForm' data-slider-id='exImgSlider' type='text' data-slider-min='50' data-slider-max='85' data-slider-step='1' data-slider-value='$theme_options_styles[sliderWidthImgForm]'>
                                     <span style='margin-left:10px;' id='sliderWidthImgFormCounter'></span>
                                 </div>
                             </div>
@@ -2485,11 +2499,31 @@ $tool_content .= "
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label class='label-container' aria-label='$langSettingSelect'>
-                                            <input type='checkbox' name='strechedImgOfForm' value='1' ".((isset($theme_options_styles['strechedImgOfForm']))? 'checked' : '').">
+                                            <input id='strechedImgOfFormId' type='checkbox' name='strechedImgOfForm' value='1' ".((isset($theme_options_styles['strechedImgOfForm']))? 'checked' : '').">
                                             <span class='checkmark'></span>
                                             $langStrechedImgOfForm
                                         </label>
                                     </div>
+                                </div>
+                            </div>
+                            <div class='form-group streched_repeaded_img_form_class mt-4' style='display:none;'>
+                                <div class='radio mb-2'>
+                                    <label>
+                                        <input type='radio' name='TypeImageForm' value='fixed' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'fixed')? 'checked' : '').">
+                                        $langFixedImg
+                                    </label>
+                                </div>
+                                <div class='radio mb-2'>
+                                    <label>
+                                        <input type='radio' name='TypeImageForm' value='repeated' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'repeated')? 'checked' : '').">
+                                        $langRepeatedImg 
+                                    </label>
+                                </div>
+                                <div class='radio mb-2'>
+                                    <label>
+                                        <input type='radio' name='TypeImageForm' value='streched' ".((isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'streched')? 'checked' : '').">
+                                        $langStretchedImg 
+                                    </label>
                                 </div>
                             </div>
                         </div>
