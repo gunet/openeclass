@@ -35,17 +35,11 @@
                                 <div class='card bg-transparent card-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                         <div class='jumbotron-intro-text'>
-                                            @if(get_config('homepage_title'))
-                                                <h1 class='eclass-title'>{!! get_config('homepage_title') !!}</h1>
-                                            @else
-                                                <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
-                                            @endif
 
-                                            @if(get_config('homepage_intro'))
-                                                <p class='eclassInfo'>{!! get_config('homepage_intro') !!}</p>
-                                            @else
-                                                <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
-                                            @endif
+                                            <h1 class='eclass-title'>{!! get_config('homepage_title_'.$language_code) !!}</h1>
+
+                                            <p class='eclassInfo'>{!! get_config('homepage_intro_'.$language_code) !!}</p>
+
                                         </div>
                                     </div>
                                     <div class='card-body px-0'>
@@ -452,11 +446,7 @@
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                             <div class='text-heading-h3'>
-                                                @if(get_config('homepage_testimonial_title'))
-                                                    {!! get_config('homepage_testimonial_title') !!}
-                                                @else
-                                                    {{ trans('langSaidForUs') }}
-                                                @endif
+                                                {!! get_config('homepage_testimonial_title_'.$language_code) !!}
                                             </div>
                                         </div>
                                         <div class='card-body px-3'>

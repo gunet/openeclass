@@ -88,9 +88,9 @@
                                     }
 
                                     @keyframes flash {
-                                        0% { border-color: #c3c3c3; }
-                                        50% { border-color: #0072ff; }
-                                        100% { border-color: #c3c3c3; }
+                                        0% { border-color: #EFF2FB; }
+                                        50% { border-color: #0072FF; }
+                                        100% { border-color: #EFF2FB; }
                                     }
                                 </style>
 
