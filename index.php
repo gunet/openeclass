@@ -78,6 +78,14 @@ if (isset($_SESSION['uid'])) {
 // if we try to login... then authenticate user.
 $warning = '';
 
+$Selected_Language = '';
+foreach ($session->active_ui_languages as $code) {
+    if($code == $session->language){
+        $data['language_code'] = $code;
+    }
+}
+
+
 if(isset($_SESSION['hybridauth_callback'])) {
     switch($_SESSION['hybridauth_callback']) {
         case 'login':
