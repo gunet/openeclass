@@ -69,7 +69,9 @@ add_nosniff_headers();
 if (file_exists('config/config.php')) { // read config file
     include_once 'config/config.php';
 } else {
-    redirect('include/not_installed.php?err_config=true');
+    $_GET['err_config'] = true;
+    chdir('include');
+    require_once 'not_installed.php';
 }
 
 // appended to JS and CSS links to break caching - changes per second in debug mode
