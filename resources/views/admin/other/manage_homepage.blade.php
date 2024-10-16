@@ -95,7 +95,7 @@
                                 </style>
 
                                 @foreach ($selectable_langs as $langCode => $langName)
-                                    <div class="d-none mt-4" data-lang="{{$langCode}}" style="border: 1px solid #c3c3c3; border-radius: 5px; padding: 10px;">
+                                    <div class="d-none mt-4 border-card p-3 rounded-2" data-lang="{{$langCode}}">
 
                                         <div class='form-group'>
                                             <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}} - {{$langName}}</label>
