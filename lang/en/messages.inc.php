@@ -6203,3 +6203,4 @@ $langbgCardAnnouncementDate = "Date container background color";
 $langTextColorCardAnnouncementDate = "Date text color";
 $langwidthOfForm = "The form width spans % of the desktop width.";
 $langStrechedImgOfForm = "The height of the image spans the same height as the registration form.";
+$langWidthOfFormInfo = "This option does not apply to the image on the user registration form.";

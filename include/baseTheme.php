@@ -66,7 +66,7 @@ function view($view_file, $view_data = array()) {
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
-            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user;
+            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user, $langFaq, $langRegistration;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
@@ -3484,16 +3484,17 @@ function view($view_file, $view_data = array()) {
         }
 
         if(isset($theme_options_styles['widthOfForm']) && isset($theme_options_styles['sliderWidthImgForm'])){
-            $WidthFormImg = $theme_options_styles['fluidContainerWidth'] ?? 1140;
-            $WidthFormImg = ($WidthFormImg - 300);
-
+            $MainContentWidth = $theme_options_styles['fluidContainerWidth'] ?? 1140;
+            // The number 300 is the max width of left menu in a course.
+            $MainContentWidth = ($MainContentWidth - 300);
+            // Now we calculate the % of the width of a form.
             $t_width = 100 - $theme_options_styles['sliderWidthImgForm'];
-            $WidthFormImg = $WidthFormImg*$t_width/100;
-            $WidthFormImg = $WidthFormImg ."px";
+            $MainContentWidth = $MainContentWidth*$t_width/100;
+            $FormWidth = $MainContentWidth ."px";
             $styles_str .= "
                 @media(min-width:992px){
                     .main-section:has(.course-wrapper) .form-image-modules{
-                        max-width: $WidthFormImg;
+                        width: $FormWidth;
                         float:right;
                         padding-bottom: 0px;
                     }
@@ -3507,6 +3508,29 @@ function view($view_file, $view_data = array()) {
         }
 
         if(isset($theme_options_styles['strechedImgOfForm'])){
+            $imgRegistrationForm = get_registration_form_image();
+            $imgFaq = get_FAQ_image();
+            $imgForm = get_form_image();
+            $head_content .= "
+                <script>
+                    $(function() {
+                        $('.form-image-modules').attr('src','');
+                        $('.form-image-modules').attr('alt','');
+                        $('.form-image-registration').attr('src','$imgRegistrationForm');
+                        $('.form-image-registration').attr('alt','$langRegistration');
+                        $('.form-image-faq').attr('src','$imgFaq');
+                        $('.form-image-faq').attr('alt','$langFaq');
+                    });
+                </script>
+            ";
+            $typeImage = "";
+            if(isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'fixed'){
+                $typeImage = "background-repeat: no-repeat; background-attachment: fixed; background-size: 100% 100%;";
+            }elseif(isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'repeated'){
+                $typeImage = "background-repeat: repeat;";
+            }elseif(isset($theme_options_styles['TypeImageForm']) && $theme_options_styles['TypeImageForm'] == 'streched'){
+                $typeImage = "background-repeat: no-repeat; background-size: cover;";
+            }
             $styles_str .= "
                 @media(min-width:992px){
                     .form-image-modules{
@@ -3515,10 +3539,13 @@ function view($view_file, $view_data = array()) {
                         flex-shrink: 0;
                         padding-bottom: 0px;
                         min-height: 100%;
+                        background-image: url('$imgForm'); 
+                        $typeImage
                     }
                     .form-image-registration,
                     .form-image-faq{
                         min-height: auto;
+                        background-image: none; 
                     }
                 }
             ";

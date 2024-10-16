@@ -6927,5 +6927,6 @@ $langUsersParticipants = "Συμμετέχουν";
 $langBgColorLinkBanner = "Χρώμα φόντου συνδέσμου banner";
 $langbgCardAnnouncementDate = "Χρώμα φόντου container ημερομηνίας";
 $langTextColorCardAnnouncementDate = "Χρώμα κειμένου ημερομηνίας";
-$langwidthOfForm = "Το πλάτος της φόρμας εκτείνεται στο επί % του πλάτους της επιφάνειας εργασίας.";
+$langwidthOfForm = "Το πλάτος της φόρμας εκτείνεται στο επί % του πλάτους του κύριου περιεχομένου της σελίδας.";
 $langStrechedImgOfForm = "Το ύψος της εικόνας εκτείνεται στο ίδιο ύψος της φόρμας εγγραφής.";
+$langWidthOfFormInfo = "Η συγκεκριμένη επιλογή δεν αφορά την εικόνα στην φόρμα εγγραφής χρήστη.";

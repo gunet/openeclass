@@ -5073,19 +5073,19 @@ body .delThemeBtn{
 
 @media(min-width:992px) and (max-width:1199px){
   .main-section:has(.course-wrapper) .form-image-modules{
-    max-width:250px;
+    max-width:220px;
     float:right;
   }
 }
 @media(min-width:1200px) and (max-width:1399px){
   .main-section:has(.course-wrapper) .form-image-modules{
-    max-width:280px;
+    max-width:270px;
     float:right;
   }
 }
 @media(min-width:1400px){
   .main-section:has(.course-wrapper) .form-image-modules{
-    max-width: 310px;
+    max-width: 300px;
     float:right;
   }
 }
