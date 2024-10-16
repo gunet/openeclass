@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
     $drq = $_POST['drq'] * MB;
     // Update query
     $sql = Database::get()->query("UPDATE course SET doc_quota=?f, video_quota=?f, group_quota=?f, dropbox_quota=?f
-			WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
+            WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
        // Session::Messages($langQuotaSuccess, 'alert-success');
@@ -67,10 +67,10 @@ if (isset($_POST['submit'])) {
     }
     // Nothing updated
     else {
-        //Session::Messages($langQuotaFail);
-        Session::flash('message',$langQuotaFail);
+        Session::flash('message', $langQuotaFail);
         Session::flash('alert-class', 'alert-danger');
     }
+    redirect_to_home_page('modules/admin/quotacours.php?c=' . $_GET['c']);
 }
 // Display edit form for course quota
 $toolName = $langQuota;
