@@ -136,10 +136,9 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
 
 
 $display_tools = $is_editor && !$is_in_tinymce;
-$colspan = $display_tools ? 2 : 3;
-$embedParam = ((isset($_REQUEST['embedtype'])) ? '&amp;embedtype=' . urlencode($_REQUEST['embedtype']) : '') .
+$data['embedParam'] = $embedParam = ((isset($_REQUEST['embedtype'])) ? '&amp;embedtype=' . urlencode($_REQUEST['embedtype']) : '') .
     ((isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . urlencode($_REQUEST['docsfilter']) : '');
-$expand_all = isset($_GET['d']) && $_GET['d'] == '1';
+$data['expand_all'] = $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
 
 if ($display_tools) {
     $actionBarArray = array(
@@ -176,8 +175,7 @@ $data['count_video'] = Database::get()->querySingle("SELECT COUNT(*) AS count FR
 $data['count_video_links'] = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
 $data['num_of_categories'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
 $data['items'] = getLinksOfCategory(0, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin); // uncategorized items
-$data['categories'] = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
-
+$data['categories'] = $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
 // js and view
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
@@ -186,4 +184,15 @@ if ($is_in_tinymce) {
 add_units_navigation(TRUE); // TODO: test
 ModalBoxHelper::loadModalBox(true);
 
-view('modules.video.index', $data);
+if (isset($_GET['form_input']) and $_GET['form_input'] === 'opendelos') {
+    list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+    $data['jsonPublicObj'] = $jsonPublicObj;
+    $data['jsonPrivateObj'] = $jsonPrivateObj;
+    $data['checkAuth'] = $checkAuth;
+    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
+    $head_content .= getDelosJavaScript();
+    view('modules.video.editdelos', $data);
+} else {
+    view('modules.video.index', $data);
+}
+

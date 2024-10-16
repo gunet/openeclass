@@ -56,12 +56,12 @@
                                     <table class='table-default'>
                                         <thead>
                                             <tr class='list-header'>
-                                                <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
-                                                @if ($expand_all)
-                                                    {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
-                                                @else
-                                                    {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
-                                                @endif
+                                                <th>{{ trans('langCatVideoDirectory') }}
+                                                    @if (isset($expand_all))
+                                                        {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
+                                                    @else
+                                                        {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
+                                                    @endif
                                                 </th>
                                                 <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 @if (!$is_in_tinymce)
@@ -79,7 +79,7 @@
                                             }
                                         ?>
                                         <tr class='link-subcategory-title'>
-                                            <td class='category-link p-3' colspan='{{ $colspan }}'>
+                                            <td class='category-link p-3' >
                                                 {!! $folder_icon !!}&nbsp;
                                                 @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
                                                     <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
@@ -106,7 +106,7 @@
                                                     !!}
                                                 </td>
                                             @else
-                                            <td></td>
+                                                <td></td>
                                             @endif
                                         </tr>
                                         @if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id))
