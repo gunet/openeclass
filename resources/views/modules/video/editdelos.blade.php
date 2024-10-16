@@ -23,15 +23,6 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    {!!
-                        action_bar(array(
-                            array('title' => $GLOBALS['langBack'],
-                                'url' => $backPath,
-                                'icon' => 'fa-reply',
-                                'level' => 'primary-label')
-                            )
-                        )
-                    !!}
 
                     @include('layouts.partials.show_alert')
 
