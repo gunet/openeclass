@@ -330,7 +330,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class='col-md-10 mt-md-0 mt-2'>
-                                                                    <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                                    <a class='TextBold' style='font-size: 1.2rem;' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                                         {!! $announcement->title !!}
                                                                     </a>
                                                                     <div class='truncate-announcement'>{!! $announcement->body !!}</div>
