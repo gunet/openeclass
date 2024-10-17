@@ -78,9 +78,9 @@ if ($is_editor) {
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
                 $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $files_in_zip[$i] = $stat['name'];
-                if (!empty(my_basename($files_in_zip[$i]))) {
-                    validateUploadedFile(my_basename($files_in_zip[$i]), $menuTypeID);
-                }
+//                if (!empty(my_basename($files_in_zip[$i]))) {
+//                    validateUploadedFile(my_basename($files_in_zip[$i]), $menuTypeID);
+//                }
             }
             // extract files
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
@@ -92,6 +92,7 @@ if ($is_editor) {
 //                    redirect_to_current_dir();
 //                }
                 $extracted_file_name = process_extracted_file($stat);
+//                die($extracted_file_name);
                 if (!is_null($extracted_file_name)) {
                     $zipFile->renameIndex($i, $extracted_file_name);
                     $zipFile->extractTo($basedir, $extracted_file_name);
