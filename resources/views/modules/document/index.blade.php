@@ -176,7 +176,7 @@
                             <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
                             <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
 
-                            <div style="border: 1px solid #c4c4c4;padding: 10px; border-radius: 4px;">
+                            <div class='border-card p-2 rounded-2'>
 
                                 <div id="uppy"></div>
 
