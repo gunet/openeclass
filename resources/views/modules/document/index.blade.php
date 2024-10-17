@@ -171,16 +171,45 @@
                         </div>
                     @endif
 
-                        <div class="drag_and_drop_container d-none mb-3">
+                        <div class="col-12 drag_and_drop_container d-none mb-3">
                             <input type="hidden" name="uploadPath" value="<?php echo $openDir; ?>">
                             <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
                             <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
 
-                            <div id="uppy"></div>
+                            <div style="border: 1px solid #c4c4c4;padding: 10px; border-radius: 4px;">
+
+                                <div id="uppy"></div>
+
+                                <div>
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-offset-2 col-sm-10'>
+                                            <div class='checkbox'>
+                                                <label class='label-container' aria-label="{{ trans('langUncompress')}}">
+                                                    <input type='checkbox' name='uncompress' value='0'>
+                                                    <span class='checkmark'></span>
+                                                    {{ trans('langUncompress') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+{{--                                <div class='form-group mt-3'>--}}
+{{--                                    <div class='col-sm-offset-2 col-sm-12'>--}}
+{{--                                        <div class='checkbox'>--}}
+{{--                                            <label class='label-container' aria-label="{{ trans('langReplaceSameName')}}">--}}
+{{--                                                <input type='checkbox' name='replace' value='0'>--}}
+{{--                                                <span class='checkmark'></span>--}}
+{{--                                                {{ trans('langReplaceSameName') }}--}}
+{{--                                            </label>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+                                </div>
+
+                            </div>
 
                             <script type="module">
                                 let backURL = '<?php echo htmlspecialchars_decode($backUrl); ?>';
-                                console.log('backUrl:',backURL);
                                 import { Uppy, Dashboard, XHRUpload } from "https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs"
 
                                 const uppy = new Uppy({
@@ -194,17 +223,46 @@
                                     proudlyDisplayPoweredByUppy: false,
                                     height: 500,
                                     thumbnailWidth: 100,
-                                    note: 'Drag and drop a file or click to browse'
+                                    locale: {
+                                        strings: {
+                                            dropPasteFiles: 'Drop files here or %{browseFiles}',
+                                            browseFiles: 'browse files!',
+                                        }
+                                    }
                                 })
 
                                 let uploadPath = '<?php echo $openDir; ?>';
                                 let fileCreator = document.querySelector('input[name="file_creator"]').value;
+
+                                let uncompressInput = $('input[name="uncompress"]');
+                                let uncompress = uncompressInput.val();
+
+                                uncompressInput.change(function() {
+                                    uncompress = $(this).is(':checked') ? '1' : '0';
+                                    $(this).val(uncompress);
+                                    uppy.setMeta({
+                                        uncompress: uncompress,
+                                    });
+                                });
+
+                                let replaceInput = $('input[name="replace"]');
+                                let replace = replaceInput.val();
+                                replaceInput.change(function() {
+                                    replace = $(this).is(':checked') ? '1' : '0';
+                                    $(this).val(replace);
+                                    uppy.setMeta({
+                                        replace: replace,
+                                    });
+                                });
+
                                 let fileCopyrighted = 0;
 
                                 uppy.setMeta({
                                     uploadPath: uploadPath,
                                     file_creator: fileCreator,
-                                    file_copyrighted: fileCopyrighted
+                                    file_copyrighted: fileCopyrighted,
+                                    replace: replace,
+                                    uncompress: uncompress,
                                 });
 
                                 uppy.use(XHRUpload, {
@@ -218,7 +276,9 @@
                                     allowedMetaFields: [
                                         'uploadPath',
                                         'file_creator',
-                                        'file_copyrighted'
+                                        'file_copyrighted',
+                                        'replace',
+                                        'uncompress',
                                     ]
                                 })
 
