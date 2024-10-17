@@ -4,7 +4,13 @@
         <div class='d-none d-lg-block w-100'>
             @if($image_footer)
                 <div class='col-12 d-flex justify-content-center align-items-center gap-3 pt-3'>
-                    <a href="{!! get_config('link_footer_image')!!}" target="_blank"><img style='max-width:300px; max-height:150px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}"></a>
+                    @if(get_config('link_footer_image'))
+                    <a href="{!! get_config('link_footer_image') !!}" target="_blank">
+                        <img style='max-width:300px; max-height:150px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                    </a>
+                    @else
+                    <img style='max-width:300px; max-height:150px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                    @endif
                 </div>
                 @if(get_config('footer_intro'))
                     <div class='col-12 d-flex justify-content-center align-items-center gap-3 p-3 footer-text'>
@@ -125,7 +131,13 @@
             <div class="d-flex align-items-start flex-column h-100">
                 @if($image_footer)
                     <div class='col-12 d-flex justify-content-center align-items-center pb-3 gap-3'>
-                        <a href="{!! get_config('link_footer_image')!!}" target="_blank"><img style='max-width:300px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}"></a>
+                        @if(get_config('link_footer_image'))
+                        <a href="{!! get_config('link_footer_image') !!}" target="_blank">
+                            <img style='max-width:300px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        </a>
+                        @else
+                        <img style='max-width:300px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        @endif
                     </div>
                 @endif
                 <div class='col-12 d-flex d-flex justify-content-center align-items-center pb-3 gap-3 flex-wrap'>
