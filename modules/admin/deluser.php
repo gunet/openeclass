@@ -32,9 +32,8 @@ if (isset($_GET['u'])) {
 
 if ($user) {
     $data['u_account'] = $u_account = q(uid_to_name($user, 'username'));
-    $data['u_realname'] = q(uid_to_name($user));
+    $data['u_realname'] = $u_realname = q(uid_to_name($user));
 } else {
-    //Session::Messages($langErrorDelete, 'alert-danger');
     Session::flash('message',$langErrorDelete);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page('modules/admin/listusers.php');
@@ -44,17 +43,14 @@ if (isset($_POST['doit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
     if (get_admin_rights($user) > 0) {
-        //Session::Messages($langTryDeleteAdmin, 'alert-danger');
-        Session::flash('message',$langTryDeleteAdmin);
+        Session::flash('message', $langTryDeleteAdmin);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/admin/deluser.php?u=$user");
     } else {
         if (deleteUser($user, true)) {
-            //Session::Messages("$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.", 'alert-info');
             Session::flash('message',"$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.");
             Session::flash('alert-class', 'alert-info');
         } else {
-            //Session::Messages($langErrorDelete, 'alert-danger');
             Session::flash('message',$langErrorDelete);
             Session::flash('alert-class', 'alert-danger');
         }
