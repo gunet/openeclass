@@ -57,8 +57,6 @@
     <script type="text/javascript" src="https://pdfanticopy.com/noprint.js"></script>
 
     <script>
-   
-
         /** TO DISABLE SCREEN CAPTURE **/
         document.addEventListener('keyup', (e) => {
             if(e.keyCode == 44){
@@ -72,12 +70,37 @@
 
         /** TO DISABLE PRINTS WHIT CTRL+P **/
         document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key == 'p') {
+            if (event.ctrlKey && (event.key === 'PrintScreen' || event.key === 'F12' || event.key === 'u')) {
                 $("#main-section-content").hide();
                 e.cancelBubble = true;
                 e.preventDefault();
                 e.stopImmediatePropagation();
             }
+        });
+    </script>
+
+    <script type="text/javascript" src="{{ $urlAppend }}js/shortcut/shortcut.min.js"></script>
+    <script>
+        shortcut("F12",function() {
+            $("#main-section-content").hide();
+        });
+        shortcut("Ctrl+Shift+C",function() {
+            $("#main-section-content").hide();
+        });
+        shortcut("Ctrl+Shift+I",function() {
+            $("#main-section-content").hide();
+        });
+        shortcut("Ctrl+Shift+J",function() {
+            $("#main-section-content").hide();
+        });
+        shortcut("Ctrl+Shift+U",function() {
+            $("#main-section-content").hide();
+        });
+        shortcut("Command+Option+I",function() {
+            $("#main-section-content").hide();
+        });
+        shortcut("Command+Shift+C",function() {
+            $("#main-section-content").hide();
         });
     </script>
 @endsection
