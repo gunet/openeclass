@@ -155,14 +155,14 @@ $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, regis
 
 if ($_SESSION['status'] == USER_TEACHER) {
     if(!get_config('show_always_collaboration')){
-        $data['num_of_courses'] = CountTeacherCourses($uid);
+        $data['num_of_courses'] = CountCourses($uid);
     }
     if(get_config('show_collaboration')){
         $data['num_of_collaborations'] = CountTeacherCollaborations($uid);
     }
 } else {
     if(!get_config('show_always_collaboration')){
-        $data['num_of_courses'] = CountStudentCourses($uid);
+        $data['num_of_courses'] = CountCourses($uid);
     }
     if(get_config('show_collaboration')){
         $data['num_of_collaborations'] = CountStudentCollaborations($uid);
