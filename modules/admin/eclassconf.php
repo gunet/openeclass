@@ -154,6 +154,7 @@ if (isset($_POST['submit'])) {
         'enable_search' => true,
         'enable_common_docs' => true,
         'enable_docs_public_write' => true,
+        'enable_prevent_download_url' => true,
         'enable_social_sharing_links' => true,
         'enable_strong_passwords' => true,
         'disable_student_unregister_cours' => true,
@@ -333,6 +334,7 @@ else {     // Display config.php edit form
     $data['cbox_enable_search'] = get_config('enable_search') ? 'checked' : '';
     $data['cbox_enable_common_docs'] = get_config('enable_common_docs') ? 'checked' : '';
     $data['cbox_enable_docs_public_write'] = get_config('enable_docs_public_write') ? 'checked' : '';
+    $data['cbox_enable_prevent_download_url'] = get_config('enable_prevent_download_url') ? 'checked' : '';
     $data['cbox_mydocs_student_enable'] = get_config('mydocs_student_enable') ? 'checked' : '';
     $data['cbox_mydocs_teacher_enable'] = get_config('mydocs_teacher_enable') ? 'checked' : '';
     $data['mydocs_student_quota'] = floatval(get_config('mydocs_student_quota'));

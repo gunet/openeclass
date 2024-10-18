@@ -457,12 +457,18 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                 @media(min-width:992px){
                     .jumbotron.jumbotron-login{
-                        min-height: calc(100vh - 80px + 80px - 80px);
+                        min-height: calc(100vh - 80px);
+                    }
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login{
+                        min-height: calc(100vh - 80px - 60px);
                     }
                 }
                 @media(max-width:991px){
                     .jumbotron.jumbotron-login{
-                        min-height: calc(100vh - 56px - 122px);
+                        min-height: calc(100vh - 56px);
+                    }
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login{
+                        min-height: calc(100vh - 56px - 60px);
                     }
                 }
             ";

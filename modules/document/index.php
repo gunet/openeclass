@@ -270,7 +270,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             subject = '',
             description = '',
             author = ?s,
-            format = ?s,            
+            format = ?s,
             copyrighted = 0,
             editable = 0,
             lock_user_id = ?d",
@@ -426,7 +426,7 @@ if (isset($_GET['mindmap'])) {
             subject = '',
             description = '',
             author = ?s,
-            format = ?s,            
+            format = ?s,
             copyrighted = 0,
             editable = 0,
             lock_user_id = ?d",
@@ -1116,7 +1116,7 @@ if ($can_upload or $user_upload) {
             Database::get()->query("UPDATE document SET
                                 creator = ?s,
                                 date_modified = NOW(),
-                                format = ?s,                                
+                                format = ?s,
                                 WHERE $group_sql AND path = ?s",
                 "$_SESSION[givenname] $_SESSION[surname]", $file_format, $metadataPath);
         } else {
@@ -1545,11 +1545,7 @@ foreach ($result as $row) {
         } else {
             $dObj->setPlayURL(file_playurl($row->path, $row->filename));
         }
-        if($row->visible == 1){
-            $info['link'] = MultimediaHelper::chooseMediaAhref($dObj);
-        }else{
-            $info['link'] = '<a style="opacity:0.5;">'.$row->filename.'</href>';
-        }
+        $info['link'] = MultimediaHelper::chooseMediaAhref($dObj);
 
         if ($row->editable) {
             $info['edit_url'] = "new.php?course=$course_code&editPath=" . $row->path .

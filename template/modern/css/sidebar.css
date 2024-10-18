@@ -66,9 +66,23 @@
     border: 0px;
     border-left: solid 1px #E8EDF8;
     border-radius: 0px;
-    min-height: calc(100vh - 80px - 80px);
     flex: 1;
   }
+
+  body:has(.footer-image) .col_maincontent_active{
+    min-height: calc(100vh - 80px - 235px);
+  }
+  body:not(:has(.footer-image)) .col_maincontent_active{
+    min-height: calc(100vh - 80px - 80px);
+  }
+  body:not(:has(.footer-image)) .fixed-announcement .col_maincontent_active{
+    min-height: calc(100vh - 80px - 80px - 60px);
+  }
+  body:has(.footer-image) .fixed-announcement .col_maincontent_active{
+    min-height: calc(100vh - 80px - 235px - 60px);
+  }
+
+
   .fixed-announcement .col_maincontent_active{
     min-height: calc(100vh - 80px - 80px - 60px);
   }
