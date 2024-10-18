@@ -76,7 +76,8 @@ if (isset($_POST['submit'])) {
             $param->setValue('');
             $param->persistValue();
         }
-        Session::Messages($langFileUpdatedSuccess, 'alert-info');
+        Session::flash('message', $langFileUpdatedSuccess);
+        Session::flash($result, 'alert-success');
     } else {
         $result = $app->storeParams();
         if (isset($_POST['enabled'])) {
@@ -103,9 +104,11 @@ if (isset($_POST['submit'])) {
             }
         }
         if ($result) {
-            Session::Messages($result, 'alert-danger');
+            Session::flash('alert-class', 'alert-danger');
+            Session::flash($result, 'alert-danger');
         } else {
-            Session::Messages($langFileUpdatedSuccess, 'alert-success');
+            Session::flash('message', $langFileUpdatedSuccess);
+            Session::flash($result, 'alert-success');
         }
     }
     redirect_to_home_page($app->getConfigUrl());

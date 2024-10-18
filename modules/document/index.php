@@ -246,7 +246,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $title = $_POST['userFile'];
         $file_path = '/' . safe_filename('webm');
         if (!move_uploaded_file($_FILES['video-blob']['tmp_name'], $basedir . $file_path)) {
-            Session::Messages($langGeneralError, 'alert-danger');
+            Session::flash('message', $langGeneralError);
+            Session::flash('alert-class', 'alert-danger');
         } else {
             $filename = $title;
             $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
@@ -287,7 +288,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $title = $_POST['userFile'];
         $file_path = '/' . safe_filename('mka');
         if (!move_uploaded_file($_FILES['audio-blob']['tmp_name'], $basedir . $file_path)) {
-            Session::Messages($langGeneralError, 'alert-danger');
+            Session::flash('message', $langGeneralError);
+            Session::flash('alert-class', 'alert-danger');
         } else {
             $filename = $title;
             $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
@@ -880,7 +882,8 @@ if ($can_upload or $user_upload) {
                     "^$curDirPath/[^/]+$", $filename);
             if ($fileExists) {
                 $curDirPath = my_dirname($source);
-                Session::Messages($langFileExists, 'alert-danger');
+                Session::flash('message', $langFileExists);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_current_dir();
             }
             if (empty($extra_path)) {

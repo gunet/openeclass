@@ -506,7 +506,7 @@ function add_attendance_other_activity($attendance_id) {
 
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
-           $langAttendanceActivityDate, $language, $head_content, $urlAppend, 
+           $langAttendanceActivityDate, $language, $head_content, $urlAppend,
            $langImgFormsDes, $langSelect, $langForm;
 
     load_js('bootstrap-datetimepicker');
@@ -1503,11 +1503,9 @@ function delete_attendance($attendance_id) {
     Database::get()->query("DELETE FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
     $action = Database::get()->query("DELETE FROM attendance WHERE id = ?d AND course_id = ?d", $attendance_id, $course_id);
     if ($action) {
-        //Session::Messages("$langAttendanceDeleted", "alert-success");
         Session::flash('message',$langAttendanceDeleted);
         Session::flash('alert-class', 'alert-success');
     } else {
-        //Session::Messages("$langAttendanceDelFailure", "alert-danger");
         Session::flash('message',$langAttendanceDelFailure);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -1515,8 +1513,6 @@ function delete_attendance($attendance_id) {
 
 /**
  * @brief delete attendance activity
- * @global type $langAttendanceDel
- * @global type $langAttendanceDelFailure
  * @param type $attendance_id
  * @param type $activity_id
  */
@@ -1527,11 +1523,9 @@ function delete_attendance_activity($attendance_id, $activity_id) {
     $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
     Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
     if($delAct) {
-        //Session::Messages("$langAttendanceDel", "alert-success");
         Session::flash('message',$langAttendanceDel);
         Session::flash('alert-class', 'alert-success');
     } else {
-        //Session::Messages("$langAttendanceDelFailure", "alert-danger");
         Session::flash('message',$langAttendanceDelFailure);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -1540,7 +1534,6 @@ function delete_attendance_activity($attendance_id, $activity_id) {
 
 /**
  * @brief delete user from attendance
- * @global type $langGradebookEdit
  * @param type $attendance_id
  * @param type $userid
  */
@@ -1551,7 +1544,6 @@ function delete_attendance_user($attendance_id, $userid) {
     Database::get()->query("DELETE FROM attendance_book WHERE uid = ?d AND attendance_activity_id IN
                                 (SELECT id FROM attendance_activities WHERE attendance_id = ?d)", $userid, $attendance_id);
     Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d AND attendance_id = ?d", $userid, $attendance_id);
-    //Session::Messages($langGradebookEdit,"alert-success");
     Session::flash('message',$langGradebookEdit);
     Session::flash('alert-class', 'alert-success');
 }
@@ -1559,7 +1551,6 @@ function delete_attendance_user($attendance_id, $userid) {
 
 /**
  * @brief clone attendance
- * @global type $course_id
  * @param type $attendance_id*
  */
 function clone_attendance($attendance_id) {

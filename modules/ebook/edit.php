@@ -198,8 +198,7 @@ if (isset($_GET['delete'])) {
     if (!empty($ebook_title) and $info->title != $ebook_title) {
         Database::get()->query("UPDATE `ebook` SET title = ?s WHERE id = ?d", $ebook_title, $info->id);
     }
-    //Session::Messages($langEBookTitleModified, 'alert-success');
-    Session::flash('message',$langEBookTitleModified); 
+    Session::flash('message',$langEBookTitleModified);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 } elseif (isset($_POST['submit'])) {
@@ -240,8 +239,7 @@ if (isset($_GET['delete'])) {
             Database::get()->query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
         }
     }
-    //Session::Messages($langEBookSectionsModified, 'alert-success');
-    Session::flash('message',$langEBookSectionsModified); 
+    Session::flash('message',$langEBookSectionsModified);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 } else {

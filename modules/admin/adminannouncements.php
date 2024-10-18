@@ -151,7 +151,6 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 
 // action message
 if (isset($message) && !empty($message)) {
-    //Session::Messages($message, 'alert-success');
     Session::flash('message',$message);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("/modules/admin/adminannouncements.php");

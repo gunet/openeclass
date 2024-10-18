@@ -146,7 +146,6 @@ if ($is_editor) {
                 if (!resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['del_path_id'])) {
                     $lp_name = deleteLearningPath($_GET['del_path_id']);
                     Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
-                    //Session::Messages($langLearnPathDeleted, 'alert-success');
                     Session::flash('message',$langLearnPathDeleted);
                     Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/learnPath/index.php?course=' . $course_code);

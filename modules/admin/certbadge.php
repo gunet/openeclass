@@ -240,7 +240,8 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
     }
     $name = canonicalize_whitespace($_POST['name'] ?? '');
     if (!$name) {
-        Session::Messages($langEmptyNodeName, 'alert-warning');
+        Session:;flash('message', $langEmptyNodeName);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page('modules/admin/certbadge.php');
     }
     if ($badge_id) {
@@ -263,7 +264,8 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
             description = ?s,
             filename = ?s", $_POST['name'], $_POST['description'], $new_icon);
     }
-    Session::Messages($langDownloadEnd, 'alert-success');
+    Session::flash('message', $langDownloadEnd);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/certbadge.php');
 }
 

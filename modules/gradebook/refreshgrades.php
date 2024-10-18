@@ -96,7 +96,6 @@ foreach ($activities as $act) {
     }
 }
 
-//Session::Messages($langRefreshGradesDone, 'alert-success');
-Session::flash('message',$langRefreshGradesDone); 
+Session::flash('message',$langRefreshGradesDone);
 Session::flash('alert-class', 'alert-success');
 redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$_GET[gradebook_id]");

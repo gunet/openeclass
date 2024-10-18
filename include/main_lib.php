@@ -4536,7 +4536,6 @@ function warnCourseInvalidDepartment($prompt=false) {
         } else {
             $message = $langCourseInvalidDepartment;
         }
-        //Session::Messages($message);
         Session::flash('message',$message);
         Session::flash('alert-class', 'alert-warning');
     }

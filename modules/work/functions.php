@@ -733,11 +733,9 @@ function send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_f
 
     if (!Plagiarism::get()->isFileSubmitted($file_id)) {
         Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);
-       // Session::Messages($langPlagiarismFileSent, 'alert-success');
         Session::flash('message',$langPlagiarismFileSent);
         Session::flash('alert-class', 'alert-success');
     } else {
-      //  Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');
         Session::flash('message',$langPlagiarismAlreadyCheck);
         Session::flash('alert-class', 'alert-warning');
     }

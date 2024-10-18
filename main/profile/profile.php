@@ -466,7 +466,8 @@ if (isset($_GET['msg'])) {
         default:
             exit;
     }
-    Session::Messages($message, 'alert-warning');
+    Session::flash('message', $message);
+    Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('main/profile/profile.php');
 }
 

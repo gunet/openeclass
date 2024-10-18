@@ -34,8 +34,7 @@ if (isset($_GET['delete'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ''
 		WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
     if ($sql->affectedRows > 0) {
-        //Session::Messages($langBlockDeleted, 'alert-success');
-        Session::flash('message',$langBlockDeleted); 
+        Session::flash('message',$langBlockDeleted);
         Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -43,12 +42,10 @@ if (isset($_GET['delete'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ?s
 			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $uid);
     if ($sql->affectedRows > 0) {
-        //Session::Messages($langRegDone, 'alert-success');
-        Session::flash('message',$langRegDone); 
+        Session::flash('message',$langRegDone);
         Session::flash('alert-class', 'alert-success');
     } else {
-        //Session::Messages($langNoChanges);
-        Session::flash('message',$langNoChanges); 
+        Session::flash('message',$langNoChanges);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page("modules/group/index.php?course=$course_code");

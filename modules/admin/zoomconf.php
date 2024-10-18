@@ -92,7 +92,8 @@ if (isset($_POST['submit'])) {
             $param->setValue('');
             $param->persistValue();
         }
-        Session::Messages($langFileUpdatedSuccess, 'alert-info');
+        Session::flash('message', $langFileUpdatedSuccess);
+        Session::flash('alert-class', 'alert-info');
     } else {
         $result = $app->storeParams();
         if (isset($_POST['enabled'])) {
@@ -132,9 +133,11 @@ if (isset($_POST['submit'])) {
             }
         }
         if ($result) {
-            Session::Messages($result, 'alert-danger');
+            Session::flash('message', $result);
+            Session::flash('alert-class', 'alert-danger');
         } else {
-            Session::Messages($langFileUpdatedSuccess, 'alert-success');
+            Session::flash('message', $langFileUpdatedSuccess);
+            Session::flash('alert-class', 'alert-success');
         }
     }
     redirect_to_home_page($app->getConfigUrl());
@@ -278,7 +281,8 @@ if (isset($_POST['submit'])) {
 
 } elseif (isset($_GET['show_api_users'])) {
     if (!$zoomUserRepo->zoomApiEnabled()) {
-        Session::Messages("$langNoApiCredentials", "alert-danger");
+        Session::flash('message', $langNoApiCredentials);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
     }
     $apiUsers = $zoomUserRepo->listAllZoomUsers();
@@ -329,11 +333,13 @@ if (isset($_POST['submit'])) {
     $res = $zoomUserRepo->changeUserType($_GET['id'], $_GET['email'], $_GET['type']);
     if (!empty($res->fail_details)) {
         if (!empty($res->fail_details[0]->reason) && $res->fail_details[0]->reason == 'Not enough seats') {
-            Session::Messages("$langNoEmptySeats");
+            Session::flash('message', $langNoEmptySeats);
+            Session::flash('alert-claass', 'alert-warning');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
     }
-    Session::Messages("$langQuotaSuccess", 'alert-success');
+    Session::flash('message', $langQuotaSuccess);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
 } else {
     $tool_content .= "  <div class='row'>

@@ -52,14 +52,12 @@ if (isset($_GET['assignment']) && isset($_GET['submission'])) {
                 download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
             }
         } else {
-          //  Session::Messages($langAutoJudgeNotEnabledForReport, 'alert-danger');
-            Session::flash('message',$langAutoJudgeNotEnabledForReport); 
+            Session::flash('message',$langAutoJudgeNotEnabledForReport);
             Session::flash('alert-class', 'alert-danger');
             draw($tool_content, 2);
         }
     } else {
-       // Session::Messages($m['WorkNoSubmission'], 'alert-danger');
-        Session::flash('message',$m['WorkNoSubmission']); 
+        Session::flash('message',$m['WorkNoSubmission']);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }
@@ -84,7 +82,7 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
 }
 
 /**
- * 
+ *
  * @global type $course_code
  * @global string $tool_content
  * @global type $langAutoJudgeInput
@@ -110,7 +108,7 @@ function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge
         $langAutoJudgeExpectedOutput, $langOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
         $langAutoJudgeDownloadPdf, $langBack, $langGradebookGrade;
-    
+
     $tool_content = "
         <div class='col-sm-10'><strong>$langAutoJudgeResultsFor: " . q(uid_to_name($sub->uid)) . "</strong></div>
         <table style='table-layout: fixed; width: 99%' class='table-default'>
@@ -191,10 +189,10 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         'margin_header' => 0,
         'margin_footer' => 0,
     ]);
-    // set document information     
+    // set document information
     $pdf->SetTitle('Auto Judge Report');
     $pdf->SetSubject('Auto Judge Report');
-    
+
     $report_table = '
     <style>
     table.first{

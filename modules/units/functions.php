@@ -51,7 +51,6 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
-       // Session::Messages($langResourceUnitModified, 'alert-success');
         Session::flash('message',$langResourceUnitModified);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
@@ -1929,14 +1928,16 @@ function insert_prerequisite_unit($unit_id, $prereq_unit_id) {
 
     if ($is_editor) { // Auth check
         if ($prereq_unit_id < 0) {
-            Session::Messages($langNewUnitPrerequisiteFailInvalid);
+            Session::flash('message', $langNewUnitPrerequisiteFailInvalid);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
         }
 
         $prereqHasCompletion = prereq_unit_has_completion_enabled($prereq_unit_id);
 
         if ( !$prereqHasCompletion ) {
-            Session::Messages($langUnitHasNotCompletionEnabled);
+            Session::flash('message', $langUnitHasNotCompletionEnabled);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
         }
 
@@ -1948,15 +1949,18 @@ function insert_prerequisite_unit($unit_id, $prereq_unit_id) {
                                  AND up.prerequisite_unit = ?d", $course_id, $unit_id, $prereq_unit_id);
 
         if (count($result) > 0) {
-            Session::Messages($langNewUnitPrerequisiteFailAlreadyIn, 'alert-danger');
+            Session::flash('message', $langNewUnitPrerequisiteFailAlreadyIn);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
         }
 
-        Session::Messages($langNewUnitPrerequisiteSuccess, 'alert-success');
+        Session::flash($langNewUnitPrerequisiteSuccess, 'alert-success');
+        Session::flash('alert-class', 'alert-successr');
         Database::get()->query("INSERT INTO unit_prerequisite (course_id, unit_id, prerequisite_unit)
                                                 VALUES (?d, ?d, ?d)", $course_id, $unit_id, $prereq_unit_id);
     } else {
-        Session::Messages($langResultsFailed);
+        Session::flash('message', $langResultsFailed);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
     }
 }

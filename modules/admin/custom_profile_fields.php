@@ -71,12 +71,10 @@ require 'modules/admin/custom_profile_fields_functions.php';
                                     registration = ?d,
                                     data = ?s
                                     WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $data, $fieldid);
-            //Session::Messages($langCPFFieldEditSuccess, 'alert-success');
             Session::flash('message',$langCPFFieldEditSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else {
-            //Session::Messages($langCPFEditUniqueShortnameError, 'alert-danger');
             Session::flash('message',$langCPFEditUniqueShortnameError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -118,7 +116,6 @@ require 'modules/admin/custom_profile_fields_functions.php';
                             WHERE custom_profile_fields.id = ?d", $fieldid);
     //delete field
     Database::get()->query("DELETE FROM custom_profile_fields WHERE id = ?d", $fieldid);
-    //Session::Messages($langCPFFieldDelSuccess, 'alert-success');
     Session::flash('message',$langCPFFieldDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/custom_profile_fields.php");

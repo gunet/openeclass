@@ -261,7 +261,6 @@ if ($is_editor) {
                                                                             'secret_directory' => $secretDirectory));
             }
 
-            //Session::Messages($langGroupsAdded2, "alert-success");
             Session::flash('message',$langGroupsAdded2);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");

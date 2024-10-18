@@ -204,7 +204,6 @@ function show_form($id, $sid, $assign) {
                             </div>
                         </div>";
                     } else {
-                        //Session::Messages("$langEndPeerReview", 'alert-danger');
                         Session::flash('message',$langEndPeerReview);
                         Session::flash('alert-class', 'alert-danger');
                     }
@@ -216,7 +215,6 @@ function show_form($id, $sid, $assign) {
     </div>";
 	} else {
 		//an den uparxoun ergasies pou eginan submit
-		//Session::Messages($m['WorkNoSubmission'], 'alert-danger');
         Session::flash('message',$m['WorkNoSubmission']);
         Session::flash('alert-class', 'alert-danger');
 		redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);

@@ -51,7 +51,6 @@ if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
     // save h5p data
     $id = saveContent((object)$_POST);
 
-    //Session::Messages($langH5pSaveSuccess, 'alert-success');
     Session::flash('message',$langH5pSaveSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect($backUrl);

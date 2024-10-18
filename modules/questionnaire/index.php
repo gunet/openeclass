@@ -116,7 +116,6 @@ $head_content .= "<script type='text/javascript'>
 if (isset($_GET['verification_code'])) {
     $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
     if ($afftected_rows > 0) {
-        //Session::Messages("$langPollParticipationValid", 'alert-success');
         Session::flash('message',$langPollParticipationValid);
         Session::flash('alert-class', 'alert-success');
     }
@@ -171,13 +170,11 @@ if ($is_editor) {
             switch ($_GET['access']) {
                 case 'public':
                     Database::get()->query("UPDATE poll SET public = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    //Session::Messages($langPollUnlocked, 'alert-success');
                     Session::flash('message',$langPollUnlocked);
                     Session::flash('alert-class', 'alert-success');
                     break;
                 case 'limited':
                     Database::get()->query("UPDATE poll SET public = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    //Session::Messages($langPollLocked, 'alert-success');
                     Session::flash('message',$langPollLocked);
                     Session::flash('alert-class', 'alert-success');
                     break;

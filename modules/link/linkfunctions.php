@@ -48,7 +48,6 @@ function submit_link() {
     $v->rule('required', array('urllink'))->message($langTheFieldIsRequired)->label('');
     if($v->validate()) {
         if (!is_url_accepted($urllink,"(https?|ftp)")){
-           // Session::Messages($langLinkNotPermitted, 'alert-danger');
             Session::flash('message',$langLinkNotPermitted);
             Session::flash('alert-class', 'alert-danger');
             if (isset($_POST['id'])) {

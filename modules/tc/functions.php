@@ -295,12 +295,14 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 $user = $db->querySingle("SELECT * FROM `user` WHERE id = " . $uid);
 
                 if (empty($user->email)) {
-                    Session::Messages($langZoomUserNotFound);
+                    Session::flash('message', $langZoomUserNotFound);
+                    Session::flaash('alert-class', 'alert-warning');
                     redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
                 }
 
                 if (!$zoomUserRepo->userExists($user->email)) {
-                    Session::Messages($langZoomUserNotRegistered . "<b>" . $user->email . "</b>");
+                    Session::flash('message', "$langZoomUserNotRegistered <strong>$user->email</strong>");
+                    Session::flash('alert-class', 'alert-warning');
                     redirect_to_home_page("modules/tc/index.php?course=$course_code&zoom_not_registered=1");
                 }
             } else {
@@ -1612,7 +1614,6 @@ function delete_tc_session($id)
     Log::record($course_id, MODULE_ID_TC, LOG_DELETE, array('id' => $id,
                                                             'title' => $tc_title));
 
-   // Session::Messages($langBBBDeleteSuccessful, 'alert-success');
     Session::flash('message',$langBBBDeleteSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
@@ -1670,7 +1671,6 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
         $run_to = -1; // no bbb server exists
     }
     if ($run_to == -1) {
-      //  Session::Messages($langBBBConnectionErrorOverload, 'alert-danger');
         Session::flash('message',$langBBBConnectionErrorOverload);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
@@ -1738,13 +1738,11 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
         // If it's all good, then we've interfaced with our BBB php api OK:
         if ($result == null) {
             // If we get a null response, then we're not getting any XML back from BBB.
-            //Session::Messages($langBBBConnectionError, 'alert-danger');
             Session::flash('message',$langBBBConnectionError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/tc/index.php?course=$course_code");
         }
         if ($result['returncode'] != 'SUCCESS') {
-            //Session::Messages($langBBBCreationRoomError, 'alert-danger');
             Session::flash('message',$langBBBCreationRoomError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/tc/index.php?course=$course_code");
@@ -2113,14 +2111,12 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
     // If it's all good, then we've interfaced with our BBB php api OK:
     if ($result == null) {
         // If we get a null response, then we're not getting any XML back from BBB.
-       // Session::Messages($langBBBConnectionError, 'alert-danger');
         Session::flash('message',$langBBBConnectionError);
         Session::flash('alert-class', 'alert-danger');
         redirect("index.php?course=$course_code");
     } else {
         // We got an XML response, so let's see what it says:
         if (isset($result['messageKey'])) {
-           // Session::Messages($langBBBGetUsersError, 'alert-danger');
             Session::flash('message',$langBBBGetUsersError);
             Session::flash('alert-class', 'alert-danger');
             redirect("index.php?course=$course_code");

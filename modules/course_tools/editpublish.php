@@ -58,14 +58,12 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langT
 if (isset($_POST['new_publish_ltiapp'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     add_publish_ltiapp($_POST['title'], $_POST['desc'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['status']);
-    //Session::Messages($langPUBLTIAppAddSuccessful, 'alert-success');
     Session::flash('message',$langPUBLTIAppAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect("index.php?course=$course_code");
 } else if (isset($_POST['update_publish_ltiapp'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     update_publish_ltiapp(getDirectReference($_POST['id']), $_POST['title'], $_POST['desc'], $_POST['lti_key'], $_POST['lti_secret'], $_POST['status']);
-    //Session::Messages($langPUBLTIAppAddSuccessful, 'alert-success');
     Session::flash('message',$langPUBLTIAppAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect("index.php?course=$course_code");
@@ -76,7 +74,6 @@ if (isset($_POST['new_publish_ltiapp'])) {
             break;
         case 'do_delete':
             delete_publish_ltiapp(getDirectReference($_GET['id']));
-            //Session::Messages($langLTIAppDeleteSuccessful, 'alert-success');
             Session::flash('message',$langLTIAppDeleteSuccessful);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/course_tools/index.php?course=$course_code");

@@ -71,8 +71,7 @@ class secondfaApp extends ExtApp {
 
     public static function block($output) {
         require_once 'include/tools.php';
-        //Session::Messages($output);
-        Session::flash('message',$output); 
+        Session::flash('message',$output);
         Session::flash('alert-class', 'alert-warning');
         header("Location: {$_SERVER['SCRIPT_NAME']}");
         exit();
@@ -178,8 +177,7 @@ class secondfaApp extends ExtApp {
                 return "OK";
             }else{
                  require_once 'include/tools.php';
-               // Session::Messages($langSFAfail);
-                Session::flash('message',$langSFAfail); 
+                Session::flash('message', $langSFAfail);
                 Session::flash('alert-class', 'alert-danger');
                 header("Location: {$_SERVER['SCRIPT_NAME']}");
                 exit();
@@ -248,16 +246,14 @@ class secondfaApp extends ExtApp {
                         self::storeSecret($userid, $_SESSION['sfatempkey']);
                     }else{
                         require_once 'include/tools.php';
-                        //Session::Messages($langSFAfail);
-                        Session::flash('message',$langSFAfail); 
+                        Session::flash('message', $langSFAfail);
                         Session::flash('alert-class', 'alert-danger');
                         header("Location: {$_SERVER['SCRIPT_NAME']}");
                         exit();
                     }
                 }else{
                     require_once 'include/tools.php';
-                   // Session::Messages($langSFAfail);
-                    Session::flash('message',$langSFAfail); 
+                    Session::flash('message', $langSFAfail);
                     Session::flash('alert-class', 'alert-danger');
                     header("Location: {$_SERVER['SCRIPT_NAME']}");
                     exit();

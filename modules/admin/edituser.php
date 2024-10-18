@@ -77,7 +77,8 @@ if ($u) {
                               verified_mail, whitelist, disable_course_registration, options
                          FROM user WHERE id = ?s", $u);
     if (!$info) {
-        Session::messages($langNoUsersFound2, 'alert-danger');
+        Session::flash('message', $langNoUsersFound2);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/');
     }
     if (isset($_POST['submit_editauth'])) {

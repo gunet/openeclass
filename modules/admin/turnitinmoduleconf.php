@@ -67,7 +67,6 @@ if (isset($_GET['add_template'])) {
 } else if (isset($_GET['delete_template'])) {
 
     delete_lti_app(getDirectReference($_GET['delete_template']));
-    //Session::Messages($langBBBDeleteSuccessful, 'alert-success');
     Session::flash('message',$langBBBDeleteSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");

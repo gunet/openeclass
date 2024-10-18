@@ -67,7 +67,6 @@ if (isset($_GET['add_template'])) {
 } else if (isset($_GET['delete_template'])) {
 
     delete_lti_app(getDirectReference($_GET['delete_template']));
-    //Session::Messages($langLimesurveyAppDeleteSuccessful, 'alert-success');
     Session::flash('message',$langLimesurveyAppDeleteSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/limesurveymoduleconf.php");
@@ -89,7 +88,6 @@ if (isset($_GET['add_template'])) {
         $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, null, true,
         true, getDirectReference($_GET['id']));
     // Display result message
-    //Session::Messages($langLimesurveyAppAddSuccessful, 'alert-success');
     Session::flash('message',$langLimesurveyAppAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/limesurveymoduleconf.php");
