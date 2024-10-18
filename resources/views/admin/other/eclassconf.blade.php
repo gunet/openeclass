@@ -923,6 +923,12 @@
                                                     <span class='checkmark'></span>
                                                     {{ trans('langEnableDocsPublicWrite') }}
                                                 </label>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='enable_prevent_download_url' value='1' {{ $cbox_enable_prevent_download_url }}>
+                                                    <span class='checkmark'></span>
+                                                    {{ trans('langEnable_prevent_download_url') }}
+                                                </label>
                                             </div>
                                             </fieldset>
                                         </div>
