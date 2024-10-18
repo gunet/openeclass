@@ -387,7 +387,7 @@ function build_notification_callback(type) {
   }
 }
 
-function initialize_lesson_display () {
+function initialize_lesson_display (pages) {
     var languageOptions = {
         "sLengthMenu": msg.langDisplay + " _MENU_ " + msg.langResults2,
         "sZeroRecords": msg.langNoResult,
@@ -406,7 +406,7 @@ function initialize_lesson_display () {
     };
     $('#portfolio_lessons').DataTable({
       "bLengthChange": false,
-      "iDisplayLength": 10,
+      "iDisplayLength": pages,
       "bSort": false,
       "fnDrawCallback": function (oSettings) {
         $('#portfolio_lessons_filter label input').attr({
@@ -423,7 +423,7 @@ function initialize_lesson_display () {
 
     $('#portfolio_collaborations').DataTable({
       "bLengthChange": false,
-      "iDisplayLength": 10,
+      "iDisplayLength": pages,
       "bSort": false,
       "fnDrawCallback": function (oSettings) {
         $('#portfolio_collaborations_filter label input').attr({

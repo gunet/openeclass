@@ -5433,3 +5433,10 @@ textarea:focus-visible{
     overflow-y: auto;
   }
 }
+
+.submitAdminBtnAllCourses{
+  width: auto;
+  height: 25px;
+  font-size: 12px;
+  margin-right: 15px;
+}
