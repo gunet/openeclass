@@ -74,7 +74,6 @@ if (isset($_POST['submit'])) {
                     prof_names = ?s
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
-    //Session::Messages($langModifDone, 'alert-success');
     Session::flash('message',$langModifDone);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/editcours.php?c='.$_GET['c']);

@@ -67,7 +67,6 @@ if (isset($_POST['insert_analytics'])) {
     if($v->validate()) {
         update_analytics($analytics_id, $_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date);
 
-        //Session::Messages($langAnalyticsUpdateSuccess, 'alert-success');
         Session::flash('message',$langAnalyticsUpdateSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");

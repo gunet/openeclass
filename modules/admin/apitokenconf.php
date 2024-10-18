@@ -37,7 +37,8 @@ $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-inf
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);
-    Session::Messages($langApiTokenDeleted, 'alert-success');
+    Session:;flash('message', $langApiTokenDeleted);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($app->getConfigUrl());
 }
 
@@ -89,11 +90,14 @@ if (isset($_POST['submit'])) {
             $token, $_POST['name'], $_POST['comments'], $_POST['remote_url'], $token_expires_at);
     }
     if (isset($result_insert) or isset($result_update_new)) {
-        Session::Messages("$langAPITokenCreated <div style='margin-top: 15px;'><strong>$token</strong></div>", 'alert-success');
+        Session::flash('message', "$langAPITokenCreated <div style='margin-top: 15px;'><strong>$token</strong></div>");
+        Session::flash('alert-class', 'alert-success');
     } else if (isset($result_update)) {
-        Session::Messages("$langFaqEditSuccess", 'alert-success');
+        Session::flash('message', $langFaqEditSuccess);
+        Session::flash('alert-class', 'alert-success');
     } else {
-        Session::Messages($result, 'alert-danger');
+        Session::flash('message', $result);
+        Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page($app->getConfigUrl());
 }

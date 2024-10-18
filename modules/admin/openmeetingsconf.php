@@ -112,7 +112,6 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         $id = $_GET['delete_server'];
         Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
         // Display result message
-        //Session::Messages($langFileUpdatedSuccess, 'alert-success');
         Session::flash('message',$langFileUpdatedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/bbbmoduleconf.php');
@@ -166,7 +165,6 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         }
     }
     // Display result message
-    //Session::Messages($langFileUpdatedSuccess,"alert-success");
     Session::flash('message',$langFileUpdatedSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/openmeetingsconf.php");

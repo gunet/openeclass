@@ -75,7 +75,8 @@ class Repository
                 ]
             );
         } catch (ClientException $e) {
-            Session::Messages($langZoomCreateMeetingError);
+            Session::flash('message', $langZoomCreateMeetingError);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
@@ -99,7 +100,8 @@ class Repository
         }
         $dbToken = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = 'zoomApiAccessToken'");
         if (empty($dbToken->value)) {
-            Session::Messages($langZoomAccessTokenError);
+            Session::flash('message', $langZoomAccessTokenError);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
         return $dbToken->value;
@@ -137,7 +139,8 @@ class Repository
                 ]
             );
         } catch (Exception|GuzzleException $e) {
-            Session::Messages($langZoomAccessTokenError);
+            Session::flash('message', $langZoomAccessTokenError);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
 
@@ -157,7 +160,8 @@ class Repository
         try {
             Database::get()->querySingle($query);
         } catch (Exception $e) {
-            Session::Messages($langZoomAccessTokenError);
+            Session::flash('message', $langZoomAccessTokenError);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page($_SERVER['HTTP_REFERER'], true);
         }
     }

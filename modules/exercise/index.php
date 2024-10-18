@@ -176,7 +176,6 @@ if ($is_editor) {
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                     } else {
-                        // Session::Messages($langResourceBelongsToCert, "alert-warning");
                         Session::flash('message', $langResourceBelongsToCert);
                         Session::flash('alert-class', 'alert-warning');
                     }

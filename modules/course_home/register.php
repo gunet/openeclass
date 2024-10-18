@@ -48,7 +48,6 @@ if (isset($_POST['register'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($course->visible == COURSE_REGISTRATION or $course->visible == COURSE_OPEN) {
         if ($course->password !== '' and !(isset($_POST['password']) and $course->password == $_POST['password'])) {
-            //Session::Messages($langWrongPassCourse, 'alert-danger');
             Session::flash('message',$langWrongPassCourse);
             Session::flash('alert-class', 'alert-danger');
             if ($_POST['register'] == 'from-home') {
@@ -78,7 +77,6 @@ if (isset($_POST['register'])) {
             }
 
             if (!$completion) {
-                //Session::Messages($langPrerequisitesNotComplete, 'alert-danger');
                 Session::flash('message',$langPrerequisitesNotComplete);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("courses/$course_code/");
@@ -88,7 +86,6 @@ if (isset($_POST['register'])) {
         Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`, `document_timestamp`)
             VALUES (?d, ?d, " . USER_STUDENT . ", NOW(), NOW())", $course_id, $uid);
         Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => USER_STUDENT));
-        //Session::Messages($langNotifyRegUser1, 'alert-success');
         Session::flash('message',$langNotifyRegUser1);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("courses/$course_code/");

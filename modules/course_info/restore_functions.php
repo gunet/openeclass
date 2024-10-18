@@ -49,7 +49,6 @@ function unpack_zip_inner($zipfile, $clone) {
 
     $zip = new ZipArchive;
     if (!$zip->open($zipfile) or !$zip->extractTo($destdir)) {
-        //Session::Messages($langGeneralError, 'alert-danger');
         Session::flash('message',$langGeneralError);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/course_info/restore_course.php');

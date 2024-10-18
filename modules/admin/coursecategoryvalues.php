@@ -111,16 +111,14 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            //Session::Messages($langEmptyNodeName, 'alert alert-danger');
-            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('message',$langEmptyNodeName);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=add');
         } else {
             // OK Create the new course category value
             $q = "INSERT INTO category_value (category_id, name, ordering, active) VALUES (?d, ?s, ?d, ?d)";
             Database::get()->query($q, $catId, $name, $ordering, $active);
-            //Session::Messages($langAddSuccess, 'alert-success');
-            Session::flash('message',$langAddSuccess); 
+            Session::flash('message',$langAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
@@ -140,8 +138,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
         // The category value can be deleted
         Database::get()->query("DELETE FROM course_category WHERE category_value_id = ?d", $id);
         Database::get()->query("DELETE FROM category_value WHERE id = ?d", $id);
-        //Session::Messages($langCourseCategoryValueErase, 'alert-success');
-        Session::flash('message',$langCourseCategoryValueErase); 
+        Session::flash('message',$langCourseCategoryValueErase);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
     }
@@ -156,16 +153,14 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            //Session::Messages($langEmptyNodeName, 'alert-danger');
-            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('message',$langEmptyNodeName);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=edit&id=' . $id);
         } else {
             // OK Update the course category value
             $q = "UPDATE category_value SET name = ?s, ordering = ?d, active = ?d WHERE id = ?d";
             Database::get()->query($q, $name, $ordering, $active, $id);
-            //Session::Messages($langEditCourseCategoryValueSuccess, 'alert-success');
-            Session::flash('message',$langEditCourseCategoryValueSuccess); 
+            Session::flash('message',$langEditCourseCategoryValueSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }

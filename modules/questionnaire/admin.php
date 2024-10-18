@@ -60,7 +60,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     if (isset($_POST['toReorder'])) {
         reorder_table('poll_question', 'pid', $pid, $_POST['toReorder'],
-            isset($_POST['prevReorder'])? $_POST['prevReorder']: null, 'pqid', 'q_position');
+            $_POST['prevReorder'] ?? null, 'pqid', 'q_position');
     }
     exit;
 }
@@ -533,7 +533,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
-                        <input type='radio' id='general_type' name='survey_type' value='0'".($PollSurveyType == POLL_NORMAL ? " checked" : "").">
+                        <input type='radio' id='general_type' name='survey_type' value='0'".(($PollSurveyType == POLL_NORMAL || isset($_GET['newPoll'])) ? " checked" : "").">
                         <span>$langGeneralSurvey </span>
                       </label>
                     </div>

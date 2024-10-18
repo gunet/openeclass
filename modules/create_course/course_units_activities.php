@@ -87,18 +87,21 @@ if (!isset($_POST['final_submit'])) {
             $validationFailed = false;
 
             if (empty($_SESSION['goals']) or $_SESSION['goals'][0] == "") {
-                Session::Messages($langEmptyGoal);
+                Session::flash('message', $langEmptyGoal);
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
             if (empty($_SESSION['units']) or $_SESSION['goals'][0] == "") {
-                Session::Messages($langEmptyUnit);
+                Session::flash('message', $langEmptyUnit);
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
 
             if (empty($_SESSION['stunum'])||empty($_SESSION['lectnum'])||empty($_SESSION['lecthours'])||empty($_SESSION['homehours'])) {
-                Session::Messages($langFieldsMissing);
+                Session::flash('message', $langFieldsMissing);
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
 
             }
@@ -506,12 +509,14 @@ if (!isset($_POST['final_submit'])) {
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
             if (count($_SESSION['code']) < 1 || empty($_SESSION['code'][0])) {
-                Session::Messages($langEmptyAddNode);
+                Session::flash('message', $langEmptyAddNode);
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
             if (empty($_SESSION['title'])) {
-                Session::Messages($langFieldsMissing);
+                Session::flash('message', $langFieldsMissing);
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
@@ -543,7 +548,8 @@ if (!isset($_POST['final_submit'])) {
 
             // create course directories
             if (!create_course_dirs($code)) {
-                Session::Messages($langGeneralError, 'alert-danger');
+                Session::flash('message', $langGeneralError);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/create_course/create_course.php');
             }
 
@@ -620,7 +626,8 @@ if (!isset($_POST['final_submit'])) {
 
             $new_course_id = $result->lastInsertID;
             if (!$new_course_id) {
-                Session::Messages($langGeneralError);
+                Session::flash('message', $langGeneralError);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/create_course/create_course.php');
             }
 

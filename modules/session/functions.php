@@ -386,7 +386,7 @@ function delete_session($sid = 0){
 function show_session_resources($sid)
 {
 
-    global $max_resource_id, $is_simple_user, 
+    global $max_resource_id, $is_simple_user,
            $head_content, $langDownload, $langPrint, $langCancel,
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code, $langNoAvailableSessionRecourses;
 
@@ -2968,7 +2968,6 @@ function insert_session_prerequisite_unit($session_id, $prereq_session_id) {
 
     if ($is_consultant) { // Auth check
         if ($prereq_session_id < 0) {
-            //Session::Messages($langNewSessionPrerequisiteFailInvalid);
             Session::flash('message',$langNewSessionPrerequisiteFailInvalid);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
@@ -2977,7 +2976,6 @@ function insert_session_prerequisite_unit($session_id, $prereq_session_id) {
         $prereqHasCompletion = prereq_session_has_completion_enabled($prereq_session_id);
 
         if ( !$prereqHasCompletion ) {
-            //Session::Messages($langSessionHasNotCompletionEnabled);
             Session::flash('message',$langSessionHasNotCompletionEnabled);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
@@ -2991,19 +2989,16 @@ function insert_session_prerequisite_unit($session_id, $prereq_session_id) {
                                  AND up.prerequisite_session = ?d", $course_id, $session_id, $prereq_session_id);
 
         if (count($result) > 0) {
-            //Session::Messages($langNewSessionPrerequisiteFailAlreadyIn, 'alert-danger');
             Session::flash('message',$langNewSessionPrerequisiteFailAlreadyIn);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
         }
 
-        //Session::Messages($langNewUnitPrerequisiteSuccess, 'alert-success');
         Session::flash('message',$langNewUnitPrerequisiteSuccess);
         Session::flash('alert-class', 'alert-success');
         Database::get()->query("INSERT INTO session_prerequisite (course_id, session_id, prerequisite_session)
                                                 VALUES (?d, ?d, ?d)", $course_id, $session_id, $prereq_session_id);
     } else {
-        //Session::Messages($langResultsFailed);
         Session::flash('message',$langResultsFailed);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/session/complete.php?course=' . $course_code . '&manage=1&session=' . $session_id);
@@ -3589,7 +3584,7 @@ function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable
     require_once 'include/sendMail.inc.php';
 
     global $course_id, $course_code, $langSubmittedUploadedFile,
-            $langUploadDeliverableFromUser, $langStudent, $langProblem, 
+            $langUploadDeliverableFromUser, $langStudent, $langProblem,
             $langManager, $siteName, $langEmail, $langAboutDeliverable, $langTel;
 
     $consultantInfo = Database::get()->querySingle("SELECT email,verified_mail FROM user 
@@ -3649,7 +3644,7 @@ function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable
         $emailPlainBody = html2text($emailbody);
 
         $emailUser = $consultantInfo->email;
-        
+
         send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
 
     }
@@ -3661,8 +3656,8 @@ function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable
  * @param integer $sid
  */
 function reference_creation_by_uploaded_file($sid){
-    
-    global $webDir, $course_id, $is_consultant, $langEmptyUploadFile, $course_code, 
+
+    global $webDir, $course_id, $is_consultant, $langEmptyUploadFile, $course_code,
             $langFileExists, $uid, $language, $langDownloadEnd;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -3705,7 +3700,7 @@ function reference_creation_by_uploaded_file($sid){
         }
 
         $spathfile = "$webDir/courses/$course_code/session/session_$sid/$safe_session_filename";
-        
+
         if (move_uploaded_file($_FILES['file_reference_upload']['tmp_name'], $spathfile)) {
             @chmod($spathfile, 0644);
             $session_real_filename = $_FILES['file_reference_upload']['name'];
@@ -3761,12 +3756,12 @@ function reference_creation_by_uploaded_file($sid){
 
         Session::flash('message',$langDownloadEnd);
         Session::flash('alert-class', 'alert-success');
-        
+
     }else {
         Session::flash('message',$langDownloadNotEnd);
         Session::flash('alert-class', 'alert-danger');
     }
-    
+
     redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
 }
 
@@ -3777,7 +3772,7 @@ function reference_creation_by_uploaded_file($sid){
  */
 function reference_creation_by_fields($sid){
 
-    global $webDir, $course_id, $is_consultant, $langEmptyUploadFile, $course_code, 
+    global $webDir, $course_id, $is_consultant, $langEmptyUploadFile, $course_code,
             $langFileExists, $uid, $language, $langDownloadEnd, $langFieldsMissing;
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -3872,6 +3867,6 @@ function reference_creation_by_fields($sid){
 
     Session::flash('message',$langDownloadEnd);
     Session::flash('alert-class', 'alert-success');
-        
+
     redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
 }

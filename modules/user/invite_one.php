@@ -53,15 +53,12 @@ if (isset($_POST['submit'])) {
             $course_user = Database::get()->querySingle('SELECT * FROM course_user
                 WHERE user_id = ?d AND course_id = ?d', $user->id, $course_id);
             if ($course_user) {
-                //Session::Messages(sprintf("$langUserWithEmail <b>%s</b> $langAlreadyRegistered", q($_POST['email_form'])), 'alert-info');
                 Session::flash('message',sprintf("$langUserWithEmail <b>%s</b> $langAlreadyRegistered", q($_POST['email_form'])));
                 Session::flash('alert-class', 'alert-info');
             } else {
                 Database::get()->query('INSERT INTO course_user
                     SET user_id = ?d, course_id = ?d, status = ?d, reg_date = NOW(), document_timestamp = NOW()',
                     $user->id, $course_id, USER_STUDENT);
-                // Session::Messages(sprintf("$langUserWithEmail <b>%s</b> (%s) $langAlreadyAccount",
-                //     q($_POST['email_form']), q("{$user->surname} {$user->givenname}")), 'alert-info');
                     Session::flash('message',sprintf("$langUserWithEmail <b>%s</b> (%s) $langAlreadyAccount",
                     q($_POST['email_form']), q("{$user->surname} {$user->givenname}")));
                     Session::flash('alert-class', 'alert-info');
@@ -113,7 +110,6 @@ if (isset($_POST['submit'])) {
             $email_subject = $default_email_subject;
         }
         send_invitation($email, $token, $email_subject, $email_body);
-        //Session::Messages($langCourseInvitationSent, 'alert-success');
         Session::flash('message',$langCourseInvitationSent);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/user/invite_one.php?course=' . $course_code);

@@ -45,7 +45,7 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langL
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
 $toolName = $langInsertMyDescToolName;
 
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -104,7 +104,7 @@ if (!$thisDocumentModule) {
         $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
 			FROM `lp_rel_learnPath_module`
 			WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
-        
+
         // finally : insert in learning path
         Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 			(`learnPath_id`, `module_id`, `rank`, `lock`, `visible`, `specificComment`)
@@ -112,8 +112,7 @@ if (!$thisDocumentModule) {
     }
 }
 
-//Session::Messages($langInsertedAsModule, 'alert-info');
-Session::flash('message',$langInsertedAsModule); 
+Session::flash('message',$langInsertedAsModule);
 Session::flash('alert-class', 'alert-info');
 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 

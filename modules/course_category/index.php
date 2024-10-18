@@ -61,7 +61,6 @@ if (isset($_POST['submit'])) {
         $catIndex++;
     }
 
-    //Session::Messages($langRegDone, 'alert-success');
     Session::flash('message',$langRegDone);
     Session::flash('alert-class', 'alert-success');
 }

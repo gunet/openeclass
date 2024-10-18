@@ -98,14 +98,12 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
         send_invitation($email, $token, $email_subject, $email_body);
         $count++;
     }
-    //Session::Messages("$langCourseInvitationsSent $count $langUsersS!", 'alert-success');
     Session::flash('message',"$langCourseInvitationsSent $count $langUsersS!");
     Session::flash('alert-class', 'alert-success');
     if ($errorLines) {
         $errorList = '<ul>' . implode('', array_map(function ($item) {
             return '<li>' . q(implode(' ', $item)) . '</li>';
         }, $errorLines)) . '</ul>';
-        //Session::Messages("$langErrorInserting" .$errorList, 'alert-danger');
         Session::flash('message',"$langErrorInserting" .$errorList);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -113,7 +111,6 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
         $existingList = '<ul>' . implode('', array_map(function ($item) {
             return '<li>' . q(implode(' ', $item)) . '</li>';
         }, $existingLines)) . '</ul>';
-        //Session::Messages("$langAlreadyRegisteredUsers:" .$existingList, 'alert-success');
         Session::flash('message',"$langAlreadyRegisteredUsers:" .$existingList);
         Session::flash('alert-class', 'alert-success');
     }

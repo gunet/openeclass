@@ -108,8 +108,7 @@ if ($is_editor) {
                                      course_id = ?d", $id, $course_id);
                 $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . q(sprintf($langEBookDeleted, $title)) . "</span></div>";
             } else {
-                //Session::Messages($langResourceBelongsToCert, "alert-warning");
-                Session::flash('message',$langResourceBelongsToCert); 
+                Session::flash('message',$langResourceBelongsToCert);
                 Session::flash('alert-class', 'alert-warning');
             }
         }
@@ -181,8 +180,7 @@ if ($is_editor) {
                                  WHERE course_id = ?d AND
                                        id = ?d", $course_id, $_GET['vis']);
         } else {
-            //Session::Messages($langResourceBelongsToCert, "alert-warning");
-            Session::flash('message',$langResourceBelongsToCert); 
+            Session::flash('message',$langResourceBelongsToCert);
             Session::flash('alert-class', 'alert-warning');
         }
     }

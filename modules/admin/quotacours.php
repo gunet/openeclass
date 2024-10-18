@@ -61,7 +61,6 @@ if (isset($_POST['submit'])) {
             WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
-       // Session::Messages($langQuotaSuccess, 'alert-success');
         Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
     }

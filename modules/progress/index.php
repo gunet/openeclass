@@ -273,7 +273,8 @@ if ($is_editor) {
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_attendance'])) {
         add_attendance_to_certificate($element, $element_id);
-        Session::Messages("$langQuotaSuccess", 'alert-success');
+        Session::flash('message', $langQuotaSuccess);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
     // actions
@@ -347,7 +348,8 @@ if ($is_editor) {
         $display = FALSE;
     } elseif (isset($_GET['refresh'])) {
         refresh_user_progress($element, $element_id);
-        Session::Messages("$langRefreshProgressResults", "alert-success");
+        Session::flash('message', $langRefreshProgressResults);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id&progressall=true");
     }
 } else if ($is_course_reviewer) {

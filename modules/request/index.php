@@ -82,7 +82,6 @@ if (isset($_GET['id'])) {
                 $_POST['assignTo'] = [];
             }
             if (array_diff($_POST['assignTo'], $course_user_ids)) {
-                //Session::Messages($langGeneralError, 'alert-danger');
                 Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
@@ -114,7 +113,6 @@ if (isset($_GET['id'])) {
                 $_POST['watchers'] = [];
             }
             if (array_diff($_POST['watchers'], $course_user_ids)) {
-                //Session::Messages($langGeneralError, 'alert-danger');
                 Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
@@ -169,7 +167,6 @@ if (isset($_GET['id'])) {
             $workPath = $webDir . "/courses/" . $course_code . "/request";
             $filePath = safe_filename();
             if (!(is_dir($workPath) or make_dir($workPath))) {
-                //Session::Messages($langGeneralError, 'alert-danger');
                 Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
@@ -177,7 +174,6 @@ if (isset($_GET['id'])) {
             if (move_uploaded_file($_FILES['requestFile']['tmp_name'], "$workPath/$filePath")) {
                 $fileName = $_FILES['requestFile']['name'];
             } else {
-                //Session::Messages($langGeneralError, 'alert-danger');
                 Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);

@@ -101,7 +101,6 @@ function create_course_dirs($code) {
         "$base/scormPackages", "video/$code"];
     foreach ($dirs as $dir) {
         if (!make_dir($dir)) {
-            //Session::Messages(sprintf($langDirectoryCreateError, $dir));
             Session::flash('message',sprintf($langDirectoryCreateError, $dir));
             Session::flash('alert-class', 'alert-warning');
             return false;
@@ -126,7 +125,7 @@ function create_modules($cid) {
     }else{
         $module_ids[1] = default_modules();
     }
-    
+
     $module_ids[0] = array_diff(array_keys($modules), $module_ids[1]);
 
     $args = $placeholders = array();
@@ -171,5 +170,5 @@ function default_modules_collaboration() {
     } else {
         return $default_module_defaults_collab;
     }
-    
+
 }

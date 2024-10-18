@@ -52,13 +52,11 @@ if (isset($_POST['submit'])) {
     $sql = Database::get()->query("UPDATE course SET visible=?d WHERE code=?s", $_POST['formvisible'], $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
-        //Session::Messages($langCourseStatusChangedSuccess, 'alert-success');
         Session::flash('message',$langCourseStatusChangedSuccess);
         Session::flash('alert-class', 'alert-success');
     }
     // Nothing updated
     else {
-        //Session::Messages($langNoChangeHappened, 'alert-warning');
         Session::flash('message',$langNoChangeHappened);
         Session::flash('alert-class', 'alert-warning');
     }

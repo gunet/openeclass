@@ -256,12 +256,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     required = ?d,
                                     data = ?s
                                     WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $data, $fieldid);
-            //Session::Messages($langEPFFieldEditSuccess, 'alert-success');
             Session::flash('message',$langEPFFieldEditSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/eportfolio_fields.php");
         } else {
-            //Session::Messages($langEPFEditUniqueShortnameError, 'alert-danger');
             Session::flash('message',$langEPFEditUniqueShortnameError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -300,7 +298,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
                             WHERE eportfolio_fields.id = ?d", $fieldid);
     //delete field
     Database::get()->query("DELETE FROM eportfolio_fields WHERE id = ?d", $fieldid);
-    //Session::Messages($langEPFFieldDelSuccess, 'alert-success');
     Session::flash('message',$langEPFFieldDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -398,7 +395,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
     if (isset($_POST['cat_id'])) { //save edited category
         $catid = intval(getDirectReference($_POST['cat_id']));
         Database::get()->query("UPDATE eportfolio_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
-        //Session::Messages($langEPFCatModSuccess, 'alert-success');
         Session::flash('message',$langEPFCatModSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -411,7 +407,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $sortorder = 0;
         }
         Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", $_POST['cat_name'], $sortorder);
-        //Session::Messages($langEPFCatAddedSuccess, 'alert-success');
         Session::flash('message',$langEPFCatAddedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/eportfolio_fields.php");

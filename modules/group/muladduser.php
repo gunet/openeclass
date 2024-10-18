@@ -106,12 +106,8 @@ if (isset($_POST['submit'])) {
         }
     }
     if ($errors) {
-        //Session::Messages($langUsersNotAdded, 'alert-warning');
-        Session::flash('message', $langUsersNotAdded);
+        Session::flash('message', "$langUsersNotAdded $errors");
         Session::flash('alert-class', 'alert-warning');
-        //Session::Messages($errors, 'alert-info');
-        Session::flash('message', $errors);
-        Session::flash('alert-class', 'alert-info');
         Session::flashPost();
         redirect_to_home_page("modules/group/muladduser.php?course=$course_code&group_id=$group_id");
     } else {
@@ -123,7 +119,6 @@ if (isset($_POST['submit'])) {
         Database::get()->query('INSERT IGNORE INTO group_members
             (group_id, user_id, is_tutor, description) VALUES ' . $placeholders,
             $user_group_data);
-        //Session::Messages($langUsersAddedToGroup, 'alert-success');
         Session::flash('message', $langUsersAddedToGroup);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");

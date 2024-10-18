@@ -143,7 +143,6 @@ if (isset($_GET['id'])) {
                 $request->id, $uid, $request->state, $request->state,
                 $comment);
 
-            //Session::Messages(trans('langFaqEditSuccess'), 'alert-success');
             Session::flash('message',trans('langFaqEditSuccess'));
             Session::flash('alert-class', 'alert-success');
 

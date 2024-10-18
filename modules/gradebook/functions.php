@@ -284,7 +284,8 @@ function delete_gradebook($gradebook_id) {
     Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
     $action = Database::get()->query("DELETE FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id);
     if ($action) {
-        Session::Messages("$langGradebookDeleted", "alert-success");
+        Session::flash('message', $langGradebookDeleted);
+        Session::flash('alert-class', 'alert-success');
     }
 }
 
@@ -301,9 +302,11 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
     $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
     Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id);
     if ($delAct) {
-        Session::Messages("$langGradebookDel", "alert-success");
+        Session::flash('message', $langGradebookDel);
+        Session::flash('alert-class', 'alert-success');
     } else {
-        Session::Messages("$langGradebookDelFailure", "alert-danger");
+        Session::flash('message', $langGradebookDelFailure);
+        Session::flash('alert-class', 'alert-danger');
     }
 }
 
@@ -319,7 +322,8 @@ function delete_gradebook_user($gradebook_id, $userid) {
     Database::get()->query("DELETE FROM gradebook_book WHERE uid = ?d AND gradebook_activity_id IN
                                 (SELECT id FROM gradebook_activities WHERE gradebook_id = ?d)", $userid, $gradebook_id);
     Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d AND gradebook_id = ?d", $userid, $gradebook_id);
-    Session::Messages($langGradebookEdit,"alert-success");
+    Session::flash('message', $langGradebookEdit);
+    Session::flash('alert-class', 'alert-success');
 }
 
 /**
@@ -1767,7 +1771,8 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                                         ON DUPLICATE KEY UPDATE grade = ?f",
                     $user_id, $activity_id, $grade/$gradebook_range, '', $grade/$gradebook_range);
             }
-            Session::Messages($langGradesImported, 'alert-success');
+            Session::flash('message', $langGradesImported);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "&ins=" . getIndirectReference($activity_id));
         } else {
             $message = $langImportGradesError;
@@ -1793,7 +1798,8 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                         <tbody>$errorText</tbody>
                     </table></p>";
             }
-            Session::Messages($message, 'alert-danger');
+            Session::flash('message', $message);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "&ins=" . getIndirectReference($activity_id));
         }
     } else { // import grades form

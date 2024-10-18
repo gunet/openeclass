@@ -786,7 +786,6 @@ function hybridauth_login() {
     $warning = '';
 
     if (isset($_GET['error'])) {
-        //Session::Messages(q(trim(strip_tags($_GET['error']))));
         Session::flash('message',q(trim(strip_tags($_GET['error']))));
         Session::flash('alert-class', 'alert-warning');
     }
@@ -833,14 +832,32 @@ function hybridauth_login() {
                 // Display the received error,
                 // to know more please refer to Exceptions handling section on the user guide
                 switch($e->getCode()) {
-                    case 0: Session::Messages($langProviderError1); break;
-                    case 1: Session::Messages($langProviderError2); break;
-                    case 2: Session::Messages($langProviderError3); break;
-                    case 3: Session::Messages($langProviderError4); break;
-                    case 4: Session::Messages($langProviderError5); break;
-                    case 5: Session::Messages($langProviderError6); break;
-                    case 6: Session::Messages($langProviderError7); $adapter->disconnect(); break;
-                    case 7: Session::Messages($langProviderError8); $adapter->disconnect();; break;
+                    case 0: Session::flash('message', $e->getMessage() . "$langProviderError1");
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    case 1: Session::flash('message', $e->getMessage() . "$langProviderError2");
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    case 2: Session::flash('message', $e->getMessage() . "$langProviderError3");
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    case 3: Session::flash('message', $e->getMessage() . "$langProviderError4");
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    case 4: Session::flash('message', $e->getMessage() . "$langProviderError5");
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    case 5: Session::flash('message', $e->getMessage() . "$langProviderError6");
+                        Session::flash('alert-class', 'alert-danger');
+                        break;
+                    case 6: Session::flash('message', $e->getMessage() . "$langProviderError7");
+                        Session::flash('alert-class', 'alert-danger');
+                        $adapter->logout();
+                        break;
+                    case 7: Session::flash('message', $e->getMessage() . "$langProviderError8");
+                        Session::flash('alert-class', 'alert-danger');
+                        $adapter->logout();
+                        break;
                 }
 
                 // debug messages for hybridauth errors
@@ -1643,7 +1660,6 @@ function update_shibboleth_endpoint($settings) {
     $path = $webDir . '/secure';
     if (!file_exists($path)) {
         if (!make_dir($path)) {
-            //Session::Messages("Error: mkdir($path)", 'alert-danger');
             Session::flash('message',"Error: mkdir($path)");
             Session::flash('alert-class', 'alert-danger');
             return false;
@@ -1671,8 +1687,6 @@ if (isset($_GET["reg"])) {
 ';
     if ($f = fopen($indexfile, 'w')) {
         if (!fwrite($f, $filecontents)) {
-            // Session::Messages("Error: write($indexfile)<pre>" .
-            //     q($filecontents) . '</pre>', 'alert-danger');
                 Session::flash('message',"Error: write($indexfile)<pre>" .
                 q($filecontents) . '</pre>');
             Session::flash('alert-class', 'alert-danger');
@@ -1680,8 +1694,6 @@ if (isset($_GET["reg"])) {
         }
         fclose($f);
     } else {
-        // Session::Messages("Error: open($indexfile)<pre>" .
-        //     q($filecontents) . '</pre>', 'alert-danger');
             Session::flash('message',"Error: open($indexfile)<pre>" .
             q($filecontents) . '</pre>');
         Session::flash('alert-class', 'alert-danger');
@@ -1691,7 +1703,6 @@ if (isset($_GET["reg"])) {
     // Remove obsolete secure/index_reg.php
     $indexregfile = $path . '/index_reg.php';
     if (file_exists($indexregfile) and !unlink($indexregfile)) {
-        //Session::Messages("Warning: unable to delete obsolete $indexregfile", 'alert-warning');
         Session::flash('message',"Warning: unable to delete obsolete $indexregfile");
         Session::flash('alert-class', 'alert-warning');
     }
@@ -1727,7 +1738,6 @@ function deny_access() {
         foreach (array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
         }
-        //Session::Messages($langRegistrationDenied, 'alert-warning');
         Session::flash('message',$langRegistrationDenied);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page();

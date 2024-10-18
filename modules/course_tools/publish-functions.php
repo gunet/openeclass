@@ -360,7 +360,6 @@ function disable_publish_ltiapp($id) {
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE course_lti_publish set enabled = 0 WHERE id = ?d", $id);
-    //Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
     Session::flash('message',$langLTIAppUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
@@ -370,7 +369,6 @@ function enable_publish_ltiapp($id) {
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE course_lti_publish SET enabled = 1 WHERE id = ?d", $id);
-    //Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
     Session::flash('message',$langLTIAppUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/course_tools/index.php?course=$course_code");

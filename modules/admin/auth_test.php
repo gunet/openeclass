@@ -97,21 +97,36 @@ if ($auth == 7) { // CAS
         $hybridauth = new Hybrid_Auth($config);
         $adapter = $hybridauth->authenticate($provider);
         $user_data = $adapter->getUserProfile();
-        Session::flash('message',$langConnYes);
-        Session::flash('alert-class', 'alert-success');
-        Session::flash('message',"<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
+        Session::flash('message',"$langConnYes <p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
         Session::flash('alert-class', 'alert-success');
     } catch (Exception $e) {
-        Session::Messages($e->getMessage(), 'alert-danger');
         switch($e->getCode()) {
-            case 0: Session::Messages(trans('langProviderError1')); break;
-            case 1: Session::Messages(trans('langProviderError2')); break;
-            case 2: Session::Messages(trans('langProviderError3')); break;
-            case 3: Session::Messages(trans('langProviderError4')); break;
-            case 4: Session::Messages(trans('langProviderError5')); break;
-            case 5: Session::Messages(trans('langProviderError6')); break;
-            case 6: Session::Messages(trans('langProviderError7')); $adapter->logout(); break;
-            case 7: Session::Messages(trans('langProviderError8')); $adapter->logout(); break;
+            case 0: Session::flash('message', $e->getMessage() . "$langProviderError1");
+                    Session::flash('alert-class', 'alert-danger');
+                    break;
+            case 1: Session::flash('message', $e->getMessage() . "$langProviderError2");
+                    Session::flash('alert-class', 'alert-danger');
+                    break;
+            case 2: Session::flash('message', $e->getMessage() . "$langProviderError3");
+                    Session::flash('alert-class', 'alert-danger');
+                    break;
+            case 3: Session::flash('message', $e->getMessage() . "$langProviderError4");
+                    Session::flash('alert-class', 'alert-danger');
+                    break;
+            case 4: Session::flash('message', $e->getMessage() . "$langProviderError5");
+                    Session::flash('alert-class', 'alert-danger');
+                    break;
+            case 5: Session::flash('message', $e->getMessage() . "$langProviderError6");
+                    Session::flash('alert-class', 'alert-danger');
+                    break;
+            case 6: Session::flash('message', $e->getMessage() . "$langProviderError7");
+                    Session::flash('alert-class', 'alert-danger');
+                    $adapter->logout();
+                    break;
+            case 7: Session::flash('message', $e->getMessage() . "$langProviderError8");
+                    Session::flash('alert-class', 'alert-danger');
+                    $adapter->logout();
+                    break;
         }
     }
 }

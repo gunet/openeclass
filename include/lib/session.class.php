@@ -161,7 +161,7 @@ class Session {
         if (!isset($_SESSION['flash_new'])) {
             $_SESSION['flash_new'] = array();
         }
-        array_push($_SESSION['flash_new'], $key);
+        $_SESSION['flash_new'][] = $key;
     }
     public static function has($key) {
         if (isset($_SESSION[$key]['data'])) {
@@ -179,7 +179,7 @@ class Session {
         }
 
         if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
-        array_push($_SESSION['flash_new'], 'messages');
+        $_SESSION['flash_new'][] = 'messages';
         return new self;
     }
     // Flashes posted variables
@@ -199,9 +199,9 @@ class Session {
         if (!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
         $keys = array_unique($keys);
         foreach ($keys as $key) {
-            array_push($_SESSION['flash_new'], $key);
+            $_SESSION['flash_new'][] = $key;
         }
-        array_push($_SESSION['flash_new'], 'messages');
+        $_SESSION['flash_new'][] = 'messages';
         return new self;
     }
     public static function get($key) {

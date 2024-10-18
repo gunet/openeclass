@@ -412,7 +412,6 @@ function add_course_completion_to_certificate($element_id) {
         }
     }
 
-    //Session::Messages("$langQuotaSuccess", 'alert-success');
     Session::flash('message',$langQuotaSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$element_id");
@@ -467,7 +466,8 @@ function add_unit_completion_to_certificate($element_id, $unit_id) {
         }
     }
 
-    Session::Messages("$langQuotaSuccess", 'alert-success');
+    Session::flash('message', $langQuotaSuccess);
+    Session::flash('alert-class', 'alert-success');
     $localhostUrl = localhostUrl();
 
     redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");

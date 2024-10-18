@@ -180,14 +180,12 @@ if ($is_editor) {
         Database::get()->query("UPDATE attendance SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['attendance_id'], $course_id);
         $log_details = array('action' => 'change attendance visibility', 'id' =>$_GET['attendance_id'], 'title' => get_attendance_title($_GET['attendance_id']), 'visibility' => $_GET['vis']);
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-        //Session::Messages($langGlossaryUpdated, 'alert-success');
         Session::flash('message',$langGlossaryUpdated);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
     if (isset($_GET['dup'])) {
         clone_attendance($attendance_id);
-        //Session::Messages($langCopySuccess, 'alert-success');
         Session::flash('message',$langCopySuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
@@ -462,7 +460,6 @@ if ($is_editor) {
         $actt = add_attendance_activity($attendance_id, $id, $type);
         $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add activity', 'activity_title' => $actt);
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-        //Session::Messages("$langGradebookSucInsert","alert-success");
         Session::flash('message',$langGradebookSucInsert);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");

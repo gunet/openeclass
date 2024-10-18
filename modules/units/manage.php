@@ -69,7 +69,6 @@ if ($is_editor) {
         $currentUnit = Database::get()->querySingle("SELECT * FROM course_units 
                                                     WHERE course_id = ?d AND id = ?d", $course_id, $unit_id);
     } else {
-        //Session::Messages($langNoExercises);
         Session::flash('message',$langNoExercises);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
@@ -191,7 +190,8 @@ if ($is_editor) {
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_lpduration'])) { // add learning path activity in certificate
         add_lp_to_certificate($element, $element_id, LearningPathDurationEvent::ACTIVITY);
-        Session::Messages("$langQuotaSuccess", 'alert-success');
+        Session::flash('message',"$langQuotaSuccess");
+        Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_poll'])) { // add poll activity in certificate
         add_poll_to_certificate($element, $element_id);

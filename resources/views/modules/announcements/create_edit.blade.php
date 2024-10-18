@@ -7,9 +7,6 @@
     $(function () {
         var langEmptyGroupName = '{{ js_escape(trans('langEmptyAnTitle')) }}';
 
-        //$('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
-        //$('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
-
         if($('input[name=startdate_active]').prop('checked')){
             $('input[name=startdate]').attr('disabled', false);
         }else{
