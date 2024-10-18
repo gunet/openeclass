@@ -39,7 +39,7 @@ function getUserCourseInfo($uid): string
            $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
-           $langThisCourseDescriptionIsEmpty, $langSyllabus, $langNotificationsExist,
+           $langThisCourseDescriptionIsEmpty, $langSyllabus,
            $langMyCollaborations, $langPreviewCollaboration, $langUnregCollaboration, $langNotEnrolledToCollaborations,
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty,
            $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage, $langClose;
@@ -591,7 +591,7 @@ function getUserCourses($uid)
                         FROM course JOIN course_user
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
                             AND course.is_collaborative = ?d
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, 0);
 
@@ -622,27 +622,13 @@ function getUserCollaborations($uid)
                         FROM course JOIN course_user
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
                             AND course.is_collaborative = ?d
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid,1);
 
     return $myCollaborations;
 }
 
-/**
- * @brief count student courses (except inactive)
- * @param $uid
- * @return void
- */
-function CountStudentCourses($uid) {
-    $total = Database::get()->querySingle("SELECT COUNT(*) AS total
-                FROM course JOIN course_user
-                    ON course.id = course_user.course_id
-                    AND course_user.user_id = ?d
-                    AND course.is_collaborative = ?d
-                    AND course.visible != " . COURSE_INACTIVE, $uid,0)->total;
-    return $total;
-}
 
 /**
  * @brief count student courses (except inactive)
@@ -664,12 +650,13 @@ function CountStudentCollaborations($uid) {
  * @param $uid
  * @return mixed
  */
-function CountTeacherCourses($uid) {
+function CountCourses($uid) {
     $total = Database::get()->querySingle("SELECT COUNT(*) AS total
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
-            AND course.is_collaborative = ?d", $uid,0)->total;
+            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
+            AND course.is_collaborative = ?d", $uid, 0)->total;
 
     return $total;
 }
