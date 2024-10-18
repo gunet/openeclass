@@ -13,15 +13,19 @@
             dataTablesDomParam: @if(get_config('show_always_collaboration')) '<"all_courses float-end px-0">frtip' @else '' @endif };
 
         $(function() {
+
             $('#consentModal').modal('show');
 
-            initialize_lesson_display();
+            var pages = parseInt("{{ $pages }}");
 
-            $('.all_courses').html("<div class='d-flex justify-content-end flex-wrap gap-2'>" +
-                "<a class='btn showCoursesBars active' role='button' aria-label='{{ js_escape(trans('langShowCoursesInTable')) }}'>" +
+            initialize_lesson_display(pages);
+
+            $('.all_courses').html("<div class='d-flex justify-content-end align-items-center flex-wrap gap-2'>" +
+                "<a href='{{ $urlAppend }}main/portfolio.php?countPages=-1' class='btn submitAdminBtn submitAdminBtnAllCourses'>{{ js_escape(trans('langListAll')) }}</a>" +
+                "<a class='btn showCoursesBars active' role='button' data-bs-toggle='tooltip' data-bs-html='true' data-bs-placement='bottom' title='{{ js_escape(trans('langShowCoursesInTable')) }}' aria-label='{{ js_escape(trans('langShowCoursesInTable')) }}'>" +
                 "<i class='fa-solid fa-table-list'></i>" +
                 "</a>" +
-                "<a class='btn showCoursesPics' role='button' aria-label='{{ js_escape(trans('langShowCoursesInPics')) }}'><i class='fa-solid fa-table-cells-large'></i></a>" +
+                "<a class='btn showCoursesPics' role='button' data-bs-toggle='tooltip' data-bs-html='true' data-bs-placement='bottom' title='{{ js_escape(trans('langShowCoursesInPics')) }}' aria-label='{{ js_escape(trans('langShowCoursesInPics')) }}'><i class='fa-solid fa-table-cells-large'></i></a>" +
                 "</div>");
 
             jQuery('.panel_title').click(function()
@@ -587,10 +591,10 @@
                                             <div id="cources-pics">
 
                                                 <div class="d-flex justify-content-end flex-wrap gap-2 mb-4">
-                                                    <a class="btn showCoursesBars" role='button' aria-label="{{ js_escape(trans('langShowCoursesInTable')) }}">
+                                                    <a class="btn showCoursesBars" role='button' data-bs-toggle='tooltip' data-bs-html='true' data-bs-placement='bottom' title="{{ js_escape(trans('langShowCoursesInTable')) }}" aria-label="{{ js_escape(trans('langShowCoursesInTable')) }}">
                                                         <i class="fa-solid fa-table-list"></i>
                                                     </a>
-                                                    <a class="btn showCoursesPics" role='button' aria-label="{{ js_escape(trans('langShowCoursesInPics')) }}">
+                                                    <a class="btn showCoursesPics" role='button' data-bs-toggle='tooltip' data-bs-html='true' data-bs-placement='bottom' title="{{ js_escape(trans('langShowCoursesInPics')) }}" aria-label="{{ js_escape(trans('langShowCoursesInPics')) }}">
                                                         <i class="fa-solid fa-table-cells-large"></i>
                                                     </a>
                                                 </div>

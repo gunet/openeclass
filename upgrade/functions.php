@@ -3114,6 +3114,11 @@ function upgrade_to_4_0($tbl_options): void {
               FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
               FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
     }
+
+    if (!DBHelper::fieldExists('document', 'prevent_download')) {
+        Database::get()->query("ALTER TABLE document ADD `prevent_download` int(11) NOT NULL DEFAULT 0");
+    }
+
 }
 
 

@@ -58,6 +58,17 @@ doc_init();
 
 if ($is_editor) {
 
+    if(isset($_GET['prevent_pdf'])){
+        Database::get()->query("UPDATE document SET prevent_download = ?d WHERE id = ?d AND course_id = ?d", $_GET['prevent_pdf'], $_GET['pdf'], $course_id);
+        if($_GET['prevent_pdf'] > 0){
+            Session::flash('message', $langPreventEnablePDF);
+        }else{
+            Session::flash('message', $langPreventDisablePDF);
+        }
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page('modules/document/index.php?course=' . $course_code);
+    }
+
     if (isset($_GET['unzip'])) {
 
         $myFile = $basedir.$_GET['unzip'];
@@ -1390,7 +1401,7 @@ if ($curDirPath) {
 // Retrieve file info for current directory from database and disk
 $result = Database::get()->queryArray("SELECT id, path, filename,
         format, title, extra_path, course_id, date_modified,
-        public, visible, editable, copyrighted, comment, lock_user_id,
+        public, visible, editable, copyrighted, comment, lock_user_id, prevent_download,
         IF((title = '' OR title IS NULL), filename, title) AS sort_key
     FROM document
     WHERE $group_sql AND
@@ -1455,6 +1466,7 @@ foreach ($result as $row) {
         'editable' => $row->editable,
         'updated_message' => $updated_message,
         'controls' => $can_upload || ($user_upload && $row->lock_user_id == $uid),
+        'prevent_download' => $row->prevent_download,
         'document_id' => $row->id);
 
     if ($row->extra_path) {
@@ -1509,9 +1521,13 @@ foreach ($result as $row) {
                       'icon' => $row->visible ? 'fa-eye-slash' : 'fa-eye',
                       'show' => !$uploading_as_user),
                 array('title' => $row->public ? $langResourceAccessLock : $langResourceAccessUnlock,
-                'url' => "{$base_url}" . ($row->public ? 'limited=' : 'public=') . $row->path,
+                      'url' => "{$base_url}" . ($row->public ? 'limited=' : 'public=') . $row->path,
                       'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
                       'show' => !$uploading_as_user),
+                array('title' => $row->prevent_download ? $langDisablePreventDownloadPdf : $langEnablePreventDownloadPdf,
+                      'url' => "{$base_url}" . ($row->prevent_download ? 'prevent_pdf=0' : 'prevent_pdf=1') . "&amp;pdf={$row->id}",
+                      'icon' => !$row->prevent_download ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark',
+                      'show' => (get_config('enable_prevent_download_url') && $row->format == 'pdf')),
                 array('title' => $langDownload,
                       'url' => $download_url,
                       'icon' => 'fa-download'),
@@ -1525,7 +1541,12 @@ foreach ($result as $row) {
                       'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));
         } elseif ($uid or $row->format != '.dir') {
-            $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);
+            if(get_config('enable_prevent_download_url') && $row->format == 'pdf' && $row->prevent_download == 1){
+                $info['action_button'] = '';
+            }else{
+                $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);
+            }
+            
         }
     }
 

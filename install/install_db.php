@@ -435,7 +435,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
     `language` VARCHAR(16) NOT NULL DEFAULT 'el',
     `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
     `editable` TINYINT(4) NOT NULL DEFAULT 0,
-    `lock_user_id` INT(11) NOT NULL DEFAULT 0) $tbl_options");
+    `lock_user_id` INT(11) NOT NULL DEFAULT 0,
+    `prevent_download` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
     `course_id` INT(11) NOT NULL,
@@ -1645,6 +1646,7 @@ $default_config = array(
     'enable_search', 1,
     'enable_social_sharing_links', 1,
     'eportfolio_enable', 1,
+    'enable_prevent_download_url', 0,
     'personal_blog', 1,
     'personal_blog_commenting', 1,
     'personal_blog_rating', 1,

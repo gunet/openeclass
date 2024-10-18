@@ -185,4 +185,7 @@ if (get_config('show_collaboration')) {
     }
 }
 
+// For datatable by default
+$data['pages'] = $_GET['countPages'] ?? 10;
+
 view('portfolio.index', $data);
