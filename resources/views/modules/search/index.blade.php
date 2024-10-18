@@ -79,7 +79,7 @@
                                 <img class='form-image-modules' src='{!! get_form_image() !!}' alt='{{ trans('langImgFormsDes') }}'>
                             </div>
                         @endif
-                    </div>
+                   
         @if(isset($course_code))
         </div></div></div></div></div>
         @else
