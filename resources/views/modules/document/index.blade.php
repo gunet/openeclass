@@ -433,7 +433,7 @@
                                                             <a class="opacity-50" href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @endif
                                                     @else
-                                                        @if(get_config('enable_prevent_download_url') && $file->format == 'pdf')
+                                                        @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && !$is_editor)
                                                             @php $urlFile = urlencode($file->url); @endphp
                                                             <a href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={!! $urlFile !!}" target="_blank">{{ $file->filename }}</a>
                                                         @else
