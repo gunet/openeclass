@@ -2167,15 +2167,6 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
 /**
  * Display a textarea with name $name using the rich text editor
  * Apply automatically various fixes for the text to be edited
- * @global type $head_content
- * @global type $language
- * @global type $purifier
- * @global type $urlAppend
- * @global type $course_code
- * @global type $langPopUp
- * @global type $langPopUpFrame
- * @global type $is_editor
- * @global type $is_admin
  * @param type $name
  * @param type $rows
  * @param type $cols

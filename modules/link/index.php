@@ -73,7 +73,7 @@ $tinymce_params = $data['tinymce_params'] = '';
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . $_REQUEST['docsfilter'] : '';
-    $tinymce_params = $data['tinymce_params'] = '&amp;embedtype=tinymce' . $docsfilter;
+    $tinymce_params = $data['tinymce_params'] = '&embedtype=tinymce' . $docsfilter;
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 

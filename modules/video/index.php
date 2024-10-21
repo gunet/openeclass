@@ -51,7 +51,6 @@ $data = array();
 
 // common data for tinymce embedding, custom filtering, sorting, etc..
 $is_in_tinymce = $data['is_in_tinymce'] = isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce';
-$data['menuTypeID'] = $is_in_tinymce ? 5 : 2;
 list($filterv, $filterl, $compatiblePlugin) = isset($_REQUEST['docsfilter'])
         ? select_proper_filters($_REQUEST['docsfilter'])
         : array('WHERE true', 'WHERE true', true);
