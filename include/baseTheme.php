@@ -2325,7 +2325,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgHoveredSuccessButtonColor];
                 }
 
-                .btn.btn-danger:hover{
+                .btn.btn-success:hover{
                     border-color: $theme_options_styles[bgHoveredSuccessButtonColor];
                     background-color: $theme_options_styles[bgHoveredSuccessButtonColor];
                 }
@@ -2347,7 +2347,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clHoveredSuccessButtonColor];
                 }
 
-                .btn.btn-danger:hover{
+                .btn.btn-success:hover{
                     color: $theme_options_styles[clHoveredSuccessButtonColor];
                 }
 
