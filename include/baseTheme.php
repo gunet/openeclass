@@ -1345,6 +1345,10 @@ function view($view_file, $view_data = array()) {
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .mycourses-pagination .page-item .page-link {
+                    background-color:  $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -1422,6 +1426,10 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
+                .mycourses-pagination .page-item .page-link {
+                    color: $theme_options_styles[whiteButtonTextColor];
+                }
+
             ";
         }
 
@@ -1477,6 +1485,10 @@ function view($view_file, $view_data = array()) {
 
                 .showSettings{
                     border-color: $theme_options_styles[whiteButtonBorderTextColor] !important;
+                }
+
+                .mycourses-pagination .page-item .page-link {
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor];
                 }
 
             ";
@@ -1569,6 +1581,11 @@ function view($view_file, $view_data = array()) {
                 .pagination-glossary .page-item:hover .page-link{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .mycourses-pagination .page-item .page-link:hover,
+                .mycourses-pagination .page-item .page-link:focus {
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -1631,6 +1648,11 @@ function view($view_file, $view_data = array()) {
 
                 .pagination-glossary .page-item:hover .page-link{
                     border-color: $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .mycourses-pagination .page-item .page-link:hover,
+                .mycourses-pagination .page-item .page-link:focus {
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor];
                 }
 
             ";
@@ -1700,6 +1722,12 @@ function view($view_file, $view_data = array()) {
                 .pagination-glossary .page-item:hover .page-link{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
+
+                .mycourses-pagination .page-item .page-link:hover,
+                .mycourses-pagination .page-item .page-link:focus {
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
             ";
         }
 
@@ -1806,7 +1834,15 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor] ;
                 }
 
+                .pagination page-link.active{
+                    border-color: $theme_options_styles[buttonBgColor] ;
+                    background-color: $theme_options_styles[buttonBgColor] ;
+                }
 
+                .mycourses-pagination .page-item .page-link.active {
+                    border-color: $theme_options_styles[buttonBgColor] ;
+                    background-color: $theme_options_styles[buttonBgColor] ;
+                }
             ";
 
             $colorChevronLeftRight = "$theme_options_styles[buttonBgColor]";
@@ -1952,6 +1988,11 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
+                .mycourses-pagination .page-item .page-link.active:hover,
+                .mycourses-pagination .page-item .page-link.active:focus {
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                    border-color: $theme_options_styles[buttonHoverBgColor];
+                }
 
             ";
         }
@@ -2098,6 +2139,12 @@ function view($view_file, $view_data = array()) {
                 .btnScrollToTop:hover i,
                 .btnScrollToTop:focus i,
                 .btnScrollToTop:active i{
+                    color:$theme_options_styles[buttonTextColor];
+                }
+
+                .mycourses-pagination .page-item .page-link.active,
+                .mycourses-pagination .page-item .page-link.active:hover,
+                .mycourses-pagination .page-item .page-link.active:focus {
                     color:$theme_options_styles[buttonTextColor];
                 }
 
@@ -5415,57 +5462,13 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .mycourses-pagination .page-item{
-                    background-color: transparent !important;
-                }
-
-                .mycourses-pagination .page-item .page-link{
-                    color: $theme_options_styles[linkColor] !important;
-                    background-color: transparent !important;
-                }
-
-                .mycourses-pagination .page-item .page-link:hover{
-                    background-color: transparent !important;
-                    color: $theme_options_styles[linkColor] !important;
-                }
-                .mycourses-pagination .page-item .page-link.active:hover{
-                    background-color: transparent !important;
-                    color: $theme_options_styles[linkColor] !important;
-                }
-                .mycourses-pagination .page-item .page-link.active{
-                    background-color: transparent !important;
-                    color: $theme_options_styles[linkColor] !important;
-                }
-
-                .mycourses-pagination .page-item-pages{
-                    background-color: transparent !important;
-                }
-                .mycourses-pagination .page-item-previous{
-                    background-color: transparent !important;
-                }
-                .mycourses-pagination .page-item-next{
-                    background-color: transparent !important;
-                }
-
-                .mycourses-pagination .page-item-next .page-link:hover,
-                .mycourses-pagination .page-item-previous .page-link:hover{
-                    background-color: transparent !important;
-                }
-                .mycourses-pagination .page-item-previous .page-link:hover,
-                .mycourses-pagination .page-item-previous .page-link:hover{
-                    background-color: transparent !important;
-                }
-
-
                 .commentPress:hover{
                     color: $theme_options_styles[linkColor];
                 }
 
-
                 #cal-slide-content a.event-item {
                     color: $theme_options_styles[linkColor] !important;
                 }
-
 
                 .tree-units summary::before,
                 .tree-sessions summary::before{
