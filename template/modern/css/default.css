@@ -5434,14 +5434,11 @@ textarea:focus-visible{
   margin-right: 15px;
 }
 
-/*Document CSS*/
-.document-index .fileURL-th {
-  align-items: center;
-  display: flex;
+.file-icon{
+  margin-top: -3px;
 }
 
-
-.document-index .fileURL {
+.document-index .fileURL-link {
   max-width: 400px;
   word-wrap: break-word;
   display: inline-block;
