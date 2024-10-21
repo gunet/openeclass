@@ -412,71 +412,74 @@
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>
 
-                                                    @if($file->visible == 1)
-                                                        @if ($file->is_dir)
-                                                            <span class='visibleFile pe-2'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
-                                                        @else
-                                                            <span class='visibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
-                                                        @endif
-                                                    @else
-                                                        @if ($file->is_dir)
-                                                            <span class='invisibleFile pe-2'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
-                                                        @else
-                                                            <span class='invisibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
-                                                       @endif
-                                                    @endif
-
-                                                    @if ($file->is_dir)
+                                                    <div class='d-flex justify-content-start align-items-start gap-1'>
                                                         @if($file->visible == 1)
-                                                            <a href='{!! $file->url !!}'>{{ $file->filename }}</a>
-                                                        @else
-                                                            <a class="opacity-50" href='{!! $file->url !!}'>{{ $file->filename }}</a>
-                                                        @endif
-                                                    @else
-                                                        @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
-                                                            @php $urlFile = urlencode($file->url); @endphp
-                                                            <a href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={!! $urlFile !!}" target="_blank">{{ $file->filename }}</a>
-                                                        @else
-                                                            {!! $file->link !!}
-                                                        @endif
-                                                        
-                                                    @endif
-                                                    @if ($can_upload)
-                                                        @if ($file->extra_path)
-                                                            @if ($file->common_doc_path)
-                                                                @if ($file->common_doc_visible)
-                                                                    {!! icon('common', trans('langCommonDocLink')) !!}
-                                                                @else
-                                                                    {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
-                                                                @endif
+                                                            @if ($file->is_dir)
+                                                                <span class='visibleFile file-icon'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
                                                             @else
-                                                                {!! icon('fa-external-link', trans('langExternalFile')) !!}
+                                                                <span class='visibleFile file-icon'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                            @endif
+                                                        @else
+                                                            @if ($file->is_dir)
+                                                                <span class='invisibleFile file-icon'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
+                                                            @else
+                                                                <span class='invisibleFile file-icon'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                        @endif
+                                                        @endif
+
+                                                        @if ($file->is_dir)
+                                                            @if($file->visible == 1)
+                                                                <a class='fileURL-link' href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                            @else
+                                                                <a class="fileURL-link opacity-50" href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                            @endif
+                                                        @else
+                                                            @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
+                                                                @php $urlFile = urlencode($file->url); @endphp
+                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={!! $urlFile !!}" target="_blank">{{ $file->filename }}</a>
+                                                            @else
+                                                                {!! $file->link !!}
+                                                            @endif
+                                                            
+                                                        @endif
+                                                        @if ($can_upload)
+                                                            @if ($file->extra_path)
+                                                                @if ($file->common_doc_path)
+                                                                    @if ($file->common_doc_visible)
+                                                                        {!! icon('common', trans('langCommonDocLink')) !!}
+                                                                    @else
+                                                                        {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
+                                                                    @endif
+                                                                @else
+                                                                    {!! icon('fa-external-link', trans('langExternalFile')) !!}
+                                                                @endif
+                                                            @endif
+                                                            @if (!$file->public)
+                                                                {!! icon('fa-lock', trans('langNonPublicFile')) !!}
+                                                            @endif
+                                                            @if ($file->editable)
+                                                                {!! icon('fa-edit', trans('langEdit'), $file->edit_url) !!}
                                                             @endif
                                                         @endif
-                                                        @if (!$file->public)
-                                                            {!! icon('fa-lock', trans('langNonPublicFile')) !!}
+                                                        @if ($file->copyrighted)
+                                                            <span>{!! copyright_info($file->id, 1, 'documents') !!}</span>
                                                         @endif
-                                                        @if ($file->editable)
-                                                            {!! icon('fa-edit', trans('langEdit'), $file->edit_url) !!}
+                                                        
+
+                                                        @if($file->updated_message)
+                                                            @if($file->visible == 1)
+                                                                <span class="badge bg-success">{{ $file->updated_message }}</span>
+                                                            @else
+                                                                <span class="badge bg-secondary">{{ $file->updated_message }}</span>
+                                                            @endif
                                                         @endif
-                                                    @endif
-                                                    @if ($file->copyrighted)
-                                                        <span class="p-1">{!! copyright_info($file->id, 1, 'documents') !!}</span>
-                                                    @endif
+                                                    </div>
                                                     @if ($file->comment)
                                                         <div class='comment text-muted mt-1'>
                                                             <small>
                                                                 {!! nl2br(e($file->comment)) !!}
                                                             </small>
                                                         </div>
-                                                    @endif
-
-                                                    @if($file->updated_message)
-                                                        @if($file->visible == 1)
-                                                            <span class="badge bg-success">{{ $file->updated_message }}</span>
-                                                        @else
-                                                            <span class="badge bg-secondary">{{ $file->updated_message }}</span>
-                                                        @endif
                                                     @endif
                                                 </td>
 
