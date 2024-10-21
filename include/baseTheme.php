@@ -4977,6 +4977,10 @@ function view($view_file, $view_data = array()) {
               .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
+
+              #blog_tree::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
             ";
         }
 
@@ -5035,6 +5039,10 @@ function view($view_file, $view_data = array()) {
               .bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
               .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb {
                  background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              #blog_tree::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
               }
 
 
@@ -5097,6 +5105,10 @@ function view($view_file, $view_data = array()) {
               .bookingCalendarByUser table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
               .myCalendarEvents table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover{
                     background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              #blog_tree::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
 
             ";

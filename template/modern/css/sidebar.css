@@ -87,11 +87,11 @@
     min-height: calc(100vh - 80px - 80px - 60px);
   }
   .container-fluid .course-wrapper .col_maincontent_active{
-    padding: 24px 24px 24px 32px;
+    padding: 24px 24px 24px 24px;
   }
 
   .container .course-wrapper .col_maincontent_active{
-    padding: 24px 24px 24px 32px;
+    padding: 24px 24px 24px 24px;
   }
 
   .col_maincontent_active.search-content {
