@@ -4528,20 +4528,27 @@ body .delThemeBtn{
   object-fit: cover;
 }
 
-.mycourses-pagination .page-item .page-link:focus, .mentors-pagination .page-item .page-link:active{
+.mycourses-pagination{
+  gap: 8px;
+}
+
+.mycourses-pagination .page-item .page-link:focus, 
+.mentors-pagination .page-item .page-link:active{
   outline: none !important;
   box-shadow: none;
 }
 
 
-/* prev button */
-.mycourses-pagination .page-item-previous.disabled{
-  opacity: 0.3;
-}
-/* next button */
+/* prev-next button */
+.mycourses-pagination .page-item-previous.disabled,
 .mycourses-pagination .page-item-next.disabled{
-  opacity: 0.3;
+  opacity: 0.5;
 }
+.mycourses-pagination .page-item-previous.disabled:hover,
+.mycourses-pagination .page-item-next.disabled:hover{
+  cursor: not-allowed;
+}
+
 
 .mycourses-pagination .page-item{
   padding: 5px;
@@ -4586,26 +4593,12 @@ body .delThemeBtn{
   background-color: transparent;
   border-top-left-radius:10px;
   border-bottom-left-radius:10px;
-  border: none !important;
 }
 .mycourses-pagination .page-item-next{
   background-color: transparent;
   border-top-right-radius:10px;
   border-bottom-right-radius:10px;
 }
-.mycourses-pagination .page-item-next .page-link,.mycourses-pagination .page-item-next .page-link:hover{
-  border: none;
-}
-.mycourses-pagination .page-item-previous .page-link,.mycourses-pagination .page-item-previous .page-link:hover{
-  border: none;
-}
-.mycourses-pagination .page-item-next .page-link:hover,.mycourses-pagination .page-item-previous .page-link:hover{
-  background-color: #E8EDF8 !important;
-}
-.mycourses-pagination .page-item-previous .page-link:hover,.mycourses-pagination .page-item-previous .page-link:hover{
-  background-color: #E8EDF8 !important;
-}
-
 
 /**********************************************************************************************************************/
 /*************************************************** H5P **************************************************************/
