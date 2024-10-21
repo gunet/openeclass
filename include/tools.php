@@ -123,7 +123,7 @@ function getExternalLinks() {
  */
 function lessonToolsMenu(bool $rich=true): array
 {
-    global $uid, $is_editor, $is_course_admin, $is_course_reviewer, $courses,
+    global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
            $langActiveTools, $langInactiveTools, $langLocale;
 
@@ -173,7 +173,7 @@ function lessonToolsMenu(bool $rich=true): array
             return strcoll($modules[$a->module_id]['title'], $modules[$b->module_id]['title']);
         });
 
-        // check if we have define mail address and want to receive messages
+        // check if we have defined mail address and want to receive messages
         if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
             $mail_status = '&nbsp;' . icon('fa-exclamation-triangle');
         }
@@ -213,7 +213,7 @@ function lessonToolsMenu(bool $rich=true): array
             if (module_path($module_link) == $current_module_dir) {
                 $sideMenuSubGroup[0]['class'] = ' in';
             }
-            $sideMenuLink[] = q($module_link);
+            $sideMenuLink[] = $module_link;
             $sideMenuImg[] = $modules[$mid]['image'];
             $sideMenuID[] = $mid;
 
@@ -224,7 +224,7 @@ function lessonToolsMenu(bool $rich=true): array
             if ($result2) { // display external links (if any)
                 foreach ($result2 as $ex_link) {
                     $sideMenuText[] = q($ex_link->title);
-                    $sideMenuLink[] = q($ex_link->url);
+                    $sideMenuLink[] = $ex_link->url;
                     $sideMenuImg[] = 'fa-external-link';
                     $sideMenuID[] = -1;
                 }
@@ -236,7 +236,7 @@ function lessonToolsMenu(bool $rich=true): array
             if ($result3) { // display lti apps as links (if any)
                 foreach ($result3 as $lti_link) {
                     $sideMenuText[] = q($lti_link->title);
-                    $sideMenuLink[] = q($lti_link->url);
+                    $sideMenuLink[] = $lti_link->url;
                     $sideMenuImg[] = q($lti_link->menulink);
                     $sideMenuID[] = -1;
                 }
@@ -261,7 +261,8 @@ function lessonToolsMenu(bool $rich=true): array
  */
 function pickerMenu() {
 
-    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid, $is_collaborative_course;
+    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session,
+           $uid, $is_collaborative_course, $langBasicOptions, $langMyDocs, $langCommonDocs;
 
     if( isset($is_collaborative_course) and $is_collaborative_course) {
         $table = 'module_disable_collaboration';
@@ -286,7 +287,7 @@ function pickerMenu() {
 
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
-    $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+    $arrMenuType['text'] = $langBasicOptions;
     $arrMenuType['class'] = 'picker';
     $sideMenuSubGroup[] = $arrMenuType;
 
@@ -302,24 +303,23 @@ function pickerMenu() {
         foreach ($result as $module) {
             $mid = $module->module_id;
             $sideMenuText[] = q($modules[$mid]['title']);
-            $sideMenuLink[] = q($urlServer . 'modules/' .
-                $modules[$mid]['link'] . '/index.php' . $params);
+            $sideMenuLink[] = $urlServer . 'modules/' . $modules[$mid]['link'] . '/index.php' . $params;
             $sideMenuImg[] = $modules[$mid]['image'] . "_on.png";
         }
     }
 
     // link for common documents
     if (get_config('enable_common_docs')) {
-        $sideMenuText[] = q($GLOBALS['langCommonDocs']);
-        $sideMenuLink[] = q($urlServer . 'modules/admin/commondocs.php' . $params);
+        $sideMenuText[] = $langCommonDocs;
+        $sideMenuLink[] = $urlServer . 'modules/admin/commondocs.php' . $params;
         $sideMenuImg[] = 'fa-folder-open';
     }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
-            $sideMenuText[] = q($GLOBALS['langMyDocs']);
-            $sideMenuLink[] = q($urlServer . 'main/mydocs/index.php' . $params);
+            $sideMenuText[] = $langMyDocs;
+            $sideMenuLink[] = $urlServer . 'main/mydocs/index.php' . $params;
             $sideMenuImg[] = 'fa-folder-open';
     }
 
@@ -332,7 +332,7 @@ function pickerMenu() {
             if ($is_editor || $is_course_admin) {
                 $usercheck = true;
             } else {
-                $group_members = Database::get()->queryArray("select user_id from group_members where group_id = ?d", $result->id);
+                $group_members = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $result->id);
                 foreach ($group_members as $member) {
                     if (intval($member->user_id) === intval($uid)) {
                         $usercheck = true;
@@ -389,7 +389,6 @@ function openCoursesExtra() {
 
 /**
  * @brief Get number of new documents for current user
- * @global type $session
  * @param type $course_id
  * @return int
  */
