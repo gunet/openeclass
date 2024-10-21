@@ -5440,3 +5440,21 @@ textarea:focus-visible{
   font-size: 12px;
   margin-right: 15px;
 }
+
+/*Document CSS*/
+.document-index .fileURL-th {
+  align-items: center;
+  display: flex;
+}
+
+.document-index .fileURL {
+  max-width: 400px;
+  word-wrap: break-word;
+  display: inline-block;
+}
+
+.announcement-index .announceTitle {
+  max-width: 650px;
+  word-wrap: break-word;
+  display: inline-block;
+}
