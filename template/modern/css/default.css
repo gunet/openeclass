@@ -5440,10 +5440,18 @@ textarea:focus-visible{
   display: flex;
 }
 
+
 .document-index .fileURL {
   max-width: 400px;
   word-wrap: break-word;
   display: inline-block;
+}
+
+/*Announcement CSS*/
+.announcement-index .announceTitleHeader {
+  align-items: center;
+  display: flex;
+  gap: 10px;
 }
 
 .announcement-index .announceTitle {
