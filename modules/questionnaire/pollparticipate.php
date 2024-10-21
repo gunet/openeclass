@@ -263,13 +263,13 @@ function printPollForm() {
             if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
                 <div class='col-12'>
-                   <div class='alert alert-info m-0 TextBold text-uppercase text-center'>" . standard_text_escape($theQuestion->question_text) . "</div>
+                   <div class='alert alert-info m-0 TextBold text-uppercase text-center mb-4'>" . standard_text_escape($theQuestion->question_text) . "</div>
                 </div>";
             } else {
                 $columnPanel = 'col';
                 $tool_content .= "
                 <div class='$columnPanel'>
-                    <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel'>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>$langQuestion $i</h3>
                         </div>
