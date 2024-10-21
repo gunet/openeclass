@@ -5456,3 +5456,7 @@ textarea:focus-visible{
   word-wrap: break-word;
   display: inline-block;
 }
+
+.new-badge-item{
+  margin-top: 2px;
+}
