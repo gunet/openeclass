@@ -342,6 +342,7 @@ function printPollForm() {
                         </div>";
                     }
                 } elseif ($qtype == QTYPE_SCALE) {
+                    $slider_value = 0;
                     if ($multiple_submissions) { // get user answers (if any)
                         $user_answers = Database::get()->querySingle("SELECT a.answer_text
                                             FROM poll_answer_record a, poll_user_record b
