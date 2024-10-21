@@ -50,13 +50,16 @@
                         <div class='col-12 mb-2'>
                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                 <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                                {!! course_access_icon(course_status($course_id)) !!}
-                                @if($courseLicense > 0)
-                                    {!! copyright_info($course_id) !!}
-                                @endif
+                                
                             </div>
-                            <div class='d-flex justify-content-start align-items-center gap-2 mt-2'>
+                            <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
                                 <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
+                                <div class='course-title-icons d-flex justify-content-start align-items-center gap-2'>
+                                    {!! course_access_icon(course_status($course_id)) !!}
+                                    @if($courseLicense > 0)
+                                        {!! copyright_info($course_id) !!}
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endif
