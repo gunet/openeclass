@@ -5464,3 +5464,26 @@ textarea:focus-visible{
 .course-title-icons{
   margin-top: 3px;
 }
+
+#blog_tree{
+  overflow: auto;
+}
+#blog_tree::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+#blog_tree::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+#blog_tree::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+#blog_tree::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
+}
