@@ -105,7 +105,7 @@
 
                                         <td class='border-top-0 border-start-0 border-end-0'>
 
-                                            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                                            <div class="d-flex justify-content-end align-items-center gap-3 flex-wrap">
                                                 <div>
                                                     @if (!get_config('show_modal_openCourses'))
                                                         <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}" aria-label="{{ trans('langPreview') }}">

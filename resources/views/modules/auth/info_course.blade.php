@@ -58,7 +58,7 @@
                                     <p class='form-label mb-1 mt-4'>{{ trans('langCreationDate')}}</p>
                                     <p>{!! format_locale_date(strtotime($c->created), null, false) !!}</p>
 
-                                    <div class='col-12 mt-4 d-flex justify-content-md-end justify-content-center'>
+                                    <div class='col-12 mt-4 d-flex justify-content-md-start justify-content-center'>
                                         <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/index.php'>
 
                                             @if($c->is_collaborative)
