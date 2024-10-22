@@ -719,13 +719,25 @@ a:hover{
   text-decoration:underline;
 }
 
-td p,
-td span,
-td strong,
-td small,
-td b,
-td a{
-  word-break: break-all;
+p,span,strong,small,b,em,a,
+h1,h2,h3,h4,h5,h6,
+.text-heading-h2,
+.text-heading-h3,
+.text-heading-h4,
+.text-heading-h5,
+.text-heading-h6,
+.form-label,
+.control-label-notes,
+.help-block,
+.title-default,
+.modal-title-default,
+.action-bar-title,
+.breadcrumb-item,
+.breadcrumb-item.active,
+.Neutral-900-cl,
+.list-group-item.list-group-item-action,
+.list-group-item.element{
+  word-break: break-word;
 }
 
 #leftnav a:hover,
@@ -781,31 +793,37 @@ b a {
 .TextExtraBold {
   font-weight: 800;
   font-style: normal;
+  word-break: break-word;
 }
 
 .TextExtraLight {
   font-weight: 200;
   font-style: normal;
+  word-break: break-word;
 }
 
 .TextLight {
   font-weight: 300;
   font-style: normal;
+  word-break: break-word;
 }
 
 .TextMedium {
   font-weight: 500;
   font-style: normal;
+  word-break: break-word;
 }
 
 .TextRegular {
   font-weight: 400;
   font-style: normal;
+  word-break: break-word;
 }
 
 .TextSemiBold {
   font-weight: 600;
   font-style: normal;
+  word-break: break-word;
 }
 
 
@@ -5518,9 +5536,9 @@ textarea:focus-visible{
 }
 
 pre {
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  white-space: pre-wrap;   
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
