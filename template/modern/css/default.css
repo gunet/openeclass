@@ -3859,6 +3859,7 @@ body .delThemeBtn{
   font-weight: 700;
   height:40px;
   border-radius: 4px;
+  transition: 0.3s ease;
 }
 .opencourses_btn:hover {
   background-color: #ffffff;
