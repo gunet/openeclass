@@ -719,6 +719,15 @@ a:hover{
   text-decoration:underline;
 }
 
+td p,
+td span,
+td strong,
+td small,
+td b,
+td a{
+  word-break: break-all;
+}
+
 #leftnav a:hover,
 .dropdown_menu_user a:hover, 
 .submitAdminBtn:hover,
@@ -2866,7 +2875,7 @@ body .form-action-button-popover{
 }
 @media(min-width:1400px){
   .sticky-column-course-home{
-    width: 320px;
+    width: 300px;
   }
 }
 

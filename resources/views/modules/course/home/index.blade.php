@@ -230,7 +230,7 @@
 
                 <div class='d-xl-flex gap-5 mt-0'>
 
-                    <div class='flex-grow-1'>
+                    <div class='flex-grow-1' style='min-width: 0;'>
                         <div class='card panelCard card-transparent border-0'>
 
                             <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
