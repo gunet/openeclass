@@ -955,6 +955,25 @@ b a {
   line-height: 16px;
   color: #2B3944;
 }
+@media(min-width:992px){
+  .header-login-text{
+    background-color: #0073E6;
+    color: #ffffff;
+    font-size: 14px;
+    letter-spacing: 0px;
+    line-height: 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    padding: 8px 12px 8px 12px;
+    text-align: center;
+    transition: 0.3s ease;
+  }
+  .header-login-text:hover,
+  .header-login-text:focus{
+    background-color: #2546F0;
+    color: #ffffff;
+  }
+}
 
 #btn-search{
   color: #687DA3;

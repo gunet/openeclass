@@ -876,8 +876,10 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
-                .header-login-text{
-                    color:$theme_options_styles[linkColorHeader];
+                @media(max-width:991px){
+                    .header-login-text{
+                        color:$theme_options_styles[linkColorHeader];
+                    }
                 }
 
                 .header-mobile-link{
@@ -965,9 +967,11 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
-                .header-login-text:hover,
-                .header-login-text:focus{
-                    color:$theme_options_styles[linkHoverColorHeader];
+                @media(max-width:991px){
+                    .header-login-text:hover,
+                    .header-login-text:focus{
+                        color:$theme_options_styles[linkHoverColorHeader];
+                    }
                 }
 
                 .header-mobile-link:hover,
@@ -1843,6 +1847,14 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonBgColor] ;
                     background-color: $theme_options_styles[buttonBgColor] ;
                 }
+
+                @media(min-width:992px){
+                    .header-login-text{
+                        border-color: $theme_options_styles[buttonBgColor] ;
+                        background-color: $theme_options_styles[buttonBgColor] ;
+                    }
+                }
+
             ";
 
             $colorChevronLeftRight = "$theme_options_styles[buttonBgColor]";
@@ -1992,6 +2004,14 @@ function view($view_file, $view_data = array()) {
                 .mycourses-pagination .page-item .page-link.active:focus {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                     border-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+                @media(min-width:992px){
+                    .header-login-text:hover,
+                    .header-login-text:focus{
+                        border-color: $theme_options_styles[buttonHoverBgColor] ;
+                        background-color: $theme_options_styles[buttonHoverBgColor] ;
+                    }
                 }
 
             ";
@@ -2146,6 +2166,14 @@ function view($view_file, $view_data = array()) {
                 .mycourses-pagination .page-item .page-link.active:hover,
                 .mycourses-pagination .page-item .page-link.active:focus {
                     color:$theme_options_styles[buttonTextColor];
+                }
+
+                @media(min-width:992px){
+                    .header-login-text,
+                    .header-login-text:hover,
+                    .header-login-text:focus{
+                         color:$theme_options_styles[buttonTextColor];
+                    }
                 }
 
             ";
