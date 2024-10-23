@@ -3504,6 +3504,10 @@ tbody tr{
   border-bottom: solid 1px #EFF6FF;
 }
 
+.table-default tbody tr td{
+  vertical-align: top !important;
+}
+
 tbody tr td,
 thead tr th,
 thead tr.list-header td,
@@ -5552,7 +5556,7 @@ pre {
 
 /*Announcement CSS*/
 .announcement-index .announceTitleHeader {
-  align-items: center;
+  align-items: top;
   display: flex;
   gap: 10px;
 }

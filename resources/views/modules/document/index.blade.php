@@ -412,7 +412,7 @@
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>
 
-                                                    <div class='d-flex justify-content-start align-items-start gap-1'>
+                                                    <div class='d-flex justify-content-start align-items-start gap-3'>
                                                         @if($file->visible == 1)
                                                             @if ($file->is_dir)
                                                                 <span class='visibleFile file-icon'>{!! icon('fa-regular fa-folder-open', trans('langDirectory')) !!} </span>
