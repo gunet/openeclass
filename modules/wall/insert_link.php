@@ -40,7 +40,7 @@ function list_links($id = NULL) {
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
             "<thead><tr class='list-header'>" .
-            "<th style='width:'>$langLinks</th>" .
+            "<th style='width:40%;'>$langLinks</th>" .
             "<th>$langDescription</th>" .
             "<th width='10'>$langChoice</th>" .
             "</tr></thead>";
@@ -48,7 +48,7 @@ function list_links($id = NULL) {
         if (count($sql) > 0) {
             foreach ($sql as $catrow) {
                 $ret_string .= "<tr>";
-                $ret_string .= "<td><b>" . icon('fa-folder-open') . "&nbsp;" .
+                $ret_string .= "<td style='width:40%;'><b>" . icon('fa-folder-open') . "&nbsp;" .
                     q($catrow->name) . "</b></td>";
                 $ret_string .= "<td >" . standard_text_escape($catrow->description) . "</td>";
                 $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' name='catlink[]' value='$catrow->id' /><span class='checkmark'></span></label></td>";
@@ -60,7 +60,7 @@ function list_links($id = NULL) {
                         $checked = 'checked';
                     }
                     $ret_string .= "<tr>";
-                    $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
+                    $ret_string .= "<td>" . icon('fa-link') . "<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                         q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a></td>";
                     $ret_string .= "<td>" . standard_text_escape($linkcatrow->description) . "</td>";
                     $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='link[]' value='$linkcatrow->id' /><span class='checkmark'></span></label></td>";

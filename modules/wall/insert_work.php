@@ -38,7 +38,7 @@ function list_assignments($id = NULL) {
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>$langTitle</th>" .
+                "<th style='width:40%;'>$langTitle</th>" .
                 "<th>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th aria-label='$langSettingSelect'></th>" .
                 "</tr></thead>";
@@ -50,7 +50,7 @@ function list_assignments($id = NULL) {
             $description = empty($row->description) ? '' :
                     "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $ret_string .= "<tr>" .
-                    "<td>".q($row->title)."<br><br><div class='text-muted'>$description</div></td>" .
+                    "<td style='width:40%;'><p>".q($row->title)."</p><br><br><div class='text-muted'>$description</div></td>" .
                     "<td>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='assignment[]' value='$row->id' /><span class='checkmark'></span></label></td>" .
                     "</tr>";

@@ -47,7 +47,7 @@ function list_forums($id = NULL) {
                 "<input type='hidden' name='id' value='$id' />" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
-                "<th>$langForums</th>" .
+                "<th style='width:40%;'>$langForums</th>" .
                 "<th>$langComments</th>" .
                 "<th aria-label='$langSettingSelect'></th>" .
                 "</tr></thead>";
@@ -59,7 +59,7 @@ function list_forums($id = NULL) {
             }
 
             $ret_string .= "<tr>
-                <td><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'><b>" . q($entry->name) . "</b></a></td>
+                <td style='width:40%;'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'><b>" . q($entry->name) . "</b></a></td>
                 <td>" . ($entry->desc? q($entry->desc): '&nbsp;') . "</td>
                 <td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $fchecked name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
               </tr>";
