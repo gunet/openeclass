@@ -5542,3 +5542,12 @@ pre {
   white-space: -o-pre-wrap;
   word-wrap: break-word;
 }
+
+.jstree-proton .jstree-anchor {
+  height: auto!important;
+  max-width: 360px;
+  word-break: break-word;
+  white-space: normal;
+  display: inline-block;
+  vertical-align: top;
+}
