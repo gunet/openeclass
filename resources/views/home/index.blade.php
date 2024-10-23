@@ -300,12 +300,12 @@
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
                                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                <div class='text-heading-h3'>{{ trans('langAnnouncements') }}</div>
-                                                <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
+                                                <h2 class='text-heading-h3 mb-0'>{{ trans('langAnnouncements') }}</h2>
+                                                <h3 class='mb-0' aria-label='Rss'><a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a></h3>
                                             </div>
                                             @if(count($announcements) > 0)
                                                 <div class='d-flex justify-content-end align-items-center'>
-                                                    <a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
+                                                    <h3 class='mb-0'><a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a></h3>
                                                 </div>
                                             @endif
                                         </div>
@@ -330,9 +330,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class='col-md-10 mt-md-0 mt-2'>
-                                                                    <a class='TextBold' style='font-size: 16px;' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                                    <h3 class='mb-0'><a class='TextBold' style='font-size: 16px;' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                                         {!! $announcement->title !!}
-                                                                    </a>
+                                                                    </a></h3>
                                                                     <div class='truncate-announcement'>{!! $announcement->body !!}</div>
                                                                 </div>
                                                             </div>
@@ -367,9 +367,9 @@
                                         <div class='card card-transparent bg-transparent border-0'>
                                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                                 <div class='d-flex justify-content-start align-items-center'>
-                                                    <div class='text-heading-h3'>
+                                                    <h2 class='text-heading-h3 mb-0'>
                                                         {{trans('langPopularCourse')}}
-                                                    </div>
+                                                    </h2>
                                                 </div>
                                             </div>
                                             <div class='card-body px-0 py-0'>
@@ -386,10 +386,10 @@
                                                                 </a>
                                                                 <div class='card-body'>
                                                                     <div class="col-12 text-center mt-2 line-height-default">
-                                                                        <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                        <h3 class='mb-0'><a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                             {{$pop_course->title}} ({{$pop_course->public_code}})
 
-                                                                        </a>
+                                                                        </a></h3>
                                                                         <p class='TextRegular msmall-text Neutral-900-cl mt-1'>{{$pop_course->prof_names}}</p>
                                                                     </div>
                                                                 </div>
@@ -419,9 +419,9 @@
                                             <div class='card card-transparent bg-transparent border-0'>
                                                 <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                                     <div class='d-flex justify-content-start align-items-center'>
-                                                        <div class='text-heading-h3'>
+                                                        <h2 class='text-heading-h3 mb-0'>
                                                             {!! $text->title !!}
-                                                        </div>
+                                                        </h2>
                                                     </div>
                                                 </div>
                                                 <div class='card-body px-0 py-0'>
@@ -445,9 +445,9 @@
                                 <div class='col'>
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                            <div class='text-heading-h3'>
+                                            <h2 class='text-heading-h3 mb-0'>
                                                 {!! get_config('homepage_testimonial_title_'.$language_code) !!}
-                                            </div>
+                                            </h2>
                                         </div>
                                         <div class='card-body px-3'>
                                             <div class="d-flex justify-content-center">
@@ -482,7 +482,7 @@
                                     <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                             <div class='d-flex justify-content-start align-items-center'>
-                                                <div class='text-heading-h3'>{{ trans('langViewStatics') }}</div>
+                                                <h2 class='text-heading-h3 mb-0'>{{ trans('langViewStatics') }}</h2>
                                             </div>
                                         </div>
                                         <div class='card-body px-0 py-3'>
