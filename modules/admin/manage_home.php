@@ -23,18 +23,17 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$toolName = $langAdminManageHomepage;
-$pageName = $langAdminManageHomepage;
+$toolName = $pageName = $langAdminManageHomepage;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {
         reorder_table('homepagePriorities', null, null, $_POST['toReorder'],
-            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            $_POST['prevReorder'] ?? null);
     }
     exit;
 }
 
-if(isset($_POST['submit'])){
+if(isset($_POST['submit'])) {
     set_config('total_courses',$_POST['total_courses']);
     set_config('visits_per_week',$_POST['visits_per_week']);
     set_config('users_registered',$_POST['users_registered']);
@@ -46,38 +45,47 @@ if(isset($_POST['submit'])){
         set_config('homepage_intro_' . $langCode, $_POST['homepage_intro_' . $langCode]);
     }
 
-    set_config('homepage_testimonial_title',$_POST['homepage_testimonial_title']);
+    set_config('homepage_testimonial_title', $_POST['homepage_testimonial_title']);
     set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
     set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
     set_config('hide_login_link', $_POST['hide_login_link'] ?? '');
     set_config('banner_link',$_POST['link_banner'] ?? '');
+    set_config('dont_display_courses_menu', $_POST['dont_display_courses_menu'] ?? '');
+    set_config('dont_display_contact_menu', $_POST['dont_display_contact_menu'] ?? '');
+    set_config('dont_display_about_menu', $_POST['dont_display_about_menu'] ?? '');
+    set_config('dont_display_manual_menu', $_POST['dont_display_manual_menu'] ?? '');
 
     Session::flash('message',"$langRegDone");
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/manage_home.php");
 }
 
-if(isset($_GET['edit_priority'])){
+if(isset($_GET['edit_priority'])) {
     $updated = Database::get()->query("UPDATE `homepagePriorities` SET visible = ?d WHERE id = ?d",$_GET['val'],$_GET['edit']);
     $visible = ($_GET['val']==1 ? 0 : 1);
-    if($_GET['titleEdit'] == 'announcements'){
+    if($_GET['titleEdit'] == 'announcements') {
         set_config('dont_display_announcements', $visible);
-    }elseif($_GET['titleEdit'] == 'popular_courses'){
+    } elseif($_GET['titleEdit'] == 'popular_courses') {
         set_config('dont_display_popular_courses', $visible);
-    }elseif($_GET['titleEdit'] == 'texts'){
+    } elseif($_GET['titleEdit'] == 'texts') {
         set_config('dont_display_texts', $visible);
-    }elseif($_GET['titleEdit'] == 'testimonials'){
+    } elseif($_GET['titleEdit'] == 'testimonials') {
         set_config('dont_display_testimonials', $visible);
-    }elseif($_GET['titleEdit'] == 'statistics'){
+    } elseif($_GET['titleEdit'] == 'statistics') {
         set_config('dont_display_statistics', $visible);
-    }else{
+    } else {
         set_config('dont_display_open_courses', $visible);
     }
 
-    Session::flash('message',"$langRegDone");
+    Session::flash('message', "$langRegDone");
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/manage_home.php");
 }
+
+$data['cbox_dont_display_courses_menu'] = get_config('dont_display_courses_menu') ? 'checked' : '';
+$data['cbox_dont_display_about_menu'] = get_config('dont_display_about_menu') ? 'checked' : '';
+$data['cbox_dont_display_manual_menu']= get_config('dont_display_manual_menu') ? 'checked' : '';
+$data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu') ? 'checked' : '';
 
 $data['total_courses'] = get_config('total_courses');
 $data['visits_per_week'] = get_config('visits_per_week');
