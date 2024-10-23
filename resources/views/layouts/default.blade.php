@@ -23,7 +23,7 @@
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css?v={{ $cache_suffix }}" rel="stylesheet"/>
 
     <!-- Font Manrope -->
-    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css?v={{ $cache_suffix }}" rel="stylesheet"/>
+    <link href="{{ $urlAppend }}template/modern/css/fonts_all/typography.css?v={{ $cache_suffix }}" rel="stylesheet"/>
 
     <!-- fullcalendar v3.10.2-->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v={{ $cache_suffix }}"/>

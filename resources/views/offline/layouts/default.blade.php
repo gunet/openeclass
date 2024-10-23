@@ -24,7 +24,7 @@
 
 
     <!-- Font Manrope -->
-    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+    <link href="{{ $urlAppend }}template/modern/css/fonts_all/typography.css" rel="stylesheet"/>
 
     <!-- fullcalendar v3.10.2-->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
