@@ -17,13 +17,13 @@
                                     <div class='form-group'>
                                         <div class='col-12'>
                                             <label for='Uname' class='form-label'>{{ trans('langUsername') }}</label>
-                                            <input id='Uname' class='login-input w-100' placeholder='&#xf007' name='uname' autofocus autocomplete='on'>
+                                            <input id='Uname' class='login-input w-100' placeholder='&#xf007;' name='uname' autofocus autocomplete='on'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-12'>
                                             <label for='Pass' class='form-label mt-4'>{{ trans('langPassword') }}&nbsp;(password)</label>
-                                            <input id='Pass' class='login-input w-100' placeholder='&#xf084' name='pass' type='password' autocomplete='on'>
+                                            <input id='Pass' class='login-input w-100' placeholder='&#xf084;' name='pass' type='password' autocomplete='on'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
