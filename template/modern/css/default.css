@@ -713,13 +713,17 @@ a{
   font-style: normal;
   letter-spacing: 0px;
   line-height: 16px;
+  max-width: 400px;
+  word-break: break-word;
+  white-space: normal;
+  display: inline-block;
 }
 
 a:hover{
   text-decoration:underline;
 }
 
-p,span,strong,small,b,em,a,
+p,span,strong,small,b,em,
 h1,h2,h3,h4,h5,h6,
 .text-heading-h2,
 .text-heading-h3,
@@ -732,8 +736,6 @@ h1,h2,h3,h4,h5,h6,
 .title-default,
 .modal-title-default,
 .action-bar-title,
-.breadcrumb-item,
-.breadcrumb-item.active,
 .Neutral-900-cl,
 .list-group-item.list-group-item-action,
 .list-group-item.element{
@@ -1568,6 +1570,17 @@ b a {
 
 .breadcrumb-item+.breadcrumb-item::before {
   color: #9BA9C1 ;
+}
+
+.breadcrumb-item{
+  word-break: break-word;
+}
+
+.breadcrumb-item.active span{
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
@@ -5485,25 +5498,6 @@ textarea:focus-visible{
   margin-top: -3px;
 }
 
-.document-index .fileURL-link {
-  max-width: 400px;
-  word-wrap: break-word;
-  display: inline-block;
-}
-
-/*Announcement CSS*/
-.announcement-index .announceTitleHeader {
-  align-items: center;
-  display: flex;
-  gap: 10px;
-}
-
-.announcement-index .announceTitle {
-  max-width: 650px;
-  word-wrap: break-word;
-  display: inline-block;
-}
-
 .new-badge-item{
   margin-top: 2px;
 }
@@ -5554,4 +5548,11 @@ pre {
   white-space: normal;
   display: inline-block;
   vertical-align: top;
+}
+
+/*Announcement CSS*/
+.announcement-index .announceTitleHeader {
+  align-items: center;
+  display: flex;
+  gap: 10px;
 }

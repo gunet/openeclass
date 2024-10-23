@@ -34,7 +34,7 @@
                             </li>
                         @else
                             <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="{{ $item['bread_text'] }}">
-                                <span class='pe-none Neutral-900-cl' style="max-width: 300px; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">{{ $item['bread_text'] }}</span>
+                                <span>{{ $item['bread_text'] }}</span>
                             </li>
                         @endif
                     @endforeach

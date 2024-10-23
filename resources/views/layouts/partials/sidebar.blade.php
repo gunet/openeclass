@@ -34,7 +34,7 @@
         <div class="panel-group accordion" id="sidebar-accordion">
             <div class="panel">
                 @foreach ($toolArr as $key => $tool_group)
-                    <a id="Tool{{$key}}" class="collapsed parent-menu mt-5 menu-header" data-bs-toggle="collapse" href="#collapse{{ $key }}">
+                    <a id="Tool{{$key}}" class="collapsed parent-menu mt-5 menu-header d-block" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                         <div class="panel-sidebar-heading bg-transparent border-bottom-default px-lg-0">
                             <div class="panel-title pb-2 bg-transparent">
                                 <div class='d-flex justify-content-start align-items-start gap-1 Tools-active-deactive'>
