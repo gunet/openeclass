@@ -320,7 +320,7 @@ function display_exercise($exercise_id): void
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
               <h3>" . q_math($exercise->selectTitle());
               if ($is_editor) {
-                    $tool_content .= "<a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes' aria-label='$langModify'>
+                    $tool_content .= "<a class='ms-2' href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes' aria-label='$langModify'>
                       <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                     </a>";
                 }
