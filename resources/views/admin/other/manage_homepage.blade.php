@@ -167,8 +167,43 @@
                                             </div>
                                     </div>
                                 </div>
-                                
-                                
+
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12 control-label-notes mb-1'>
+                                        {{ trans('langOtherOptions') }}:
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                <input id='hide_login_check' type='checkbox' name='dont_display_courses_menu' value='1' {{ $cbox_dont_display_courses_menu }}>
+                                                <span class='checkmark'></span>
+                                                {{ trans('lang_dont_display_courses_menu') }}
+                                            </label>
+                                        </div>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                <input id='hide_login_check' type='checkbox' name='dont_display_contact_menu' value='1' {{ $cbox_dont_display_contact_menu }}>
+                                                <span class='checkmark'></span>
+                                                {{ trans('lang_dont_display_contact_menu') }}
+                                            </label>
+                                        </div>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                <input id='hide_login_check' type='checkbox' name='dont_display_about_menu' value='1' {{ $cbox_dont_display_about_menu }}>
+                                                <span class='checkmark'></span>
+                                                {{ trans('lang_dont_display_about_menu') }}
+                                            </label>
+                                        </div>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                <input id='hide_login_check' type='checkbox' name='dont_display_manual_menu' value='1' {{ $cbox_dont_display_manual_menu }}>
+                                                <span class='checkmark'></span>
+                                                {{ trans('lang_dont_display_manual_menu') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
                                         <button type="submit" class="btn submitAdminBtn" name="submit">{{ trans('langSave') }}</button>
@@ -176,7 +211,7 @@
                                 </div>
 
                             </form>
-                            
+
                         </div>
                     </div>
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
@@ -185,7 +220,7 @@
 
 
 
-                    
+
                     @if($priorities)
                         <div class='col-12 mt-5'>
                             <div id='orderTexts'>
@@ -220,19 +255,19 @@
                                                     @php $urlEdit = $urlServer . 'modules/admin/eclassconf.php'; @endphp
                                                 @endif
                                             </h3>
-                                                
+
                                             @php ($p->visible==1 ? $vis=0 : $vis=1); @endphp
 
                                             <div class='d-flex gap-3'>
-                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif" 
+                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif"
                                                     href="{{ $_SERVER['SCRIPT_NAME'] }}?edit_priority=1&amp;edit={{ $p->id }}&amp;val={{ $vis }}&amp;titleEdit={{ $p->title }}" aria-label="@if($vis==1) {{ trans('lang_visible_in_homepage') }} @else {{ trans('lang_invisible_in_homepage') }} @endif">
                                                     <span class='fa-solid @if($vis==1) fa-eye-slash @else fa-eye @endif fa-lg'></span>
                                                 </a>
-                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langReorder') }}" 
+                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langReorder') }}"
                                                     href='javascript:void(0);' aria-label="{{ trans('langReorder') }}">
                                                     <span class='fa fa-arrows'></span>
                                                 </a>
-                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langEditChange') }}" 
+                                                <a data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langEditChange') }}"
                                                     href='{{ $urlEdit }}' aria-label="{{ trans('langEditChange') }}">
                                                     <span class='fa-solid fa-edit fa-lg'></span>
                                                 </a>
@@ -242,15 +277,15 @@
                                 @endforeach
                             </div>
                         </div>
-                    
+
                     @else
-                    <div id='orderTexts'></div>      
+                    <div id='orderTexts'></div>
                     @endif
 
-                
+
         </div>
     </div>
-  
+
 </div>
 <script type="text/javascript">
     $(document).ready(function() {

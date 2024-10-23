@@ -70,11 +70,6 @@ if (isset($_POST['submit'])) {
         set_config('toolbox_name', $_POST['toolbox_name']);
         set_config('toolbox_title', $_POST['toolbox_title']);
         set_config('toolbox_intro', $_POST['toolbox_intro']);
-    } else {
-        set_config('homepage', 'default');
-        set_config('homepage_title', $_POST['homepage_title']);
-        set_config('homepage_name', $_POST['homepage_name']);
-        set_config('homepage_intro', purify($_POST['homepage_intro']));
     }
 
     set_config('maintenance_theme', $_POST['maintenance_theme']);
@@ -111,8 +106,6 @@ if (isset($_POST['submit'])) {
         'email_required' => true,
         'email_verification_required' => true,
         'am_required' => true,
-        'dont_display_login_form' => true,
-        'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
         'eportfolio_enable' => true,
@@ -270,8 +263,6 @@ else {     // Display config.php edit form
     $data['maintenance_theme'] = $maintenance_theme = get_config('maintenance_theme');
     $data['sel'] = [];
     $data['selectable_langs'] = [];
-    $data['cbox_dont_display_login_form'] = get_config('dont_display_login_form') ? 'checked' : '';
-    $data['cbox_hide_login_link'] = get_config('hide_login_link') ? 'checked' : '';
     foreach ($language_codes as $langcode => $langname) {
         if (in_array($langcode, $langdirs)) {
             $loclangname = $langNameOfLang[$langname];
