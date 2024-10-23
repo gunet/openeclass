@@ -7089,26 +7089,17 @@ function widget_view($view_file, $view_data = array()) {
     $data = array_merge($global_data, $view_data);
     return $blade->make($view_file, $data)->render();
 }
+
+
 /**
- * @brief
- * This method processes all data to render the display. It is executed by
- * each tool. Is in charge of generating the interface and parse it to the user's browser.
- *
+ * @brief Old views. user for compatibility issue.
  * @param mixed $toolContent html code
  * @param int $menuTypeID
  * @param string $tool_css (optional) catalog name where a "tool.css" file exists
  * @param string $head_content (optional) code to be added to the HEAD of the UI
- * @param string $body_action (optional) code to be added to the BODY tag
  */
-function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-
-    $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
-    if ($is_embedonce) {
-        unset($_SESSION['embedonce']);
-        view('legacy.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
-    } else {
-        view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
-    }
+function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null, $perso_tool_content = null) {
+    view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
 }
 
 // Simplified draw for pop-ups
