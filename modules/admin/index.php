@@ -47,6 +47,11 @@ $data['action_bar'] = action_bar(array(
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
 
+if (!check_stored_procedures()) {
+    Session::flash('message', $langNoStoredProcedures);
+    Session::flash('alert-class', 'alert-danger');
+}
+
 // Count prof requests with status = 1
 $data['count_prof_requests'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user_request WHERE state = 1 AND status = " . USER_TEACHER)->cnt;
 // Find last course created
@@ -90,6 +95,10 @@ $data['ts'] = format_locale_date(strtotime($ts), 'short', false);
 
 view('admin.index', $data);
 
+/**
+ * @brief get eclass latest version
+ * @return mixed|null
+ */
 function get_eclass_release() {
     $ts = get_config('eclass_release_timestamp');
     if (!$ts or time() - $ts > 24 * 3600) {
@@ -109,5 +118,39 @@ function get_eclass_release() {
         }
     }
     return json_decode(get_config('eclass_release_info'));
-
 }
+
+
+/**
+ * @brief check if required stored procedures exist
+ * @return bool
+ */
+function check_stored_procedures()
+{
+    global $mysqlMainDb;
+
+    $procedure_names = ['add_node',
+                        'delete_node',
+                        'delete_nodes',
+                        'get_maxrgt',
+                        'get_parent',
+                        'move_nodes',
+                        'shift_end',
+                        'shift_left',
+                        'shift_right',
+                        'update_node'];
+
+    $db_procedures = Database::get()->queryArray("SHOW PROCEDURE STATUS WHERE Db='$mysqlMainDb'");
+
+    if (count($db_procedures) == 0 or count($db_procedures) != count($procedure_names)) {
+        return false;
+    } else {
+        foreach ($db_procedures as $item) {
+            if (!in_array($item->Name, $procedure_names)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+

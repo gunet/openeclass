@@ -224,6 +224,8 @@ $langNewEclassVersionInfo = 'Μια νέα έκδοση της πλατφόρμ�
 $langUnlockPlatform = 'Ξεκλείδωμα πλατφόρμας';
 $langUserLastLogins = "Ιστορικό συνδέσεων";
 $langNoUserLastLogins = "Ο χρήστης δεν έχει συνδεθεί ποτέ στην πλατφόρμα.";
+$langNoStoredProcedures = "ΠΡΟΣΟΧΗ! Φάίνεται ότι δεν υπάρχουν οι απαραίτητες Stored Procedures. (χωρίς αυτές δεν λειτουργεί σωστά η ιεραρχία σχολών / τμημάτων). 
+Για να τις ξαναδημιουργήσετε εκτελέστε ξανά  τη διαδικασία αναβάθμισης ";
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
