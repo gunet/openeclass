@@ -223,7 +223,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <head>
      <meta http-equiv='Content-Type' content='text/html' charset='" . $charset . "'>
      <link href='{$urlAppend}template/modern/css/bootstrap.min.css' rel='stylesheet'>
-     <link href='{$urlAppend}template/modern/css/font-Manrope/css/Manrope.css?" . time() . "' rel='stylesheet'>
+     <link href='{$urlAppend}template/modern/css/fonts_all/typography.css?" . time() . "' rel='stylesheet'>
      
      <link href='{$urlAppend}template/modern/css/all.css' rel='stylesheet'>
 

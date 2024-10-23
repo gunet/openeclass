@@ -43,7 +43,7 @@ $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
         <link href="../../../template/modern/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="../../../template/modern/css/font-Manrope/css/Manrope.css?<?php echo time(); ?>" type="text/css">
+        <link href="../../../template/modern/css/fonts_all/typography.css?<?php echo time(); ?>" type="text/css">
         <link href="../../../template/modern/css/lp.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
         <link href="../../../template/modern/css/default.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
 

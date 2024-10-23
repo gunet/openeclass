@@ -2,7 +2,7 @@
 <!-- Bootstrap v5 -->
 <link rel="stylesheet" type="text/css" href="../template/modern/css/bootstrap.min.css"/>
 <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
-<link href="../template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+<link href="../template/modern/css/fonts_all/typography.css" rel="stylesheet"/>
 <link href="../template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
 <link rel="stylesheet" href="../template/modern/css/default.css">
 <!-- fav icons -->
