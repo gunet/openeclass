@@ -18,10 +18,37 @@
 
                                                     @foreach($authLink as $authInfo)
 
+                                                        @if (Session::has('login_error') and $authInfo[0])
+                                                            <div class='col-12'>
+                                                                <input id='showWarningModal2' type='hidden' value='1'>
+                                                                <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1' data-bs-backdrop='static' data-bs-keyboard='false'>
+                                                                    <div class='modal-dialog modal-dialog-centered'>
+                                                                        <div class='modal-content border-0 p-0'>
+                                                                            <div class='modal-header d-flex justify-content-between align-items-center'>
+                                                                                <div class='modal-title'>{{ trans('langError') }}</div>
+                                                                                <button aria-label="{{ trans('langClose') }}" type='button' class='close close-error' data-bs-dismiss='modal'></button>
+                                                                            </div>
+                                                                            <div class='modal-body'>
+                                                                                <div class='alert alert-warning'>
+                                                                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                                                    <span>{!! Session::get('login_error') !!}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
                                                         @if ($loop->first)
                                                             <div class='col-12 page slide-page h-100'>
                                                         @else
+                                                            @if ($primary_method >= 2 && count($authLink) == 2)
+                                                                @break
+                                                            @endif
+
                                                             <div class='col-12 page next-page-{{ $loop->iteration-1 }} h-100'>
+                                                            
                                                         @endif
 
                                                         <div class='row h-100'>
@@ -124,24 +151,6 @@
                                                         </div>
                                                     </div>
 
-                                                    @if (Session::has('login_error') and $authInfo[0])
-                                                        <div class='col-12'>
-                                                            <input id='showWarningModal2' type='hidden' value='1'>
-                                                            <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1' data-bs-backdrop='static' data-bs-keyboard='false'>
-                                                                <div class='modal-dialog modal-dialog-centered'>
-                                                                    <div class='modal-content border-0 p-0'>
-                                                                        <div class='modal-header d-flex justify-content-between align-items-center'>
-                                                                            <div class='modal-title'>{{ trans('langError') }}</div>
-                                                                            <button aria-label="{{ trans('langClose') }}" type='button' class='close close-error' data-bs-dismiss='modal'></button>
-                                                                        </div>
-                                                                        <div class='modal-body'>
-                                                                            {!! Session::get('login_error') !!}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
                                                 @endforeach
                                                 </div>
                                             </div>

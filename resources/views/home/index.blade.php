@@ -94,6 +94,11 @@
                                                             <div class='col-12 container-pages d-flex align-items-center h-100'>
 
                                                                 @foreach($authLinks as $auth => $key)
+                                                                
+                                                                    @if($i > 0 && $primary_method >= 2 && count($authLinks) == 2)
+                                                                        @break
+                                                                    @endif
+                                                                
                                                                     <div class="col-12 page @if($i == 0) slide-page @elseif($i == 1) next-page-1 @else next-page-2 @endif h-100">
                                                                         <div class="row h-100">
                                                                             <div class='col-12 align-self-start'>
