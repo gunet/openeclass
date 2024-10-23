@@ -5543,6 +5543,10 @@ pre {
   word-wrap: break-word;
 }
 
+.hierarchy .jstree-proton .jstree-anchor {
+  max-width: 100%;
+}
+
 .jstree-proton .jstree-anchor {
   height: auto!important;
   max-width: 360px;
