@@ -30,12 +30,12 @@ foreach ($q as $l) {
                                       <div>
                                         <div class='form-group text-start'>
                                           <label for='username_id' class='form-label'>$langUsername</label>
-                                          <input id='username_id' class='login-input w-100' placeholder='&#xf007' type='text' id='uname' name='uname' autocomplete='on' />
+                                          <input id='username_id' class='login-input w-100' placeholder='&#xf007;' type='text' name='uname' autocomplete='on' />
                                         </div>
                                         <div class='form-group text-start mt-3'>
                                           <label for='password_id' class='form-label mt-4'>$langPassword&nbsp;(password)</label>
                                           <div class='input-group flex-nowrap'>
-                                            <input id='password_id' class='login-input border-end-0 w-100 mt-0' placeholder='&#xf084' type='password' name='pass' autocomplete='on' aria-label='reveal Password'>
+                                            <input id='password_id' class='login-input border-end-0 w-100 mt-0' placeholder='&#xf084;' type='password' name='pass' autocomplete='on' aria-label='reveal Password'>
                                             <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color'>
                                                 <i class='fa-solid fa-eye fa-md'></i>
                                             </span>
