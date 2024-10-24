@@ -1103,6 +1103,10 @@ b a {
   
   .header-login-text{
     min-width: 80px;
+    white-space: nowrap;
+  }
+  .user-menu-btn .user-name{
+    white-space: nowrap;
   }
 }
 
