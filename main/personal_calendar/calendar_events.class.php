@@ -261,7 +261,11 @@ class Calendar_Events {
                         . "FROM tc_session tc JOIN course_user cu ON tc.course_id = cu.course_id "
                         . "JOIN course c ON cu.course_id=c.id "
                         . "WHERE cu.user_id = ?d AND tc.active = '1' AND c.visible != " . COURSE_INACTIVE . " "
-                        . "AND (cu.status = 1 OR cu.editor = 1 OR cu.reviewer = 1 OR $group_sql_template3) "
+                        . "AND (cu.status = 1 OR
+                                cu.editor = 1 OR
+                                cu.reviewer = 1 OR
+                                tc.participants = 0 OR
+                                $group_sql_template3) "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
