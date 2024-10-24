@@ -316,7 +316,7 @@
                                         <div>
                                             @if ($curDirName)
                                                 <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
-                                                    <span class='fa fa-level-up'></span><span class='hidden-xs TextBold'>{{ trans('langUp') }}</span>
+                                                    <span class='fa fa-level-up'></span><span class='hidden-xs TextBold text-nowrap'>{{ trans('langUp') }}</span>
                                                 </a>
                                             @endif
                                         </div>
