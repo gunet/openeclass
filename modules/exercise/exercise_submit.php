@@ -602,7 +602,7 @@ if (isset($timeleft)) { // time remaining
     if ($timeleft <= 1) {
         $timeleft = 1;
     }
-    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i><span>";
+    $tool_content .= "<div class='alert alert-warning time-remaining-warning'><i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i><span>";
     $tool_content .= "<div class='col-sm-12'><h4 class='d-flex align-items-center gap-2 mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
     $tool_content .= "</span></div>";
 }

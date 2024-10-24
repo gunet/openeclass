@@ -5568,9 +5568,17 @@ pre {
   vertical-align: top;
 }
 
-/*Announcement CSS*/
+/*Announcement*/
 .announcement-index .announceTitleHeader {
   align-items: top;
   display: flex;
   gap: 10px;
+}
+
+/*Exercise sticky time*/
+.time-remaining-warning {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 55px;
+  z-index: 1000;
 }
