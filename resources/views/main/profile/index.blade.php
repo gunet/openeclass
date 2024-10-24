@@ -224,7 +224,7 @@
                                         <div class='col'>
                                             <div class="card h-100 border-0">
                                                 <img style='height:150px; width:150px;' src="{{ $urlServer }}resources/img/game/badge.png" class="card-img-top ms-auto me-auto mt-3" alt="certificate">
-                                                <div class="card-body">
+                                                <div class="card-body text-center">
                                                     <a href='../out.php?i={{ $certificate->identifier }}'>
                                                         <h4 class='certificate_panel_title text-center'>
                                                             {!! $certificate->cert_title !!}
