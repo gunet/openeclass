@@ -955,6 +955,9 @@ function show_session_tc($title, $comments, $resource_id, $tc_id, $visibility) {
             $has_expired = "&nbsp;<span class='TextBold text-danger'>($langHasExpired)</span>";
         }
         $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
+        if ($is_consultant) {
+            $bbblink .= '&amp;mod_pw=' . urlencode($tc->mod_pw);
+        }
         $tclink = "<a class='$locked' href='$bbblink' target='_blank' aria-label='$langOpenNewTab'>";
         if (!$module_visible) {
             $tclink .= " <i>($langInactiveModule)</i>&nbsp;";
@@ -1323,7 +1326,7 @@ function upload_session_doc($sid){
             redirect_to_home_page("modules/session/session_space.php?course=$course_code&session=$sid");
         }else{
             if(isset($_POST['for_file']) && isset($_POST['fromUser'])){
-                $is_completed_deliverable = database::get()->querySingle("SELECT is_completed FROM session_resources 
+                $is_completed_deliverable = database::get()->querySingle("SELECT is_completed FROM session_resources
                                                                         WHERE session_id = ?d
                                                                         AND doc_id = ?d
                                                                         AND from_user = ?d", $sid, $_POST['for_file'], $_POST['fromUser']);
@@ -3587,15 +3590,15 @@ function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable
             $langUploadDeliverableFromUser, $langStudent, $langProblem,
             $langManager, $siteName, $langEmail, $langAboutDeliverable, $langTel;
 
-    $consultantInfo = Database::get()->querySingle("SELECT email,verified_mail FROM user 
-                                                    WHERE id IN (SELECT creator FROM mod_session 
+    $consultantInfo = Database::get()->querySingle("SELECT email,verified_mail FROM user
+                                                    WHERE id IN (SELECT creator FROM mod_session
                                                     WHERE id = ?d AND course_id = ?d)", $sid, $course_id);
 
     if($consultantInfo->verified_mail){
         $course_title = course_id_to_title($course_id);
         $session_title = title_session($course_id,$sid);
 
-        $simpleUsertInfo = Database::get()->querySingle("SELECT givenname,surname FROM user 
+        $simpleUsertInfo = Database::get()->querySingle("SELECT givenname,surname FROM user
                                                      WHERE id = ?d", $fromSimpleUser);
 
         $deliverableInfo = Database::get()->querySingle("SELECT title FROM session_resources WHERE id = ?d AND session_id = ?d", $aboutDeliverable, $sid);
@@ -3617,11 +3620,11 @@ function informConsultantAboutDeliverable($sid,$fromSimpleUser,$aboutDeliverable
                     <div id='mail-body-inner'>
                         <ul id='forum-category'>
                             <li>
-                                <span><b>$langStudent: </b></span> 
+                                <span><b>$langStudent: </b></span>
                                 <span>$simpleUsertInfo->givenname&nbsp;$simpleUsertInfo->surname</span>
                             </li>
                             <li>
-                                <span><b>$langAboutDeliverable: </b></span> 
+                                <span><b>$langAboutDeliverable: </b></span>
                                 <span>$deliverableInfo->title</span>
                             </li>
                         </ul>
