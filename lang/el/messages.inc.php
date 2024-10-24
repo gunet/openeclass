@@ -2640,7 +2640,7 @@ $langOtherReq = "Άλλες απαιτήσεις συστήματος";
 $langInstallBullet1 = "Μια βάση δεδομένων MySQL.";
 $langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το Open eClass έχει αποσυμπιεστεί.";
 $langCheckReq = "Έλεγχος προαπαιτούμενων για τη λειτουργία του Open eClass";
-$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια <a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html' target='_blank' aria-label='(opens in a new tab)'>GNU General Public Licence (GPL). </a><br />
+$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια <a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html' target='_blank' aria-label='GNU General Public Licence - (opens in a new tab)'>GNU General Public Licence (GPL). </a><br />
                 Παρακαλούμε διαβάστε την άδεια και κάνετε κλικ στο 'Αποδοχή'";
 $langAccept = "Αποδοχή";
 $langLater = 'Αργότερα';
@@ -6124,7 +6124,7 @@ $langUnknownSetting = 'Άγνωστη ρύθμιση';
 $langAPITokenExists = "Έχει δημιουργηθεί ήδη ένα token. Αν θέλετε να δημιουργήσετε νέο, κάντε κλικ στο 'Δημιουργία νέου token'";
 $langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API.";
 $langAPITokenLongDesc = "Λεπτομέρειες σχετικά με τις υποστηριζόμενες κλήσεις του API μπορείτε να βρείτε
-<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='(opens in a new tab)'>εδώ</a>.";
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='Open Eclass api - (opens in a new tab)'>εδώ</a>.";
 $langCreateAPIToken = 'Δημιουργία νέου Token';
 $langAPITokenCreated = "Το token δημιουργήθηκε. Αντιγράψτε το έτσι ώστε να το χρησιμοποιήσετε στην εφαρμογή σας.";
 
@@ -6536,7 +6536,7 @@ $langImportH5P = "Μπορείτε να εισάγετε ένα έτοιμο α�
 $langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P
                     να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br>
                     Δείτε περισσότερες λεπτομέρειες στο
-                    <a href='https://h5p.org/content-types-and-applications/' target='_blank' aria-label='(opens in a new tab)'>https://h5p.org/content-types-and-applications/</a>
+                    <a href='https://h5p.org/content-types-and-applications/' target='_blank' aria-label='Ενημέρωση H5p - (opens in a new tab)'>https://h5p.org/content-types-and-applications/</a>
                     για τους διαθέσιμους τύπους περιεχομένων.";
 $langUpdateRequired = "Χρειάζεται ενημέρωση";
 $langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";

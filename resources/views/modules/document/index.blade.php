@@ -343,7 +343,7 @@
                                                                 <div class='form-group mt-4'>
                                                                     <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
                                                                     <div class='col-12'>
-                                                                        <select id='moveTo' name='moveTo' class='form-select' aria-label="{{ trans('langMove')}}">
+                                                                        <select id='moveTo' name='moveTo' class='form-select' aria-label="{{ trans('langMove')}} - {{ trans('langTo') }}">
                                                                             @if ($curDirPath and $curDirPath != '/')
                                                                                 <option value=''>{{ trans('langParentDir') }}</option>
                                                                             @endif
@@ -429,14 +429,15 @@
 
                                                         @if ($file->is_dir)
                                                             @if($file->visible == 1)
-                                                                <a class='fileURL-link' href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                                
+                                                                <a class='fileURL-link' href='{!! $file->url !!}' aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
                                                             @else
-                                                                <a class="fileURL-link opacity-50" href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                                <a class="fileURL-link opacity-50" href='{!! $file->url !!}' aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
                                                             @endif
                                                         @else
                                                             @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
                                                                 @php $urlFile = urlencode($file->url); @endphp
-                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={!! $urlFile !!}" target="_blank">{{ $file->filename }}</a>
+                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={!! $urlFile !!}" target="_blank" aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
                                                             @else
                                                                 {!! $file->link !!}
                                                             @endif
