@@ -109,7 +109,7 @@ class MultimediaHelper {
             } else if (file_exists(ModalBoxHelper::getColorboxDir())) {
                 $class = 'colorboxframe';
             }
-            $ahref = "<a href='" . $mediaRsrc->getPlayURL() . "' class='$class fileURL' $extraParams title='$title'>$title</a>";
+            $ahref = "<a href='" . $mediaRsrc->getPlayURL() . "' class='$class fileURL' $extraParams title='$title' aria-label='$title'>$title</a>";
         }
 
         return $ahref;
