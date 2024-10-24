@@ -5346,7 +5346,7 @@ $langTypeH5P = "H5P content type";
 $langImportH5P = "Import an H5P interactive content via the following form.";
 $langH5pInfoUpdate = "Click 'Update' in order to update H5P content types (if needed)<br>
     For further details about the available H5P content types please visit
-    <a href='https://h5p.org/content-types-and-applications/' target='_blank' aria-label='(opens in a new tab)'>https://h5p.org/content-types-and-applications/</a>.";
+    <a href='https://h5p.org/content-types-and-applications/' target='_blank' aria-label='H5p - (opens in a new tab)'>https://h5p.org/content-types-and-applications/</a>.";
 $langMultipleCourseUsers = "Users registered to the most courses";
 $langLast30Entries = "Top 30 results";
 $langHaveCreated = "Created";
@@ -5609,7 +5609,7 @@ $langBBBCronEnableInstructions = '
 Για παράδειγμα, αυτό μπορεί να γίνει μέσω κάποιου εξωτερικού συστήματος webcron.</p>
 <p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
-<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='(opens in a new tab)'>here</a>.";
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='Open Eclass Api - (opens in a new tab)'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
 $langActiveUsers = "Active";
 $langEmailUpdatedAutomaticaly = 'Your e-mail address was automatically changed by the authentication system to "%s" (from "%s").';

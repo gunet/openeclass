@@ -4062,7 +4062,7 @@ function setOpenCoursesExtraHTML() {
                                     <div class='col d-flex justify-content-center align-items-center'>
                                         <div>
                                             <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                                <a class='d-flex gap-1 align-items-center' target='_blank' href='$openFacultiesUrl' aria-label='Open courses(opens in a new tab)'>
+                                                <a class='d-flex gap-1 align-items-center' target='_blank' href='$openFacultiesUrl' aria-label='$langCourses - (opens in a new tab)'>
                                                     <i class='fa-solid fa-book-open fa-xl'></i>
                                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
                                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>
@@ -4072,7 +4072,7 @@ function setOpenCoursesExtraHTML() {
                                             </div>
 
                                             <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                                <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank' aria-label='Open courses(opens in a new tab)'>
+                                                <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank' aria-label='$langNationalOpenCourses - (opens in a new tab)'>
                                                     $langNationalOpenCourses
                                                     <span class='fa-solid fa-chevron-right ms-2'></span>
                                                 </a>
