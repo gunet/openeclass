@@ -717,6 +717,7 @@ function view($view_file, $view_data = array()) {
                 .text-heading-h5,
                 .text-heading-h6,
                 .action-bar-title,
+                .breadcrumb-item.active,
                 .list-group-item.list-group-item-action,
                 .list-group-item.element{
                     color:$theme_options_styles[ColorHyperTexts];
