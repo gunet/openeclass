@@ -441,7 +441,7 @@
                                                             @else
                                                                 {!! $file->link !!}
                                                             @endif
-                                                            
+
                                                         @endif
                                                         @if ($can_upload)
                                                             @if ($file->extra_path)
@@ -465,7 +465,7 @@
                                                         @if ($file->copyrighted)
                                                             <span>{!! copyright_info($file->id, 1, 'documents') !!}</span>
                                                         @endif
-                                                        
+
 
                                                         @if($file->updated_message)
                                                             @if($file->visible == 1)
@@ -558,7 +558,7 @@
     {
         e.preventDefault();
         var fileURL = $(this).attr('href');
-        var downloadURL = $(this).siblings('input').val();
+        var downloadURL = $(this).closest('tr').find('input[type=hidden]').first().val();
         var fileTitle = $(this).attr('title');
 
         // BUTTONS declare
