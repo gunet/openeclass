@@ -2795,6 +2795,9 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `agenda` ADD `end` DATETIME NOT NULL");
     }
 
+    Database::get()->query("ALTER TABLE tag_element_module MODIFY COLUMN module_id int NULL");
+    Database::get()->query("ALTER TABLE tag_element_module MODIFY COLUMN element_id int NULL");
+
     // learningPath
     if (!DBHelper::fieldExists('lp_user_module_progress', 'attempt')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `attempt` int(11) NOT NULL DEFAULT 1");
