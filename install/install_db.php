@@ -1915,8 +1915,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` int(11) NOT NULL,
-    `module_id` int(11) NOT NULL,
-    `element_id` int(11) NOT NULL,
+    `module_id` int(11) NULL,
+    `element_id` int(11) NULL,
     `user_id` int(11) NOT NULL,
     `date` DATETIME DEFAULT NULL,
     `tag_id` int(11) NOT NULL) $tbl_options");
