@@ -24,9 +24,11 @@ $require_login = true;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 include 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
 require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
+$user = new User();
 load_js('jstree3');
 
 $pageName = $langReqRegProf;
