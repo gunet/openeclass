@@ -1546,7 +1546,7 @@ foreach ($result as $row) {
             }else{
                 $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);
             }
-            
+
         }
     }
 
@@ -1670,7 +1670,7 @@ if (count($data['fileInfo'])) {
 } else {
     $data['downloadPath'] = '';
 }
-$data['backUrl'] = isset($backUrl)? $backUrl: documentBackLink($curDirPath);
+$data['backUrl'] = htmlspecialchars_decode($backUrl ?? documentBackLink($curDirPath));
 
 if (defined('SAVED_COURSE_CODE')) {
     $course_code = SAVED_COURSE_CODE;

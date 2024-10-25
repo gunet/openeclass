@@ -4,8 +4,6 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
-<?php $openDir = isset($_GET['openDir']) && $_GET['openDir'] !== '/' ? $_GET['openDir'] : ''; ?>
-
 <script type='text/javascript'>
 
     $(document).ready(function(){
@@ -14,8 +12,16 @@
 
         async function loadUppy() {
             try {
-                let backURL = '<?php echo htmlspecialchars_decode($backUrl); ?>';
-                const { Uppy, Dashboard, XHRUpload } = await import("https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs");
+                const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
+
+                const locale_map = {
+                  'de': German,
+                  'el': Greek,
+                  'en': English,
+                  'es': Spanish,
+                  'fr': French,
+                  'it': Italian,
+                }
 
                 const uppy = new Uppy({
                     autoProceed: false,
@@ -28,15 +34,10 @@
                     proudlyDisplayPoweredByUppy: false,
                     height: 500,
                     thumbnailWidth: 100,
-                    locale: {
-                        strings: {
-                            dropPasteFiles: 'Drop files here or %{browseFiles}',
-                            browseFiles: 'browse files!',
-                        }
-                    }
+                    locale: locale_map['{{ $language }}'] || English,
                 })
 
-                let uploadPath = '<?php echo $openDir; ?>';
+                let uploadPath = '{{ $curDirPath }}';
                 let fileCreator = document.querySelector('input[name="file_creator"]').value;
 
                 let uncompressInput = $('input[name="uncompress"]');
@@ -71,7 +72,7 @@
                 });
 
                 uppy.use(XHRUpload, {
-                    endpoint: backURL,
+                    endpoint: '{{ $backUrl }}',
                     formData: true,
                     fieldName: 'userFile',
                     method: 'POST',
@@ -88,7 +89,7 @@
                 })
 
                 uppy.setMeta({
-                    uploadPath: '<?php echo $openDir; ?>',
+                    uploadPath: '{{ $curDirPath }}',
                 });
 
                 uppy.on('file-added', (file) => {
@@ -96,11 +97,12 @@
                 })
 
                 uppy.on('complete', (result) => {
-                    window.location.href = backURL;
+                    window.location.href = '{!! $backUrl !!}';
 
                 })
                 isUppyLoaded = true;
             } catch (error) {
+
                 isUppyLoaded = false;
             }
         }
@@ -109,6 +111,7 @@
 
         // Drag and drop
         $('.uploadBTN').on('click', function(event) {
+                event.preventDefault();
             if (!isUppyLoaded) {
                 console.log('Uppy not loaded');
             } else {
@@ -272,9 +275,11 @@
                     @endif
 
                         <div class="col-12 drag_and_drop_container d-none mb-3">
-                            <input type="hidden" name="uploadPath" value="<?php echo $openDir; ?>">
+                            <input type="hidden" name="uploadPath" value="{{ $curDirPath }}">
                             <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
-                            <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
+                            @push('head_styles')
+                                <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
+                            @endpush
 
                             <div class='border-card p-2 rounded-2'>
 
@@ -440,7 +445,7 @@
 
                                                         @if ($file->is_dir)
                                                             @if($file->visible == 1)
-                                                                
+
                                                                 <a class='fileURL-link' href='{!! $file->url !!}' aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
                                                             @else
                                                                 <a class="fileURL-link opacity-50" href='{!! $file->url !!}' aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>

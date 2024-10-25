@@ -1,0 +1,20 @@
+{
+  "name": "open-eclass",
+  "version": "4.0",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.openeclass.org/",
+  "dependencies": {
+    "@uppy/core": "^4.2.2",
+    "@uppy/dashboard": "^4.1.1",
+    "@uppy/drag-drop": "^4.0.3",
+    "@uppy/locales": "^4.2.0",
+    "@uppy/xhr-upload": "^4.2.1",
+    "h5p-standalone": "^3.5.1",
+    "mathjax": "3",
+    "recordrtc": "^5.6.2",
+    "video.js": "^8.19"
+  },
+  "scripts": {
+    "build": "bun build ./js/build/uppy.js --outdir ./js/bundle --minify"
+  }
+}
