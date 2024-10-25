@@ -10,11 +10,111 @@
 
     $(document).ready(function(){
 
+        let isUppyLoaded = false;
+
+        async function loadUppy() {
+            try {
+                let backURL = '<?php echo htmlspecialchars_decode($backUrl); ?>';
+                const { Uppy, Dashboard, XHRUpload } = await import("https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs");
+
+                const uppy = new Uppy({
+                    autoProceed: false,
+                })
+
+                uppy.use(Dashboard, {
+                    target: '#uppy',
+                    inline: true,
+                    showProgressDetails: true,
+                    proudlyDisplayPoweredByUppy: false,
+                    height: 500,
+                    thumbnailWidth: 100,
+                    locale: {
+                        strings: {
+                            dropPasteFiles: 'Drop files here or %{browseFiles}',
+                            browseFiles: 'browse files!',
+                        }
+                    }
+                })
+
+                let uploadPath = '<?php echo $openDir; ?>';
+                let fileCreator = document.querySelector('input[name="file_creator"]').value;
+
+                let uncompressInput = $('input[name="uncompress"]');
+                let uncompress = uncompressInput.val();
+
+                uncompressInput.change(function() {
+                    uncompress = $(this).is(':checked') ? '1' : '0';
+                    $(this).val(uncompress);
+                    uppy.setMeta({
+                        uncompress: uncompress,
+                    });
+                });
+
+                let replaceInput = $('input[name="replace"]');
+                let replace = replaceInput.val();
+                replaceInput.change(function() {
+                    replace = $(this).is(':checked') ? '1' : '0';
+                    $(this).val(replace);
+                    uppy.setMeta({
+                        replace: replace,
+                    });
+                });
+
+                let fileCopyrighted = 0;
+
+                uppy.setMeta({
+                    uploadPath: uploadPath,
+                    file_creator: fileCreator,
+                    file_copyrighted: fileCopyrighted,
+                    replace: replace,
+                    uncompress: uncompress,
+                });
+
+                uppy.use(XHRUpload, {
+                    endpoint: backURL,
+                    formData: true,
+                    fieldName: 'userFile',
+                    method: 'POST',
+                    headers: {
+
+                    },
+                    allowedMetaFields: [
+                        'uploadPath',
+                        'file_creator',
+                        'file_copyrighted',
+                        'replace',
+                        'uncompress',
+                    ]
+                })
+
+                uppy.setMeta({
+                    uploadPath: '<?php echo $openDir; ?>',
+                });
+
+                uppy.on('file-added', (file) => {
+                    console.log('File added:', file)
+                })
+
+                uppy.on('complete', (result) => {
+                    window.location.href = backURL;
+
+                })
+                isUppyLoaded = true;
+            } catch (error) {
+                isUppyLoaded = false;
+            }
+        }
+
+        loadUppy();
+
         // Drag and drop
         $('.uploadBTN').on('click', function(event) {
-            event.preventDefault();
-            console.log('clicked')
-            $('.drag_and_drop_container').toggleClass('d-none');
+            if (!isUppyLoaded) {
+                console.log('Uppy not loaded');
+            } else {
+                event.preventDefault();
+                $('.drag_and_drop_container').toggleClass('d-none');
+            }
         });
 
         // Bulk processing
@@ -208,95 +308,6 @@
 
                             </div>
 
-                            <script type="module">
-                                let backURL = '<?php echo htmlspecialchars_decode($backUrl); ?>';
-                                import { Uppy, Dashboard, XHRUpload } from "https://releases.transloadit.com/uppy/v4.4.0/uppy.min.mjs"
-
-                                const uppy = new Uppy({
-                                    autoProceed: false,
-                                })
-
-                                uppy.use(Dashboard, {
-                                    target: '#uppy',
-                                    inline: true,
-                                    showProgressDetails: true,
-                                    proudlyDisplayPoweredByUppy: false,
-                                    height: 500,
-                                    thumbnailWidth: 100,
-                                    locale: {
-                                        strings: {
-                                            dropPasteFiles: 'Drop files here or %{browseFiles}',
-                                            browseFiles: 'browse files!',
-                                        }
-                                    }
-                                })
-
-                                let uploadPath = '<?php echo $openDir; ?>';
-                                let fileCreator = document.querySelector('input[name="file_creator"]').value;
-
-                                let uncompressInput = $('input[name="uncompress"]');
-                                let uncompress = uncompressInput.val();
-
-                                uncompressInput.change(function() {
-                                    uncompress = $(this).is(':checked') ? '1' : '0';
-                                    $(this).val(uncompress);
-                                    uppy.setMeta({
-                                        uncompress: uncompress,
-                                    });
-                                });
-
-                                let replaceInput = $('input[name="replace"]');
-                                let replace = replaceInput.val();
-                                replaceInput.change(function() {
-                                    replace = $(this).is(':checked') ? '1' : '0';
-                                    $(this).val(replace);
-                                    uppy.setMeta({
-                                        replace: replace,
-                                    });
-                                });
-
-                                let fileCopyrighted = 0;
-
-                                uppy.setMeta({
-                                    uploadPath: uploadPath,
-                                    file_creator: fileCreator,
-                                    file_copyrighted: fileCopyrighted,
-                                    replace: replace,
-                                    uncompress: uncompress,
-                                });
-
-                                uppy.use(XHRUpload, {
-                                    endpoint: backURL,
-                                    formData: true,
-                                    fieldName: 'userFile',
-                                    method: 'POST',
-                                    headers: {
-
-                                    },
-                                    allowedMetaFields: [
-                                        'uploadPath',
-                                        'file_creator',
-                                        'file_copyrighted',
-                                        'replace',
-                                        'uncompress',
-                                    ]
-                                })
-
-                                uppy.setMeta({
-                                    uploadPath: '<?php echo $openDir; ?>',
-                                });
-
-                                uppy.on('file-added', (file) => {
-                                    console.log('File added:', file)
-                                })
-
-                                uppy.on('complete', (result) => {
-                                    console.log('complete');
-                                    console.log(result);
-                                    window.location.href = backURL;
-                                })
-
-                            </script>
                         </div>
 
                     @if (count($fileInfo) or $curDirName)
