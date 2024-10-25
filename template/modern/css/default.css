@@ -738,7 +738,8 @@ h1,h2,h3,h4,h5,h6,
 .action-bar-title,
 .Neutral-900-cl,
 .list-group-item.list-group-item-action,
-.list-group-item.element{
+.list-group-item.element,
+.label-container{
   word-break: break-word;
 }
 
@@ -5585,6 +5586,7 @@ pre {
   z-index: 1000;
 }
 
-.text-nowrap{
+.text-nowrap,
+.paginate_button{
   white-space: nowrap;
 }
