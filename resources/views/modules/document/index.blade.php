@@ -278,7 +278,7 @@
                             <input type="hidden" name="uploadPath" value="{{ $curDirPath }}">
                             <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
                             @push('head_styles')
-                                <link href="https://releases.transloadit.com/uppy/v4.4.0/uppy.min.css" rel="stylesheet">
+                                <link href="{{ $urlAppend }}js/bundle/uppy.min.css" rel="stylesheet">
                             @endpush
 
                             <div class='border-card p-2 rounded-2'>
