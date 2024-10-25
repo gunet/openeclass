@@ -235,9 +235,9 @@
                                                 <div class='col-12 px-3'>
                                                     <div class='form-group mt-5'>
                                                         @if ($eclass_stud_reg == 2)
-                                                            <input class='btn w-100 secondary-submit' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                                                            <input class='btn w-100 secondary-submit reg_button' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                                         @else
-                                                            <input class='btn w-100 secondary-submit' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                                            <input class='btn w-100 secondary-submit reg_button' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                                         @endif
                                                     </div>
                                                 </div>
