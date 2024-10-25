@@ -20,8 +20,6 @@
         const loadingTask = pdfjsLib.getDocument(url);
         loadingTask.promise.then(pdf => {
             var numPages = pdf.numPages;
-            console.log('number:'+numPages);
-            console.log('PDF loaded');
 
             // Fetch the first page
             for(i=1; i<=numPages; i++){
@@ -54,7 +52,7 @@
         var noScreenshot = true;
         var autoBlur = true;
     </script>
-    <script type="text/javascript" src="https://pdfanticopy.com/noprint.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/noscript/noscript.js"></script>
 
     <script>
         /** TO DISABLE SCREEN CAPTURE **/

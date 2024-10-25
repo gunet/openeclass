@@ -952,7 +952,7 @@ if($is_consultant && !$is_coordinator){
     $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
                                 WHERE participants = $uid AND is_accepted = 1)";
 }
-
+$data['next_session'] = array();
 if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
     $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
                                                             WHERE course_id = ?d

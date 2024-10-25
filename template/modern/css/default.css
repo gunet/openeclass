@@ -2039,7 +2039,8 @@ label:has(input[type="checkbox"]:disabled){
 .warningAdminBtn,
 .helpAdminBtn,
 .secodandary-submit,
-.btn-submit{
+.btn-submit,
+.reg_button{
   transition: 0.3s ease;
 }
 
