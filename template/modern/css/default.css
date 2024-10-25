@@ -4611,6 +4611,7 @@ body .delThemeBtn{
 
 .mycourses-pagination{
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .mycourses-pagination .page-item .page-link:focus, 

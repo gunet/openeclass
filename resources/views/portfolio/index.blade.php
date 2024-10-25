@@ -719,7 +719,7 @@
                                                 <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
                                                 <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
 
-                                                <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent solidPanel mt-4'>
+                                                <div class='col-12 d-flex justify-content-center Borders p-0 bg-transparent solidPanel mt-4'>
                                                     <nav aria-label="{{ trans('langPagination') }}">
                                                         <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                             <li class='page-item page-item-previous'>
