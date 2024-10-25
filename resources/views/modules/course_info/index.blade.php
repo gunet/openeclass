@@ -139,7 +139,7 @@
                                 {!! $action_bar !!}
                           </div>
 
-                          @include('layouts.partials.show_alert') 
+                          @include('layouts.partials.show_alert')
 
                           <div class='d-lg-flex gap-4 mt-4'>
                           <div class='flex-grow-1'>
@@ -219,7 +219,7 @@
                                                     {{ trans('langWithCourseUnits') }}
                                                 </label>
                                             </div>
-                                            
+
                                             <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_activity">
                                                 <label>
                                                     <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
@@ -238,11 +238,11 @@
                                                     {{ trans('langFlippedClassroom') }}
                                                 </label>
                                             </div>
-                                            <div class="radio 
-                                                        @if(!get_config('show_collaboration') and !get_config('show_always_collaboration')) 
-                                                            d-none 
-                                                        @elseif(is_module_disable(MODULE_ID_SESSION)) 
-                                                            d-none 
+                                            <div class="radio
+                                                        @if(!get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                                                            d-none
+                                                        @elseif(is_module_disable(MODULE_ID_SESSION))
+                                                            d-none
                                                         @endif" id="radio_collaborative">
                                                 <label>
                                                     <input type='radio' name='view_type' value='sessions' id='sessions' {{ $course_type_sessions }}>
@@ -250,7 +250,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        @if(get_config('show_collaboration') and !get_config('show_always_collaboration')) 
+                                        @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
                                             <input type="hidden" id="radio_collaborative_helper" value="{{ $is_type_collaborative }}">
                                         @endif
                                     </div>
@@ -322,7 +322,7 @@
 
                                             <div class='radio mb-3'>
                                                 <label>
-                                                    <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
+                                                    <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {!! $disable_visibility !!}>
                                                     <label for="courseclose" aria-label="{{ trans('langClosedCourse') }}">{!! course_access_icon(COURSE_CLOSED) !!}</label>
                                                     {{ trans('langClosedCourse') }}
                                                 </label>
@@ -332,7 +332,7 @@
 
                                             <div class='radio'>
                                                 <label>
-                                                    <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
+                                                    <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {!! $disable_visibility !!}>
                                                     <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
                                                     {!! trans('langInactiveCourse') !!}
                                                 </label>
@@ -367,14 +367,14 @@
                                         <div class="col-sm-12">
                                             <div class="radio mb-2">
                                                 <label>
-                                                    <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}>
+                                                    <input type='radio' value='1' name='enable_offline_course' {!! $log_offline_course_enable !!} {!! $log_offline_course_inactive !!}>
                                                     {{ trans('langActivate') }}
                                                 </label>
                                                 <div class='help-block'>{{ trans('langCourseOfflineLegend') }}</div>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}>
+                                                    <input type='radio' value='0' name='enable_offline_course' {!! $log_offline_course_disable !!} {!! $log_offline_course_inactive !!}>
                                                     {{ trans('langDeactivate') }}
                                                 </label>
                                             </div>
@@ -387,17 +387,16 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
-                                                    <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}>
+                                                    <input type='radio' value='0' name='disable_log_course_user_requests' {!! $log_course_user_requests_enable !!} {!! $log_course_user_requests_inactive !!}>
                                                     {{ trans('langActivate') }}
                                                 </label>
-                                                <div class='help-block'>{{ $log_course_user_requests_disable }}</div>
+                                                <div class='help-block'>{{ $log_course_user_requests_dis }}</div>
                                             </div>
                                             <div class='radio'>
                                                 <label>
-                                                    <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}>
+                                                    <input type='radio' value='1' name='disable_log_course_user_requests' {!! $log_course_user_requests_disable !!} {!! $log_course_user_requests_inactive !!}>
                                                     {{ trans('langDeactivate') }}
                                                 </label>
-                                                <div class='help-block'>{{ $log_course_user_requests_disable }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -407,16 +406,15 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
-                                                    <input type='radio' value='1' name='enable_access_users_list' {{ $check_enable_access_users_list }} >
+                                                    <input type='radio' value='1' name='enable_access_users_list' {!! $check_enable_access_users_list !!}>
                                                     {{ trans('langActivate') }}
                                                 </label>
                                                 <div class='help-block'>{{ trans('langUsersListAccessInfo') }}</div>
                                             </div>
                                             <div class='radio'>
                                                 <label>
-                                                    <input type='radio' value='0' name='enable_access_users_list' {{ $check_disable_access_users_list}} >
+                                                    <input type='radio' value='0' name='enable_access_users_list' {!! $check_disable_access_users_list !!} >
                                                     {{ trans('langDeactivate') }}
-
                                                 </label>
                                             </div>
                                         </div>
@@ -427,13 +425,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {{ $sharing_radio_dis }}>
+                                                    <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {!! $sharing_radio_dis !!}>
                                                     {{ trans('langSharingEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}>
+                                                    <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {!! $sharing_radio_dis !!}>
                                                     {{ trans('langSharingDis') }}
 
                                               </label>
@@ -450,13 +448,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}>
+                                                    <input type='radio' value='1' name='f_radio' {!! $checkForumEn !!}>
                                                     {{ trans('langDisableForumNotifications') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}>
+                                                    <input type='radio' value='0' name='f_radio' {!! $checkForumDis !!}>
                                                     {{ trans('langActivateForumNotifications') }}
                                               </label>
                                             </div>
@@ -471,13 +469,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
-                                                    <input type='radio' value='1' name='r_radio' {{ $checkRatingEn }}>
+                                                    <input type='radio' value='1' name='r_radio' {!! $checkRatingEn !!}>
                                                     {{ trans('langRatingEn') }}
                                                 </label>
                                             </div>
                                             <div class='radio'>
                                                 <label>
-                                                    <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}>
+                                                    <input type='radio' value='0' name='r_radio' {!! $checkRatingDis !!}>
                                                     {{ trans('langRatingDis') }}
                                                 </label>
                                             </div>
@@ -491,13 +489,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='ran_radio' {{ $checkAnonRatingEn }} {{ $anon_rating_radio_dis }}>
+                                                    <input type='radio' value='1' name='ran_radio' {!! $checkAnonRatingEn !!} {!! $anon_rating_radio_dis !!}>
                                                     {{ trans('langRatingAnonEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}>
+                                                    <input type='radio' value='0' name='ran_radio' {!! $checkAnonRatingDis !!} {!! $anon_rating_radio_dis !!}>
                                                     {{ trans('langRatingAnonDis') }}
 
                                               </label>
@@ -514,13 +512,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='c_radio' {{ $checkCommentEn }}>
+                                                    <input type='radio' value='1' name='c_radio' {!! $checkCommentEn !!}>
                                                     {{ trans('langCommentsEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}>
+                                                    <input type='radio' value='0' name='c_radio' {!! $checkCommentDis !!}>
                                                     {{ trans('langCommentsDis') }}
                                               </label>
                                             </div>
@@ -532,13 +530,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='ar_radio' {{ $checkAbuseReportEn }}>
+                                                    <input type='radio' value='1' name='ar_radio' {!! $checkAbuseReportEn !!}>
                                                     {{ trans('langAbuseReportEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}>
+                                                    <input type='radio' value='0' name='ar_radio' {!! $checkAbuseReportDis !!}>
                                                     {{ trans('langAbuseReportDis') }}
                                               </label>
                                             </div>
