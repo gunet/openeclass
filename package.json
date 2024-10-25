@@ -15,6 +15,6 @@
     "video.js": "^8.19"
   },
   "scripts": {
-    "build": "bun build ./js/build/uppy.js --outdir ./js/bundle --minify"
+    "build": "bun build ./js/build/uppy.js --outdir ./js/bundle --minify && rm js/bundle/uppy.min.css && cat node_modules/@uppy/*/dist/*.min.css >>js/bundle/uppy.min.css"
   }
 }
