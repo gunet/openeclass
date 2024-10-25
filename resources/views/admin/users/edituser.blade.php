@@ -230,7 +230,7 @@
                                             <tr>
                                         @endif
                                                 <td>
-                                                    <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
+                                                    <div style="min-width: 200px;"><a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a></div>
                                                 </td>
                                                 <td>{{ $logs->title }}</td>
                                                 <td>
