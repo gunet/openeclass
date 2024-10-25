@@ -356,7 +356,7 @@ if (isset($_POST['submit'])) {
         $log_course_user_requests_dis = '';
     }
     $data['log_course_user_requests_inactive'] = $log_course_user_requests_inactive;
-    $data['log_course_user_requests_disable'] = $log_course_user_requests_dis;
+    $data['log_course_user_requests_dis'] = $log_course_user_requests_dis;
 
     //Sharing options
     if (!is_sharing_allowed($course_id)) {
@@ -477,18 +477,16 @@ if (isset($_POST['submit'])) {
 
     // Log course user requests
     if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
-        $log_course_user_requests_disable = 'checked';
+        $log_course_user_requests_disable = ' checked';
         $log_course_user_requests_enable = '';
     } else {
         $log_course_user_requests_disable = '';
-        $log_course_user_requests_enable = 'checked';
+        $log_course_user_requests_enable = ' checked';
     }
-    $data['log_rourse_user_requests_disable'] = $log_course_user_requests_disable;
+    $data['log_course_user_requests_disable'] = $log_course_user_requests_disable;
     $data['log_course_user_requests_enable'] = $log_course_user_requests_enable;
 
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
-    $data['menuTypeID'] = 2;
-
 
     view('modules.course_info.index', $data);
 }
