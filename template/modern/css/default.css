@@ -718,6 +718,29 @@ a{
   white-space: normal;
   display: inline-block;
 }
+@media(max-width: 991px){
+  .table-default tbody tr td a {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+@media(max-width:425px){
+  .table-default tbody tr td a {
+    max-width: 150px;
+  }
+}
+@media(min-width:426px) and (max-width:767px){
+  .table-default tbody tr td a {
+    max-width: 200px;
+  }
+}
+@media(min-width:768px) and (max-width:991px){
+  .table-default tbody tr td a {
+    max-width: 250px;
+  }
+}
 
 a:hover{
   text-decoration:underline;
