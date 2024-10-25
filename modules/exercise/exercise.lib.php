@@ -393,7 +393,7 @@ function display_exercise($exercise_id): void
             <thead>
                 <tr class='active'>
                 <td colspan='$colspan'>
-                    <strong><u>$langQuestion</u>: $i</strong>";
+                    <strong class='pe-2'><u>$langQuestion</u>: $i</strong>";
             if ($is_editor) {
                 $tool_content .= "<a $modal_params href = 'admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid' aria-label='$langModify'>
                     <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement ='bottom' data-bs-original-title ='$langModify' ></span >
