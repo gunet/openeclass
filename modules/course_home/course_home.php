@@ -946,38 +946,42 @@ if ($uid) {
 $limit = "LIMIT 1";
 $sql_session = "";
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
-if($is_consultant && !$is_coordinator){
-    $sql_session = "AND creator = $uid";
-}elseif($is_simple_user){
-    $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
-                                WHERE participants = $uid AND is_accepted = 1)";
-}
 $data['next_session'] = array();
-if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
-    $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+$data['course_sessions'] = array();
+if($course_info->view_type == 'sessions' && isset($_SESSION['uid'])){
+    if($is_consultant && !$is_coordinator){
+        $sql_session = "AND creator = $uid";
+    }elseif($is_simple_user){
+        $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
+                                    WHERE participants = $uid AND is_accepted = 1)";
+    }
+    if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
+        $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+                                                                WHERE course_id = ?d
+                                                                AND start > NOW() 
+                                                                AND visible = 1
+                                                                $sql_session
+                                                                ORDER BY start ASC $limit",$course_id);
+    }elseif($is_coordinator){
+        // Get the minimum datetime from the current date
+        $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session 
+                                                WHERE course_id = ?d
+                                                AND start > NOW()
+                                                AND visible = 1", $course_id);
+
+        if($minDate){
+            $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+                                                                WHERE course_id = ?d
+                                                                AND start = ?t", $course_id, $minDate->st);
+        }
+    }
+
+    $data['course_sessions'] = $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                             WHERE course_id = ?d
-                                                            AND start > NOW() 
-                                                            AND visible = 1
+                                                            AND visible = ?d
                                                             $sql_session
-                                                            ORDER BY start ASC $limit",$course_id);
-}elseif($is_coordinator){
-    // Get the minimum datetime from the current date
-    $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session 
-                                             WHERE course_id = ?d
-                                             AND start > NOW()
-                                             AND visible = 1", $course_id);
-
-    $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
-                                                         WHERE course_id = ?d
-                                                         AND start = ?t", $course_id, $minDate->st);
+                                                            ORDER BY start ASC",$course_id,1);
 }
-
-$data['course_sessions'] = $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
-                                                        WHERE course_id = ?d
-                                                        AND visible = ?d
-                                                        $sql_session
-                                                        ORDER BY start ASC",$course_id,1);
-
 view('modules.course.home.index', $data);
 
 /**
