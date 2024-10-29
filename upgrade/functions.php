@@ -2892,8 +2892,28 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE exercise ADD is_exam INT DEFAULT 0 NULL");
     }
 
+    if (!DBHelper::fieldExists('exercise', 'passing_grade')) {
+        Database::get()->query("ALTER TABLE exercise ADD passing_grade FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('assignment', 'passing_grade')) {
+        Database::get()->query("ALTER TABLE assignment ADD passing_grade FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('gradebook_activities', 'passing_grade')) {
+        Database::get()->query("ALTER TABLE gradebook_activities ADD passing_grade FLOAT NULL");
+    }
+
+    if (!DBHelper::fieldExists('gradebook_activities', 'extra_credit')) {
+        Database::get()->query("ALTER TABLE gradebook_activities ADD extra_credit BOOL DEFAULT 0 NULL");
+    }
+
     if (!DBHelper::fieldExists('group_properties', 'booking')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
+    }
+
+    if (!DBHelper::fieldExists('course', 'daily_access_limit')) {
+        Database::get()->query("ALTER TABLE `course` ADD daily_access_limit INT NULL");
     }
 
     if (!DBHelper::tableExists('tutor_availability_group')) {
@@ -3636,7 +3656,6 @@ function finalize_upgrade(): void
         set_config('theme_options_id', 0);
     }
     set_config('version', ECLASS_VERSION);
-    set_config('upgrade_begin', '');
 }
 
 
