@@ -207,6 +207,7 @@ $db->query("CREATE TABLE `course` (
   `view_units` INT(11) NOT NULL DEFAULT 0,
   `popular_course` INT(11) NOT NULL DEFAULT 0,
   `is_collaborative` INT(11) NOT NULL DEFAULT 0,
+  `daily_access_limit` INT NULL,
   PRIMARY KEY  (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user` (
@@ -1134,7 +1135,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `reviews_per_assignment` int(4) DEFAULT NULL,
     `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-    `max_submissions` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1) $tbl_options");
+    `max_submissions` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1,
+    `passing_grade` FLOAT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1225,7 +1227,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `calc_grade_method` TINYINT DEFAULT 1,
     `general_feedback` TEXT DEFAULT NULL,
     `options` TEXT DEFAULT NULL,
-    `is_exam` INT DEFAULT 0 NULL) $tbl_options");
+    `is_exam` INT DEFAULT 0 NULL,
+     passing_grade FLOAT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1832,7 +1835,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook` (
     `active` TINYINT(1) NOT NULL DEFAULT 0,
     `title` VARCHAR(255) DEFAULT NULL,
     `start_date` DATETIME NOT NULL,
-    `end_date` DATETIME NOT NULL) $tbl_options");
+    `end_date` DATETIME NOT NULL,
+    `passing_grade` FLOAT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1845,7 +1849,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
     `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
     `auto` TINYINT(4) NOT NULL DEFAULT 0,
-    `visible` TINYINT(4) NOT NULL DEFAULT 0) $tbl_options");
+    `visible` TINYINT(4) NOT NULL DEFAULT 0,
+    `extra_credit` BOOL DEFAULT 0 NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -372,7 +372,6 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
     } else { // Main part of upgrade starts here
         $_SESSION['step'] = 3;
-        set_config('upgrade_begin', time());
         setGlobalContactInfo();
 
         if (!isset($_SERVER['SERVER_NAME'])) {
@@ -412,7 +411,6 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 function fatal_error($message) {
     global $command_line, $ajax_call, $error_message;
 
-    set_config('upgrade_begin', '');
     if ($command_line) {
         if ($error_message) {
             $message .= "\n\n$error_message\n";
