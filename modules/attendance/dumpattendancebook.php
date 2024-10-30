@@ -50,9 +50,17 @@ if (isset($_GET['activity_id'])) {
 foreach ($activities as $act) {
     $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
     $data[] = [ $title ];
-    $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, attend
-        FROM attendance_book, user
-        WHERE attendance_book.uid = user.id AND attendance_activity_id = ?d", $act->id);
+
+    $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, attendance_users.uid, attend
+                    FROM attendance_users
+                    LEFT JOIN attendance_book
+                        ON attendance_book.uid = attendance_users.uid
+                        AND attendance_activity_id = ?d
+                    JOIN user
+                        ON user.id = attendance_users.uid
+                    WHERE attendance_id = ?d
+                    ORDER BY surname, givenname", $act->id, getDirectReference($_GET['attendance_id']));
+
     foreach ($entries as $item) {
         $data[] = [ $item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->attend ];
     }
