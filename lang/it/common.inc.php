@@ -37,7 +37,7 @@ $langother = 'Altro';
 $langInfoAbout = "La piattaforma <strong>$siteName</strong>  è un sistema completo di gestione di corsi elettronici. Adotta la filosofia del software a codice sorgente aperto e supporta il servizio di e-learning asincrono senza limitazioni ed impegni. L'accesso al servizio si fa con l'uso di un semplice web browser senza l'esigenza di nozioni tecniche e speciali.";
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langCourses = "corsi";
+$langCourses = "Corsi";
 $langGroupTutor = "Group Tutor";
 $langEditor = "Insegnante di Sostegno";
 $langOfEditor = "Tutor Assistant";
@@ -72,4 +72,3 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
-

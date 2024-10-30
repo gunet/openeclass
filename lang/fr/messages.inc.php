@@ -475,7 +475,7 @@ $langCourseS = "cours";
 $langCourseIden = "Identité du cours";
 $langBackupCourse = "Copie de sauvegarde du cours";
 $langModifDone = "L'information a été modifiée";
-$langHome = "Retour à la page d'accueil";
+$langHome = "Page d'accueil";
 $langCode = "Code du cours";
 $langDelCourse = "Supprimer le cours";
 $langDelUsers = "Supprimer les utilisateurs";
@@ -1021,7 +1021,7 @@ $langListCourses = "Liste des Cours"
 ;
 $langAsynchronous = "Équipe de Télé-enseignement Asynchrone"
 ;
-$langUserLogin = "Connexion de l'utilisateur";
+$langUserLogin = "Connexion";
 $langWelcomeToPortfolio = "Bienvenus à votre portfolio personnel";
 $langUnregCourse = "Se désinscrire d'un cours";
 $langUnCourse = "Désinscription";
@@ -4613,7 +4613,8 @@ $langAdminCreateFaq = "Create FAQ";
 $langAdminCreateHomeTexts = "Create texts on the homepage";
 $langAdminManageHomepage = "Homepage management";
 $langAdminManageFooter = "Footer management";
-$langFaq = "Frequently Asked Questions";
+$langFaq = "Questions fréquentes";
+$langFaqAbbrev = "FAQ";
 $langFaqQuestion = "Question";
 $langFaqAnswer = "Answer";
 $langFaqOrder = "Ordering";

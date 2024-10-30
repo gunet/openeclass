@@ -37,7 +37,7 @@ $langother = "Otro";
 $langInfoAbout = "La <strong>$siteName</strong> plaforma is un sistema completo de Administración de Curson que soporta Servicios de eLearning Asincrónicos con un simple navegador Web. Su meta es la incorporación y el uso constructivo de Internet y las tecnologías de la Web en los procesos de enseañanza y aprendizaje. Soporta administración electrónica, almacenamiento y presentación de materiales para la enseñanza, independientes de los factores constrictores como el espacio y el tiempo y creando las condiciones necesarias para un entorno de enseñanza dinámico.<br><br><br><br> La introducción de e-learning en un proceso de aprendizaje tradicional proporciona nuevas capacidades y permite nuevas fuentes de interacción entre aprendices y formadores, $langsOfTeacher and $langsOfStudent, a través de entornos technologicos contemporáneos.";
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langCourses = "curso";
+$langCourses = "Cursos";
 $langGroupTutor = "Group Tutor";
 $langEditor = "Tutor auxiliar";
 $langOfEditor = "Tutor Assistant";
@@ -70,4 +70,3 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
-

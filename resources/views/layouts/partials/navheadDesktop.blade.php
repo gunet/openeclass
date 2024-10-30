@@ -42,7 +42,7 @@
                                 @if (faq_exist())
                                     <li class="nav-item">
                                         <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
-                                            {{ trans('langFaq') }}
+                                            {{ trans('langFaqAbbrev') }}
                                         </a>
                                     </li>
                                 @endif
@@ -592,5 +592,3 @@
         });
     });
 </script>
-
-
