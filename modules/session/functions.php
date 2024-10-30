@@ -1732,7 +1732,7 @@ function display_session_activities($element, $id, $session_id = 0) {
            $langWithSubmittedUploadedFile, $langWithTCComplited,
            $langContinueToCompletetionWithCompletedTC, $langAddCompletionCriteria,
            $langWithMeetingCompletion, $langContinueToCompletetionWithMeeting,
-           $langWithAttendanceRegistrationByConsultant, $langSettingSelect;
+           $langWithAttendanceRegistrationByConsultant, $langSettingSelect, $infoPrereqSession;
 
     if ($session_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;session=$session_id&amp;badge_id=$id";
@@ -2008,6 +2008,10 @@ function display_session_activities($element, $id, $session_id = 0) {
                                 </div>
                             </div>
                             <div class='card-body'>
+                                <div class='alert alert-info'>
+                                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                                    <span>$infoPrereqSession</span>
+                                </div>
                                 <div class='res-table-wrapper'>";
                                         $delPrereqBtn = action_button(array(
                                         array('title' => $langDelete,

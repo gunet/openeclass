@@ -1670,3 +1670,5 @@ $langUnregCollaboration = 'Unregister from collaboration';
 $langDisableCollaborationModulesHelp = 'You can select which modules will be disabled for all collaborations platform-wide.';
 $langDefaultModulesCollaborationHelp = 'The following modules are enabled by default in all collaborations created on the platform.';
 $langInsertQuestionnaire = 'questionnaire';
+$infoPrereqSession = "The session you select as a prerequisite must have at least one completion criterion.</br>
+ Otherwise the system will ignore the session prerequisite calculation process.";
