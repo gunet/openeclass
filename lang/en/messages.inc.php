@@ -196,6 +196,7 @@ $langAdminCreateHomeTexts = "Create texts on the homepage";
 $langAdminManageHomepage = "Homepage management";
 $langAdminManageFooter = "Footer management";
 $langFaq = "Frequently Asked Questions";
+$langFaqAbbrev = "FAQ";
 $langFaqQuestion = "Question";
 $langFaqAdd = "Add question";
 $langFaqExpandAll = "Expand all";
@@ -974,7 +975,7 @@ $langCourseIden = "Course Info";
 $langBackupCourse = "Course Archive";
 $langCloneCourse = "$langCourse Clone";
 $langModifDone = "Course settings updated.";
-$langHome = "Back to Home Page";
+$langHome = "Home Page";
 $langCode = "$langCourse code";
 $langDelCourse = "Delete Course";
 $langDelUsers = "Unregister all users";
@@ -1899,7 +1900,7 @@ $langDefineBlanks = "Define one blank by tags [...]";
 $langGiveAnswers = "Enter answers";
 $langChooseGoodAnswer = "Choose the correct answer";
 $langChooseGoodAnswers = "Choose the correct answer(s)";
-$langColumnA = "Column Α";
+$langColumnA = "Column A";
 $langColumnB = "Column B";
 $langMoreLessChoices = "More/Less choices";
 $langQuestionUpdated = "The question was updated";
@@ -2167,7 +2168,7 @@ $langBookingIsDone = "HAS BEEN BOOKED";
 $langAcceptBooking = "Reservation Acceptance";
 $langWarningInfoBooking = "<div class='TextBold' style='color:#ffa500;'>In ORANGE color is displayed the reservation to the group leader by another user.";
 $langBlueInfoBooking = "<div class='TextBold' style='color:#337ab7;'>The available date of the team leader to make a reservation is shown in BLUE.</br>Click on the available slot to submit a reservation.</div>";
-$langSuccessInfoBooking = "<div class='TextBold' style='color:#1E7E0E;'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζεται κράτηση που κάνετε προς τον υπεύθυνο ομάδας (Αναμονή έγκρισης ή απορρίψης από τον υπεύθυνο).</br>Δυνατότητα ακύρωσης κάνοντας κλικ στο slot της κράτησης.</div>";
+$langSuccessInfoBooking = "<div class='TextBold' style='color:#1E7E0E;'>Your reservation to the group manager is displayed in GREEN color (Waiting for approval or rejection).</br>Click on the available   slot to cancel a reservation.</div>";
 $langPinkInfoBooking = "<div class='TextBold Pink-cl'>Your reservation to the group manager is displayed in PINK color (Request approval by the manager).</br>Click on the available slot to cancel a reservation.</div>";
 $langAvailableTutorBookings = "Manager reservations available";
 $langAVailableBookingsForTutor = "Bookings available for manager:";
@@ -2238,7 +2239,7 @@ $langReturn = "Back";
 $langAddPage = "Add a page";
 $langPageAdded = "Page added";
 $langPageUpdated = "Page updated";
-$langPageDeleted = "Η σελίδα διαγράφηκε";
+$langPageDeleted = "The page was deleted";
 $langPageTitleModified = "The title of the page has been modified";
 $langSendPage = "Page to send";
 $langCouldNotSendPage = "This file is not in HTML format and could not be sent. If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/document.php'>Documents tool</a>";
@@ -3404,9 +3405,9 @@ $langUserAccountInfo2 = 'New Account Registration&nbsp;';
 $langUserAccountInfo3 = 'Alternative Selection';
 $langUserAccountInfo4 = 'Login as a different user';
 $langNewAccount = 'New Account';
-$langNewAccountActivation = 'Account Αctivation';
-$langNewUserAccountActivation = $langStudent. 'Account Αctivation';
-$langNewProfAccountActivation = $langTeacher. 'Account Αctivation';
+$langNewAccountActivation = 'Account Activation';
+$langNewUserAccountActivation = $langStudent. ' Account Activation';
+$langNewProfAccountActivation = $langTeacher. ' Account Activation';
 $langNewAccountActivation1 = '(existing account)';
 $langUserExistingAccount = 'Login';
 $langMultiRegUserData = "Usernames";
@@ -4440,7 +4441,7 @@ $langMailVerifySuccessU = "Your account has been activated.";
 $langVerifiedMail = "Verified e-mail address";
 $langMailNotVerified = "Your e-mail address is unverified. You can't receive e-mail notifications from courses until you verify it. To do so, please click";
 $langNoCookies = 'Warning! Cookies are deactivated in your browser. Log-in is not possible.';
-$langNoHelpTopic = "Δεν υπάρχει βοήθεια για το συγκεκριμένο θέμα";
+$langNoHelpTopic = "No help available for this topic";
 $langGlossary = "Glossary";
 $langGlossaryTerm = "Term";
 $langGlossaryTerms = "Terms";
@@ -4566,9 +4567,9 @@ $langOpenCoursesHasUnits = "Has Course units";
 $langOpenCoursesHasMediaFiles = "Has multimedia files";
 $langOpenCoursesTeacherConfirmVideo = "Teacher statement - The available video lectures cover 80% of the curriculum";
 $langOpenCoursesFiles = "Files";
-$langOpenCoursesIsAMinusLevel = "Open Courses Α-";
-$langOpenCoursesIsALevel = "Open Courses Α";
-$langOpenCoursesIsAPlusLevel = "Open Courses Α+";
+$langOpenCoursesIsAMinusLevel = "Open Courses A-";
+$langOpenCoursesIsALevel = "Open Courses A";
+$langOpenCoursesIsAPlusLevel = "Open Courses A+";
 $langOpenCoursesLevel = "OpenCourses Level";
 $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
@@ -4940,7 +4941,7 @@ $langBBBServerAlertHostname = "Please enter the server hostname";
 $langBBBServerAlertName = "Please enter the server name";
 $langBBBServerAlertIP = "Please enter the correct server IP address";
 $langBBBServerAlertKey = "Please enter the server pre-shared key";
-$langBBBServerAlertAPIUrl = "Please enter the server ΑPI URL";
+$langBBBServerAlertAPIUrl = "Please enter the server API URL";
 $langBBBServerAlertMaxRooms = "Please enter the correct number of max server rooms";
 $langBBBServerAlertMaxUsers = "Please enter the correct number of server max users";
 $langBBBServerAlertOrder = 'Please enter correctly the server choice order';
@@ -4963,15 +4964,15 @@ $langBBBCronStopped = 'Warning! Automatic registration of teleconference attenda
 $langBBBCronEnable = 'Please note: You can enable automatic registration of teleconference attendance with no explicit actions by the instructors (opening of attendance monitor window). {Instructions}';
 $langBBBCronEnableTitle = 'Automatic Teleconference Attendance Registration Instructions';
 $langBBBCronEnableInstructions = '
-<p>Εφόσον η υπηρεσία φιλοξενείται σε περιβάλλον Unix / Linux, μπορείτε να προσθέσετε την παρακάτω εντολή ως cron job στον εξυπηρετητή, δίνοντας <code>crontab -e</code>:</p>
+<p>If the service is hosted in a Unix/Linux environment, you can add the following command as a cron job on the server by typing <code>crontab -e</code>:</p>
 <pre>
 * * * * *  /usr/bin/php {webRoot}/modules/tc/tc_cron_attendance.php
 </pre>
-<p>Ανάλογα με το σύστημα φιλοξενίας, πιθανόν να χρειαστεί κάποια αλλαγή στην πλήρη διαδρομή της εντολής της php.</p>
-<p>Εναλλακτικά, μπορείτε να ενεργοποιήσετε φόρτωση της διεύθυνση / URL:<br>
+<p>Depending on the host system, some changes might be needed to the full path of the php command.</p>
+<p>Alternatively, you can enable a regular request to the following URL:<br>
 <code>{cronURL}</code><br>
-Για παράδειγμα, αυτό μπορεί να γίνει μέσω κάποιου εξωτερικού συστήματος webcron.</p>
-<p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
+This can be done, for instance, via an external webcron service.</p>
+<p>In any case, the call must be made every minute in order for the log data to be accurate.</p>';
 $langZoomCreateMeetingError = "An error occurred during zoom meeting creation.";
 $langZoomAccessTokenError = "An error occurred while generating zoom access token.";
 $langZoomUserCreateError = "An error occurred while creating zoom user.";
@@ -5400,7 +5401,7 @@ $langbgHoveredHelpButtonColor = "Hovered background color";
 $langclHoveredHelpButtonColor = "Hovered text color";
 $langBgBorderForms = "Form border color";
 $langSubmitComment = "Submit a comment";
-$langBriefProfilePortfolioTextColor = "Χρώμα κειμένων";
+$langBriefProfilePortfolioTextColor = "Text color";
 $langRadio = "Radio";
 $langRadios = "Settings radio button";
 $langBgRadios = "Radio button background color";

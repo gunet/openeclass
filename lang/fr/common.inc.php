@@ -37,7 +37,7 @@ $langother = "Autre";
 $langInfoAbout = "La plateforme <strong>$siteName</strong> est un Système complet de Gestion de Cours (CMS). Inspirée par la philosophie du logiciel libre (open source), cette plateforme supporte le Service de Télé-enseignement Asynchrone, étant facilement accessible par le biais d'un simple navigateur web, sans besoin de connaissances techniques et sans restriction de temps et d'espace.";
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langCourses = "cours";
+$langCourses = "Cours";
 $langGroupTutor = "Group Tutor";
 $langEditor = "Enseignant assistant";
 $langOfEditor = "Tutor Assistant";
@@ -72,4 +72,3 @@ $langCourseReviewer = "Reviewer";
 $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
-
