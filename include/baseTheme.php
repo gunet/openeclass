@@ -3641,13 +3641,48 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clLabelForms'])){
             $styles_str .= "
-                form label,
-                form .form-label{
+            
+                .form-wrapper.form-edit .control-label-notes,
+                .form-group .control-label-notes{
                     color:$theme_options_styles[clLabelForms];
                 }
 
-                .form-wrapper.form-edit .control-label-notes,
-                .form-group .control-label-notes{
+                form small,
+                form strong,
+                form p,
+                form span,
+                form em,
+                form h1,
+                form h2,
+                form h3,
+                form h4,
+                form h5,
+                form h6,
+                form .li-indented,
+                form li,
+                form .Neutral-900-cl,
+                form .form-label,
+                form .default-value,
+                form label,
+                form th,
+                form td,
+                form .panel-body,
+                form .card-body,
+                form div,
+                form .visibleFile,
+                form .list-group-item,
+                form .help-block,
+                form .control-label-notes,
+                form .title-default,
+                form .modal-title-default,
+                form .text-heading-h2,
+                form .text-heading-h3,
+                form .text-heading-h4,
+                form .text-heading-h5,
+                form .text-heading-h6,
+                form .action-bar-title,
+                form .list-group-item.list-group-item-action,
+                form .list-group-item.element{
                     color:$theme_options_styles[clLabelForms];
                 }
             ";
