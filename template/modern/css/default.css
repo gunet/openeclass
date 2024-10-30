@@ -768,6 +768,12 @@ h1,h2,h3,h4,h5,h6,
 .label-container{
   word-break: break-word;
 }
+@media(min-width:992px){
+  .table-default tbody tr td{
+    word-break: break-word;
+  }
+}
+
 
 #leftnav a:hover,
 .dropdown_menu_user a:hover, 
