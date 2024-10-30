@@ -227,7 +227,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'showTitle' => false,
                     'class' => 'login-option',
                     'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => " <div class='col-12'><form action='$urlServer' method='post'>
+                    'html' => " <div class='col-12'><div class='form-wrapper form-edit'><form action='$urlServer' method='post'>
                                     <div class='form-group text-start'>
                                         <label for='uname' class='form-label'>$langUsername</label>
                                         <input type='text' id='uname' name='uname' class='login-input w-100' placeholder='&#xf007;' $autofocus>
@@ -241,8 +241,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                                             </span>
                                         </div>
                                     </div>
-                                    <button type='submit' name='submit' class='btn w-100 login-form-submit mt-4'>$langEnter</button>
-                                </form></div>
+                                    <button type='submit' name='submit' class='btn w-100 login-form-submit mt-4 mb-2'>$langEnter</button>
+                                </form></div></div>
                                 <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center mt-4'>
                                     <a class='text-decoration-underline' href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                                 </div>");

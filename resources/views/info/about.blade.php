@@ -3,124 +3,97 @@
 @section('content')
 
 <div class="col-12 main-section">
-    <div class='{{ $container }} main-container'>
-        <div class="row m-auto">
-
-                    <div class='col-12 mb-4'>
-                        <h1>{{ $toolName }}</h1>
+    
+            <div class='about-content about-content-1 d-flex flex-column align-items-center'>
+                <div class='{{ $container }} padding-default p-lg-5'>
+                    <div class='about-organization-name text-center'>
+                        <div class="about-title">{{ trans('langInstituteShortNameSecondary') }}</div>
+                        <a href='{{ $institution_url }}' target='_blank' class='mainpage about-value' aria-label='{{ $institution }}'>{{ $institution }}</a>
                     </div>
+                    <div class='about-site-name text-center mt-5'>
+                        <div class="about-title">{{ trans('langCampusName') }}</div>
+                        <p class='form-label about-value'>{{ $siteName }}</p>
+                    </div>
+                    <div class='about-version text-center mt-5'>
+                        <div class="about-title">{{ trans('langVersion') }}</div>
+                        <a class='about-value' href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' aria-label='{{ $eclass_version }}'>{{ $eclass_version }}</a>
+                    </div>
+                    <div class='about-support-user text-center mt-5'>
+                        <div class="about-title">{{ trans('langSupportUser') }}</div>
+                        <p class='form-label about-value'>{{ $admin_name }}</p>
+                    </div>
+                </div>
+            </div>
 
-                    <div class='col-12'>
-                        <div class='row row-cols-lg-4 row-cols-md-2 row-cols-1 g-4'>
-                            <div class='col'>
-                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
-                                    <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2 text-center'>
-                                            <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
+            <div class='about-content about-content-2'>
+                <div class='{{ $container }} padding-default'>
+                    <div class='row row-cols-1 g-4 w-100 row-about-courses mb-5'>
+                        <div class='col'>
+                            <div class='card panelCard card-transparent card-about-courses h-100 border-0'>
+                                <div class='card-body d-flex align-items-center'>
+                                    <div class='row m-auto w-100'>
+                                        <div class='col-lg-3 col-md-6 col-12 text-center'>
+                                            <div class='about-badge text-heading-h2 badge Primary-600-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_inactive }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langCourses') }}</p>
                                         </div>
-                                        <div class='col-12 d-flex justify-content-center mb-0 text-center'>
-                                            <strong class='form-label'>{{ trans('langInstituteShortNameSecondary') }}</strong>
+                                        <div class='col-lg-3 col-md-6 col-12 col-12 text-center mt-md-0 mt-4'>
+                                            <div class='about-badge text-heading-h2 badge Success-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_open }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langOpenCoursesShort') }}</p>
                                         </div>
-                                        <div class='col-12 d-flex justify-content-center text-center'>
-                                            <a href='{{ $institution_url }}' target='_blank' class='mainpage' aria-label='{{ $institution }}'>{{ $institution }}</a>
+                                        <div class='col-lg-3 col-md-6 col-12 col-12 text-center mt-lg-0 mt-4'>
+                                            <div class='about-badge text-heading-h2 badge Warning-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_registration }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langOpenCourseWithRegistration') }}</p>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='col'>
-                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
-                                    <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2 text-center'>
-                                            <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
+                                        <div class='col-lg-3 col-md-6 col-12 col-12 text-center mt-lg-0 mt-4'>
+                                            <div class='about-badge text-heading-h2 badge Accent-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_closed }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langClosedCourses') }}</p>
                                         </div>
-                                        <div class='col-12 d-flex justify-content-center mb-0 text-center'>
-                                            <strong class='form-label'>{{ trans('langCampusName') }}</strong>
-                                        </div>
-                                        <div class='col-12 d-flex justify-content-center text-center'><p class='form-label' style="font-weight:400;">{{ $siteName }}</p></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='col'>
-                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
-                                    <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2 text-center'>
-                                            <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
-                                        </div>
-                                        <div class='col-12 d-flex justify-content-center mb-0 text-center'>
-                                            <strong class='form-label'>{{ trans('langVersion') }}</strong>
-                                        </div>
-                                        <div class='col-12 d-flex justify-content-center text-center'>
-                                            <a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' aria-label='{{ $eclass_version }}'>{{ $eclass_version }}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='col'>
-                                <div class='card panelCard card-default px-lg-4 py-lg-3 w-100 h-100'>
-                                    <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2 text-center'>
-                                            <div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div>
-                                        </div>
-                                        <div class='col-12 d-flex justify-content-center mb-0 text-center'>
-                                            <strong class='form-label'>{{ trans('langSupportUser') }}</strong>
-                                        </div>
-                                        <div class='col-12 d-flex justify-content-center text-center'><p class='form-label' style="font-weight:400;">{{ $admin_name }}</p></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
-                    <div class='col-12 mt-5'>
-                        <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
-                            <div class='col'>
-                                <ul class='list-group list-group-flush'>
-                                    <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-5 flex-wrap'>
-                                        <div class='d-flex justify-content-start align-items-start gap-2'><i class="fa-solid fa-book-open mt-1" role="presentation"></i>{{ trans('langCourses') }}</div>
-                                        <div><span class='badge Primary-600-bg'>{{ $course_inactive }}</span></div>
-                                    </li>
-                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
-                                        <div>{{ trans('langOpenCoursesShort') }}</div>
-                                        <div><span class='badge Success-200-bg'>{{ $course_open }}</span></div>
-                                    </li>
-                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
-                                        <div>{{ trans('langOpenCourseWithRegistration') }}</div>
-                                        <div><span class='badge Warning-200-bg'>{{ $course_registration }}</span></div>
-                                    </li>
-                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
-                                        <div>{{ trans('langClosedCourses') }}</div>
-                                        <div><span class='badge Accent-200-bg'>{{ $course_closed }}</span></div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class='col'>
-                                <ul class='list-group list-group-flush'>
-                                    <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-5 flex-wrap'>
-                                        <div class='d-flex justify-content-start align-items-start gap-2'><i class="fa-solid fa-user mt-1" role="presentation"></i>{{ trans('langUsers') }}</div>
-                                        <div><span class='badge Primary-600-bg'>{{ $count_total }}</span></div>
-                                    </li>
-                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
-                                        <div>{{ trans('langTeachers') }}</div>
-                                        <div><span class='badge Success-200-bg'>{{ $count_status[USER_TEACHER] }}</span></div>
-                                    </li>
-                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
-                                        <div>{{ trans('langStudents') }}</div>
-                                        <div><span class='badge Warning-200-bg'>{{ $count_status[USER_STUDENT] }}</span></div>
-                                    </li>
-                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
-                                        <div>{{ trans('langGuest') }}</div>
-                                        <div><span class='badge Accent-200-bg'>{{ $count_status[USER_GUEST] }}</span></div>
-                                    </li>
-                                </ul>
+                    <div class='row row-cols-1 g-4 w-100 row-about-students'>
+                        <div class='col'>
+                            <div class='card panelCard card-transparent card-about-students h-100 border-0'>
+                                <div class='card-body d-flex align-items-center'>
+                                    <div class='row m-auto w-100'>
+                                        <div class='col-lg-3 col-md-6 col-12 text-center'>
+                                            <div class='about-badge text-heading-h2 badge Primary-600-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_total }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langUsers') }}</p>
+                                        </div>
+                                        <div class='col-lg-3 col-md-6 col-12 text-center mt-md-0 mt-4'>
+                                            <div class='about-badge text-heading-h2 badge Success-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_status[USER_TEACHER] }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langTeachers') }}</p>
+                                        </div>
+                                        <div class='col-lg-3 col-md-6 col-12 text-center mt-lg-0 mt-4'>
+                                            <div class='about-badge text-heading-h2 badge Warning-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_status[USER_STUDENT] }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langStudents') }}</p>
+                                        </div>
+                                        <div class='col-lg-3 col-md-6 col-12 text-center mt-lg-0 mt-4'>
+                                            <div class='about-badge text-heading-h2 badge Accent-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_status[USER_GUEST] }}</div>
+                                            <p class='TextBold text-white'>{{ trans('langGuest') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
+        
 
-        </div>
-    </div>
+       
+ 
 </div>
+
+
+<script type="text/javascript">
+    setTimeout(function(){
+        $('.about-content-1').addClass('show-animate');
+        window.scrollTo({ top: 1, behavior: 'smooth' });
+    }, 100);
+</script>
 
 @endsection

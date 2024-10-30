@@ -25,6 +25,7 @@ foreach ($q as $l) {
     if ($l->auth_name == 'eclass') { // standard auth method
         $authLink[] = array(true, "
                                 <div class='col-12'>
+                                    <div class='form-wrapper form-edit'>
                                     <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
                                       $next
                                       <div>
@@ -41,9 +42,9 @@ foreach ($q as $l) {
                                             </span>
                                           </div>
                                         </div>
-                                        <input class='btn w-100 login-form-submit mt-4' type='submit' name='submit' value='$langEnter'>
+                                        <input class='btn w-100 login-form-submit mt-4 mb-2' type='submit' name='submit' value='$langEnter'>
                                       </div>
-                                    </form>
+                                    </form></div>
                                     <div class='col-12 text-md-start text-center mt-4'>
                                         <a class='text-decoration-underline' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                                     </div>

@@ -5618,3 +5618,107 @@ pre {
 .paginate_button{
   white-space: nowrap;
 }
+
+/******************************** PAGE ABOUT *********************************/
+
+.about-content-1,
+.about-content-2{
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.about-content-2{
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../images/courses_info.jpg);
+  min-height: calc(100vh - 60px);
+}
+@media(max-width:991px){
+  .about-content-1,
+  .about-content-2{
+    min-height: calc(100vh - 56px);
+  }
+}
+
+.about-badge{
+  min-width: 100px;
+  min-height: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.about-title{
+  font-size: 50px; 
+  font-weight: 600;
+  line-height: 52px;
+}
+.about-value{
+  font-size: 25px; 
+  line-height:36px;
+}
+
+
+.about-organization-name{
+  transition: 1s;
+}
+.about-content-1 .about-organization-name{
+  transform: translateX(-100%);
+}
+.about-content-1.show-animate .about-organization-name{
+  transform: translateX(0);
+}
+
+
+.about-site-name{
+  transition: 1s;
+}
+.about-content-1 .about-site-name{
+  transform: translateX(100%);
+}
+.about-content-1.show-animate .about-site-name{
+  transform: translateX(0);
+}
+
+
+.about-version{
+  transition: 1s;
+}
+.about-content-1 .about-version{
+  transform: translateX(-100%);
+}
+.about-content-1.show-animate .about-version{
+  transform: translateX(0);
+}
+
+.about-support-user{
+  transition: 1s;
+}
+.about-content-1 .about-support-user{
+  transform: translateX(100%);
+}
+.about-content-1.show-animate .about-support-user{
+  transform: translateX(0);
+}
+
+.row-about-courses{
+  transition: 1s;
+}
+.about-content-2 .row-about-courses{
+  transform: translateX(-100%);
+}
+.about-content-2.show-animate .row-about-courses{
+  transform: translateX(0);
+}
+
+.row-about-students{
+  transition: 1s;
+}
+.about-content-2 .row-about-students{
+  transform: translateX(100%);
+}
+.about-content-2.show-animate .row-about-students{
+  transform: translateX(0);
+}

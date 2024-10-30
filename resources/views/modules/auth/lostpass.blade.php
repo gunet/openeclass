@@ -43,7 +43,7 @@
                                         <h1>{{ trans('langNewPass1') }} </h1>
                                     </div>
                                     <div class='card-body'>
-
+                                        <div class='form-wrapper form-edit'>
                                             <form role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                                 <input type='hidden' name='u' value='{{ $userUID }}'>
                                                 <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
@@ -65,6 +65,7 @@
                                                     </div>
                                                 </div>
                                             </form>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -83,7 +84,7 @@
                                 <h1>{{ trans('langUserData') }} </h1>
                             </div>
                             <div class='card-body'>
-
+                                <div class='form-wrapper form-edit'>
                                     <form role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='form-group'>
                                             <div class='col-12'>
@@ -108,6 +109,7 @@
                                             </div>
                                         </div>
                                     </form>
+                                </div>
 
                             </div>
                         </div>
