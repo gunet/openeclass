@@ -5644,8 +5644,8 @@ pre {
 }
 
 .about-badge{
-  min-width: 100px;
-  min-height: 100px;
+  min-width: 120px;
+  min-height: 120px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
