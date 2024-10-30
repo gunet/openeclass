@@ -72,7 +72,7 @@
                 });
 
                 uppy.use(XHRUpload, {
-                    endpoint: '{{ $backUrl }}',
+                    endpoint: '{!! $backUrl !!}',
                     formData: true,
                     fieldName: 'userFile',
                     method: 'POST',
