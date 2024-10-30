@@ -1,27 +1,19 @@
 <?php
 
 /* ========================================================================
- * Open eClass 4.0
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+ * Copyright 2003-2024, Greek Universities Network - GUnet
  *
  * Open eClass is an open platform distributed in the hope that it will
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
  *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * Contact address: GUnet Asynchronous eLearning Group
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
-/**
- * @file: course_home.php
- * @brief: course home page
+ * ========================================================================
  */
 
 use Widgets\WidgetArea;
@@ -104,7 +96,7 @@ $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title
 if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {
         reorder_table('course_units', 'course_id', $course_id, $_POST['toReorder'],
-            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+            $_POST['prevReorder'] ?? null);
         exit;
     }
 }

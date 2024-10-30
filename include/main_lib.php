@@ -1,29 +1,25 @@
 <?php
 
-/*
+/* ========================================================================
+ * Open eClass
+ * E-learning and Course Management System
  * ========================================================================
- * Open eClass 4.0 - E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2022  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
+ * Copyright 2003-2024, Greek Universities Network - GUnet
  *
  * Open eClass is an open platform distributed in the hope that it will
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
  *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * Contact address: GUnet Asynchronous eLearning Group
  *                  e-mail: info@openeclass.org
- *
- * For a full list of contributors, see "credits.txt".
+ * ========================================================================
  */
+
 
 /**
  * @file main.lib.php
  * @brief General useful functions for eClass
- * @authors many...
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
@@ -2510,7 +2506,7 @@ function handle_unit_info_edit() {
         }
         $moduleTag = new ModuleElement($unit_id);
         $moduleTag->syncTags($tagsArray);
-        $successmsg = trans('langCourseUnitModified');
+        $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = units_get_maxorder()+1;
         $q = Database::get()->query("INSERT INTO course_units SET
@@ -2522,7 +2518,12 @@ function handle_unit_info_edit() {
                                  `order` = ?d, course_id = ?d", $title, $descr,
                                         $unitdurationfrom, $unitdurationto,
                                         $order, $course_id);
-        $successmsg = trans('langCourseUnitAdded');
+
+        if (units_get_maxorder() == 1) { // make 'list' default unit view
+            Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
+        }
+
+        $successmsg = $langCourseUnitAdded;
         $unit_id = $q->lastInsertID;
         // tags
         if (isset($_POST['tags'])) {
