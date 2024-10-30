@@ -3,7 +3,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2024  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,11 +19,10 @@
  * ========================================================================
  */
 
-global $require_current_course,$require_login,$head_content,$pageName,$tool_content;
-global $langBBBRecordUserParticipation,$langWangBBBAttendance;
-
-$require_current_course = TRUE;
-$require_login = TRUE;
+if (!defined('TC_CRON')) {
+    $require_current_course = true;
+    $require_login = true;
+}
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
@@ -65,31 +64,36 @@ foreach($q as $server) {
             $meet_id = $row->meetingID;
             $moder_pw = $row->moderatorPW;
 
-            $course = Database::get()->querySingle("SELECT code,course.title,tc_session.title as mtitle
-            FROM course LEFT JOIN tc_session on course.id = tc_session.course_id
-            WHERE tc_session.meeting_id = ?s", $meet_id);
-            // don't list meetings from other APIs
+            $course = Database::get()->querySingle("SELECT code, course.title, tc_session.title AS mtitle
+                FROM course LEFT JOIN tc_session ON course.id = tc_session.course_id
+                WHERE tc_session.meeting_id = ?s", $meet_id);
+            // Don't list meetings from other APIs
             if (!$course) {
                 continue;
             }
-            /****************************************************/
-            /*		write attends in SQL database		*/
-            /****************************************************/
+            // Write attendees in SQL database
             $joinParams = array(
                 'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
-                'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
+                'password' => $moder_pw, // REQUIRED - Must match either attendee or moderator pass for meeting.
             );
             // Get the URL to meeting info:
             $room_xml = $bbb->getMeetingInfoUrl($bbb_url, $salt, $joinParams);
-            /****************************************************/
-            /*		XML read from URL and write to SQL	*/
-            /****************************************************/
+            // Read XML from BBB URL and write to SQL
             xml2sql($room_xml, $bbb);
         }
     }
 }
-// draws pop window
-draw_popup($tool_content, $head_content);
+if (defined('TC_CRON')) {
+    // update TC cron timestamp
+    $ts = date('Y-m-d H:i', time());
+    Database::get()->querySingle("INSERT INTO config
+        SET `key` = 'tc_cron_ts', value = ?s
+        ON DUPLICATE KEY UPDATE value = ?s",
+        $ts, $ts);
+} else {
+    // Display pop-up window
+    draw_popup();
+}
 
 /**
  * @brief record users attendance in db
@@ -110,11 +114,8 @@ function xml2sql($room_xml, $bbb) {
         /*	per room				    */
         /*	SQL table: tc_log			    */
         /****************************************************/
-        $nextid = Database::get()->querySingle("SELECT MAX(id) as id FROM tc_log")->id;
-        $nextid++;
-
-        Database::get()->query("INSERT INTO tc_log (id, meetingid, bbbuserid, fullName)
-                    VALUES (?d, ?s, ?s, ?s)", $nextid, $meetingid, $bbbuserid, $fullName);
+        Database::get()->query("INSERT INTO tc_log (meetingid, bbbuserid, fullName)
+                    VALUES (?s, ?s, ?s)", $meetingid, $bbbuserid, $fullName);
 
         /****************************************************/
         /*	Write users' presence in summary            */
@@ -122,33 +123,24 @@ function xml2sql($room_xml, $bbb) {
         /*	per room                                    */
         /*	SQL table: tc_attendance                   */
         /****************************************************/
-        $currentDate = strtotime(date("Y-m-d H:i:s"));
-        $q2 = Database::get()->querySingle("SELECT start_date, end_date FROM tc_session WHERE meeting_id = ?s", strval($xml_meet_id));
-        $tcDateBegin = strtotime($q2->start_date);
-        $tcDateEnd = strtotime($q2->end_date);
-
-        if($currentDate > $tcDateBegin && ($currentDate < $tcDateEnd || empty($tcDateEnd))) {
-            $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM tc_attendance
-                                            WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
-                                            $bbbuserid, $meetingid)->cnt;
-            if ($cnt > 0) {
-                Database::get()->querySingle("UPDATE tc_attendance
-                                                SET totaltime = totaltime + 1,
-                                                    `date` = NOW()
-                                            WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIMESTAMPDIFF(SECOND, `date`, NOW()) >= 60",
-                                            $bbbuserid, $meetingid);
-            } else {
-                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
-                $nextid++;
-                Database::get()->query('INSERT INTO tc_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`)
-                    SELECT COALESCE(MAX(id) + 1, 1), ?s, ?s, 1 FROM tc_attendance', $meetingid, $bbbuserid);
-            }
-            $u = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
-            if (!empty($u->id)) {
-                update_attendance_book($u->id, get_tc_id($meetingid),GRADEBOOK_ACTIVITY_TC);
-            }
+        $record = Database::get()->querySingle("SELECT id FROM tc_attendance
+                                        WHERE bbbuserid = ?s AND meetingid = ?s AND
+                                              TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
+                                        $bbbuserid, $meetingid);
+        if ($record) {
+            Database::get()->querySingle("UPDATE tc_attendance
+                                            SET totaltime = totaltime + 1,
+                                                `date` = NOW()
+                                        WHERE id = ?d AND
+                                              TIME_FORMAT(now(), '%H:%i') <> TIME_FORMAT(`date`, '%H:%i')",
+                                        $record->id);
+        } else {
+            Database::get()->query('INSERT INTO tc_attendance (`meetingid`, `bbbuserid`, `totaltime`)
+                VALUES (?s, ?s, 1)', $meetingid, $bbbuserid);
+        }
+        $user = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
+        if ($user) {
+            update_attendance_book($user->id, get_tc_id($meetingid), GRADEBOOK_ACTIVITY_TC);
         }
     }
 }
