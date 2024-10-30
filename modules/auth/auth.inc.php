@@ -1369,7 +1369,10 @@ function shib_cas_login($type) {
                 'attributes' => $attributes,
                 'status' => $info->status,
                 'departments' => $userObj->getDepartmentIds($info->id),
-                'am' => $am]);
+                'am' => $am,
+                'email' => $email,
+                'surname' => $surname,
+                'givenname' => $givenname]);
 
             if ($type == 'cas') {
                 $cas_settings = @unserialize(get_auth_settings(7)['auth_settings']);
@@ -1385,17 +1388,20 @@ function shib_cas_login($type) {
             $status = $options['status'];
             $_SESSION['auth_user_info']['studentid'] = $am = $options['am'];
 
-            if (!$surname and $info->surname !== '') {
-                $_SESSION['auth_user_info']['surname'] = $_SESSION['cas_surname'] = $surname = $info->surname;
+            if (!$options['surname'] and $info->surname !== '') {
+                $_SESSION['auth_user_info']['surname'] = $_SESSION['cas_surname'] = $options['surname'] = $info->surname;
             }
-            if (!$givenname and $info->givenname !== '') {
-                $_SESSION['auth_user_info']['givenname'] = $_SESSION['cas_givenname'] = $givenname = $info->givenname;
+            if (!$options['givenname'] and $info->givenname !== '') {
+                $_SESSION['auth_user_info']['givenname'] = $_SESSION['cas_givenname'] = $options['givenname'] = $info->givenname;
+            }
+            if (!$options['email'] and $info->email !== '') {
+                $_SESSION['auth_user_info']['email'] = $_SESSION['cas_email'] = $options['email'] = $info->email;
             }
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
                                            status = ?d, verified_mail = ?d WHERE id = ?d",
-                    $surname, $givenname, $email, $status, $verified_mail, $info->id);
+                    $options['surname'], $options['givenname'], $options['email'], $status, $verified_mail, $info->id);
             if (!empty($am) and $info->am != $am) {
                 Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
                     $am, $info->id);
@@ -1430,10 +1436,13 @@ function shib_cas_login($type) {
             $_SESSION['mail_verification_required'] = 1;
         }
 
-        $options = login_hook(array(
+        $options = login_hook([
             'user_id' => null,
             'attributes' => $attributes,
-            'am' => $am));
+            'am' => $am,
+            'email' => $email,
+            'surname' => $surname,
+            'givenname' => $givenname]);
 
         if ($type == 'cas') {
             $cas_settings = unserialize(get_auth_settings(7)['auth_settings']);
@@ -1454,7 +1463,7 @@ function shib_cas_login($type) {
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
                         whitelist = ''",
-                $surname, $givenname, $type, $uname, $email, $status,
+                $options['surname'], $options['givenname'], $type, $uname, $options['email'], $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
