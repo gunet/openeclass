@@ -111,7 +111,7 @@
 
         // Drag and drop
         $('.uploadBTN').on('click', function(event) {
-                event.preventDefault();
+
             if (!isUppyLoaded) {
                 console.log('Uppy not loaded');
             } else {
