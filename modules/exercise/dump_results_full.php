@@ -35,6 +35,10 @@ $exerciseId = getDirectReference($_GET['exerciseId']);
 $objExercise = new Exercise();
 $objExercise->read($exerciseId);
 
+$stringValueBinder = new \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder();
+$stringValueBinder->setNumericConversion(false);
+\PhpOffice\PhpSpreadsheet\Cell\Cell::setValueBinder($stringValueBinder);
+
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle($langResults);
@@ -181,7 +185,7 @@ foreach ($q as $d) { // for each attempt
             } else {
                 $question = $results[$i][$j]; // question id
                 $output[] = details($question, $eurid); // question answer details
-                $output[] = user_question_score($question, $eurid); // question score
+                $output[] = floatval(user_question_score($question, $eurid)); // question score
             }
         }
         $output[] = $total_score[$eurid];
