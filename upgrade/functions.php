@@ -2908,6 +2908,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE gradebook_activities ADD extra_credit BOOL DEFAULT 0 NULL");
     }
 
+    if (!DBHelper::indexExists('attendance_book', 'attendance_activity_uid')) {
+        Database::get()->query("ALTER TABLE attendance_book ADD UNIQUE attendance_activity_uid (attendance_activity_id, uid)");
+    }
+
     if (!DBHelper::fieldExists('group_properties', 'booking')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
     }

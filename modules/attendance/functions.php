@@ -4,21 +4,20 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+ * Copyright 2003-2024, Greek Universities Network - GUnet
  *
  * Open eClass is an open platform distributed in the hope that it will
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
  *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * Contact address: GUnet Asynchronous eLearning Group
  *                  e-mail: info@openeclass.org
  * ========================================================================
  */
+
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once 'modules/progress/AttendanceEvent.php';
 
@@ -103,10 +102,12 @@ function register_user_presences($attendance_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langAmShort, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect;
+           $langGroup, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect;
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
+
+
     $tool_content .= "
     <div class='col-12'>
         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . q($result->title) . "</span></div></div>";
@@ -169,10 +170,9 @@ function register_user_presences($attendance_id, $actID) {
                 <tr class='list-header'>
                   <th class='count-col'>$langID</th>
                   <th>$langName $langSurname</th>
-                  <th>$langAmShort</th>
+                  <th>$langGroup</th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langAttendanceAbsences</th>
-
                 </tr>
             </thead>
             <tbody>";
@@ -191,8 +191,10 @@ function register_user_presences($attendance_id, $actID) {
             $tool_content .= "
               <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
-                <td>" . display_user($userID) . "</td>
-                <td>" . q($resultUser->am) . "</td>
+                <td>" . display_user($userID) . "
+                    <div class='help-block'>" . q($resultUser->am) . "</div>
+                </td>
+                <td>" . user_groups($course_id, $userID) . "</td>
                 <td>$reg_date</td>
                 <td>
                     <label class='label-container' aria-label='$langSelect'>
@@ -343,11 +345,13 @@ function display_attendance_activities($attendance_id) {
                 } elseif($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
                         $tool_content .= $langAssignment;
                 }
+                $tool_content .= "<div><small class='help-block'>";
                 if($details->auto) {
-                    $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
+                    $tool_content .= "($langAttendanceInsAut)";
                 } else {
-                    $tool_content .= "<small class='help-block'>($langAttendanceInsMan)</small>";
+                    $tool_content .= "($langAttendanceInsMan)";
                 }
+                $tool_content .= "</small></div>";
             } else {
                 $tool_content .= $langAttendanceActivity;
             }
@@ -763,7 +767,7 @@ function new_attendance() {
 
     global $tool_content, $course_code, $langNewAttendance2, $head_content,
            $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber,
-           $attendance_limit, $langStart, $langEnd, $language, $urlAppend, $langImgFormsDes;
+           $attendance_limit, $langStart, $langEnd, $language, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -962,7 +966,7 @@ function display_user_presences($attendance_id) {
 function display_all_users_presences($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
-           $langID, $langAmShort, $langRegistrationDateShort, $langAttendanceAbsences,
+           $langID, $langGroup, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAttendanceBook, $langAttendanceDelete, $langConfirmDelete,
            $langNoStudentsInAttendance, $langHere, $is_editor, $langSettingSelect;
 
@@ -977,14 +981,16 @@ function display_all_users_presences($attendance_id) {
                                                 LEFT JOIN course_user ON user.id = course_user.user_id
                                                     AND `course_user`.`course_id` = ?d
                                                 ORDER BY surname, name", $attendance_id, $course_id);
+
     if (count($resultUsers)) {
+        $tool_content .= "<div class='table-responsive'>";
         //table to display the users
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
-            <thead class='list-header'>
-                <tr>
+            <thead>
+                <tr class='list-header'>
                   <th class='count-col'>$langID</th>
                   <th>$langName $langSurname</th>
-                  <th>$langAmShort</th>
+                  <th>$langGroup</th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langAttendanceAbsences</th>
                   <th aria-label='$langSettingSelect'></th>
@@ -1000,8 +1006,10 @@ function display_all_users_presences($attendance_id) {
             $cnt++;
             $tool_content .= "<tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
-                <td>" . display_user($resultUser->userID) . "</td>
-                <td>$resultUser->am</td>
+                <td>" . display_user($resultUser->userID) . "
+                    <div class='help-block'>" . q($resultUser->am) . "</div>
+                </td>
+                <td>" . user_groups($course_id, $resultUser->userID) . "</td>
                 <td>";
             if (!is_null($resultUser->reg_date)) {
                 $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
@@ -1009,7 +1017,7 @@ function display_all_users_presences($attendance_id) {
                 $tool_content .= "";
             }
             $tool_content .= "</td>
-                <td>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>";
+                <td style='width:10%;'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>";
                 if ($is_editor) {
                         $tool_content .= "<td class='option-btn-cell text-end'>"
                             . action_button(array(
@@ -1025,9 +1033,15 @@ function display_all_users_presences($attendance_id) {
             }
             $tool_content .= "</tr>";
             $tool_content .= "</tbody></table>";
+            $tool_content .= "</div>";
         } else {
             $tool_content .= "
-            <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</span></div></div>";
+            <div class='col-12'>
+                <div class='alert alert-warning'>
+                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                    <span>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</span>
+                </div>
+            </div>";
     }
 }
 
@@ -1040,7 +1054,7 @@ function attendance_settings($attendance_id) {
     global $tool_content, $course_code, $language,
            $langTitle, $langAttendanceLimitNumber,
            $langAttendanceUpdate, $langSave, $head_content,
-           $attendance, $langStart, $langEnd, $urlAppend, $langImgFormsDes;
+           $attendance, $langStart, $langEnd, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1148,7 +1162,7 @@ function user_attendance_settings($attendance_id) {
            $langAttendanceUpdate, $langAttendanceInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $attendance, $urlAppend, $langImgFormsDes, $langForm;
+           $langStudents, $langMove, $langParticipate, $attendance, $langImgFormsDes, $langForm;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1293,7 +1307,7 @@ function student_view_attendance($attendance_id) {
     global $tool_content, $uid, $langAttendanceAbsencesNo, $langAttendanceAbsencesFrom,
            $langAttendanceAbsencesFrom2, $langAttendanceStudentFailure,
            $langTitle, $langDate, $langDescription,
-           $langAttendanceAbsencesYes, $langBack, $course_code;
+           $langAttendanceAbsencesYes;
 
     $attendance_limit = get_attendance_limit($attendance_id);
     //check if there are attendance records for the user, otherwise alert message that there is no input
@@ -1386,7 +1400,7 @@ function userAttendTotal ($attendance_id, $userID){
 /**
  * @brief Function to get the total attend number for a user in a course attendance
  * @param type $activityID
- * @param type $participantsNumber
+ * @param int $participantsNumber
  * @return string
  */
 function userAttendTotalActivityStats ($activityID, $participantsNumber, $attendance_id){
@@ -1419,7 +1433,7 @@ function userAttendTotalActivityStats ($activityID, $participantsNumber, $attend
  */
 function attendForAutoActivities($userID, $exeID, $exeType) {
 
-    if ($exeType == 1) { //asignments: valid submission!
+    if ($exeType == 1) { //assignments: valid submission!
        $autoAttend = Database::get()->querySingle("SELECT COUNT(id) AS count FROM assignment_submit
                                     WHERE uid = ?d AND assignment_id = ?d", $userID, $exeID)->count;
        if ($autoAttend) {
@@ -1468,10 +1482,10 @@ function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
         array_push($params, $uid);
     }
     // This query gets the attendance activities that:
-    // 1) belong to attendancebooks (or specific attendancebook if $attendance_id != 0)
+    // 1) belong to attendance books (or specific attendance book if $attendance_id != 0)
     // withing the date constraints
-    // 2) of a specifc module and have grade auto-submission enabled
-    // 3) attended by a specifc user
+    // 2) of a specific module and have grade auto-submission enabled
+    // 3) attended by a specific user
     $attendanceActivities = Database::get()->queryArray($sql, $params);
 
     foreach ($attendanceActivities as $attendanceActivity) {
@@ -1605,6 +1619,154 @@ function get_attendance_limit($attendance_id) {
     return $at_limit;
 
 }
+
+/**
+ * @brief import attendances from `xls` file
+ * @param $attendance_id
+ * @param $activity
+ * @param $import
+ * @return void
+ */
+function import_attendances($attendance_id, $activity, $import = false) {
+
+    global $tool_content, $course_code, $langAttendanceUsers,
+           $langWorkFile, $langUpload, $langImportAttendancesHelp,
+           $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
+           $langImportExtraAttendanceUsers, $langAttendancesImported,
+           $langImgFormsDes, $langForm;
+
+    if ($import and isset($_FILES['userfile'])) { // import user attendances
+        $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+        $sheet = $file->getActiveSheet();
+        $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
+
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
+        for ($row = 1; $row <= $highestRow; ++$row) {
+            if ($row <= 4) { // first 4 rows are headers
+                continue;
+            } else {
+                for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
+                    $cells = [$col, $row];
+                    $value = trim($sheet->getCell($cells)->getValue());
+                    $data[] = $value;
+                }
+                if (!is_numeric($data[1]) or $data[1] != 1) { // valid attendances have value = 1
+                    $data[1] = 0;
+                }
+                if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
+                    $username = $matches[1];
+                } else {
+                    $username = $data[0];
+                }
+                $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
+                $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
+
+                if (!$user) {
+                    $invalidUsers[] = $username;
+                } else {
+                    $submission = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d AND attendance_id = ?d",
+                        $user->id, $attendance_id);
+                    if (!$submission) {
+                        $extraUsers[] = $username;
+                    } else {
+                        $userAttendance[$user->id] = $data[1];
+                    }
+                }
+                $data = [];
+            }
+        }
+
+        if (!($errorLines or $invalidUsers or $extraUsers)) {
+            foreach ($userAttendance as $user_id => $attendance) {
+                Database::get()->query("INSERT INTO attendance_book (uid, attendance_activity_id, attend, comments)
+                                            VALUES (?d, ?d, ?f, ?s)
+                                        ON DUPLICATE KEY UPDATE attend = ?f",
+                    $user_id, $activity, $attendance, '', $attendance);
+            }
+            Session::flash('message', $langAttendancesImported);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($activity));
+        } else {
+            $message = $langImportGradesError;
+            if ($invalidUsers) {
+                $errorText = implode('', array_map(function ($username) {
+                    return '<li>' . q($username) . '</li>';
+                }, $invalidUsers));
+                $message .= "<p>$langImportInvalidUsers<ul>$errorText</ul></p>";
+            }
+            if ($extraUsers) {
+                $errorText = implode('', array_map(function ($username) {
+                    return '<li>' . q($username) . '</li>';
+                }, $extraUsers));
+                $message .= "<p>$langImportExtraAttendanceUsers<ul>$errorText</ul></p>";
+            }
+            if ($errorLines) {
+                $errorText = implode('', array_map(function ($line) {
+                    $line = array_map('q', $line);
+                    return '<tr class="danger"><td>' . implode('</td><td>', $line) . '</td></tr>';
+                }, $errorLines));
+                $message .= "<p>$langImportErrorLines
+                    <table class='table table-condensed table-bordered table-striped'>
+                        <tbody>$errorText</tbody>
+                    </table></p>";
+            }
+            Session::flash('message', $message);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($activity));
+        }
+    } else { // import grades form
+        enableCheckFileSize();
+        $tool_content .= "            
+            <div class='d-lg-flex gap-4 mt-4'>
+                <div class='flex-grow-1'>
+                    <div class='form-wrapper'>
+                        <form class='form-horizontal' enctype='multipart/form-data' method='post' 
+                            action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance_id . "&amp;imp=$activity&amp;import_attendances=true'>
+                            <fieldset>
+                                <legend class='mb-0' aria-label='$langForm'></legend>
+                                <div class='form-group'>
+                                    <div class='col-sm-12'>
+                                        <p class='form-control-static'>$langImportAttendancesHelp</p>
+                                        <a href='dumpattendancebook.php?course=$course_code&attendance_id=" . getIndirectReference($attendance_id) . "&activity_id=$activity'>$langAttendanceUsers</a>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='userfile' class='col-sm-12 form-label'>$langWorkFile:</label>
+                                    <div class='col-sm-10'>" . fileSizeHidenInput() . "
+                                        <input type='file' id='userfile' name='userfile'>
+                                    </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-12 d-flex justify-content-end'>" .
+            form_buttons([
+                    [
+                        'class' => 'btn-primary',
+                        'name' => 'new_assign',
+                        'value' => $langUpload,
+                        'javascript' => ''
+                    ],
+                    [
+                        'class' => 'btn cancelAdminBtn',
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($activity)
+                    ]
+                ]) . "
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div><div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+            </div>
+            </div>
+            ";
+    }
+}
+
+
 
 function triggerAttendanceGame($courseId, $uid, $attendanceId, $eventName) {
     $eventData = new stdClass();

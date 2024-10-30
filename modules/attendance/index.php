@@ -1,23 +1,20 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+ * Copyright 2003-2024, Greek Universities Network - GUnet
  *
  * Open eClass is an open platform distributed in the hope that it will
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
  *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * Contact address: GUnet Asynchronous eLearning Group
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ * ========================================================================
+ */
 
 $require_login = true;
 $require_current_course = true;
@@ -61,10 +58,13 @@ load_js('tools.js');
 load_js('datatables');
 
 if ($is_editor) {
-    // disable ordering for action button column
-    $columns = 'null, null, null, null, { orderable: false }';
+    if (isset($_GET['ins'])) {
+        $columns = 'null, null, null, null, { orderable: false }';
+    } else {
+        $columns = 'null, null, null, null, null, { orderable: false }';
+    }
 } else if ($is_course_reviewer) {
-    $columns = 'null, null, null, nulll';
+    $columns = 'null, null, null, null, null';
 }
 
 @$head_content .= "
@@ -370,8 +370,18 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langEditChange;
     } elseif (isset($_GET['ins'])) {
+        $actID = intval(getDirectReference($_GET['ins']));
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langAttendanceBook;
+        $action_bar = action_bar(
+            array(
+                array('title' => $langImportAttendances,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;imp=$actID",
+                    'button-class' => 'btn btn-success',
+                    'icon' => 'fa-upload',
+                    'level' => 'primary')
+            ));
+        $tool_content .= $action_bar;
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp']) or isset($_GET['addActivityTc'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         if (isset($_GET['addActivityAs'])) {
@@ -404,7 +414,7 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $pageName = $langNewAttendance;
     } elseif (isset($_GET['attendance_id']) && $is_editor) {
-        $pageName = get_attendance_title($attendance_id);
+        $pageName = get_attendance_title($_GET['attendance_id']);
     }  elseif (!isset($_GET['attendance_id'])) {
         $action_bar= action_bar(
             array(
@@ -585,6 +595,14 @@ if ($is_editor) {
         $actID = intval(getDirectReference($_GET['ins']));
         $error = false;
         register_user_presences($attendance_id, $actID);
+        $display = false;
+    }
+    elseif (isset($_GET['imp'])) {
+        if (isset($_GET['import_attendances'])) {
+            import_attendances($attendance_id, $_GET['imp'], true);
+        } else {
+            import_attendances($attendance_id, $_GET['imp']);
+        }
         $display = false;
     }
 
