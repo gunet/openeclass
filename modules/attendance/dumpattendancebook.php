@@ -1,23 +1,21 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+ * Copyright 2003-2024, Greek Universities Network - GUnet
  *
  * Open eClass is an open platform distributed in the hope that it will
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
  *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * Contact address: GUnet Asynchronous eLearning Group
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ * ========================================================================
+ */
+
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -39,9 +37,16 @@ $data[] = [ $course_title ];
 $data[] = [];
 $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langAttendanceAbsences ];
 
-$activities = Database::get()->queryArray("SELECT id, title
+if (isset($_GET['activity_id'])) {
+    $activities = Database::get()->queryArray("SELECT id, title
+            FROM attendance_activities WHERE attendance_id = ?d AND id = ?d",
+                getDirectReference($_GET['attendance_id']), $_GET['activity_id']);
+} else {
+    $activities = Database::get()->queryArray("SELECT id, title
     FROM attendance_activities WHERE attendance_id = ?d",
-    getDirectReference($_GET['attendance_id']));
+        getDirectReference($_GET['attendance_id']));
+}
+
 foreach ($activities as $act) {
     $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
     $data[] = [ $title ];

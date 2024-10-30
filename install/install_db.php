@@ -572,7 +572,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
     `attendance_activity_id` MEDIUMINT(11) NOT NULL,
     `uid` int(11) NOT NULL DEFAULT 0,
     `attend` TINYINT(4) NOT NULL DEFAULT 0,
-    `comments` TEXT NOT NULL) $tbl_options");
+    `comments` TEXT NOT NULL
+     UNIQUE KEY attendance_activity_uid (attendance_activity_id, uid)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
