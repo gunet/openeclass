@@ -348,7 +348,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
             $extension = pathinfo($image, PATHINFO_EXTENSION);
             $imgExtArr = ['jpg', 'jpeg', 'png', 'PNG'];
             if (in_array($extension, $imgExtArr)) {
-                $theme_images =
+                $theme_images .=
                     "<div class='col-lg-8 col-md-10 m-auto py-4'>
                     <div class='card panelCard h-100'>
                         <h3 class='alert alert-secondary'>
