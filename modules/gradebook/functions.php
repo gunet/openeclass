@@ -1,22 +1,20 @@
 <?php
 /* ========================================================================
- * Open eClass 3.5
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+ * Copyright 2003-2024, Greek Universities Network - GUnet
  *
  * Open eClass is an open platform distributed in the hope that it will
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
  *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * Contact address: GUnet Asynchronous eLearning Group
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ * ========================================================================
+ */
+
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -594,7 +592,7 @@ function user_gradebook_settings() {
 function display_all_users_grades($gradebook_id) {
 
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
-           $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
+           $langID, $langGroup, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
            $langNoRegStudent, $langHere, $langGradebookGradeAlert, $is_editor;
 
@@ -611,7 +609,7 @@ function display_all_users_grades($gradebook_id) {
                 <tr class='list-header'>
                   <th class='count-col'>$langID</th>
                   <th>$langName $langSurname</th>
-                  <th>$langAm</th>
+                  <th>$langGroup</th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langGradebookGrade</th>";
                 if ($is_editor) {
@@ -630,8 +628,10 @@ function display_all_users_grades($gradebook_id) {
             $tool_content .= "
                 <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
-                <td>" . display_user($resultUser->userID). "</td>
-                <td>" . $resultUser->am . "</td>
+                <td>" . display_user($resultUser->userID). "
+                    <div class='text-muted'><small>$resultUser->am</small></div>
+                </td>
+                <td>" . user_groups($course_id, $resultUser->userID) . "</td>
                 <td>";
                 if (!empty($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
@@ -889,7 +889,7 @@ function display_gradebook($gradebook) {
             } else if ($is_course_reviewer) {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
             }
-            $tool_content .= "<small class='help-block'>";
+            $tool_content .= "<div><small class='help-block'>";
             switch ($details->activity_type) {
                  case 1: $tool_content .= "($langGradebookOral)"; break;
                  case 2: $tool_content .= "($langGradebookLabs)"; break;
@@ -898,7 +898,7 @@ function display_gradebook($gradebook) {
                  case 5: $tool_content .= "($langGradebookOtherType)"; break;
                  default : $tool_content .= "";
              }
-            $tool_content .= "</small";
+            $tool_content .= "</small></div>";
             $tool_content .= "</td><td>";
             if (!empty($details->date)) {
                 $tool_content .= "<div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div>";
@@ -1183,7 +1183,7 @@ function display_available_lps($gradebook_id) {
 function register_user_grades($gradebook_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
-            $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
+            $langID, $langName, $langSurname, $langGroup, $langRegistrationDateShort,
             $langGradebookGrade, $langGradebookNoTitle,
             $langGradebookBooking, $langGradebookTotalGrade,
             $langGradebookActivityWeight, $langCancel;
@@ -1212,10 +1212,10 @@ function register_user_grades($gradebook_id, $actID) {
                 <tr class='list-header'>
                     <th class='count-col'>$langID</th>
                     <th>$langName $langSurname</th>
-                    <th>$langAm</th>
+                    <th>$langGroup</th>
                     <th>$langRegistrationDateShort</th>
-                    <th>$langGradebookGrade</th>
-                    <th>$langGradebookTotalGrade</th>
+                    <th style='width:10%;'>$langGradebookGrade</th>
+                    <th style='width:10%;'>$langGradebookTotalGrade</th>
                 </tr>
             </thead>
             <tbody>";
@@ -1236,8 +1236,11 @@ function register_user_grades($gradebook_id, $actID) {
             $tool_content .= "
             <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
-                <td>" . display_user($resultUser->userID). "</td>
-                <td>$resultUser->am</td><td>";
+                <td>" . display_user($resultUser->userID). "
+                    <div class='text-muted'><small>$resultUser->am</small></div>
+                </td>
+                <td>" . user_groups($course_id, $resultUser->userID). "</td>
+                <td>";
                 if (!empty($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
                 } else {
@@ -1713,7 +1716,7 @@ function insert_grades($gradebook_id, $actID) {
  */
 function import_grades($gradebook_id, $activity_id, $import = false) {
 
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $langGradebookUsers,
            $langImportGradesGradebookHelp, $langWorkFile, $langUpload,
            $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
            $langImportExtraGradebookUsers, $langGradesImported, $urlAppend, $langImgFormsDes, $langForm;
@@ -1816,7 +1819,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>$langImportGradesGradebookHelp</p>
-                                        <a href='dumpgradebook.php?course=$course_code&t=3&gradebook_id=" . getIndirectReference($gradebook_id) . "&activity_id=$activity_id'>Χρήστες του βαθμολογίου</a>
+                                        <a href='dumpgradebook.php?course=$course_code&t=3&gradebook_id=" . getIndirectReference($gradebook_id) . "&activity_id=$activity_id'>$langGradebookUsers</a>
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
