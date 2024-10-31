@@ -15,7 +15,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<div class="col-12 main-section searchcours">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class='form-group mt-4'>
-                                <label for='formprof' class='col-sm-2 control-label-notes'>{{ trans('langTeachers') }}:</label>
+                                <label for='formprof' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}:</label>
                                 <div class='col-sm-12'>
                                     <input type='text' placeholder="{{ trans('langTeachers') }}" class='form-control' id='formprof' name='formsearchprof' value=''>
                                 </div>
