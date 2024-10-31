@@ -19,13 +19,6 @@
     </div>
 @endif
 
-@if ($db_error_db_exists)
-    <div class='alert alert-warning'>
-        <i class='fa-solid fa-circle-info fa-lg'></i>
-        <span> {!! (sprintf(trans('langDatabaseExists'), "<strong>$dbNameForm</strong>")) !!}</span>
-    </div>
-@endif
-
 <div class='alert alert-info'>
     <i class='fa-solid fa-circle-info fa-lg'></i>
     <span>{{ trans('langWillWrite') }} <strong>config/config.php</strong>

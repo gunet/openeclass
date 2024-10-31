@@ -1,3 +1,10 @@
+@if ($db_error_db_exists)
+    <div class='alert alert-warning'>
+        <i class='fa-solid fa-circle-info fa-lg'></i>
+        <span> {!! (sprintf(trans('langDatabaseExists'), "<strong>$dbNameForm</strong>")) !!}</span>
+    </div>
+@endif
+
 <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
     <fieldset>
         <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
