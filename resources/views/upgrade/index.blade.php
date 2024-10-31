@@ -25,28 +25,24 @@
                                     {{ trans('langUpgRead') }} <a href='{{ $upgrade_info_file }}' target='_blank' aria-label='{{ trans('langOpenNewTab') }}'>{{ trans('langUpgMan') }}</a> {{ trans('langUpgLastStep') }}
                               </span>
                             </div>
-                            <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langUpgDetails') }}</h3>
-                                </div>
-                                <div class='card-body'>
-                                    <form role='form' action='upgrade.php' method='post'>
-                                        <fieldset>
-                                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
-                                            <div class='form-group'>
-                                                <label for='admin_username' class='control-label-notes'>{{ trans('langUsername') }}</label>
-                                                <input id='admin_username' class='form-control' name='login' placeholder='{{ trans('langUsername') }}' type='text'>
-                                            </div>
-                                            <div class='form-group mt-4'>
-                                                <label for='admin_password' class='control-label-notes'>{{ trans('langPass') }}</label>
-                                                <input id='admin_password' class='form-control' name='password' placeholder='{{ trans('langPass') }}' type='password'>
-                                            </div>
-                                            <div class='form-group mt-5'>
-                                                <button class='btn submitAdminBtn w-100' type='submit' name='submit_1' value='{{ trans('langUpgrade') }}'>{{ trans('langUpgrade') }}</button>
-                                            </div>
-                                        </fieldset>
-                                    </form>
-                                </div>
+                            <div class='form-wrapper form-edit'>
+                                <form role='form' action='upgrade.php' method='post'>
+                                    <fieldset>
+                                        <div class='text-heading-h2 mb-4'>{{ trans('langUpgDetails') }}</div>
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                        <div class='form-group'>
+                                            <label for='admin_username' class='control-label-notes'>{{ trans('langUsername') }}</label>
+                                            <input id='admin_username' class='form-control' name='login' placeholder='{{ trans('langUsername') }}' type='text'>
+                                        </div>
+                                        <div class='form-group mt-4'>
+                                            <label for='admin_password' class='control-label-notes'>{{ trans('langPass') }}</label>
+                                            <input id='admin_password' class='form-control' name='password' placeholder='{{ trans('langPass') }}' type='password'>
+                                        </div>
+                                        <div class='form-group mt-5'>
+                                            <button class='btn submitAdminBtn w-100 mb-2' type='submit' name='submit_1' value='{{ trans('langUpgrade') }}'>{{ trans('langUpgrade') }}</button>
+                                        </div>
+                                    </fieldset>
+                                </form>
                             </div>
                         </div>
                         <div class='col d-none d-lg-block text-end'>
