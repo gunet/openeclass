@@ -2701,8 +2701,8 @@ function invalidate_glossary_cache() {
 // when the platform is not functional
 function guess_base_url() {
     $uri = rtrim(str_replace(['/?.*$/', '/\.php/'], ['', '.php'], $_SERVER['REQUEST_URI']), '/');
-    $path = dirname($_SERVER['SCRIPT_FILENAME']);
-    $base_path = dirname(dirname(__FILE__));
+    $path = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
+    $base_path = realpath(dirname(__FILE__, 2));
     while ($uri and $base_path != $path) {
         $uri = preg_replace('|/[^/]+$|', '', $uri);
         $path = preg_replace('|/[^/]+$|', '', $path);
