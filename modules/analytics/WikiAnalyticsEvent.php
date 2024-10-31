@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'Event.php';
 
@@ -22,15 +39,15 @@ class WikiAnalyticsEvent extends Event {
                 . " WHERE owner_id = ?d "
                 . " AND w.course_id = ?d"
                 . " AND DATE(ctime) = CURDATE()", $this->context['user_id'], $this->context['course_id']);
-                
+
                 $this->context['value'] = $record->value;
-                
+
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                            
+
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
@@ -57,8 +74,8 @@ class WikiAnalyticsEvent extends Event {
                 . " group by DATE(ctime), owner_id", $course_id, $data->start_date, $data->end_date);
                 print_r($wiki_records);
                 foreach ($wiki_records as $wiki_record) {
-                    $this->insertValue($wiki_record->user_id, $analytics_element_id, $wiki_record->value, $wiki_record->time); 
-                } 
+                    $this->insertValue($wiki_record->user_id, $analytics_element_id, $wiki_record->value, $wiki_record->time);
+                }
             }
         });
 

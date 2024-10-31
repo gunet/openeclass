@@ -1,4 +1,22 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /**
  * \file
  * \brief Response to Verb Identify
@@ -21,7 +39,7 @@ if (SHOW_QUERY_ERROR) {
 $outputObj = new ANDS_Response_XML($args);
 foreach($identifyResponse as $key => $val) {
 	$outputObj->add2_verbNode($key, $val);
-    
+
     // adminEmail comes after protocolVersion
     if ($key === 'protocolVersion') {
         foreach ($adminEmail as $val) {
@@ -38,14 +56,14 @@ if(isset($compression)) {
 
 // A description MAY be included.
 // Use this if you choose to comply with a specific format of unique identifiers
-// for items. 
-// See http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm 
+// for items.
+// See http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
 // for details
 
 // As they will not be changed, using string for simplicity.
 $output = '';
 if ($show_identifier && $repositoryIdentifier && $delimiter && $sampleIdentifier) {
-	$output .= 
+	$output .=
 '  <description>
    <oai-identifier xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -56,7 +74,7 @@ if ($show_identifier && $repositoryIdentifier && $delimiter && $sampleIdentifier
     <delimiter>'.$delimiter.'</delimiter>
     <sampleIdentifier>'.$sampleIdentifier.'</sampleIdentifier>
    </oai-identifier>
-  </description>'."\n"; 
+  </description>'."\n";
 }
 
 // A description MAY be included.
@@ -65,7 +83,7 @@ if ($show_identifier && $repositoryIdentifier && $delimiter && $sampleIdentifier
 
 // To include, change 'false' to 'true'.
 if (false) {
-	$output .= 
+	$output .=
 '  <description>
    <eprints xmlns="http://www.openarchives.org/OAI/1.1/eprints"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -78,17 +96,17 @@ if (false) {
     <dataPolicy />
     <submissionPolicy />
    </eprints>
-  </description>'."\n"; 
+  </description>'."\n";
 }
 
 // If you want to point harvesters to other repositories, you can list their
 // base URLs. Usage of friends container is RECOMMENDED.
-// see http://www.openarchives.org/OAI/2.0/guidelines-friends.htm 
+// see http://www.openarchives.org/OAI/2.0/guidelines-friends.htm
 // for details
 
 // To include, change 'false' to 'true'.
 if (false) {
-	$output .= 
+	$output .=
 '  <description>
    <friends xmlns="http://www.openarchives.org/OAI/2.0/friends/" 
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -101,17 +119,17 @@ if (false) {
     <baseURL>http://ub.uni-duisburg.de:8080/cgi-oai/oai.pl</baseURL>
     <baseURL>http://rocky.dlib.vt.edu/~jcdlpix/cgi-bin/OAI1.1/jcdlpix.pl</baseURL>
    </friends>
-  </description>'."\n"; 
+  </description>'."\n";
 }
 
 // If you want to provide branding information, adjust accordingly.
 // Usage of friends container is OPTIONAL.
-// see http://www.openarchives.org/OAI/2.0/guidelines-branding.htm 
+// see http://www.openarchives.org/OAI/2.0/guidelines-branding.htm
 // for details
 
 // To include, change 'false' to 'true'.
 if (false) {
-	$output .= 
+	$output .=
 '  <description>
    <branding xmlns="http://www.openarchives.org/OAI/2.0/branding/"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

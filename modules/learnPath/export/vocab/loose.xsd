@@ -1,3 +1,21 @@
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <xs:schema targetNamespace="http://ltsc.ieee.org/xsd/LOM/vocab"
            xmlns="http://ltsc.ieee.org/xsd/LOM/vocab"
            xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
@@ -18,11 +36,11 @@
             elements that are defined to be of the Vocabulary datatype.
 
             This component schema supports loose validation of vocabulary value constraints
-            by allowing both the source and value to be arbitrary strings. 
+            by allowing both the source and value to be arbitrary strings.
 
-            NOTE-The absence of the enforcement of vocabulary values does not relieve a 
+            NOTE-The absence of the enforcement of vocabulary values does not relieve a
             particular LOM instance from satisfying vocabulary requirements defined in the
-            LOMv1.0 base schema. Applications that require the use of vocab/loose.xsd 
+            LOMv1.0 base schema. Applications that require the use of vocab/loose.xsd
             component XSD should enforce those vocabulary requirements by other means.
         </xs:documentation>
         <xs:documentation>

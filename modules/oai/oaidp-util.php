@@ -1,4 +1,22 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /**
  * \file
  * \brief Utilities for the OAI Data Provider
@@ -17,7 +35,7 @@ function debug_var_dump($var_name, $var) {
 		echo "Dumping \${$var_name}: \n";
 		var_dump($var)."\n";
 	}
-} 
+}
 
 /** Prints human-readable information about a variable for debugging,
  * only works when SHOW_QUERY_ERROR is true.
@@ -30,7 +48,7 @@ function debug_print_r($var_name, $var) {
 		echo "Printing \${$var_name}: \n";
 		print_r($var)."\n";
 	}
-} 
+}
 
 /** Prints a message for debugging,
  * only works when SHOW_QUERY_ERROR is true.
@@ -49,7 +67,7 @@ function debug_message($msg) {
  * metadataPrefix has to be checked before it is used.
  * set has to be checked before it is used.
  * resumptionToken has to be checked before it is used.
- * from and until can easily checked here because no extra information 
+ * from and until can easily checked here because no extra information
  * is needed.
  */
 function checkArgs($args, $checkList) {
@@ -60,7 +78,7 @@ function checkArgs($args, $checkList) {
 
 	debug_print_r('checkList',$checkList);
 	debug_print_r('args',$args);
-	
+
 	// "verb" has been checked before, no further check is needed
 	if(isset($checkList['required'])) {
 		for($i = 0; $i < count($checkList["required"]); $i++) {
@@ -88,33 +106,33 @@ function checkArgs($args, $checkList) {
 	debug_print_r('errors',$errors);
 	if (!empty($errors)) return;
 
-	// check to see if there is unwanted	
+	// check to see if there is unwanted
 	foreach($args as $key => $val) {
 		debug_message("checkArgs: $key");
 		if(!in_array($key, $checkList["ops"])) {
-			debug_message("Wrong\n".print_r($checkList['ops'],true)); 
+			debug_message("Wrong\n".print_r($checkList['ops'],true));
 			$errors[] = oai_error('badArgument', $key, $val);
 		}
-		switch ($key) { 
+		switch ($key) {
 			case 'from':
 			case 'until':
 				if(!checkDateFormat($val)) {
-					$errors[] = oai_error('badGranularity', $key, $val); 
+					$errors[] = oai_error('badGranularity', $key, $val);
 				}
 			break;
-			
+
 			case 'resumptionToken':
 			// only check for expairation
 				if((int)$val+TOKEN_VALID < time())
 					$errors[] = oai_error('badResumptionToken');
-			break;		
+			break;
 		}
 	}
 }
 
-/** Validates an identifier. The pattern is: '/^[-a-z\.0-9]+$/i' which means 
- * it accepts -, letters and numbers. 
- * Used only by function <B>oai_error</B> code idDoesNotExist. 
+/** Validates an identifier. The pattern is: '/^[-a-z\.0-9]+$/i' which means
+ * it accepts -, letters and numbers.
+ * Used only by function <B>oai_error</B> code idDoesNotExist.
  * \param $url Type: string
  */
 function is_valid_uri($url)
@@ -123,14 +141,14 @@ function is_valid_uri($url)
 }
 
 /** Validates attributes come with the query.
- * It accepts letters, numbers, ':', '_', '.' and -. 
+ * It accepts letters, numbers, ':', '_', '.' and -.
  * Here there are few more match patterns than is_valid_uri(): ':_'.
  * \param $attrb Type: string
  */
  function is_valid_attrb($attrb) {
 	 return preg_match("/^[_a-zA-Z0-9\-\:\.]+$/",$attrb);
  }
- 
+
 /** All datestamps used in this system are GMT even
  * return value from database has no TZ information
  */
@@ -154,7 +172,7 @@ function checkDateFormat($date) {
 	}
 }
 
-/** Retrieve all defined 'setSpec' from configuraiton of $SETS. 
+/** Retrieve all defined 'setSpec' from configuraiton of $SETS.
  * It is used by ANDS_TPA::create_obj_node();
 */
 function prepare_set_names() {
@@ -177,13 +195,13 @@ function oai_exit()
 	if ($compress) {
 		ob_start('ob_gzhandler');
 	}
-	
+
 	$e->display();
 
 	if ($compress) {
 		ob_end_flush();
 	}
-	
+
 	exit();
 }
 
@@ -195,21 +213,21 @@ function get_token()
 	return ((int)($usec*1000) + (int)($sec*1000));
 }
 
-/** Create a token file. 
+/** Create a token file.
  * It has three parts which is separated by '#': cursor, extension of query, metadataPrefix.
  * Called by listrecords.php.
  */
 function createResumToken($cursor, $extquery, $metadataPrefix) {
-	$token = get_token(); 
+	$token = get_token();
 	$fp = fopen (TOKEN_PREFIX.$token, 'w');
-	if($fp==false) { 
+	if($fp==false) {
 		exit("Cannot write. Writer permission needs to be changed.");
-	}	
-	fputs($fp, "$cursor#"); 
-	fputs($fp, "$extquery#"); 
-	fputs($fp, "$metadataPrefix#"); 
+	}
+	fputs($fp, "$cursor#");
+	fputs($fp, "$extquery#");
+	fputs($fp, "$metadataPrefix#");
 	fclose($fp);
-	return $token; 
+	return $token;
 }
 
 /** Read a saved ResumToken */
@@ -219,19 +237,19 @@ function readResumToken($resumptionToken) {
 	if ($fp!=false) {
 		$filetext = fgets($fp, 255);
 		$textparts = explode('#', $filetext);
-		fclose($fp); 
+		fclose($fp);
 		unlink ($resumptionToken);
 		$rtVal = array((int)$textparts[0], $textparts[1], $textparts[2]);
-	} 
-	return $rtVal; 
+	}
+	return $rtVal;
 }
 
-// Here are a couple of queries which might need to be adjusted to 
+// Here are a couple of queries which might need to be adjusted to
 // your needs. Normally, if you have correctly named the columns above,
 // this does not need to be done.
 
 /** filter for until, appends to the end of SQL query */
-function untilQuery($until) 
+function untilQuery($until)
 {
 	global $SQL;
 
@@ -253,5 +271,5 @@ function setQuery($set)
 	// strip off "class:" which is not saved in database
 	if(strstr($set,"class:")) $set = substr($set,6);
 	return ' AND '.$SQL['set']." LIKE '%$set%'";
-}			
+}
 ?>

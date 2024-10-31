@@ -1,4 +1,21 @@
-<?php 
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 define('ANALYTICS_BLOGPOSTS', 10);
 define('ANALYTICS_BLOGCOMMENTS', 20);
@@ -17,7 +34,7 @@ define('ANALYTICS_LPPERCENTAGE', 90);
 
 class ElementTypes {
     const elements = array(
-        ANALYTICS_BLOGPOSTS => array('title' => 'Δημοσιεύσεις στο Blog', 'link' => 'blogposts', 'icon' =>'fa fa-columns fa-fw'), 
+        ANALYTICS_BLOGPOSTS => array('title' => 'Δημοσιεύσεις στο Blog', 'link' => 'blogposts', 'icon' =>'fa fa-columns fa-fw'),
         ANALYTICS_BLOGCOMMENTS => array('title' => 'Σχόλια στο Blog', 'link' => 'blog-comments', 'icon' => 'fa fa-comment fa-fw'),
         ANALYTICS_COURSECOMMENTS => array('title' => 'Σχόλια στο μάθημα', 'link' => 'course-comments', 'icon' => 'fa fa-edit space-after-icon'),
         ANALYTICS_WALLCOMMENTS => array('title' => 'Σχόλια στον τοίχο', 'link' => 'wall-comments', 'icon' => 'fa fa-comment fa-fw'),

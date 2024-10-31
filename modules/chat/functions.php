@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass 
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== 
  */
 
 require_once 'modules/admin/extconfig/externals.php';
@@ -27,7 +25,7 @@ define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
 
 $colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
 
-/** 
+/**
  * @brief checks if user has chat access permissions
  * @global type $is_editor
  * @param type $uid
@@ -36,9 +34,9 @@ $colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
  * @return boolean
  */
 function is_valid_chat_user($uid, $conference_id, $conference_status) {
-    
+
     global $is_editor;
-    
+
     if ($is_editor) {
         return TRUE;
     } else {

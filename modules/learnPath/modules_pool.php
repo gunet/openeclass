@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /* ===========================================================================
@@ -61,7 +60,7 @@ $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
-                      'level' => 'primary'))); 
+                      'level' => 'primary')));
 
 
 // display use explication text
@@ -94,7 +93,7 @@ switch ($cmd) {
 				AND `course_id` = ?d", $_GET['cmdid'], $course_id);
 
             //delete all user progression concerning this module
-            $sql = "DELETE FROM `lp_user_module_progress` WHERE 1=0 ";            
+            $sql = "DELETE FROM `lp_user_module_progress` WHERE 1=0 ";
             foreach ($result as $list) {
                 $sql .= " OR `learnPath_module_id`=" . intval($list->learnPath_module_id);
             }
@@ -234,13 +233,13 @@ if (!$num_results == 0) {
             </tr></thead>";
 }
 
-foreach ($result as $list) {    
+foreach ($result as $list) {
 
     //DELETE , RENAME, COMMENT
     if (empty($list->name) and $list->contentType == 'LINK') {
         $list->name = $list->path;
     }
-    
+
     $contentType_img = selectImage($list->contentType);
     $contentType_alt = selectAlt($list->contentType);
     $tool_content .= "<tr><td class='count-col'>".icon($contentType_img, $contentType_alt)."
@@ -263,10 +262,10 @@ foreach ($result as $list) {
                       'class' => 'delete',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
                       'confirm' => "$langConfirmDelete")
-                    ));          
+                    ));
     $tool_content .= "</td></tr>";
     $atleastOne = true;
-    
+
 } //end while another module to display
 if (!$num_results == 0) {
     $tool_content .= "</table></div></div>";

@@ -1,4 +1,22 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /**
  * \file
  * \brief Response to Verb ListRecords
@@ -16,7 +34,7 @@ if (isset($args['resumptionToken'])) {
 	if (!file_exists(TOKEN_PREFIX.$args['resumptionToken'])) {
 		$errors[] = oai_error('badResumptionToken', '', $args['resumptionToken']);
 	} else {
-		$readings = readResumToken(TOKEN_PREFIX.$args['resumptionToken']);             
+		$readings = readResumToken(TOKEN_PREFIX.$args['resumptionToken']);
 		if ($readings == false) {
 			$errors[] = oai_error('badResumptionToken', '', $args['resumptionToken']);
 		} else {
@@ -25,7 +43,7 @@ if (isset($args['resumptionToken'])) {
 		}
 	}
 } else { // no, we start a new session
-	$deliveredrecords = 0; 
+	$deliveredrecords = 0;
 	$extquery = '';
 
 	$metadataPrefix = $args['metadataPrefix'];
@@ -44,7 +62,7 @@ if (isset($args['resumptionToken'])) {
 	    if (is_array($SETS)) {
 		    $extquery .= setQuery($args['set']);
 	    } else {
-			$errors[] = oai_error('noSetHierarchy'); 
+			$errors[] = oai_error('noSetHierarchy');
 		}
 	}
 }
@@ -54,7 +72,7 @@ if (!empty($errors)) {
 }
 
 // Load the handler
-if (is_array($METADATAFORMATS[$metadataPrefix]) 
+if (is_array($METADATAFORMATS[$metadataPrefix])
 	&& isset($METADATAFORMATS[$metadataPrefix]['myhandler'])) {
 	$inc_record  = $METADATAFORMATS[$metadataPrefix]['myhandler'];
 	include($inc_record);
@@ -74,7 +92,7 @@ if (empty($errors)) {
 			exit();
 		} else {
 			$errors[] = oai_error('noRecordsMatch');
-		}		
+		}
 	} else {
 		if ($r===false) {
 			exit("FetchMode is not supported");
@@ -106,7 +124,7 @@ $maxrec = min($num_rows - $deliveredrecords, $maxItems);
 if ($num_rows - $deliveredrecords > $maxItems) {
 	$cursor = (int)$deliveredrecords + $maxItems;
 	$restoken = createResumToken($cursor, $extquery, $metadataPrefix);
-	$expirationdatetime = gmstrftime('%Y-%m-%dT%TZ', time()+TOKEN_VALID);	
+	$expirationdatetime = gmstrftime('%Y-%m-%dT%TZ', time()+TOKEN_VALID);
 }
 // Last delivery, return empty ResumptionToken
 elseif (isset($args['resumptionToken'])) {
@@ -137,7 +155,7 @@ while ($countrec++ < $maxrec) {
 	$identifier = $oaiprefix.$record->{$SQL['identifier']};
 	$datestamp = formatDatestamp($record->{$SQL['datestamp']});
 	$setspec = $record->{$SQL['set']};
-	
+
 	// debug_var_dump('record', $record);
 	if (isset($record->{$SQL['deleted']}) && (intval($record->{$SQL['deleted']}) === 1 ) &&
 		($deletedRecord == 'transient' || $deletedRecord == 'persistent')) {
@@ -145,7 +163,7 @@ while ($countrec++ < $maxrec) {
 	} else {
 		$status_deleted = FALSE;
 	}
-	
+
   //debug_var_dump('status_deleted', $status_deleted);
 	if($args['verb']=='ListRecords') {
 		$cur_record = $outputObj->create_record();
@@ -154,22 +172,22 @@ while ($countrec++ < $maxrec) {
 		if (!$status_deleted) {
 			debug_var_dump('inc_record',$inc_record);
 			create_metadata($outputObj, $cur_record, $identifier, $setspec);
-		}	
+		}
 	} else { // for ListIdentifiers, only identifiers will be returned.
 		$cur_header = $outputObj->create_header($identifier, $datestamp,$setspec);
 	}
 	if ($status_deleted) {
 		$cur_header->setAttribute("status","deleted");
-	}  
+	}
 }
 
 // ResumptionToken
 if (isset($restoken)) {
 	if(isset($expirationdatetime)) {
-		$outputObj->create_resumpToken($restoken,$expirationdatetime,$num_rows,$cursor); 
+		$outputObj->create_resumpToken($restoken,$expirationdatetime,$num_rows,$cursor);
 	} else {
-		$outputObj->create_resumpToken('',null,$num_rows,$deliveredrecords); 
-	}	
+		$outputObj->create_resumpToken('',null,$num_rows,$deliveredrecords);
+	}
 }
 
 // end ListRecords

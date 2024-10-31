@@ -1,10 +1,21 @@
 <?php
 
-/* ========================================================================
- *   Open eClass 3.6
- *   E-learning and Course Management System
- * ========================================================================
- *  Copyright(c) 2003-2017  Greek Universities Network - GUnet
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
  */
 
 require_once 'include/course_settings.php';
@@ -522,7 +533,7 @@ function user_visible_groups($uid, $course_id)
 }
 
 
-function getNextAvailableDateOfTutor($editorId,$g_id,$c_id){ 
+function getNextAvailableDateOfTutor($editorId,$g_id,$c_id){
     $end = date('Y-m-d',strtotime('now + 30days'));
     $available_next_dates_of_tutor_id = Database::get()->queryArray("SELECT * FROM tutor_availability_group
                                                             WHERE lesson_id = ?d

@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass 
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== 
  */
 
 require_once 'vendor/autoload.php';
@@ -44,11 +42,11 @@ class UnPlag extends Plagiarism {
     protected function getType() {
         return 1;
     }
-    
+
     /**
-     * 
+     *
      * @param type $fileID
-     * @param PlagiarismResult $result 
+     * @param PlagiarismResult $result
      */
     private function getPDF($fileID, $result) {
         $submitID = $this->getSubmissionID($fileID);
@@ -72,7 +70,7 @@ class UnPlag extends Plagiarism {
     }
 
     /**
-     * 
+     *
      * @param type $fileID
      * @return PlagiarismResult
      */
@@ -127,10 +125,10 @@ class UnPlag extends Plagiarism {
     }
 
     private function submitFileToServer($fileID, $fileLocation, $filename = null) {
-                
+
         if ($this->isFileSubmitted($fileID))
             return TRUE;
-        
+
         try {
             $response = $this->getClient()->post('file/upload', [//send HTTP POST request
                 'multipart' => [
@@ -151,7 +149,7 @@ class UnPlag extends Plagiarism {
                     'Accept' => 'application/json' // Force unplag to give response in JSON
                 ]
             ]);
-            $result = json_decode($response->getBody(), true);            
+            $result = json_decode($response->getBody(), true);
             if ($result['file']['id']) {
                 $this->createRemoteFileID($fileID, $result['file']['id']);
                 return TRUE;
@@ -164,7 +162,7 @@ class UnPlag extends Plagiarism {
 
     private function getClient() {
         $app = ExtAppManager::getApp("unplag");
-        if (!$app->isEnabled()) {            
+        if (!$app->isEnabled()) {
             return null;
         }
 
@@ -195,5 +193,5 @@ class UnPlag extends Plagiarism {
         ]);
         return $client;
     }
-    
+
 }

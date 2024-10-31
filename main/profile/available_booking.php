@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 $require_login = true;
 $require_valid_uid = TRUE;
@@ -53,7 +52,7 @@ if(isset($_POST['accept_book'])){
     if($accept_booking){
         $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id IN (SELECT student_id FROM date_booking_user WHERE booking_id = ?d)",$_POST['accept_booking_id'])->email;
         $details_booking = Database::get()->queryArray("SELECT * FROM date_booking WHERE id = ?d",$_POST['accept_booking_id']);
-        
+
         if(count($details_booking) > 0){
             foreach($details_booking as $d){
                 $userName = $d->title;
@@ -105,16 +104,16 @@ if(isset($_POST['accept_book'])){
                 $emailbody = $emailHeader.$emailMain;
 
                 $emailPlainBody = html2text($emailbody);
-                
+
                 send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-                
+
                 redirect_to_home_page("main/profile/available_booking.php?user_id=".$uid);
 
         }
 
-        
+
     }
-}    
+}
 
 
 
@@ -122,7 +121,7 @@ if(isset($_POST['delete_book'])){
 
     $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id IN (SELECT student_id FROM date_booking_user WHERE booking_id = ?d)",$_POST['booking_id'])->email;
     $details_booking = Database::get()->queryArray("SELECT * FROM date_booking WHERE id = ?d",$_POST['booking_id']);
-    
+
     if(count($details_booking) > 0){
         foreach($details_booking as $d){
             $userName = $d->title;
@@ -175,9 +174,9 @@ if(isset($_POST['delete_book'])){
     $emailbody = $emailHeader.$emailMain;
 
     $emailPlainBody = html2text($emailbody);
-    
+
     send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-    
+
     redirect_to_home_page("main/profile/available_booking.php?user_id=".$uid);
 }
 
@@ -211,7 +210,7 @@ if(isset($_GET['myBooks'])){
                                                             WHERE date_booking.teacher_id = ?d
                                                             AND (date_booking.start <= ?t AND date_booking.end >= ?t OR date_booking.start > ?t)
                                                             ORDER BY start ASC",$uid,$now,$now,$now);
-    
+
         $data['booking_history'] = Database::get()->queryArray("SELECT * FROM date_booking 
                                                                 LEFT JOIN date_booking_user 
                                                                 ON date_booking_user.booking_id = date_booking.id 
@@ -221,7 +220,7 @@ if(isset($_GET['myBooks'])){
 }
 
 
-            
+
 $data['action_bar'] =
                 action_bar(array(
                     array('title' => $langBack,

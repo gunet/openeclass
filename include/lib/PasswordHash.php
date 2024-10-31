@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 namespace Hautelook\Phpass;
 
@@ -66,11 +83,11 @@ class PasswordHash
     public function get_random_bytes($count)
     {
         $output = '';
-        
+
         if (is_callable('random_bytes')) {
             return random_bytes($count);
         }
-        
+
         if (@is_readable('/dev/urandom') &&
             ($fh = @fopen('/dev/urandom', 'rb'))) {
             $output = fread($fh, $count);

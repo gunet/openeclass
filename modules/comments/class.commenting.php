@@ -1,22 +1,21 @@
 <?php
-/* ========================================================================
- * Open eClass 3.0
-* E-learning and Course Management System
-* ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
-* A full copyright notice can be read in "/info/copyright.txt".
-* For a full list of contributors, see "credits.txt".
-*
-* Open eClass is an open platform distributed in the hope that it will
-* be useful (without any warranty), under the terms of the GNU (General
-		* Public License) as published by the Free Software Foundation.
-* The full license can be read in "/info/license/license_gpl.txt".
-*
-* Contact address: GUnet Asynchronous eLearning Group,
-*                  Network Operations Center, University of Athens,
-*                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-*                  e-mail: info@openeclass.org
-* ======================================================================== */
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'include/log.class.php';
 require_once 'modules/abuse_report/abuse_report.php';
@@ -133,7 +132,7 @@ Class Commenting {
                             $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode));
                         }
 
-                        
+
                         $post_actions .= '<a aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
                         $post_actions .= '<a aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
@@ -187,7 +186,7 @@ Class Commenting {
                 $space_textarea = "";
                 if(!isset($_GET['action'])) {
                     $space_textarea = "px-lg-5";
-                } 
+                }
                 $out .= '<div class="col-12 '.$space_textarea.' px-0 pb-5"><div class="form-wrapper form-edit Borders px-0"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" aria-label="'.$langTypeOutMessage.'" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn submitAdminBtn" name="send_button" type="submit" value="'.$langSubmitComment.'" />';

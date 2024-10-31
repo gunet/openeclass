@@ -1,4 +1,21 @@
-<?php         
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 $require_login = true;
 $require_current_course = true;
@@ -20,13 +37,13 @@ if(isset($_GET['view'])) {
         $group_id = $_GET['show_group'];
         $tutor_id = $_GET['show_tutor'];
 
-       
+
         $start = date('Y-m-d H:i:s',strtotime($_GET['start']));
         $end = date('Y-m-d H:i:s',strtotime($_GET['end']));
 
         $eventArr = array();
 
-        
+
         $result_events = Database::get()->queryArray("SELECT id,lesson_id,user_id,group_id,start,end FROM tutor_availability_group
                                                         WHERE start BETWEEN (?t) AND (?t)
                                                         AND end > NOW()
@@ -34,7 +51,7 @@ if(isset($_GET['view'])) {
                                                         AND group_id = ?d
                                                         AND user_id = ?d",$start,$end,$lesson_id,$group_id,$tutor_id);
 
-    
+
 
         if($result_events){
             foreach($result_events as $row){
@@ -49,17 +66,17 @@ if(isset($_GET['view'])) {
                 ];
             }
         }
-        
+
         header('Content-Type: application/json');
 
         echo json_encode($eventArr);
 
         exit();
-        
+
 
     }
 
-   
+
 }
 
 function showTimeEvent($startTime,$endTime,$evtId){

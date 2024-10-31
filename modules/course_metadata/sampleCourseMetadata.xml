@@ -1,59 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <course
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://www.openeclass.org'
     xsi:schemaLocation='http://www.openeclass.org courseLooseMetadata.xsd'>
-    
+
     <instructor>
         <firstName lang="el">Διδάσκων1</firstName>
         <firstName lang="en">Instructor1</firstName>
-        
+
         <lastName lang="el">Διδάσκων1</lastName>
         <lastName lang="en">Instructor1</lastName>
-        
+
         <fullName lang="el">Διδάσκων1</fullName>
         <fullName lang="en">Instructor1</fullName>
     </instructor>
     <instructor>
         <firstName lang="el">Διδάσκων2</firstName>
         <firstName lang="en">Instructor2</firstName>
-        
+
         <lastName lang="el">Διδάσκων2</lastName>
         <lastName lang="en">Instructor2</lastName>
-        
+
         <fullName lang="el">Διδάσκων2</fullName>
         <fullName lang="en">Instructor2</fullName>
     </instructor>
-    
+
     <title lang="el">Course 1</title>
     <title lang="en">Μάθημα 1</title>
-    
+
     <url>http://eclass</url>
-    
+
     <code lang="el">TMA1</code>
-    
+
     <level>doctoral</level>
-    
+
     <yearOfStudy>3</yearOfStudy>
     <semester>6</semester>
-    
+
     <type>compulsory</type>
-    
+
     <credithours>10</credithours>
-    
+
     <coTeaching>true</coTeaching>
     <coTeachingColleagueOpensCourse>true</coTeachingColleagueOpensCourse>
     <coTeachingAutonomousDepartment>true</coTeachingAutonomousDepartment>
     <coTeachingDepartmentCreditHours>10</coTeachingDepartmentCreditHours>
-    
+
     <language lang="en">greek</language>
-    
+
     <targetGroup lang="el">Ομάδα στόχος.</targetGroup>
     <targetGroup lang="en">Just a target group.</targetGroup>
-    
+
     <credits>30</credits>
-    
+
     <description lang="el">Περιγραφή μαθήματος.</description>
     <description lang="en">Just a description.</description>
     <contents lang="el">Περιεχόμενα μαθήματος</contents>
@@ -63,12 +81,12 @@
     <featuredBooks lang="el">Συγγράματα</featuredBooks>
     <prerequisites lang="el">Προαπαιτούμενα</prerequisites>
     <literature lang="el">Βιβλιογραφία</literature>
-    
+
     <numberOfUnits>0</numberOfUnits>
-    
+
     <thematic lang="el">Θεματική επιστημονική περιοχή</thematic>
     <thematic lang="en">Thematic scientific area</thematic>
-    
+
     <institution lang="el">Ίδρυμα</institution>
     <institution lang="en">Institution</institution>
     <institutionDescription lang="el">περιγραφή</institutionDescription>

@@ -1,3 +1,21 @@
+<!--
+  - /* ========================================================================
+  -  * Open eClass
+  -  * E-learning and Course Management System
+  -  * ========================================================================
+  -  * Copyright 2003-2024, Greek Universities Network - GUnet
+  -  *
+  -  * Open eClass is an open platform distributed in the hope that it will
+  -  * be useful (without any warranty), under the terms of the GNU (General
+  -  * Public License) as published by the Free Software Foundation.
+  -  * The full license can be read in "/info/license/license_gpl.txt".
+  -  *
+  -  * Contact address: GUnet Asynchronous eLearning Group
+  -  *                  e-mail: info@openeclass.org
+  -  * ========================================================================
+  -  */
+  -->
+
 <!-- DTD for XML Schemas: Part 1: Structures
      Public Identifier: "-//W3C//DTD XMLSCHEMA 200102//EN"
      Official Location: http://www.w3.org/2001/XMLSchema.dtd -->
@@ -130,7 +148,7 @@
      because at the Infoset level where schemas operate,
      xmlns(:prefix) is NOT an attribute! -->
 <!-- The declaration of xmlns is a convenience for schema authors -->
- 
+
 <!-- The id attribute here and below is for use in external references
      from non-schemas using simple fragment identifiers.
      It is NOT used for schema-to-schema reference, internal or
@@ -174,7 +192,7 @@
           id    ID           #IMPLIED
           %simpleContentAttrs;>
 
-<!-- restriction should use the simple branch from part2, not the 
+<!-- restriction should use the simple branch from part2, not the
      one defined above; extension should have no particle  -->
 
 <!ELEMENT %extension; (%particleAndAttrs;)>
@@ -214,7 +232,7 @@
 <!-- default and fixed are mutually exclusive -->
 
 <!ELEMENT %group; ((%annotation;)?,(%mgs;)?)>
-<!ATTLIST %group; 
+<!ATTLIST %group;
           name        %NCName;               #IMPLIED
           ref         %QName;                #IMPLIED
           minOccurs   %nonNegativeInteger;   #IMPLIED

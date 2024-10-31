@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 require_once 'indexer.class.php';
 require_once 'abstractindexer.class.php';
@@ -30,7 +29,7 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a unit db row.
-     * 
+     *
      * @global string $urlServer
      * @param  object  $unit
      * @return Zend_Search_Lucene_Document
@@ -55,60 +54,60 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
 
     /**
      * Fetch a Unit from DB.
-     * 
+     *
      * @param  int $unitId
      * @return object - the mysql fetched row
      */
     protected function fetch($unitId) {
-        $unit = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d", $unitId);        
+        $unit = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d", $unitId);
         if (!$unit) {
             return null;
         }
 
         return $unit;
     }
-    
+
     /**
      * Get Term object for locating a unique single unit.
-     * 
+     *
      * @param  int $unitId - the unit id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($unitId) {
         return new Zend_Search_Lucene_Index_Term('unit_' . $unitId, 'pk');
     }
-    
+
     /**
      * Get Term object for locating all possible units.
-     * 
+     *
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForAllResources() {
         return new Zend_Search_Lucene_Index_Term('unit', 'doctype');
     }
-    
+
     /**
      * Get all possible units from DB.
-     * 
+     *
      * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getAllResourcesFromDB() {
         return Database::get()->queryArray("SELECT * FROM course_units");
     }
-    
+
     /**
      * Get Lucene query input string for locating all units belonging to a given course.
-     * 
+     *
      * @param  int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
         return 'doctype:unit AND courseid:' . $courseId;
     }
-    
+
     /**
      * Get all units belonging to a given course from DB.
-     * 
+     *
      * @param  int   $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */

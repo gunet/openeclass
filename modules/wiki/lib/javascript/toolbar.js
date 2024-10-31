@@ -1,43 +1,37 @@
- /**===========================================================================
- *   Open eClass 3.0
- *   E-learning and Course Management System
- * ===========================================================================
- *	Copyright(c) 2003-2014  Greek Universities Network - GUnet
- *	A full copyright notice can be read in "/info/copyright.txt".
+ /*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- *  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
- *				Yannis Exidaridis <jexi@noc.uoa.gr>
- *				Alexandros Diamantidis <adia@noc.uoa.gr>
- *
- *	For a full list of contributors, see "credits.txt".
- *
- *	This program is a free software under the terms of the GNU
- *	(General Public License) as published by the Free Software
- *	Foundation. See the GNU License for more details.
- *	The full license can be read in "license.txt".
- *
- *	Contact address: 	GUnet Asynchronous Teleteaching Group,
- *						Network Operations Center, University of Athens,
- *						Panepistimiopolis Ilissia, 15784, Athens, Greece
- *						eMail: eclassadmin@gunet.gr
- ============================================================================*/
+ */
 
 /**===========================================================================
  toolbar.js
  @last update: 15-05-2007 by Thanos Kyritsis
  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
- 
+
  based on DotClear licensed under GPL
  copyright (c) 2004 Olivier Meunier and contributors
- 
+
  original file: toolbar Revision:
- 
- ==============================================================================        
- @Description: 
- 
+
+ ==============================================================================
+ @Description:
+
  @Comments:
- 
- @todo: 
+
+ @todo:
  ==============================================================================
  */
 
@@ -49,7 +43,7 @@
  "if (document.getElementById) {
  var tb = new dcToolBar(document.getElementById('p_content'),
  document.getElementById('p_format'),'images/');
- 
+
  tb.btStrong('Strong emphasis');
  tb.btEm('Emphasis'');
  tb.btIns('Inserted');
@@ -419,7 +413,7 @@ function dcToolBar(textarea, format, img_path)
                     });
         }
     }
-    
+
     function btHr(label) {
         addButton(img_path + 'bt_hr.png', label,
                 function() {
@@ -427,7 +421,7 @@ function dcToolBar(textarea, format, img_path)
                     encloseSelection('', tag);
                 });
     }
-    
+
     function btH1(label) {
         addButton(img_path + 'bt_h1.png', label,
                 function() {
@@ -438,7 +432,7 @@ function dcToolBar(textarea, format, img_path)
                     }
                 });
     }
-    
+
     function btH2(label) {
         addButton(img_path + 'bt_h2.png', label,
                 function() {
@@ -449,7 +443,7 @@ function dcToolBar(textarea, format, img_path)
                     }
                 });
     }
-    
+
     function btH3(label) {
         addButton(img_path + 'bt_h3.png', label,
                 function() {
@@ -460,7 +454,7 @@ function dcToolBar(textarea, format, img_path)
                     }
                 });
     }
-    
+
     function btH4(label) {
         addButton(img_path + 'bt_h4.png', label,
                 function() {

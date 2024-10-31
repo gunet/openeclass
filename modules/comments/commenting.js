@@ -1,3 +1,21 @@
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 
 	if (action == 'delete') {
@@ -19,18 +37,18 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	} else {
 		proceed = true;
 	}
-	
+
 	if (proceed) {
-	
+
 	    var xmlHttpReq = false;
-	
+
 	    //Mozilla/Safari/IE7
 	    if (window.XMLHttpRequest) {
 	        xmlHttpReq = new XMLHttpRequest();
 	    } else if (window.ActiveXObject) { //IE older versions
 	        xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
 	    }
-	
+
 	    xmlHttpReq.open('POST', strURL, true);
 	    xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	    xmlHttpReq.onreadystatechange = function() {
@@ -48,7 +66,7 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        			document.getElementById('comments-'+rid).appendChild(addedDiv);
 	        			setTimeout(function(){fade(document.getElementById('comment-'+response[2]).childNodes[0])}, 3000);
 	        		} else if (response[0] == 'ERROR') {
-	        			
+
 	        		}
 	        	} else if (action == 'delete') {
 	        		response = JSON.parse(xmlHttpReq.responseText);
@@ -78,9 +96,9 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        			setTimeout(function(){fade(document.getElementById('comment-'+cid).childNodes[0])}, 3000);
 	        		}
 	        	}
-	        } 
+	        }
 	    }
-	
+
 	    if (action == 'new') {
 	    	var commentText = encodeURIComponent(document.getElementById('textarea-'+rid).value);
 	    	var params = 'commentText='+commentText+'&action='+action+'&rid='+rid+'&rtype='+rtype;
@@ -90,9 +108,9 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	    	var commentText = encodeURIComponent(document.getElementById('edit-textarea-'+cid).value);
 	    	var params = 'commentText='+commentText+'&action='+action+'&cid='+cid+'&rid='+rid+'&rtype='+rtype;
 	    }
-	    
+
 	    xmlHttpReq.send(params);
-    
+
 	}
 }
 

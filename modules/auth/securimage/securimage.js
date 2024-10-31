@@ -1,7 +1,25 @@
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /*!
  * Securimage CAPTCHA Audio Library
  * https://www.phpcaptcha.org/
- * 
+ *
  * Copyright 2015 phpcaptcha.org
  * Released under the BSD-3 license
  * See https://github.com/dapphp/securimage/blob/master/README.md
@@ -79,7 +97,7 @@ SecurimageAudio.prototype.init = function() {
 
                 this.audioElement.parentNode.removeChild(this.audioElement);
                 this.controlsElement.parentNode.removeChild(this.controlsElement);
-                
+
                 return ;
             }
         }
@@ -143,7 +161,7 @@ SecurimageAudio.prototype.play = function(evt) {
     } catch (ex) {
         alert('Audio error: ' + ex);
     }
-    
+
     if (undefined !== evt) {
         evt.preventDefault();
     }
@@ -157,13 +175,13 @@ SecurimageAudio.prototype.refresh = function(captchaId) {
 
     if (undefined !== captchaId) {
         this.captchaId = captchaId;
-    }    
+    }
 
     this.playing = true;
     this.reload  = false;
     this.play(); // stops audio if playing
     this.reload  = true;
-    
+
     return false;
 }
 
@@ -171,14 +189,14 @@ SecurimageAudio.prototype.copyElementAttributes = function(newEl, el) {
     for (var i = 0, atts = el.attributes, n = atts.length; i < n; ++i) {
         newEl.setAttribute(atts[i].nodeName, atts[i].value);
     }
-    
+
     return newEl;
 }
 
 SecurimageAudio.prototype.replaceElements = function() {
     var parent = this.audioElement.parentNode;
     parent.removeChild(this.audioElement);
-    
+
     var newAudioEl = document.createElement('audio');
     newAudioEl.setAttribute('style', 'display: none;');
     newAudioEl.setAttribute('preload', 'false');

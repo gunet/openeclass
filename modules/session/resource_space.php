@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -90,8 +89,8 @@ if (isset($_GET['download'])) {
         $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
                         WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND
                         path = ?s", $course_id, MYSESSIONS, $sessionID, $downloadDir);
-                        
-        
+
+
         if (!$q) {
             not_found($downloadDir);
         }
@@ -149,7 +148,7 @@ if(isset($_POST['delete_resource'])){
         if(!$is_consultant && $r->is_completed){
             Session::flash('message',$langForbidden);
             Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID); 
+            redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
         }
         $badge = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$sessionID,$course_id);
         if($badge){
@@ -164,7 +163,7 @@ if(isset($_POST['delete_resource'])){
                                             WHERE user = ?d AND badge_criterion = ?d",$r->from_user,$badge_criterion_id);
             }
         }
-        
+
     }
 
     $file = Database::get()->queryArray("SELECT filename,path,lock_user_id FROM document WHERE id = ?d",$_POST['delete_resource']);
@@ -179,7 +178,7 @@ if(isset($_POST['delete_resource'])){
     Database::get()->query("DELETE FROM session_resources WHERE session_id = ?d AND res_id = ?d",$sessionID,$_POST['delete_resource']);
     Session::flash('message',$langDocDeleted);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
+    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']);
 }
 
 
@@ -222,9 +221,9 @@ if(isset($_POST['userBadgeCriterionId'])){
         Session::flash('message',$langDocCompletionNoSuccess);
         Session::flash('alert-class', 'alert-warning');
     }
-     
-    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
-} 
+
+    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']);
+}
 
 // ---------------------------
 // add comment to deliverable by consultant
@@ -238,7 +237,7 @@ if(isset($_POST['add_comment'])){
                                     AND doc_id = ?d 
                                     AND from_user = ?d",q($_POST['add_comment']), $sessionID, $_POST['for_resource_id'], $_POST['for_user_id']);
 
-    
+
     // Send email to user
     $sessionName =  title_session($course_id,$sessionID);
     $nameUser = participant_name($_POST['for_user_id']);
@@ -282,7 +281,7 @@ if(isset($_POST['add_comment'])){
 
     Session::flash('message',$langAddCommentsSuccess);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']); 
+    redirect_to_home_page("modules/session/resource_space.php?course=".$course_code."&session=".$sessionID."&resource_id=".$_GET['resource_id']."&file_id=".$_GET['file_id']);
 }
 
 
@@ -379,7 +378,7 @@ if(count($docs) > 0){
         $file->link = $link;
         $file->download_url = $download_url;
         $file->fileTitle = $file->title ?? $file->filename;
-        
+
         $refers_temp = Database::get()->querySingle("SELECT doc_id,from_user,is_completed,deliverable_comments FROM session_resources WHERE res_id = ?d AND session_id = ?d",$file->id,$sessionID);
         $refers = Database::get()->querySingle("SELECT title FROM session_resources WHERE res_id = ?d AND session_id = ?d",$refers_temp->doc_id,$sessionID);
         $file->refers_to = $refers->title;
@@ -392,7 +391,7 @@ if(count($docs) > 0){
                                                                         AND badge = ?d",$refers_temp->doc_id,'document-submit',$badge_id);
 
                 if($user_badge_criterion){
-                    $file->user_badge_criterion_id = $user_badge_criterion->id; 
+                    $file->user_badge_criterion_id = $user_badge_criterion->id;
                 }else{
                     $file->user_badge_criterion_id = 0;
                 }
@@ -401,7 +400,7 @@ if(count($docs) > 0){
             }
             $file->user_sender = $refers_temp->from_user;
             $file->completed = $refers_temp->is_completed;
-            $file->can_delete_file = 1;                 
+            $file->can_delete_file = 1;
         }
         if($is_simple_user){
             if(!$refers_temp->is_completed){

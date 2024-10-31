@@ -1,3 +1,21 @@
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /*******************************************************************************
  **
  ** FileName: APIWrapper.js
@@ -45,7 +63,7 @@
  **
  **    javascript:
  **          var result = doInitialize();
- **          if (result != true) 
+ **          if (result != true)
  **          {
  **             // handle error
  **          }
@@ -251,7 +269,7 @@ function doSetValue(name, value)
  ** Return:  None
  **
  ** Description:
- ** Call the Commit function 
+ ** Call the Commit function
  **
  *******************************************************************************/
 function doCommit()
@@ -283,7 +301,7 @@ function doCommit()
  ** Return:  The error code that was set by the last LMS function call
  **
  ** Description:
- ** Call the GetLastError function 
+ ** Call the GetLastError function
  **
  *******************************************************************************/
 function doGetLastError()
@@ -308,7 +326,7 @@ function doGetLastError()
  ** Return:  The textual description that corresponds to the input error code
  **
  ** Description:
- ** Call the GetErrorString function 
+ ** Call the GetErrorString function
  **
  ********************************************************************************/
 function doGetErrorString(errorCode)
@@ -328,7 +346,7 @@ function doGetErrorString(errorCode)
  **
  ** Function doGetDiagnostic(errorCode)
  ** Inputs:  errorCode - Error Code(integer format), or null
- ** Return:  The vendor specific textual description that corresponds to the 
+ ** Return:  The vendor specific textual description that corresponds to the
  **          input error code
  **
  ** Description:
@@ -455,7 +473,7 @@ function findAPI(win)
  ** Return:  If an API object is found, it's returned, otherwise null is returned
  **
  ** Description:
- ** This function looks for an object named API, first in the current window's 
+ ** This function looks for an object named API, first in the current window's
  ** frame hierarchy and then, if necessary, in the current window's opener window
  ** hierarchy (if there is an opener window).
  **
@@ -607,7 +625,7 @@ function convertTotalSeconds(ts)
 
 /*******************************************************************************
  ** this function will convert seconds into hours, minutes, and seconds in
- ** timeinterval(second,10,2) type format - PThHmMsS 
+ ** timeinterval(second,10,2) type format - PThHmMsS
  *******************************************************************************/
 function convertTotalSeconds2004(ts)
 {

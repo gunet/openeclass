@@ -1,3 +1,21 @@
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <xs:schema targetNamespace="http://ltsc.ieee.org/xsd/LOM/vocab"
            xmlns="http://ltsc.ieee.org/xsd/LOM/vocab"
            xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
@@ -20,7 +38,7 @@
 
             This component schema supports strict validation of both standard and custom
             vocabulary values by checking that both the source and value are taken
-            from either the IEEE standard token set or from a custom token set.  
+            from either the IEEE standard token set or from a custom token set.
 
             Organizations are free to define their own namespace for the custom vocabulary
             extensions.  For completeness this XSD is set up to use a namespace defined
@@ -38,7 +56,7 @@
 
     <xs:import namespace="http://ltsc.ieee.org/xsd/LOM"/>
     <xs:import namespace="http://ltsc.ieee.org/xsd/LOM/custom"/>
-  
+
     <!-- Vocabulary type declarations -->
 
     <!-- Source -->

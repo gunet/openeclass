@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass 
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== 
  */
 
 class RestoreHelper {
@@ -62,7 +60,7 @@ class RestoreHelper {
             return $field;
         }
     }
-    
+
     public function getValue($obj, $field, $value) {
         if (isset($this->values[$this->eclassVersion][$obj][$field]) && is_callable($this->values[$this->eclassVersion][$obj][$field])) {
             return $this->values[$this->eclassVersion][$obj][$field]($value);
@@ -72,7 +70,7 @@ class RestoreHelper {
             return $value;
         }
     }
-    
+
     public function getType($obj, $field, $value) {
         if (isset($this->types[$this->eclassVersion][$obj][$field])) {
             return $this->types[$this->eclassVersion][$obj][$field];
@@ -82,7 +80,7 @@ class RestoreHelper {
             return '?s';
         }
     }
-    
+
     public function getBackupVersion() {
         return $this->backupVersion;
     }
@@ -193,7 +191,7 @@ class RestoreHelper {
         $this->fields[self::STYLE_2X]['course_units']['visibility'] = 'visible';
         $this->fields[self::STYLE_2X]['unit_resources']['visibility'] = 'visible';
     }
-    
+
     private function populateValues() {
         $visibility = function($value) {
             if ($value === 'v') {
@@ -216,7 +214,7 @@ class RestoreHelper {
             if (is_int($value)) {
                 return $value;
             }
-            
+
             $ret = 4;
             switch($value) {
                 case 'single':
@@ -257,7 +255,7 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['forum_category']['cat_order'] = $to_int;
         $this->values[self::STYLE_2X]['poll_question']['qtype'] = $poll_qtype;
         $this->values[self::STYLE_2X]['exercise_question']['ponderation'] = $zero_if_null;
-        
+
         // data consistency for contentType
         $lp_module_contentType = function($value) {
             if ($value === '') {
@@ -268,7 +266,7 @@ class RestoreHelper {
         };
         $this->values[self::STYLE_2X]['lp_module']['contentType'] = $lp_module_contentType;
         $this->values[self::STYLE_3X]['lp_module']['contentType'] = $lp_module_contentType;
-        
+
         // data consistency for res_id
         $unit_resources_res_id = function($value) {
             return intval($value);
@@ -276,7 +274,7 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['unit_resources']['res_id'] = $unit_resources_res_id;
         $this->values[self::STYLE_3X]['unit_resources']['res_id'] = $unit_resources_res_id;
     }
-    
+
     private function populateTypes() {
         $this->types = array();
         $this->types[self::STYLE_3X]['admin_announcement']['begin'] = '?t';

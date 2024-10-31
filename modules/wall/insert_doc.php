@@ -1,29 +1,28 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
     global $course_code, $langNoDocuments, $urlServer;
-    
+
     load_js('jstree3');
-    
+
     if (is_null($subsystem)) { //main documents
         $div_id = 'jstree_doc';
         $sys = '';
@@ -33,15 +32,15 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
         $sys = '&subsystem=mydocs';
         $input_id = 'mydocs';
     }
-    
+
     if (!is_null($id)) {
         $id_str = '&post_id='.$id;
     } else {
         $id_str = '';
     }
-    
+
     $ret_str = '<div id="'.$div_id.'"></div>';
-    
+
     $ret_str .= "<script>
                    $(function () {
                      $('#$div_id').jstree({
@@ -67,8 +66,8 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                        },
                        'plugins' : [ 'checkbox', 'types' ]
                      });";
-        
-        if (!$expanded) {             
+
+        if (!$expanded) {
             $ret_str .= "
                          $('#$div_id').on('ready.jstree', function(e, data) {
                              if(data.instance._cnt == 0) {
@@ -84,10 +83,10 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                                  $('#".$input_id."_div').html('<div class=\"alert alert-warning\"><i class=\"fa-solid fa-triangle-exclamation fa-lg\"></i><span>$langNoDocuments</span></div>');
                              }
                          })";
-        }                     
-                     
-                     
-                     
+        }
+
+
+
         $ret_str .= "
                      $('#wall_form').on('submit', function(e) {
                         var selectedElms = $('#$div_id').jstree('get_selected', true);
@@ -101,6 +100,6 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                      });
                    });
                  </script>";
-    
+
     return $ret_str;
 }

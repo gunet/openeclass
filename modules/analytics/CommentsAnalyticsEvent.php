@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'Event.php';
 
@@ -29,7 +46,7 @@ class CommentsAnalyticsEvent extends Event {
                         rtype = 'course'
                         AND user_id = ?d
                         AND rid = ?d
-                        AND DATE(time) = CURDATE()", $this->context['user_id'], $this->context['course_id']);                    
+                        AND DATE(time) = CURDATE()", $this->context['user_id'], $this->context['course_id']);
                 else if ($this->context['triggeredModule'] == ANALYTICS_WALLCOMMENTS)
                     $record = Database::get()->querySingle("SELECT count(c.id) as value FROM comments as c 
                         INNER JOIN wall_post as wp on c.rid = wp.id WHERE 
@@ -37,9 +54,9 @@ class CommentsAnalyticsEvent extends Event {
                         AND c.user_id = ?d
                         AND wp.course_id = ?d
                         AND DATE(c.time) = CURDATE()", $this->context['user_id'], $this->context['course_id']);
-                           
+
                 $this->context['value'] = $record->value;
-                
+
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
@@ -87,8 +104,8 @@ class CommentsAnalyticsEvent extends Event {
                             group by DATE(c.time), c.user_id", $course_id, $data->start_date, $data->end_date);
 
                 foreach ($comments_records as $comment_record) {
-                    $this->insertValue($comment_record->user_id, $analytics_element_id, $comment_record->value, $comment_record->time); 
-                } 
+                    $this->insertValue($comment_record->user_id, $analytics_element_id, $comment_record->value, $comment_record->time);
+                }
             }
         };
 

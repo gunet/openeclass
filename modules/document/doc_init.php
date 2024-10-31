@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 /**
  * @file doc_init.php
@@ -25,11 +24,11 @@
  */
 
 function doc_init() {
-    global $urlAppend, $course_id, $course_code, $webDir, $can_upload, $group_name, 
+    global $urlAppend, $course_id, $course_code, $webDir, $can_upload, $group_name,
         $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id, $secret_directory,
         $group_id, $groupset, $base_url, $group_name, $upload_target_url, $group_sql, $is_member,
-        $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName, $sessionID, 
-        $is_session_doc, $is_consultant, $uploaded_docs_by_users, $user_uploader, 
+        $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName, $sessionID,
+        $is_session_doc, $is_consultant, $uploaded_docs_by_users, $user_uploader,
         $user_counselor_uploader, $uploaded_reference_docs_by_users;
 
     $can_upload = $is_editor || $is_admin;
@@ -47,7 +46,7 @@ function doc_init() {
         $upload_target_url = 'document.php?course=' . $course_code;
         $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;    
+        $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;
         $can_upload = $can_upload || $is_member;
         $pageName = trans('langGroupDocumentsLink');
         $navigation[] = array('url' => $urlAppend . 'modules/group/index.php?course=' . $course_code, 'name' => trans('langGroups'));
@@ -126,7 +125,7 @@ function doc_init() {
             $upload_target_url = $urlAppend . 'modules/session/resourse.php?course=' . $course_code . '&amp;session=' . $sessionID;
             $subsystem_id = $sessionID;
             $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
-            $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID;            
+            $basedir = $webDir . '/courses/' . $course_code . '/session/session_' . $sessionID;
         } elseif (isset($uploaded_docs_by_users) and $uploaded_docs_by_users) {
             $subsystem = MYSESSIONS;
             $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;session=' . $sessionID;

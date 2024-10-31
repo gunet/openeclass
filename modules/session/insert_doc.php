@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 require_once 'modules/document/doc_init.php';
@@ -177,8 +176,8 @@ function list_documents($sid, $cid) {
 
 
 function upload_file($sid){
-    global $webDir, $tool_content, $course_code, $langTitle, $langComments, 
-           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, 
+    global $webDir, $tool_content, $course_code, $langTitle, $langComments,
+           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject,
            $uid, $langDescription, $langImgFormsDes, $langForm;
 
         $resources = array();
@@ -263,9 +262,9 @@ function upload_file($sid){
 
 
 function upload_file_reference($sid){
-    global $webDir, $tool_content, $head_content, $course_code, $langTitle, $langComments, 
-           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject, 
-           $uid, $langDescription, $langImgFormsDes, $langForm, $langInfoUploadReference, 
+    global $webDir, $tool_content, $head_content, $course_code, $langTitle, $langComments,
+           $langSubmit, $langDownloadFile, $is_consultant, $course_id, $langReferencedObject,
+           $uid, $langDescription, $langImgFormsDes, $langForm, $langInfoUploadReference,
            $langContent, $langFileCreation, $langCPFMenu;
 
         $head_content .= "

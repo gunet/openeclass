@@ -1,25 +1,24 @@
 <?php
-/* ========================================================================
-* Open eClass 3.0
-* E-learning and Course Management System
-* ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
-* A full copyright notice can be read in "/info/copyright.txt".
-* For a full list of contributors, see "credits.txt".
-*
-* Open eClass is an open platform distributed in the hope that it will
-* be useful (without any warranty), under the terms of the GNU (General
-* Public License) as published by the Free Software Foundation.
-* The full license can be read in "/info/license/license_gpl.txt".
-*
-* Contact address: GUnet Asynchronous eLearning Group,
-*                  Network Operations Center, University of Athens,
-*                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-*                  e-mail: info@openeclass.org
-* ======================================================================== */
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
- * 
+ *
  * @param string $url
  * @param string $title
  * @param string $themimg the theme img dir
@@ -27,9 +26,9 @@
  */
 function print_sharing_links ($url, $text) {
     global $head_content, $urlServer;
-    
+
     $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/sharing/style.css">';
-    
+
     $out = "<span class='sharingcontainer'>";
     $out .= "<ul class='sharinglist'>";
 
@@ -45,7 +44,7 @@ function print_sharing_links ($url, $text) {
     //email
     $sharer = "mailto:?subject=".rawurlencode($text)."&body=".rawurlencode($url);
     $out .= "<li><a href='".$sharer."' target='_blank' aria-label='Email'><i class='fa-solid fa-envelope'></i></a></li>";
-    
+
     $out .= "</ul>";
     $out .= "</span>";
 

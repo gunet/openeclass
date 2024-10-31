@@ -1,11 +1,29 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /**
  * \file
  * \brief Response to Verb GetRecord
  *
  * Retrieve a record based its identifier.
  *
- * Local variables <B>$metadataPrefix</B> and <B>$identifier</B> need to be provided through global array variable <B>$args</B> 
+ * Local variables <B>$metadataPrefix</B> and <B>$identifier</B> need to be provided through global array variable <B>$args</B>
  * by their indexes 'metadataPrefix' and 'identifier'.
  * The reset of information will be extracted from database based those two parameters.
  */
@@ -16,7 +34,7 @@ $metadataPrefix = $args['metadataPrefix'];
 // myhandler is a php file which will be included to generate metadata node.
 // $inc_record  = $METADATAFORMATS[$metadataPrefix]['myhandler'];
 
-if (is_array($METADATAFORMATS[$metadataPrefix]) 
+if (is_array($METADATAFORMATS[$metadataPrefix])
 	&& isset($METADATAFORMATS[$metadataPrefix]['myhandler'])) {
 	$inc_record  = $METADATAFORMATS[$metadataPrefix]['myhandler'];
 } else {
@@ -31,13 +49,13 @@ if ($res===false) {
 		echo __FILE__.','.__LINE__."<br />";
 		die();
 	} else {
-		$errors[] = oai_error('idDoesNotExist', '', $identifier); 
+		$errors[] = oai_error('idDoesNotExist', '', $identifier);
 	}
 } elseif (!count($res)) {
-	$errors[] = oai_error('idDoesNotExist', '', $identifier); 
+	$errors[] = oai_error('idDoesNotExist', '', $identifier);
 }
 
- 
+
 if (!empty($errors)) {
 	oai_exit();
 }
@@ -47,10 +65,10 @@ if ($record===false) {
 	if (SHOW_QUERY_ERROR) {
 		echo __FILE__.','.__LINE__."<br />";
 	}
-	$errors[] = oai_error('idDoesNotExist', '', $identifier);	
+	$errors[] = oai_error('idDoesNotExist', '', $identifier);
 }
 
-$datestamp = formatDatestamp($record->{$SQL['datestamp']}); 
+$datestamp = formatDatestamp($record->{$SQL['datestamp']});
 
 if (isset($record->{$SQL['deleted']}) && (intval($record->{$SQL['deleted']}) === 1) &&
         ($deletedRecord == 'transient' || $deletedRecord == 'persistent')) {
@@ -68,5 +86,5 @@ if (!$status_deleted) {
 	create_metadata($outputObj, $cur_record, $record->{$SQL['identifier']}, $record->{$SQL['set']});
 }	else {
 	$cur_header->setAttribute("status","deleted");
-}  
+}
 ?>

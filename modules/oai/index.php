@@ -1,64 +1,20 @@
 <?php
-/* ! \mainpage notitle
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * \section intro_sec Introduction
- *
- * This is an implementation for an OAI-PMH 2.0 Data Provider (sometimes, repository is used exchangeablly) written in PHP.
- *
- * This implementation completely complies to OAI-PMH 2.0, including
- * the support of on-the-fly output compression which may significantly
- * reduce the amount of data being transfered.
- *
- * This package has been inspired by PHP OAI Data Provider developed by Heinrich Stamerjohanns at University of Oldenburg.  
- * Some of the functions and algorithms used in this code were transplanted from his  implementation at http://physnet.uni-oldenburg.de/oai/.
- *
- * Database support is supported through Open eClass Database subsystem.
- *
- * The repository can be quite easily configured by just editing 
- * oaidp-config.php, most possible values and options are explained.
- *
- * \section req_sec Requirements
- * - A running web server + PHP version 5.0 or above.
- * - A database can be connected by via Open eClass.
- *
- * \section install_sec Installation
- *
- * - Copy the the files in source package to a location under your
- * 	 document root of your web server. The directory structure should be
- * 	 preserved. 
- * - Change to that directory (e.g. cd /var/www/html/oai).
- * - Allow your webserver to write to the token directory.
- * 	 The default token directory is /tmp which does not need any attention.
- * - Edit oaidp-config.php. Almost all possible options are 
- * 	 explained. It is assumed that basic elements of a record are stored in 
- * 	 one simple table. You can find sql examples of table definition in doc folder.
- * 	 If your data is organized differently, you have to adjust the <i>Query</i> functions 
- *  to reflect it and even develop your own code.
- * - Check your oai site through a web browser. e.g. : \code http://localhost/oai/ \endcode
- * - SELinux needs special treatments for database connection and other permission.
- *
- * \section struct_sec Structure
-  The system includes files for individual functionality and utility classes and functions to get it work.
-  - Controller
-  - oai2.php
-  - Individual functionalities:
-  - identify.php: identifies the data provider. Responses to <B>Identify</B>.
-  - listmetadataformats.php: lists supported metadata formats, e.g. dc or rif-cs. Responses to <B>ListMetadataFormats</B>.
-  - listsets.php: lists supported sets, e.g. Activity, Collection or Party. Responses to <B>ListSets</B>.
-  - listrecords.php: lists a group of records without details. Responses to <B>ListRecords</B>. It also serves to <B>ListIdentifiers</B> which only returns identifiers.
-  - getrecord.php: gets an individual record. Responses to <B>GetRecord</B>.
-  - Utility classes
-  - xml_creater.php which includes classess ANDS_XML, ANDS_Error_XML, ANDS_Response_XML
-  - Utility functions
-  - oaidp-util.php
-  - Support to different metadataformats in your own systems. One example is provided with the package: record_dc.php. They are helpers and need information from the real records. They need to be devloped for your particular system.
-  - Configurations
-  - oaidp-config.php
-
- *
- * \author Jianfeng Li
- * \version 1.1
- * \date 2010-2011
  */
 
 /**
@@ -86,7 +42,7 @@ $MY_URI = substr($MY_URI, 0, $pos) . '/oai2.php';
         <p>This implementation completely complies to <a href="http://www.openarchives.org/OAI/openarchivesprotocol.html" target="_blank">OAI-PMH 2.0</a>, including the support of on-the-fly output compression which may significantly
             reduce the amount of data being transfered.</p>
 
-        <p> This package has been inspired by <a href='http://code.google.com/p/oai-pmh-2/' target="_blank">PHP OAI-PMH 2.0 Data Provider</a>.  
+        <p> This package has been inspired by <a href='http://code.google.com/p/oai-pmh-2/' target="_blank">PHP OAI-PMH 2.0 Data Provider</a>.
             Some of the functions and algorithms used in this code were transplanted from that implementation.<p>
 
         <p>For requirements and instructions to install and configure, please reference <a href="doc/index.html">the documentation</a>.</p>
