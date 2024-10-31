@@ -67,9 +67,7 @@ add_nosniff_headers();
 if (file_exists('config/config.php')) { // read config file
     include_once 'config/config.php';
 } else {
-    $_GET['err_config'] = true;
-    chdir('include');
-    require_once 'not_installed.php';
+    redirect(guess_base_url() . 'include/not_installed.php?err=config');
 }
 
 // appended to JS and CSS links to break caching - changes per second in debug mode
@@ -84,7 +82,7 @@ require_once 'modules/db/database.php';
 try {
     Database::get();
 } catch (Exception $ex) { // db credentials are wrong
-    redirect('include/not_installed.php?err_db=true');
+    redirect(guess_base_url() . 'include/not_installed.php?err=db');
 }
 
 require_once 'modules/admin/extconfig/externals.php';

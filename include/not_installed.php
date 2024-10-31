@@ -18,17 +18,18 @@
  */
 
 require_once '../vendor/autoload.php';
+require_once '../include/main_lib.php';
 
 $viewsDir = '../resources/views/install';
 $cacheDir = '../storage/views/';
 if (!is_dir($cacheDir)) {
     $tempDir = $cacheDir;
     $cacheDir = null;
-    if (mkdir($tempDir, 0755, true)) {
+    if (@mkdir($tempDir, 0755, true)) {
         $cacheDir = $tempDir;
     }
 }
-if (!is_writable($cacheDir) or !$cacheDir) {
+if (!$cacheDir or !is_writable($cacheDir)) {
     $cacheDir = sys_get_temp_dir() . '/storage';
     if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
         die("Error: Unable to find a writable storage directory - tried '$cacheDir'.");
@@ -38,11 +39,9 @@ if (!is_writable($cacheDir) or !$cacheDir) {
 use Jenssegers\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);
 
-if (isset($_GET['err_config'])) {
-    $data['err_config'] = true;
-} else if (isset($_GET['err_db'])) {
-    $data['err_db'] = true;
-} else {
-    exit;
+$data['err'] = $_GET['err'] ?? null;
+if (!in_array($data['err'], ['config', 'db'])) {
+    redirect(guess_base_url());
 }
+
 echo $blade->make('not_installed', $data)->render();
