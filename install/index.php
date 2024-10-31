@@ -304,8 +304,6 @@ if (isset($_POST['install1'])) { // step 1 requirements
                 Database::get();
                 $data['db_error_db_exists'] = true;
                 $data['dbNameForm'] = $GLOBALS['dbNameForm'];
-                unset($_POST['install4']);
-                $_POST['install3'] = true;
             } catch (Exception $e) {
                 // no problem, database doesn't exist
             }
