@@ -5650,8 +5650,8 @@ pre {
 }
 
 .about-badge{
-  min-width: 120px;
-  min-height: 120px;
+  min-width: 130px;
+  min-height: 130px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
