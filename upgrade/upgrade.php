@@ -329,6 +329,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
         $theme_id = get_config('theme_options_id') ?? 0;
         $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version >= 3 ORDER BY name");
+        $active_theme = 0;
         $themes_arr[0] = 'Default';
         foreach ($all_themes as $row) {
             $themes_arr[$row->id] = $row->name;
@@ -363,7 +364,8 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
         $data['theme_images'] = $theme_images;
         $data['mail_settings_form'] = $mail_settings_form;
-        $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
+        $homePageIntro = "homepage_intro_$language";
+        $data['homepage_intro'] = $homepage_intro = rich_text_editor('homepage_intro', 5, 20, get_config($homePageIntro));
         $data['error_message'] = $error_message;
         $data['webDir'] = $webDir;
 
@@ -383,14 +385,29 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
         set_config('homepage_intro', $_POST['homepage_intro']);
         set_config('theme_options_id', $_POST['theme_selection']);
-        set_config('dont_display_statistics', 1);
-        set_config('dont_display_popular_courses', 1);
-        set_config('dont_display_testimonials', 1);
-        set_config('dont_display_texts', 1);
-        set_config('dont_display_open_courses', 1);
-        set_config('dont_display_login_form', 0);
-        Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title <> 'announcements'");
+        set_config('dont_display_statistics', get_config('dont_display_statistics') ?? 1);
+        set_config('dont_display_popular_courses', get_config('dont_display_popular_courses') ?? 1);
+        set_config('dont_display_testimonials', get_config('dont_display_testimonials') ?? 1);
+        set_config('dont_display_texts', get_config('dont_display_texts') ?? 1);
+        set_config('dont_display_open_courses', get_config('dont_display_open_courses') ?? 1);
+        set_config('dont_display_login_form', get_config('dont_display_login_form') ?? 0);
 
+        if(get_config('dont_display_statistics')){
+            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'statistics');
+        }
+        if(get_config('dont_display_popular_courses')){
+            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'popular_courses');
+        }
+        if(get_config('dont_display_testimonials')){
+            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'testimonials');
+        }
+        if(get_config('dont_display_texts')){
+            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'texts');
+        }
+        if(get_config('dont_display_open_courses')){
+            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'open_courses');
+        }
+        
         unset($_SESSION['upgrade_step']);
         unset($_SESSION['upgrade_tag']);
 

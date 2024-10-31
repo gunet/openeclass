@@ -113,7 +113,7 @@
                     type: 'POST',
                     success: function(response) {
                         if (response == 1) {
-                            window.location.href = '{{ $_SERVER['SCRIPT_NAME'] }}';
+                            //window.location.href = '{{ $_SERVER['SCRIPT_NAME'] }}';
                         }
                     },
                     error:function(error){
