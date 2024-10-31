@@ -34,6 +34,7 @@
             <label for='emailForm' class='col-sm-12 control-label-notes'>{{ trans('langAdminEmail') }} (*)</label>
             <div class='col-sm-12'>
                 <input id='emailForm' class='form-control' type='text' size='40' name='emailForm' value='{{ $GLOBALS['emailForm'] }}'>
+                <div class="form-text">{{ trans('langWarnAdminEmail') }}</div>
             </div>
         </div>
 
@@ -61,7 +62,8 @@
         <div class='form-group mt-3'>
             <label for='helpdeskmail' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskEmail') }} </label>
             <div class='col-sm-12'>
-                <input id='helpdeskmail' class='form-control' type='text' size='40' name='helpdeskmail' placeholder="{{ trans('langWarnHelpDesk') }}" value='{{ $GLOBALS['helpdeskmail'] }}'>
+                <input id='helpdeskmail' class='form-control' type='text' size='40' name='helpdeskmail' value='{{ $GLOBALS['helpdeskmail'] }}'>
+                <div class="form-text">{{ trans('langWarnHelpDesk') }}</div>
             </div>
         </div>
 
