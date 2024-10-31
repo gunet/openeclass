@@ -253,6 +253,9 @@ elseif(isset($_POST['update_tc_session'])) { // update existing BBB session
     }
     if (isset($_POST['notifyExternalUsers']) and $_POST['notifyExternalUsers']) {
         $notifyExternalUsers = 1;
+        if (isset($_POST['mailinglist']) and $_POST['mailinglist']) {
+            $notifyExternalUsers = explode(',', $_POST['mailinglist']);
+        }
     }
     if (isset($_POST['addAnnouncement']) and $_POST['addAnnouncement']) {
         $addAnnouncement = 1;
@@ -261,8 +264,8 @@ elseif(isset($_POST['update_tc_session'])) { // update existing BBB session
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    if (isset($_POST['external_users']) && is_array($_POST['external_users'])) {
-        $ext_users = implode(',', $_POST['external_users']);
+    if (isset($_POST['external_users']) and $_POST['external_users']) {
+        $ext_users = $_POST['external_users'];
     } else {
         $ext_users = null;
     }
@@ -377,8 +380,8 @@ elseif(isset($_GET['choice']))
             } elseif ($serv->type == 'jitsi') { // if tc server is `jitsi`
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
-                $course_user = Database::get()->querySingle("SELECT * FROM course_user 
-                                                                WHERE user_id = " . $uid . " 
+                $course_user = Database::get()->querySingle("SELECT * FROM course_user
+                                                                WHERE user_id = " . $uid . "
                                                                 AND course_id = " . $course_id);
                 if (!empty($serv->webapp) && $serv->webapp == 'api') {
                     if ($course_user && $course_user->editor) {
@@ -415,6 +418,9 @@ elseif(isset($_GET['choice']))
     }
     if (isset($_POST['notifyExternalUsers']) and $_POST['notifyExternalUsers']) {
         $notifyExternalUsers = 1;
+        if (isset($_POST['mailinglist']) and $_POST['mailinglist']) {
+            $notifyExternalUsers = explode(',', $_POST['mailinglist']);
+        }
     }
     if (isset($_POST['addAnnouncement']) and $_POST['addAnnouncement']) {
         $addAnnouncement = 1;
@@ -423,8 +429,8 @@ elseif(isset($_GET['choice']))
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
     }
-    if (isset($_POST['external_users']) && is_array($_POST['external_users'])) {
-        $external_users = implode(',', $_POST['external_users']);
+    if (isset($_POST['external_users']) and $_POST['external_users']) {
+        $external_users = $_POST['external_users'];
     } else {
         $external_users = NULL;
     }
@@ -484,7 +490,7 @@ elseif(isset($_GET['choice']))
 
     // new TC session
     add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
-    Session::flash('message',$langBBBAddSuccessful);
+    Session::flash('message', $langBBBAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }elseif (isset($_GET['new'])) {
