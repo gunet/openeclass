@@ -464,7 +464,7 @@ function display_exercise($exercise_id): void
                                 $icon_choice = "fa-regular fa-square";
                             }
                             $tool_content .= icon($icon_choice) . "</div>";
-                            $tool_content .= "</td><td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                            $tool_content .= "</td><td style='width: 200px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
                                                <td>" . $answerComment . "</td>
                                         </tr>";
                         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {

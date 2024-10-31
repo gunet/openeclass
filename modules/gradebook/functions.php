@@ -722,8 +722,8 @@ function student_view_gradebook($gradebook_id, $uid) {
         $tool_content .= "<div class='badge Primary-200-bg p-2'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
-                              <th>$langGradebookActivityDate2</th>
-                              <th>$langType</th>
+                              <th style='width:30%;'>$langGradebookActivityDate2</th>
+                              <th style='width:30%;'>$langType</th>
                               <th>$langGradebookActivityWeight</th>
                               <th>$langGradebookGrade</th>
                               <th>$langGradebookTotalGrade</th>
@@ -872,9 +872,9 @@ function display_gradebook($gradebook) {
                                 <table class='table-default'>
                                 <thead>
                                     <tr class='list-header'>
-                                        <th>$langTitle</th>
+                                        <th style='width:30%;'>$langTitle</th>
                                         <th>$langGradebookActivityDate2</th>
-                                        <th>$langType</th><th>$langGradebookWeight</th>
+                                        <th style='width:30%;'>$langType</th><th>$langGradebookWeight</th>
                                         <th>$langViewShow</th>
                                         <th>$langScore</th>";
                             if ($is_editor) {

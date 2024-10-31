@@ -67,6 +67,7 @@
     border-left: solid 1px #E8EDF8;
     border-radius: 0px;
     flex: 1;
+    overflow-x: auto;
   }
 
   body:has(.footer-image) .col_maincontent_active{

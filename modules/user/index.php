@@ -251,7 +251,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             </div>
                             <div class='pull-left'>
                                 <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
-                                <div><small><a aria-label='".$langProfileSendMail."' href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
+                                <div><small><a class='text-nowrap' aria-label='".$langProfileSendMail."' href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
                                 <div class='text-muted'><small>$am_message</small></div>
                             </div>
                         </div>";

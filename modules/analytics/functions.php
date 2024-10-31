@@ -46,11 +46,11 @@ function display_learning_analytics() {
 
             $results .= "
             <div class='row res-table-row border-0 mb-4 g-3'>
-                <div class='col-md-9 col-12'>
+                <div class='col-md-7 col-12'>
                     <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
                     <small class='text-start text-muted'>$description</small>
                 </div>
-                <div class='col-md-3 col-12 text-start'>".
+                <div class='col-md-5 col-12 text-start'>".
                 action_bar(array(
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",

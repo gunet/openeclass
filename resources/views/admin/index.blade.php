@@ -178,11 +178,9 @@
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
-                                        <div class='col-lg-5 col-12'>
-                                            <a class='btn submitAdminBtn' href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
-                                        </div>
-                                        <div class='col-lg-7 col-12'>
-                                            <a class='btn submitAdminBtn mt-lg-0 mt-3' id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
+                                        <div class='d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                            <a class='btn submitAdminBtn text-nowrap' href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
+                                            <a class='btn submitAdminBtn text-nowrap mt-lg-0 mt-3' id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
                                         </div>
                                     </div>
                                 </div>

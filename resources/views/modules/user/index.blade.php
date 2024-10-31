@@ -272,28 +272,30 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class='col-12'>
-                        <table id='users_table_{{ $course_code }}' class='table-default'>
-                            <thead>
-                                <tr class="list-header">
-                                    <th style='width:40%;'>{{ trans('langSurnameName') }}</th>
-                                    <th style='width:20%;'>{{ trans('langRole') }}</th>
-                                    <th style='width:20%;'>{{ trans('langGroup') }}</th>
-                                    <th style='width:10%;'>{{ trans('langRegistrationDate') }}</th>
-                                    <th class='text-end' style='width:10%;' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-cogs') !!}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th style='width:40%;' aria-label="{{ trans('langSurnameName') }}"></th>
-                                    <th style='width:20%;' aria-label="{{ trans('langRole') }}"></th>
-                                    <th style='width:20%;' aria-label="{{ trans('langGroup') }}"></th>
-                                    <th style='width:10%;' aria-label="{{ trans('langRegistrationDate') }}"></th>
-                                    <th class='text-end' style='width:10%;' aria-label="{{ trans('langSettingSelect') }}"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <div class='table-responsive'>
+                            <table id='users_table_{{ $course_code }}' class='table-default'>
+                                <thead>
+                                    <tr class="list-header">
+                                        <th>{{ trans('langSurnameName') }}</th>
+                                        <th>{{ trans('langRole') }}</th>
+                                        <th>{{ trans('langGroup') }}</th>
+                                        <th>{{ trans('langRegistrationDate') }}</th>
+                                        <th class='text-end' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-cogs') !!}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th aria-label="{{ trans('langSurnameName') }}"></th>
+                                        <th aria-label="{{ trans('langRole') }}"></th>
+                                        <th aria-label="{{ trans('langGroup') }}"></th>
+                                        <th aria-label="{{ trans('langRegistrationDate') }}"></th>
+                                        <th class='text-end' aria-label="{{ trans('langSettingSelect') }}"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
 
                 </div>

@@ -407,10 +407,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             ));
         }
         $data['aaData'][] = array(
-            '0' => q(sanitize_utf8($myrow->surname)),
-            '1' => q(sanitize_utf8($myrow->givenname)),
-            '2' => q(sanitize_utf8($myrow->username)),
-            '3' => $email_icon,
+            '0' => '<div class="text-nowrap">' . q(sanitize_utf8($myrow->surname)) . '</div>',
+            '1' => '<div class="text-nowrap">' . q(sanitize_utf8($myrow->givenname)) . '</div>',
+            '2' => '<div class="text-nowrap">' . q(sanitize_utf8($myrow->username)) . '</div>',
+            '3' => '<div class="text-nowrap">' . $email_icon . '</div>',
             '4' => icon($icon, $tip),
             '5' => $icon_content,
             '6' => $inactive_user
@@ -485,10 +485,10 @@ $head_content .= "<script>
             'sPaginationType': 'full_numbers',
             'bAutoWidth': false,
             'aoColumns': [
-                {'bSortable' : true, 'sWidth': '20%' },
-                {'bSortable' : true, 'sWidth': '20%' },
-                {'bSortable' : true, 'sWidth': '20%' },
-                {'bSortable' : false, 'sWidth': '20%' },
+                {'bSortable' : true },
+                {'bSortable' : true },
+                {'bSortable' : true },
+                {'bSortable' : false },
                 {'bSortable' : false, 'sClass': 'text-center' },
                 {'bSortable' : false, 'sClass': 'text-end' },
             ],
