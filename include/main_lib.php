@@ -2697,6 +2697,19 @@ function invalidate_glossary_cache() {
     unset($_SESSION['glossary']);
 }
 
+// Try to guess the platform installation base url (i.e. $urlAppend)
+// when the platform is not functional
+function guess_base_url() {
+    $uri = rtrim(str_replace(['/?.*$/', '/\.php/'], ['', '.php'], $_SERVER['REQUEST_URI']), '/');
+    $path = dirname($_SERVER['SCRIPT_FILENAME']);
+    $base_path = dirname(dirname(__FILE__));
+    while ($uri and $base_path != $path) {
+        $uri = preg_replace('|/[^/]+$|', '', $uri);
+        $path = preg_replace('|/[^/]+$|', '', $path);
+    }
+    return $uri . '/';
+}
+
 function redirect($path) {
     header("Location: $path");
     exit;

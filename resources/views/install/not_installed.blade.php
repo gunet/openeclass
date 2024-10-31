@@ -33,7 +33,7 @@
                                                     </div>
                                                     <div class='card-body'>
                                                         <ul class='list-group list-group-flush'>
-                                                            @if (isset($err_config))
+                                                            @if ($err == 'config')
                                                                 <li class='list-group-item element text-start'>Το αρχείο ρυθμίσεων της πλατφόρμας δεν υπάρχει.
                                                                     <p><i class="fa-solid fa-hand-point-right"></i><small>
                                                                     Σε περίπτωση που χρησιμοποιείτε την πλατφόρμα <strong>για πρώτη</strong> φορά,
@@ -46,7 +46,7 @@
                                                                     <p><i class="fa-solid fa-hand-point-right"></i> <small>Ελέγξτε τα δικαιώματα πρόσβασης</small></p>
                                                                 </li>
                                                             @endif
-                                                            @if (isset($err_db))
+                                                            @if ($err == 'db')
                                                                 <li class='list-group-item element text-start'>
                                                                     <i class="fa-solid fa-hand-point-right"></i> Η βάση δεδομένων δεν λειτουργεί.
                                                                 </li>
