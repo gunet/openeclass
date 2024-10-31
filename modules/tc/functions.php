@@ -142,7 +142,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $r_group = explode(",",$row->participants);
         $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
         $start_session = q($start_date->format('d-m-Y H:i'));
-        $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);
+        if ($end_date) {
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);
+        } else {
+            $end_date = null;
+        }
         if (isset($row->end_date)) {
             $BBBEndDate = $end_date->format('d-m-Y H:i');
         } else {
@@ -153,18 +157,13 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $textarea = rich_text_editor('desc', 4, 20, $row->description);
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
-        if (!is_null($row->external_users)) {
-            $data_external_users = trim($row->external_users);
-        } else {
-            $data_external_users = $row->external_users;
-        }
-        if ($data_external_users) {
-            $init_external_users = 'data: ' . json_encode(array_map(function ($item) {
-                    $item = trim($item);
-                    return array('id' => $item, 'text' => $item, 'selected' => true);
-            }, explode(',', $data_external_users))) . ',';
-        } else {
-            $init_external_users = '';
+        $external_users = trim($row->external_users ?? '');
+        if ($external_users) {
+            if (!($data_external_users = @json_decode($external_users))) {
+                $data_external_users = array_map(function ($item) {
+                    return [$item, ''];
+                }, explode(',', $external_users));
+            }
         }
         if (!empty($row->options)) {
             $options = unserialize($row->options);
@@ -206,7 +205,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         } else {
             $value_session_users = $c;
         }
-        $data_external_users = '';
+        $data_external_users = [];
         $submit_name = 'new_tc_session';
         $submit_id = '';
         $google_meet_link = $zoom_link = $webex_link = $microsoft_teams_link = '';
@@ -267,7 +266,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='form-group'>
                 <label for='title_id' class='col-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
-                    <input id='title_id' class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>                
+                    <input id='title_id' class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>
                 </div>
             </div>";
         }
@@ -492,7 +491,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     </div>
             </div>
         </div>
-    
+
         <div class='form-group mt-4'>
             <div class='col-sm-12 control-label-notes'>$langBBBExternalUsers:</div>
             <div class='col-sm-12'>
@@ -507,30 +506,30 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
-                <input id='external_users' name='external_users[]' type='hidden' value=''>
-                <input id='mailinglist' name='mailinglist[]' type='hidden' value=''>
+                <input id='external_users' name='external_users' type='hidden' value=''>
+                <input id='mailinglist' name='mailinglist' type='hidden' value=''>
                 <input id='meeting_id_input' name='meeting_id_input' type='hidden' value='$meeting_id_input'>
             </div>
-            
+
         </div>
-        
+
         <div class='form-group mt-4'>
             <div class='col-sm-2'></div>
-            
+
             <div class='col-sm-12'>
                 <div class='form-group mt-4'>
                     <div class='col-sm-12'>
                         <label for='newExtEmail' class='control-label-notes'>$langProfEmail:</label>
                     </div>
-                    
+
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='newExtEmail' id='newExtEmail' size='10'>
                     </div>
                 </div>
-                
+
                 <div class='form-group mt-4'>
                     <div class='col-sm-12'>
                         <label for='newExtName' class='control-label-notes'>$langSurnameName:</label>
@@ -539,7 +538,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                         <input class='form-control' type='text' name='newExtName' id='newExtName' size='10'>
                     </div>
                 </div>
-            
+
                 <div class='form-group mt-4'>
                     <div class='col-sm-6'>
                         <div class='btn btn-primary newExtUserAdd'>
@@ -548,9 +547,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     </div>
                 </div>
             </div>
-            
+
         </div>
-    
+
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
@@ -647,7 +646,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                                      <div class='checkbox'>
                                          <label class='label-container' aria-label='$langSelect'>
                                             <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'><span class='checkmark'></span>$langBBBHideParticipants
-                                         </label>        
+                                         </label>
                                     </div>
                                 </div>
                             </div>
@@ -675,54 +674,41 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             chkValidator.addValidation('title', 'req', '".js_escape($langBBBAlertTitle)."');
             chkValidator.addValidation('sessionUsers', 'req', '".js_escape($langBBBAlertMaxParticipants)."');
             chkValidator.addValidation('sessionUsers', 'numeric', '".js_escape($langBBBAlertMaxParticipants)."');
-            
-            
-            //set ipnut with id #external_users with user data from sql
-            let usrData = '$data_external_users';
-                       
-            if (usrData.length > 0) {
-                if (!isValidJson(usrData)) {
-                    let emails = usrData.split(',');
-                    usrData = emails.map(email => [email, '']);
-                    usrData = JSON.stringify(usrData)
-                }
-                $('#external_users').val(usrData);
+
+            // Set input with id #external_users with user data from sql
+            let usrDataArray = " . json_encode($data_external_users) . ";
+            if (usrDataArray.length > 0) {
+                usrDataArray.forEach((element, index) => {
+                    let newRow = $('<tr data-id=\"'+index+'\">');
+                    let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<div class=\"checkbox\"><label class=\"label-container\"><input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + index + '\"><span class=\"checkmark\"></span></label></div>');
+                    let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">'+element[0]+'</strong>');
+                    let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">'+element[1]+'</strong>');
+                    let copyCell = $('<td class=\"col-sm-1\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$urlServer\"></i>');
+                    let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+element[0]+'\" class=\"fa fa-times Accent-200-cl\"></i></span>');
+                    newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
+                    $('#user-list').append(newRow);
+                });
+                $('#external_users').val(JSON.stringify(usrDataArray));
             }
-            
-            let usrDataArray = [];
-            
-            if (usrData.length > 0) {
-                usrDataArray = JSON.parse(usrData);
-            } 
-            
-            //function delete row and remove from usrDataArray on click
+
+            // function delete row and remove from usrDataArray on click
             function deleteUserRow(spanElement) {
                 let email = spanElement.getAttribute('data-email')
                 usrDataArray = usrDataArray.filter(subarray => subarray[0] !== email);
                 $('#external_users').val(JSON.stringify(usrDataArray));
                 $(spanElement).closest('tr').remove();
             }
-            
-            //function check if mail is valid
+
+            // Check if mail is valid
             function isValidEmail(email) {
-                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                var emailPattern = /^[\+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
                 return emailPattern.test(email);
             }
-                
-            //function check if string is json valid
-            function isValidJson(str) {
-              try {
-                JSON.parse(str);
-                return true;
-              } catch (error) {
-                return false;
-              }
-            }
-            
-            //function for creating url and copy to clipboard
+
+            // function for creating url and copy to clipboard
             function copyLinkToClipboard(element) {
                 let meeting_id = $('#meeting_id_input').val();
-                
+
                 if (meeting_id.length > 0) {
                     let usermailElement = $(element).closest('tr').find('.usermail');
                     let email = usermailElement.text();
@@ -739,18 +725,17 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 } else {
                     alert('Save first');
                 }
+            }
 
-            } 
-            
             //function for adding/removing to mail list
             function mailList(checkbox) {
 
               let email = $(checkbox).closest('tr').find('.usermail').text().trim();
               let mailingListInput = $('#mailinglist');
-              
+
               let currentEmails = mailingListInput.val().split(',');
               let index = currentEmails.indexOf(email);
-            
+
               if (checkbox.checked) {
                 // Add email
                 if (index === -1) {
@@ -762,12 +747,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                   currentEmails.splice(index, 1);
                 }
               }
-            
+
               mailingListInput.val(currentEmails.filter(email => email !== '').join(','));
             }
-            
+
             $(function () {
-           
+
                 $('#newExtEmail, #newExtName').on('keypress', function(event) {
                     if (event.keyCode === 13) {
                         event.preventDefault();
@@ -776,12 +761,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 });
 
                 let userData = [];
-                
+
                 $('.newExtUserAdd').click(function() {
-                     
+
                     let userEmail = $('#newExtEmail').val();
                     let userName = $('#newExtName').val();
-                                        
+
                     if (userEmail !== '') {
                         let emailExists = false;
                         $('#user-list tbody tr').each(function() {
@@ -791,40 +776,40 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                               return false;
                             }
                         });
-                        
+
                         if (emailExists) {
                             alert('Email already exists.');
                         } else {
                             if (isValidEmail(userEmail)) {
-                              
-                                //push new mail and name to usrDataArray, then change #external_users
+
+                                // push new mail and name to usrDataArray, then change #external_users
                                 usrDataArray.push([userEmail, userName])
                                 $('#external_users').val(JSON.stringify(usrDataArray));
-                               
+
                                 let lastRow = $('#user-list tbody tr:last-child');
                                 let lastRowId = lastRow.data('id');
                                 let newId = lastRowId + 1;
-                                
+
                                 let newRow = $('<tr data-id=\"'+newId+'\">');
-                                
+
                                 let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<div class=\"checkbox\"><label class=\"label-container\"><input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + newId + '\" checked><span class=\"checkmark\"></span></label></div>');
                                 let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">' + userEmail + '</strong>');
                                 let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">' + userName + '</strong>');
                                 let copyCell = $('<td class=\"col-sm-4\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$course_code\"></i>');
                                 let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+userEmail+'\" class=\"fa fa-times Accent-200-cl\"></i></span>');
-                                
+
                                 newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
                                 $('#user-list tbody').append(newRow);
                                 $('#newExtEmail').val('');
                                 $('#newExtName').val('');
-                                
+
                                 let mailingListInput = $('#mailinglist');
                                 let currentEmails = mailingListInput.val().split(',');
                                 currentEmails.push(userEmail);
                                 currentEmails = currentEmails.filter(email => email.trim() !== '');
                                 let updatedMailingList = currentEmails.join(',');
                                 mailingListInput.val(updatedMailingList);
-                                
+
                             } else {
                               alert('email \"' + userEmail + '\" is not valid');
                             }
@@ -833,26 +818,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                         alert('Email is required');
                     }
                 });
-                
-                
-                if (usrData.length > 0) {
-                    if (isValidJson(usrData)) {
-                        usrDataArray.forEach((element, index) => {
-                            let newRow = $('<tr data-id=\"'+index+'\">');
-                            let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<div class=\"checkbox\"><label class=\"label-container\"><input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + index + '\"><span class=\"checkmark\"></span></label></div>');
-                            let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">'+element[0]+'</strong>');
-                            let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">'+element[1]+'</strong>');
-                            let copyCell = $('<td class=\"col-sm-1\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$urlServer\"></i>'); 
-                            let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+element[0]+'\" class=\"fa fa-times Accent-200-cl\"></i></span>');
-                    
-                            newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
-                            $('#user-list').append(newRow);
-                        });
-                    } 
-                }
-                                
+
             });
-            
+
         //]]></script>";
 }
 
@@ -930,10 +898,6 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
            $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langTheU, $langNotFound,
            $langDescription, $course_code, $course_id, $urlServer, $uid, $is_admin;
 
-    // $zoomRepo = new \modules\tc\Zoom\Api\Repository();
-    // $zoomService = new \modules\tc\Zoom\Api\Service($zoomRepo);
-    // $zoomService->call();
-
     // Groups of participants per session
     $r_group = '';
     if (isset($_POST['groups']) and count($_POST['groups']) > 0) {
@@ -951,7 +915,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
     if (isset($update) and $update) { // update existing BBB session
         if ($tc_type == 'zoom') {
-            $q = Database::get()->querySingle("SELECT options FROM tc_session 
+            $q = Database::get()->querySingle("SELECT options FROM tc_session
                                                         WHERE id = " . $session_id);
 
             if ($q && !empty($q->options)) {
@@ -959,9 +923,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
             }
         }
 
-        Database::get()->querySingle("UPDATE tc_session SET title=?s, description=?s, start_date=?t, end_date=?t,
-                                        public=?s, active=?s, unlock_interval=?d, external_users=?s,
-                                        participants=?s, record=?s, sessionUsers=?d, options=?s WHERE id=?d",
+        Database::get()->querySingle("UPDATE tc_session SET title = ?s, description = ?s, start_date = ?t, end_date = ?t,
+                                        public = ?s, active = ?s, unlock_interval = ?d, external_users = ?s,
+                                        participants = ?s, record = ?s, sessionUsers = ?d, options = ?s WHERE id=?d",
                                 $title, $desc, $start_session, $BBBEndDate, 1, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $options, $session_id);
 
@@ -989,90 +953,94 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         $session_module_id = $_GET['for_session_module'] ?? 0;
 
         if ($tc_type == 'bbb') {
-            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = ?s,
-                                                            sessionUsers = ?s,
-                                                            options = ?s,
-                                                            id_session = ?d",
+            $q = Database::get()->query("INSERT INTO tc_session
+                SET course_id = ?d,
+                    title = ?s,
+                    description = ?s,
+                    start_date = ?t,
+                    end_date = ?t,
+                    public = 1,
+                    active = ?s,
+                    running_at = ?d,
+                    meeting_id = ?s,
+                    mod_pw = ?s,
+                    att_pw = ?s,
+                    unlock_interval = ?s,
+                    external_users = ?s,
+                    participants = ?s,
+                    record = ?s,
+                    sessionUsers = ?s,
+                    options = ?s,
+                    id_session = ?d",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 generateRandomString(), generateRandomString(), generateRandomString(),
                 $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $session_module_id);
         } elseif ($tc_type == 'jitsi') {
             $meeting_id = $course_code . "_" . generateRandomString();
-            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = 'false',
-                                                            sessionUsers = ?s",
+            $q = Database::get()->query("INSERT INTO tc_session
+                SET course_id = ?d,
+                    title = ?s,
+                    description = ?s,
+                    start_date = ?t,
+                    end_date = ?t,
+                    public = 1,
+                    active = ?s,
+                    running_at = ?d,
+                    meeting_id = ?s,
+                    mod_pw = ?s,
+                    att_pw = ?s,
+                    unlock_interval = ?s,
+                    external_users = ?s,
+                    participants = ?s,
+                    record = 'false',
+                    sessionUsers = ?s",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 $meeting_id, '' , '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'googlemeet') {
             $meeting_id = $options;
-            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = 'false',
-                                                            sessionUsers = ?s",
+            $q = Database::get()->query("INSERT INTO tc_session
+                SET course_id = ?d,
+                    title = ?s,
+                    description = ?s,
+                    start_date = ?t,
+                    end_date = ?t,
+                    public = 1,
+                    active = ?s,
+                    running_at = ?d,
+                    meeting_id = ?s,
+                    mod_pw = ?s,
+                    att_pw = ?s,
+                    unlock_interval = ?s,
+                    external_users = ?s,
+                    participants = ?s,
+                    record = 'false',
+                    sessionUsers = ?s",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 $meeting_id, '', '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'microsoftteams') {
             $meeting_id = $options;
-            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = 'false',
-                                                            sessionUsers = ?s",
+            $q = Database::get()->query("INSERT INTO tc_session
+                SET course_id = ?d,
+                    title = ?s,
+                    description = ?s,
+                    start_date = ?t,
+                    end_date = ?t,
+                    public = 1,
+                    active = ?s,
+                    running_at = ?d,
+                    meeting_id = ?s,
+                    mod_pw = ?s,
+                    att_pw = ?s,
+                    unlock_interval = ?s,
+                    external_users = ?s,
+                    participants = ?s,
+                    record = 'false',
+                    sessionUsers = ?s",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 $meeting_id, '', '' ,
@@ -1105,47 +1073,49 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
             $meeting = $zoomMeeting->create($title , $desc, $start_session, $record);
             $options = serialize($meeting->start_url);
 
-            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = ?s,
-                                                            sessionUsers = ?s,
-                                                            options = ?s,
-                                                            id_session = ?d",
-                    $course_id, $title, $desc, $start_session, $BBBEndDate,
-                    $status, $server_id,
-                    $meeting->id, $meeting->encrypted_password, '' ,
-                    $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $session_module_id);
+            $q = Database::get()->query("INSERT INTO tc_session
+                SET course_id = ?d,
+                    title = ?s,
+                    description = ?s,
+                    start_date = ?t,
+                    end_date = ?t,
+                    public = 1,
+                    active = ?s,
+                    running_at = ?d,
+                    meeting_id = ?s,
+                    mod_pw = ?s,
+                    att_pw = ?s,
+                    unlock_interval = ?s,
+                    external_users = ?s,
+                    participants = ?s,
+                    record = ?s,
+                    sessionUsers = ?s,
+                    options = ?s,
+                    id_session = ?d",
+                $course_id, $title, $desc, $start_session, $BBBEndDate,
+                $status, $server_id,
+                $meeting->id, $meeting->encrypted_password, '' ,
+                $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options, $session_module_id);
             } else {
                 $meeting_id = $options;
-                $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = ?s,
-                                                            sessionUsers = ?s,
-                                                            id_session = ?d",
+                $q = Database::get()->query("INSERT INTO tc_session
+                    SET course_id = ?d,
+                        title = ?s,
+                        description = ?s,
+                        start_date = ?t,
+                        end_date = ?t,
+                        public = 1,
+                        active = ?s,
+                        running_at = ?d,
+                        meeting_id = ?s,
+                        mod_pw = ?s,
+                        att_pw = ?s,
+                        unlock_interval = ?s,
+                        external_users = ?s,
+                        participants = ?s,
+                        record = ?s,
+                        sessionUsers = ?s,
+                        id_session = ?d",
                     $course_id, $title, $desc, $start_session, $BBBEndDate,
                     $status, $server_id,
                     $meeting_id, '', '' ,
@@ -1154,22 +1124,23 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
         } elseif ($tc_type == 'webex') {
             $meeting_id = $options;
-            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
-                                                            title = ?s,
-                                                            description = ?s,
-                                                            start_date = ?t,
-                                                            end_date = ?t,
-                                                            public = 1,
-                                                            active = ?s,
-                                                            running_at = ?d,
-                                                            meeting_id = ?s,
-                                                            mod_pw = ?s,
-                                                            att_pw = ?s,
-                                                            unlock_interval = ?s,
-                                                            external_users = ?s,
-                                                            participants = ?s,
-                                                            record = 'false',
-                                                            sessionUsers = ?s",
+            $q = Database::get()->query("INSERT INTO tc_session
+                SET course_id = ?d,
+                    title = ?s,
+                    description = ?s,
+                    start_date = ?t,
+                    end_date = ?t,
+                    public = 1,
+                    active = ?s,
+                    running_at = ?d,
+                    meeting_id = ?s,
+                    mod_pw = ?s,
+                    att_pw = ?s,
+                    unlock_interval = ?s,
+                    external_users = ?s,
+                    participants = ?s,
+                    record = 'false',
+                    sessionUsers = ?s",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 $meeting_id, '', '',
@@ -1177,10 +1148,11 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         }
 
         // logging
-        Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
-                                                                'title' => $_POST['title'],
-                                                                'desc' => html2text($_POST['desc']),
-                                                                'tc_type' => $tc_type));
+        Log::record($course_id, MODULE_ID_TC, LOG_INSERT, [
+            'id' => $q->lastInsertID,
+            'title' => $_POST['title'],
+            'desc' => html2text($_POST['desc']),
+            'tc_type' => $tc_type]);
 
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $q->lastInsertID);
     }
@@ -1264,42 +1236,37 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
     }
 
     // Notify external users for new tc session
-    if ($notifyExternalUsers == "1") {
-        if (isset($external_users)) {
+    if ($notifyExternalUsers) {
+        $emailsubject = $langBBBScheduledSession;
+        $emailheader = "
+            <div id='mail-header'>
+                <div>
+                    <div id='header-title'>$langBBBScheduleSessionInfo " . q($title) .  " $langBBBScheduleSessionInfo2 " . q(format_locale_date(strtotime($start_session), 'short')) ."</div>
+                </div>
+            </div>";
+        if (is_array($notifyExternalUsers)) {
+            $recipients = $notifyExternalUsers;
+        } elseif (isset($external_users)) {
             $recipients = explode(',', $external_users);
-            $emailsubject = $langBBBScheduledSession;
-            $emailheader = "
-                    <div id='mail-header'>
-                        <div>
-                            <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q(format_locale_date(strtotime($start_session), 'short')) ."</div>
-                        </div>
-                    </div>
-                ";
-            foreach ($recipients as $row) {
-                $pattern_r = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,4})(?:\.[a-z]{2})?/i';
-                preg_match_all($pattern_r, $row, $matches);
-                if($matches[0][0]){
-                    $sender = $matches[0][0];
-                }else{
-                    $sender = '';
-                }
-                $bbblink = $urlServer . "modules/tc/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($sender);
+        } else {
+            $recipients = [];
+        }
+        foreach ($recipients as $recipient) {
+            if (valid_email($recipient)) {
+                $bbblink = $urlServer . "modules/tc/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($recipient);
 
                 $emailmain = "
-                <div id='mail-body'>
-                    <div><b>$langDescription:</b></div>
-                    <div id='mail-body-inner'>
-                        $desc
-                        <br><br>$langBBBScheduleSessionInfoJoin:<br><a href='$bbblink'>$bbblink</a>
-                    </div>
-                </div>
-                ";
+                    <div id='mail-body'>
+                        <div><b>$langDescription:</b></div>
+                        <div id='mail-body-inner'>
+                            $desc
+                            <br><br>$langBBBScheduleSessionInfoJoin:<br><a href='$bbblink'>$bbblink</a>
+                        </div>
+                    </div>";
 
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                if(filter_var($sender, FILTER_VALIDATE_EMAIL)){
-                    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $sender, $emailsubject, $emailbody, $emailcontent);
-                }
+                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $recipient, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -1308,9 +1275,12 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
         $order = $orderMax + 1;
-        Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible)
-                                    VALUES ('".$langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
-                                             '$langBBBScheduledSession', " . DBHelper::timeAfter() . ", ?d, ?d, '1')", $course_id, $order);
+        Database::get()->querySingle("INSERT INTO announcement
+            (content, title, `date`, course_id, `order`, visible)
+            VALUES (?s, ?s, " . DBHelper::timeAfter() . ", ?d, ?d, 1)",
+                $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " .
+                $langBBBScheduleSessionInfo2 . " " . $start_session,
+                $langBBBScheduledSession, $course_id, $order);
     }
 
 }
