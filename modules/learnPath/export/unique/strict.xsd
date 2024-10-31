@@ -1,3 +1,21 @@
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <xs:schema targetNamespace="http://ltsc.ieee.org/xsd/LOM/unique"
            xmlns="http://ltsc.ieee.org/xsd/LOM/unique"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -18,9 +36,9 @@
             by providing the attribute uniqueElementName for each metadata element
             that should appear with multiplicity at most one.
 
-            NOTE: For most applications, enforcing the uniqueness constraints using the 
-            unique/strict.xsd component XSD is desirable, but adding such an artificial 
-            attribute is undesirable, although the addition of the artificial attribute 
+            NOTE: For most applications, enforcing the uniqueness constraints using the
+            unique/strict.xsd component XSD is desirable, but adding such an artificial
+            attribute is undesirable, although the addition of the artificial attribute
             is unlikely to cause problems.
         </xs:documentation>
         <xs:documentation>

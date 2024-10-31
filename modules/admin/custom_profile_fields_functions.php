@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ========================================================================
  */
 
 define('CPF_TEXTBOX', 1);
@@ -87,7 +85,7 @@ function render_profile_fields_form($context, $valitron = false) {
                                             "AND user_type <> ?d ORDER BY sortorder DESC", $args);
 
         if (count($res) > 0) {
-            
+
             foreach ($res as $f) {
 
                 if (isset($fdata)) {
@@ -109,7 +107,7 @@ function render_profile_fields_form($context, $valitron = false) {
 
                 $column = 'col-lg-6 col-12';
                 $padding = 'px-3';
-                // if case is editor then set column to equals 12. 
+                // if case is editor then set column to equals 12.
                 if($f->datatype == 2 or isset($_GET['edProfile'])){
                     $column = 'col-12';
                     $padding = 'px-0';
@@ -119,7 +117,7 @@ function render_profile_fields_form($context, $valitron = false) {
                 }
                 $return_string .= '<div class="'.$column.' '.$padding.'"><div class="'.$form_class.'">';
                 $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
-               
+
 
                 //get data to prefill fields
                 if ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile') {
@@ -445,7 +443,7 @@ function render_profile_fields_content($context) {
                                                                         </li>";
 
                                                                     }
-                                                    $return_str .= "</ul>";  
+                                                    $return_str .= "</ul>";
                                                                 }else{
                                                                     $return_str .= "<p class='card-text'>$langNoInfoAvailable</p>";
                                                                 }

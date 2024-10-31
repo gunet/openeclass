@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -73,7 +72,7 @@ if(isset($_POST['user_registration'])){
                         <div id='header-title'>$session_title&nbsp;&nbsp;<span>($course_title)</span></div>
                     </div>
                 </div>";
-  
+
         $emailMain = "
         <!-- Body Section -->
             <div id='mail-body'>
@@ -91,13 +90,13 @@ if(isset($_POST['user_registration'])){
                     </ul>
                 </div>
             </div>";
-  
+
         $emailsubject = $siteName;
-  
+
         $emailbody = $emailHeader.$emailMain;
-  
+
         $emailPlainBody = html2text($emailbody);
-  
+
         if(get_user_email_notification($consultant_id)){
             send_mail_multipart('', '', '', $emailConsultant, $emailsubject, $emailPlainBody, $emailbody);
         }
@@ -166,7 +165,7 @@ if(isset($_POST['leave_session'])){
 if($is_coordinator or $is_consultant){
 
     $data['action_bar'] = action_bar([
-        [ 
+        [
             'title' => $langAddSession,
             'url' => 'new.php?course=' . $course_code,
             'icon' => 'fa-plus-circle',
@@ -182,7 +181,7 @@ if($is_coordinator or $is_consultant){
             'level' => 'primary-label',
             'show' => !$is_simple_user
         ],
-        [ 
+        [
             'title' => $langSummaryScheduledSessions,
             'url' => 'session_scheduled.php?course=' . $course_code,
             'icon' => 'fa-solid fa-list',
@@ -217,15 +216,15 @@ if($is_coordinator or $is_consultant){
                                                                         WHERE course_id = ?d
                                                                         $sql_remote
                                                                         $sql_session
-                                                                        ORDER BY start ASC",$course_id); 
-                                                                        
+                                                                        ORDER BY start ASC",$course_id);
+
     }elseif($is_consultant){// is consultant user
         $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                     WHERE course_id = ?d
                                                                     AND creator = ?d
                                                                     $sql_remote
                                                                     $sql_session
-                                                                    ORDER BY start ASC",$course_id,$uid); 
+                                                                    ORDER BY start ASC",$course_id,$uid);
     }
 
     if(count($data['individuals_group_sessions']) > 0){
@@ -241,7 +240,7 @@ if($is_coordinator or $is_consultant){
                     // This refers to session completion with completed tc.
                     check_session_completion_by_tc_completed($s->id,$p);
                 }
-                
+
                 // This refers to session completion for other activities.
                 check_session_progress($s->id,$p);  // check session completion - call to Game.php
             }
@@ -277,7 +276,7 @@ if($is_coordinator or $is_consultant){
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ],
-        [ 
+        [
             'title' => $langSummaryScheduledSessions,
             'url' => 'session_scheduled.php?course=' . $course_code,
             'icon' => 'fa-solid fa-list',
@@ -285,7 +284,7 @@ if($is_coordinator or $is_consultant){
             'level' => 'primary-label'
         ],
     ], false);
-    
+
     $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
                                             WHERE visible = ?d
                                             AND course_id = ?d
@@ -304,7 +303,7 @@ if($is_coordinator or $is_consultant){
             // This refers to session completion with completed tc.
             check_session_completion_by_tc_completed($s->id,$uid);
         }
-       
+
         // This refers to session completion for other activities.
         check_session_progress($s->id,$uid);  // check session completion - call to Game.php
     }

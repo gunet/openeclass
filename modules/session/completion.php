@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -105,7 +104,7 @@ if(isset($_GET['addSessions'])){
                                                           AND course_id = ?d
                                                           AND id IN (SELECT session_id FROM mod_session_users
                                                                       WHERE participants = ?d AND is_accepted = ?d)
-                                                          ORDER BY start ASC",1,$course_id,$uid,1); 
+                                                          ORDER BY start ASC",1,$course_id,$uid,1);
 
         $visible_user_sessions = findUserVisibleSessions($uid, $all_user_sessions);
         foreach ($visible_user_sessions as $d) {
@@ -135,7 +134,7 @@ if(isset($_GET['addSessions'])){
                     <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
                   </div>
                 ";
-                
+
                 $userParticipant[$p] = [
                   'user' => participant_name($p),
                   'session_id' => $r->session_id,

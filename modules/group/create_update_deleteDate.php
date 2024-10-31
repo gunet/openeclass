@@ -1,4 +1,21 @@
-<?php         
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
  *
@@ -29,13 +46,13 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         $eventArr = array();
 
-        
+
         $result_events = Database::get()->queryArray("SELECT id,lesson_id,user_id,group_id,start,end FROM tutor_availability_group
                                                         WHERE start BETWEEN (?t) AND (?t)
                                                         AND group_id IN (SELECT group_id FROM group_members 
                                                                             WHERE user_id = ?d AND is_tutor = ?d)",$start,$end,$tutor_id,1);
 
-    
+
 
         if($result_events){
             foreach($result_events as $row){
@@ -52,17 +69,17 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                 ];
             }
         }
-        
+
         header('Content-Type: application/json');
 
         echo json_encode($eventArr);
 
         exit();
-        
+
     }
 
     // add new event section
-    elseif($_POST['action'] == "add"){   
+    elseif($_POST['action'] == "add"){
 
         $add = Database::get()->query("INSERT INTO tutor_availability_group SET
                             lesson_id = ?d,
@@ -70,7 +87,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                             start = ?t,
                             end = ?t,
                             group_id = ?d",$_POST["idCourse"], $_POST['user'], date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])),$_POST['group_id']);
-            
+
             if($add){
                 echo 1;
             }else{
@@ -109,17 +126,17 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                                                 AND lesson_id = ?d 
                                                 AND user_id = ?d
                                                 AND group_id = ?d",date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s', strtotime($_POST["end"])), $_POST["id"], $_POST["idCourse"], $_POST["user_id"],$_POST['group_id']);
-                
-                echo 1; 
-                
+
+                echo 1;
+
             }else{
                 echo 0;
             }
         }else{
             echo 2;
         }
-        
-       
+
+
         exit();
 
     }
@@ -136,9 +153,9 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
             $old_start = $old_date->start;
             $old_end = $old_date->end;
         }
-        
-        
-         //check if exists simple user who have made a book 
+
+
+         //check if exists simple user who have made a book
          $checkExistSimpleUser = Database::get()->querySingle("SELECT COUNT(id) as c FROM booking
                                                             WHERE lesson_id = ?d
                                                             AND group_id = ?d
@@ -155,7 +172,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
             if(($check == $uid && $is_editor_course) or $is_course_admin){
                 $del = Database::get()->query("DELETE FROM tutor_availability_group WHERE id = ?d",$event_id);
                 if($del){
-                    echo 1; 
+                    echo 1;
                 }
             }else{
                 echo 0;
@@ -163,7 +180,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         }else{
             echo 2;
         }
-        
+
         exit();
 
     }
@@ -173,7 +190,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
 function getBackgroundEvent($lessonId,$group,$userId,$start,$end,$tutor_id,$group_id){
     global $course_id;
-  
+
     $color = '';
 
     if($course_id == $lessonId && $group_id == $group){
@@ -202,7 +219,7 @@ function getBackgroundEvent($lessonId,$group,$userId,$start,$end,$tutor_id,$grou
             $color = '#d11208';
         }
     }
-    
+
 
     return $color;
 
@@ -216,7 +233,7 @@ function nameTutor($userId,$lessonId,$group,$start,$end,$tutor_id,$group_id){
     $TutorSurname = Database::get()->querySingle("SELECT `surname` FROM user WHERE id = ?d",$userId)->surname;
 
     $course_title = Database::get()->querySingle("SELECT `title` FROM course WHERE id = ?d",$lessonId)->title;
-    
+
     $gr_name = Database::get()->querySingle("SELECT `name` FROM `group` WHERE id = ?d",$group)->name;
 
 
@@ -285,8 +302,8 @@ function nameTutor($userId,$lessonId,$group,$start,$end,$tutor_id,$group_id){
                         </div>
                         ";
         }
-    }                                             
-    
+    }
+
     $name .= "</div>";
     return $name;
 }

@@ -65,7 +65,7 @@
                 if (evt.from.childNodes.length == 0) {
                     evt.from.innerHTML = "<tr class='ignore-item'><td colspan='9'>&nbsp;</td></tr>";
                 }
-            	
+
                 //check if target list has only the transfered element and the empty one
                 if (evt.item.parentElement.childNodes.length == 2) {
                     var childs = evt.item.parentElement.childNodes;
@@ -84,14 +84,14 @@
             }
         });
     });
-    
-    
-	
+
+
+
 })();
 
 function submitSortOrderForm() {
 	var form = document.sortOrderForm;
-	
+
 	//categories
 	var cat_divs = document.getElementsByClassName('table-responsive tile');
 	for (var i=0; i<cat_divs.length; i++) {
@@ -101,7 +101,7 @@ function submitSortOrderForm() {
 		input.value = cat_divs[i].id;
 		form.appendChild(input);
 	}
-	
+
 	//fields
 	var field_tbodys = document.getElementsByClassName('tile__list');
 	for (var i=0; i<field_tbodys.length; i++) {
@@ -114,7 +114,7 @@ function submitSortOrderForm() {
 				input.name = 'fields[]';
 				input.value = trs[j].id;
 				form.appendChild(input);
-				
+
 				var input = document.createElement("input");
 				input.type = 'hidden';
 				input.name = 'fields_cat['+trs[j].id+']';
@@ -123,6 +123,6 @@ function submitSortOrderForm() {
 			}
 		}
 	}
-	
+
 	$.post(window.location.href, $('form[name="sortOrderForm"]').serialize())
 }

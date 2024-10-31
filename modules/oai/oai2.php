@@ -1,4 +1,22 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /**
  * \file oai2.php
  * \brief
@@ -8,7 +26,7 @@
  *
  * This is an implementation of OAI Data Provider version 2.0.
  * @see http://www.openarchives.org/OAI/2.0/openarchivesprotocol.htm
- * 
+ *
  * It needs other files:
  * - oaidp-config.php : Configuration of provider
  * - oaidp-util.php : Utility functions
@@ -22,7 +40,7 @@
  *		- Your own implementation for providing metadata records.
  *
  * It also initiates:
- *	- ANDS_XML XML document handler $outputObj.  
+ *	- ANDS_XML XML document handler $outputObj.
  *
  * \todo <b>Remember:</b> to define your own classess for generating metadata records.
  * In common cases, you have to implement your own code to act fully and correctly.
@@ -32,7 +50,7 @@
 if(function_exists("date_default_timezone_set")) {
     date_default_timezone_set("Europe/Athens");
 }
- 
+
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
 // If anything else, try them.
@@ -98,7 +116,7 @@ if (isset($args['verb'])) {
 				foreach($args as $key => $val) {
 					if(strcmp($key,"verb")!=0) {
 						$errors[] = oai_error('badArgument', $key, $val);
-					}	
+					}
 				}
 			}
 			if (empty($errors)) include 'identify.php';

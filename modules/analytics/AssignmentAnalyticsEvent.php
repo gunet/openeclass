@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'Event.php';
 
@@ -24,7 +41,7 @@ class AssignmentAnalyticsEvent extends Event {
                 . " WHERE s.uid = ?d "
                 . " AND s.assignment_id = ?d"
                 . " AND a.course_id = ?d", $this->context['user_id'], $this->context['resource'], $this->context['course_id']);
-                
+
                 $this->context['value'] = 0;
                 if ($record && floatval($record->grade) > 0) {
                     $this->context['value'] = floatval($record->grade);
@@ -33,13 +50,13 @@ class AssignmentAnalyticsEvent extends Event {
                 // print_r($this->context);
                 // print_r($this->elements);
                 // die("aaa");
-                
+
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                            
+
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
@@ -73,8 +90,8 @@ class AssignmentAnalyticsEvent extends Event {
                         $value = floatval($assignment_record->grade);
                     }
 
-                    $this->insertValue($assignment_record->uid, $analytics_element_id, $value, $assignment_record->submission_date); 
-                } 
+                    $this->insertValue($assignment_record->uid, $analytics_element_id, $value, $assignment_record->submission_date);
+                }
             }
         };
 
@@ -96,7 +113,7 @@ class AssignmentAnalyticsEvent extends Event {
                 if ($recorddl && $recorddl->submission_date <= $recorddl->deadline ) {
                     $value = 1;
                 }
-                
+
                 foreach ($this->elements as $element) {
                     $recorddl = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
@@ -138,8 +155,8 @@ class AssignmentAnalyticsEvent extends Event {
                         $value = 1;
                     }
 
-                    $this->insertValue($assignment_recorddl->uid, $analytics_element_id, $value, $assignment_recorddl->submission_date); 
-                } 
+                    $this->insertValue($assignment_recorddl->uid, $analytics_element_id, $value, $assignment_recorddl->submission_date);
+                }
             }
         };
 

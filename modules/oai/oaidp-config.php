@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
  * \file
@@ -17,22 +34,22 @@
  *
  * - <B>$adminEmail</B>: the e-mail addresses of administrators of the repository.
  *
- * - <b>$repositoryIdentifier</b> : For a data provider there is only one. For repositories to comply with the oai 
+ * - <b>$repositoryIdentifier</b> : For a data provider there is only one. For repositories to comply with the oai
  * format it has to be unique identifiers for items records.  Basically using domainname will be fine.
  * See: http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm.
  *
  * - <b>$SETS</b>: An array with key words . List of supported SETs.
  *
  * - <b>$METADATAFORMATS</b>: List of supported metadata formats. It is a two-dimensional array with keys.
- * Each supported format is one element of this array at the first dimension. 
- * The key is the name of a metadata format.  
+ * Each supported format is one element of this array at the first dimension.
+ * The key is the name of a metadata format.
  * The exact number of items within each format associated array depends on the nature of a metadata format.
  * Most definitions are done here but handlers themselves are defined in separated files because only the names of PHP script are listed here.
  * 		- metadataPrefix
  * 		- schema
  * 		- metadataNamespace
  * 		- myhandler
- * 		- other optional items: record_prefix, record_namespace and etc. 
+ * 		- other optional items: record_prefix, record_namespace and etc.
  *
  * - <b>$SQL</b>: Settings for database and queries from database
  *
@@ -53,7 +70,7 @@ define('SHOW_QUERY_ERROR', FALSE);
 
 /**
  * \property CONTENT_TYPE
- * The content-type the WWW-server delivers back. For debug-puposes, "text/plain" 
+ * The content-type the WWW-server delivers back. For debug-puposes, "text/plain"
  * is easier to view. On a production site you should use "text/xml".
  */
 //define('CONTENT_TYPE','Content-Type: text/plain');
@@ -95,15 +112,15 @@ $identifyResponse["earliestDatestamp"] = '1970-01-01';
 // How your repository handles deletions
 // no: 			The repository does not maintain status about deletions.
 //				It MUST NOT reveal a deleted status.
-// persistent:	The repository persistently keeps track about deletions 
+// persistent:	The repository persistently keeps track about deletions
 //				with no time limit. It MUST consistently reveal the status
 //				of a deleted record over time.
-// transient:   The repository does not guarantee that a list of deletions is 
+// transient:   The repository does not guarantee that a list of deletions is
 //				maintained. It MAY reveal a deleted status for records.
-// 
+//
 // If your database keeps track of deleted records change accordingly.
 // Currently if $record['deleted'] is set to 'true', $status_deleted is set.
-// Some lines in listidentifiers.php, listrecords.php, getrecords.php  
+// Some lines in listidentifiers.php, listrecords.php, getrecords.php
 // must be changed to fit the condition for your database.
 $identifyResponse["deletedRecord"] = 'persistent';
 $deletedRecord = $identifyResponse["deletedRecord"]; // a shorthand for checking the configuration of Deleted Records
@@ -124,21 +141,21 @@ if (strcmp($identifyResponse["granularity"], 'YYYY-MM-DDThh:mm:ssZ') == 0) {
 $adminEmail = array(get_config('email_sender'));
 
 /** Compression methods supported. Optional (multiple). Default: null.
- * 
- * Currently only gzip is supported (you need output buffering turned on, 
- * and php compiled with libgz). 
- * The client MUST send "Accept-Encoding: gzip" to actually receive 
+ *
+ * Currently only gzip is supported (you need output buffering turned on,
+ * and php compiled with libgz).
+ * The client MUST send "Accept-Encoding: gzip" to actually receive
  */
 // $compression		= array('gzip');
 $compression = null;
 
 // MUST (only one)
-// You may choose any name, but for repositories to comply with the oai 
-// format it has to be unique identifiers for items records. 
+// You may choose any name, but for repositories to comply with the oai
+// format it has to be unique identifiers for items records.
 // see: http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
 // Basically use domainname
 // please adjust
-//$repositoryIdentifier = 'url.organisation.'; 
+//$repositoryIdentifier = 'url.organisation.';
 $repositoryIdentifier = $_SERVER['SERVER_NAME'];
 
 // For RIF-CS, especially with ANDS, each registryObject much has a group for the ownership of data.
@@ -146,10 +163,10 @@ $repositoryIdentifier = $_SERVER['SERVER_NAME'];
 // for this purpose.
 define('REG_OBJ_GROUP', 'Something agreed on');
 
-// If Identifier needs to show NODE description. It is defined in identify.php 
+// If Identifier needs to show NODE description. It is defined in identify.php
 // You may include details about your community and friends (other
 // data-providers).
-// Please check identify.php for other possible containers 
+// Please check identify.php for other possible containers
 // in the Identify response
 $show_identifier = false;
 // MUST (only one)
@@ -184,7 +201,7 @@ $SETS = array(
 
 // define all supported metadata formats, has to be an array
 //
-// myhandler is the name of the file that handles the request for the 
+// myhandler is the name of the file that handles the request for the
 // specific metadata format.
 // [record_prefix] describes an optional prefix for the metadata
 // [record_namespace] describe the namespace for this prefix
@@ -206,13 +223,13 @@ if (!is_array($METADATAFORMATS)) {
 // The shorthand of xml schema namespace, no need to change this
 define('XMLSCHEMA', 'http://www.w3.org/2001/XMLSchema-instance');
 
-// 
+//
 // DATABASE SETUP
 //
-// We store multiple entries for one element in a single row 
+// We store multiple entries for one element in a single row
 // in the database. SQL['split'] lists the delimiter for these entries.
 // If you do not do this, do not define $SQL['split']
-// $SQL['split'] = ';'; 
+// $SQL['split'] = ';';
 // the name of the table where your store your metadata's header
 $SQL['table'] = 'oai_record';
 
@@ -232,8 +249,8 @@ $idPrefix = '';
 // oai:$repositoryIdentifier:$idPrefix$SQL['identifier']
 // should not be changed
 //
-// Commented out 24/11/10 14:19:09 
-// $oaiprefix = "oai".$delimiter.$repositoryIdentifier.$delimiter.$idPrefix; 
+// Commented out 24/11/10 14:19:09
+// $oaiprefix = "oai".$delimiter.$repositoryIdentifier.$delimiter.$idPrefix;
 $oaiprefix = "";
 
 // adjust anIdentifier with sample contents an identifier

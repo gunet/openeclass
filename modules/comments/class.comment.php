@@ -1,22 +1,21 @@
 <?php
-/* ========================================================================
- * Open eClass 3.0
-* E-learning and Course Management System
-* ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
-* A full copyright notice can be read in "/info/copyright.txt".
-* For a full list of contributors, see "credits.txt".
-*
-* Open eClass is an open platform distributed in the hope that it will
-* be useful (without any warranty), under the terms of the GNU (General
-		* Public License) as published by the Free Software Foundation.
-* The full license can be read in "/info/license/license_gpl.txt".
-*
-* Contact address: GUnet Asynchronous eLearning Group,
-*                  Network Operations Center, University of Athens,
-*                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-*                  e-mail: info@openeclass.org
-* ======================================================================== */
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'include/log.class.php';
 
@@ -24,14 +23,14 @@ require_once 'include/log.class.php';
  * This class represents a comment
 */
 Class Comment {
-    
+
     private $id = 0;
     private $content = '';
     private $creationTime = '1970-01-01 00:00:01';
     private $authorId = 0;
     private $rtype = '';
     private $rid = 0;
-    
+
     /**
      * Load a comment from db
      * @param postId the blog post id
@@ -52,7 +51,7 @@ Class Comment {
     		return false;
     	}
     }
-    
+
     /**
      * Load multiple comments from a PDO array
      * @param arr the array with the data retrieved from DB
@@ -73,7 +72,7 @@ Class Comment {
     	}
     	return $ret;
     }
-    
+
     /**
      * Save a comment in database
      * @param content the blog post content
@@ -93,7 +92,7 @@ Class Comment {
             return false;
         }
     }
-    
+
     /**
      * Delete comment
      * @return boolean true on success, false on failure
@@ -112,10 +111,10 @@ Class Comment {
                       'rcontent' => $this->getContent(),
                       'status' => $r->status
                      ));
-        } 
+        }
         $sql = 'DELETE FROM `abuse_report` WHERE `rid` = ?d AND `rtype` = ?s';
         Database::get()->query($sql, $this->id, 'comment');
-        
+
         $sql = 'DELETE FROM `comments` WHERE `id` = ?d';
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
@@ -124,8 +123,8 @@ Class Comment {
         	return false;
         }
     }
-    
-    
+
+
     /**
      * Update a blog post in database
      * @param title the blog post title
@@ -148,7 +147,7 @@ Class Comment {
             return true;
         }
     }
-    
+
     /**
      * Get comment id
      * @return int
@@ -156,7 +155,7 @@ Class Comment {
     public function getId() {
     	return $this->id;
     }
-    
+
     /**
      * Get comment content
      * @return string
@@ -164,7 +163,7 @@ Class Comment {
     public function getContent() {
     	return $this->content;
     }
-    
+
     /**
      * Get comment author id
      * @return int
@@ -172,7 +171,7 @@ Class Comment {
     public function getAuthor() {
     	return $this->authorId;
     }
-    
+
     /**
      * Get comment creation time
      * @return DateTime
@@ -180,7 +179,7 @@ Class Comment {
     public function getTime() {
     	return $this->creationTime;
     }
-    
+
     /**
      * Get comment resource type
      * @return string
@@ -188,7 +187,7 @@ Class Comment {
     public function getRtype() {
     	return $this->rtype;
     }
-    
+
     /**
      * Get comment resource id
      * @return int
@@ -196,7 +195,7 @@ Class Comment {
     public function getRid() {
     	return $this->rid;
     }
-    
+
     /**
      * Check if a user has permission to edit/delete the comment
      * @param isEditor boolean showing if user is teacher

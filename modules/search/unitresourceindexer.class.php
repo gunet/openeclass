@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 require_once 'indexer.class.php';
 require_once 'abstractindexer.class.php';
@@ -30,7 +29,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a unit resource db row.
-     * 
+     *
      * @global string $urlServer
      * @param  object  $ures
      * @return Zend_Search_Lucene_Document
@@ -57,7 +56,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
 
     /**
      * Fetch a Unit Resource from DB.
-     * 
+     *
      * @param  int $uresId
      * @return object - the mysql fetched row
      */
@@ -65,36 +64,36 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
         $ures = Database::get()->querySingle("SELECT ur.*, cu.course_id
                                                 FROM unit_resources ur 
                                             JOIN course_units cu ON cu.id = ur.unit_id 
-                                                WHERE ur.id = ?d",  $uresId);        
+                                                WHERE ur.id = ?d",  $uresId);
         if (!$ures) {
             return null;
         }
 
         return $ures;
     }
-    
+
     /**
      * Get Term object for locating a unique single unit resource.
-     * 
+     *
      * @param  int $uresId - the unit resource id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($uresId) {
         return new Zend_Search_Lucene_Index_Term('unitresource_' . $uresId, 'pk');
     }
-    
+
     /**
      * Get Term object for locating all possible unit resources.
-     * 
+     *
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForAllResources() {
         return new Zend_Search_Lucene_Index_Term('unitresource', 'doctype');
     }
-    
+
     /**
      * Get all possible unit resources from DB.
-     * 
+     *
      * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getAllResourcesFromDB() {
@@ -102,20 +101,20 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
                                                 FROM unit_resources ur 
                                             JOIN course_units cu ON cu.id = ur.unit_id");
     }
-    
+
     /**
      * Get Lucene query input string for locating all unit resources belonging to a given course.
-     * 
+     *
      * @param  int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
         return 'doctype:unitresource AND courseid:' . $courseId;
     }
-    
+
     /**
      * Get all unit resources belonging to a given course from DB.
-     * 
+     *
      * @param  int   $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
@@ -127,7 +126,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
 
     /**
      * Remove all Unit Resources belonging to a Unit.
-     * 
+     *
      * @param int     $unitId
      * @param boolean $optimize
      */
@@ -135,7 +134,7 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         $hits = $this->__index->find('doctype:unitresource AND unitid:' . $unitId);
         foreach ($hits as $hit) {
             $this->__index->delete($hit->id);

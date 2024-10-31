@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 /**
  * @file user_report.php
@@ -64,7 +63,7 @@ if(isset($_POST['delete_material'])){
                                     AND session_id = ?d
                                     AND user_id = ?d", $course_id, $s->id, $_POST['aboutU']);
     }
-    
+
     Session::flash('message',$langDelMaterialSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/user_report.php?course=$course_code&session=$sessionID");
@@ -93,7 +92,7 @@ if(isset($_POST['add_material'])){
                                                         WHERE course_id = ?d
                                                         AND session_id = ?d
                                                         AND user_id = ?d", $course_id, $s->id, $_POST['aboutU']);
-        
+
         if(!$existsMaterial){
             Database::get()->query("INSERT INTO session_user_material 
                                     SET content = ?s,
@@ -107,7 +106,7 @@ if(isset($_POST['add_material'])){
                                     AND user_id = ?d",$_POST['addContent'], $course_id, $s->id, $_POST['aboutU']);
         }
     }
-    
+
     Session::flash('message',$langRegDone);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/user_report.php?course=$course_code&session=$sessionID");
@@ -230,7 +229,7 @@ if (isset($_GET['u'])) { //  stats per user
             </div>
         </div>
     </div>";
-    
+
 
     if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
         pdf_session_output($sessionID);
@@ -252,7 +251,7 @@ if (isset($_GET['u'])) { //  stats per user
                             <th aria-label='$langSettingSelect'></th>
                         </tr>
                     </thead>";
-    
+
 
     $result = users_session($sessionID);
     if (count($result) > 0) {
@@ -300,9 +299,9 @@ if (isset($_GET['u'])) { //  stats per user
                     }
                 }
             }
-           
- 
-            
+
+
+
             if(!empty($contentToModify)){
                 $action_msg = "$langModify";
                 $materialToPdf = "<a class='btn successAdminBtn' href='$_SERVER[SCRIPT_NAME]?course={$course_code}&session={$sessionID}&material_pdf=true&uMaterial={$row->id}' target='_blank'>$langDumpPDF</a>";
@@ -371,7 +370,7 @@ if (isset($_GET['u'])) { //  stats per user
 
 
         }
-        
+
  $tool_content .= "</table>
             </div>
         </div>";
@@ -385,7 +384,7 @@ if (isset($_GET['u'])) { //  stats per user
     }
 
      draw($tool_content, 2);
-    
+
 }
 
 
@@ -418,14 +417,14 @@ if (isset($_GET['u'])) { //  stats per user
             }elseif(is_remote_session($course_id,$sid)){
                 check_session_completion_by_tc_completed($sid,$r->id);
             }
-           
+
             check_session_progress($sid,$r->id);
             if(isset($badge_id)){
                 $per = get_cert_percentage_completion_by_user('badge',$badge_id,$r->id);
             }else{
                 $per = 0;
             }
-            
+
             $r->percentage = "
                 <div class='progress' style='width:200px;'>
                     <div class='progress-bar' role='progressbar' style='width: $per%;' aria-valuenow='$per' aria-valuemin='0' aria-valuemax='100'>$per%</div>
@@ -446,7 +445,7 @@ if (isset($_GET['u'])) { //  stats per user
  function user_reference($sid,$cid,$u){
 
     global $langIndividualSession, $langGroupSession, $langNotRemote, $langRemote,
-           $langDate, $langPercentageSessionCompletion, $langTools, $langRefernce, 
+           $langDate, $langPercentageSessionCompletion, $langTools, $langRefernce,
            $langUserHasCompleted, $langNotUploadedDeliverable, $langCommentsByConsultant,
            $langNoCommentsAvailable, $langCompletedSessionWithoutActivity, $langCompletedSessionMeeting;
 
@@ -516,14 +515,14 @@ if (isset($_GET['u'])) { //  stats per user
     }elseif(is_remote_session($cid,$sid)){
         check_session_completion_by_tc_completed($sid,$u);
     }
-    
+
     check_session_progress($sid,$u);
     if(isset($badge_id)){
         $per = get_cert_percentage_completion_by_user('badge',$badge_id,$u);
     }else{
         $per = 0;
     }
-    
+
 
     $userInfo = [
         'username' => $user_name,
@@ -578,7 +577,7 @@ function pdf_session_output($sid) {
         "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "</h2>";
 
-    // Array containing icons 
+    // Array containing icons
     $searchVal = array('&#10004;', '&#x2718;');
     // Array containing replace icons with strings
     $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
@@ -586,7 +585,7 @@ function pdf_session_output($sid) {
     $output = str_replace($searchVal, $replaceVal, $tool_content);
 
     $pdf_content .= $output;
-   
+
     $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -653,7 +652,7 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
         <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
 
     $pdf_mcontent .= $content_m;
-   
+
     $pdf_mcontent .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();

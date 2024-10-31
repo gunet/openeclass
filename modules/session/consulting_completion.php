@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -107,33 +106,33 @@ if(isset($_GET['user_docs'])){
                 if (file_exists($basedir)) {
                     create_map_to_real_filename('/', false);
                     $topdir = $basedir;
-                    
+
                     // Create recursive directory iterator
                     $files = new RecursiveIteratorIterator(
                         new RecursiveDirectoryIterator($topdir),
                         RecursiveIteratorIterator::LEAVES_ONLY
                     );
-                
-                    $dir = preg_replace('/[\/]{2,}/', '/', $s->title ."/"); 
+
+                    $dir = preg_replace('/[\/]{2,}/', '/', $s->title ."/");
                     $zipFile->addEmptyDir($dir);
                     foreach ($files as $name => $file) {
                         // Get real and filename to be added for current file
                         $filePath = fix_directory_separator($file->getRealPath());
                         $relativePath = substr($filePath, strlen($basedir));
-                
+
                         // Skip directories (they will be added automatically)
                         if (!$file->isDir()) {
                             // Add current file to archive
                             $zipFile->addFile($filePath, $s->title . '/' . substr($map_filenames[$relativePath], 1));
                         }
                     }
-                } 
+                }
             }
 
             if (!$zipFile->close()) {
                 die("Error while creating ZIP file!");
             }
-            
+
             if($empty_dirs > 0){
                 send_file_to_client($dload_filename, $real_filename, null, true, true);
                 exit;
@@ -142,7 +141,7 @@ if(isset($_GET['user_docs'])){
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code);
             }
-            
+
         }
     }else{
         Session::flash('message',$langChooseUser);
@@ -374,7 +373,7 @@ function pdf_reports_output() {
         <body>" . get_platform_logo() .
         "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
 
-    // Array containing icons 
+    // Array containing icons
     $searchVal = array('&#10004;', '&#x2718;');
     // Array containing replace icons with strings
     $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');

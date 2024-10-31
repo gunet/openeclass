@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -120,7 +119,7 @@ if(isset($_POST['modify'])){
         }
       }
     }
-    
+
 
     // Update dates on video teleconference
     $tc_exists = Database::get()->querySingle("SELECT id FROM tc_session WHERE course_id = ?d AND id_session = ?d",$course_id,$_GET['session']);
@@ -131,7 +130,7 @@ if(isset($_POST['modify'])){
                                     WHERE course_id = ?d
                                     AND id_session = ?d", $start_session, $end_session, $course_id, $_GET['session']);
     }
-    
+
 
     $insert = Database::get()->query("UPDATE mod_session SET
                                         creator = ?d,
@@ -350,7 +349,7 @@ if(isset($_POST['modify'])){
     Session::flash('message',$langAddSessionCompleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
-    
+
   }else{
     Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     redirect_to_home_page("modules/session/edit.php?course=".$course_code."&session=".$_GET['session']);
@@ -411,7 +410,7 @@ if($is_coordinator){// is the tutor course
 }else{// is the consultant
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }
- 
+
 $sql = "";
 if($is_consultant && !$is_coordinator){
   $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members WHERE user_id = ?d AND is_tutor = ?d", $uid, 1);

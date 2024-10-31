@@ -1,35 +1,20 @@
 <?php
-
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
-/**
-  @file class.wiki2xhtml.php
-  @author: Open eClass Team <eclass@gunet.gr>
-  based on DotClear version 3.1d licensed under GPL
-  copyright (c) 2004 Olivier Meunier and contributors.
-                    DotClear contributors: Stephanie Booth
-                    Mathieu Pillard
-                    Christophe Bonijol
-                    Jean-Charles Bagneris
-                    Nicolas Chachereau
-                    Jérôme Lipowicz
  */
 
 class wiki2xhtml {
@@ -288,8 +273,8 @@ class wiki2xhtml {
     }
 
     function __getTagsPattern($escape = false) {
-        $res = $this->all_tags;        
-        array_walk($res, 
+        $res = $this->all_tags;
+        array_walk($res,
             function(&$a) {
                 $a = preg_quote($a,"/");
             }

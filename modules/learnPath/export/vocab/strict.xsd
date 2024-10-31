@@ -1,3 +1,21 @@
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <xs:schema targetNamespace="http://ltsc.ieee.org/xsd/LOM/vocab"
            xmlns="http://ltsc.ieee.org/xsd/LOM/vocab"
            xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
@@ -78,12 +96,12 @@
     <xs:simpleType name="interactivityType">
         <xs:union memberTypes="lom:interactivityTypeValues"/>
     </xs:simpleType>
- 
+
     <!-- 5.2 Learning Resource Type -->
     <xs:simpleType name="learningResourceType">
         <xs:union memberTypes="lom:learningResourceTypeValues"/>
     </xs:simpleType>
- 
+
     <!-- 5.3 Interactivity Level -->
     <xs:simpleType name="interactivityLevel">
         <xs:union memberTypes="lom:interactivityLevelValues"/>

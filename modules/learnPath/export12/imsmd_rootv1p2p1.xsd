@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <!-- edited by Thomas Wason  -->
-<xsd:schema targetNamespace="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1" 
-            xmlns:xml="http://www.w3.org/XML/1998/namespace" 
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-            xmlns="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1" 
-            elementFormDefault="qualified" 
+<xsd:schema targetNamespace="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1"
+            xmlns:xml="http://www.w3.org/XML/1998/namespace"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1"
+            elementFormDefault="qualified"
             version="1.2:1.1 IMS:MD1.2">
 
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="ims_xml.xsd"/> 
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="ims_xml.xsd"/>
 
     <!-- ******************** -->
     <!-- ** Change History ** -->
@@ -23,7 +41,7 @@
         <xsd:documentation> 2001-07-25 Schawn Thropp.  Updates to bring the XSD up to speed with the W3C        </xsd:documentation>
         <xsd:documentation> XML Schema Recommendation.  The following changes were made: Change the             </xsd:documentation>
         <xsd:documentation> namespace to reference the 5/2/2001 W3C XML Schema Recommendation,the base          </xsd:documentation>
-        <xsd:documentation> type for the durtimeType, simpleType, was changed from timeDuration to duration.    </xsd:documentation>              
+        <xsd:documentation> type for the durtimeType, simpleType, was changed from timeDuration to duration.    </xsd:documentation>
         <xsd:documentation> Any attribute declarations that have use="default" had to change to use="optional"  </xsd:documentation>
         <xsd:documentation> - attr.type.  Any attribute declarations that have value ="somevalue" had to change </xsd:documentation>
         <xsd:documentation> to default = "somevalue" - attr.type (URI)                                          </xsd:documentation>
@@ -132,7 +150,7 @@
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="annotationType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="person" minOccurs="0"/>
@@ -141,7 +159,7 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="catalogentryType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="catalog"/>
@@ -149,13 +167,13 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="centityType">
         <xsd:sequence>
             <xsd:element ref="vcard"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="classificationType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="purpose" minOccurs="0"/>
@@ -165,14 +183,14 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="contextType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="contributeType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="role"/>
@@ -181,54 +199,54 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="copyrightandotherrestrictionsType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="costType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="coverageType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="dateType">
         <xsd:sequence>
             <xsd:element ref="datetime" minOccurs="0"/>
             <xsd:element ref="description" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="descriptionType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="difficultyType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="durationType">
         <xsd:sequence>
             <xsd:element ref="datetime" minOccurs="0"/>
             <xsd:element ref="description" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="educationalType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="interactivitytype" minOccurs="0"/>
@@ -245,13 +263,13 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="entryType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="generalType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="identifier" minOccurs="0"/>
@@ -266,47 +284,47 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="installationremarksType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="intendedenduserroleType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="interactivitylevelType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="interactivitytypeType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="keywordType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="kindType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="langstringType">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
@@ -314,14 +332,14 @@
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
-   
+
     <xsd:complexType name="learningresourcetypeType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="lifecycleType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="version" minOccurs="0"/>
@@ -330,7 +348,7 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="locationType">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
@@ -338,7 +356,7 @@
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
-   
+
     <xsd:complexType name="lomType">
         <xsd:sequence>
             <xsd:element ref="general" minOccurs="0"/>
@@ -352,7 +370,7 @@
             <xsd:element ref="classification" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="metametadataType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="identifier" minOccurs="0"/>
@@ -363,33 +381,33 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="nameType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="otherplatformrequirementsType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="personType">
         <xsd:sequence>
             <xsd:element ref="vcard"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="purposeType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="relationType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="kind" minOccurs="0"/>
@@ -397,7 +415,7 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="requirementType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="type" minOccurs="0"/>
@@ -407,7 +425,7 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="resourceType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="identifier" minOccurs="0"/>
@@ -416,7 +434,7 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="rightsType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="cost" minOccurs="0"/>
@@ -425,34 +443,34 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="roleType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="semanticdensityType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="sourceType">
         <xsd:sequence>
             <xsd:element ref="langstring"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="statusType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="stringType">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
@@ -460,21 +478,21 @@
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
-   
+
     <xsd:complexType name="structureType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="taxonpathType">
         <xsd:sequence>
             <xsd:element ref="source" minOccurs="0"/>
             <xsd:element ref="taxon" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="taxonType">
         <xsd:sequence>
             <xsd:element ref="id" minOccurs="0"/>
@@ -482,7 +500,7 @@
             <xsd:element ref="taxon" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="technicalType" mixed="true">
         <xsd:sequence>
             <xsd:element ref="format" minOccurs="0" maxOccurs="unbounded"/>
@@ -495,77 +513,77 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="titleType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="typeType">
         <xsd:sequence>
             <xsd:element ref="source"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="typicalagerangeType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="typicallearningtimeType">
         <xsd:sequence>
             <xsd:element ref="datetime" minOccurs="0"/>
             <xsd:element ref="description" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="valueType">
         <xsd:sequence>
             <xsd:element ref="langstring"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <xsd:complexType name="versionType">
         <xsd:sequence>
             <xsd:element ref="langstring" minOccurs="1" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <!-- ****************** -->
     <!-- ** Simple Types ** -->
     <!-- ****************** -->
-   
+
     <xsd:simpleType name="formatType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="sizeType">
         <xsd:restriction base="xsd:int"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="datetimeType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="idType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="metadataschemeType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="catalogType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="minimumversionType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>
-   
+
     <xsd:simpleType name="maximumversionType">
         <xsd:restriction base="xsd:string"/>
     </xsd:simpleType>

@@ -1,4 +1,21 @@
-<?php 
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'modules/auth/auth.inc.php';
 
@@ -33,15 +50,15 @@ class Transition {
      * @brief sso user authentication
      */
     public function sso_authenticate() {
-        
+
         global $urlServer;
-                
+
         $cas_res = cas_authenticate(7);
         if (phpCAS::checkAuthentication()) {
             $cas = get_auth_settings(7);
             $_SESSION['cas_attributes'] = phpCAS::getAttributes();
             $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
-            $_SESSION['cas_uname'] = strtolower(phpCAS::getUser());            
+            $_SESSION['cas_uname'] = strtolower(phpCAS::getUser());
             if (!empty($_SESSION['cas_uname'])) {
                 $_SESSION['uname'] = $_SESSION['cas_uname'];
             }
@@ -78,7 +95,7 @@ class Transition {
 
         $q = Database::get()->querySingle("SELECT status FROM sso_exception WHERE uid = ?d", $this->userid);
         if ($q) {
-            return $q->status;            
+            return $q->status;
         } else {
             return false;
         }

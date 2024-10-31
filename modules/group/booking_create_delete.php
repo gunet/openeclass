@@ -1,4 +1,21 @@
-<?php         
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
  *
@@ -48,18 +65,18 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                 ];
             }
         }
-        
+
         header('Content-Type: application/json');
 
         echo json_encode($eventArr);
 
         exit();
-       
+
 
     }
 
     // add new event section
-    elseif($_POST['action'] == "add"){   
+    elseif($_POST['action'] == "add"){
 
         //Before add booking, check if tutor has deleted the current date for booking
         $checkDateTutorExist = Database::get()->querySingle("SELECT COUNT(id) as c FROM tutor_availability_group
@@ -89,14 +106,14 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                                     title = ?s,
                                     start = ?t,
                                     end = ?t",$_POST["course_Id"], $_POST['group_Id'], $_POST["tutor_Id"],$_POST['title'],date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
-            
 
-                
+
+
                 $add_bookind_by_user = Database::get()->query("INSERT INTO booking_user SET
                                                 booking_id = ?d,
                                                 simple_user_id = ?d",$add->lastInsertID,$uid);
-                    
-                    
+
+
                 //send email to the tutor about the booking from user
                 $userName = $_POST['title'];
                 $tutorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$_POST["tutor_Id"])->givenname;
@@ -142,30 +159,30 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                 $emailbody = $emailHeader.$emailMain;
 
                 $emailPlainBody = html2text($emailbody);
-                
+
                 send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-                
+
                 echo 1;
-                   
-                
+
+
             }else{
                 echo 0;
             }
-            
+
         }else{
             echo 2;
         }
-            
-       
-        
-        
+
+
+
+
         exit();
 
     }
 
     // remove event
     elseif($_POST['action'] == "delete"){
-        
+
         $event_id = $_POST['id'];
         $tutor_availabity_group_id = Database::get()->queryArray("SELECT * FROM tutor_availability_group WHERE id = ?d",$event_id);
 
@@ -187,7 +204,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                                                         AND tutor_id = ?d
                                                         AND start = ?t
                                                         AND end = ?t",$course_id,$tutor_group,$tutor_user,$tutor_start,$tutor_end)->id;
-            
+
             //send email to the tutor about canceling booking by user
             $userName = Database::get()->querySingle("SELECT title FROM booking WHERE id = ?d",$bookingId)->title;
             $tutorName = Database::get()->querySingle("SELECT givenname FROM user WHERE id IN (SELECT tutor_id FROM booking WHERE id = ?d)",$bookingId)->givenname;
@@ -242,7 +259,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                 $emailbody = $emailHeader.$emailMain;
 
                 $emailPlainBody = html2text($emailbody);
-                
+
                 send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
 
                 echo 1;
@@ -251,7 +268,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         }else{
             echo 0;
         }
-        
+
         exit();
 
     }
@@ -297,9 +314,9 @@ function classNameBooking($bookingTutorStart,$bookingTutorEnd,$tutor_id,$group_i
         }else{
             $html_bookingClassName = 'pe-none';
         }
-        
+
     }
-    
+
 
     return $html_bookingClassName;
 }
@@ -349,9 +366,9 @@ function TitleBooking($bookingTutorStart,$bookingTutorEnd,$tutor_id,$group_id){
         }else{
             $html_bookingTitle .= "<p class='text-center TextBold simple-user-booking-event smallText'>$langBookingIsDone</p>";
         }
-        
+
     }
-    
+
 
     return $html_bookingTitle;
 }
@@ -402,7 +419,7 @@ function ColorExistBooking($bookingTutorStart,$bookingTutorEnd,$tutor_id,$group_
         }else{
             $html_bookingExist = '#ffa500';
         }
-        
+
     }
 
     return $html_bookingExist;

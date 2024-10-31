@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ========================================================================
  */
 
 require_once('xml_creater.php');
@@ -25,14 +23,14 @@ require_once('xml_creater.php');
 class ECLASS_OAIDC {
 
     /**
-     * \var $oai_pmh 
+     * \var $oai_pmh
      * Type: ANDS_Response_XML. Assigned by constructor. \see __construct
      */
     private $oai_pmh;
 
     /**
      * \var $working_node
-     * Type: DOMElement. Assigned by constructor. \see __construct	
+     * Type: DOMElement. Assigned by constructor. \see __construct
      */
     protected $working_node;
 
@@ -55,12 +53,12 @@ class ECLASS_OAIDC {
             try {
                 $record = Database::get()->querySingle("select * from oai_record where oai_identifier = ?s", $key);
                 $metadata = Database::get()->queryArray("select * from oai_metadata where oai_record = ?d", $record->id);
-                
+
                 $meta_record = array();
                 foreach ($metadata as $meta_row) {
                     $meta_record[$meta_row->field] = $meta_row->value;
                 }
-                
+
                 foreach ($meta_record as $rkey => $rvalue) {
                     if (!strncmp($rkey, 'dc_', 3)) {
                         $is_serialized = false;

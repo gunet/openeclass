@@ -1,4 +1,21 @@
-<?php         
+<?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 /**
  *
@@ -22,12 +39,12 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
 
         $eventArr = array();
 
-        
+
         $result_events = Database::get()->queryArray("SELECT id,user_id,start,end FROM date_availability_user
                                                         WHERE start BETWEEN (?t) AND (?t)
                                                         AND user_id = ?d",$start,$end,$tutor_id);
 
-    
+
 
         if($result_events){
             foreach($result_events as $row){
@@ -42,23 +59,23 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                 ];
             }
         }
-        
+
         header('Content-Type: application/json');
 
         echo json_encode($eventArr);
 
         exit();
-        
+
     }
 
     // add new event section
-    elseif($_POST['action'] == "add"){   
+    elseif($_POST['action'] == "add"){
 
         $add = Database::get()->query("INSERT INTO date_availability_user SET
                             user_id = ?d,
                             start = ?t,
                             end = ?t", $_POST['user'], date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s',strtotime($_POST["end"])));
-            
+
             if($add){
                 echo 1;
             }else{
@@ -89,17 +106,17 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
                 $update = Database::get()->query("UPDATE date_availability_user SET start = ?t, end = ?t
                                                 WHERE id = ?d
                                                 AND user_id = ?d",date('Y-m-d H:i:s', strtotime($_POST["start"])), date('Y-m-d H:i:s', strtotime($_POST["end"])), $_POST["id"], $_POST["user_id"]);
-                
-                echo 1; 
-                
+
+                echo 1;
+
             }else{
                 echo 0;
             }
         }else{
             echo 2;
         }
-        
-       
+
+
         exit();
 
     }
@@ -114,9 +131,9 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
             $old_start = $old_date->start;
             $old_end = $old_date->end;
         }
-        
-        
-         //check if exists simple user who have made a book 
+
+
+         //check if exists simple user who have made a book
          $checkExistSimpleUser = Database::get()->querySingle("SELECT COUNT(id) as c FROM date_booking
                                                             WHERE teacher_id = ?d
                                                             AND start = ?t
@@ -129,7 +146,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
             if(($check == $uid) or $is_admin){
                 $del = Database::get()->query("DELETE FROM date_availability_user WHERE id = ?d",$event_id);
                 if($del){
-                    echo 1; 
+                    echo 1;
                 }
             }else{
                 echo 0;
@@ -137,7 +154,7 @@ if(isset($_POST['action']) or isset($_GET['view'])) {
         }else{
             echo 2;
         }
-        
+
         exit();
 
     }
@@ -159,7 +176,7 @@ function getBackgroundEvent($userId,$start,$end){
     }else{
         $color .= '#1E7E0E';
     }
-   
+
     return $color;
 
 }
@@ -197,8 +214,8 @@ function nameTutor($userId,$start,$end){
                     </div>
 
                     ";
-    }                                             
-    
+    }
+
     $name .= "</div>";
     return $name;
 }

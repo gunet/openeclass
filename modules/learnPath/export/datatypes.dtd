@@ -1,4 +1,22 @@
 <!--
+  - /* ========================================================================
+  -  * Open eClass
+  -  * E-learning and Course Management System
+  -  * ========================================================================
+  -  * Copyright 2003-2024, Greek Universities Network - GUnet
+  -  *
+  -  * Open eClass is an open platform distributed in the hope that it will
+  -  * be useful (without any warranty), under the terms of the GNU (General
+  -  * Public License) as published by the Free Software Foundation.
+  -  * The full license can be read in "/info/license/license_gpl.txt".
+  -  *
+  -  * Contact address: GUnet Asynchronous eLearning Group
+  -  *                  e-mail: info@openeclass.org
+  -  * ========================================================================
+  -  */
+  -->
+
+<!--
         DTD for XML Schemas: Part 2: Datatypes
         $Id$
         Note this DTD is NOT normative, or even definitive. - - the
@@ -86,7 +104,7 @@
    "%pattern; | %enumeration; | %whiteSpace; | %length; |
    %maxLength; | %minLength;">
 <!ENTITY % facet "%ordered; | %unordered;">
-<!ENTITY % facetAttr 
+<!ENTITY % facetAttr
         "value CDATA #REQUIRED
         id ID #IMPLIED">
 <!ENTITY % fixedAttr "fixed %boolean; #IMPLIED">

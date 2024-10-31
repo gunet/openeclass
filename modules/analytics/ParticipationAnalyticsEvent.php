@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'Event.php';
 
@@ -22,7 +39,7 @@ class ParticipationAnalyticsEvent extends Event {
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                
+
                     if ($record) {
                         $id = $record->id;
                         $value = $record->value;
@@ -47,11 +64,11 @@ class ParticipationAnalyticsEvent extends Event {
                     group by day, user_id", $course_id, $data->start_date, $data->end_date);
 
                 foreach ($hit_records as $hit_record) {
-                    $this->insertValue($hit_record->user_id, $analytics_element_id, 1, $hit_record->last_update); 
-                } 
+                    $this->insertValue($hit_record->user_id, $analytics_element_id, 1, $hit_record->last_update);
+                }
             }
         });
-                
+
         $this->on(self::HITRECORDED, function ($data) {
 
             if($this->exists) {
@@ -63,15 +80,15 @@ class ParticipationAnalyticsEvent extends Event {
                     user_id = ?d
                     AND course_id = ?d
                     AND day = CURDATE()", $this->context['user_id'], $this->context['course_id']);
-                
+
                 $this->context['value'] = $record->value;
-                
+
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                
+
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
@@ -97,8 +114,8 @@ class ParticipationAnalyticsEvent extends Event {
 
 
                 foreach ($hit_records as $hit_record) {
-                    $this->insertValue($hit_record->user_id, $analytics_element_id, $hit_record->value, $hit_record->last_update); 
-                } 
+                    $this->insertValue($hit_record->user_id, $analytics_element_id, $hit_record->value, $hit_record->last_update);
+                }
             }
         });
 
@@ -112,15 +129,15 @@ class ParticipationAnalyticsEvent extends Event {
                     user_id = ?d
                     AND course_id = ?d
                     AND day = CURDATE()", $this->context['user_id'], $this->context['course_id']);
-                
+
                 $this->context['value'] = $record->value;
-                
+
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                
+
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
@@ -146,8 +163,8 @@ class ParticipationAnalyticsEvent extends Event {
 
 
                 foreach ($hit_records as $hit_record) {
-                    $this->insertValue($hit_record->user_id, $analytics_element_id, $hit_record->value, $hit_record->last_update); 
-                } 
+                    $this->insertValue($hit_record->user_id, $analytics_element_id, $hit_record->value, $hit_record->last_update);
+                }
             }
         });
     }

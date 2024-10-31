@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 /** @file index.php
  *  @brief display form to contact with course prof if course is closed
@@ -59,19 +58,19 @@ if (empty($userdata->email)) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyMessage</span></div></div>";
         $tool_content .= form("$userdata->surname $userdata->givenname");
     } else {
-        
+
         $tool_content .= action_bar(array(
         array('title' => "$langBack",
             'url' => "../auth/courses.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')        
-        ));        
-        
+            'level' => 'primary-label')
+        ));
+
         $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email);
         Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
                                                         status = 1, comments = ?s, 
                                                         ts = " . DBHelper::timeAfter() . "",
-                                                    $uid, $course_id, $content);        
+                                                    $uid, $course_id, $content);
     }
 } else {
     $tool_content .= form("$userdata->surname $userdata->givenname");
@@ -83,17 +82,17 @@ draw($tool_content, 1);
  * @param type $user
  * @global type $course_id
  * @global type $course_code
- * @global type $langInfoAboutRegistration 
+ * @global type $langInfoAboutRegistration
  * @global type $langSendTo
  * @global type $course_code
- * @global type $langFrom 
+ * @global type $langFrom
  * @global type $langOfCourse
  * @global type $langRequestReasons
  * @return type
  */
 function form($user) {
-    global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, 
-            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend, 
+    global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo,
+            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend,
             $is_collaborative_course, $langInfoAboutCollabRegistration, $langLabelCollabUserRequest,
             $langRequestReasonsCollab, $langTypeCollaboration, $langImgFormsDes, $langForm;
 
@@ -103,7 +102,7 @@ function form($user) {
         $langRequestReasons = $langRequestReasonsCollab;
         $langOfCourse = $langTypeCollaboration;
     }
-           
+
     $userprof = '';
     $profdata = Database::get()->queryArray("SELECT user.surname, user.givenname
                            FROM course_user JOIN user ON user.id = course_user.user_id
@@ -111,7 +110,7 @@ function form($user) {
     foreach ($profdata as $prof) {
         $userprof .= "$prof->surname $prof->givenname &nbsp;&nbsp;";
     }
-        
+
     $ret = "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoAboutRegistration</span></div></div>";
     $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit p-0 border-0 mt-2 mb-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -141,7 +140,7 @@ function form($user) {
 }
 
 /**
- * @brief send emails to course prof 
+ * @brief send emails to course prof
  * @global type $langSendingMessage
  * @global type $langLabelCourseUserRequest
  * @global type $langContactIntro
@@ -155,13 +154,13 @@ function form($user) {
  * @return type
  */
 function email_profs($course_id, $content, $from_name, $from_username, $from_address) {
-    global $langSendingMessage, $langLabelCourseUserRequest, $langContactIntro, 
+    global $langSendingMessage, $langLabelCourseUserRequest, $langContactIntro,
             $langHere, $urlServer, $langNote, $langMessage, $langContactIntroFooter;
-            
+
     $c_code = course_id_to_code($course_id);
     $title = course_id_to_title($course_id);
     $public_code = course_id_to_public_code($course_id);
-    $ret = "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";    
+    $ret = "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";
     $profs = Database::get()->queryArray("SELECT user.id AS prof_uid, user.email AS email,
                               user.surname, user.givenname
                            FROM course_user JOIN user ON user.id = course_user.user_id
@@ -177,7 +176,7 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
 			<div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_username, $from_address))."</div>
 		</div>
 	</div>";
-    
+
     $mailMain = "
     <!-- Body Section -->
 	<div id='mail-body'>
@@ -187,7 +186,7 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
 			$content
         </div>
 	</div>";
-    
+
     $mailFooter = "
     <!-- Footer Section -->
 	<div id='mail-footer'>
@@ -199,15 +198,15 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
     $message = $mailHeader.$mailMain.$mailFooter;
     $plainMessage = html2text($message);
     foreach ($profs as $prof) {
-        if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {            
+        if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
-            $ret .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . "" . "&nbsp;" . q($to_name) . "</span></div></div>";            
+            $ret .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . "" . "&nbsp;" . q($to_name) . "</span></div></div>";
             if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message)) {
                 $ret .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$GLOBALS[langErrorSendingMessage]</span></div></div>";
             }
         }
-    }    
+    }
     return $ret;
 }

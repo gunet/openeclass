@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 $require_login = true;
 $require_valid_uid = TRUE;
@@ -29,12 +28,12 @@ require_once 'include/log.class.php';
 
 $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 
-//For user with status USER_STUDENT in order to do a reservation with a USER_TEACHER in the calendar events 
+//For user with status USER_STUDENT in order to do a reservation with a USER_TEACHER in the calendar events
 if(isset($_GET['do_booking'])){
     //Get all users with status -USER_TEACHER- and display them into a list for a simple user.
     //This user can choose the user_teacher for making a reservation with him.
 
-    $data['showUsers'] = ''; 
+    $data['showUsers'] = '';
     if(isset($_GET['show_all_users'])){
         //This code refers to all available user teachers for a reservation by a simple user.
         load_js('datatables');
@@ -65,7 +64,7 @@ if(isset($_GET['do_booking'])){
         $pageName = $toolName;
         $data['booking_by_username'] = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d",$uid)->givenname;
         $data['booking_by_surname'] = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d",$uid)->surname;
-        $data['showUsers'] = false; 
+        $data['showUsers'] = false;
 
         $data['action_bar'] =
         action_bar(array(
@@ -76,7 +75,7 @@ if(isset($_GET['do_booking'])){
             ));
 
     }
-   
+
     $data['menuTypeID'] = 1;
     view('main.profile.do_booking', $data);
 }else{//For USER_TEACHER in order to add his available date in the calendar events

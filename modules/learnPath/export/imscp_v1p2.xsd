@@ -1,4 +1,22 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <xs:schema xmlns="http://www.imsglobal.org/xsd/imscp_v1p1"
     targetNamespace="http://www.imsglobal.org/xsd/imscp_v1p1"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -15,8 +33,8 @@
             Date:         31st October, 2006
             Version:      2.0
             Status:       CM/DN Release
-            Description:  This is a normative representation of the IMS CP 1.2 Information Model for binding 
-                          purposes.  Read the corresponding IMS CP Information Model for the Platform 
+            Description:  This is a normative representation of the IMS CP 1.2 Information Model for binding
+                          purposes.  Read the corresponding IMS CP Information Model for the Platform
                           Independent Model representation.
 
             History:      This is version 1 of the IMS CP v1.2 XSD.  It directly supercedes IMS CP v1.1.4 XSD.
@@ -28,7 +46,7 @@
             Copyright:    2006 (c) IMS Global Learning Consortium Inc.  All Rights Reserved.
                           IMS Global Learning Consortium, Inc. (IMS/GLC) is publishing the information
                           contained in this binding ("Specification") for purposes of scientific
-                          experimental and scholarly collaboration only.  IMS/GLC makes no warranty or 
+                          experimental and scholarly collaboration only.  IMS/GLC makes no warranty or
                           representation regarding the accuracy or completeness of the Specification.
                           This material is provided on an "As Is" and "As Available basis".
                           The Specification is at all times subject to change and revision without
@@ -94,12 +112,12 @@
             <xs:complexType name="Manifest.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        A manifest element is a container for data structures whose contents describe a 
-                        semantically complete instance of the IMS Content Packaging Information Model.  
-                        
-                        A manifest element may contain and reference child manifest elements 
-                        in the same IMS Manifest document.  The root manifest element defines an 
-                        entire IMS Package.  A child manifest element defines a semantically complete 
+                        A manifest element is a container for data structures whose contents describe a
+                        semantically complete instance of the IMS Content Packaging Information Model.
+
+                        A manifest element may contain and reference child manifest elements
+                        in the same IMS Manifest document.  The root manifest element defines an
+                        entire IMS Package.  A child manifest element defines a semantically complete
                         subset of that Package.
 
                         <p>Represents a binding of the kinds of objects defined as children of ims-cp-imManifest : Manifest.[ ManifestMetadata, Organizations, Resources, Manifest, Extension ].</p>
@@ -121,10 +139,10 @@
             <xs:complexType name="Metadata.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        An instance of the metadata element contains data structures 
-                        that declare descriptive information about a metadata element's 
+                        An instance of the metadata element contains data structures
+                        that declare descriptive information about a metadata element's
                         parent only.
-                        
+
                         One or more different metadata models may be declared as
                         child extensions of a metadata element.
 
@@ -141,9 +159,9 @@
             <xs:complexType name="Organizations.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        The organizations element is a container for all data structures 
-                        that describe the way or ways that information encapsulated by 
-                        its parent manifest element is structured. 
+                        The organizations element is a container for all data structures
+                        that describe the way or ways that information encapsulated by
+                        its parent manifest element is structured.
 
                         <p>Represents of binding of the child objects of ims-cp-imOrganizations: Organizations.[ Organization, Extension ].</p>
                     </xs:documentation>
@@ -159,12 +177,12 @@
             <xs:complexType name="Resources.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        The Resources element is a container for data structures containing 
-                        references  to one or more assets.  Asset references may be grouped 
+                        The Resources element is a container for data structures containing
+                        references  to one or more assets.  Asset references may be grouped
                         within a containing resources element in whatever manner seems best.
-                          
-                        The scope of referenced assets is specific to a resources element's parent 
-                        manifest element only. 
+
+                        The scope of referenced assets is specific to a resources element's parent
+                        manifest element only.
 
                         <p>Represents a binding of the kinds of child objects defined for ims-cp-imResources: Resources.[ Resource, Extension ].</p>
                     </xs:documentation>
@@ -180,13 +198,13 @@
             <xs:complexType name="Organization.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        An organization element is a container for all data structures relating 
-                        to a particular way or view that information encapsulated by a 
-                        grandparent manifest object is structured.  
-                        
-                        Multiple organization elements within the same parent organizations 
-                        element are equivalent in purpose: Each shows a different way for 
-                        structuring the same information declared within a grandparent 
+                        An organization element is a container for all data structures relating
+                        to a particular way or view that information encapsulated by a
+                        grandparent manifest object is structured.
+
+                        Multiple organization elements within the same parent organizations
+                        element are equivalent in purpose: Each shows a different way for
+                        structuring the same information declared within a grandparent
                         manifest object.
 
                         <p>Represents a binding of the kinds of child objects defined for ims-cp-Organization: Organization[ Title, Item, Metadata, Extension ].</p>
@@ -206,14 +224,14 @@
             <xs:complexType name="Resource.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        A resource element is a container for a particular asset 
-                        or collection of assets.  A resource may contain references 
+                        A resource element is a container for a particular asset
+                        or collection of assets.  A resource may contain references
                         to assets that are all of the same type or different types (i.e., file formats).
-                        
-                        The scope or boundary of an IMS Package is defined by the asset 
+
+                        The scope or boundary of an IMS Package is defined by the asset
                         references collected into all resources containers associated with the
-                        root manifest element, whether as a child, direcdt descendant, or externally 
-                        linked descendant. 
+                        root manifest element, whether as a child, direcdt descendant, or externally
+                        linked descendant.
 
                         <p>Represents a binding of the kinds of child objects defined for ims-cp-imResource: Resource.[ Metadata, File, Dependency, Extension ].</p>
                     </xs:documentation>
@@ -234,10 +252,10 @@
             <xs:complexType name="Item.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        An item element represents a structural node in a particular organization.  
-                        An item element may be a parent or sibling of other Item elements, 
+                        An item element represents a structural node in a particular organization.
+                        An item element may be a parent or sibling of other Item elements,
                         each one representing a unique structural node.
-                        
+
                         An organization has no meaning unless it has at least one Item element.
 
                         <p>Represents a binding of the kinds of child objects of ims-cp-imItem: Item.[ Title, Item, Metadata, Extension ].</p>
@@ -260,9 +278,9 @@
                 <xs:annotation>
                     <xs:documentation>
                         A file element declares a reference to a single asset.  The reference may
-                        be relative to the Package containing the file element or absolute 
+                        be relative to the Package containing the file element or absolute
                         (external to the Package).
-                        
+
                         A file element may contain child extensions declaring alternative references
                          to the same asset as that referenced by the file element's href attribute.
 
@@ -280,12 +298,12 @@
             <xs:complexType name="Dependency.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        A dependency element provides a way to associate another collection of 
-                        asset references within the scope of the dependency element's parent 
+                        A dependency element provides a way to associate another collection of
+                        asset references within the scope of the dependency element's parent
                         resource element.
-                        
-                        This element allows the parsimonious declaration of asset references.  
-                        Shared asset references can be declared once and associated many 
+
+                        This element allows the parsimonious declaration of asset references.
+                        Shared asset references can be declared once and associated many
                         times through a Dependency element.
 
                         <p>Represents a binding of the kinds of child objects defined for ims-cp-imDependency: Dependency.[ Extension ].</p>
@@ -301,13 +319,13 @@
             <xs:complexType name="ManifestMetadata.Type">
                 <xs:annotation>
                     <xs:documentation>
-                        This metadata element contains data structures that declare 
+                        This metadata element contains data structures that declare
                         descriptive information about an entire Package.
-                        
+
                         One or more different metadata models may be declared as
                         child extensions of a metadata element.
-                        
-                        The schema and schemaversion children define the kind or collection 
+
+                        The schema and schemaversion children define the kind or collection
                         of metadata models being used.
 
                         <p>Represents a binding of the kinds of child objects defined for ims-cp-imManifestMetadata:  ManifestMetadata.[ Schema, SchemaVersion, MetadataModel ]..</p>

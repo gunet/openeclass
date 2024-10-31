@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 
@@ -30,7 +29,7 @@ require_once '../../include/baseTheme.php';
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toDelete'])) {
         Database::get()->query("UPDATE `homepageTexts` SET `order` = `order` - 1 WHERE `order` > ?d", $_POST['oldOrder']);
-        Database::get()->query("DELETE FROM homepageTexts WHERE `id` = ?d", $_POST['toDelete']); 
+        Database::get()->query("DELETE FROM homepageTexts WHERE `id` = ?d", $_POST['toDelete']);
     } elseif (isset($_POST['toReorder'])) {
         reorder_table('homepageTexts', null, null, $_POST['toReorder'],
             isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
@@ -115,7 +114,7 @@ if(!$data['new'] and !$data['modify']){
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ]
-    ],false); 
+    ],false);
 }else{
     $data['action_bar'] = action_bar(
         [
@@ -125,7 +124,7 @@ if(!$data['new'] and !$data['modify']){
                 'icon' => 'fa-reply',
                 'level' => 'primary'
             ]
-        ],false); 
+        ],false);
 }
 
 view('admin.other.homepageTexts_create', $data);

@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -104,8 +103,8 @@ if (isset($_GET['download'])) {
         $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
                         WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND
                         path = ?s", $course_id, $subSystem, $sessionID, $downloadDir);
-                        
-        
+
+
         if (!$q) {
             not_found($downloadDir);
         }
@@ -225,7 +224,7 @@ if(isset($_GET['del'])){
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sessionID);
     }
-    
+
 }
 $data['tool_content_sessions'] = show_session_resources($sessionID);
 
@@ -268,7 +267,7 @@ if($is_coordinator or $is_consultant){
                                                     AND course_id = ?d
                                                     AND id IN (SELECT session_id FROM mod_session_users
                                                                 WHERE participants = ?d AND is_accepted = ?d)
-                                                    ORDER BY start ASC",1,$course_id,$uid,1); 
+                                                    ORDER BY start ASC",1,$course_id,$uid,1);
 
     foreach ($data['all_session'] as $s) {
         if(!$s->type_remote){

@@ -1,15 +1,33 @@
 <?xml version="1.0"?>
 
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <!-- edited with XML Spy v3.5 (http://www.xmlspy.com) by Thomas Wason (private) -->
 <!-- filename=ims_cp_rootv1p1p2.xsd -->
 <!-- Copyright (2) 2001 IMS Global Learning Consortium, Inc. -->
 <!-- edited by Thomas Wason  -->
 <!-- Conforms to w3c http://www.w3.org/TR/xmlschema-1/ 2000-10-24-->
 
-<xsd:schema xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2" 
-            targetNamespace="http://www.imsproject.org/xsd/imscp_rootv1p1p2" 
-            xmlns:xml="http://www.w3.org/XML/1998/namespace" 
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+<xsd:schema xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+            targetNamespace="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+            xmlns:xml="http://www.w3.org/XML/1998/namespace"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             elementFormDefault="unqualified" version="IMS CP 1.1.2">
 
     <!-- ******************** -->
@@ -30,14 +48,14 @@
         <xsd:documentation>2001-05-14 Schawn Thropp: Made all complexType extensible with the group.any</xsd:documentation>
         <xsd:documentation>Added the anyAttribute to all complexTypes. Changed the href attribute on the fileType and resourceType to xsd:string</xsd:documentation>
         <xsd:documentation>Changed the maxLength of the href, identifierref, parameters, structure attributes to match the Information model.</xsd:documentation>
-        <xsd:documentation>2001-07-25 Schawn Thropp: Changed the namespace for the Schema of Schemas to the 5/2/2001 W3C XML Schema</xsd:documentation> 
+        <xsd:documentation>2001-07-25 Schawn Thropp: Changed the namespace for the Schema of Schemas to the 5/2/2001 W3C XML Schema</xsd:documentation>
         <xsd:documentation>Recommendation. attributeGroup attr.imsmd deleted, was not used anywhere.  Any attribute declarations that have</xsd:documentation>
         <xsd:documentation>use = "default" changed to use="optional" - attr.structure.req.</xsd:documentation>
         <xsd:documentation>Any attribute declarations that have value="somevalue" changed to default="somevalue",</xsd:documentation>
         <xsd:documentation>attr.structure.req (hierarchical).  Removed references to IMS MD Version 1.1.</xsd:documentation>
         <xsd:documentation>Modified attribute group "attr.resourcetype.req" to change use from optional</xsd:documentation>
-        <xsd:documentation>to required to match the information model.  As a result the default value also needed to be removed</xsd:documentation> 
-        <xsd:documentation>Name change for XSD.  Changed to match version of CP Spec                                           </xsd:documentation> 
+        <xsd:documentation>to required to match the information model.  As a result the default value also needed to be removed</xsd:documentation>
+        <xsd:documentation>Name change for XSD.  Changed to match version of CP Spec                                           </xsd:documentation>
     </xsd:annotation>
 
     <xsd:annotation>
@@ -79,7 +97,7 @@
                 </xsd:restriction>
             </xsd:simpleType>
         </xsd:attribute>
-    </xsd:attributeGroup> 
+    </xsd:attributeGroup>
 
     <xsd:attributeGroup name="attr.identifier.req">
         <xsd:attribute name="identifier" type="xsd:ID" use="required"/>
@@ -92,7 +110,7 @@
     <xsd:attributeGroup name="attr.isvisible">
         <xsd:attribute name="isvisible" type="xsd:boolean" use="optional"/>
     </xsd:attributeGroup>
-   
+
     <xsd:attributeGroup name="attr.parameters">
         <xsd:attribute name="parameters" use="optional">
             <xsd:simpleType>
@@ -102,7 +120,7 @@
             </xsd:simpleType>
         </xsd:attribute>
     </xsd:attributeGroup>
-   
+
     <xsd:attributeGroup name="attr.identifierref">
         <xsd:attribute name="identifierref" use="optional">
             <xsd:simpleType>
@@ -112,7 +130,7 @@
             </xsd:simpleType>
         </xsd:attribute>
     </xsd:attributeGroup>
-   
+
     <xsd:attributeGroup name="attr.identifierref.req">
         <xsd:attribute name="identifierref" use="required">
             <xsd:simpleType>
@@ -122,7 +140,7 @@
             </xsd:simpleType>
         </xsd:attribute>
     </xsd:attributeGroup>
-                
+
     <xsd:attributeGroup name="attr.resourcetype.req">
         <xsd:attribute name="type" use="required">
             <xsd:simpleType>
@@ -197,7 +215,7 @@
         <xsd:attributeGroup ref="attr.identifierref.req"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- ********** -->
     <!-- ** file ** -->
     <!-- ********** -->
@@ -209,7 +227,7 @@
         <xsd:attributeGroup ref="attr.href.req"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- ********** -->
     <!-- ** item ** -->
     <!-- ********** -->
@@ -226,7 +244,7 @@
         <xsd:attributeGroup ref="attr.parameters"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- ************** -->
     <!-- ** manifest ** -->
     <!-- ************** -->
@@ -243,7 +261,7 @@
         <xsd:attribute ref="xml:base"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- ************** -->
     <!-- ** metadata ** -->
     <!-- ************** -->
@@ -254,7 +272,7 @@
             <xsd:group ref="grp.any"/>
         </xsd:sequence>
     </xsd:complexType>
-   
+
     <!-- ******************* -->
     <!-- ** organizations ** -->
     <!-- ******************* -->
@@ -266,7 +284,7 @@
         <xsd:attributeGroup ref="attr.default"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- ****************** -->
     <!-- ** organization ** -->
     <!-- ****************** -->
@@ -281,7 +299,7 @@
         <xsd:attributeGroup ref="attr.structure.req"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- *************** -->
     <!-- ** resources ** -->
     <!-- *************** -->
@@ -293,7 +311,7 @@
         <xsd:attributeGroup ref="attr.base"/>
         <xsd:anyAttribute namespace="##other" processContents="strict"/>
     </xsd:complexType>
-   
+
     <!-- ************** -->
     <!-- ** resource ** -->
     <!-- ************** -->
@@ -323,7 +341,7 @@
             <xsd:maxLength value="100"/>
         </xsd:restriction>
     </xsd:simpleType>
-   
+
     <!-- ******************* -->
     <!-- ** schemaversion ** -->
     <!-- ******************* -->
@@ -332,7 +350,7 @@
             <xsd:maxLength value="20"/>
         </xsd:restriction>
     </xsd:simpleType>
-   
+
     <!-- *********** -->
     <!-- ** title ** -->
     <!-- *********** -->

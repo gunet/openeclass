@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass 
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== 
  */
 
 require_once 'database.php';
@@ -32,7 +30,7 @@ final class ForeignKeys {
      * @param type $detailFieldName The detail table's field name, which
      * connects with the master table
      * @param type $masterTableName The master table name
-     * @param type $defaultEntryResolver A numeric value or a function which 
+     * @param type $defaultEntryResolver A numeric value or a function which
      * returns a numeric value, in order to get the master id field value. This
      * will be used as default for those entries of the detail table, who are
      * orphaned (have a wrong reference). If this value is null, or if the

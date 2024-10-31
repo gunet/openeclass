@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 require_once 'indexer.class.php';
 require_once 'abstractindexer.class.php';
@@ -30,7 +29,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a forum post row.
-     * 
+     *
      * @global string $urlServer
      * @param  object  $fpost
      * @return Zend_Search_Lucene_Document
@@ -55,7 +54,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
 
     /**
      * Fetch a Forum Post from DB.
-     * 
+     *
      * @param  int    $fpostId - the forum post id
      * @return object          - the DB fetched anonymous object
      */
@@ -71,29 +70,29 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
 
         return $fpost;
     }
-    
+
     /**
      * Get Term object for locating a unique single forum post.
-     * 
+     *
      * @param  int $fpostId - the forum post id
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForSingleResource($fpostId) {
         return new Zend_Search_Lucene_Index_Term('fpost_' . $fpostId, 'pk');
     }
-    
+
     /**
      * Get Term object for locating all possible forum posts.
-     * 
+     *
      * @return Zend_Search_Lucene_Index_Term
      */
     protected function getTermForAllResources() {
         return new Zend_Search_Lucene_Index_Term('fpost', 'doctype');
     }
-    
+
     /**
      * Get all possible forum posts from DB.
-     * 
+     *
      * @return array - array of DB fetched anonymous objects with property names that correspond to the column names
      */
     protected function getAllResourcesFromDB() {
@@ -103,20 +102,20 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
                                             JOIN forum_category fc ON fc.id = f.cat_id 
                                         WHERE fc.cat_order >= 0");
     }
-    
+
     /**
      * Get Lucene query input string for locating all forum posts belonging to a given course.
-     * 
+     *
      * @param  int $courseId - the given course id
      * @return string        - the string that can be used as Lucene query input
      */
     protected function getQueryInputByCourse($courseId) {
         return 'doctype:fpost AND courseid:' . $courseId;
     }
-    
+
     /**
      * Get all forum posts belonging to a given course from DB.
-     * 
+     *
      * @param  int   $courseId - the given course id
      * @return array           - array of DB fetched anonymous objects with property names that correspond to the column names
      */
@@ -130,7 +129,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
 
     /**
      * Remove all Forum Posts belonging to a Forum Topic.
-     * 
+     *
      * @param int     $topicId
      * @param boolean $optimize
      */
@@ -138,7 +137,7 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         $hits = $this->__index->find('doctype:fpost AND topicid:' . $topicId);
         foreach ($hits as $hit) {
             $this->__index->delete($hit->id);

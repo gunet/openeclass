@@ -1,4 +1,22 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
+
 /**
  * \file
  * \brief functions and class related to generating XML response file.
@@ -6,7 +24,7 @@
  * Example usage:
  *
  * \code
- * $par_array = array("verb"=>"ListRecords","resumptionToken"=>"9CD1DA87F59C3E960871F4F3C9D093887C17D174");    
+ * $par_array = array("verb"=>"ListRecords","resumptionToken"=>"9CD1DA87F59C3E960871F4F3C9D093887C17D174");
  * // Example 1: Error response
  * $error_array[] = oai_error("badVerb","Rubish");
  * $error_array[] = oai_error("sameVerb");
@@ -46,11 +64,11 @@ idDoesNotExist:
 
 noRecordsMatch:
 	The combination of the values of the from, until, set and metadataPrefix arguments results in an empty list. Applied to	ListIdentifiers, ListRecords
-	
-noMetadataFormats: 
+
+noMetadataFormats:
 	There are no metadata formats available for the specified item. 	Applied to ListMetadataFormats.
-	
-noSetHierarchy: 
+
+noSetHierarchy:
 	The repository does not support sets. Applied to ListSets, ListIdentifiers, ListRecords
 
 */
@@ -146,7 +164,7 @@ function oai_error($code, $argument = '', $value = '')
  * A wraper of DOMDocument for data provider
  */
 class ANDS_XML {
-	
+
 	public $doc; /**< Type: DOMDocument. Handle of current XML Document object */
 
   /**
@@ -232,10 +250,10 @@ class ANDS_Error_XML extends ANDS_XML {
 		$oai_node = $this->doc->documentElement;
 		foreach($error_array as $e) {
 			list($code, $value) = explode("|", $e);
-			$node = $this->addChild($oai_node,"error",$value); 
+			$node = $this->addChild($oai_node,"error",$value);
 			$node->setAttribute("code",$code);
 		}
-	}  
+	}
 }
 
 /**
@@ -246,7 +264,7 @@ class ANDS_Error_XML extends ANDS_XML {
 class ANDS_Response_XML extends ANDS_XML {
   public $verbNode; /**< Type: DOMElement. Verb node itself. */
   protected $verb; /**< Type: string. The verb in the request */
-   
+
   function __construct($par_array) {
   	parent::__construct($par_array);
 		$this->verb = $par_array["verb"];
@@ -254,7 +272,7 @@ class ANDS_Response_XML extends ANDS_XML {
   }
 
 /** Add direct child nodes to verb node (OAI-PMH), e.g. response to ListMetadataFormats.
- * Different verbs can have different required child nodes.  
+ * Different verbs can have different required child nodes.
  *  \see create_record, create_header
  * \see http://www.openarchives.org/OAI/2.0/openarchivesprotocol.htm.
  *
@@ -271,15 +289,15 @@ class ANDS_Response_XML extends ANDS_XML {
 	function create_record() {
 		return $this->add2_verbNode("record");
 	}
-	
-	/** Headers are enclosed inside of \<record\> to the query of ListRecords, ListIdentifiers and etc. 
+
+	/** Headers are enclosed inside of \<record\> to the query of ListRecords, ListIdentifiers and etc.
    *
 	 * \param $identifier Type: string. The identifier string for node \<identifier\>.
 	 * \param $timestamp Type: timestamp. Timestapme in UTC format for node \<datastamp\>.
 	 * \param $ands_class Type: mix. Can be an array or just a string. Content of \<setSpec\>.
-	 * \param $add_to_node Type: DOMElement. Default value is null. 
+	 * \param $add_to_node Type: DOMElement. Default value is null.
 	 * In normal cases, $add_to_node is the \<record\> node created previously. When it is null, the newly created header node is attatched to $this->verbNode.
-	 * Otherwise it will be attatched to the desired node defined in $add_to_node. 
+	 * Otherwise it will be attatched to the desired node defined in $add_to_node.
 	 */
 	function create_header($identifier,$timestamp,$ands_class, $add_to_node=null) {
 		if(is_null($add_to_node)) {
@@ -291,17 +309,17 @@ class ANDS_Response_XML extends ANDS_XML {
 		$this->addChild($header_node,"datestamp",$timestamp);
 		if (is_array($ands_class)) {
 			foreach ($ands_class as $setspec) {
-				$this->addChild($header_node,"setSpec",$setspec); 
+				$this->addChild($header_node,"setSpec",$setspec);
 			}
 		} else { $this->addChild($header_node,"setSpec",$ands_class); }
 		return $header_node;
 	}
-	
+
 	/** Create metadata node for holding metadata. This is always added to \<record\> node.
 	 *
 	 * \param $mom_record_node DOMElement. A node acts as the parent node.
 	 *
-   * @return $meta_node Type: DOMElement. 
+   * @return $meta_node Type: DOMElement.
    *   The newly created registryObject node which will be used for further expansion.
    *   metadata node itself is maintained by internally by the Class.
    */
@@ -309,9 +327,9 @@ class ANDS_Response_XML extends ANDS_XML {
 		$meta_node =  $this->addChild($mom_record_node,"metadata");
 		return $meta_node;
 	}
-	
+
 	/** If there are too many records request could not finished a resumpToken is generated to let harvester know
-	 * 
+	 *
 	 * \param $token Type: string. A random number created somewhere?
 	 * \param $expirationdatetime Type: string. A string representing time.
 	 * \param $num_rows Type: integer. Number of records retrieved.

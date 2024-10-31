@@ -1,23 +1,21 @@
 <?php
 
-/* ========================================================================
- * Open eClass 
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== 
  */
 
 require_once '../../include/baseTheme.php';
@@ -68,7 +66,7 @@ $fetchNodeById = "select * from hierarchy where id = ?d";
 
 if ($requestId <= 0) {
     $nodes = $tree->buildRootsArray();
-    
+
     foreach ($tree_array as $key => $value) {
         $data[] = array(
             "id" => $key,
@@ -82,7 +80,7 @@ if ($requestId <= 0) {
     if ($parent && ($parent->rgt - $parent->lft) > 1) {
         $searchLft = intval($parent->lft) + 1;
     }
-    
+
     // get 1st child's all neighbour elements
     if ($searchLft > 0) {
         $tree->loopTree(function($node) use (&$nodes, &$searchLft) {
@@ -93,7 +91,7 @@ if ($requestId <= 0) {
             }
         }, $allnodes);
     }
-    
+
     if ($exclude != null) {
         $exnode = Database::get()->querySingle($fetchNodeById, $exclude);
         if ($exnode) {
@@ -115,12 +113,12 @@ foreach ($nodes as $node) {
     if ($node->lft >= $excludeLft && $node->rgt <= $excludeRgt) {
         $disabled = true;
     }
-    
+
     $class1 = $disabled ? 'nosel' : '';
     $class2 = classOfUserNodes($usernodes, $node);
     $class = (strlen($class2) > 0) ? $class1 . ' ' . $class2 : $class1;
     $valcode = ($codesuffix && strlen($node->code) > 0) ? ' (' . $node->code . ')' : '';
-    
+
     $data[] = array(
         "id" => $node->id,
         "text" => Hierarchy::unserializeLangField($node->name) . $valcode,

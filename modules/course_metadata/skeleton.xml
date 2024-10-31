@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ /* ========================================================================
+  ~  * Open eClass
+  ~  * E-learning and Course Management System
+  ~  * ========================================================================
+  ~  * Copyright 2003-2024, Greek Universities Network - GUnet
+  ~  *
+  ~  * Open eClass is an open platform distributed in the hope that it will
+  ~  * be useful (without any warranty), under the terms of the GNU (General
+  ~  * Public License) as published by the Free Software Foundation.
+  ~  * The full license can be read in "/info/license/license_gpl.txt".
+  ~  *
+  ~  * Contact address: GUnet Asynchronous eLearning Group
+  ~  *                  e-mail: info@openeclass.org
+  ~  * ========================================================================
+  ~  */
+  -->
+
 <course
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://www.openeclass.org'
     xsi:schemaLocation='http://www.openeclass.org courseLooseMetadata.xsd'>
-    
+
     <title lang="el"></title>
     <title lang="en"></title>
     <level></level>
@@ -33,7 +51,7 @@
     <videolectures>0</videolectures>
     <visits>0</visits>
     <hits>0</hits>
-    
+
     <code lang="el"></code>
     <keywords lang="el"></keywords>
     <keywords lang="en"></keywords>
@@ -51,25 +69,25 @@
     <remarks lang="en"></remarks>
     <acknowledgments lang="el"></acknowledgments>
     <acknowledgments lang="en"></acknowledgments>
-    
-    
+
+
     <instructor>
         <firstName lang="el"></firstName>
         <lastName lang="el"></lastName>
-        
+
         <firstName lang="en"></firstName>
         <lastName lang="en"></lastName>
-        
+
         <fullName lang="el"></fullName>
         <fullName lang="en"></fullName>
-        
+
         <moreInformation lang="el"></moreInformation>
         <moreInformation lang="en"></moreInformation>
         <cv></cv>
         <photo mime=""></photo>
         <registrationCode></registrationCode>
     </instructor>
-    
+
     <coTeaching></coTeaching>
     <coTeachingColleagueOpensCourse></coTeachingColleagueOpensCourse>
     <coTeachingAutonomousDepartment></coTeachingAutonomousDepartment>
@@ -82,7 +100,7 @@
     <department lang="en"></department>
     <language lang="el"></language>
     <language lang="en"></language>
-    
+
     <yearOfStudy></yearOfStudy>
     <semester></semester>
     <type></type>
@@ -115,8 +133,8 @@
     <eudoxusCode></eudoxusCode>
     <eudoxusURL></eudoxusURL>
     <kalliposURL></kalliposURL>
-    
-    
+
+
     <numberOfUnits></numberOfUnits>
     <unit>
         <title></title>

@@ -1,4 +1,21 @@
 <?php
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once 'Event.php';
 
@@ -23,18 +40,18 @@ class LpAnalyticsEvent extends Event {
                 . " WHERE lump.learnPath_id = ?d "
                 . " AND lp.course_id = ?d"
                 . " AND lump.user_id = ?d", $this->context['resource'], $this->context['course_id'], $this->context['user_id']);
-                
+
                 $this->context['value'] = 0;
                 if ($record && floatval($record->value) > 0) {
                     $this->context['value'] = floatval($record->value);
                 }
-                
+
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-                            
+
                     if ($record) {
                         $id = $record->id;
                         $value = $this->context['value'];
@@ -67,8 +84,8 @@ class LpAnalyticsEvent extends Event {
                     }
 
                     $time = date("Y-m-d H:i:s");
-                    $this->insertValue($lp_record->user_id, $analytics_element_id, $value, $time); 
-                } 
+                    $this->insertValue($lp_record->user_id, $analytics_element_id, $value, $time);
+                }
             }
         };
 

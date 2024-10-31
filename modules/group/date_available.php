@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.6
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 /**
  *
@@ -128,7 +127,7 @@ if(isset($_GET['add_for_tutor'])){
             if($accept_booking){
                 $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id IN (SELECT simple_user_id FROM booking_user WHERE booking_id = ?d)",$_POST['accept_booking_id'])->email;
                 $details_booking = Database::get()->queryArray("SELECT * FROM booking WHERE id = ?d",$_POST['accept_booking_id']);
-                
+
                 if(count($details_booking) > 0){
                     foreach($details_booking as $d){
                         $userName = $d->title;
@@ -180,16 +179,16 @@ if(isset($_GET['add_for_tutor'])){
                         $emailbody = $emailHeader.$emailMain;
 
                         $emailPlainBody = html2text($emailbody);
-                        
+
                         send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-                        
+
                         redirect_to_home_page("modules/group/date_available.php?course=".$course_code."&group_id=".$group_id."&bookings_of_tutor=".$tutor_id);
 
                 }
 
-                
+
             }
-        }    
+        }
 
 
 
@@ -197,7 +196,7 @@ if(isset($_GET['add_for_tutor'])){
 
             $emailUser = Database::get()->querySingle("SELECT email FROM user WHERE id IN (SELECT simple_user_id FROM booking_user WHERE booking_id = ?d)",$_POST['booking_id'])->email;
             $details_booking = Database::get()->queryArray("SELECT * FROM booking WHERE id = ?d",$_POST['booking_id']);
-            
+
             if(count($details_booking) > 0){
                 foreach($details_booking as $d){
                     $userName = $d->title;
@@ -250,13 +249,13 @@ if(isset($_GET['add_for_tutor'])){
             $emailbody = $emailHeader.$emailMain;
 
             $emailPlainBody = html2text($emailbody);
-            
+
             send_mail_multipart('', '', '', $emailUser, $emailsubject, $emailPlainBody, $emailbody);
-            
+
             redirect_to_home_page("modules/group/date_available.php?course=".$course_code."&group_id=".$group_id."&bookings_of_tutor=".$tutor_id);
         }
 
-        
+
         $now = date('Y-m-d H:i:s', strtotime('now'));
 
         $data['bookings'] = Database::get()->queryArray("SELECT * FROM booking 
@@ -276,7 +275,7 @@ if(isset($_GET['add_for_tutor'])){
                                                                     AND booking.tutor_id = ?d
                                                                     AND booking.end < ?t
                                                                     ORDER BY start ASC",$course_id,$group_id,$tutor_id,$now);
-                    
+
 
 
         view('modules.group.tutor_bookings', $data);
@@ -299,7 +298,7 @@ if(isset($_GET['add_for_tutor'])){
                                 AND group_id = ?d
                                 AND tutor_id = ?d
                                 AND (start <= ?t AND end >= ?t OR start > ?t)
-                                ORDER BY start ASC",$uid,$course_id,$group_id,$tutor_id,$now,$now,$now); 
+                                ORDER BY start ASC",$uid,$course_id,$group_id,$tutor_id,$now,$now,$now);
         $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "date_available.php?course=$course_code&group_id=$group_id&show_tutor=1",
@@ -336,7 +335,7 @@ if(isset($_GET['add_for_tutor'])){
                     'url' => "date_available.php?course=$course_code&group_id=$group_id",
                     'icon' => 'fa-reply',
                     'level' => 'primary'
-                )));                                                   
+                )));
         }
         view('modules.group.show_history_bookings', $data);
     }else{
@@ -352,7 +351,7 @@ if(isset($_GET['add_for_tutor'])){
                     'url' => "group_space.php?course=$course_code&group_id=$group_id",
                     'icon' => 'fa-reply',
                     'level' => 'primary'
-                )));    
+                )));
             view('modules.group.show_date_available', $data);
         }else{
             Session::flash('message',$langForbidden);
@@ -364,7 +363,7 @@ if(isset($_GET['add_for_tutor'])){
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     }
-    
+
 }
 
 

@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 $qry = "SELECT LEFT(surname, 1) AS first_letter FROM user
             GROUP BY first_letter ORDER BY first_letter";
@@ -52,7 +51,7 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
         '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>" .
         '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>";
 
-$tool_content .= '<div class="col-12"><div class="form-wrapper form-edit rounded"><form class="form-horizontal" role="form" method="post">';   
+$tool_content .= '<div class="col-12"><div class="form-wrapper form-edit rounded"><form class="form-horizontal" role="form" method="post">';
 $tool_content .= "
 <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label for='user_date_start_t' class='col-sm-12 control-label-notes'>$langStartDate:</label>
@@ -62,7 +61,7 @@ $tool_content .= "
     
         
     </div>
-</div>";        
+</div>";
 $tool_content .= "
 <div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
     <label for='user_date_end_t' class='col-sm-12 control-label-notes'>$langEndDate:</label>

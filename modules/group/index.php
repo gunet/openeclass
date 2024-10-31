@@ -1,22 +1,21 @@
 <?php
-/* ========================================================================
- * Open eClass 3.6
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 /**
  *
@@ -560,7 +559,7 @@ if ($is_editor) {
                                             <div class='mt-2'>";
                                                 if (!empty($group_description)) {
                                                     $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";
-                                                } 
+                                                }
                                                 if ($user_group_description && $student_desc) {
                                                     $tool_content .= "</br><small>
                                                                         <a class='TextBold mt-1' href = 'javascirpt:void(0);' data-bs-toggle = 'modal' data-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' >
@@ -583,7 +582,7 @@ if ($is_editor) {
                                             } else {
                                                 $tool_content .= " <span>$member_count</span>";
                                             }
-                                            
+
                       $tool_content .= "</td>
                                         <td>
                                             <div class='text-end'>
@@ -602,7 +601,7 @@ if ($is_editor) {
                                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
                                                         'icon' => 'fa-xmark',
                                                         'class' => 'delete',
-                                                        'confirm' => $langConfirmDelete))) 
+                                                        'confirm' => $langConfirmDelete)))
                                                 . "
                                             </div>
                                         </td>
@@ -886,7 +885,7 @@ if ($is_editor) {
                                                                 foreach ($tutors as $t) {
                                                                     $tool_content .= "<div class='mt-1'>" . display_user($t->user_id) . "</div>";
                                                                 }
-                                                            } 
+                                                            }
                                         $tool_content .= "</td>
                                                         <td>
                                                             <div class='d-flex justify-content-center align-items-center flex-wrap gap-4'>";
@@ -914,7 +913,7 @@ if ($is_editor) {
                                                                         }
                                                                     }
                                                                     $tool_content .= ($control? $control: '&mdash;');
-                                                                    
+
                                       $tool_content .="     </div>
                                                         </td>
                                                     </tr>";

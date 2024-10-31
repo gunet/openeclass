@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 4.0
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 
 /**
@@ -46,7 +45,7 @@ if(isset($_GET['course']) and isset($_GET['show_sessions'])){
 
     // Ο συντονιστής ΔΕΝ ΒΛΕΠΕΙ στο ημερολόγιο τις καταχωριμένες συνεδρίες των συμβούλων ώστε να μπορεί να εισάγει νέα συνέδρια ενός συμβουλου
     // στην ίδια ημερομηνία και ώρα ενός άλλου συμβούλου.
-    
+
     // Αν γίνει καταχώριση συνεδρίας ίδιου συμβούλου σε ημερομήνια που έχει καταχωρίσει μία άλλη δική του συνεδρία, τότε το σύστημα
     // δεν του επιτρέπει να δημιουργήσει την συγκεκριμένη συνεδρία.
 
@@ -103,7 +102,7 @@ function getTitleSession($sid,$cid){
                                                         LEFT JOIN user ON mod_session_users.participants=user.id
                                                         WHERE mod_session_users.session_id=?d
                                                         AND mod_session_users.is_accepted=?d",$sid,1);
-         
+
     if(count($participants_info)>0){
         $html_participant .= "<ul class='list-group list-group-flush'>";
         foreach($participants_info as $p){
@@ -142,7 +141,7 @@ function backgroundColorSession($sid,$sid_edit){
     }else{// edit session
         $color = "#1E7E0E";
     }
-    
+
     return $color;
 }
 
@@ -154,6 +153,6 @@ function getClassSession($sid,$sid_edit){
     }else{// edit session
         $class_name = "exist_edit_event_session";
     }
-    
+
     return $class_name;
 }

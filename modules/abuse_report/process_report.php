@@ -1,22 +1,21 @@
 <?php
-/* ========================================================================
- * Open eClass 3.0
-* E-learning and Course Management System
-* ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
-* A full copyright notice can be read in "/info/copyright.txt".
-* For a full list of contributors, see "credits.txt".
-*
-* Open eClass is an open platform distributed in the hope that it will
-* be useful (without any warranty), under the terms of the GNU (General
-		* Public License) as published by the Free Software Foundation.
-* The full license can be read in "/info/license/license_gpl.txt".
-*
-* Contact address: GUnet Asynchronous eLearning Group,
-*                  Network Operations Center, University of Athens,
-*                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-*                  e-mail: info@openeclass.org
-* ======================================================================== */
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
+ *
+ */
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/abuse_report/abuse_report.php';
@@ -34,8 +33,8 @@ if (empty($rtype) OR empty($rid) OR empty($cid)) {
 
 if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
 
-    $response = array();    
-    
+    $response = array();
+
     if(empty($reason)) {
         $response[0] = 'fail';
         $response[1] = '<p class="text-danger">'.$langAbuseReportCatError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
@@ -83,7 +82,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
     } else {
         $id = Database::get()->query("INSERT INTO abuse_report (rid, rtype, course_id, reason, message, timestamp, user_id, status)
             VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d, ?d)", $rid, $rtype, $cid, $reason, $msg, $uid, 1)->lastInsertID;
-        
+
         if ($rtype == 'comment') {
             $res = Database::get()->querySingle("SELECT rid, rtype, content FROM comments WHERE id = ?d", $rid);
             $rcontent = $res->content;
@@ -100,7 +99,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $rid);
             $rcontent = $res->content;
         }
-        
+
         Log::record($cid, MODULE_ID_ABUSE_REPORT, LOG_INSERT,
                     array('id' => $id,
                           'user_id' => $uid,
@@ -111,7 +110,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                           'rcontent' => $rcontent,
                           'status' => 1
                     ));
-        
+
         //send PM to course editors
         $res = Database::get()->queryArray("SELECT user_id FROM course_user 
                 WHERE course_id = ?d AND (status = ?d OR editor = ?d)", $cid, 1, 1);
@@ -119,7 +118,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         foreach ($res as $r) {
             $editors[] = $r->user_id;
         }
-        
+
         //build variables depending on resource type
         if ($rtype == 'forum_post') {
             $res = Database::get()->querySingle("SELECT p.post_text, t.id, t.forum_id FROM forum_post as p, forum_topic as t 
@@ -132,7 +131,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             if ($comm_rtype == 'blogpost') {
                 $url = $urlServer."modules/blog/index.php?course=".course_id_to_code($cid).
                     "&action=showPost&pId=".$comm_rid."#comments_title";
-                
+
             } elseif ($comm_rtype == 'course') {
                 $url = $urlServer."courses/".course_id_to_code($comm_rid);
             } elseif ($comm_rtype == 'wallpost') {
@@ -151,24 +150,24 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $content = nl2br(standard_text_escape($rcontent));
             $url = $urlServer."modules/wall/index.php?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
         }
-        
+
         $v = Database::get()->querySingle("SELECT visible FROM course_module
                                 WHERE module_id = ?d AND
                                 course_id = ?d", MODULE_ID_MESSAGE, $cid)->visible;
-        
+
         if ($v == 1) {
             $reports_cats = array('rudeness' => $langRudeness,
                                   'spam' => $langSpam,
                                   'other' => $langOther);
-            
+
             $msg_body = sprintf($langAbuseReportPMBody, $content_type, $reports_cats[$reason], q($msg), $content, $url);
-            
+
             $pm = new Msg($uid, $cid, $langAbuseReport, $msg_body, $editors);
         }
-        
+
         $response[0] = 'succes';
         $response[1] = '<p>'.$langAbuseReportSaveSuccess.'</p>';
     }
-    
+
     echo json_encode($response);
 }
