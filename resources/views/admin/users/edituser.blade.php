@@ -217,11 +217,11 @@
                             <div class='table-responsive mt-0'>
                                 <table class='table-default'>
                                     <thead><tr class='list-header'>
-                                        <th>{{ trans('langCode') }}</th>
-                                        <th>{{ trans('langLessonName') }}</th>
-                                        <th>{{ trans('langRegistrationDate') }}</th>
-                                        <th>{{ trans('langProperty') }}</th>
-                                        <th aria-label="{{ trans('langSettingSelect') }}"></th>
+                                        <th style="width:30%;">{{ trans('langCode') }}</th>
+                                        <th style="width:30%;">{{ trans('langLessonName') }}</th>
+                                        <th style="width:15%;">{{ trans('langRegistrationDate') }}</th>
+                                        <th style="width:20%;">{{ trans('langProperty') }}</th>
+                                        <th style="width:5%;" aria-label="{{ trans('langSettingSelect') }}"></th>
                                     </tr></thead>
                                     @foreach ($sql as $logs)
                                         @if ($logs->visible == COURSE_INACTIVE)
@@ -230,7 +230,7 @@
                                             <tr>
                                         @endif
                                                 <td>
-                                                    <div style="min-width: 200px;"><a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a></div>
+                                                    <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
                                                 </td>
                                                 <td>{{ $logs->title }}</td>
                                                 <td>

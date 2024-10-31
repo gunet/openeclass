@@ -714,6 +714,7 @@ a{
   letter-spacing: 0px;
   line-height: 16px;
   max-width: 400px;
+  word-wrap: break-word;
   word-break: break-word;
   white-space: normal;
   display: inline-block;
@@ -766,10 +767,12 @@ h1,h2,h3,h4,h5,h6,
 .list-group-item.list-group-item-action,
 .list-group-item.element,
 .label-container{
+  word-wrap: break-word;
   word-break: break-word;
 }
 @media(min-width:992px){
   .table-default tbody tr td{
+    word-wrap: break-word;
     word-break: break-word;
   }
 }
@@ -2022,14 +2025,14 @@ select.form-select option{
 }
 
 select.form-select:disabled{
-  opacity: 0.4;
+  opacity: 0.7;
   border-image: none;
   border-image-slice: 0;
   background-color: #DCDCDC;
 }
 
 label:has(input[type="checkbox"]:disabled){
-  opacity: 0.4;
+  opacity: 0.7;
 }
 
 /**********************************************************************************************************************/
@@ -2622,7 +2625,7 @@ body .form-action-button-mydropdowns{
   font-size: 14px;
 }
 .menu-popover .list-group-item.disabled{
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

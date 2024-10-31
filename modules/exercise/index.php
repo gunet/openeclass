@@ -620,7 +620,7 @@ if ($is_editor) {
             foreach ($my_courses1 as $row){
                 $courses_options1 .= "<tr>"
                     . "<td><div class=\'teacher-name\' data-id=\'$row->id\'>$row->givenname</div></td>"
-                    . "<td><input type\'text\' class=\'grade-number\' style=\'max-width:50px\'>"
+                    . "<td><input type=\'text\' class=\'grade-number form-control\' style=\'max-width:50px\'>"
                     . "</input><strong> / '+results.current+'</strong></td>"
                     . "</tr>";
             }
