@@ -41,7 +41,7 @@
                             </tr>
                             <tr>
                                 <th class='px-2'>{{ trans('langTitle') }}</th>
-                                <td>{{ $course->title }}</td>
+                                <td><p>{{ $course->title }}</p></td>
                             </tr>
                             <tr>
                                 <th class='px-2'>
@@ -74,7 +74,7 @@
                             <thead><th class='list-header' colspan='2'>{{ trans('langQuota') }}  {!! icon('fa-gear ps-2', trans('langModify'), "quotacours.php?c=".$c) !!}</th></thead>
                             <tr>
                                 <td colspan='2'>
-                                    <div class='sub_title1'>{{ trans('langTheCourse') }} {{ $course->title }}  {{ trans('langMaxQuota') }}</div>
+                                    <div class='sub_title1'><p>{{ trans('langTheCourse') }} {{ $course->title }}  {{ trans('langMaxQuota') }}</p></div>
                                 </td>
                             </tr>
                             <tr>
