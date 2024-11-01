@@ -660,7 +660,7 @@
                                                                             <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title="{{ trans('langNotificationsExist') }}"></i>
                                                                         </a>
 
-                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top'
+                                                                        <a class='ClickCoursePortfolio' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" data-bs-toggle='tooltip' data-bs-placement='top'
                                                                             title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}" aria-label="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                                             <i class='fa-solid fa-display'></i>
                                                                         </a>

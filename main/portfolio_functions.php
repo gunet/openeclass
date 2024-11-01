@@ -62,7 +62,7 @@ function getUserCourseInfo($uid): string
                 $lesson_ids[] = $data->course_id;
                 $visclass = '';
 
-                //Get syllabus for course
+                // Get syllabus for course
                 $syllabus = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
                                         LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                         WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
@@ -107,7 +107,7 @@ function getUserCourseInfo($uid): string
                             <div class='col-12 portfolio-tools'>
                                 <div class='d-inline-flex'>";
 
-                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
+                $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
                                     <i class='fa-solid fa-display'></i>
                                 </a>
 
@@ -205,10 +205,6 @@ function getUserCourseInfo($uid): string
         }
     }
 
-
-
-
-
     // Create ui for collabations which a user is participated in.
     if(get_config('show_collaboration')){
         if(!get_config('show_always_collaboration')){
@@ -225,7 +221,7 @@ function getUserCourseInfo($uid): string
                     $collaboration_ids[] = $data->course_id;
                     $visclass = '';
 
-                    //Get syllabus for course
+                    // Get syllabus for course
                     $syllabus = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
                                             LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                             WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
@@ -271,7 +267,7 @@ function getUserCourseInfo($uid): string
                                 <div class='col-12 portfolio-tools'>
                                     <div class='d-inline-flex'>";
 
-                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
+                    $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
                                         <i class='fa-solid fa-display'></i>
                                     </a>
 
@@ -453,7 +449,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         }
         return $arr_an;
     } else {
-        //Προσθήκη μετρητή ώστε να εμφανίζονται μέχρι 2 ανακοινώσεις σαν pagination
+        // Προσθήκη μετρητή ώστε να εμφανίζονται μέχρι 2 ανακοινώσεις σαν pagination
         // Όλες οι τελευταίες ανακοινώσεις εμφανίζονται όταν πατήσει ο χρήστης το κουμπί.
         $counterAn = 0;
         $ann_content = '';
@@ -569,10 +565,11 @@ function user_accept_policy($uid, $accept = true) {
 
 /**
  * @brief get user courses
- * @param $uid
+ * @param $uid User ID
+ * @param $colaborative Set to 1 to get collaborations instead of courses
  * @return array|DBResult|null
  */
-function getUserCourses($uid)
+function getUserCourses($uid, $colaborative = 0)
 {
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                              course.code code,
@@ -590,9 +587,12 @@ function getUserCourses($uid)
                         FROM course JOIN course_user
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
+                            AND (course.visible != " . COURSE_INACTIVE . " OR
+                                 course_user.status = " . USER_TEACHER . " OR
+                                 course_user.course_reviewer = 1 OR
+                                 course_user.editor = 1)
                             AND course.is_collaborative = ?d
-                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, 0);
+                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $colaborative);
 
     return $myCourses;
 }
@@ -604,28 +604,7 @@ function getUserCourses($uid)
  */
 function getUserCollaborations($uid)
 {
-    $myCollaborations = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.course_license course_license,
-                             course.lang,
-                             course.visible visible,
-                             course.description description,
-                             course.course_image course_image,
-                             course.popular_course popular_course,
-                             course.is_collaborative is_collaborative,
-                             course_user.status status,
-                             course_user.favorite favorite
-                        FROM course JOIN course_user
-                            ON course.id = course_user.course_id
-                            AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
-                            AND course.is_collaborative = ?d
-                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid,1);
-
-    return $myCollaborations;
+    return getUserCourses($uid, 1);
 }
 
 
