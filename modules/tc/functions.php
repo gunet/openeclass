@@ -61,7 +61,7 @@ function select_tc_server($course_id) {
         $description = $descriptions[$name][1];
         if (is_active_tc_server($name, $course_id)) {
             $tool_content .= "
-                <table class='table-default dataTable no-footer extapp-table mb-3 border-0'>
+                <div class='table-responsive'><table class='table-default dataTable no-footer extapp-table mb-3 border-0'>
                   <tr>
                     <td>
                       <div>
@@ -76,7 +76,7 @@ function select_tc_server($course_id) {
                         </div>
                     </td>
                   </tr>
-                </table>";
+                </table></div>";
         }
     }
     $tool_content .= "</div></div>";

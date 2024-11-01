@@ -325,7 +325,7 @@ if ($fromExercise) {
     $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 }
 
-$tool_content .= "<table class='table-default' id='questions'>";
+$tool_content .= "<div class='table-responsive'><table class='table-default' id='questions'>";
 
 //START OF BUILDING QUERIES AND QUERY VARS
 if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercise
@@ -471,7 +471,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         }
         unset($question_temp);
     }
-    $tool_content .= "</tbody></table>";
+    $tool_content .= "</tbody></table></div>";
 }
 
 $tool_content .= "

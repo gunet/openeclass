@@ -85,6 +85,7 @@
    
             @if(count($bookings) > 0)
                 <div class='col-12 mb-5'>
+                <div class='table-responsive'>
                     <table class='table-default' id='all_bookings'>
                         <thead>
                             <tr>
@@ -141,7 +142,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
+                </div></div>
             @else
                 <div class='col-12 mb-5'>
                     <div class='alert alert-warning'>
@@ -156,6 +157,7 @@
                 <div class='col-12'>
                     <h2 class='pb-3'>{{ trans('langHistoyBooking') }}</h2>
                     @if(count($booking_history) > 0)
+                    <div class='table-responsive'>
                         <table class='table-default' id='all_history_bookings'>
                             <thead>
                                 <tr>
@@ -193,6 +195,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
                     @else
                         <div class='alert alert-warning'>
                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoInfoAvailable') }}</span>

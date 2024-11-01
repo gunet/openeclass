@@ -68,7 +68,7 @@
             @if($showUsers)
                 @if(count($user_teachers) > 0)
                     <div class='col-12'>
-
+                        <div class='table-responsive'>
                             <table id="all_users_booking" class='table-default'>
                                 <thead>
                                     <tr>
@@ -102,7 +102,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-
+                        </div>
                     </div>
                 @else
                     <div class='col-12'>

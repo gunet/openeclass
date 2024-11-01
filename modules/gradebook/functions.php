@@ -1166,8 +1166,8 @@ function display_available_lps($gradebook_id) {
         $tool_content .= "</tr></thead>";
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
-            $tool_content .= "<td>" .q($newExerToGradebook->comment). "</td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
+            $tool_content .= "<td><p>" .q($newExerToGradebook->comment). "</p></td>";
             $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
             $tool_content .= "</tr>";
         } // end of while

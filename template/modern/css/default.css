@@ -705,6 +705,8 @@ span{
   margin-bottom: 0px;
 }
 
+
+/************************* ABOUT LINKS ***************************/
 a{
   text-decoration: none;
   font-size: 14px;
@@ -718,6 +720,9 @@ a{
   word-break: break-word;
   white-space: normal;
   display: inline-block;
+}
+a:hover{
+  text-decoration:underline;
 }
 @media(max-width: 991px){
   .table-default tbody tr td a {
@@ -745,10 +750,7 @@ a{
     max-width: 400px;
   }
 }
-
-a:hover{
-  text-decoration:underline;
-}
+/**********************************************************************/
 
 p,span,strong,small,b,em,
 h1,h2,h3,h4,h5,h6,
@@ -766,11 +768,14 @@ h1,h2,h3,h4,h5,h6,
 .Neutral-900-cl,
 .list-group-item.list-group-item-action,
 .list-group-item.element,
-.label-container{
+.label-container,
+.radio label,
+.smaller,
+.panel-title{
   word-wrap: break-word;
   word-break: break-word;
 }
-@media(min-width:992px){
+@media(min-width:1200px){
   .table-default tbody tr td{
     word-wrap: break-word;
     word-break: break-word;

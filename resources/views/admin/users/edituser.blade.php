@@ -6,21 +6,20 @@
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
-        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+            @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-        @include('layouts.partials.legend_view')
+            @include('layouts.partials.legend_view')
 
-        @if(isset($action_bar))
-            {!! $action_bar !!}
-        @else
-            <div class='mt-4'></div>
-        @endif
+            @if(isset($action_bar))
+                {!! $action_bar !!}
+            @else
+                <div class='mt-4'></div>
+            @endif
 
-        @include('layouts.partials.show_alert')
+            @include('layouts.partials.show_alert')
 
             <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
-
                     <form class='form-horizontal' role='form' name='edituser' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();'>
                         <fieldset>
                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
@@ -51,7 +50,6 @@
                                     </div>
                                 @endif
                             </div>
-
                             @if (!in_array($info->password, $auth_ids))
                                 <div class='checkbox mb-2 mt-2'>
                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
@@ -60,7 +58,6 @@
                                     </label>
                                 </div>
                             @endif
-
                             <div class='form-group mt-4'>
                                 <label for='email' class='col-sm-12 control-label-notes'>e-mail</label>
                                 <div class='col-sm-12'>
@@ -73,28 +70,24 @@
                                     {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control' id='verified_mail_id'") !!}
                                 </div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <label for='am' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                 <div class='col-sm-12'>
                                     <input id='am' class='form-control' type='text' name='am' value='{{ $info->am }}'>
                                 </div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <label for='phone' class='col-sm-12 control-label-notes'>{{ trans('langTel') }}</label>
                                 <div class='col-sm-12'>
                                     <input id='phone' class='form-control' type='text' name='phone' value='{{ $info->phone }}'>
                                 </div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                 <div class='col-sm-12'>
                                     {!! $html !!}
                                 </div>
                             </div>
-
                             <div class="form-group mt-4">
                                 @if ($info->status == USER_GUEST)
                                     <div class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</div>{{ trans('langGuest') }}
@@ -120,7 +113,6 @@
                                     </div>
                                 @endif
                             </div>
-
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</div>
                                 <div class='col-sm-12'>
@@ -136,33 +128,28 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <label for='lang_selection' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}:</label>
                                 <div class='col-sm-12'>
                                     {!! lang_select_options('user_language', "class='form-control' id='lang_selection'", $info->lang)  !!}
                                 </div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes'>{{ trans('langLastLogin') }}</div>
                                 <div class='col-sm-10'><p class='form-control-static'>{{ $last_login_date }}&nbsp;&mdash;&nbsp; <small><a href='user_last_logins.php?u={{ $u }}'>{{ trans('langUserLastLogins') }}</a></small></p></div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes'>{{ trans('langUserID') }}</div>
                                 <div class='col-sm-12'>
                                     <p class='form-control-static'>{{ $u }}</p>
                                 </div>
                             </div>
-
                             <div class='form-group mt-4'>
                                 <label for='user_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langUserWhitelist') }}</label>
                                 <div class='col-sm-12'>
                                     <textarea id='user_upload_whitelist' class='w-100' rows='6' name='user_upload_whitelist'>{{ $info->whitelist }}</textarea>
                                 </div>
                             </div>
-
                             @if ($ext_uid)
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 control-label-notes'>{{ trans('langProviderConnectWith') }}</div>
@@ -201,14 +188,12 @@
                 </div>
             </div>
 
-            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-            <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
-            </div>
-
-            <!--user is registered to courses-->
-
-            @if (count($sql) > 0)
-                <div class='col-12 mt-3'>
+            @if (count($sql) == 0)
+                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
+                </div>
+            @else
+                <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class="card-header border-0 d-flex justify-content-start">
                             <h3>{{ trans('langStudentParticipation') }}</h3>
@@ -216,13 +201,13 @@
                         <div class='card-body'>
                             <div class='table-responsive mt-0'>
                                 <table class='table-default'>
-                                    <thead><tr class='list-header'>
-                                        <th style="width:30%;">{{ trans('langCode') }}</th>
-                                        <th style="width:30%;">{{ trans('langLessonName') }}</th>
-                                        <th style="width:15%;">{{ trans('langRegistrationDate') }}</th>
-                                        <th style="width:20%;">{{ trans('langProperty') }}</th>
-                                        <th style="width:5%;" aria-label="{{ trans('langSettingSelect') }}"></th>
-                                    </tr></thead>
+                                    <thead>
+                                        <tr class='list-header'>
+                                            <th style='width:50%;'>{{ trans('langLessonName') }}</th>
+                                            <th style='width:40%;'>{{ trans('langProperty') }}</th>
+                                            <th style='width:10%;' aria-label="{{ trans('langSettingSelect') }}"></th>
+                                        </tr>
+                                    </thead>
                                     @foreach ($sql as $logs)
                                         @if ($logs->visible == COURSE_INACTIVE)
                                             <tr class='not_visible'>
@@ -230,15 +215,19 @@
                                             <tr>
                                         @endif
                                                 <td>
-                                                    <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
-                                                </td>
-                                                <td>{{ $logs->title }}</td>
-                                                <td>
-                                                    @if (!$logs->reg_date)
-                                                        {{ trans('langUnknownDate') }}
-                                                    @else
-                                                        {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }}
-                                                    @endif
+                                                    <div class='d-flex justify-content-start align-items-start gap-1 flex-wrap'>
+                                                        <a class='pt-1' href='{{ $urlServer }}courses/{{ $logs->code }}/'>
+                                                            {{ $logs->title }}
+                                                        </a> 
+                                                        ({{ $logs->code }})
+                                                        @if ($logs->reg_date)
+                                                            <small>
+                                                                <span class='small-text'>{{ trans('langRegistrationDate') }}&nbsp;</span>
+                                                                <span class='TextBold small-text'>({{ format_locale_date(strtotime($logs->reg_date), 'short', false) }})</span>
+                                                            </small>
+                                                           
+                                                        @endif
+                                                    </div>
                                                 </td>
                                                 @if ($logs->status == USER_TEACHER)
                                                     <td>
@@ -269,6 +258,7 @@
                     </div>
                 </div>
             @endif
+
         </div>
     </div>
 </div>

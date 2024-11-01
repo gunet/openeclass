@@ -859,7 +859,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>
                     <div class='form-group'>
                         <div class='col-12 control-label-notes'>$langPollAddAnswer:</div>
-                        <div class='col-12'>
+                        <div class='col-12 mt-2'>
                           <input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
                         </div>
                     </div><hr><br>";
@@ -1102,7 +1102,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 });
             </script>";
 
-            $tool_content .= "<table class='table-default'>
+            $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
                               <th class='p-2' colspan='2'>$langQuesList</th>
@@ -1113,8 +1113,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             foreach ($questions as $question) {
                 $tool_content .= "<tr class='even' data-id='$question->pqid'>
                                 <td align='text-right' width='1'>$i.</td>
-                                <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
-                                $aType[$question->qtype - 1]."</td>
+                                <td><p>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
+                                $aType[$question->qtype - 1]."</p></td>
                                 <td>
                                     <div class='d-flex justify-content-center align-items-center gap-2'>
                                     <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; vertical-align: bottom;'>
@@ -1138,7 +1138,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 ))."</div></div></td></tr>";
                 $i++;
             }
-            $tool_content .= "</tbody></table>";
+            $tool_content .= "</tbody></table></div>";
         } else {
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPollEmpty</span></div>";
         }
@@ -1182,7 +1182,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 });
             </script>";
 
-            $tool_content .= "<table class='table-default'>
+            $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
                               <th colspan='2'>$langQuesList</th>
@@ -1217,7 +1217,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     ))."</div></td></tr>";
                 $i++;
             }
-            $tool_content .= "</tbody></table>";
+            $tool_content .= "</tbody></table></div>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
         }

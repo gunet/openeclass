@@ -59,7 +59,7 @@ function list_forums($id = NULL) {
 
             $ret_string .= "<tr>
                 <td style='width:40%;'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'><b>" . q($entry->name) . "</b></a></td>
-                <td>" . ($entry->desc? q($entry->desc): '&nbsp;') . "</td>
+                <td><p>" . ($entry->desc? q($entry->desc): '&nbsp;') . "</p></td>
                 <td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $fchecked name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
               </tr>";
 

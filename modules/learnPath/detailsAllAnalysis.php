@@ -148,7 +148,7 @@ foreach ($usersList as $user) {
         // --------------------
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
-        $lp_content .= "<td>" . q($learningPath->name) . "</td>";
+        $lp_content .= "<td><p>" . q($learningPath->name) . "</p></td>";
         $lp_content .= "<td>" . q($lpAttemptsNb) . "</td>";
         $lp_content .= "<td>" . q($lpTotalTime) . "</td>";
         $lp_content .= "<td>" . disp_progress_bar($prog, 1) . "</td>";

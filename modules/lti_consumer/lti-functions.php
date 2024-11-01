@@ -343,7 +343,7 @@ function edit_lti_app($session_id) {
                     </div>
                     </fieldset>
                      ". generate_csrf_token_form_field() ."
-                    </form></div></div><div class='col-lg-6 col-12 d-none d-lg-block'>
+                    </form></div></div><div class='d-none d-lg-block'>
                     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
                 </div>";
@@ -415,9 +415,9 @@ function lti_app_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td>$title</td>
-                    <td>$desc</td>
-                    <td>$joinLink</td>
+                    <td><p>$title</p></td>
+                    <td><p>$desc</p></td>
+                    <td class='text-nowrap'>$joinLink</td>
                     <td class='option-btn-cell text-end'>".
                         action_button(array(
                             array(  'title' => $langEditChange,

@@ -193,7 +193,9 @@ function show_edit_form($id, $sid, $assign) {
 
                             }
                         }
-                        $grade_field = "<div class='col-12' id='myModalLabel'><h5>$rubric->name</h5>
+                        $grade_field = "<div class='col-12' id='myModalLabel'>
+                        <div class='text-heading-h5'>$rubric->name</div>
+                            <div class='table-responsive'>
                             <table class='table-default'>
                               <tr>
                                 <td>
@@ -203,6 +205,7 @@ function show_edit_form($id, $sid, $assign) {
                                 </td>
                               </tr>
                             </table>
+                            </div>
                           </div>";
 
                         if ($cdate > $assign->due_date_review and empty($row->grade)) {
@@ -382,7 +385,9 @@ function show_edit_form($id, $sid, $assign) {
 							$criteria_list .= "</ul></li>";
 						}
 					}
-					$grade_field = "<div class='col-12' id='myModalLabel'><div class='TextBold large-text'>$rubric->name</div>
+					$grade_field = "<div class='col-12' id='myModalLabel'>
+                                <div class='text-heading-h5'>$rubric->name</div>
+                                <div class='table-responsive'>
 								<table class='table-default'>
 								<tr>
 									<td>
@@ -392,6 +397,7 @@ function show_edit_form($id, $sid, $assign) {
 									</td>
 								</tr>
 								</table>
+                                </div>
 								</div>";
 				}
 			} else {

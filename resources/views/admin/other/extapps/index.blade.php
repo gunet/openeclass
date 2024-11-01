@@ -20,7 +20,7 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class="extapp">
-                        <div class='col-12'>
+                        <div class='col-12 table-responsive'>
                             <table class="table-default extapp-table">
                                 <thead class='list-header'>
                                     <th>{{ trans('langExtAppName') }}</th>

@@ -167,7 +167,7 @@ function metaFormRow($title, $cell, $help) {
  */
 
 function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = false) {
-    $cell = "<table class='table-default'>";
+    $cell = "<div class='table-responsive'><table class='table-default'>";
     $i = 0;
 
     foreach ($values as $value) {
@@ -182,7 +182,7 @@ function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = fa
         $cell .= "$start<input type='checkbox' name='" . $name . "[]' value='$value' $check /><span class='checkmark'></span>" . $$langElement . $end;
     }
 
-    $cell .= "</table>";
+    $cell .= "</table></div>";
 
     return metaFormRow($title, $cell, $help);
 }

@@ -199,7 +199,7 @@ if (isset($_GET['from_other'])) {
 
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= '<div class="row form-group mt-4">
+    $tool_content .= '<div class="row form-group mt-3">
             <label for="id_u_module_id" class="col-12 control-label-notes">' . $langLogModules . ' <span class="asterisk Accent-200-cl">(*)</span></label>
             <div class="col-12"><select name="u_module_id" class="form-select" id="id_u_module_id">';
     $tool_content .= "<option value='-1'>$langAllModules</option>";

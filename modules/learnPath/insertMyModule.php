@@ -98,7 +98,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
 $result = Database::get()->queryArray(buildRequestModules());
 
 $tool_content .= '<form name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n\n";
-$tool_content .= '<table class="table-default">'
+$tool_content .= '<div class="table-responsive"><table class="table-default">'
         . '<thead><tr class="list-header">'
         . '<th>'.$langLearningModule.'</th>'
         . '<th>'
@@ -151,7 +151,7 @@ if (!$atleastOne) {
 }
 
 // Display button to add selected modules
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 if ($atleastOne) {
     $tool_content .= "<div class='form-group'>

@@ -138,7 +138,9 @@ function show_form($id, $sid, $assign) {
 
 			}
 		}
-		$grade_field = "<div class='col-sm-12' id='myModalLabel'><h5>$rubric->name</h5>
+		$grade_field = "<div class='col-sm-12' id='myModalLabel'>
+            <div class='text-heading-h5'>$rubric->name</div>
+            <div class='table-responsive'>
             <table class='table-default'>
                 <tr>
                     <td>
@@ -148,6 +150,7 @@ function show_form($id, $sid, $assign) {
                     </td>
                 </tr>
             </table>
+            </div>
 		</div>";
         if ($unit) {
             $form_link = "view.php?res_type=assignment&course=$course_code&unit=$unit";

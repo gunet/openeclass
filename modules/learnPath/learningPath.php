@@ -280,7 +280,7 @@ foreach ($flatElementList as $module) {
         }
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style='vertical-align: middle;'>" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;";
+        $tool_content .= "<span style='vertical-align: top;'>" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;";
         if (isset($_GET['unit'])) {
             $tool_content .= "<a href='../units/view.php?course=$course_code&amp;res_type=lp&amp;unit=$_GET[unit]&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
         } else {
@@ -311,7 +311,7 @@ foreach ($flatElementList as $module) {
             $moduleImg = choose_image(basename($module['path']));
         }
 
-        $tool_content .= "<span style='vertical-align: middle;'>" . icon($moduleImg, $contentType_alt) . "</span>" . q($module['name']);
+        $tool_content .= "<span style='vertical-align: top;'>" . icon($moduleImg, $contentType_alt) . "</span>" . q($module['name']);
     }
     $tool_content .= "</td>";
 

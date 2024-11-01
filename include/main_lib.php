@@ -348,7 +348,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {
-        $icon = profile_image($user->id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '&nbsp;';
+        $icon = profile_image($user->id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '';
     }
 
     if (!empty($class)) {
@@ -362,9 +362,18 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     if (!empty($code)) {
       $course_code_link = "&amp;course=$GLOBALS[course_code]";
     }
-    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'
-                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langUserProfile'>" .
-            $student_name . "</a>" .
+
+    $padding_link = "";
+    if($icon){
+        $padding_link = "padding-top:7px;";
+    }
+    return "<div class='d-flex justify-content-start align-items-start gap-2'>
+                $icon
+                <a style='$padding_link' $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'
+                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langUserProfile'>" 
+                     . $student_name . 
+                "</a>
+            </div>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
 

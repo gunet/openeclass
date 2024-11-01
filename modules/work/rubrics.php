@@ -539,7 +539,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 }
                 $table_content .= "<tr>
                         <td style='padding-left:15px;'><a href='rubrics.php?course=$course_code&amp;preview=$rubric_id'>$rubric->name</a><small>$rubric->description</small></td>
-                        <td>$rubric_assignment</td>";
+                        <td><p>$rubric_assignment</p></td>";
                 $table_content .= "<td class='option-btn-cell text-end'>
                         " . action_button(array(
                                 array(
