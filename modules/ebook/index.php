@@ -220,7 +220,7 @@ if (!$q && !isset($_GET['create'])) {
             $title_link .= '&nbsp;&nbsp;&nbsp;' . icon('fa-edit', $langEditChange, "edit.php?course=$course_code&amp;id=" . $r->id);
         }
         $tool_content .= "<tr class = '$vis_class' data-id='$r->id'>
-                <td>$title_link</td>".
+                <td><p>$title_link</p></td>".
                    tools($r->id, $r->visible) .
                 "</tr>";
 

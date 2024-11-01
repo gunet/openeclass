@@ -191,9 +191,9 @@
                                                             @php $headingsSent = true; @endphp
                                                             @endif
                                                             <tr {!!($row->enabled? '': " class='not_visible'")!!}>
-                                                                <td class='text-start'>{!! $title !!}</td>
-                                                                <td>{!! $desc !!}</td>
-                                                                <td>{!! $joinLink !!}</td>
+                                                                <td class='text-start'><p>{!! $title !!}</p></td>
+                                                                <td><p>{!! $desc !!}</p></td>
+                                                                <td class='text-nowrap'>{!! $joinLink !!}</td>
                                                                 <td class='option-btn-cell text-center'>
                                                                 {!! action_button(array(
                                                                         array(  'title' => trans('langEditChange'),
@@ -215,9 +215,9 @@
                                                                 @php $headingsSent = true; @endphp
                                                             @endif
                                                             <tr>
-                                                                <td class='text-center'>{!! $title !!}</td>
-                                                                <td>{!! $desc !!}</td>
-                                                                <td class='text-center'>{!! $joinLink !!}</td>
+                                                                <td class='text-center'><p>{!! $title !!}</p></td>
+                                                                <td><p>{!! $desc !!}</p></td>
+                                                                <td class='text-center text-nowrap'>{!! $joinLink !!}</td>
                                                             </tr>
                                                         @endif
                                                 @endforeach

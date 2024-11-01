@@ -592,7 +592,7 @@ foreach ($flatElementList as $module) {
         }
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style=\"vertical-align: middle;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
+        $tool_content .= "<span style=\"vertical-align: top;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
 

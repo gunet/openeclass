@@ -160,9 +160,9 @@ foreach ($usersList as $user) {
     $tool_content .= "<td>" . q($user->email). "</td>
                       <td>" . q($user->am) . "</td>";
     if (!isset($_GET['pdf'])) {
-        $tool_content .= "<td> " . user_groups($course_id, $user->id) . "</td>";
+        $tool_content .= "<td><div style='width:200px;'> " . user_groups($course_id, $user->id) . "</div></td>";
     } else {
-        $tool_content .= "<td> " . user_groups($course_id, $user->id, false) . "</td>";
+        $tool_content .= "<td><div style='width:200px;'> " . user_groups($course_id, $user->id, false) . "</div></td>";
     }
     $tool_content .= "<td>" . q($globaltime) . "</td>
             <td>"

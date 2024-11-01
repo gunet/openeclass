@@ -19,7 +19,8 @@
                     
                     @include('layouts.partials.show_alert') 
 
-                    <div class="overflow-auto">
+                    <div class="col-12">
+                        <div class='table-responsive'>
                         <table id='search_results_table' class='table-default display'>
                             <thead class='list-header'>
                                 <tr>
@@ -44,7 +45,7 @@
                             </tfoot>
                             <tbody>
                             </tbody>
-                        </table>
+                        </table></div>
                     </div>
                     <div class='col-12 mt-4'>
                         <!--Edit all function-->

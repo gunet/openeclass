@@ -46,6 +46,7 @@
                 @include('layouts.partials.legend_view')
                 {!! $action_bar !!}
 
+                <div class='table-responsive'>
                  <table class='table-default' id='bbb_courses'>
                      <thead>
                      <th>{{ trans('langCourse') }}</th>
@@ -56,6 +57,7 @@
                         {!! $tbl_cnt !!}
                      </tbody>
                  </table>
+                </div>
             </div>
         </div>
     </div>

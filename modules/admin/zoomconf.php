@@ -314,7 +314,7 @@ if (isset($_POST['submit'])) {
             );
         </script>";
 
-    $tool_content .= "<table class='table-default' id='zoomTable'>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default' id='zoomTable'>";
     $tool_content .= "<thead>
                         <tr>
                           <th style='width:20%'>$langSurname</th>
@@ -343,7 +343,7 @@ if (isset($_POST['submit'])) {
                     <td><a href='".$_SERVER['SCRIPT_NAME']."?change_zoom_user_type=1&id=".$user_data->id."&email=".$user_data->email."&type=".$changeType."' class='btn btn-primary'>$langModify</a></td>
                     </tr>";
     }
-    $tool_content .= "</tbody></table>";
+    $tool_content .= "</tbody></table></div>";
     draw($tool_content, 3, null, $head_content);
 
 } elseif (isset($_GET['change_zoom_user_type'])) {

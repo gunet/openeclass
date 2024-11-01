@@ -34,7 +34,7 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class='col-sm-12'>
-                        
+                        <div class='table-responsive'>
                             <table id='request_table_{{ $course_id }}' class='table table-default table-request'>
                                 <thead>
                                     <tr class='list-header'>
@@ -58,6 +58,7 @@
                                     </tr>
                                 </tfoot>
                             </table>
+                        </div>
                         
                     </div>
                         

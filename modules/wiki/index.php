@@ -379,7 +379,7 @@ switch ($action) {
 
                     $tool_content .= '<td>';
                     if (!empty($entry->description)) {
-                        $tool_content .= $entry->description;
+                        $tool_content .= '<p>' . $entry->description . '</p>';
                     } else {
                         $tool_content .= "<span class='not_visible'>$langWikiNoDescription</span>";
                     }

@@ -165,7 +165,7 @@ class Log {
             $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
             $tool_content .= "</tr>";
             $tool_content .= "</thead>";
-            $tool_content .= "<tbody>";
+            $tool_content .= "<tbody style='word-wrap: break-word; word-break: break-word;'>";
             // display logs
             foreach ($sql as $r) {
                 $tool_content .= "<tr>";
@@ -173,7 +173,7 @@ class Log {
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                     $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
-                    $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
+                    $tool_content .= "<td><div style='width:200px;'>" . display_user($r->user_id, false, false) . "</div></td>";
                 }
                 $tool_content .= "<td>" . $r->ip ."</td>";
                 if ($course_id == -1) { // all courses

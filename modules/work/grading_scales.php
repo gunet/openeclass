@@ -235,7 +235,7 @@ if (isset($_GET['scale_id'])) {
             }
             $table_content .= "
                         <tr>
-                            <td style='padding-left:15px'>$grading_scale->title</td>
+                            <td style='padding-left:15px'><p>$grading_scale->title</p></td>
                             <td>
                                 <ul class='list-unstyled'>
                                     $scales_list

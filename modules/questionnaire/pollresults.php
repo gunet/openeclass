@@ -261,7 +261,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
-                    <table class='table-default'>
+                    <div class='table-responsive'><table class='table-default'>
                         <thead><tr class='list-header'>
                             <th>$langAnswer</th>
                             <th>$langSurveyTotalAnswers</th>
@@ -323,7 +323,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                 <td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";
                     unset($names_array);
                 }
-                $answers_table .= "</table><br>";
+                $answers_table .= "</table></div><br>";
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
                 /****   C3 plot   ****/
                 $tool_content .= "<div class='row plotscontainer mb-4'>";
@@ -351,7 +351,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
-                    <table class='table-default'>
+                    <div class='table-responsive'><table class='table-default'>
                         <thead><tr class='list-header'>
                             <th>$langAnswer</th>
                             <th>$langSurveyTotalAnswers</th>
@@ -405,7 +405,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                         "</tr>";
                     unset($names_array);
                 }
-                $answers_table .= "</table>";
+                $answers_table .= "</table></div>";
                 /****   C3 plot   ****/
                 $chart_data[] = $this_chart_data;
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
@@ -426,7 +426,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                             AND a.poll_user_record_id = b.id
                                             AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                             GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
-                $tool_content .= "<table class='table-default'>
+                $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <tbody>
                         <tr class='list-header'>
                                 <th>$langAnswer</th>
@@ -488,7 +488,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                         <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$langViewShow</a></td>
                     </tr>";
                 }
-                $tool_content .= '</tbody></table><br>';
+                $tool_content .= '</tbody></table></div><br>';
             }
             $tool_content .= "</div></div></div>";
         }

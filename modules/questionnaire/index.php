@@ -400,7 +400,7 @@ function printPolls() {
                     $poll_ended = 1;
                 }
 
-                $tool_content .= "<td><div class='table_td'><div class='table_td_header clearfix'>";
+                $tool_content .= "<td><div class='table_td'><div class='table_td_header clearfix' style='word-wrap: break-word; word-break: break-word;'>";
                 if ($is_editor) {
                     $lock_icon = "";
                     if (!$thepoll->public) {
