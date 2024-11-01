@@ -132,7 +132,7 @@
                         @foreach ($admins as $admin)
                             <tr>
                                 <td class='count-col'>{{ $admin->id }}</td>
-                                <td>{{ $admin->givenname }} {{ $admin->surname }}</td>
+                                <td><p>{{ $admin->givenname }} {{ $admin->surname }}</p></td>
                                 <td>{{ $admin->username }}</td>
                                 <td>
                                 @if ($admin->privilege == 0)

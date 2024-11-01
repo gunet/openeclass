@@ -150,7 +150,7 @@
                                     @foreach ($q as $data)
                                        <tr>
                                             <td>
-                                                {{ $data->surname }} {{ $data->givenname }} (<a href='{{ $urlServer }}modules/admin/edituser.php?u={{ $data->user_id }}'>{{ $data->username }}</a>)
+                                                <p>{{ $data->surname }} {{ $data->givenname }}</p> (<a href='{{ $urlServer }}modules/admin/edituser.php?u={{ $data->user_id }}'>{{ $data->username }}</a>)
                                             </td>
                                             <td>{{ $data->num_of_courses }}</td>
                                        </tr>

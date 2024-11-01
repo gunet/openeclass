@@ -180,9 +180,6 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </form>
             </div>
         </div>
-        <div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-        </div>
     </div>";
 }
 draw($tool_content, null, null, $head_content);
