@@ -10,7 +10,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @if(!$is_in_tinymce)
@@ -27,10 +27,10 @@
                         </div>
                         @include('layouts.partials.legend_view')
                     @endif
-                    
+
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-sm-12'>
                         <div class='table-responsive mb-4'>
@@ -54,7 +54,7 @@
                             </table>
                         </div>
                     </div>
-                           
+
                     @if ($social_bookmarks_enabled == 1)
                         <div class='col-sm-12'>
                             <div class='table-responsive mb-4'>
@@ -89,7 +89,7 @@
                                 </table>
                             </div>
                         </div>
-                            
+
                     @endif
 
                     <div class='col-sm-12'>
@@ -97,8 +97,8 @@
                             <table class='table-default category-links'>
                             <thead><tr class='list-header'>
                                     <th>{{ trans('langCategorisedLinks').'   ' }}
-                                    @if ($categories)    
-                                        @if (isset($urlview) && abs($urlview) == 0)
+                                    @if ($categories)
+                                        @if (intval($urlview) == 0)
                                             <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
                                                 {!! icon('fa-folder', trans('langViewShow')) !!}
                                             </a>
@@ -112,11 +112,11 @@
                                     @if ($categories && $display_tools)
                                         <th style='width:109px;'>{!! icon('fa-cogs') !!}</th>
                                     @endif
-                                </tr></thead>                    
+                                </tr></thead>
                             @if ($categories)
                                 @foreach ($categories as $key => $category)
                                     @if ((isset($urlview[$key]) and $urlview[$key] == '1'))
-                                        <?php 
+                                        <?php
                                             $newurlview = $urlview;
                                             $newurlview[$key] = '0';
                                         ?>
@@ -163,14 +163,14 @@
                                             <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                             @if ($display_tools)
                                                 <td></td>
-                                            @endif                                
+                                            @endif
                                         <tr>
-                                        @endif                            
+                                        @endif
                                     @else
                                         <tr class='link-subcategory-title'>
                                             <th class = 'text-start category-link' style='padding-left:12px;'>{!! icon('fa-folder-open', trans('langViewShow')) !!}
                                                 <a href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
-                                                    {{ $category->name }} 
+                                                    {{ $category->name }}
                                                 </a>
                                                 @if (!empty($description))
                                                     <br>
@@ -201,24 +201,24 @@
                                                         ))  !!}
                                                 </td>
                                             @endif
-                                        </tr>                        
+                                        </tr>
                                     @endif
                                 @endforeach
                             @else
                                 <tr>
                                     <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkCategories') }} - </td>
-                                </tr>                    
+                                </tr>
                             @endif
                             </table>
                         </div>
                     </div>
-                           
+
 
                 </div>
             </div>
 
         </div>
-    
+
 </div>
 </div>
 @endsection
