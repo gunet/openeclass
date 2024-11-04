@@ -99,7 +99,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langAllUsers, $langParticipants, $langBBBRecord,
         $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2,
         $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll,
-        $langEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
+        $langNewBBBSessionEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
         $langReadMore, $langBBBmuteOnStart, $langBBBlockSettingsDisableCam,
         $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat,
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
@@ -142,14 +142,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $r_group = explode(",",$row->participants);
         $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
         $start_session = q($start_date->format('d-m-Y H:i'));
-        if ($end_date) {
+        if ($row->end_date) {
             $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);
-        } else {
-            $end_date = null;
-        }
-        if (isset($row->end_date)) {
             $BBBEndDate = $end_date->format('d-m-Y H:i');
         } else {
+            $end_date = null;
             $BBBEndDate = NULL;
         }
         $enableEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : ($BBBEndDate ? 1 : 0);
@@ -348,7 +345,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>";
         $tool_content .= "<div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
-            <label for='BBBEndDate' class='col-sm-12 control-label-notes'>$langEnd</label>
+            <label for='BBBEndDate' class='col-sm-12 control-label-notes'>$langNewBBBSessionEnd</label>
             <div class='col-sm-12'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
@@ -1373,7 +1370,7 @@ function tc_session_details() {
                     "</small></span>";
             }
 
-            if($end_date) {
+            if ($end_date) {
                 $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
                 $timeLabel = format_locale_date(strtotime($end_date));
             } else {
@@ -1648,7 +1645,7 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
         $bbb_url = $res->api_url;
         $duration = 0;
         $r = Database::get()->querySingle("SELECT end_date FROM tc_session WHERE meeting_id = ?s", $meeting_id);
-        if ($r->end_date != null) {
+        if ($r->end_date) {
             $now = new DateTime('now');
             $end = new DateTime($r->end_date);
             $interval = $now->diff($end);
