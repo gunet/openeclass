@@ -5636,7 +5636,9 @@ pre {
 }
 
 .text-nowrap,
-.paginate_button{
+.paginate_button,
+th.date-col a,
+th.grade-col a{
   white-space: nowrap;
 }
 
