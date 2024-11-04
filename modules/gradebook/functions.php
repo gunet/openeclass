@@ -722,8 +722,8 @@ function student_view_gradebook($gradebook_id, $uid) {
         $tool_content .= "<div class='badge Primary-200-bg p-2'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
-                              <th style='width:30%;'>$langGradebookActivityDate2</th>
-                              <th style='width:30%;'>$langType</th>
+                              <th>$langGradebookActivityDate2</th>
+                              <th>$langType</th>
                               <th>$langGradebookActivityWeight</th>
                               <th>$langGradebookGrade</th>
                               <th>$langGradebookTotalGrade</th>
@@ -733,29 +733,29 @@ function student_view_gradebook($gradebook_id, $uid) {
         foreach ($result as $details) {
             $tool_content .= "
                 <tr>
-                    <td>
+                    <td class='text-nowrap'>
                         " .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "
                     </td>
-                    <td>
+                    <td class='text-nowrap'>
                         " . (!is_null($details->date) ? format_locale_date(strtotime($details->date), 'short', false) : " &mdash;") . "
                     </td>";
 
             if ($details->module_auto_id) {
                 if ($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-                    $tool_content .= "<td class='smaller'>$langAssignment";
+                    $tool_content .= "<td class='smaller text-nowrap'>$langAssignment";
                 }
                 if ($details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
-                    $tool_content .= "<td class='smaller'>$langExercise ";
+                    $tool_content .= "<td class='smaller text-nowrap'>$langExercise ";
                 }
                 if ($details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
-                    $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
+                    $tool_content .= "<td class='smaller text-nowrap'>$langGradebookActivityAct";
                 }
                 $tool_content .= "</td>";
             } else {
-                $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
+                $tool_content .= "<td class='smaller text-nowrap'>$langAttendanceActivity</td>";
             }
-            $tool_content .= "<td>" . q($details->weight) . "%</td>";
-            $tool_content .= "<td>";
+            $tool_content .= "<td class='text-nowrap'>" . q($details->weight) . "%</td>";
+            $tool_content .= "<td class='text-nowrap'>";
             //check user grade for this activity
             $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book
                                                             WHERE gradebook_activity_id = ?d
@@ -766,7 +766,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td>";
+            $tool_content .= "<td class='text-nowrap'>";
             $tool_content .= $sql ? round($sql->grade * $range * $details->weight / 100, 2)." / $range</td>" : "&mdash;";
             $tool_content .= "</td>
             </tr>";
@@ -774,7 +774,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         $s_grade = userGradeTotal($gradebook_id, $uid);
         $tool_content .= "
             <tr>
-                <th colspan='5' class='text-end'>$langGradebookSum:</th>
+                <th colspan='5' class='text-end text-nowrap'>$langGradebookSum:</th>
                 <th>". (($s_grade != "&mdash;") ? $s_grade . " / $range" : "$s_grade"). "</th>
             </tr>";
     }
