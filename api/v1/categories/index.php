@@ -22,13 +22,26 @@ function api_method($access) {
 
     if (isset($_GET['all'])) {
 
-        $hierarchyQuery = Database::get()->queryArray("SELECT id, code, description, name FROM `hierarchy`");
-
-//        $name = $hierarchyQuery[6]->name;
-//        $unsName = unserialize($name);
+        $categories = Database::get()->queryArray('SELECT hierarchy.id,hierarchy.code, hierarchy.name, hierarchy.description,
+            MIN(course.created) AS timemodified, 0 AS sortorder
+        FROM hierarchy
+            LEFT JOIN course_department ON hierarchy.id = course_department.department
+            LEFT JOIN course ON course_department.course = course.id
+        GROUP BY hierarchy.id, hierarchy.name, hierarchy.description
+        ORDER BY hierarchy.id');
+        $categories = array_map(function ($item) {
+            return [
+                'id' => $item->id,
+                'code' => $item->code,
+                'description' => getSerializedMessage($item->description, 'el'),
+                'name' => getSerializedMessage($item->name, 'el'),
+                'timemodified' => $item->timemodified,
+                'sortorder' => $item->sortorder,
+            ];
+        }, $categories);
 
         header('Content-Type: application/json');
-        echo json_encode($hierarchyQuery, JSON_UNESCAPED_UNICODE);
+        echo json_encode($categories, JSON_UNESCAPED_UNICODE);
         exit();
 
 
