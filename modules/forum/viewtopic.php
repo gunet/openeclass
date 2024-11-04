@@ -286,12 +286,18 @@ if ($topic_locked == 1) {
         $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum";
     }
     $action_bar = action_bar(array(
-                array('title' => $langReply,
-                    'url' => "$reply_url",
-                    'icon' => 'fa-regular fa-comments',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success')
-                ));
+                                    array('title' => $langReply,
+                                        'url' => "$reply_url",
+                                        'icon' => 'fa-regular fa-comments',
+                                        'level' => 'primary-label',
+                                        'button-class' => 'btn-success action-forum-btn'),
+                                    array('title' => $langDumpPDF,
+                                           'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&topic=$_GET[topic]&forum=$_GET[forum]&export_ans=true",
+                                           'icon' => 'fa-solid fa-file-pdf',
+                                            'level' => 'primary-label',
+                                            'button-class' => 'btn-success action-forum-btn')
+                                )
+                            );
     $tool_content .= $action_bar;
     // forum posts view selection
     $selected_view_0 = $selected_view_1 = $selected_view_2 = 0;
@@ -315,7 +321,7 @@ if ($topic_locked == 1) {
     }
 
     $tool_content .= "
-        <div class='col-sm-12 mb-3'>
+        <div class='col-sm-12 selection_type mb-3'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' name='viewselect' action='$selection_url' method='get'>
                     <div class='form-group'>
@@ -551,6 +557,11 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
     }
 }
 
+// Export to pdf
+if(isset($_GET['export_ans'])){
+    pdf_forum_output($tool_content,$_GET['topic'],$_GET['forum']);
+}
+
 draw($tool_content, 2, null, $head_content);
 
 
@@ -646,7 +657,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($is_editor) {
         $content .= "
-                <span class='d-flex gap-2 ps-3'>
+                <span class='d-flex gap-2 ps-3 actions-post-btns'>
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum' aria-label='$langModify'>" .
                             "<span class='fa fa-edit pe-1' title='$langModify' data-bs-toggle='tooltip' " .
@@ -663,7 +674,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     if ($myrow->parent_post_id > 0) {
         $anchor_url_to_parent_post_id = "viewtopic.php?course=$course_code&topic=$topic&forum=$forum&all=true#$myrow->parent_post_id";
         $parent_post_text = ellipsize(canonicalize_whitespace(strip_tags(get_post_text($myrow->parent_post_id))), 50);
-        $achor_to_parent_post = "<div class='anchor_to_parent_post_id' style='padding-bottom: 15px;'><em>$langForumPostParent<a href='$anchor_url_to_parent_post_id' id='$myrow->parent_post_id'>$parent_post_text</a></em></div>";
+        $achor_to_parent_post = "<div class='anchor_to_parent_post_id' style='padding-bottom: 15px;'><em>$langForumPostParent<a class='TextBold ms-1' href='$anchor_url_to_parent_post_id' id='$myrow->parent_post_id'>$parent_post_text</a></em></div>";
     }
 
     $content .= "
@@ -676,31 +687,31 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         }
         $content .= "
                 <div class='col-12 d-flex justify-content-start align-items-start gap-2 flex-wrap'>
-                    <div>" .
+                    <div class='div-profile-img'>" .
                         profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'rounded-circle margin-bottom-thin') . "
                     </div>
-                    <div>
+                    <div class='flex-grow-1 d-flex justify-content-between align-items-start gap-3 flex-wrap'>
                         <div class='forum-post-header'>
-                            <small class='help-block'><strong>$langSent:</strong> " .
-                                format_locale_date(strtotime($myrow->post_time), 'short') .
+                            <small class='help-block'>
+                                <strong>$langSent:</strong> " . format_locale_date(strtotime($myrow->post_time), 'short') . 
                                 " $langFrom2 " . display_user($myrow->poster_id, false, false) .
                                 " ({$user_stats[$myrow->poster_id]})
-                            </small><small>$achor_to_parent_post</small>";
-
-        if (!empty($dyntools)) {
-            $content .= "<span style='margin-left: 20px;' class='float-end'>";
-            if (isset($report_modal)) {
-                $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . $report_modal . "</span>";
-                unset($report_modal);
-            } else {
-                $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . "</span>";
-            }
-            $content .= "</span>";
-        }
-
-        $content .= "
-                        </div>
-                    </div>
+                            </small>
+                            <small>
+                                $achor_to_parent_post";
+                $content .= "</small>
+                        </div>";
+                        if (!empty($dyntools)) {
+                            $content .= "<div class='div-menu-popover'>";
+                            if (isset($report_modal)) {
+                                $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . $report_modal . "</span>";
+                                unset($report_modal);
+                            } else {
+                                $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . "</span>";
+                            }
+                            $content .= "</div>";
+                        }
+        $content .= "</div>
                 </div>
                 <div class='col-12 mt-3'>
                     <div class='text-justify'>$message</div>
@@ -724,4 +735,83 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     $content .= "</div>";
 
     return $content;
+}
+
+
+/**
+ * @brief output to pdf file for course forum
+ * @return void
+ * @throws \Mpdf\MpdfException
+ */
+function pdf_forum_output($content_m,$topic_id,$forum_id) {
+    global $currentCourseName, $webDir, $course_id, $course_code, $language;
+
+    $res = Database::get()->querySingle("SELECT * FROM forum_topic WHERE id = ?d AND forum_id = ?d",$topic_id,$forum_id);
+
+    $newContent1 = str_replace("<a","<span",$content_m);
+    $newContent2 = str_replace("</a>","</span>",$newContent1);
+    $topicName = $res->title;
+
+    $pdf_mcontent = "
+        <!DOCTYPE html>
+        <html lang='$language'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; }
+            h3 { font-size: 10pt; color: #158; }
+            .card-default { background: #fafafa; }
+            .panel-title { color: #5d6d7e; }
+            .action-bar-title { display: none; }
+            .actions-post-btns { display: none; }
+            .selection_type { display: none; }
+            .ButtonsContent { display: none; }
+            .div-profile-img { display: none; }
+            .reply-post-btn { display: none; }
+            .div-menu-popover{ display: none; }
+            .card-default {border: solid 1px #000000; padding: 10px; margin-top: 15px; }
+          </style>
+        </head>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <h2> " . q($topicName) . "</h2>";
+
+    $pdf_mcontent .= $newContent2;
+
+    $pdf_mcontent .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_mcontent);
+    $mpdf->Output("forum_topic.pdf", 'I'); // 'D' or 'I' for download / inline display
+    exit;
 }
