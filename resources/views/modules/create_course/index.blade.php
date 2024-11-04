@@ -349,9 +349,9 @@
                                   </small>
                               </div>
 
-                              <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
-                                  <input class='btn submitAdminBtn' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
-                                  <a href='{{ $cancel_link }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
+                              <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                  <input class='btn submitAdminBtn text-nowrap' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
+                                  <a href='{{ $cancel_link }}' class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
                               </div>
 
                             <div class='modal fade' id='CoursesImagesModal' tabindex='-1' aria-labelledby='CoursesImagesModalLabel' aria-hidden='true'>

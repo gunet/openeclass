@@ -51,10 +51,10 @@ function list_videos($id = NULL) {
         $video_found = TRUE;
         $ret_string .= "<div class='table-responsive'><table class='table-default'>";
         $ret_string .= "<thead><tr class='list-header'>" .
-                         "<th width='200' class='text-start'>&nbsp;$langTitle</th>" .
+                         "<th class='text-start'>&nbsp;$langTitle</th>" .
                          "<th class='text-start'>$langDescription</th>" .
-                         "<th class='pe-2' width='100'>$langDate</th>" .
-                         "<th class='pe-2' width='80'>$langChoice</th>" .
+                         "<th class='pe-2'>$langDate</th>" .
+                         "<th class='pe-2'>$langChoice</th>" .
                          "</tr></thead>";
         foreach (array('video', 'videolink') as $table) {
             $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d AND visible = ?d", $course_id, 1);
@@ -75,7 +75,7 @@ function list_videos($id = NULL) {
                     }
                 }
                 $ret_string .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
-                                 "<td>" . q($row->description) . "</td>".
+                                 "<td><p>" . q($row->description) . "</p></td>".
                                  "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                                  "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$row->id' /><span class='checkmark'></span></label></td>" .
                                  "</tr>";
@@ -85,9 +85,9 @@ function list_videos($id = NULL) {
         if ($sql) {
             foreach ($sql as $videocat) {
                 $ret_string .= "<tr>";
-                $ret_string .= "<td>".icon('fa-folder-open')."&nbsp;&nbsp;" .
-                                 q($videocat->name) . "</td>";
-                $ret_string .= "<td colspan='3'>" . standard_text_escape($videocat->description) . "</td>";
+                $ret_string .= "<td><p>".icon('fa-folder-open')."&nbsp;&nbsp;" .
+                                 q($videocat->name) . "</p></td>";
+                $ret_string .= "<td colspan='3'><p>" . standard_text_escape($videocat->description) . "</p></td>";
                 $ret_string .= "</tr>";
                 foreach (array('video', 'videolink') as $table) {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d AND visible = ?d", $videocat->id, 1);
@@ -105,7 +105,7 @@ function list_videos($id = NULL) {
                             $ret_string .= "<tr>";
                             $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='$langOpenNewTab'>" .
                                     q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
-                            $ret_string .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
+                            $ret_string .= "<td><p>" . standard_text_escape($linkvideocat->description) . "</p></td>";
                             $ret_string .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                             $ret_string .= "<td><label aria-label='$langSelect' class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
                             $ret_string .= "</tr>";

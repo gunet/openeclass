@@ -823,11 +823,11 @@ function plot_placeholder($plot_id, $title = null){
 function table_placeholder($table_id, $table_class, $table_schema, $title = null){
     $t = "<div class='panel-body'>";
     if(!is_null($title)){
-        $t .= "<div class='inner-heading'>"
+        $t .= "<div class='inner-heading d-flex justify-content-between align-items-start gap-3 flex-wrap'>"
             . "<h3 id='".$table_id."_title'>"
             . q($title)
             . "</h3>"
-            ."<div class='float-end' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
+            ."<div id='{$table_id}_buttons'></div>"
             . "</div>";
     }
     $t .= "<div class='table-responsive'>"

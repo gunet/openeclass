@@ -136,7 +136,7 @@
                             <span class='d-inline-block text-truncate TextBold title-announcement' style="max-width: auto;">
                                 @php echo strip_tags($pinned_announce_title); @endphp
                             </span>
-                            <a class='link-color TextBold msmall-text text-decoration-underline ps-1' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>
+                            <a class='link-color TextBold msmall-text text-decoration-underline ps-1 text-nowrap' href="{{ $urlAppend }}main/system_announcements.php?an_id={{ $pinned_announce_id }}">{!! trans('langDisplayAnnouncement') !!}</a>
                         </div>
                     </div>
                 </div>
