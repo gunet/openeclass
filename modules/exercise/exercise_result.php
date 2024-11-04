@@ -404,7 +404,7 @@ if (count($exercise_question_ids) > 0) {
 
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
-                $answerComment = standard_text_escape($objAnswerTmp->selectComment($answerId));
+                $answerComment = $objAnswerTmp->selectComment($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 
@@ -640,7 +640,7 @@ if (count($exercise_question_ids) > 0) {
                         }
                         $tool_content .= "</div>";
                         if ($studentChoice or $answerCorrect) {
-                            $tool_content .= "<div class='d-flex align-items-center'><small><span class='help-block'>" . standard_text_escape(nl2br(make_clickable($answerComment))) ."</span></small></div>";
+                            $tool_content .= "<div class='d-flex align-items-center'><small><span class='help-block'>" . standard_text_escape(nl2br($answerComment)) ."</span></small></div>";
                         }
                         $tool_content .= "</div>";
                         $tool_content .= "</td></tr>";
