@@ -5252,7 +5252,7 @@ function show_assignment($id) {
             }
             $tool_content .= "<tr>
                             <td class='count-col'>$i.</td>
-                            <td class='user-col'>$name $am_field $mess";
+                            <td class='user-col' style='width: 50%';>$name $am_field $mess";
 
             // student comment
             if (trim($row->comments != '')) {
