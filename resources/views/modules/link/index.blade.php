@@ -169,7 +169,7 @@
                                     @else
                                         <tr class='link-subcategory-title'>
                                             <th class = 'text-start category-link' style='padding-left:12px;'>{!! icon('fa-folder-open', trans('langViewShow')) !!}
-                                                <a href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
+                                                <a href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key, count($categories)) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
                                                 @if (!empty($description))

@@ -739,7 +739,7 @@ if ($is_editor) {
                                                                             <li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                                 <a id='Keypage$i' class='page-link'>$i</a>
                                                                             </li>
-                            
+
                                                                             <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
                                                                                 <a>...</a>
                                                                             </li>";
@@ -794,7 +794,7 @@ if ($is_editor) {
                                             <div class='modal-header'>
                                                 <div class='modal-title' id='myModalLabel'>$langCommentsUser</div>
                                                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'></button>
-                                                
+
                                             </div>
                                             <div class='modal-body'>
                                             </div>
@@ -856,7 +856,7 @@ if ($is_editor) {
                                    $tool_content .= "<tr>
                                                         <td>";
                                                             if ($is_member or $is_tutor) {
-                                                                $tool_content .= "<a class='TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) ."</a> 
+                                                                $tool_content .= "<a class='TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) ."</a>
                                                                                   <span class='badge Success-200-bg TextBold text-capitalize'>$langMyGroup</span>";
                                                             } else {
                                                                 $full_group_message = '';
@@ -953,7 +953,7 @@ if ($is_editor) {
                                                             <div class='card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-3'>";
                                                                     if ($is_member or $is_tutor) {
                                                                     $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
-                                                                                        "</a> 
+                                                                                        "</a>
                                                                                         <span class='badge Success-200-bg TextBold text-capitalize'>$langMyGroup</span>";
                                                                     } else {
                                                                         $full_group_message = '';
@@ -1049,7 +1049,7 @@ if ($is_editor) {
                                                                             <li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                                 <a id='Keypage$i' class='page-link'>$i</a>
                                                                             </li>
-                            
+
                                                                             <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
                                                                                 <a>...</a>
                                                                             </li>";
@@ -1119,7 +1119,7 @@ if (!in_array($action, array('addcategory', 'editcategory'))) {
         }
     }
     if($cat){
-            $tool_content .= "</div>            
+            $tool_content .= "</div>
                                 <table class='table-default category-links rounded-0'>";
     }
 
@@ -1129,8 +1129,8 @@ if (!in_array($action, array('addcategory', 'editcategory'))) {
     $i = 0;
     foreach ($cat as $myrow) {
         if (empty($urlview)) {
-            // No $view set in the url, thus for each category link it should be all zeros except it's own
-            $view = makedefaultviewcode($i);
+            // No $view set in the url, thus for each category link it should be all zeros except its own
+            $view = makedefaultviewcode($i, $aantalcategories);
         } else {
             $view = $urlview;
             $view[$i] = '1';
@@ -1198,7 +1198,7 @@ var arrayLeftRight = [];
 // init page1
 if(arrayLeftRight.length == 0){
     var totalGroups = $('#KeyallGroup').val();
-    
+
     for(j=1; j<=totalGroups; j++){
         if(j!=1){
             $('.cardGroup'+j).removeClass('d-block');
@@ -1259,7 +1259,7 @@ $('.page-item-previous .page-link').on('click',function(){
 
             $('#KeystartLi').removeClass('d-none');
             $('#KeystartLi').addClass('d-block');
-            
+
             for(i=2; i<=totalPages-1; i++){
                 $('#KeypageCenter'+i).removeClass('d-block');
                 $('#KeypageCenter'+i).addClass('d-none');
@@ -1292,7 +1292,7 @@ $('.page-item-previous .page-link').on('click',function(){
             $('#KeycloseLi').removeClass('d-none');
             $('#KeycloseLi').addClass('d-block');
 
-            
+
             for(i=1; i<=number; i++){
                 $('#KeypageCenter'+i).removeClass('d-none');
                 $('#KeypageCenter'+i).addClass('d-block');
@@ -1319,10 +1319,10 @@ $('.page-item-next .page-link').on('click',function(){
         var delPageActive = nextPage-1;
         $('#Keypage'+delPageActive).removeClass('active');
         $('#Keypage'+nextPage).addClass('active');
-    
+
         var totalGroups = $('#KeyallGroup').val();
         var totalPages = $('#KeypagesGroup').val();
-        
+
         for(i=1; i<=totalGroups; i++){
             if(i == nextPage){
                 $('.cardGroup'+i).removeClass('d-none');
@@ -1350,7 +1350,7 @@ $('.page-item-next .page-link').on('click',function(){
 
             $('#KeystartLi').removeClass('d-none');
             $('#KeystartLi').addClass('d-block');
-            
+
             for(i=2; i<=totalPages-1; i++){
                 $('#KeypageCenter'+i).removeClass('d-block');
                 $('#KeypageCenter'+i).addClass('d-none');
@@ -1399,7 +1399,7 @@ $('.page-item-next .page-link').on('click',function(){
             }
         }
 
-        
+
     });
 });
 
@@ -1408,7 +1408,7 @@ $('.page-item-next .page-link').on('click',function(){
 
 // page-link except prev-next button
 $('.page-item-pages .page-link').on('click',function(){
-    
+
     var IDCARD = this.id;
     var number = parseInt(IDCARD.match(/\d+/g));
 
@@ -1445,7 +1445,7 @@ $('.page-item-pages .page-link').on('click',function(){
         }
     }
 
-   
+
     if(number>=1 && number<=4 && totalPages>=12){
 
         $('#KeystartLi').removeClass('d-block');
@@ -1453,7 +1453,7 @@ $('.page-item-pages .page-link').on('click',function(){
 
         for(i=1; i<=5; i++){
             $('#KeypageCenter'+i).removeClass('d-none');
-            $('#KeypageCenter'+i).addClass('d-block'); 
+            $('#KeypageCenter'+i).addClass('d-block');
         }
         for(i=6; i<=totalPages-1; i++){
             $('#KeypageCenter'+i).removeClass('d-block');
