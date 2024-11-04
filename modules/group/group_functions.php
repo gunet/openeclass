@@ -379,9 +379,7 @@ function category_form_defaults($id) {
     }
 }
 
-function makedefaultviewcode($locatie) {
-    global $aantalcategories;
-
+function makedefaultviewcode($locatie, $aantalcategories) {
     $view = str_repeat('0', $aantalcategories);
     $view[$locatie] = '1';
     return $view;

@@ -22,9 +22,7 @@ require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';
 
-function makedefaultviewcode($locatie) {
-    global $aantalcategories;
-
+function makedefaultviewcode($locatie, $aantalcategories) {
     $view = str_repeat('0', $aantalcategories);
     $view[$locatie] = '1';
     return $view;
@@ -36,8 +34,8 @@ function makedefaultviewcode($locatie) {
  */
 function submit_link() {
     global $course_id, $course_code, $uid, $langSocialCategory,
-    $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state,
-	$langFormErrors, $langTheFieldIsRequired;
+        $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state,
+        $langFormErrors, $langTheFieldIsRequired;
 
     register_posted_variables(array('urllink' => true,
         'title' => true,
