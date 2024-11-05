@@ -190,7 +190,7 @@ if (!isset($_POST['final_submit'])) {
                 <div class='form-wrapper '>
                     <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
                     <div class='card panelCard card-default border-0'>
-                        <div class='card-header px-0 border-0'>
+                        <div class='card-header px-3 border-0'>
                             $langActSelect
                         </div>
                     </div>
@@ -509,7 +509,7 @@ if (!isset($_POST['final_submit'])) {
 } else {   //complete actions
 
     if (!isset($_GET['edit_act'])){ //complete actions if it is creation
-        $language = $_SESSION['language'];
+            $language = $_SESSION['language'];
             $units = $_SESSION['units'];
             $goals =$_SESSION['goals'];
 
