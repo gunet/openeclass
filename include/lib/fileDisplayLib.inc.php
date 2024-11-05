@@ -147,7 +147,7 @@ function public_file_path($disk_path, $filename = null) {
                 }
             }
         } else {
-            $dirname = $seen_paths[$partial_path];
+            $dirname = $seen_paths[$disk_path];
         }
     }
     if (!isset($filename)) {
