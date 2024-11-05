@@ -114,7 +114,7 @@ Class Commenting {
             foreach ($comments as $comment) {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
-                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
+                        $post_actions = '<div class="d-flex gap-3">';
                         $post_actions .= '<a aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
                         $post_actions .= '<a aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
@@ -125,7 +125,7 @@ Class Commenting {
                     }
                 } else {
                     if ($comment->permEdit($isEditor, $uid)) {
-                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
+                        $post_actions = '<div class="d-flex gap-3">';
 
                         if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
                             $head_content .= abuse_report_add_js();
@@ -151,12 +151,13 @@ Class Commenting {
                 $out .= "<div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
                             <div class='card panelCard panelCard-comments px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <div>
-                                        <a class='media-left p-0' href='#'>
-                                            ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."
-                                            <small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
-                                        </a>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3'>
+                                    <div class='media-left d-flex justify-content-start align-items-start gap-1 px-0'>
+                                        <div style='min-width:32px;'>". profile_image($comment->getAuthor(), IMAGESIZE_SMALL, 'img-circle rounded-circle') . "</div>
+                                        <div class='d-flex justify-content-start align-items-start gap-1 flex-wrap' style='margin-top:8px; line-height:16px;'>
+                                            <div>".$langBlogPostUser."</div>
+                                            <div style='margin-top:0px;'>".display_user($comment->getAuthor(), false, false)."</div>
+                                        </div>
                                     </div>
                                     ".$post_actions."
                                 </div>

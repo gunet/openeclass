@@ -245,11 +245,15 @@ function generate_single_post_html($post) {
     <div class="col-12">
         <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">
                                   <div class="card panelCard px-lg-4 py-lg-3 p-0">
-                                        <div class="card-header border-0">
-                                            <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                                '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') .'
-                                                &nbsp;<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
-                                            </a>
+                                        <div class="card-header border-0 d-flex justify-content-between align-items-center gap-4">
+                                            <div class="media-left d-flex justify-content-start align-items-start gap-1 px-0">
+                                                <div style="min-width:32px;">'. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '</div>
+                                                <div class="d-flex justify-content-start align-items-start gap-1 flex-wrap" style="margin-top:8px; line-height:16px;">
+                                                    <div>'.$langWallUser.'</div>
+                                                    <div style="margin-top:0px;">'.display_user($user_id, false, false).'</div>'.
+                                                    '<div>'.$shared.'</div>
+                                                </div>
+                                            </div>
                                             '.$post_actions.'
                                         </div>
                                         <div class="card-body bubble overflow-auto Borders">
@@ -407,11 +411,15 @@ function generate_infinite_container_html($posts, $next_page) {
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
                   <div class="col-12 mb-4">
                     <div class="card panelCard px-lg-4 py-lg-3">
-                      <div class="card-header border-0">
-                        <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .
-                          profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '
-                          &nbsp;<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
-                        </a>' .
+                      <div class="card-header border-0 d-flex justify-content-between align-items-center gap-4">
+                        <div class="media-left d-flex justify-content-start align-items-start gap-1 px-0">
+                            <div style="min-width:32px;">'. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '</div>
+                            <div class="d-flex justify-content-start align-items-start gap-1 flex-wrap" style="margin-top:8px; line-height:16px;">
+                                <div>'.$langWallUser.'</div>
+                                <div style="margin-top:0px;">'.display_user($user_id, false, false).'</div>'.
+                                '<div>'.$shared.'</div>
+                            </div>
+                        </div>' .
                         $post_actions . '
                       </div>
 
