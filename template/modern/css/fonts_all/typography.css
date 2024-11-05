@@ -2,152 +2,150 @@
     font-family: 'Manrope';
     font-weight: 700;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-Bold.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-Bold.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
     font-family: 'Manrope';
     font-weight: 800;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-ExtraBold.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-ExtraBold.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
     font-family: 'Manrope';
     font-weight: 200;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-ExtraLight.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-ExtraLight.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
     font-family: 'Manrope';
     font-weight: 300;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-Light.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-Light.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
     font-family: 'Manrope';
     font-weight: 500;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-Medium.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-Medium.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
     font-family: 'Manrope';
     font-weight: 400;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-Regular.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-Regular.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
     font-family: 'Manrope';
     font-weight: 600;
     font-style: normal;
-    src: url('../font-Manrope/fonts/Manrope-SemiBold.ttf')  format('truetype');
+    src: url('../font-Manrope/fonts/Manrope-SemiBold.ttf') format('truetype');
     font-display: swap;
 }
 
 
-
-
 @font-face {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-weight: 700;
     font-style: normal;
-    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-700.ttf')  format('truetype');
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-700.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-weight: 900;
     font-style: normal;
-    src: url('../font-Manrope/fonts/roboto-v15-latin_greek_cyrillic_greek-ext-900.ttf')  format('truetype');
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-900.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-weight: 100;
     font-style: normal;
-    src: url('../font-Manrope/fonts/roboto-v15-latin_greek_cyrillic_greek-ext-100.ttf')  format('truetype');
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-100.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-weight: 300;
     font-style: normal;
-    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-300.ttf')  format('truetype');
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-300.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-weight: 500;
     font-style: normal;
-    src: url('../font-Manrope/fonts/roboto-v15-latin_greek_cyrillic_greek-ext-500.ttf')  format('truetype');
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-500.ttf') format('truetype');
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'roboto';
+    font-family: 'Roboto';
     font-style: italic;
-    src: url('../font-Manrope/fonts/roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf')  format('truetype');
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf') format('truetype');
     font-display: swap;
 }
 
 
 @font-face {
-    font-family: 'open sans';
+    font-family: 'Open Sans';
     font-weight: 300;
     font-style: normal;
-    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-300.ttf')  format('truetype');
+    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-300.ttf') format('truetype');
     font-display: swap;
 }
-  
+
 @font-face {
-    font-family: 'open sans';
+    font-family: 'Open Sans';
     font-weight: 600;
     font-style: normal;
-    src: url('../font-Manrope/fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-600.ttf')  format('truetype');
-    font-display: swap;
-}
-  
-@font-face {
-    font-family: 'open sans';
-    font-weight: 700;
-    font-style: normal;
-    src: url('../font-Manrope/fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf')  format('truetype');
-    font-display: swap;
-}
-  
-@font-face {
-    font-family: 'open sans';
-    font-weight: 800;
-    font-style: normal;
-    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-800.ttf')  format('truetype');
-    font-display: swap;
-}
-  
-@font-face {
-    font-family: 'open sans';
-    font-weight: 500;
-    font-style: normal;
-    src: url('../font-Manrope/fonts/roboto-v15-latin_greek_cyrillic_greek-ext-500.ttf')  format('truetype');
+    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-600.ttf') format('truetype');
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'open sans';
+    font-family: 'Open Sans';
+    font-weight: 700;
+    font-style: normal;
+    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-weight: 800;
+    font-style: normal;
+    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-800.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-weight: 500;
+    font-style: normal;
+    src: url('../../fonts/roboto-v15-latin_greek_cyrillic_greek-ext-500.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Open Sans';
     font-style: italic;
-    src: url('../font-Manrope/fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf')  format('truetype');
+    src: url('../../fonts/open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf') format('truetype');
     font-display: swap;
 }
