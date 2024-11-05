@@ -54,6 +54,7 @@ $course_help_modules = [
     'progress',
     'request',
     'h5p',
+    'course_units',
     'course_settings',
     'course_description',
     'course_users',
