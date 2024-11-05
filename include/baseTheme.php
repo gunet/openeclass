@@ -5551,6 +5551,10 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[linkColor] url($urlServer/resources/img/units-expand-collapse.svg) 0 0;
                 }
 
+                .active-unit::after {
+                    background: $theme_options_styles[linkColor] !important;
+                }
+
                 .prev-next-learningPath{
                     color: $theme_options_styles[linkColor];
                 }
