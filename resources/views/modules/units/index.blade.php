@@ -128,7 +128,7 @@
                                 <div class='card-body p-0'>
                                     <ul class="tree-units">
                                         <li>
-                                            <details open>
+                                            <details>
                                                 <summary><h3 class='mb-0'>{{ trans('langUnits')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
