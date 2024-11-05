@@ -5755,3 +5755,12 @@ th.grade-col a{
   background-size: 100%;
   background-repeat: no-repeat;
 }
+
+/******************************** Course Units *********************************/
+.active-unit::after {
+  background:#0073E6!important;
+}
+
+.gray-color {
+  color: #808080;
+}
