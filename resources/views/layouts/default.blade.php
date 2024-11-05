@@ -10,39 +10,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Favicon for various devices -->
+    {{-- Favicon for various devices --}}
     <link rel="shortcut icon" href="{{ $favicon_img }}" />
     <link rel="apple-touch-icon-precomposed" href="{{ $favicon_img }}" />
     <link rel="icon" type="image/png" href="{{ $favicon_img }}" />
 
-    <!-- Bootstrap v5 -->
+    {{-- Bootstrap v5 --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?v={{ $cache_suffix }}"/>
 
-    <!-- new link for input icon -->
-    <!-- Font Awesome - A font of icons -->
+    {{-- new link for input icon --}}
+    {{-- Font Awesome - A font of icons --}}
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css?v={{ $cache_suffix }}" rel="stylesheet"/>
 
-    <!-- Font Manrope -->
+    {{-- Bundled fonts --}}
     <link href="{{ $urlAppend }}template/modern/css/fonts_all/typography.css?v={{ $cache_suffix }}" rel="stylesheet"/>
 
-    <!-- fullcalendar v3.10.2-->
+    {{-- fullcalendar v3.10.2--}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v={{ $cache_suffix }}"/>
 
-    <!-- DataTables 1.10.19 version -->
+    {{-- DataTables 1.10.19 version --}}
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css?v={{ $cache_suffix }}"/>
 
-    <!-- Owl-carousel -->
+    {{-- Owl-carousel --}}
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css?v={{ $cache_suffix }}"/>
 
-    <!-- Our css modern if we need it -->
+    {{-- Our css modern if we need it --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?v={{ $cache_suffix }}"/>
 
-    <!-- if change eclass theme then put styles css of this theme -->
+    {{-- if change eclass theme then put styles css of this theme --}}
     @if (isset($styles_str) && $styles_str)
     <style>
         {!! $styles_str !!}
@@ -51,29 +51,29 @@
     @stack('head_styles')
 
 
-    <!-- jQuery -->
+    {{-- jQuery --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
 
-    <!-- Bootstrap v5 js -->
+    {{-- Bootstrap v5 js --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js?v={{ $cache_suffix }}"></script>
 
-    <!-- DataTables v1.10.19 and Checkitor v11.0.1 js-->
+    {{-- DataTables v1.10.19 and Checkitor v11.0.1 js--}}
     <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
-    <!-- Bootbox -->
+    {{-- Bootbox --}}
     <script src="{{ $urlAppend }}js/bootbox/bootboxV6.min.js"></script>
-    <!-- SlimScroll -->
+    {{-- SlimScroll --}}
     <script src="{{ $urlAppend }}js/jquery.slimscroll.min.js"></script>
-    <!-- BlockUI -->
+    {{-- BlockUI --}}
     <script src="{{ $urlAppend }}js/blockui-master/jquery.blockUI.js"></script>
-    <!-- Tinymce -->
+    {{-- Tinymce --}}
     <script src="{{ $urlAppend }}js/tinymce/tinymce.min.js"></script>
-    <!-- Screenfull -->
+    {{-- Screenfull --}}
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
-    <!-- cLICKbOARD -->
+    {{-- cLICKbOARD --}}
     <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
-    <!-- fullcalendar v3.10.2 and moment v 2.29.1-->
+    {{-- fullcalendar v3.10.2 and moment v 2.29.1--}}
     <script src="{{ $urlAppend }}js/fullcalendar/moment.min.js"></script>
     <script src="{{ $urlAppend }}js/fullcalendar/fullcalendar.min.js"></script>
     <script src="{{ $urlAppend }}js/fullcalendar/locales/fullcalendar.{{ $language }}.js"></script>
@@ -93,11 +93,10 @@
         var notificationsCourses = { getNotifications: '{{ $urlAppend }}main/ajax_sidebar.php' };
     </script>
 
-    <!-- owl-carousel js -->
+    {{-- owl-carousel js --}}
     <script src="{{ $urlAppend }}js/owl-carousel.min.js"></script>
 
-
-    <!-- Our js modern -->
+    {{-- Our js modern --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/custom.js?v={{ $cache_suffix }}"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js?v={{ $cache_suffix }}"></script>

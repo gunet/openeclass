@@ -10,30 +10,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Favicon for various devices -->
+    {{-- Favicon for various devices --}}
     <link rel="shortcut icon" href="{{ $favicon_img }}" />
     <link rel="apple-touch-icon-precomposed" href="{{ $favicon_img }}" />
     <link rel="icon" type="image/png" href="{{ $favicon_img }}" />
 
-    <!-- Bootstrap v5 -->
+    {{-- Bootstrap v5 --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css"/>
 
-    <!-- new link for input icon -->
-    <!-- Font Awesome - A font of icons -->
+    {{-- new link for input icon --}}
+    {{-- Font Awesome - A font of icons --}}
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
 
-
-    <!-- Font Manrope -->
+    {{-- Bundled fonts --}}
     <link href="{{ $urlAppend }}template/modern/css/fonts_all/typography.css" rel="stylesheet"/>
 
-    <!-- fullcalendar v3.10.2-->
+    {{-- fullcalendar v3.10.2 --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
 
-    <!-- DataTables 1.10.19 version -->
+    {{-- DataTables 1.10.19 version --}}
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>
 
 
-    <!-- Our css modern if we need it -->
+    {{-- Our css modern if we need it --}}
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css"/>
@@ -41,7 +40,7 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
 
 
-    <!-- if change eclass theme then put styles css of this theme -->
+    {{-- if change eclass theme then put styles css of this theme --}}
     @if (isset($styles_str) && $styles_str)
     <style>
         {!! $styles_str !!}
@@ -49,34 +48,32 @@
     @endif
     @stack('head_styles')
 
-
-    <!-- jQuery -->
+    {{-- jQuery --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
 
-    <!-- Bootstrap v5 js -->
+    {{-- Bootstrap v5 js --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js"></script>
 
-    <!-- DataTables v1.10.19 and Checkitor v11.0.1 js-->
+    {{-- DataTables v1.10.19 and Checkitor v11.0.1 js--}}
     <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
     <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
-    <!-- Bootbox -->
+    {{-- Bootbox --}}
     <script src="{{ $urlAppend }}js/bootbox/bootboxV6.min.js"></script>
-    <!-- SlimScroll -->
+    {{-- SlimScroll --}}
     <script src="{{ $urlAppend }}js/jquery.slimscroll.min.js"></script>
-    <!-- BlockUI -->
+    {{-- BlockUI --}}
     <script src="{{ $urlAppend }}js/blockui-master/jquery.blockUI.js"></script>
-    <!-- Tinymce -->
+    {{-- Tinymce --}}
     <script src="{{ $urlAppend }}js/tinymce/tinymce.min.js"></script>
-    <!-- Screenfull -->
+    {{-- Screenfull --}}
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
-    <!-- cLICKbOARD -->
+    {{-- ClickBoard --}}
     <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
-    <!-- fullcalendar v3.10.2 and moment v 2.29.1-->
+    {{-- fullcalendar v3.10.2 and moment v 2.29.1--}}
     <script src="{{ $urlAppend }}js/fullcalendar/moment.min.js"></script>
     <script src="{{ $urlAppend }}js/fullcalendar/fullcalendar.min.js"></script>
     <script src="{{ $urlAppend }}js/fullcalendar/locales/fullcalendar.{{ $language }}.js"></script>
-
 
     <script>
         $(function() {
@@ -84,16 +81,13 @@
                 $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4>" });
             });
         });
-    </script>
 
-    <script>
         bootbox.setDefaults({
             locale: "{{ $language }}"
         });
     </script>
 
-
-    <!-- Our js modern -->
+    {{-- Our js modern --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/custom.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js"></script>
@@ -109,24 +103,24 @@
 
     <div class="ContentEclass d-flex flex-column min-vh-100">
 
-        <!-- Desktop navbar -->
+        {{-- Desktop navbar --}}
         <div class="d-none d-lg-block">
-            @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
+            @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
         </div>
 
-        <!-- Mobile navbar -->
+        {{-- Mobile navbar --}}
         <div class="d-block d-lg-none">
-            @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
+            @include('layouts.partials.navheadMobile', ['logo_img_small' => $logo_img_small])
         </div>
 
         @yield('content')
 
-        <!-- Desktop navbar -->
+        {{-- Desktop navbar --}}
         <div class="d-none d-lg-block">
             @include('layouts.partials.footerDesktop')
         </div>
 
-        <!-- Mobile navbar -->
+        {{-- Mobile navbar --}}
         <div class="d-block d-lg-none">
             @include('layouts.partials.footerMobile')
         </div>
