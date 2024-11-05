@@ -6229,3 +6229,4 @@ $langEnablePreventDownloadPdf = "Enable file download avoidance methods";
 $langDisablePreventDownloadPdf = "Disable file download avoidance methods";
 $langPreventEnablePDF = "The process has been activated.";
 $langPreventDisablePDF = "Process disabled.";
+$langChooseContactImg = "Image selection in contact";

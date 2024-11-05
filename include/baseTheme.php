@@ -7041,6 +7041,21 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// CONTACT IMAGE UPLOADED  /////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['contactUpload'])){
+            $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
+            $contact_image = "$urlThData/$theme_options_styles[contactUpload]";
+            $styles_str .= "
+                .contact-content{
+                    background-image: url($contact_image);
+                }
+            ";
+        }
 
 
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.

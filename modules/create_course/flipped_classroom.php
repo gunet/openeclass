@@ -46,7 +46,7 @@ $(document).ready(function() {
     $('#add_g').click(function() {
         if (i <= 20) {
             
-            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\" class="col-12 d-inline-flex mt-3"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "control-label-notes" >' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div>')
+            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\" class="col-12 d-inline-flex mt-3"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "control-label-notes text-nowrap" >' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
@@ -54,7 +54,7 @@ $(document).ready(function() {
     $('#add_u').click(function() {
         if (j <= 20) {
             
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mt-3"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\"class= "control-label-notes"  >' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mt-3"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\"class= "control-label-notes text-nowrap"  >' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -178,7 +178,7 @@ if (!isset($_POST['next'])) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
-                        <input name='title' id='title' type='text' class='form-control pe-none greyColor text-info fw-bold' value='" . q($_SESSION['title']) . "' placeholder='$langTitle' readonly>
+                        <input name='title' id='title' type='text' class='form-control pe-none greyColor text-dark fw-bold' value='" . q($_SESSION['title']) . "' placeholder='$langTitle' readonly>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
@@ -222,7 +222,7 @@ if (!isset($_POST['next'])) {
                     </div>
                         
                     <div id='row_g_1' class='col-12 d-inline-flex'>
-                        <label for='goal_1' id='gtitle_1' class= 'control-label-notes'>1: </label>
+                        <label for='goal_1' id='gtitle_1' class= 'control-label-notes text-nowrap'>1: </label>
                         <input name='goals[]' id='goal_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langGoals'>
                     </div>   
                     <div id='dynamic_goals'></div>
@@ -261,7 +261,7 @@ if (!isset($_POST['next'])) {
                         </a>
                     </div>
                     <div id='row_u_1' class='col-12 d-inline-flex'>
-                        <label for='unit_1' id='utitle_1' class='control-label-notes'>1: </label>
+                        <label for='unit_1' id='utitle_1' class='control-label-notes text-nowrap'>1: </label>
                         <input name='units[]' id='unit_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langUnits'>               
                     </div>
 

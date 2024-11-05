@@ -6948,3 +6948,4 @@ $langEnablePreventDownloadPdf = "Ενεργοποίηση μεθόδων απο�
 $langDisablePreventDownloadPdf = "Απενεργοποίηση μεθόδων αποφυγής λήψης αρχείου";
 $langPreventEnablePDF = "Η διαδικασία ενεργοποιήθηκε.";
 $langPreventDisablePDF = "Η διαδικασία απενεργοποιήθηκε.";
+$langChooseContactImg = "Επιλογή εικόνας στην επικοινωνία";

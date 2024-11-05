@@ -140,6 +140,9 @@ if (isset($_GET['export'])) {
         if (isset($styles['faviconUpload'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[faviconUpload]");
         }
+        if (isset($styles['contactUpload'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[contactUpload]");
+        }
 
         $zipFile = new ZipArchive();
         $zipFile->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -887,6 +890,15 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $faviconUpload = "<label for='faviconUpload' aria-label='$langFavicon'></label><input type='file' name='faviconUpload' id='faviconUpload'>";
+    }
+
+    if (isset($theme_options_styles['contactUpload'])) {
+        $contactUpload = "
+            <img src='$urlThemeData/$theme_options_styles[contactUpload]' style='max-height:100px;max-width:150px;' alt='Contact upload'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=contactUpload'>$langDelete</a>
+            <input type='hidden' name='contactUpload' value='$theme_options_styles[contactUpload]'>
+        ";
+    } else {
+       $contactUpload = "<label for='contactUpload' aria-label='$langContact'></label><input type='file' name='contactUpload' id='contactUpload'>";
     }
 
 
@@ -2920,6 +2932,14 @@ $tool_content .= "
                     </div>
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <h3 class='theme_options_legend text-decoration-underline mt-4'>$langContact </h3>
+                        <div class='col-sm-12 control-label-notes mb-2'>$langChooseContactImg:</div>
+                        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                            $contactUpload
+                        </div>
+                    </div>
+                    <hr>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
                         <div>
                             <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAboutChatContainer</h3>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -3230,7 +3250,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -3246,7 +3266,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];

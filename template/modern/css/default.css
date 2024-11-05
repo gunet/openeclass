@@ -5656,7 +5656,7 @@ th.grade-col a{
   overflow: hidden;
 }
 .about-content-2{
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../images/courses_info.jpg);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(../images/courses_info.PNG);
   min-height: calc(100vh - 60px);
 }
 @media(max-width:991px){
@@ -5744,4 +5744,14 @@ th.grade-col a{
 }
 .about-content-2.show-animate .row-about-students{
   transform: translateX(0);
+}
+
+
+/******************************** PAGE CONTACT *********************************/
+
+.contact-content{
+  min-height: 100%;
+  background-image: url(../images/contact_us.svg);
+  background-size: 100%;
+  background-repeat: no-repeat;
 }

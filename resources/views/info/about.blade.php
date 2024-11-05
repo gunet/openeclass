@@ -34,19 +34,19 @@
                                     <div class='row m-auto w-100'>
                                         <div class='col-lg-3 col-md-6 col-12 text-center'>
                                             <div class='about-badge text-heading-h2 badge Primary-600-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_inactive }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langCourses') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langCourses') }}</p>
                                         </div>
                                         <div class='col-lg-3 col-md-6 col-12 col-12 text-center mt-md-0 mt-4'>
                                             <div class='about-badge text-heading-h2 badge Success-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_open }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langOpenCoursesShort') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langOpenCoursesShort') }}</p>
                                         </div>
                                         <div class='col-lg-3 col-md-6 col-12 col-12 text-center mt-lg-0 mt-4'>
                                             <div class='about-badge text-heading-h2 badge Warning-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_registration }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langOpenCourseWithRegistration') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langOpenCourseWithRegistration') }}</p>
                                         </div>
                                         <div class='col-lg-3 col-md-6 col-12 col-12 text-center mt-lg-0 mt-4'>
                                             <div class='about-badge text-heading-h2 badge Accent-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $course_closed }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langClosedCourses') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langClosedCourses') }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -60,19 +60,19 @@
                                     <div class='row m-auto w-100'>
                                         <div class='col-lg-3 col-md-6 col-12 text-center'>
                                             <div class='about-badge text-heading-h2 badge Primary-600-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_total }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langUsers') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langUsers') }}</p>
                                         </div>
                                         <div class='col-lg-3 col-md-6 col-12 text-center mt-md-0 mt-4'>
                                             <div class='about-badge text-heading-h2 badge Success-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_status[USER_TEACHER] }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langTeachers') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langTeachers') }}</p>
                                         </div>
                                         <div class='col-lg-3 col-md-6 col-12 text-center mt-lg-0 mt-4'>
                                             <div class='about-badge text-heading-h2 badge Warning-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_status[USER_STUDENT] }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langStudents') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langStudents') }}</p>
                                         </div>
                                         <div class='col-lg-3 col-md-6 col-12 text-center mt-lg-0 mt-4'>
                                             <div class='about-badge text-heading-h2 badge Accent-200-bg p-4 rounded-circle' style='font-size:24px;'>{{ $count_status[USER_GUEST] }}</div>
-                                            <p class='TextBold text-white'>{{ trans('langGuest') }}</p>
+                                            <p class='TextBold text-dark'>{{ trans('langGuest') }}</p>
                                         </div>
                                     </div>
                                 </div>

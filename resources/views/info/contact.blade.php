@@ -12,7 +12,7 @@
 
             @include('layouts.partials.show_alert')
 
-            @if(!empty($postaddress) or !empty($phone) or !empty($emailhelpdesk))
+            @if((!empty($postaddress) or !empty($phone) or !empty($emailhelpdesk)) && get_config('contact_form_activation'))
                 <div class='col-12'>
                     <div class='row row-cols-1 row-cols-md-3 g-4'>
                         @if(!empty($postaddress))
@@ -140,6 +140,67 @@
                         </div>
                         <div class='col d-none d-lg-block text-end'>
                             <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class='col-12 mt-4'>
+                    <div class='row row-cols-1 row-cols-md-2 g-4'>
+                        <div class='col'>
+                            @if(!empty($postaddress))
+                                <div class='card panelCard card-default mb-4'>
+                                    <div class='card-body'>
+                                        <div class='col-12 d-flex justify-content-center mb-2'>
+                                            <div class='circle-img-contant'>
+                                                <i class="fa-solid fa-address-card fa-lg"></i>
+                                            </div>
+                                        </div>
+                                        <div class='col-12 d-flex justify-content-center text-center mb-0'>
+                                            <strong>{!! trans('langInstitutePostAddress') !!}</strong>
+                                        </div>
+                                        <div class='col-12 d-flex justify-content-center text-center'>
+                                            {!! $postaddress !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if(!empty($phone))
+                                <div class='card panelCard card-default mb-4'>
+                                    <div class='card-body'>
+                                        <div class='col-12 d-flex justify-content-center mb-2'>
+                                            <div class='circle-img-contant'>
+                                                <i class="fa-solid fa-phone fa-lg"></i>
+                                            </div>
+                                        </div>
+                                        <div class='col-12 d-flex justify-content-center text-center mb-0'>
+                                            <strong>{!! trans('langPhone') !!}</strong>
+                                        </div>
+                                        <div class='col-12 d-flex justify-content-center text-center'>
+                                            {{ $phone }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if(!empty($emailhelpdesk))
+                                <div class='card panelCard card-default'>
+                                    <div class='card-body'>
+                                        <div class='col-12 d-flex justify-content-center mb-2'>
+                                            <div class='circle-img-contant'>
+                                                <i class="fa-solid fa-square-envelope fa-lg"></i>
+                                            </div>
+                                        </div>
+                                        <div class='col-12 d-flex justify-content-center text-center mb-0'>
+                                            <strong>{!! trans('langEmail') !!}</strong>
+                                        </div>
+                                        <div class='col-12 d-flex justify-content-center text-center'>
+                                            {!! $emailhelpdesk !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class='col'>
+                            <div class='contact-content'></div>
                         </div>
                     </div>
                 </div>
