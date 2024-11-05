@@ -5074,9 +5074,9 @@ function show_assignment($id) {
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) { //neo pedio vathmos aksiologhshs mono gia peer review
                     sort_link($langPeerReviewGrade, '');
                 }
-                sort_link($langGradebookGrade, 'grade', 'class="grade-col"');
+                sort_link($langGradebookGrade, 'grade', 'style="width: 10%;" class="grade-col"');
                 if ($is_editor) {
-                    $tool_content .= "<th class='tools-col' aria-label='$langSettingSelect'></th>";
+                    $tool_content .= "<th class='tools-col' style='width:10%;' aria-label='$langSettingSelect'></th>";
                 }
 
                 $tool_content .= "</tr></thead><tbody>";
@@ -5252,7 +5252,7 @@ function show_assignment($id) {
             }
             $tool_content .= "<tr>
                             <td class='count-col'>$i.</td>
-                            <td class='user-col' style='width: 50%';>$name $am_field $mess";
+                            <td class='user-col' style='width: 45%';>$name $am_field $mess";
 
             // student comment
             if (trim($row->comments != '')) {
@@ -5345,7 +5345,7 @@ function show_assignment($id) {
             }
             $tool_content .= "<td class='filename-col' class='col-md-2'>$filelink <br> $plagiarismlink</td>";
 
-            $tool_content .= "<td class='col-md-2'>" . format_locale_date(strtotime($row->submission_date)) .$late_sub_text. "</td>";
+            $tool_content .= "<td class='col-md-2'><small>" . format_locale_date(strtotime($row->submission_date)) .$late_sub_text. "</small></td>";
 
             if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
                 $tool_content .="<td class='col-md-1' class='text-center'>
@@ -6112,12 +6112,6 @@ function submit_review_per_ass($id) {
 
 /**
  * @brief submit grades to students
- * @global type $langGrades
- * @global type $course_id
- * @global type $course_code
- * @global type $langFormErrors
- * @global type $langTheField
- * @global type $langGradebookGrade
  * @param type $grades_id
  * @param type $grades
  * @param type $email
@@ -6275,8 +6269,6 @@ function send_file($id, $file_type) {
 
 /**
  * @brief Zip submissions to assignment $id and send it to user
- * @global string $workPath
- * @global type $course_code
  * @param type $id
  * @return boolean
  */

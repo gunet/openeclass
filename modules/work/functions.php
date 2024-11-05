@@ -53,8 +53,6 @@ function table_row($title, $content, $html = false) {
  * @brief Show a table header which is a link with the appropriate sorting
     parameters - $attrib should contain any extra attributes requered in
     the <th> tags
- * @global type $tool_content
- * @global type $course_code
  * @param type $title
  * @param type $opt
  * @param type $attrib
@@ -660,15 +658,6 @@ function export_grades_to_csv($id) {
 
 /**
  * @brief notify (via email) course admin about assignment submission
- * @global type $logo
- * @global type $langAssignmentPublished
- * @global type $langAssignmentHasPublished
- * @global type $urlServer
- * @global type $course_code
- * @global type $langSender
- * @global type $langAssignment
- * @global type $course_id
- * @global type $langHasAssignmentPublished
  * @param type $title
  */
 function notify_for_assignment_submission($title) {
