@@ -231,9 +231,9 @@
             @endif
 
             @if($course_code)
-            <div class="col_maincontent_active">
+                <div class="col_maincontent_active">
             @else
-            <div class="col-12">
+                <div class="col-12">
             @endif
 
                 <div class="row">
@@ -244,14 +244,14 @@
 
 
                     @if($course_code and !$is_in_tinymce)
-                    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
-                        <div class="offcanvas-header">
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
+                        <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
+                            <div class="offcanvas-header">
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                            </div>
                         </div>
-                        <div class="offcanvas-body">
-                            @include('layouts.partials.sidebar',['is_editor' => $is_editor])
-                        </div>
-                    </div>
                     @endif
 
                     @if(!$is_in_tinymce)
@@ -273,7 +273,7 @@
                             {!! $metaDataBox !!}
                         </div>
                     @endif
-
+                    @if ($can_upload)
                         <div class="col-12 drag_and_drop_container d-none mb-3">
                             <input type="hidden" name="uploadPath" value="{{ $curDirPath }}">
                             <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
@@ -310,10 +310,9 @@
 {{--                                    </div>--}}
 {{--                                </div>--}}
                                 </div>
-
                             </div>
-
                         </div>
+                    @endif
 
                     @if (count($fileInfo) or $curDirName)
 
