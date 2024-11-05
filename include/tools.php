@@ -123,7 +123,7 @@ function lessonToolsMenu(bool $rich=true): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
-           $langActiveTools, $langInactiveTools, $langLocale;
+           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -145,6 +145,10 @@ function lessonToolsMenu(bool $rich=true): array
                         'title' => $langCourseOptions,
                         'class' => 'active'));
     }
+
+    // Check if a course is collaborative and its view-type is different than session-view-type.
+    // If it's true then hide the module session.
+    $view_course = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id);
 
     foreach ($tools_sections as $section) {
 
@@ -182,6 +186,11 @@ function lessonToolsMenu(bool $rich=true): array
             // hide teleconference when no tc servers are enabled
             if ($mid == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
                 continue;
+            }
+
+            if ($mid == MODULE_ID_SESSION and $is_collaborative_course and 
+                (is_null($view_course->view_type) or $view_course->view_type != 'sessions')) {
+                    continue;
             }
 
             // if we are in messages or announcements add (if needed) mail address status
