@@ -148,12 +148,10 @@
                     <div class='row row-cols-1 row-cols-md-2 g-4'>
                         <div class='col'>
                             @if(!empty($postaddress))
-                                <div class='card panelCard card-default mb-4'>
+                                <div class='card panelCard card-default card-transparent border-0 mb-4'>
                                     <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2'>
-                                            <div class='circle-img-contant'>
-                                                <i class="fa-solid fa-address-card fa-lg"></i>
-                                            </div>
+                                        <div class='col-12 d-flex justify-content-center mb-4'>
+                                            <i class="fa-solid fa-address-card fa-lg" style='font-size:36px;'></i>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center text-center mb-0'>
                                             <strong>{!! trans('langInstitutePostAddress') !!}</strong>
@@ -165,12 +163,10 @@
                                 </div>
                             @endif
                             @if(!empty($phone))
-                                <div class='card panelCard card-default mb-4'>
+                                <div class='card panelCard card-default card-transparent border-0 mb-4'>
                                     <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2'>
-                                            <div class='circle-img-contant'>
-                                                <i class="fa-solid fa-phone fa-lg"></i>
-                                            </div>
+                                        <div class='col-12 d-flex justify-content-center mb-4'>
+                                            <i class="fa-solid fa-phone fa-lg" style='font-size:36px;'></i>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center text-center mb-0'>
                                             <strong>{!! trans('langPhone') !!}</strong>
@@ -182,12 +178,10 @@
                                 </div>
                             @endif
                             @if(!empty($emailhelpdesk))
-                                <div class='card panelCard card-default'>
+                                <div class='card panelCard card-default card-transparent border-0'>
                                     <div class='card-body'>
-                                        <div class='col-12 d-flex justify-content-center mb-2'>
-                                            <div class='circle-img-contant'>
-                                                <i class="fa-solid fa-square-envelope fa-lg"></i>
-                                            </div>
+                                        <div class='col-12 d-flex justify-content-center mb-4'>
+                                            <i class="fa-solid fa-square-envelope fa-lg" style='font-size:36px;'></i>
                                         </div>
                                         <div class='col-12 d-flex justify-content-center text-center mb-0'>
                                             <strong>{!! trans('langEmail') !!}</strong>
