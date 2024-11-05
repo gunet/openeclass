@@ -132,8 +132,8 @@
                                                 <summary><h3 class='mb-0'>{{ trans('langUnits')}}</h3></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
-                                                        <li>
-                                                            <a class='TextBold' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
+                                                        <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
+                                                            <a class='TextBold{{ $cu->id != $id ? " gray-color" : "" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
                                                                 {{ $cu->title }}
                                                             </a>
                                                             <br>
