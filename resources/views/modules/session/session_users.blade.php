@@ -58,7 +58,7 @@
                                         <table class='table-default'>
                                             <thead>
                                                 <tr>
-                                                    <th>{{ trans('langUsers') }}</th>
+                                                    <th style='min-width:200px;'>{{ trans('langUsers') }}</th>
                                                     <th>{{ trans('langRegisteredUsers') }}</th>
                                                     <th aria-label="{{ trans('langSettingSelect') }}"></th>
                                                 </tr>
