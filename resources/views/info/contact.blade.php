@@ -193,7 +193,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class='col'>
+                        <div class='col d-none d-md-block'>
                             <div class='contact-content'></div>
                         </div>
                     </div>
