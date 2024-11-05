@@ -41,12 +41,17 @@ $pageName = $langMyPersoAnnouncements;
 //         $lesson_ids = $collaboration_ids;
 //     }
 // }
+
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-    foreach ($_SESSION['courses'] as $user_course_code => $user_course_status) {
-        $lesson_ids[] = course_code_to_id($user_course_code);
+    if (isset($_SESSION['courses'])) {
+        foreach ($_SESSION['courses'] as $user_course_code => $user_course_status) {
+            $lesson_ids[] = course_code_to_id($user_course_code);
+        }
+    } else {
+        $lesson_ids = array();
     }
     $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
     $data['iTotalDisplayRecords'] =  count($announcements);
