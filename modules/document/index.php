@@ -746,18 +746,17 @@ if ($can_upload or $user_upload) {
                                         copyrighted = ?d,
                                         lock_user_id = ?d"
                             , $course_id, $subsystem, $subsystem_id, $file_path, $extra_path, $fileName, $vis
-                            , $_POST['file_comment'], $_POST['file_title']
+                            , $_POST['file_comment'] ?? '', $_POST['file_title'] ?? ''
                             , $file_date, $file_date
                             , $file_format, $language, $_POST['file_copyrighted'], $uid)->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             // Logging
-            Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
+            Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, [
+                'id' => $id,
                 'filepath' => $file_path,
-                'filename' => $fileName,
-                'comment' => $_POST['file_comment'],
-                'title' => $_POST['file_title']));
-                Session::flash('message',$langDownloadEnd);
-                Session::flash('alert-class', 'alert-success');
+                'filename' => $fileName ]);
+            Session::flash('message',$langDownloadEnd);
+            Session::flash('alert-class', 'alert-success');
             $session->setDocumentTimestamp($course_id);
             redirect_to_current_dir();
         } elseif (isset($_POST['file_content'])) {
