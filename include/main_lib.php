@@ -370,8 +370,8 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     return "<div class='d-flex justify-content-start align-items-start gap-2'>
                 $icon
                 <a style='$padding_link' $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'
-                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langUserProfile'>" 
-                     . $student_name . 
+                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langUserProfile'>"
+                     . $student_name .
                 "</a>
             </div>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
@@ -1363,6 +1363,9 @@ function get_file_extension($filename) {
 // sequences of whitespace characters to single spaces
 // and remove non-printable characters, while preserving new lines
 function canonicalize_whitespace($s) {
+    if (is_null($s)) {
+        return '';
+    }
     return str_replace(array(" \1 ", " \1", "\1 ", "\1"), "\n", preg_replace('/[\t ]+/', ' ', str_replace(array("\r\n", "\n", "\r"), "\1", trim(preg_replace('/[\x00-\x08\x0C\x0E-\x1F\x7F]/', '', $s)))));
 }
 
