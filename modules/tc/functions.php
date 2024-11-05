@@ -681,7 +681,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">'+element[0]+'</strong>');
                     let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">'+element[1]+'</strong>');
                     let copyCell = $('<td class=\"col-sm-1\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$urlServer\"></i>');
-                    let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+element[0]+'\" class=\"fa fa-times Accent-200-cl\"></i></span>');
+                    let deleteCell = $('<td class=\"col-sm-1\">')
+                        .html('<span><i onclick=\"deleteUserRow(this)\" class=\"fa fa-times Accent-200-cl\"></i></span>')
+                        .find('i.fa-times').data('email', element[0]);
                     newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
                     $('#user-list').append(newRow);
                 });
@@ -690,7 +692,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
             // function delete row and remove from usrDataArray on click
             function deleteUserRow(spanElement) {
-                let email = spanElement.getAttribute('data-email')
+                let email = $(spanElement).data('email');
                 usrDataArray = usrDataArray.filter(subarray => subarray[0] !== email);
                 $('#external_users').val(JSON.stringify(usrDataArray));
                 $(spanElement).closest('tr').remove();
