@@ -5750,7 +5750,7 @@ th.grade-col a{
 /******************************** PAGE CONTACT *********************************/
 
 .contact-content{
-  min-height: 100%;
+  min-height: 560px;
   background-image: url(../images/contact_us.svg);
   background-size: 100%;
   background-repeat: no-repeat;
