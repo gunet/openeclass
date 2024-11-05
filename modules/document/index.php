@@ -752,11 +752,16 @@ if ($can_upload or $user_upload) {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, [
-                'id' => $id,
-                'filepath' => $file_path,
-                'filename' => $fileName ]);
-            Session::flash('message',$langDownloadEnd);
-            Session::flash('alert-class', 'alert-success');
+                    'id' => $id,
+                    'filepath' => $file_path,
+                    'filename' => $fileName,
+                    'comment' => $_POST['file_comment'] ?? '',
+                    'title' => $_POST['file_title'] ?? ''
+                ]);
+                Session::flash('message',$langDownloadEnd);
+                Session::flash('alert-class', 'alert-success');
+
+
             $session->setDocumentTimestamp($course_id);
             redirect_to_current_dir();
         } elseif (isset($_POST['file_content'])) {
@@ -1481,6 +1486,7 @@ foreach ($result as $row) {
     }
 
     $downloadMessage = $row->format == '.dir' ? $langDownloadDir : $langSave;
+    $info['action_button'] = '';
     if (!$is_in_tinymce) {
         $cmdDirName = getIndirectReference($row->path);
         if ($can_upload) {
@@ -1539,12 +1545,11 @@ foreach ($result as $row) {
                       'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));
         } elseif ($uid or $row->format != '.dir') {
-            if(get_config('enable_prevent_download_url') && $row->format == 'pdf' && $row->prevent_download == 1){
+            if (get_config('enable_prevent_download_url') && $row->format == 'pdf' && $row->prevent_download == 1){
                 $info['action_button'] = '';
-            }else{
+            } else {
                 $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);
             }
-
         }
     }
 
