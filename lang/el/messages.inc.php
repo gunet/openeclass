@@ -3145,7 +3145,7 @@ $langSelectFac = "Επιλογή $langOfFaculty";
 $listtomeis = "Τομείς";
 $langDepartmentsList = "Ακολουθεί ο κατάλογος τμημάτων του ιδρύματος.
 	Επιλέξτε οποιοδήποτε από αυτά για να δείτε τα διαθέσιμα σε αυτό $langsCourses.";
-$langWrongPassCourse = "Λάθος συνθηματικό για το $langsCourse";
+$langWrongPassCourse = "Λάθος συνθηματικό $langsOfCourse";
 $langAvCourses = "διαθέσιμα $langsCourses";
 $langAvCours = "διαθέσιμο $langsCourse";
 $m['tomeas'] = 'Τομέας';
