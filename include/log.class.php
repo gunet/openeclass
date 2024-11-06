@@ -31,6 +31,7 @@ define('LOG_CREATE_COURSE', 5);
 define('LOG_DELETE_COURSE', 6);
 define('LOG_MODIFY_COURSE', 7);
 define('LOG_LOGIN_FAILURE', 8);
+define('LOG_LOGIN_DOUBLE', 10);
 define('LOG_DELETE_USER', 9);
 
 class Log {
@@ -81,7 +82,7 @@ class Log {
      * @param type $logtype (-1 means logtypes)
      * @param type $date_from
      * @param type $date_now
-     * @param type script_page
+     * @param type $script_page script_page
      * @return none
      */
     public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {

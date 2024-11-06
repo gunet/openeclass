@@ -4578,6 +4578,16 @@ function warnCourseInvalidDepartment($prompt=false) {
  */
 function login_hook($options) {
     session_regenerate_id();
+
+    if (get_config('double_login_lock')) {
+        Database::get()->query('INSERT INTO login_lock
+            SET user_id = ?d, session_id = ?s, ts = NOW()
+            ON DUPLICATE KEY UPDATE user_id = ?d, ts = NOW()',
+            $options['user_id'], session_id(), $options['user_id']);
+        Database::get()->query('DELETE FROM login_lock
+            WHERE ts < ' . DBHelper::timeAfter(-ini_get('session.gc_maxlifetime')));
+    }
+
     if (!isset($options['am'])) {
         $options['am'] = '';
     }
