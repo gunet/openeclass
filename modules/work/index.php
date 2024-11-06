@@ -99,7 +99,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (isset($_POST['sid'])) {
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
-    } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
+    } elseif (isset($_POST['assign_type']) or (isset($_POST['assign_g_type']) and $_POST['assign_g_type'] == 2)) {
         $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
