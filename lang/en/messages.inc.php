@@ -6230,3 +6230,7 @@ $langDisablePreventDownloadPdf = "Disable file download avoidance methods";
 $langPreventEnablePDF = "The process has been activated.";
 $langPreventDisablePDF = "Process disabled.";
 $langChooseContactImg = "Image selection in contact";
+$langDoubleLoginLock = 'You have logged into the platform from another device
+    with the same account. Double logins are disabled, so your current login has
+    been disconnected.';
+$langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';

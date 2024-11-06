@@ -293,6 +293,18 @@
                                                     </div>
                                                 </div>
 
+                                                <div class='form-group mt-4'>
+                                                    <div class='checkbox col-sm-12'>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                                <input type='checkbox' name='double_login_lock' value='1' {{ $cbox_double_login_lock }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langDoubleLoginLockOption') }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </fieldset>
                                         </div>
                                     </div>

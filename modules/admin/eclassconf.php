@@ -150,6 +150,7 @@ if (isset($_POST['submit'])) {
         'enable_social_sharing_links' => true,
         'enable_strong_passwords' => true,
         'disable_student_unregister_cours' => true,
+        'double_login_lock' => true,
         'login_fail_check' => true,
         'login_fail_threshold' => true,
         'login_fail_deny_interval' => true,
@@ -332,6 +333,7 @@ else {     // Display config.php edit form
     $data['cbox_enable_social_sharing_links'] = get_config('enable_social_sharing_links') ? 'checked' : '';
     $data['cbox_enable_strong_passwords'] = get_config('enable_strong_passwords') ? 'checked' : '';
     $data['cbox_disable_student_unregister_cours'] = get_config('disable_student_unregister_cours') ? 'checked' : '';
+    $data['cbox_double_login_lock'] = get_config('double_login_lock') ? 'checked' : '';
     $data['cbox_login_fail_check'] = get_config('login_fail_check') ? 'checked' : '';
     $data['id_enable_mobileapi'] = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
     $data['cbox_block_duration_account'] = get_config('block_duration_account') ? 'checked' : '';

@@ -116,7 +116,7 @@ V::langDir($webDir.'/vendor/vlucas/valitron/lang'); // always set langDir before
 V::lang($language);
 
 // Managing Session Flash Data
-if (isset($_SESSION['flash_old'])){
+if (isset($_SESSION['flash_old'])) {
     foreach($_SESSION['flash_old'] as $row){
         unset($_SESSION[$row]);
     }
@@ -132,6 +132,7 @@ if (!isset($session)) {
     $session = new Session();
 }
 $uid = $session->user_id;
+
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
@@ -178,7 +179,7 @@ if (file_exists($extra_messages)) {
 }
 require "$webDir/lang/$language/messages.inc.php";
 if (file_exists('config/config.php')) {
-    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+    if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
         require "$webDir/lang/$language/messages_collaboration.inc.php";
     }
 }
@@ -202,11 +203,10 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
     }
 }
 
-// ----------------- sso transition ------------------
+// SSO transition
 if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
-    header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
+    redirect_to_home_page('modules/auth/transition/auth_transition.php');
 }
-// ----------------------------------------------------
 
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
@@ -234,6 +234,36 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_power_user = false;
     $is_usermanage_user = false;
     $is_departmentmanage_user = false;
+}
+
+if ($uid and !isset($_GET['logout']) and !$is_power_user and get_config('double_login_lock')) {
+    $sessions = Database::get()->queryArray('SELECT session_id FROM login_lock
+        WHERE user_id = ?d ORDER BY ts DESC', $uid);
+    if ($sessions and count($sessions) > 1 and $sessions[0]->session_id != session_id()) {
+        require_once 'include/log.class.php';
+        Database::get()->queryArray('DELETE FROM login_lock
+            WHERE user_id = ?d AND session_id = ?s',
+            $uid, session_id());
+        session_destroy();
+        session_start();
+        session_regenerate_id(true);
+        Database::get()->query("INSERT INTO loginout (loginout.id_user,
+                    loginout.ip, loginout.when, loginout.action)
+                    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
+        Log::record(0, $uid, LOG_LOGIN_DOUBLE, []);
+        Session::flash('message', $langDoubleLoginLock);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page();
+    }
+}
+
+if (($upgrade_begin = get_config('upgrade_begin'))) {
+    if (!defined('UPGRADE')) {
+        Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
+        if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed)) {
+            redirect_to_home_page();
+        }
+    }
 }
 
 //Maintenance redirect
@@ -318,22 +348,22 @@ if (isset($_GET['course'])) {
 register_shutdown_function('restore_dbname_override');
 
 
-//Regarding activation of collaboration
+// Regarding activation of collaboration
 $is_enabled_collaboration = false;
 if (file_exists('config/config.php')) {
-    if(!get_config('show_always_collaboration') and get_config('show_collaboration')){
+    if (!get_config('show_always_collaboration') and get_config('show_collaboration')) {
         $is_enabled_collaboration = true;
     }
-    if(get_config('show_always_collaboration') and get_config('show_collaboration')){ //always enabled
+    if (get_config('show_always_collaboration') and get_config('show_collaboration')) { //always enabled
         $collaboration_platform = $collaboration_value = 1;
-    }else{
+    } else {
         $collaboration_platform = $collaboration_value = 0;
     }
 }
 
 // Regarding session docs
 $is_session_doc = false;
-if(isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($require_current_course) and $require_current_course){
+if (isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($require_current_course) and $require_current_course) {
     $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['fileSessionId']);
     $course_id = $q->course_id;
     $_SESSION['dbname'] = course_id_to_code($course_id);
@@ -345,7 +375,7 @@ if(isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($re
 // Regarding uploaded docs by users in a session completion
 $user_uploader = 0;
 $uploaded_docs_by_users = false;
-if(isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isset($require_current_course) && $require_current_course){
+if (isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isset($require_current_course) && $require_current_course) {
     $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['CurrentSessionId']);
     $course_id = $q->course_id;
     $_SESSION['dbname'] = course_id_to_code($course_id);
@@ -359,7 +389,7 @@ if(isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isse
 // Regarding uploaded reference docs by counselor in a session
 $user_counselor_uploader = 0;
 $uploaded_reference_docs_by_users = false;
-if(isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReferenceSessionId'] && isset($require_current_course) && $require_current_course){
+if (isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReferenceSessionId'] && isset($require_current_course) && $require_current_course) {
     $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['CurrentReferenceSessionId']);
     $course_id = $q->course_id;
     $_SESSION['dbname'] = course_id_to_code($course_id);
@@ -422,7 +452,7 @@ if (isset($require_current_course) and $require_current_course) {
         }
 
         // Get essential messages when a course is collaborative course
-        if(isset($is_collaborative_course) and $is_collaborative_course){
+        if (isset($is_collaborative_course) and $is_collaborative_course) {
             if (file_exists('config/config.php') && (!get_config('show_always_collaboration') and get_config('show_collaboration'))) {
                 include "lang/$language/messages_collaboration.inc.php";
             }
@@ -442,12 +472,12 @@ if (isset($require_current_course) and $require_current_course) {
                 $status = $stat->status;
                 $is_editor = $stat->editor;
                 $is_course_reviewer = $stat->course_reviewer;
-                if($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer){
+                if ($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer) {
                     $is_consultant = true;
                     $is_coordinator = false;
-                }elseif($stat->status == USER_TEACHER or $is_editor){
+                } elseif ($stat->status == USER_TEACHER or $is_editor) {
                     $is_coordinator = $is_consultant = true;
-                }elseif($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer){
+                } elseif ($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer) {
                     $is_simple_user = true;
                     $is_consultant = false;
                     $is_coordinator = false;
@@ -486,7 +516,7 @@ if (isset($require_current_course) and $require_current_course) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
             } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
-                Session::flash('message',$langLoginRequired);
+                Session::flash('message', $langLoginRequired);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
             } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) {
@@ -513,7 +543,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
             include "lang/$language/messages.inc.php";
             if (file_exists('config/config.php')) {
-                if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+                if (get_config('show_always_collaboration') and get_config('show_collaboration')){
                     include "lang/$language/messages_collaboration.inc.php";
                 }
             }
@@ -558,7 +588,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_SESSION => array('title' => $langSession, 'link' => 'session', 'image' => 'fa-solid fa-handshake')
 
     );
-}else{
+} else {
     $modules = array(
         MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
         MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-solid fa-link'),
@@ -884,10 +914,10 @@ $tinymce_color_text = '#687DA3';
 get_tinymce_color_text();
 
 // Regarding the course reviewer in a session
-if(isset($is_collaborative_course) and $is_collaborative_course){
-    if($is_coordinator){
+if (isset($is_collaborative_course) and $is_collaborative_course){
+    if ($is_coordinator) {
         $is_course_reviewer = true;
-    }elseif($is_course_reviewer){
+    } elseif ($is_course_reviewer) {
         $is_consultant = false;
         $is_coordinator = true;
     }
