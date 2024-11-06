@@ -129,27 +129,25 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<div class='col-12 mt-4'>
                             <div class='row row-cols-1'>
                                
-                                    <div class='col-12'>";
+                            <div class='col-12'>";
                                 if (count($roots) > 1) {
                                     $tool_content .= $tree->buildRootsSelectForm($fc);
                                 }
-
                                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>
                                                     <div class='col-12'>";
                                         $tool_content .= "<ul class='list-group list-group-flush'>
                                                                 <li class='list-group-item list-group-item-action d-flex justify-content-start align-items-center flex-wrap gap-2'>
                                                                     ".$tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=')."
                                                                 </li>";
-                                            $tool_content .= "";
-                                                                    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
-                                                                    $tool_content .= $childHTML;
-                                                                    $subTrees = $tree->buildSubtrees(array($fc));
-                                            $tool_content .= "";
+                                        $tool_content .= "";
+                                        list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+                                        $tool_content .= $childHTML;
+                                        $subTrees = $tree->buildSubtrees(array($fc));
+                                        $tool_content .= "";
                                         $tool_content .= "</ul>
-                                                    </div>
-                                                </form>
+                                            </div>
+                                        </form>
                                     </div>
-                                
                             </div>";
        $tool_content .= "</div>";
 
@@ -170,7 +168,7 @@ var lang = {
         close: '" . js_escape($langClose) . "',
         unregCourse: '" . js_escape($langUnregCourse) . "',
         reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
-        invalidCode: '" . js_escape($langInvalidCode) . "',
+        invalidCode: '" . js_escape("$langWrongPassCourse") . "',
         prereqsNotComplete: '" . js_escape($langPrerequisitesNotComplete) . "',
 };
 var courses = ".(json_encode($courses_list)).";
@@ -210,7 +208,7 @@ function getdepnumcourses($fac) {
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $langTutor, $langRegistration, $langCourseCode, $langLabelCourseUserRequest,
+    global $m, $langTutor, $langRegistration, $langCourse, $langLabelCourseUserRequest,
     $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess,
     $langLabelCollabUserRequest, $langSelect;
 
@@ -241,8 +239,7 @@ function expanded_faculte($facid, $uid) {
     $retString .= "<div class='table-responsive mt-4'><table class='table-default'>";
     $retString .= "<thead><tr class='list-header'>";
     $retString .= "<th style='width:10%'>$langRegistration</th>";
-    $retString .= "<th>$langCourseCode</th>";
-    $retString .= "<th>$langTeacher</th>";
+    $retString .= "<th>$langCourse</th>";
     $retString .= "<th class='text-end'>$langGroupAccess</th>";
     $retString .= "</tr></thead>";
 
@@ -260,7 +257,7 @@ function expanded_faculte($facid, $uid) {
                         AND course_department.department = ?d
                         AND course.visible != ?d
                    ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $langLabelCourseUserRequest, $unlock_all_courses, $langLabelCollabUserRequest) {
-        global $urlAppend, $courses_list, $langSelect;
+        global $urlAppend, $courses_list, $langSelect, $langPassword;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
         $password = q($mycours->password);
@@ -316,40 +313,30 @@ function expanded_faculte($facid, $uid) {
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
-                $msg_password = '';
-                if($mycours->clb){
-                    $msg_password = $m['password_collab'];
-                }else{
-                    $msg_password = $m['code'];
-                }
+                $requirepassword = '';
                 if (!empty($password)) {
-                    $requirepassword = "<br /><span class='badge Warning-200-bg'>$msg_password:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
-                } else {
-                    $requirepassword = '';
+                    $requirepassword = "<span class='badge Warning-200-bg'>$langPassword:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
                 }
                 $retString .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class $cbox_disable_student_unregister_cours /><span class='checkmark'></span></label>";
             } else {
                 $retString .= "<i class='fa fa-user'></i>";
             }
         } else { // display unregistered courses
+            $requirepassword = '';
             if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {
-                $msg_password = '';
-                if($mycours->clb){
-                    $msg_password = $m['password_collab'];
-                }else{
-                    $msg_password = $m['code'];
-                }
-                $requirepassword = "<br /><span class='badge Warning-200-bg'>$msg_password:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
-            } else {
-                $requirepassword = '';
+                $requirepassword = "<span class='badge Warning-200-bg'>$langPassword:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
             }
-
             $disabled = (!is_enabled_course_registration($uid) or $mycours->visible == COURSE_CLOSED) ? 'disabled' : '';
             $retString .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
-                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>
-                   <td>" . q($mycours->t) . "</td>
+                   <td>
+                       <span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")
+                       <div>
+                            <small class='vsmall-text TextRegular'>" .q($mycours->t) . "</small>
+                       </div>
+                       $course_request_access_link $requirepassword $coursePrerequisites 
+                   </td>                   
                    <td class='text-end pe-4'>" . course_access_icon($mycours->visible) . "</td></tr>";
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";

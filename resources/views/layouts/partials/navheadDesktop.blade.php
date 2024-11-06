@@ -24,6 +24,13 @@
                                             {{ trans('langRegistration') }}
                                         </a>
                                     </li>
+                                    @if (!get_config('dont_display_courses_menu'))
+                                        <li class="nav-item">
+                                            <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                                                {{ trans('langCourses') }}
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endif
                                 @if (isset($_SESSION['uid']))
                                     <li class="nav-item">
@@ -31,10 +38,8 @@
                                             {{ trans('langPortfolio') }}
                                         </a>
                                     </li>
-                                @endif
-                                @if (!get_config('dont_display_courses_menu'))
                                     <li class="nav-item">
-                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php">
                                             {{ trans('langCourses') }}
                                         </a>
                                     </li>
@@ -466,11 +471,18 @@
                                     </a>
                                 </p>
                             @endif
-                            @if(!isset($_SESSION['uid']))
+                            @if (!isset($_SESSION['uid']))
                                 @if(get_config('registration_link')!='hide')
                                     <p class='py-2 px-0'>
                                         <a id='registrationId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label='Registration'>
                                             <i class="fa-solid fa-pencil"></i>{{ trans('langRegistration') }}
+                                        </a>
+                                    </p>
+                                @endif
+                                @if (!get_config('dont_display_courses_menu'))
+                                    <p class='py-2 px-0'>
+                                        <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label="{{ trans('langOtherCourses') }}">
+                                            <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                         </a>
                                     </p>
                                 @endif
@@ -481,16 +493,12 @@
                                         <i class="fa-solid fa-pencil"></i>{{ trans('langPortfolio') }}
                                     </a>
                                 </p>
-                            @endif
-
-                            @if(!get_config('dont_display_courses_menu'))
                                 <p class='py-2 px-0'>
-                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label="{{ trans('langOtherCourses') }}">
+                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/courses.php" aria-label="{{ trans('langOtherCourses') }}">
                                         <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                     </a>
                                 </p>
                             @endif
-
                             @if (faq_exist())
                                 <p class='py-2 px-0'>
                                     <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label="{{ trans('langFaq') }}">
