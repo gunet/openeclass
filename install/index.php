@@ -85,7 +85,7 @@ date_default_timezone_set('Europe/Athens');
 
 // get installation language. Greek is the default language.
 if (isset($_REQUEST['lang'])) {
-    $lang = $_POST['lang'] = $_SESSION['lang'] = $_REQUEST['lang'];
+    $lang = $_SESSION['lang'] = $_REQUEST['lang'];
 } elseif (isset($_SESSION['lang'])) {
     $lang = $_SESSION['lang'];
 } else {
@@ -112,6 +112,10 @@ if (file_exists($extra_messages)) {
     $extra_messages = false;
 }
 require_once "lang/$lang/messages.inc.php";
+
+$data['lang'] = $lang;
+$data['title'] = $langTitleInstall . ' - ' . ECLASS_VERSION;
+
 if (file_exists('config/config.php')) {
   if(get_config('show_always_collaboration') and get_config('show_collaboration')){
     require_once "lang/$lang/messages_collaboration.inc.php";
@@ -164,8 +168,8 @@ if (isset($_POST['welcomeScreen'])) {
     $mysqlUser = $GLOBALS['dbUsernameForm'] = $dbUsernameForm;
     $mysqlPassword = $GLOBALS['dbPassForm'] = $dbPassForm;
 }
+
 $all_vars = [
-    'lang',
     'dbHostForm',
     'dbUsernameForm',
     'dbNameForm',
@@ -198,6 +202,11 @@ $all_vars = [
     'sendmail_command'
 ];
 
+// Pass language through post only after welcome screen
+if (isset($_SESSION['step'])) {
+    $all_vars[] = 'lang';
+}
+
 foreach ($all_vars as $name) {
     if (isset($_POST[$name])) {
         $GLOBALS[$name] = $_POST[$name];
@@ -211,25 +220,19 @@ $data['db_error_db_exists'] = false;
 $data['db_error_message'] = '';
 $data['config_error'] = false;
 
-$data['lang_selection'] = selection(
-    [
-        'el' => 'Ελληνικά (el)',
-        'en' => 'English (en)'
-    ],
-    'lang',
-    $lang,
-    "class='form-control' onChange='document.langform.submit();'"
-);
-
+$data['lang_selection'] = [
+    'el' => 'Ελληνικά (el)',
+    'en' => 'English (en)',
+];
 $availableThemes = [
-                    'Default',
-                    'Crimson',
-                    'Emerald',
-                    'Dark',
-                    'Wood',
-                    'Neutral',
-                    'Soft_light'
-                ];
+    'Default',
+    'Crimson',
+    'Emerald',
+    'Dark',
+    'Wood',
+    'Neutral',
+    'Soft_light',
+];
 
 $data['user_registration_selection'] = selection(
     [
