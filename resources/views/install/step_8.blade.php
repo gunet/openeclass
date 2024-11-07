@@ -17,6 +17,6 @@
     </form>
 
     <div class="help-block pt-2">
-        {{ trans('langProtect') }}
+        {!! trans('langProtect') !!}
     </div>
 @endif
