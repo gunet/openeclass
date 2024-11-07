@@ -474,6 +474,39 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        if (isset($theme_options_styles['MaxHeightHalfMaxScreenJumbotron'])){
+            $styles_str .= "
+                @media(min-width:992px){
+                    .jumbotron.jumbotron-login{
+                        min-height: calc((100vh - 80px)/2);
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-size: 100% 100%;
+                    }
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login{
+                        min-height: calc((100vh - 80px - 60px)/2);
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-size: 100% 100%;
+                    }
+                }
+                @media(max-width:991px){
+                    .jumbotron.jumbotron-login{
+                        min-height: calc((100vh - 56px)/2);
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-size: 100% 100%;
+                    }
+                    body:has(.fixed-announcement) .jumbotron.jumbotron-login{
+                        min-height: calc((100vh - 56px - 60px)/2);
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-size: 100% 100%;
+                    }
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////// BACKGROUND IMAGE OF LOGIN FORM ///////////////////////////

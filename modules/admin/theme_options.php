@@ -1597,6 +1597,16 @@ $tool_content .= "
                                         </div>
                                         <small>$langHelpJumbotronInfoText</small>
                                     </div>
+                                    <div class='col-sm-12 mt-4'>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label='$langSettingSelect'>
+                                                <input type='checkbox' name='MaxHeightHalfMaxScreenJumbotron' value='1' ".((isset($theme_options_styles['MaxHeightHalfMaxScreenJumbotron']))? 'checked' : '').">
+                                                <span class='checkmark'></span>
+                                                $langMaxHeightHalfMaxScreenJumbotron
+                                            </label>
+                                        </div>
+                                        <small>$langHelpJumbotronInfoText</small>
+                                    </div>
                                 </div>
 
 
