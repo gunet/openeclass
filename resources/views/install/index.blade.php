@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="{{ $lang }}">
+<head>
+    <meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title }}</title>
+</head>
 <body>
     <!-- jQuery -->
     <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
@@ -88,12 +95,15 @@
                                             <div class='col-12 col-md-6 m-auto d-block mt-3'>
                                                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                                     <div class='card-body'>
-                                                        <form class='form-horizontal form-wrapper' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
-                                                            <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
+                                                        <form name='langform' class='form-horizontal form-wrapper' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                                             <div class='form-group'>
                                                                 <label for='lang' class='col-sm-12 control-label-notes text-start'>{{ trans('langChooseLang') }}:</label>
                                                                 <div class='col-sm-12'>
-                                                                    {!! $lang_selection !!}
+                                                                    <select class="form-select" name="lang" onchange="document.langform.submit();">
+                                                                        @foreach ($lang_selection as $code => $name)
+                                                                            <option value="{{ $code }}" @if ($lang == $code) selected @endif>{{ $name }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class='form-group mt-4'>
