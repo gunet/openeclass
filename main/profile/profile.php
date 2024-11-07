@@ -275,6 +275,7 @@ if (isset($_POST['submit'])) {
         $old_username = q($myrow->username);
         $old_email = q($myrow->email);
         $old_am = q($myrow->am);
+        $old_description = q($myrow->description);
 
         $userObj->refresh($uid, $departments);
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
@@ -284,7 +285,10 @@ if (isset($_POST['submit'])) {
                                              'old_email' => "$old_email",
                                              'email' => "$email_form",
                                              'old_am' => "$old_am",
-                                             'am' => "$am_form"));
+                                             'am' => "$am_form",
+                                             'old_description' => "$old_description",
+                                             'description' => "$desc_form"
+                                        ));
         $_SESSION['uname'] = $username_form;
         $_SESSION['surname'] = $surname_form;
         $_SESSION['givenname'] = $givenname_form;

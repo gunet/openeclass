@@ -176,7 +176,7 @@ class Log {
                 } else {
                     $tool_content .= "<td><div style='width:200px;'>" . display_user($r->user_id, false, false) . "</div></td>";
                 }
-                $tool_content .= "<td>" . $r->ip ."</td>";
+                $tool_content .= "<td class='text-nowrap'>" . $r->ip ."</td>";
                 if ($course_id == -1) { // all courses
                     $tool_content .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
                 }
@@ -196,7 +196,7 @@ class Log {
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
-                $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
+                $tool_content .= "<td class='text-nowrap'>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
                     $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
@@ -250,7 +250,6 @@ class Log {
 
     /**
      *
-     * @global type $langUnknownModule
      * @param type $module_id
      * @param type $details
      * @return type
@@ -321,7 +320,7 @@ class Log {
      * @brief drive to appropriate subsystems for displaying results
      * @param type $logtype
      * @param type $details
-     * @return \type
+     * @return string
      */
     private function other_action_details($logtype, $details) {
 
@@ -346,7 +345,6 @@ class Log {
 
     /**
      * display action details while creating course
-     * @global type $langTitle
      * @param type $details
      * @return string
      */
@@ -364,7 +362,6 @@ class Log {
 
     /**
      * display action details while deleting course
-     * @global type $langTitle
      * @param type $details
      * @return string
      */
@@ -462,7 +459,7 @@ class Log {
         global $lang_username, $langAm, $langChangePass, $langUpdateImage,
                $langType, $langDelImage, $langPersoDetails, $langActivate,
                $langDeactivate, $langOfNotifications, $langsOfCourse,
-               $langFrom2, $langIn;
+               $langFrom2, $langIn, $langDescription;
 
         $details = unserialize(($details));
         $content = '';
@@ -470,20 +467,24 @@ class Log {
         if (!empty($details['modifyprofile'])) {
             $content .= "$langPersoDetails<br />$lang_username: ";
             if (!empty($details['old_username'])) {
-                $content .= "$langFrom2 " . q($details['old_username']). " $langIn ";
+                $content .= "$langFrom2 &nbsp;&laquo;" . q($details['old_username']). "&raquo;&nbsp; $langIn ";
             }
-            $content .= q($details['username']);
+            $content .= "&nbsp;&laquo;".  q($details['username']) . "&raquo;&nbsp;";
             $content .= " Email: ";
             if (!empty($details['old_email'])) {
-                $content .= "$langFrom2 " . q($details['old_email']) . " $langIn ";
+                $content .= "$langFrom2 &nbsp;&laquo;" . q($details['old_email']) . "&raquo;&nbsp; $langIn ";
             }
-            $content .= q($details['email']);
+            $content .= "&nbsp;&laquo;" . q($details['email']) . "&raquo;&nbsp;";
             $content .= " $langAm: ";
             if (!empty($details['old_am'])) {
-                $content .= " $langFrom2 " . q($details['old_am']) . " $langIn ";
+                $content .= " $langFrom2 &nbsp;&laquo; " . q($details['old_am']) . "&raquo;&nbsp; $langIn ";
             }
             if (!empty($details['am'])) {
-                $content .= q($details['am']);
+                $content .= "&nbsp;&laquo;" . q($details['am']) . "&raquo;&nbsp;";
+            }
+            if (!empty($details['old_description']) or !(empty($details['description']))) {
+                $content .= " $langDescription: ";
+                $content .= "$langFrom2 &nbsp;&laquo;" . q($details['old_description']) . " &nbsp;&raquo $langIn &nbsp;&laquo;" . q($details['description']) . "&raquo;&nbsp;";
             }
         }
         if (!empty($details['pass_change'])) {
@@ -537,7 +538,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function video_action_details($details) {
+    private function video_action_details($details): string
+    {
 
         global $langTitle, $langDescription;
 
@@ -557,7 +559,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function assignment_action_details($details) {
+    private function assignment_action_details($details): string
+    {
 
         global $langTitle, $langDescription, $m, $langGradebookGrade;
 
@@ -583,7 +586,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function announcement_action_details($details) {
+    private function announcement_action_details($details): string
+    {
 
         global $langTitle, $langContent;
 
@@ -598,9 +602,10 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function agenda_action_details($details) {
+    private function agenda_action_details($details): string
+    {
 
-        global $langTitle, $langContent, $langDuration, $langhours, $langDate;
+        global $langTitle, $langContent;
 
         $details = unserialize($details);
 
@@ -614,7 +619,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function link_action_details($details) {
+    private function link_action_details($details): string
+    {
 
         global $langTitle, $langDescription, $langCategoryName;
 
@@ -640,7 +646,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function document_action_details($details) {
+    private function document_action_details($details): string
+    {
 
         global $langFileName, $langComments, $langTitle, $langRename, $langMove, $langTo, $langIn;
 
@@ -667,7 +674,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function dropbox_action_details($details) {
+    private function dropbox_action_details($details): string
+    {
 
         global $langFileName, $langSubject, $langMessage;
 
@@ -688,7 +696,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function group_action_details($details) {
+    private function group_action_details($details): string
+    {
 
         global $langGroup, $langRegistration, $langInGroup;
 
@@ -708,7 +717,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function description_action_details($details) {
+    private function description_action_details($details): string
+    {
 
         global $langTitle, $langContent;
 
@@ -725,7 +735,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function glossary_action_details($details) {
+    private function glossary_action_details($details): string
+    {
 
         global $langGlossaryTerm, $langGlossaryDefinition, $langGlossaryURL, $langCategoryNotes;
 
@@ -746,13 +757,12 @@ class Log {
     }
 
     /**
-     * display action details in learning path
-     * @global type $langLearnPath
-     * @global type $langComments
+     * @brief display action details in learning path
      * @param type $details
      * @return string
      */
-    private function lp_action_details($details) {
+    private function lp_action_details($details): string
+    {
 
         global $langLearnPath, $langComments;
 
@@ -769,7 +779,8 @@ class Log {
      * display action details in exercises
      * @return string
      */
-    private function exercise_action_details($details) {
+    private function exercise_action_details($details): string
+    {
 
         global $langTitle, $langDescription, $langAttempt, $urlAppend, $course_code,
                $langDelete, $langOfAttempt, $langOfUserS, $langModify, $langIn, $langPurgeExercises;
@@ -806,7 +817,8 @@ class Log {
      * @param $details
      * @return string
      */
-    private function questionnaire_action_details($details) {
+    private function questionnaire_action_details($details): string
+    {
 
         global $langTitle, $langDescription, $langSubmit, $langPurgeExerciseResults;
 
@@ -831,12 +843,11 @@ class Log {
 
     /**
      * display action details in wiki
-     * @global type $langTitle
-     * @global type $langDescription
      * @param type $details
      * @return string
      */
-    private function wiki_action_details($details) {
+    private function wiki_action_details($details): string
+    {
 
         global $langTitle, $langDescription;
 
@@ -924,11 +935,11 @@ class Log {
 
     /**
      * display action details in external links
-     * @global type $langLinkName
      * @param type $details
      * @return string
      */
-    private function external_link_action_details($details) {
+    private function external_link_action_details($details): string
+    {
         global $langLinkName, $langActivate, $langDeactivate;
 
         $details = unserialize($details);
@@ -961,7 +972,8 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function abuse_report_action_details($details) {
+    private function abuse_report_action_details($details): string
+    {
 
         global $langCreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
@@ -997,9 +1009,7 @@ class Log {
     }
 
     /**
-     * display action details for social wall
-     * @global type $langContent
-     * @global type $langWallVideoLink
+     * @brief display action details for social wall
      * @param type $details
      * @return string
      */
@@ -1057,7 +1067,7 @@ class Log {
 
         if(isset($d['action'])){
             $content .= $separator()."$langAction: ";
-            if($d['action'] == 'change gradebook visibility'){
+            if($d['action'] == 'change gradebook visibility') {
                 $content .= "$langModify $langOfGradebookVisibility";
                 $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";
             }
@@ -1103,7 +1113,7 @@ class Log {
                 }
 
             }
-            elseif($d['action'] == 'reset users'){
+            elseif($d['action'] == 'reset users') {
                 $content .= "$langRefreshList";
                 if(isset($d['group_count'])){
                     $content .= $separator()."$langGroups: {$d['group_count']}";
