@@ -244,13 +244,13 @@ if ($uid and !isset($_GET['logout']) and !$is_power_user and get_config('double_
         Database::get()->queryArray('DELETE FROM login_lock
             WHERE user_id = ?d AND session_id = ?s',
             $uid, session_id());
-        session_destroy();
-        session_start();
-        session_regenerate_id(true);
         Database::get()->query("INSERT INTO loginout (loginout.id_user,
                     loginout.ip, loginout.when, loginout.action)
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
         Log::record(0, $uid, LOG_LOGIN_DOUBLE, []);
+        session_destroy();
+        session_start();
+        session_regenerate_id(true);
         Session::flash('message', $langDoubleLoginLock);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page();
