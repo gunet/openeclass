@@ -451,6 +451,7 @@
                                                         @else
                                                             @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
                                                                 <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={{ urlencode($file->url) }}" target="_blank" aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
+                                                                {!! icon('fa-shield', trans('langEnablePreventDownloadPdf')) !!}
                                                             @else
                                                                 {!! $file->link !!}
                                                             @endif
