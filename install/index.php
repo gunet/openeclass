@@ -228,10 +228,27 @@ $availableThemes = [
     'Default',
     'Crimson',
     'Emerald',
+    'Light Purple Pink',
     'Dark',
+    'Dark Purple',
     'Wood',
     'Neutral',
     'Soft_light',
+    'Collaboration',
+    'Consulting',
+    'Elearning Brown',
+    'Elearning Brown (small image)',
+    'Elearning White Blue',
+    'Elearning White Blue (small image)',
+    'Elearning Dark White Blue',
+    'Elearning Dark White Blue (small image)',
+    'Education Light Blue',
+    'Education Light Blue (small image)',
+    'Education Light Yellow',
+    'Education Light Yellow (small image)',
+    'Education',
+    'School Green White',
+    'School Red Blue'
 ];
 
 $data['user_registration_selection'] = selection(

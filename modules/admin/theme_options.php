@@ -108,40 +108,40 @@ if (isset($_GET['export'])) {
         $filename = "courses/theme_data/".replace_dangerous_char(greek_to_latin($theme_name)).".zip";
         $file_list = array("courses/theme_data/theme_options.txt");
         if (isset($styles['bgImage'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[bgImage]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[bgImage]";
         }
         if (isset($styles['imageUpload'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUpload]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUpload]";
         }
         if (isset($styles['imageUploadSmall'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadSmall]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadSmall]";
         }
         if (isset($styles['imageUploadFooter'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadFooter]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadFooter]";
         }
         if (isset($styles['imageUploadForm'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadForm]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadForm]";
         }
         if (isset($styles['imageUploadRegistration'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadRegistration]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadRegistration]";
         }
         if (isset($styles['imageUploadFaq'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadFaq]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadFaq]";
         }
         if (isset($styles['loginImg'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[loginImg]";
         }
         if (isset($styles['loginImgL'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImgL]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[loginImgL]";
         }
         if(isset($styles['RightColumnCourseBgImage'])){
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[RightColumnCourseBgImage]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[RightColumnCourseBgImage]";
         }
         if (isset($styles['faviconUpload'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[faviconUpload]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[faviconUpload]";
         }
         if (isset($styles['contactUpload'])) {
-            array_push($file_list, "courses/theme_data/$theme_id/$styles[contactUpload]");
+            $file_list[] = "courses/theme_data/$theme_id/$styles[contactUpload]";
         }
 
         $zipFile = new ZipArchive();
