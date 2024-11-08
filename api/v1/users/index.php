@@ -24,6 +24,7 @@ function api_method($access) {
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $ok = register_posted_variables([
             'username' => true,
@@ -46,6 +47,7 @@ function api_method($access) {
                 Database::get()->query('UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                     WHERE id = ?d', $user->id);
             }
+            $statusmsg = 'User updated';
             $user_id = $user_id;
         } else {
             $password = choose_password_strength();
@@ -64,10 +66,11 @@ function api_method($access) {
             }
             $user_id = $user->lastInsertID;
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
+            $statusmsg = 'User created';
         }
         user_hook($id);
         header('Content-Type: application/json');
-        echo json_encode(['id' => $user_id]);
+        echo json_encode(['id' => $user_id, 'status' => $statusmsg]);
         exit();
     } elseif (isset($_GET['id']) or isset($_GET['username'])) {
         if (isset($_GET['username'])) {
