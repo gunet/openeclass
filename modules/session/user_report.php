@@ -419,6 +419,7 @@ if (isset($_GET['u'])) { //  stats per user
             }
 
             check_session_progress($sid,$r->id);
+            check_session_completion_without_activities($sid);
             if(isset($badge_id)){
                 $per = get_cert_percentage_completion_by_user('badge',$badge_id,$r->id);
             }else{
@@ -517,6 +518,7 @@ if (isset($_GET['u'])) { //  stats per user
     }
 
     check_session_progress($sid,$u);
+    check_session_completion_without_activities($sid);
     if(isset($badge_id)){
         $per = get_cert_percentage_completion_by_user('badge',$badge_id,$u);
     }else{

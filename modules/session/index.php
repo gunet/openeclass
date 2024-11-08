@@ -243,6 +243,7 @@ if($is_coordinator or $is_consultant){
 
                 // This refers to session completion for other activities.
                 check_session_progress($s->id,$p);  // check session completion - call to Game.php
+                check_session_completion_without_activities($s->id);
             }
 
             $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
@@ -306,6 +307,7 @@ if($is_coordinator or $is_consultant){
 
         // This refers to session completion for other activities.
         check_session_progress($s->id,$uid);  // check session completion - call to Game.php
+        check_session_completion_without_activities($s->id);
     }
 
     $visible_sessions_id = [];

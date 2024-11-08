@@ -2607,7 +2607,9 @@ function session_completion_without_resources($element, $element_id, $session_id
 
             if($crit && count($par) > 0){
                 foreach ($par as $p) {
-                    Database::get()->query("INSERT INTO user_{$element} SET
+                    $noExistUser = Database::get()->querySingle("SELECT id FROM user_{$element} WHERE user = ?d AND $element = ?d",$p->participants,$element_id);
+                    if (!$noExistUser) {
+                        Database::get()->query("INSERT INTO user_{$element} SET
                                                 user = ?d,
                                                 $element = ?d,
                                                 updated = " . DBHelper::timeAfter() . ",
@@ -2615,7 +2617,8 @@ function session_completion_without_resources($element, $element_id, $session_id
                                                 completed = ?d,
                                                 completed_criteria = ?d,
                                                 total_criteria = ?d",$p->participants,$element_id,1,1,1);
-
+                    }
+                    
                     Database::get()->query("INSERT INTO user_{$element}_criterion SET
                                                 user = ?d,
                                                 created = " . DBHelper::timeAfter() . ",
@@ -3874,4 +3877,36 @@ function reference_creation_by_fields($sid){
     Session::flash('alert-class', 'alert-success');
 
     redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".$sid);
+}
+
+
+/**
+ * @brief session completion checker for noactivity type
+ * @param int $sid
+ */
+function check_session_completion_without_activities($session_id = 0){
+    global $course_id;
+
+    if ($session_id > 0) {
+        $badge = Database::get()->querySingle("SELECT id,badge FROM badge_criterion
+                                                WHERE activity_type = ?s
+                                                AND badge IN (SELECT id FROM badge 
+                                                                WHERE course_id = ?d AND session_id = ?d)",'noactivity',$course_id,$session_id);
+
+        if ($badge) {
+            $badge_id = $badge->badge;
+            $badge_criterion_id = $badge->id;
+            $result = Database::get()->queryArray("SELECT id,user FROM user_badge WHERE badge = ?d", $badge_id);
+            if (count($result) > 0) {
+                foreach ($result as $r) {
+                    $existUser = Database::get()->querySingle("SELECT id FROM user_badge_criterion WHERE user = ?d AND badge_criterion = ?d", $r->user, $badge_criterion_id);
+                    if (!$existUser) {
+                        Database::get()->query("INSERT INTO user_badge_criterion SET user = ?d, `created` = " . DBHelper::timeAfter() . ", badge_criterion = ?d", $r->user, $badge_criterion_id);
+                        Database::get()->query("UPDATE user_badge SET completed = 1, completed_criteria = 1, total_criteria = 1 
+                                                    WHERE user = ?d AND badge = ?d",$r->user, $badge_id);
+                    }
+                }
+            }                                   
+        }
+    }
 }
