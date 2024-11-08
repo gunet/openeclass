@@ -1,5 +1,4 @@
 <?php
-
 /*
  *  ========================================================================
  *  * Open eClass
@@ -22,10 +21,10 @@ function api_method($access) {
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
-    if (!isset($_GET['user_id'])) {
+    if (!isset($_REQUEST['user_id'])) {
         Access::error(2, 'Required parameter user_id missing');
     }
-    $user_id = $_GET['user_id'];
+    $user_id = $_REQUEST['user_id'];
     $user = Database::get()->querySingle('SELECT id, username, expires_at > NOW() FROM user
         WHERE id = ?d', $user_id);
     if (!$user) {
