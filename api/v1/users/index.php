@@ -47,7 +47,7 @@ function api_method($access) {
                 Database::get()->query('UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                     WHERE id = ?d', $user->id);
             }
-            $statusmsg = 'User updated';
+            $statusmsg = 'updated';
             $user_id = $user_id;
         } else {
             $password = choose_password_strength();
@@ -66,7 +66,7 @@ function api_method($access) {
             }
             $user_id = $user->lastInsertID;
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
-            $statusmsg = 'User created';
+            $statusmsg = 'created';
         }
         user_hook($id);
         header('Content-Type: application/json');
