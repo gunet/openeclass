@@ -424,8 +424,7 @@
                                                     </div>
                                                 </td>
                                                 <td class='fileURL-th' style='width:50%;'>
-                                                    @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
-                                                    <input type='hidden' value={!!$downloadfile!!}>
+                                                    <input type='hidden' value='{!! $base_url !!}download={{ getIndirectReference($file->path) }}'>
 
                                                     <div class='d-flex justify-content-start align-items-start gap-3'>
                                                         @if($file->visible == 1)
@@ -451,8 +450,7 @@
                                                             @endif
                                                         @else
                                                             @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
-                                                                @php $urlFile = urlencode($file->url); @endphp
-                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={!! $urlFile !!}" target="_blank" aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
+                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={{ urlencode($file->url) }}" target="_blank" aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
                                                             @else
                                                                 {!! $file->link !!}
                                                             @endif
@@ -624,6 +622,8 @@
         bootbox.dialog({
             size: 'large',
             title: fileTitle,
+            onEscape: function() {},
+            backdrop: true,
             message: '<div class="row">'+
                         '<div class="col-12">'+
                             '<div class="iframe-container" style="height:500px;"><iframe title="'+fileTitle+'" id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
