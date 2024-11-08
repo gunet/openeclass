@@ -25,6 +25,10 @@
 
                 const uppy = new Uppy({
                     autoProceed: false,
+                    restrictions: {
+                        maxFileSize: {{ parseSize(ini_get('upload_max_filesize')) }},
+                        maxTotalFileSize: {{ $diskQuotaDocument }},
+                    }
                 })
 
                 uppy.use(Dashboard, {
