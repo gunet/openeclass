@@ -72,8 +72,8 @@ iframe{
     max-width: 100%;
     padding-top: 56px;
     min-height: calc(100vh - 56px - 235px);
-  }  
-  
+  }
+
   .fixed-announcement .main-section{
     padding-top: 116px !important;
   }
@@ -791,10 +791,10 @@ h1,h2,h3,h4,h5,h6,
 
 
 #leftnav a:hover,
-.dropdown_menu_user a:hover, 
+.dropdown_menu_user a:hover,
 .submitAdminBtn:hover,
-.cancelAdminBtn:hover, 
-.deleteAdminBtn:hover, 
+.cancelAdminBtn:hover,
+.deleteAdminBtn:hover,
 .menu-popover a:hover,
 #bgr-cheat-header a:hover{
   text-decoration: none;
@@ -1148,7 +1148,7 @@ b a {
   .link-selection-language *{
     white-space: nowrap;
   }
-  
+
   .header-login-text{
     min-width: 80px;
     white-space: nowrap;
@@ -2929,16 +2929,9 @@ body .form-action-button-popover{
   border-bottom-right-radius: 0px;
 }
 
-@media(max-width:767px){
+@media(max-width:1199px){
   .sticky-column-course-home{
     width: auto;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-@media(min-width:768px) and (max-width:1199px){
-  .sticky-column-course-home{
-    width: 320px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -4662,7 +4655,7 @@ body .delThemeBtn{
   flex-wrap: wrap;
 }
 
-.mycourses-pagination .page-item .page-link:focus, 
+.mycourses-pagination .page-item .page-link:focus,
 .mentors-pagination .page-item .page-link:active{
   outline: none !important;
   box-shadow: none;
@@ -5600,7 +5593,7 @@ textarea:focus-visible{
 }
 
 pre {
-  white-space: pre-wrap;   
+  white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
@@ -5674,12 +5667,12 @@ th.grade-col a{
   justify-content: center;
 }
 .about-title{
-  font-size: 50px; 
+  font-size: 50px;
   font-weight: 600;
   line-height: 52px;
 }
 .about-value{
-  font-size: 25px; 
+  font-size: 25px;
   line-height:36px;
 }
 
