@@ -46,7 +46,7 @@ class MultimediaHelper {
     public static function chooseMediaAhrefRaw($mediaDL, $mediaPlay, $title, $filename) {
         $title = q($title);
         $filename = q($filename);
-        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' aria-label='$title' title='".q($title)."'>" . $title . "</a>";
+        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='".q($title)."'>" . $title . "</a>";
         $class = '';
         $extraParams = '';
         $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
@@ -69,13 +69,13 @@ class MultimediaHelper {
             } else if (file_exists(ModalBoxHelper::getColorboxDir())) {
                 $class = (self::isSupportedImage($filename)) ? 'colorbox' : 'colorboxframe';
             }
-            $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='".q($title)."' aria-label='".q($title)."'>" . $title . "</a>";
+            $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='$title'>$title</a>";
             if (self::isSupportedImage($filename)) {
-                $ahref = "<a href='$mediaDL' class='$class fileURL' title='".q($title)."' aria-label='".q($title)."'>" . $title . "</a>";
+                $ahref = "<a href='$mediaDL' class='$class fileURL' title='$title'>$title</a>";
             }
         } else if(self::isSupportedModalFile($filename)) {
             $modalClass = ($is_mobile) ? '' : 'fileModal';
-            $ahref = "<a href='$mediaDL' class='fileURL ". $modalClass . "' target='_blank' aria-label='".q($title)."' title='".q($title)."'>" . $title . "</a>";
+            $ahref = "<a href='$mediaDL' class='fileURL $modalClass' target='_blank' title='$title'>$title</a>";
         }
 
         return $ahref;
@@ -91,7 +91,7 @@ class MultimediaHelper {
      */
     public static function chooseMedialinkAhref($mediaRsrc) {
         $title = q($mediaRsrc->getTitle());
-        $ahref = "<a href='" . q($mediaRsrc->getPath()) . "' class='fileURL' target='_blank' aria-label='$title' title='$title'>" . $title . "</a>";
+        $ahref = "<a href='" . q($mediaRsrc->getPath()) . "' class='fileURL' target='_blank' title='$title'>$title</a>";
 
         if (self::isEmbeddableMedialink($mediaRsrc->getPath())) {
             $class = '';
@@ -108,7 +108,7 @@ class MultimediaHelper {
             } else if (file_exists(ModalBoxHelper::getColorboxDir())) {
                 $class = 'colorboxframe';
             }
-            $ahref = "<a href='" . $mediaRsrc->getPlayURL() . "' class='$class fileURL' $extraParams title='$title' aria-label='$title'>$title</a>";
+            $ahref = "<a href='" . $mediaRsrc->getPlayURL() . "' class='$class fileURL' $extraParams title='$title'>$title</a>";
         }
 
         return $ahref;
