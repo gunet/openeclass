@@ -239,6 +239,7 @@ foreach ($elementList as $module) {
                 format_locale_date(strtotime($module['accessed']), 'short'), $session_time, $total_time,
                 disp_lesson_status($module['lesson_status']), $progress . "%"
               ];
+    $totalTime = addScormTime($totalTime, $global_time[$module['attempt']]);
 }
 
 if ($moduleNbT == 0) {
@@ -261,8 +262,8 @@ if ($moduleNbT == 0) {
     // display global stats
     $tool_content .= "<tr>
                         <th colspan='" . ($maxDeep + 4) . "'>&nbsp;</th>
-                        <th><small>" . (($global_time[$bestAttempt] != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . "</small></th>
-                        <th><small>" . (($global_time[$bestAttempt] != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time[$bestAttempt]) : '&nbsp;') . "</small></th>
+                        <th><small>" . ($totalTime != "0000:00:00" ? $langTimeInLearnPath : '&nbsp;') . "</small></th>
+                        <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
                         <th><small>" . $langTotalPercentCompleteness . "</small></th>
                         <th>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
                     </tr>";
