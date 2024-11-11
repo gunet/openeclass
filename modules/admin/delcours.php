@@ -79,7 +79,8 @@ if (isset($_GET['delete']) && $course_id) {
     redirect_to_home_page('modules/admin/listcours.php');
 }
 
-$toolName = $langCourseDel;
+$toolName = $langAdmin;
+$pageName = $langCourseDel;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 

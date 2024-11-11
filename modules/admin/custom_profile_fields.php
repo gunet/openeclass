@@ -179,7 +179,8 @@ require 'modules/admin/custom_profile_fields_functions.php';
     exit;
 }
 
-$toolName = $langCPFAdmin;
+$toolName = $langAdmin;
+$pageName = $langCPFAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category form

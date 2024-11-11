@@ -54,7 +54,8 @@ $(document).ready(function() {
 });
 </script>";
 
-$toolName = $langCertBadgeAdmin;
+$toolName = $langAdmin;
+$pageName = $langCertBadgeAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $action_bar = action_bar(array(

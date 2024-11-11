@@ -75,8 +75,9 @@ if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
 }
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$toolName = $langAdminCreateFaq;
-$pageName = $toolName;
+
+$toolName = $langAdmin;
+$pageName = $langAdminCreateFaq;
 
 $data['action_bar'] = action_bar(
     [

@@ -81,7 +81,8 @@ if (isset($_POST['submit'])) {
 $data['course'] = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id, course.is_collaborative AS is_collaborative
                                         FROM course
                                        WHERE course.code = ?s" ,$_GET['c']);
-$toolName = $langCourseInfo;
+$toolName = $langAdmin;
+$pageName = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 

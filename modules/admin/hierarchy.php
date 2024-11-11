@@ -45,7 +45,8 @@ $user = new User();
 
 load_js('jstree3');
 
-$toolName = $langHierarchyActions;
+$toolName = $langAdmin;
+$pageName = $langHierarchy;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['action'])) {

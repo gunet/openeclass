@@ -20,17 +20,9 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$toolName = $langCollaborationPlatform;
+$toolName = $langAdmin;
+$pageName = $langCollaborationPlatform;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-$data['action_bar'] = action_bar([
-    [
-        'title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary'
-    ]
-]);
 
 
 if(isset($_POST['submit'])){
@@ -70,4 +62,4 @@ if(isset($_POST['submit'])){
     redirect_to_home_page("modules/admin/collaboration_enable.php");
 }
 
-view ('admin.collaboration.collaboration_enable', $data);
+view ('admin.collaboration.collaboration_enable');

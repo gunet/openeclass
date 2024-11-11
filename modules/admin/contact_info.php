@@ -20,7 +20,8 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$toolName = $langUpgContact;
+$toolName = $langAdmin;
+$pageName = $langUpgContact;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['submit'])) {

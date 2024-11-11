@@ -19,12 +19,16 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'disable_modules';
 
 require_once '../../include/baseTheme.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$pageName = $langDisableModules;
 
+$toolName = $langAdmin;
+$pageName = $langDisableModules;
 
 // Modules for main platform
 if (isset($_POST['submit'])) {

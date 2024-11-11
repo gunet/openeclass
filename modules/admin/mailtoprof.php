@@ -32,7 +32,8 @@ require_once 'hierarchy_validations.php';
 $user = new User();
 $tree = new Hierarchy();
 
-$toolName = $langSendInfoMail;
+$toolName = $langAdmin;
+$pageName = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('jstree3');

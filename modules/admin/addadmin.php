@@ -152,7 +152,8 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
     $data['showFormAdmin'] = true;
 
 }else {
-    $toolName = $langAdmins;
+    $toolName = $langAdmin;
+    $pageName = $langAdmins;
     $data['showFormAdmin'] = false;
     $data['action_bar'] = action_bar([
         [ 'title' => $langAdd,

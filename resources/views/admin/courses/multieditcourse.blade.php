@@ -11,13 +11,7 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @if(isset($action_bar))
-                        {!! $action_bar !!}
-                    @else
-                        <div class='mt-4'></div>
-                    @endif
-
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12 mb-4'>
                         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langMultiMoveCourseInfo') }}</span></div>

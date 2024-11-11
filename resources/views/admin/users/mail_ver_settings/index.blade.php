@@ -9,9 +9,7 @@
 
                 @include('layouts.partials.legend_view')
 
-                <div class='mt-4'></div>
-
-                @include('layouts.partials.show_alert') 
+                @include('layouts.partials.show_alert')
 
                 @include('admin.users.mail_ver_settings.messages')
 

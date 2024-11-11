@@ -18,9 +18,13 @@
  */
 
 $require_admin = true;
+$require_help = true;
 require_once '../../include/baseTheme.php';
 
-$toolName = $langActivityCourse;
+$helpTopic = 'users_administration';
+
+$toolName = $langAdmin;
+$pageName = $langActivityCourse;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['toReorder'])) {

@@ -3899,7 +3899,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if(isset($_SESSION['uid'])){
                 $marginBottom = 'my-4';
             }
-            $titleHeader = (!empty($pageName) ? $pageName : $toolName);
+            $titleHeader = (!empty($pageName) ? $pageName : '');
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
                         <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>

@@ -19,12 +19,13 @@
  */
 
 $require_admin = true;
-
+$require_help = true;
+$helpTopic = 'course_administration';
+$helpSubTopic = 'metadata_categories';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
-
-$toolName = $langCourseCategoryActions;
+$pageName = $langCourseCategoryActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['action'])) {

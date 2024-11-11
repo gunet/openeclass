@@ -39,6 +39,7 @@ load_js('jstree3');
 list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
 
+$toolName = $langAdmin;
 $pageName = $langRestoreCourse;
 $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 

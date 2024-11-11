@@ -245,12 +245,12 @@ if (isset($_POST['submit'])) {
     }
 }
 
-
+$toolName = $langAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 if (isset($_GET['id']) and isset($_GET['type']) and $_GET['type'] == 'prof') { // creating course request
-    $toolName = $langCourseCreate;
+    $pageName = "$langUserPermissions ($langCourseCreate)";
 } else {
-    $toolName = $langCreateAccount;
+    $pageName = $langCreateAccount;
 }
 
 // javascript

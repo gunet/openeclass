@@ -224,7 +224,8 @@ load_js('datatables');
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
-$toolName = $langListCours;
+$toolName = $langAdmin;
+$pageName = $langListCours;
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(

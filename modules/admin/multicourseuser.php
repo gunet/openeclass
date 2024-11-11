@@ -25,7 +25,8 @@ $helpSubTopic = 'course_mass_user_registration';
 
 include '../../include/baseTheme.php';
 
-$toolName = $langMultiRegCourseUser;
+$toolName = $langAdmin;
+$pageName = $langMultiRegCourseUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 if (isset($_POST['submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

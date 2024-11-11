@@ -33,18 +33,15 @@
  */
 
 $require_login = true;
+$require_valid_uid = true;
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'my_notes';
 
 include '../../include/baseTheme.php';
-$require_valid_uid = true;
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/notes/notes.class.php';
-
-//angela: Do we need recording of personal actions????
-// The following is added for statistics purposes
-//require_once 'include/action.php';
-//$action = new action();
-//$action->record(MODULE_ID_ANNOUNCE);
 
 $toolName = $langNotes;
 

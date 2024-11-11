@@ -46,7 +46,7 @@ $data['course'] = Database::get()->querySingle("SELECT code, title, doc_quota, v
 
 // Initialize some variables
 $quota_info = '';
-define('MB', 1048576);
+const MB = 1048576;
 
 // Update course quota
 if (isset($_POST['submit'])) {
@@ -70,8 +70,9 @@ if (isset($_POST['submit'])) {
     }
     redirect_to_home_page('modules/admin/quotacours.php?c=' . $_GET['c']);
 }
-// Display edit form for course quota
-$toolName = $langQuota;
+
+$toolName = $langAdmin;
+$pageName = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);

@@ -26,7 +26,8 @@ $helpSubTopic = 'external_tools';
 require_once '../../include/baseTheme.php';
 require_once 'extconfig/externals.php';
 
-$toolName = $langExtAppConfig;
+$toolName = $langAdmin;
+$pageName = $langExtAppConfig;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 load_js('validation.js');
