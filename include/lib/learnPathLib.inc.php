@@ -591,7 +591,8 @@ function get_learnPath_progress($lpid, $lpUid) {
     return calculate_learnPath_progress($lpid, $modules);
 }
 
-function get_learnPath_progress_details($lpid, $lpUid): array {
+
+function get_learnPath_progress_details($lpid, $lpUid, $total=true): array {
     global $course_id;
 
     // find progression for this user in each module of the path
@@ -686,7 +687,22 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
         }
     }
 
-    return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt);
+    if ($total) {
+        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt);
+    } else {
+        $attempts = [];
+        for ($i = 1; $i <= $maxAttempt; $i++) {
+            $attempts[$i] = [
+                $global_progress[$i],
+                $global_time[$i],
+                $global_started[$i],
+                $global_accessed[$i],
+                $global_status[$i],
+                $i,
+            ];
+        }
+        return $attempts;
+    }
 }
 
 function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
