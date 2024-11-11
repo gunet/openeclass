@@ -6195,7 +6195,6 @@ $langTopPositionJumbotronText = "Align text to top";
 $langCenterPositionJumbotronText = "Align text to center";
 $langBottomPositionJumbotronText = "Align text to bottom";
 $langMaxHeightMaxScreenJumbotron = "Alternatively, the height is configured according to the height of the current screen";
-$langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the height is configured according to the half of the height of the current screen";
 $langHelpJumbotronInfoText = "In case you choose it, the maximum height ceases to apply.";
 $langMaxWidthTextJumbotron = "Max width of text";
 $langEnableContactInfo = "Activate contact form";
@@ -6235,3 +6234,21 @@ $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';
 $langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
+$langNumberScaleDiffAnswers = "The maximum scale number you entered should equal the number of possible responses you provided.";
+$langInfoAddSliderLabels = "Add to the text field the possible answers that the scale will include based on its maximum number.</br>
+ Each answer is separated by the symbol | .</br>
+ Eg if the maximum number of the scale is 5 then you should give 5 possible answers of the form: (not at all|very little|a little|very|very much).";
+$langTableDimension = "Create the dimension of the table (N*N) by entering the number of its columns and rows.</br></br>
+ <ul><li>Columns = Questions to the user</li><li>Rows = Answers from the user</li></ul>";
+$langNumberOfColumns = "Number of columns";
+$langNumberOfRows = "Number of lines";
+$langWriteQuestion = "Write the question...";
+$langNumberRowColBigger = "The number of rows and columns of the table should be greater than zero.";
+$langRowsColumnsInsertd = "Table rows and columns were successfully entered.";
+$langSubmitQuestions = "Ask questions";
+$langEditRowsColsTable = "Edit table dimensions and questions";
+$langQuestionsInsertd = "Questions added successfully.";
+$langNumberColumnsSmallerThanQ = "The number of columns you entered is less than the available questions entered.";
+$langUserAnswer = "User response";
+$langAddRowsColumns = "Registration";
+$langCurrentDuration = "Current duration";
