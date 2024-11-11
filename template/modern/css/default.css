@@ -5739,6 +5739,9 @@ th.grade-col a{
   transform: translateX(0);
 }
 
+.flex-xs-row {
+  flex-direction: row !important;
+}
 
 /******************************** PAGE CONTACT *********************************/
 
