@@ -330,7 +330,7 @@ function getCoreSettings(): array {
         'siteUrl' => $urlServer,
         'l10n' => array('H5P' => $core->getLocalization()),
         'user' => $usersettings,
-        'hubIsEnabled' => true,
+        'hubIsEnabled' => false,
         'reportingIsEnabled' => false,
         'crossorigin' => null,
         'libraryConfig' => $core->h5pF->getLibraryConfig(),
