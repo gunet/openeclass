@@ -30,7 +30,8 @@ $helpTopic = 'users_administration';
 $helpSubTopic = 'user_e_portfolio_fields';
 require_once '../../include/baseTheme.php';
 
-$toolName = $langEPFAdmin;
+$toolName = $langAdmin;
+$pageName = $langEPFAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['add_cat'])) { //add a new category form

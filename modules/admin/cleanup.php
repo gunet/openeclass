@@ -37,7 +37,8 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page('modules/admin/cleanup.php');
 }
 
-$toolName = $langCleanUp;
+$toolName = $langAdmin;
+$pageName = $langCleanUp;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 view('admin.server.cleanup');

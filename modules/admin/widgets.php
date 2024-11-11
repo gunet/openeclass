@@ -353,6 +353,7 @@ $view_data['final_data_courseHomePageMain_widget'] = tinymce_widget(COURSE_HOME_
 
 $view_data = recursiveWidgetIterator('Widgets', $view_data);
 
+$toolName = $langAdmin;
 $pageName = $langWidgets;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 

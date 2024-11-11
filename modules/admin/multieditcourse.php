@@ -24,6 +24,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
 
+$toolName = $langAdmin;
 $toolName = $langChangeDepartment;
 
 $tree = new Hierarchy();

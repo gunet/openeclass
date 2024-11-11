@@ -20,7 +20,8 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$toolName = $langPrivacyPolicy;
+$toolName = $langAdmin;
+$pageName = $langPrivacyPolicy;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['updatePrivacyPolicy'])) {

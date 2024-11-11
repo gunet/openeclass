@@ -20,7 +20,7 @@
 
 $require_departmentmanage_user = true;
 $require_help = true;
-$helpTopic = 'course_administration';
+$helpTopic = 'users_administration';
 $helpSubTopic = 'mass_courses_creation';
 
 require_once '../../include/baseTheme.php';
@@ -108,7 +108,8 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page('modules/admin/multicourse.php');
 }
 
-$toolName = $langMultiCourse;
+$toolName = $langAdmin;
+$pageName = $langMultiCourse;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $tree = new hierarchy();

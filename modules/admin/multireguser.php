@@ -41,7 +41,8 @@ $user = new User();
 
 load_js('jstree3');
 
-$toolName = $langMultiRegUser;
+$toolName = $langAdmin;
+$pageName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');

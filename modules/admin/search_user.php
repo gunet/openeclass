@@ -39,21 +39,23 @@ load_js('jstree3');
 load_js('bootstrap-datepicker');
 
 $navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
-$toolName = $langSearchUser;
+//$toolName = $langSearchUser;
+$toolName = $langAdmin;
+$pageName = $langSearchUser;
 
 // get the incoming values
 
 $data['inactive_checked'] = (isset($_GET['search']) and $_GET['search'] == 'inactive') ? ' checked' : '';
-$data['lname'] = isset($_GET['lname']) ? $_GET['lname'] : '';
-$data['fname'] = isset($_GET['fname']) ? $_GET['fname'] : '';
+$data['lname'] = $_GET['lname'] ?? '';
+$data['fname'] = $_GET['fname'] ?? '';
 $data['uname'] = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
-$data['am'] = isset($_GET['am']) ? $_GET['am'] : '';
+$data['am'] = $_GET['am'] ?? '';
 $data['verified_mail'] = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
 $data['email'] = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $data['reg_flag'] = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
-$data['user_registered_at'] = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
-$data['user_expires_until'] = isset($_GET['user_expires_until']) ? $_GET['user_expires_until'] : '';
-$data['user_last_login'] = isset($_GET['user_last_login']) ? $_GET['user_last_login'] : '';
+$data['user_registered_at'] = $_GET['user_registered_at'] ?? '';
+$data['user_expires_until'] = $_GET['user_expires_until'] ?? '';
+$data['user_last_login'] = $_GET['user_last_login'] ?? '';
 
 if (isset($_GET['department'])) {
     $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
@@ -81,6 +83,7 @@ $data['action_bar'] = action_bar(array(
                 'icon' => 'fa-solid fa-user-slash',
                 'level' => 'primary-label'),
             ));
+
 
 //Preparing form data
 $data['usertype_data'] = array(

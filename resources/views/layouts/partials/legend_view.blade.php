@@ -1,67 +1,76 @@
 @php
-
     $go_back_url = $_SERVER['REQUEST_URI'];
-
-    if(!$module_visibility) {
+    if (!$module_visibility) {
         $visible_module = 0;
-    }else{
+    } else {
         $visible_module = 1;
     }
 @endphp
 
-@if(!isset($_GET['fromFlipped']))
-    <h1 class='sr-only'>@if($course_code) {{ trans('langCourse') }} : {{ $currentCourseName }} @elseif($pageTitle) {{ $pageTitle }} @endif</h1>
-    <h2 class='sr-only'>@if($course_code) {{ trans('langCode') }} : {{ $course_code }} @elseif($pageName) {{ trans('langThePageIs') }} {{ $pageName }} @elseif($toolName) {{ trans('langThePageIs') }} {{ $toolName }} @endif</h2>
-    <div class='col-12 mt-4'>
+@if (!isset($_GET['fromFlipped']))
+    <h1 class='sr-only'>
+        @if($course_code)
+            {{ trans('langCourse') }} : {{ $currentCourseName }}
+        @elseif($pageTitle)
+            {{ $pageTitle }}
+        @endif
+    </h1>
+    <h2 class='sr-only'>
+        @if($course_code)
+            {{ trans('langCode') }} : {{ $course_code }}
+        @elseif($pageName)
+            {{ trans('langThePageIs') }} {{ $pageName }}
+        @elseif($toolName) {{ trans('langThePageIs') }} {{ $toolName }}
+        @endif
+    </h2>
+    @if ($course_code or $require_help or $breadcrumbs)
+        <div class='col-12 mt-4'>
+    @else
+        <div class='col-12'>
+    @endif
         <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
             <div class='flex-grow-1'>
-                @if($toolName)
-                    @if ($course_code)
-                        <div class='col-12 mb-2'>
+                @if ($course_code) {{-- course --}}
+                    <div class='col-12 mb-2'>
+                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                             <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                            <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
                         </div>
-                    @endif
-                    @if (!isset($action_bar) or empty($action_bar))
-                        <div class='col-12 d-inline-flex'>
-                            <!-- toolName -->
-                            @if ($course_code)
+                        <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
+                            <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
+                            <div class='course-title-icons d-flex justify-content-start align-items-center gap-2'>
+                                {!! course_access_icon(course_status($course_id)) !!}
+                                @if($courseLicense > 0)
+                                    {!! copyright_info($course_id) !!}
+                                @endif
+                            </div>
+                        </div>
+                        @if (!isset($action_bar) or empty($action_bar))
+                            <div class='col-12 d-inline-flex'>
                                 <p>
                                     {{ $toolName }}
                                     @if ($pageName and ($pageName != $toolName))
                                         - {{ $pageName }}
                                     @endif
                                 </p>
-                            @else
-                                <h2>
-                                    {{ $toolName }}
-                                    @if ($pageName and ($pageName != $toolName))
-                                        - {{ $pageName }}
-                                    @endif
-                                </h2>
-                            @endif
-                        </div>
-                    @else
-                        <div class='col-12 d-inline-flex'>
-                        </div>
-                    @endif
+                            </div>
+                        @endif
+                    </div>
                 @else
-                    @if ($course_code)
-                        <div class='col-12 mb-2'>
-                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-
-                            </div>
-                            <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
-                                <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
-                                <div class='course-title-icons d-flex justify-content-start align-items-center gap-2'>
-                                    {!! course_access_icon(course_status($course_id)) !!}
-                                    @if($courseLicense > 0)
-                                        {!! copyright_info($course_id) !!}
-                                    @endif
-                                </div>
-                            </div>
+                    @if($toolName)
+                        <div class='col-12 d-inline-flex'>
+                            <h2>
+                                {{ $toolName }}
+                            </h2>
                         </div>
+                        @if (!isset($action_bar) or empty($action_bar))
+                            <div class='col-12 d-inline-flex mt-2'>
+                                @if ($pageName and ($pageName != $toolName))
+                                    <h3>
+                                        {{ $pageName }}
+                                    </h3>
+                                @endif
+                            </div>
+                        @endif
                     @endif
                 @endif
             </div>
@@ -71,8 +80,11 @@
                 @if ($is_editor)
                     @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                 @endif
-
-                <div class='d-flex justify-content-end align-items-end gap-2 mt-auto'>
+                @if ($course_code) {{-- course --}}
+                    <div class='d-flex justify-content-end align-items-end gap-2 mt-3'>
+                @else
+                    <div class='d-flex justify-content-end align-items-end gap-2'>
+                @endif
                     <!-- active - inactive module_id -->
                     @if($module_id != MODULE_ID_COURSEINFO and $module_id != MODULE_ID_USERS
                         and $module_id != MODULE_ID_USAGE and $module_id != MODULE_ID_TOOLADMIN
@@ -97,14 +109,14 @@
                                 @endif
                             </form>
                     @endif
-                    <!-- rss for announcements - blog -->
-                    @if (defined('RSS'))
+
+                    @if (defined('RSS')) {{-- rss link --}}
                         <a class='btn btn-default text-decoration-none' href="{{RSS}}" role="button"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
                            <span class="fa-solid fa-rss"></span>
                         </a>
                     @endif
-                    @if ($require_help)
+                    @if ($require_help) {{-- help icon / link --}}
                         <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}&subtopic={{ $helpSubTopic }}'
                             class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip' data-bs-placement='bottom'
                             title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" tabindex="-1" role="button">

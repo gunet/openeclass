@@ -28,7 +28,8 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$toolName = $langAdminAn;
+$toolName = $langAdmin;
+$pageName = $langAdminAn;
 
 // modify visibility
 if (isset($_GET['vis'])) {

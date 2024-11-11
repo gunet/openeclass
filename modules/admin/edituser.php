@@ -62,7 +62,8 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
-$toolName = "$langEditUser: " . uid_to_name($u);
+$toolName = $langAdmin;
+$pageName = "$langEditUser: " . uid_to_name($u);
 
 $u_submitted = $_POST['u_submitted'] ?? '';
 

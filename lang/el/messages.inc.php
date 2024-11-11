@@ -121,7 +121,7 @@ $langEnableStrongPasswords = "Δημιουργία 'δύσκολων' συνθη
 // index
 $langComments = "Σχόλια";
 $langCommentsUser = "Σχόλια χρηστών";
-$langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
+$langAdminTool = "Διαχείριση Πλατφόρμας";
 $langState = "Διαχείριση εξυπηρετητή";
 $langDevAdmin = "Διαχείριση Βάσης Δεδομένων";
 $langSysInfo = "Πληροφορίες Συστήματος";
@@ -2592,7 +2592,7 @@ $langCreationDate = "Ημερομηνία δημιουργίας";
 $langMoreCourseInfo = "Περισσότερες πληροφορίες";
 $langMyAgenda = "Το ημερολόγιό μου";
 $langMyAnnouncements = "Οι ανακοινώσεις μου";
-$langAdminTool = "Διαχείριση πλατφόρμας";
+$langAdmin = "Διαχείριση πλατφόρμας";
 $langPass = "Συνθηματικό (password)";
 $langHelp = "Βοήθεια";
 $langSelection = "Επιλογή";

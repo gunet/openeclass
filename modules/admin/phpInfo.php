@@ -26,15 +26,9 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
+$toolName = $langAdmin;
 $pageName = $langPHPInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-// Display link to go back to index.php
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
 
 $head_content .= '<style type="text/css">
 a{
@@ -64,5 +58,5 @@ a{
         hr {width: 600px; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}
         </style>
         ';
-view('admin.server.phpInfo', $data);
+view('admin.server.phpInfo');
 

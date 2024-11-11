@@ -22,7 +22,7 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$toolName = $langAdminManageFooter;
+$toolName = $langAdmin;
 $pageName = $langAdminManageFooter;
 
 if(isset($_POST['submit'])){

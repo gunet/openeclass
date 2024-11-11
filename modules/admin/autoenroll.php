@@ -20,13 +20,14 @@
 
 $require_admin = true;
 $require_help = true;
-$helpTopic = 'course_administration';
+$helpTopic = 'users_administration';
 $helpSubTopic = 'auto_registration';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$toolName = $langAutoEnroll;
+$toolName = $langAdmin;
+$pageName = $langAutoEnroll;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['add'])) {

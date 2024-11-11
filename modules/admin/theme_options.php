@@ -344,6 +344,7 @@ if (isset($_POST['optionsSave'])) {
     }
     redirect_to_home_page('modules/admin/theme_options.php');
 } else {
+    $toolName = $langAdmin;
     $pageName = $langThemeSettings;
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
     load_js('spectrum');

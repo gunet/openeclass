@@ -28,6 +28,7 @@ $require_help = true;
 $helpTopic = 'users_administration';
 $helpSubTopic = 'course_search';
 
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
@@ -39,7 +40,8 @@ $user = new User();
 load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
-$toolName = $langSearchCourse;
+$toolName = $langAdmin;
+$pageName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $data['action_bar'] = action_bar(array(

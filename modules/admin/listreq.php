@@ -19,6 +19,9 @@
  */
 
 $require_usermanage_user = true;
+$require_help = true;
+$helpTopic = 'users_administration';
+$helpSubTopic = 'teachers_request';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -34,19 +37,20 @@ $close = $_GET['close'] ?? (isset($_POST['close']) ? $_POST['close'] : '');
 $id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
 $show = $_GET['show'] ?? (isset($_POST['show']) ? $_POST['show'] : '');
 
+$toolName = $langAdmin;
 // Deal with navigation
 switch ($show) {
     case "closed":
-        $toolName = $langReqHaveClosed;
+        $pageName = $langReqHaveClosed;
         $pagination_link = '&amp;show=closed';
         $columns = 'null, null, null, null, null, null, { orderable: false }';
         break;
     case "rejected":
-        $toolName = $langReqHaveBlocked;
+        $pageName = $langReqHaveBlocked;
         $columns = 'null, null, null, null, null, null, { orderable: false }';
         break;
     default:
-        $toolName = $langUserOpenRequests;
+        $pageName = $langUserOpenRequests;
         $columns = 'null, null, null, null, null, { orderable: false }';
         break;
 }

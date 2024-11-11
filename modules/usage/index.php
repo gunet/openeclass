@@ -114,7 +114,7 @@ $head_content .= "<style>
 }
 </style>";
 
-$pageName = $langUsage;
+$toolName = $langUsage;
 
 if (isset($_REQUEST['u'])) {
     if (!$is_admin) { // security check
@@ -128,8 +128,7 @@ if (isset($_REQUEST['u'])) {
 
 if (isset($_GET['per_course_dur'])) {
     if ($is_admin) {
-        $toolName .= "$langUserStats: " . q(uid_to_name($uid_stats))." (". q(uid_to_name($uid_stats, 'username')).")";
-        $pageName = "$langUserStats: " . q(uid_to_name($uid_stats))." (".q(uid_to_name($uid_stats, 'username')).")";
+        $pageName = q(uid_to_name($uid_stats)) . " (" .q(uid_to_name($uid_stats, 'username')) .")";
         $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
         $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
         $action_bar = action_bar(array(

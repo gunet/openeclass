@@ -28,7 +28,8 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/modalconfirmation.php';
 require_once 'include/mailconfig.php';
 
-$toolName = $langEclassConf;
+$toolName = $langAdmin;
+$pageName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 const MONTHS = 30 * 24 * 60 * 60;

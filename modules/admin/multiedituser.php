@@ -32,12 +32,14 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
+$toolName = $langAdmin;
+
 if (isset($_POST['activate_submit'])) {
-    $toolName = $langAddSixMonths;
+    $pageName = $langAddSixMonths;
 } elseif (isset($_POST['move_submit'])) {
-    $toolName = $langChangeDepartment;
+    $pageName = $langChangeDepartment;
 } else {
-    $toolName = $langMultiDelUser;
+    $pageName = $langMultiDelUser;
 }
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');

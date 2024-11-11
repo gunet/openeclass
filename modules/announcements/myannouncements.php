@@ -28,19 +28,7 @@ $require_help = true;
 $helpTopic = 'portfolio';
 $helpSubTopic = 'my_announcements';
 
-$pageName = $langMyPersoAnnouncements;
-
-// Main platform and Collaboration platform are always enabled
-// if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
-//     if(count($collaboration_ids) > 0){
-//         $lesson_collaboration_ids = array_merge($collaboration_ids,$lesson_ids);
-//         $lesson_ids = $lesson_collaboration_ids;
-//     }
-// }elseif(get_config('show_collaboration') && get_config('show_always_collaboration')){ // Only Collaboration platform is always enabled
-//     if(count($collaboration_ids) > 0){
-//         $lesson_ids = $collaboration_ids;
-//     }
-// }
+$toolName = $langMyPersoAnnouncements;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 

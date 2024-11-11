@@ -100,15 +100,9 @@ if (isset($_GET['auth'])) {
     }
 }
 
-$toolName = $langUserAuthentication;
+$toolName = $langAdmin;
+$pageName = $langUserAuthentication;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-$action_bar = action_bar(array(
-                array('title' => $langBack,
-                    'url' => "$_SERVER[PHP_SELF]",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
-                ),false);
 
 $data['auth_ids'] = $auth_ids;
 $data['auth_active_ids'] = $auth_active_ids = get_auth_active_methods();

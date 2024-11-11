@@ -31,7 +31,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$toolName = $langChangeUser;
+$toolName = $langAdmin;
+$pageName = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (!($is_admin or $is_power_user or $is_usermanage_user or $is_departmentmanage_user)) {

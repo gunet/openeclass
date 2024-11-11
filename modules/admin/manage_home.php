@@ -22,7 +22,9 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$toolName = $pageName = $langAdminManageHomepage;
+
+$toolName = $langAdmin;
+$pageName = $langAdminManageHomepage;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {

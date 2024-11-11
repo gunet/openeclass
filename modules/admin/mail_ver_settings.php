@@ -25,7 +25,7 @@
  * @abstract This component massively changes user's verification status.
  *
  */
-$require_admin = TRUE;
+$require_admin = true;
 $require_help = true;
 $helpTopic = 'users_administration';
 $helpSubTopic = 'user_mail_verification';
@@ -72,8 +72,8 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
         redirect_to_home_page('modules/admin/mail_ver_settings.php');
     }
 }
-
-$toolName = $langMailVerification;
+$toolName = $langAdmin;
+$pageName = $langMailVerification;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // admin hasn't clicked on edit

@@ -526,7 +526,9 @@ $head_content .= "<script>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
-$toolName = $langListUsersActions;
+
+$toolName = $langAdmin;
+$pageName = $langListUsersActions;
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
