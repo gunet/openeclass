@@ -294,7 +294,7 @@ if ($is_editor) {
                                                             <div class='control-label-notes'>$langStartDate</div>
                                                             <div id='fromNewDate'></div>
 
-                                                            <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
+                                                            <div class='control-label-notes mt-3'>$langCurrentDuration <small>$langInHour</small></div>
                                                             <div class='small-text'>$duration</div>
 
                                                             <div class='control-label-notes mt-2'>$langCalculateNewDuration <small>$langInHour</small></div>
@@ -401,7 +401,6 @@ if ($is_editor) {
                         <script type='text/javascript'>
                             $(document).ready(function () {
 
-
                                 //initial clicker duration
                                 var isOnDuration = '';
                                 if($('#OnOffDuration').is(':checked')){
@@ -414,12 +413,12 @@ if ($is_editor) {
                                     header:{
                                         left: 'prev,next ',
                                         center: 'title',
-                                        right: ''
+                                        right: 'month'
                                     },
                                     defaultView: 'agendaWeek',
                                     defaultDate: '{$startDateEvent}',
                                     firstDay: (new Date().getDay()),
-                                    slotDuration: '00:30' ,
+                                    slotDuration: '00:05',
                                     minTime: '08:00:00',
                                     maxTime: '23:00:00',
                                     editable: true,
@@ -793,7 +792,7 @@ if ($is_editor) {
                                 right: ''
                             },
                             defaultView: 'agendaWeek',
-                            slotDuration: '00:30' ,
+                            slotDuration: '00:05' ,
                             minTime: '08:00:00',
                             maxTime: '23:00:00',
                             editable: true,
