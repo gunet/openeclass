@@ -209,6 +209,18 @@ if (isset($_POST['newTitle'])) {
         $originalDatetime = date('Y-m-d H:i:s', strtotime($_POST['startdate']));
         $duration_text = '+'.$duration_arr[0].' hours'.' +'.$duration_arr[1].' minutes';
         $enddateEvent = date('d-m-Y H:i', strtotime($originalDatetime . $duration_text));
+
+        // If the dates are different do not continue.
+        $start_day_check = date('Y-m-d', strtotime($start));
+        $start_day_check = explode('-',$start_day_check);
+        $end_day_check = date('Y-m-d', strtotime($enddateEvent));
+        $end_day_check = explode('-',$end_day_check);
+        if ($start_day_check[2] != $end_day_check[2]) {
+            Session::flash('message',$langChooseDayAgain);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("main/personal_calendar/index.php");
+        }
+
         if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
             $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
         }
