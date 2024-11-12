@@ -333,7 +333,7 @@ $view_data = recursiveWidgetIterator('Widgets', $view_data);
 
 $view_data['myWidgets'] = 1;
 
-$view_data['menuTypeID'] = 1;
+$toolName = $langPortfolio;
 $pageName = $langMyWidgets;
 
 // Initialization tinymce regarding widget area id

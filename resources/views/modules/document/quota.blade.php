@@ -16,27 +16,26 @@
             @else
                 <div class="col-12">
             @endif
-
                     <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                         @if($course_code)
-                        <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
-                            <div class="offcanvas-header">
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
+                            <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
+                                <div class="offcanvas-header">
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                                </div>
                             </div>
-                            <div class="offcanvas-body">
-                                @include('layouts.partials.sidebar',['is_editor' => $is_editor])
-                            </div>
-                        </div>
                         @endif
 
                         @include('layouts.partials.legend_view')
 
                         @include('layouts.partials.show_alert')
 
-                        <div class='col-12'>
+                        <div class='col-12 mt-3'>
                             <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                 <div class='card-body'>
                                     <form class='form-horizontal' role='form'>

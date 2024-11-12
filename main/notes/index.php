@@ -43,7 +43,8 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/notes/notes.class.php';
 
-$toolName = $langNotes;
+$toolName = $langPortfolio;
+$pageName = $langNotes;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -117,7 +118,6 @@ if (isset($_GET['delete'])) {
     Notes::delete_note($thisNoteId);
     Session::flash('message', $langNoteDel);
     Session::flash('alert-class', 'alert-success');
-//    redirect_to_home_page('main/notes/index.php');
 }
 
 
@@ -228,14 +228,12 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             ));
     $tool_content .= $action_bar;
     /* display notes */
-    //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
     if (isset($_GET['course'])) {
         $cid = course_code_to_id($_GET['course']);
         $notelist = Notes::get_all_course_notes($cid);
     } else {
         $notelist = Notes::get_user_notes();
     }
-    //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
 
     $iterator = 1;
     $bottomNote = $noteNumber = count($notelist);

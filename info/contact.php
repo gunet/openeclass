@@ -34,15 +34,4 @@ if(!empty($data['emailhelpdesk'])){
     $data['emailhelpdesk'] = "<a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>";
 }
 
-$data['action_bar'] = action_bar(
-                                    [
-                                        [
-                                            'title' => $langBack,
-                                            'url' => $urlServer,
-                                            'icon' => 'fa-reply',
-                                            'level' => 'primary',
-                                            'button-class' => 'btn-secondary'
-                                        ]
-                                    ], false);
-
 view('info.contact', $data);

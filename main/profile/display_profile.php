@@ -31,7 +31,8 @@ require_once 'modules/progress/process_functions.php';
 $data['tree'] = new Hierarchy();
 $data['user'] = new User();
 
-$toolName = $langMyProfile;
+$toolName = $langPortfolio;
+$pageName = $langMyProfile;
 
 if (isset($_GET['id']) and isset($_GET['token'])) {
     $data['id'] = $id = intval($_GET['id']);

@@ -221,7 +221,7 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         if (isset($_GET['addAnnounce'])) {
             $pageName = $langAdminAddAnn;
         } else {
-            $pageName = $langAdminModifAnn;
+            $pageName = $langModify;
         }
         // display add announcement command
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);

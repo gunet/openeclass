@@ -54,7 +54,7 @@
 
                 @include('layouts.partials.legend_view')
 
-                @if(isset($action_bar))
+                @if (isset($action_bar) and !empty($action_bar))
                     {!! $action_bar !!}
                 @else
                     <div class='mt-4'></div>

@@ -29,8 +29,8 @@ if (is_module_disable(MODULE_ID_GRADEBOOK)) {
     redirect_to_home_page();
 }
 
-// Module name
-$toolName = $langGradebook;
+$toolName = $langPortfolio;
+$pageName = $langGradebook;
 $content = false;
 $grade_content = '';
 $courses = Database::get()->queryArray('SELECT course.id course_id, code, title

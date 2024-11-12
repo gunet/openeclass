@@ -12,13 +12,13 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @if(isset($action_bar))
+                    @if(isset($action_bar) and !empty($action_bar))
                         {!! $action_bar !!}
                     @else
                         <div class='mt-4'></div>
                     @endif
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     @if ($rules)
                     <div class='col-12'>
@@ -27,11 +27,11 @@
                             <div class='col'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                        
-                                        
+
+
                                                 <h3>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</h3>
-                                            
-                                        
+
+
                                                 <div>
                                                     {!! action_button([
                                                         [
@@ -48,8 +48,8 @@
                                                         ],
                                                     ]) !!}
                                                 </div>
-                                        
-                                    
+
+
                                     </div>
                                     <div class='card-body'>
                                         <div>
@@ -63,7 +63,7 @@
                                                 </ul>
                                             @else
                                                 {{ trans('langApplyAnyDepartment') }}:
-                                                <br>                 
+                                                <br>
                                             @endif
                                             @if ($rule['courses'])
                                                 {{ trans('langAutoEnrollCourse') }}:
@@ -72,7 +72,7 @@
                                                     <li>
                                                         <a href='{{ $urlAppend }}courses/{{ $course->code }}/'>
                                                             {{ $course->title }}
-                                                        </a> 
+                                                        </a>
                                                         ({{ $course->public_code }})
                                                     </li>
                                                 @endforeach
@@ -92,8 +92,8 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>   
-                            </div>                 
+                                </div>
+                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -102,9 +102,9 @@
                             <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span> {{ trans('langNoRules') }}</span></div>
                         </div>
                     @endif
-               
+
         </div>
 </div>
 
-</div>    
+</div>
 @endsection

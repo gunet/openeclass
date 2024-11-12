@@ -102,7 +102,7 @@
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/newuseradmin.php">
-                                {!! trans('langNewAccount') !!}
+                                {!! trans('langCreateAccount') !!}
                             </a>
                         </li>
                         <li class="list-group-item element">

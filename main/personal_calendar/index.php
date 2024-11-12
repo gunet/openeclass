@@ -177,7 +177,8 @@ function checkrequired(thisform) {
 }"
 .'</script>';
 
-$toolName = $langMyAgenda;
+$toolName = $langPortfolio;
+$pageName = $langMyAgenda;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');

@@ -7,12 +7,11 @@
                 <div class="row m-auto">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
-                    <h1 aria-label="{{ trans('langMyCourses') }}"></h1>
+                    @include('layouts.partials.legend_view')
 
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12 mb-4'>
                         <div class='row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4'>

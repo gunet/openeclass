@@ -32,7 +32,7 @@ require_once 'include/log.class.php';
 
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
-           $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
+           $langVideo, $langDoc, $langMyDocs, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
            $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall,
            $langOfCourse, $is_collaborative_course, $langForm;
 
@@ -152,12 +152,10 @@ function show_post_form() {
                           </script>';
 
         $tool_content .= '
-            <div class="col-12">
+            <div class="col-12 mt-3">
                 <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
                     <div class="card-header border-0">
-
-                            <h3>'.$langWall.'&nbsp;'.$langOfCourse.'</h3>
-
+                        <h3>'.$langWall.'&nbsp;'.$langOfCourse.'</h3>
                     </div>
                     <div class="card-body">
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">

@@ -28,7 +28,8 @@ $require_help = true;
 $helpTopic = 'portfolio';
 $helpSubTopic = 'my_announcements';
 
-$toolName = $langMyPersoAnnouncements;
+$toolName = $langPortfolio;
+$pageName = $langMyAnnouncements;
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 

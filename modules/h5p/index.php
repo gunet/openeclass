@@ -38,7 +38,7 @@ if ($is_editor) {
     // custom action bar
     $tool_content .= "
         <div class='action_bar'>
-            <div class='col-sm-12 d-flex justify-content-end'>
+            <div class='col-sm-12 d-flex justify-content-end mt-3'>
                 <div class='margin-top-thin margin-bottom-fat'>
                     <div class='btn-group'>";
 

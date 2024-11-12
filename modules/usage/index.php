@@ -114,7 +114,8 @@ $head_content .= "<style>
 }
 </style>";
 
-$toolName = $langUsage;
+$toolName = $langPortfolio;
+$pageName = $langUsage;
 
 if (isset($_REQUEST['u'])) {
     if (!$is_admin) { // security check

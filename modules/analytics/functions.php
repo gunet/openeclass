@@ -85,7 +85,7 @@ function display_learning_analytics() {
     $tool_content .= "
 
             <div class='col-12'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                         
                            

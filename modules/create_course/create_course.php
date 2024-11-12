@@ -38,7 +38,9 @@ require_once 'functions.php';
 $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
-$toolName = $langCourseCreate;
+
+$toolName = $langPortfolio;
+$pageName = $langCourseCreate;
 
 register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
 if (empty($prof_names)) {

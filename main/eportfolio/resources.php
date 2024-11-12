@@ -50,7 +50,8 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     }
 }
 
-$toolName = $langResourcesCollection;
+$toolName = $langMyePortfolio;
+$pageName = $langResourcesCollection;
 
 if (!token_validate('eportfolio' . $id, $_GET['token'])) {
     redirect_to_home_page();
@@ -78,11 +79,6 @@ if ($userdata) {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
         }
-
-        $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                            <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='$langClose'>&times;</a>
-                            $langePortfolioCollectionUserInfo</span>
-                          </div></div>";
 
         if ($userdata->eportfolio_enable == 1) {
             $tool_content .= "<script type='text/javascript'>
@@ -128,6 +124,10 @@ if ($userdata) {
             )
         ));
         $tool_content .= $action_bar;
+
+        $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                            $langePortfolioCollectionUserInfo</span>
+                          </div></div>";
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
