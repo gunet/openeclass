@@ -93,7 +93,7 @@ if (!isset($_GET['action'])) {
     $query = "SELECT max(depth) as maxdepth FROM (SELECT  COUNT(parent.id) - 1 AS depth
                 FROM `hierarchy` AS node, `hierarchy` AS parent
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    GROUP BY node.id
+                    GROUP BY node.id, node.lft
                     ORDER BY node.lft) AS hierarchydepth";
     $maxdepth = Database::get()->querySingle($query)->maxdepth;
 
