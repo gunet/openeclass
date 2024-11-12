@@ -14,7 +14,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} main-container'>
+    <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -23,7 +23,7 @@
 
             {!! $action_bar !!}
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             <div class='col-lg-6 col-12'>
             <div class='form-wrapper form-edit border-0 px-0'>
@@ -35,8 +35,8 @@
                             <div class='col-sm-12'>
                             @if ($allow_name_change)
                                 <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
-                            @else {
-                                <p class='form-control-static'>{{$givenname_form}}</p>
+                            @else
+                                <p class='form-control-static'>{{ $givenname_form }}</p>
                                 <input type='hidden' name='givenname_form' value='{{ $givenname_form }}' id='givenname_form'>
                             @endif
                             </div>
@@ -60,8 +60,7 @@
                             @if ($allow_username_change)
                                 <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
                             @else
-                                [{{ $auth_text }}]
-                                <p class='form-control-static'>{{ $username_form }}</p>
+                                <p class='form-control-static'>{{ $username_form }} <strong>[{{ $auth_text }}]</strong></p>
                             @endif
                             </div>
                         </div>
@@ -125,34 +124,34 @@
                             <div class='col-sm-12'>
                                 <div class='checkbox'>
                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                        <input type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}> 
+                                        <input type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}>
                                         <span class='checkmark'></span>
                                         {{ trans('langEmail') }}
                                     </label>
                                 </div>
                                 <div class='checkbox'>
                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                        <input type='checkbox' name='am_public' value='1' {!! $am_public_selected !!}> 
+                                        <input type='checkbox' name='am_public' value='1' {!! $am_public_selected !!}>
                                         <span class='checkmark'></span>
                                         {{ trans('langAm') }}
                                     </label>
                                 </div>
                                 <div class='checkbox'>
                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                        <input type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}> 
+                                        <input type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}>
                                         <span class='checkmark'></span>
                                         {{ trans('langPhone') }}
                                     </label>
                                 </div>
                                 <div class='checkbox'>
                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                        <input type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}> 
+                                        <input type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}>
                                         <span class='checkmark'></span>
                                         {{ trans('langProfileImage') }}
                                     </label>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         @if (get_config('email_verification_required'))
@@ -225,7 +224,6 @@
                             <a href='display_profile.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                         </div>
 
-                
                     {!! generate_csrf_token_form_field() !!}
                 </fieldset>
                 </form>
