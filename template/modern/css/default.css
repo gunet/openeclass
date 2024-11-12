@@ -8,7 +8,7 @@ html{
 
 body{
   background: #ffffff;
-  font-family: 'Manrope' ,'FontAwesome', sans-serif;
+  font-family: 'Manrope', 'Open Sans', 'FontAwesome', sans-serif;
   line-height: 1.65;
   font-size:14px;
   padding-right: 0px !important;
@@ -333,7 +333,7 @@ img {
 .help-block{
   color:#2B3944;
   font-size: 12px;
-  font-family: 'Manrope' , sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -643,7 +643,7 @@ caption{
 h1,
 h2,
 .text-heading-h2{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700;
   font-size: 24px;
   line-height: 32px;
@@ -656,7 +656,7 @@ h3,
 .action-bar-title,
 .modal-title-default,
 .text-heading-h3{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700;
   font-size: 18px;
   line-height: 26px;
@@ -666,7 +666,7 @@ h3,
 
 h4,
 .text-heading-h4{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700;
   font-size: 16px;
   line-height: 24px;
@@ -677,7 +677,7 @@ h4,
 h5,
 .portfolio-texts,
 .text-heading-h5{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700 ;
   font-size: 14px;
   line-height: 24px;
@@ -687,7 +687,7 @@ h5,
 
 h6,
 .text-heading-h6{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700;
   font-size: 12px;
   line-height: 16px;
@@ -697,7 +697,7 @@ h6,
 
 p,
 span{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 24px;
@@ -719,7 +719,6 @@ a{
   word-wrap: break-word;
   word-break: break-word;
   white-space: normal;
-  display: inline-block;
 }
 a:hover{
   text-decoration:underline;
@@ -802,7 +801,7 @@ h1,h2,h3,h4,h5,h6,
 }
 
 .form-label{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700;
   font-size: 14px;
   line-height: 16px;
@@ -878,7 +877,7 @@ b a {
 
 
 .eclass-title{
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope', 'Open Sans', sans-serif;
   font-weight: 700;
   font-size: 32px;
   line-height: 48px;
@@ -2016,7 +2015,7 @@ select.form-select {
   border-radius: 4px;
   border-color:#687DA3;
   font-size: 14px;
-  font-family: 'Manrope' , sans-serif; font-weight: 400; font-style: normal;
+  font-family: 'Manrope', sans-serif; font-weight: 400; font-style: normal;
   height:40px;
   color:#3E4965;
   padding-top: 5px;
