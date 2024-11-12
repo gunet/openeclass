@@ -194,6 +194,18 @@ if ($is_editor) {
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
             }
+
+            // If the dates are different do not continue.
+            $start_day_check = date('Y-m-d', strtotime($startdate));
+            $start_day_check = explode('-',$start_day_check);
+            $end_day_check = date('Y-m-d', strtotime($enddateEvent));
+            $end_day_check = explode('-',$end_day_check);
+            if ($start_day_check[2] != $end_day_check[2]) {
+                Session::flash('message',$langChooseDayAgain);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/agenda/index.php?course=$course_code");
+            }
+
             if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
                 $resp = update_recursive_event($id, $event_title, $startdate, $enddateEvent, $duration, $content, $recursion);
             } else {
