@@ -62,10 +62,13 @@ load_js('jquery');
 load_js('datatables');
 
 if ($is_editor) {
-    // disable ordering for action button column
-    $columns = 'null, null, null, null, { orderable: false }';
+    if (isset($_GET['ins'])) {
+        $columns = 'null, null, null, null, { orderable: false }';
+    } else {
+        $columns = 'null, null, null, null, null, { orderable: false }';
+    }
 } else if ($is_course_reviewer) {
-    $columns = 'null, null, null, nulll';
+    $columns = 'null, null, null, null, null';
 }
 
 @$head_content .= "
