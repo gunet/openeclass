@@ -30,7 +30,8 @@ $helpSubTopic = 'my_courses';
 include '../include/baseTheme.php';
 require_once 'portfolio_functions.php';
 
-$toolName = $langMyCourses;
+$toolName = $langPortfolio;
+$pageName = $langMyCourses;
 
 load_js('datatables');
 
@@ -42,7 +43,7 @@ if(isset($_GET['term'])){
   $q = $_GET['term'];
 
   $typeCourse = 0;
-  if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+  if (get_config('show_collaboration') && get_config('show_always_collaboration')){
     $typeCourse = 1;
   }
   if(isset($_GET['typeCourse'])){
@@ -218,17 +219,15 @@ if(isset($_GET['term'])){
 
             $html .= "
         </div>";
-  }else{
+  } else {
       $html .= "<div class='col-12'>
           <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCourses</span></div>
       </div>";
   }
 
-
   echo($html);
 
   exit();
-
 }
 
 $data['action_bar']  = action_bar([
@@ -246,10 +245,7 @@ $data['action_bar']  = action_bar([
 
 ], false);
 
-$data['menuTypeID'] = 1;
-
 view('main.my_courses.index', $data);
-
 
 function GroupCardsPagination($allCourses,$pagesPag){
 

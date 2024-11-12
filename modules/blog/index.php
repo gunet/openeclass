@@ -39,11 +39,13 @@ require_once 'modules/sharing/sharing.php';
 require_once 'modules/progress/BlogEvent.php';
 require_once 'modules/analytics/BlogAnalyticsEvent.php';
 
+$toolName = $langPortfolio;
+
 if ($blog_type == 'course_blog') {
     $user_id = 0;
 
     define_rss_link();
-    $toolName = $langBlog;
+    $pageName = $langBlog;
 
     //check if commenting is enabled for course blogs
     $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
@@ -85,9 +87,9 @@ if ($blog_type == 'course_blog') {
     }
 
     if ($user_id == $_SESSION['uid']) {
-        $toolName = $langMyBlog;
+        $pageName = $langMyBlog;
     } else {
-        $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
+        $pageName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
     }
     $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
     //check if commenting is enabled for personal blogs

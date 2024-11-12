@@ -25,6 +25,7 @@ $helpSubTopic = 'metadata_categories';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
+$toolName = $langAdmin;
 $pageName = $langCourseCategoryActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -50,13 +51,14 @@ if (!in_array($language, $session->active_ui_languages)) {
 
 // link to add a new course category
 if (!isset($_REQUEST['action'])) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
             array('title' => $langAdd,
                 'url' => "$_SERVER[SCRIPT_NAME]?action=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')
         ));
+    $tool_content .= $action_bar;
 }
 
 // Display all available course categories
@@ -93,7 +95,7 @@ if (!isset($_GET['action'])) {
     }
 }
 // Add a new course category
-elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
+elseif ($_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
 
@@ -142,7 +144,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
     }
 }
 // Edit a course category
-elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
+elseif ($_GET['action'] == 'edit') {
     $id = intval($_REQUEST['id']);
 
     if (isset($_POST['edit'])) {
@@ -202,7 +204,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     $html .= "
     <div class='row'>
        
-    <div class='col-lg-6 col-12'><div class='form-wrapper form-edit border-0 px-0'>
+    <div class='col-lg-6 col-12 mt-3'><div class='form-wrapper form-edit border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=" . $action . "'>
         <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 
@@ -290,8 +292,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-       
+    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>       
            "
                 . form_buttons(array(
                     array(
@@ -305,8 +306,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
                         'href' => $_SERVER['SCRIPT_NAME']
                     )
                 )) .
-           "
-        
+           "        
     </div>
     </fieldset>
     ". generate_csrf_token_form_field() ."

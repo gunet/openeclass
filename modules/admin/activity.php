@@ -80,8 +80,8 @@ if (isset($_POST['toReorder'])) {
     }
     $navigation[] = array('url' => 'activity.php', 'name' => $langActivityCourse);
     $toolName = $langActivityCourseAdd;
-    $tool_content .= "<div class='row'>              
-       <div class='col-lg-6 col-12'>
+    $tool_content .= "<div class='row'>
+       <div class='col-lg-6 col-12 mt-3'>
         <div class='form-wrapper form-edit rounded border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
           $idInput
@@ -179,7 +179,7 @@ $(function() {
 });
 </script>";
 
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langAdd,
               'url' => 'activity.php?add=true',
               'icon' => 'fa-plus-circle',
@@ -187,6 +187,7 @@ $(function() {
               'button-class' => 'btn-success')
         ));
 
+    $tool_content .= $action_bar;
     $headings = Database::get()->queryArray('SELECT * FROM activity_heading ORDER BY `order`');
     if (count($headings)) {
         $tool_content .= "<div class='panel-group' id='headings'>";
@@ -205,40 +206,41 @@ $(function() {
             $heading = q($heading);
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
-      <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
-        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                     
-            <h3>$heading</h3>
-                        
-            <div class='d-flex justify-content-end align-items-center'>$type " .
-                icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
-                <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' aria-label='$langDelete' title='$langDelete' data-bs-toggle='tooltip'>
-                    <span class='fa-solid fa-xmark delete_btn text-danger'></span>
-                    <span class='sr-only'>$langDelete</span></a>
-                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
-            </div>
-           
-          
-        </div>
-        <div class='card-body'>";
-            foreach ($headings as $lang => $msg) {
-                $tool_content .= "
-          <div class='row'>
-            <div class='col-md-2 col-4 text-end'>
-              <strong>" . $langNameOfLang[langcode_to_name($lang)] . ":</strong>
-            </div>
-            <div class='col-md-10 col-8'>" . q($msg) . "</div>
-          </div>";
+              <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                             
+                    <h3>$heading</h3>
+                                
+                    <div class='d-flex justify-content-end align-items-center'>$type " .
+                        icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
+                        <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' aria-label='$langDelete' title='$langDelete' data-bs-toggle='tooltip'>
+                            <span class='fa-solid fa-xmark delete_btn text-danger'></span>
+                            <span class='sr-only'>$langDelete</span></a>
+                            <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                    </div>                             
+                </div>
+                <div class='card-body'>";
+                    foreach ($headings as $lang => $msg) {
+                        $tool_content .= "
+                          <div class='row'>
+                            <div class='col-md-2 col-4 text-end'>
+                              <strong>" . $langNameOfLang[langcode_to_name($lang)] . ":</strong>
+                            </div>
+                            <div class='col-md-10 col-8'>" . q($msg) . "</div>
+                          </div>";
+                    }
+                    $tool_content .= "
+                </div>
+              </div>";
             }
-            $tool_content .= "
-        </div>
-      </div>";
-        }
         $tool_content .= "</div>";
-
     } else {
         $tool_content .= "
-        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoActivityHeadings</span></div></div>";
+                        <div class='col-12'>
+                            <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoActivityHeadings</span>
+                            </div>
+                        </div>";
     }
 }
 

@@ -75,7 +75,6 @@
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-
                         <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                             <div class="offcanvas-header">
                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
@@ -87,7 +86,7 @@
 
                         @include('layouts.partials.legend_view')
 
-                        <div class='d-lg-flex gap-4'>
+                        <div class='d-lg-flex gap-4 mt-3'>
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
                                 <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">

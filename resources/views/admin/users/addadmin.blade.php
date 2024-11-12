@@ -30,16 +30,15 @@
 
             @include('layouts.partials.legend_view')
 
-            @if(isset($action_bar))
+            @if(isset($action_bar) and !empty($action_bar))
                 {!! $action_bar !!}
             @else
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             @if($showFormAdmin)
-
             <div class='col-lg-6 col-12'>
 
                 <div class='form-wrapper form-edit border-0 px-0'>
@@ -114,11 +113,11 @@
                 </div>
             </div>
             <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-            <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
+                <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
             </div>
             @endif
 
-            <div class='col-12 mt-3'>
+            <div class='col-12'>
                 <div class='table-responsive'>
                     <table class='table-default'>
                         <thead><tr class='list-header'>

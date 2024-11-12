@@ -43,14 +43,15 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
-    $toolName = $langUserePortfolio;
+    $toolName = $langPortfolio;
+    $pageName = $langMyePortfolio;
 } else {
     if ($session->status == 0) {
         redirect_to_home_page();
         exit;
     } else {
         $id = $uid;
-        $toolName = $langMyePortfolio;
+        $toolName = $langUserePortfolio;
     }
 }
 
@@ -63,7 +64,7 @@ $token = token_generate('eportfolio' . $id);
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
 
-$pageName = q("$userdata->givenname $userdata->surname");
+//$pageName = q("$userdata->givenname $userdata->surname");
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
 $clipboard_link = "";
 
@@ -218,19 +219,17 @@ if ($userdata) {
 
     $ret_str = render_eportfolio_fields_content($id);
 
-    if ($ret_str['panels'] == ""){
+    if ($ret_str['panels'] == "") {
         $tool_content .= "
-                        
-                            <div class='col-sm-12'>
-                                <div class='card panelCard card-default h-100'>
-                                    <div class='card-body text-center'>".$langNoInfoAvailable."</div>
-                                </div>";
+                    <div class='col-12'>
+                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoInfoAvailable.</span>
+                        </div>
+                    </div>";
     } else {
-        $tool_content .= "
-                            <div class='col-sm-12'>
-                            <div class='row row-cols-1 g-4'>".$ret_str['panels']."</div>";
+        $tool_content .= "<div class='col-sm-12'>
+                            <div class='row row-cols-1 g-4'>".$ret_str['panels']."</div>
+                            </div>";
     }
-
 
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
         $social_share = "<div class='float-end mt-4'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
@@ -241,8 +240,8 @@ if ($userdata) {
     $tool_content .= $clipboard_link;
     $tool_content .= "$social_share</div>";
     $tool_content .= $ret_str['right_menu'];
-    $tool_content .= "";
 }
+
 if ($uid == $id) {
     draw($tool_content, 1, null, $head_content);
 } else {

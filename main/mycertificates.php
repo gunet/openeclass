@@ -29,7 +29,8 @@ if (is_module_disable(MODULE_ID_PROGRESS)) {
     redirect_to_home_page();
 }
 
-$toolName = $langMyCertificates;
+$toolName = $langPortfolio;
+$pageName = $langMyCertificates;
 $content = false;
 
 $table_content = '';

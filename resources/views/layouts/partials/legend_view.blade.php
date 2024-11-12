@@ -28,7 +28,7 @@
     @else
         <div class='col-12'>
     @endif
-        <div class='d-flex gap-lg-5 gap-4' style='margin-bottom: 15px;'>
+        <div class='d-flex gap-lg-5 gap-4'>
             <div class='flex-grow-1'>
                 @if ($course_code) {{-- course --}}
                     <div class='col-12 mb-2'>

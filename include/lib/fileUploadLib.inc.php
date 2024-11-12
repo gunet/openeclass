@@ -260,16 +260,11 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
 
 /**
  * @brief A page that shows a table with statistic data and a gauge bar
- * @global type $pageName
  * @param type $quota
  * @param type $used
  */
-function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
+function showquota($quota, $used) {
     global $pageName;
-
-    if ($menuTypeID) {
-        $data['menuTypeID'] = $menuTypeID;
-    }
 
     if ($quota == 0) {
         $data['diskUsedPercentage'] = ($used > 0)? '100': '0';
@@ -279,14 +274,6 @@ function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
     $data['quota'] = format_bytesize($quota / 1024);
     $data['used'] = format_bytesize($used / 1024);
     $pageName = trans('langQuotaBar');
-    if (is_null($backPath)) {
-        $backPath = documentBackLink('');
-    }
-    $data['backButton'] = action_bar(array(
-                    array('title' => trans('langBack'),
-                          'url' => $backPath,
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
     view('modules.document.quota', $data);
 }
 

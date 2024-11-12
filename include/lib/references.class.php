@@ -80,7 +80,7 @@ class References {
     /** @staticvar array Language name of the specified modules
      */
     private static $lang_vars = array(
-        MODULE_ID_AGENDA => 'langEvent',
+        MODULE_ID_AGENDA => 'langAgenda',
         MODULE_ID_DOCS => 'langDocument',
         MODULE_ID_LINKS => 'langLink',
         MODULE_ID_VIDEO => 'langVideo',

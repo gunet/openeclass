@@ -105,14 +105,14 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
 
 if (isset($_GET['add']) or isset($_GET['edit'])) {
     load_js('jstree3');
-    $navigation[] = ['url' => 'index.php', 'name' => $langAdmins];
-
+    $navigation[] = ['url' => 'addadmin.php', 'name' => $langAdmins];
     $adminDeps = [];
     if (isset($_GET['edit'])) {
+        $toolName = $langAdmin;
+        $pageName = $langEditPrivilege;
         $user_id = getDirectReference($_GET['edit']);
         $user = Database::get()->querySingle('SELECT * FROM user WHERE id = ?d', $user_id);
         $username = q($user->username);
-        $toolName = $langEditPrivilege;
         $usernameValue = " readonly value='$username'";
         $roles = Database::get()->queryArray('SELECT * FROM admin WHERE user_id = ?d', $user_id);
         $privilege = $roles[0]->privilege;
@@ -128,7 +128,8 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
             }, $roles);
         }
     } else {
-        $toolName = $langAddAdmin;
+        $toolName = $langAdmin;
+        $pageName = $langAddAdmin;
         $usernameValue = " placeholder='$langUsername'";
         $data['checked'] = [
             'admin' => '',
@@ -136,7 +137,6 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
             'manageuser' => '',
             'managedepartment' => '',
         ];
-        //$adminDeps = [];
     }
 
     $data['usernameValue'] = $usernameValue;

@@ -19,7 +19,8 @@
 
 
 require_once '../include/baseTheme.php';
-$toolName = $langFaq;
+
+$pageName = $langFaq;
 
 $data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
 

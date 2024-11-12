@@ -24,6 +24,10 @@ $helpTopic = 'system_settings';
 $helpSubTopic ='clean_up_proceed';
 require_once '../../include/baseTheme.php';
 
+$toolName = $langAdmin;
+$pageName = $langCleanUp;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
@@ -37,14 +41,10 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page('modules/admin/cleanup.php');
 }
 
-$toolName = $langAdmin;
-$pageName = $langCleanUp;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
 view('admin.server.cleanup');
 
 // Remove all files under $path older than $max_age days
-// Afterwards, remove $path as well if it points to an empty directory
+// Afterward, remove $path as well if it points to an empty directory
 function cleanup($path, $max_age) {
     $max_age_seconds = $max_age * 60 * 60 * 24;
     $files_left = 0;

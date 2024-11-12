@@ -38,7 +38,8 @@ load_js('select2');
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
 }
-$toolName = $langDropBox;
+$toolName = $langPortfolio;
+$pageName = $langDropBox;
 $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 
 if (!isset($course_id)) {
@@ -174,7 +175,7 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
     }
 
     $backPath = "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : "");
-    $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released, $backPath);
+    $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released);
     exit;
 }
 

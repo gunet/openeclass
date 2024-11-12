@@ -27,7 +27,7 @@
  * as a namespace.
  * However, it is created as a class for a possible need of instantiation of
  * note objects in the future. Another scenario could be the creation
- * of a set of abstract methods to be implemented seperatelly per module.
+ * of a set of abstract methods to be implemented separately per module.
  *
  */
 

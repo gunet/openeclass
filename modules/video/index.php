@@ -77,7 +77,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
         $data = array();
         list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
-        $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
+        $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed);
         exit;
     }
 

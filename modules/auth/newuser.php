@@ -56,9 +56,9 @@ $data['user_registration'] = get_config('user_registration');
 $data['eclass_stud_reg'] = $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 
 if ($eclass_stud_reg == 1) {
-    $pageName = "$langUserRequest";
+    $pageName = $langUserRequest;
 } else {
-    $pageName = "$langRegistration $langOfUserS";
+    $pageName = $langUserAccountInfo2;
 }
 
 $data['lang_select_options'] = lang_select_options('localize', "class='form-control' id='UserLang'");

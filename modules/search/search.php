@@ -27,7 +27,13 @@ require_once 'include/lib/user.class.php';
 require_once 'indexer.class.php';
 require_once 'courseindexer.class.php';
 
-$pageName = $langSearch;
+if (isset($_SESSION['uid'])) {
+    $toolName = $langPortfolio;
+    $pageName = $langSearch;
+} else {
+    $toolName = $langSearch;
+}
+
 $courses_list = array();
 $tree = new Hierarchy();
 $c = new Course();

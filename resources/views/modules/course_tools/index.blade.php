@@ -16,11 +16,10 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                         <div class="offcanvas-header">
@@ -33,10 +32,10 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12'>
-                        <div class="card panelCard card-default px-lg-4 py-lg-3">
+                        <div class="card panelCard card-default px-lg-4 py-lg-3 mt-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
@@ -85,14 +84,14 @@
                     <div class='col-12 mt-5'>
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                
+
                                 <h3>
                                     {{ trans('langOperations') }}
                                 </h3>
                                 <div>
                                     <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg ps-2'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
-                                
+
                             </div>
                             <div class='card-body'>
                                 @if(count($q) > 0)
@@ -117,7 +116,7 @@
                                     {{ trans('langNoInfoAvailable')}}
                                 @endif
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -125,20 +124,20 @@
                     <div class='col-12 mt-5'>
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                
+
                                 <h3>
                                     {{ trans('langLtiConsumer') }}
                                 </h3>
-                                   
+
                                 <div>
                                     <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
                                         <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs hidden-lg ps-2'>{{ trans('langNewLTITool') }}</span>
                                     </a>
                                 </div>
-                                
+
                             </div>
                             <div class='card-body'>
-                                @php 
+                                @php
                                     load_js('trunk8');
                                     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
                                     $result = Database::get()->queryArray("SELECT * FROM lti_apps
@@ -158,7 +157,7 @@
                                                 </tr></thead>
 
                                                 @foreach ($result as $row)
-                                                        @php 
+                                                        @php
                                                             $id = $row->id;
                                                             $title = $row->title;
                                                             $desc = isset($row->description)? $row->description: '';
@@ -223,7 +222,7 @@
                                                 @endforeach
                                                     @if ($headingsSent)
                                             </table>
-                                        
+
                                         </div>
                                     @endif
 
@@ -241,7 +240,7 @@
             </div>
 
         </div>
-    
+
 </div>
 </div>
 

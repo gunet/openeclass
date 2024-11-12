@@ -87,7 +87,7 @@ $head_content .= '
 $tool_content .= "
 <div id='layout'>
 	<div id='jsmiin-nav-horizontal'>
-        <div class='col-12 d-flex justify-content-end align-items-center'>
+        <div class='col-12 d-flex justify-content-end align-items-center mt-3'>
             <div class='btn-group btn-group-justified gap-2' role='group'>
 
                 <div class='btn-group' role='group'>

@@ -45,7 +45,8 @@ require_once 'main/eportfolio/eportfolio_functions.php';
 check_uid();
 check_guest();
 
-$toolName = $langEditChange;
+$toolName = $langMyePortfolio;
+$pageName = $langEditChange;
 $token = token_generate('eportfolio' . $uid);
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
 $navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
