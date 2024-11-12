@@ -5758,3 +5758,7 @@ th.grade-col a{
 .gray-color {
   color: #808080;
 }
+
+.bootstrap-timepicker-widget.open{
+  z-index: 1061 !important;
+}

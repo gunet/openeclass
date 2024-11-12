@@ -146,7 +146,7 @@ $(function() {
         language: '".$language."',
         autoclose: true
     });
-    $('#durationcal').timepicker({showMeridian: false, minuteStep: 1, defaultTime: false });
+    $('#durationcal').timepicker({showMeridian: false, minuteStep: 5, defaultTime: false });
 });
 </script>";
 
@@ -184,10 +184,13 @@ if ($is_editor) {
     if (isset($_POST['event_title'])) {
         register_posted_variables(array('startdate' => true, 'event_title' => true, 'content' => true, 'duration' => true));
         $content = purify($content);
-        $enddateEvent = $_POST['enddateEvent'];
         if (isset($_POST['id']) and !empty($_POST['id'])) {  // update event
             $id = $_POST['id'];
             $recursion = null;
+            $duration_arr = explode(':',$_POST['duration']); // Duration to be added
+            $originalDatetime = date('Y-m-d H:i:s', strtotime($_POST['startdate']));
+            $duration_text = '+'.$duration_arr[0].' hours'.' +'.$duration_arr[1].' minutes';
+            $enddateEvent = date('d-m-Y H:i', strtotime($originalDatetime . $duration_text));
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
             }
@@ -199,6 +202,7 @@ if ($is_editor) {
             $agdx->store($id);
         } else { // add new event
             $recursion = null;
+            $enddateEvent = $_POST['enddateEvent'];
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
             }
@@ -286,10 +290,6 @@ if ($is_editor) {
                                                         <input type='hidden' id = 'id' name='id' value='$id'>
                                                         <input type='hidden' name='rep' id='rep' value='$applytogroup'>
 
-                                                        <input type='hidden' name='startdate' id='startdate'>
-                                                        <input type='hidden' name='enddateEvent' id='enddateEvent'>
-                                                        <input type='hidden' name='duration' id='duration'>
-
                                                         <div class='form-group'>
                                                             <div class='control-label-notes'>$langStartDate</div>
                                                             <div id='fromNewDate'></div>
@@ -313,7 +313,36 @@ if ($is_editor) {
                                                             <div class='col-12'>
                                                                 <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                                                             </div>
-                                                        </div>";
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        <div class='input-append date form-group mt-4' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                                                            <label for='startdate' class='col-sm-12 control-label-notes'>$langDate :</label>
+                                                            <div class='col-sm-12'>
+                                                                <div class='input-group'>
+                                                                    <div class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                                                                    <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class='input-append bootstrap-timepicker form-group mt-4'>
+                                                            <label for='durationcal' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
+                                                            <div class='col-sm-12'>
+                                                                <div class='input-group add-on'>
+                                                                    <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
+                                                                    <input class='form-control mt-0 border-start-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        ";
 
 
 
@@ -492,69 +521,7 @@ if ($is_editor) {
 
 
                                             $('#editAgendaEventModal #idNewDuration').text(duration);
-
-                                            $('#editAgendaEventModal').modal('toggle');
-                                        }else{
-                                            alert('$langChooseDayAgain');
-                                            window.location.reload();
-                                        }
-
-
-                                    },
-
-                                    eventDrop: function(event){
-
-                                        var eventStart = event.start;
-                                        var eventEnd = event.end;
-
-                                        startDay =  moment(eventStart).format('DD');
-                                        endDay = moment(eventEnd).format('DD');
-
-                                        if(parseInt(startDay)==parseInt(endDay)){
-                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
-                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-
-                                            $('#editAgendaEventModal #fromNewDate').text(startS);
-                                            $('#editAgendaEventModal #startdate').val(startS);
-                                            $('#editAgendaEventModal #enddateEvent').val(endS);
-
-                                            //duration time
-                                            var duration_start = moment(eventStart).format('HH:mm');
-                                            var duration_end = moment(eventEnd).format('HH:mm');
-                                            var value_start = duration_start.split(':');
-                                            var value_end = duration_end.split(':');
-
-                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
-                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
-                                            var diff = endDate.getTime() - startDate.getTime();
-                                            var hours = Math.floor(diff / 1000 / 60 / 60);
-                                            diff -= hours * 1000 * 60 * 60;
-                                            var minutes = Math.floor(diff / 1000 / 60);
-
-                                            if (hours < 0){
-                                                hours = hours + 24;
-                                            }
-
-                                            duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-
-
-
-                                            if(isOnDuration == 'true'){
-                                                $('#editAgendaEventModal #duration').val(duration);
-                                            }else{
-                                                $('#editAgendaEventModal #duration').val('00:00:00');
-                                            }
-
-                                            $('#OnOffDuration').on('click',function(){
-                                                if($('#OnOffDuration').is(':checked')){
-                                                    $('#editAgendaEventModal #duration').val(duration);
-                                                }else{
-                                                    $('#editAgendaEventModal #duration').val('00:00:00');
-                                                }
-                                            });
-
-
-                                            $('#editAgendaEventModal #idNewDuration').text(duration);
+                                            $('#durationcal').val(duration);
 
                                             $('#editAgendaEventModal').modal('toggle');
                                         }else{
@@ -563,78 +530,8 @@ if ($is_editor) {
                                         }
 
                                     },
-
-                                    eventResize: function(event) {
-
-
-                                        var eventStart = event.start;
-                                        var eventEnd = event.end;
-
-
-                                        startDay =  moment(eventStart).format('DD');
-                                        endDay = moment(eventEnd).format('DD');
-
-                                        if(parseInt(startDay)==parseInt(endDay)){
-                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
-                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-
-
-                                            $('#editAgendaEventModal #fromNewDate').text(startS);
-                                            $('#editAgendaEventModal #startdate').val(startS);
-                                            $('#editAgendaEventModal #enddateEvent').val(endS);
-
-                                            //duration time
-                                            var duration_start = moment(eventStart).format('HH:mm');
-                                            var duration_end = moment(eventEnd).format('HH:mm');
-                                            var value_start = duration_start.split(':');
-                                            var value_end = duration_end.split(':');
-
-                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
-                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
-                                            var diff = endDate.getTime() - startDate.getTime();
-                                            var hours = Math.floor(diff / 1000 / 60 / 60);
-                                            diff -= hours * 1000 * 60 * 60;
-                                            var minutes = Math.floor(diff / 1000 / 60);
-
-                                            if (hours < 0){
-                                                hours = hours + 24;
-                                            }
-
-                                            duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-
-
-
-                                            if(isOnDuration == 'true'){
-                                                $('#editAgendaEventModal #duration').val(duration);
-                                            }else{
-                                                $('#editAgendaEventModal #duration').val('00:00:00');
-                                            }
-
-                                            $('#OnOffDuration').on('click',function(){
-                                                if($('#OnOffDuration').is(':checked')){
-                                                    $('#editAgendaEventModal #duration').val(duration);
-                                                }else{
-                                                    $('#editAgendaEventModal #duration').val('00:00:00');
-                                                }
-                                            });
-
-
-                                            $('#editAgendaEventModal #idNewDuration').text(duration);
-
-                                            $('#editAgendaEventModal').modal('toggle');
-                                        }else{
-                                            alert('$langChooseDayAgain');
-                                            window.location.reload();
-                                        }
-                                    }
-
                                 });
-
-
-
-
                             });
-
                         </script>
                     ";
 
