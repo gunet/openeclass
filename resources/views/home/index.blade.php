@@ -138,7 +138,7 @@
                                                                             </div>
 
                                                                             <div class='col-12 align-self-center' @if ($primary_method >= 3 && count($authLinks) == 2) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
-                                                                                <div class='text-center'>{!! $key['html'] !!}</div>
+                                                                                <div class='text-center w-100'>{!! $key['html'] !!}</div>
                                                                             </div>
 
 

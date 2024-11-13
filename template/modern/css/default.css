@@ -2120,7 +2120,9 @@ label:has(input[type="checkbox"]:disabled){
   cursor:  url(../images/pointer.png), auto;
 }
 
-.sso-btn,
+.sso-btn{
+  min-width: 100%;
+}
 .social-btn{
   height:60px;
   min-width: 200px;
@@ -5766,4 +5768,8 @@ th.grade-col a{
 
 .bootstrap-timepicker-widget.open{
   z-index: 1061 !important;
+}
+
+.wrapper-sso{
+  padding: 16px 24px 16px 24px;
 }

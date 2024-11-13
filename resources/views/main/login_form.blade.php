@@ -83,7 +83,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class='col-12 align-self-center' @if ($primary_method >= 3 && count($authLink) == 2) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
-                                                                <div class='text-center'>{!! $authInfo[1] !!}</div>
+                                                                <div class='text-center w-100'>{!! $authInfo[1] !!}</div>
                                                             </div>
 
                                                             <div class='col-12 align-self-end'>
