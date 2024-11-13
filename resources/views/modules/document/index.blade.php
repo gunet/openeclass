@@ -5,7 +5,6 @@
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
 <script type='text/javascript'>
-
     $(document).ready(function(){
 
         let isUppyLoaded = false;
@@ -27,7 +26,7 @@
                     autoProceed: false,
                     restrictions: {
                         maxFileSize: {{ parseSize(ini_get('upload_max_filesize')) }},
-                        maxTotalFileSize: {{ $diskQuotaDocument }},
+                        maxTotalFileSize: {{ $diskQuotaDocument-$diskUsed }},
                     }
                 })
 
