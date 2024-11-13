@@ -301,11 +301,12 @@ if ($is_editor) {
             $usersstart = new DateTime($_POST['UsersStart']);
             $usersend = new DateTime($_POST['UsersEnd']);
             // Delete all students not in the Date Range
-            $gu = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
-                    . "WHERE attendance_users.uid = course_user.user_id "
-                    . "AND attendance_users.attendance_id = ?d "
-                    . "AND course_user.status = " . USER_STUDENT . " "
-                    . "AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+            $gu = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user
+                    WHERE attendance_users.uid = course_user.user_id
+                    AND course_id = ?d 
+                    AND attendance_users.attendance_id = ?d
+                    AND course_user.status = " . USER_STUDENT . " 
+                    AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $course_id, $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
 
             foreach ($gu as $u) {
                 delete_attendance_user($attendance_id, $u->uid);
@@ -313,21 +314,22 @@ if ($is_editor) {
             $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'delete users not in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($gu),'users' => $gu);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
 
-            //Add students that are not already registered to the gradebook
-            $already_inserted_users = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
-                    . "WHERE attendance_users.uid = course_user.user_id "
-                    . "AND attendance_users.attendance_id = ?d "
-                    . "AND course_user.status = " . USER_STUDENT . " "
-                    . "AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+            //Add students that are not already registered to the attendance
+            $already_inserted_users = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user
+                    WHERE attendance_users.uid = course_user.user_id
+                    AND course_id = ?d
+                    AND attendance_users.attendance_id = ?d 
+                    AND course_user.status = " . USER_STUDENT . "
+                    AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $course_id, $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
             $already_inserted_ids = [];
             foreach ($already_inserted_users as $already_inserted_user) {
-                array_push($already_inserted_ids, $already_inserted_user->uid);
+                $already_inserted_ids[] = $already_inserted_user->uid;
             }
             $valid_users_for_insertion = Database::get()->queryArray("SELECT user_id
                         FROM course_user
                         WHERE course_id = ?d
-                        AND status = " . USER_STUDENT . " "
-                    . "AND DATE(reg_date) BETWEEN ?s AND ?s",$course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+                        AND status = " . USER_STUDENT . "
+                       AND DATE(reg_date) BETWEEN ?s AND ?s", $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
             $added_users = array();
             foreach ($valid_users_for_insertion as $u) {
                 if (!in_array($u->user_id, $already_inserted_ids)) {
@@ -338,6 +340,13 @@ if ($is_editor) {
             }
             $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add users in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($added_users),'users' => $added_users);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
+
+            // Delete all students not in the Date Range
+            $gu = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
+                    . "WHERE attendance_users.uid = course_user.user_id "
+                    . "AND attendance_users.attendance_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
         }
         Session::Messages($langGradebookEdit,"alert-success");
         redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendance_id=' . $attendance_id . '&attendanceBook=1');
