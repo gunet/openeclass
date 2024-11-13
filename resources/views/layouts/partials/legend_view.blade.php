@@ -24,9 +24,9 @@
         @endif
     </h2>
     @if ($course_code or $require_help or $breadcrumbs)
-        <div class='col-12 mt-4'>
+        <div class='col-12 mt-4 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
     @else
-        <div class='col-12'>
+        <div class='col-12 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
     @endif
         <div class='d-flex gap-lg-5 gap-4'>
             <div class='flex-grow-1'>
