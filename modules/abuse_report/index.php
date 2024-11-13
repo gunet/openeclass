@@ -168,10 +168,10 @@ if (!$nbrReports) {
     $tool_content .= "<div class='table-responsive'><table class='table-default'><thead><tr class='list-header'>";
     $tool_content .= "
             <th>$langAbuseReportCat</th>
-            <th>$langMessage</th>
+            <th style='min-width:150px;'>$langMessage</th>
             <th>$langAbuseResourceType</th>
             <th>$langContent</th>
-            <th>$langUser</th>
+            <th style='min-width:150px;'>$langUser</th>
             <th>$langDate</th>
             <th class='text-end' aria-label='$langSettingSelect'>".icon('fa-gears')."</th>
           </tr></thead>";
