@@ -1563,7 +1563,6 @@ $db->query("CREATE TABLE `cron_params` (
 // tables for units module
 $db->query("CREATE TABLE `course_units` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `uuid` VARCHAR(40) NOT NULL DEFAULT 0,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `comments` MEDIUMTEXT,
     `start_week` DATE,
