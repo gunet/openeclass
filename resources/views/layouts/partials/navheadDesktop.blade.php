@@ -316,6 +316,10 @@
                                 <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
                                     {{ trans('langUserLogin') }}
                                 </a>
+                            @elseif(!get_config('dont_display_login_form') and !empty($authNameEnabled))
+                                <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
+                                    {{ trans('langUserLogin') }}
+                                </a>
                             @endif
                         </div>
                     @endif
