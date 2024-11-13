@@ -1600,6 +1600,10 @@ if ($curDirName) {
     $data['parentLink'] = $base_url . 'openDir=' . rawurlencode($parentDir);
 }
 
+
+$data['diskQuotaDocument'] = $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
+$data['diskUsed'] = $diskUsed;
+
 if (($can_upload or $user_upload) and !$is_in_tinymce) {
     // available actions
     if (isset($_GET['rename'])) {
@@ -1617,8 +1621,6 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
     if (isset($_GET['replace'])) {
         $pageName = $langReplace;
     }
-    $data['diskQuotaDocument'] = $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-    $data['diskUsed'] = $diskUsed;
 
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
