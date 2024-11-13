@@ -22,16 +22,10 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';
 
-$toolName = $langMonthlyReport;
+$toolName = $langAdmin;
+$pageName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
-
-
-$data['action_bar'] = action_bar(array(
-                array('title' => $langBack,
-                    'url' => "../usage/index.php?t=a",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')));
 
 $data['monthly_data'] = $monthly_data = get_monthly_archives();
 

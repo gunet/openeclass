@@ -39,7 +39,8 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
-    $navigation_msg = $langUserePortfolio;
+    //$navigation_msg = $langUserePortfolio
+    $navigation_msg = $langMyePortfolio;
 } else {
     if ($session->status == 0) {
         redirect_to_home_page();

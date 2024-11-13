@@ -43,8 +43,13 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
-    $toolName = $langPortfolio;
-    $pageName = $langMyePortfolio;
+    if ($id == $_SESSION['uid']) {
+        $toolName = $langPortfolio;
+        $pageName = $langMyePortfolio;
+    } else {
+        $toolName = $langUserePortfolio;
+        $pageName = q(uid_to_name($id));
+    }
 } else {
     if ($session->status == 0) {
         redirect_to_home_page();
@@ -60,11 +65,9 @@ if (!token_validate('eportfolio' . $id, $_GET['token'])) {
 }
 
 $token = token_generate('eportfolio' . $id);
-
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
 
-//$pageName = q("$userdata->givenname $userdata->surname");
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
 $clipboard_link = "";
 
@@ -114,7 +117,7 @@ if ($userdata) {
                               </script>";
         }
 
-        $tool_content .= action_bar(array(
+        $action_bar = action_bar(array(
                                         array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
                                             'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
                                             'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
@@ -136,6 +139,7 @@ if ($userdata) {
                                             'level' => 'primary'
                                             )
                                 ));
+        $tool_content .= $action_bar;
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";

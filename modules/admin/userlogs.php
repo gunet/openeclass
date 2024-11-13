@@ -83,7 +83,7 @@ $head_content .= "<script type='text/javascript'>
 
 
 $data['u'] = $u = isset($_GET['u']) ? intval($_GET['u']) : '';
-
+$toolName = $langAdmin;
 $pageName = "$langUserLog: " . uid_to_name($u);
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);

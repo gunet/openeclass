@@ -40,16 +40,11 @@ $head_content .= "<script type='text/javascript'>
 
 $tree = new Hierarchy();
 $user = new User();
+$toolName = $langAdmin;
+$pageName = $langStatOfFaculty;
 
-$toolName = $langStatOfFaculty;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "index.php?t=a", "name" => $langUsage);
-
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php?t=a",
-        'icon' => 'fa-reply',
-        'level' => 'primary')));
 
 if (isset($_GET['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['user_date_start']);

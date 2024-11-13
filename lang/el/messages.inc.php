@@ -2534,7 +2534,7 @@ $mailbody7 = "$langFaculty:";
 $mailbody8 = "ως $langStudent.";
 $logo = "Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης $siteName";
 $gunet = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης $siteName";
-$langSendInfoMail = "Αποστολή ενημερωτικού e-mail στους χρήστες";
+$langSendInfoMail = "Αποστολή e-mail στους χρήστες";
 $langAdminMessage = "Μήνυμα Διαχειριστή $siteName";
 
 $langRequestForTeacherRights = "επιθυμεί να αποκτήσει δικαιώματα δημιουργίας μαθημάτων";

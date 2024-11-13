@@ -38,28 +38,26 @@ if (isset($_GET['add_cat'])) { //add a new category form
     load_js('validation.js');
 
     $pageName = $langCategoryAdd;
+    $navigation[] = array('url' => 'eportfolio_fields.php', 'name' => $langEPFAdminSideMenuLink);
 
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "eportfolio_fields.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
     $tool_content .= "
-    <div class='row'>
-   
-    <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit border-0 px-0'>";
-    $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
-                      <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>";
-    $tool_content .= "</div><div class='row p-2'>";
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
-    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-</div></div>";
+            <div class='row'>
+                <div class='col-lg-6 col-12 mt-3'>
+                    <div class='form-wrapper form-edit border-0 px-0'>
+                        <form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>
+                        <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                        <div class='form-group'>
+                            <label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
+                            <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>
+                        </div>
+                        <div class='row p-2'>
+                            <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>
+                        </fieldset>". generate_csrf_token_form_field() ."</form>
+                    </div>
+                </div>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+        </div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                         var chkValidator  = new Validator("catForm");
@@ -88,78 +86,62 @@ if (isset($_GET['add_cat'])) { //add a new category form
     load_js('validation.js');
 
     $pageName = $langCategoryMod;
+    $navigation[] = array('url' => 'eportfolio_fields.php', 'name' => $langEPFAdminSideMenuLink);
 
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "eportfolio_fields.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
     $tool_content .= "
-    <div class='row'>
-    
-    <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit border-0 px-0'>";
-    $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
-    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
-                      <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
-    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-                    </div></div>";
-    $tool_content .='<script language="javaScript" type="text/javascript">
-        //<![CDATA[
-            var chkValidator  = new Validator("catForm");
-            chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
-    //]]></script>';
+            <div class='row'>
+                <div class='col-lg-6 col-12 mt-3'>
+                  <div class='form-wrapper form-edit border-0 px-0'>
+                    <form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>
+                    <input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>
+                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                        <div class='form-group'>
+                        <label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
+                              <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>
+                        </div>
+                    <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>
+                    </fieldset>". generate_csrf_token_form_field() ."</form></div></div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+                    </div>
+                </div>";
+            $tool_content .='<script language="javaScript" type="text/javascript">
+                //<![CDATA[
+                    var chkValidator  = new Validator("catForm");
+                    chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
+            //]]></script>';
 } elseif (isset($_GET['add_field'])) { //add new field form (first step)
     $catid = intval(getDirectReference($_GET['add_field']));
-
+    $navigation[] = array('url' => 'eportfolio_fields.php', 'name' => $langEPFAdminSideMenuLink);
     $pageName = $langAddField;
 
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "eportfolio_fields.php",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')));
-
-    $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink );
+    $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langLink );
 
     $tool_content .= "
-    <div class='row'>
-    
-    <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit border-0 px-0'>";
-    $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
-    $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype <span class='asterisk Accent-200-cl'>(*)</span></label>
-                      <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control" id="datatype"')."</div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
-    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-                    </div></div>";
+        <div class='row'>    
+            <div class='col-lg-6 col-12 mt-3'>
+              <div class='form-wrapper form-edit border-0 px-0'>
+                <form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>
+                <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
+                <input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>
+                <div class='form-group'>
+                <label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype <span class='asterisk Accent-200-cl'>(*)</span></label>
+                <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control" id="datatype"')."</div>
+                </div>
+                <div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>
+                </fieldset>". generate_csrf_token_form_field() ."</form></div></div>
+                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+                </div>
+            </div>";
 
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $catid = intval(getDirectReference($_POST['catid']));
 
     load_js('validation.js');
-
+    $navigation[] = array('url' => 'eportfolio_fields.php', 'name' => $langEPFAdminSideMenuLink);
     $pageName = $langAddField;
-
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "eportfolio_fields.php?add_field=" . getIndirectReference($catid),
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
 
     $yes_no = array(0 => $langNo, 1 => $langYes);
 
@@ -168,7 +150,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "
     <div class='row'>
     
-    <div class='col-lg-6 col-12'>
+    <div class='col-lg-6 col-12 mt-3'>
                       <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
@@ -185,7 +167,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
     $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langDescription</label>
                       <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
-
 
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group mt-4'>";
@@ -302,12 +283,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     redirect_to_home_page("modules/admin/eportfolio_fields.php");
 } elseif (isset($_GET['edit_field'])) { //save edited field
     $pageName = $langCPFFieldEdit;
-
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "eportfolio_fields.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary')));
+    $navigation[] = array('url' => 'eportfolio_fields.php', 'name' => $langEPFAdminSideMenuLink);
 
     $fieldid = intval(getDirectReference($_GET['edit_field']));
     $result = Database::get()->querySingle("SELECT * FROM eportfolio_fields WHERE id = ?d", $fieldid);
@@ -331,13 +307,13 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
         load_js('validation.js');
 
-        $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink);
+        $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK => $langLink);
         $yes_no = array(0 => $langNo, 1 => $langYes);
 
         $tool_content .= "
         <div class='row'>
         
-        <div class='col-lg-6 col-12'>
+        <div class='col-lg-6 col-12 mt-3'>
                           <div class='form-wrapper form-edit border-0 px-0'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
@@ -430,13 +406,15 @@ if (isset($_GET['add_cat'])) { //add a new category form
 } else { //show categories and fields list
     load_js('sortable');
 
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
         array('title' => $langCategoryAdd,
               'url' => "eportfolio_fields.php?add_cat",
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
               'button-class' => 'btn-success'),
         ));
+
+    $tool_content .= $action_bar;
 
     $result = Database::get()->queryArray("SELECT * FROM eportfolio_fields_category ORDER BY sortorder DESC");
     if (count($result) == 0) {
@@ -533,7 +511,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= generate_csrf_token_form_field() ."</form>";
         $tool_content .= "<script src='custom_profile_fields.js'></script>";
     }
-
 }
 
 draw($tool_content, null, null, $head_content);

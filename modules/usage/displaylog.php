@@ -46,7 +46,7 @@ load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').DataTable ({                                
+            $('#log_results_table').DataTable ({
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -93,7 +93,8 @@ if (!isset($_REQUEST['course_code'])) {
 
 
 if (isset($_GET['from_other'])) {
-    $toolName = $langSystemActions;
+    $toolName = $langAdmin;
+    $pageName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../usage/index.php?t=a', 'name' => $langUsage);
 } else {
@@ -246,7 +247,7 @@ $tool_content .= "<div class='row input-append date form-group mt-4' data-date =
     
         <label class='col-12 control-label-notes' for='user_date_start'>$langStartDate <span class='asterisk Accent-200-cl'>(*)</span></label>
         <div class='col-12'> 
-            <div class='input-group'>            
+            <div class='input-group'>
                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
                 <input class='form-control mt-0 border-start-0' id='user_date_start' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
                 
@@ -268,7 +269,7 @@ $tool_content .= "<div class='row input-append date form-group mt-4' data-date= 
 </div>";
 
 
-// if we haven't choose 'system actions'
+// if we haven't chosen 'system actions'
 if (!isset($_GET['from_other'])) {
     $tool_content .=
       '<div class="row form-group mt-4">  
@@ -282,7 +283,6 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= "<div class='row form-group mt-5'><div class='col-12 d-flex justify-content-end align-items-center'>
-
 
     ".form_buttons(array(
         array(

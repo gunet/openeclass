@@ -40,7 +40,6 @@ $head_content .= "<script type='text/javascript'>
     });
 
 function refresh_oldstats_plot(startdate, enddate) {
-        
     $.getJSON('../usage/results.php',{ t:'ols', s:startdate, e:enddate },function(data) {
         var options = {
             data: {
@@ -84,17 +83,11 @@ function refresh_oldstats_plot(startdate, enddate) {
 }
 </script>";
 
-$toolName = $langUsageVisits;
+$toolName = $langAdmin;
+$pageName = $langUsageVisits;
+
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
-
-$data['action_bar'] = action_bar(array(
-                array('title' => $langBack,
-                    'url' => "../usage/index.php?t=a",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
-            ),false);
-
 
 // recent logins
 $interval = [ $langToday => 1, $langLast7Days => 7, $langLast30Days => 30 ];
