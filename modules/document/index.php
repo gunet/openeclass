@@ -1618,6 +1618,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         $pageName = $langReplace;
     }
     $data['diskQuotaDocument'] = $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
+    $data['diskUsed'] = $diskUsed;
+
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'url' => "group_space.php?course=$course_code&group_id=$group_id",
