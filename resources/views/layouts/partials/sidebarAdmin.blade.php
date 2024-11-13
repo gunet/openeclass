@@ -154,7 +154,7 @@
                         </li>
                         <li class="list-group-item element">
                             <a class='TextBold' href="{{$urlAppend}}modules/admin/mailtoprof.php">
-                                {!! trans('langInfoMail') !!}
+                                {!! trans('langSendInfoMail') !!}
                             </a>
                         </li>
                     </ul>

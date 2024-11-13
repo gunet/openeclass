@@ -180,12 +180,12 @@ require 'modules/admin/custom_profile_fields_functions.php';
 }
 
 $toolName = $langAdmin;
-$pageName = $langCPFAdmin;
+$pageName = $langCPFAdminSideMenuLink;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category form
-    load_js('validation.js');
 
+    $navigation[] = array('url' => 'custom_profile_fields.php', 'name' => $langCPFAdminSideMenuLink);
     $pageName = $langCategoryAdd;
 
     $data['action_bar'] = action_bar(array(
@@ -194,6 +194,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
               'icon' => 'fa-reply',
               'level' => 'primary')));
 
+    load_js('validation.js');
     $data['catid'] = '';
     $data['cat_name'] = '';
     if (isset($_GET['edit_cat'])) {
@@ -229,6 +230,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     load_js('validation.js');
 
     $pageName = $langAddField;
+    $navigation[] = array('url' => 'custom_profile_fields.php', 'name' => $langCPFAdminSideMenuLink);
 
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
@@ -246,6 +248,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
 
 } elseif (isset($_GET['edit_field'])) { //save edited field
     $pageName = $langCPFFieldEdit;
+    $navigation[] = array('url' => 'custom_profile_fields.php', 'name' => $langCPFAdminSideMenuLink);
 
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,

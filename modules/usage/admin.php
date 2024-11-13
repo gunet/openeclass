@@ -20,11 +20,7 @@
 
 /**** Summary info    ****/
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "../admin/",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary'),
+$action_bar = action_bar(array(
                 array('title' => $langSystemActions,
                     'url' => "../usage/displaylog.php?from_other=TRUE",
                     'icon' => 'fa-bar-chart',
@@ -49,8 +45,8 @@ $tool_content .= action_bar(array(
                     'url' => "analytical_course_stats.php",
                     'icon' => 'fa-bar-chart',
                     'level' => 'primary-label')
-
             ),false);
+$tool_content .= $action_bar;
 
 $tool_content .= "
         <div class='col-12'>

@@ -30,21 +30,12 @@ $head_content .=
         stats = 'a';
     </script>";
 
-/**** Summary info    ****/
-
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "../usage/index.php?t=a",
-        'icon' => 'fa-reply',
-        'level' => 'primary')
-),false);
-
 /****   Form   ****/
 require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
 $tool_content .= "<div class='plotscontainer mt-4'>";
-$tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
+$tool_content .= "<div id='userlogins_container' class='col-lg-12 mt-3'>";
 $tool_content .= plot_placeholder("userlogins_stats", $langNbLogin.' '.$langAndTotalCourseVisits);
 $tool_content .= "</div>";
 $tool_content .= "<div id='favcourses_container' class='col-lg-12 mt-3'>";
@@ -53,7 +44,7 @@ $tool_content .= "</div>";
 $tool_content .= "</div>";
 
 $tool_content .= "<div class='plotscontainer mt-4'>";
-$tool_content .= "<div id='modulepref_pie_container' class='col-sm-12'>";
+$tool_content .= "<div id='modulepref_pie_container' class='col-sm-12 mt-3'>";
 $tool_content .= plot_placeholder("depuser_stats", $langUsers);
 $tool_content .= "</div>";
 $tool_content .= "<div id='module_container' class='col-sm-12 mt-3'>";

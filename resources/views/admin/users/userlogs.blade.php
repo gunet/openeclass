@@ -7,7 +7,6 @@
         <div class="row m-auto">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    
 
                     @include('layouts.partials.legend_view')
 
@@ -17,17 +16,14 @@
                         <div class='mt-4'></div>
                     @endif
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     {!! $users_login_data !!}
 
-                    @if($users_login_data) <div class='mt-5'></div> @endif
-
-                    
+                    @if($users_login_data) <div class='mt-3'></div> @endif
 
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit border-0 px-0'>
-
                             <form class='form-horizontal' role='form' method='get' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <input type="hidden" name="u" value="{{ $u }}">
                                 <div class='form-group' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
@@ -66,10 +62,9 @@
                         </div>
                     </div>
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-                    <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
+                        <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                     </div>
 
-                
         </div>
 </div>
 </div>

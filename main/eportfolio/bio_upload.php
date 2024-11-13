@@ -74,49 +74,33 @@ elseif (isset($_POST['submit'])) {
 
 $head_content .= "<script>
                     function confirmDel(url) {
-
-                    //   bootbox.confirm('$langConfirmDelete', function(okay) {
-                    //     if(okay)
-                    //       location.href = url;
-                    //   });
-
-
-                      bootbox.confirm({ 
-                        closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
-                        message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
-                        buttons: {
-                            cancel: {
-                                label: '".js_escape($langCancel)."',
-                                className: 'cancelAdminBtn position-center'
+                          bootbox.confirm({ 
+                            closeButton: false,
+                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
+                            message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
+                            buttons: {
+                                cancel: {
+                                    label: '".js_escape($langCancel)."',
+                                    className: 'cancelAdminBtn position-center'
+                                },
+                                confirm: {
+                                    label: '".js_escape($langDelete)."',
+                                    className: 'deleteAdminBtn position-center',
+                                }
                             },
-                            confirm: {
-                                label: '".js_escape($langDelete)."',
-                                className: 'deleteAdminBtn position-center',
+                            callback: function (okay) {
+                                if(okay) {
+                                    location.href = url;
+                                }
                             }
-                        },
-                        callback: function (okay) {
-                            if(okay) {
-                                location.href = url;
-                            }
-                        }
-                    });
-
-
+                        });
                       return false;
-                    } 
+                    }
                   </script>";
 
 $tool_content .=
-    action_bar(array(
-        array('title' => $langBack,
-            'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
-            'icon' => 'fa-reply'
-            )));
-
-$tool_content .=
    "<div class='row'>
-        <div class='col-lg-6 col-12'>
+        <div class='col-lg-6 col-12 mt-3'>
                 <form class='form-wrapper form-edit border-0 px-0' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
                     <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
 enableCheckFileSize();

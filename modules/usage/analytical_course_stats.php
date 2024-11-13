@@ -24,23 +24,18 @@ require_once 'include/lib/hierarchy.class.php';
 
 $navigation[] = ['url' => '../admin/index.php', 'name' => $langAdmin];
 $navigation[] = ['url' => 'index.php?t=a', 'name' => $langUsage];
+
+$toolName = $langAdmin;
 $pageName = $langDetails;
 
 $tree = new Hierarchy();
 
-$tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                        'url' => "../usage/index.php?t=a",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary')
-                    ));
-
 $tool_content .= "<div class='table-responsive'>
-                    <table class='table-default table-logs'>            
+                    <table class='table-default table-logs'>
                     <thead><tr class='list-header'>
                         <th>$langFaculties</th>
                         <th>$langTeachers</th>
-                        <th>$langStudents</th>                
+                        <th>$langStudents</th>
                         <th>$langCourses</th>
                         <th>$langAnnouncements</th>
                         <th>$langMessages</th>

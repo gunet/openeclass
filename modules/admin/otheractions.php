@@ -61,15 +61,11 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-$toolName = $langPlatformGenStats;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$toolName = $langAdmin;
+$pageName = $langPlatformGenStats;
 
-$data['action_bar'] = action_bar(array(
-                    array('title' => $langBack,
-                        'url' => "../usage/index.php?t=a",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary')
-                    ));
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
 // ---------------------
 // actions

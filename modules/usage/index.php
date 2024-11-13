@@ -163,7 +163,9 @@ if (isset($_GET['per_course_dur'])) {
             require_once 'modules/usage/course.php';
         }
     } elseif($stats_type == 'admin' && $is_admin) { // admin statistics
+        $toolName = $langAdmin;
         if (isset($_REQUEST['g_stats'])) {
+            $pageName = $langPlatformGenStats;
             require_once 'modules/usage/general_admin_stats.php';
         } else {
             require_once 'modules/usage/admin.php';
@@ -178,6 +180,7 @@ add_units_navigation(true);
 
 if ($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))) {
     $navigation[] = array('url' => '../admin/', 'name' => $langAdmin);
+    $navigation[] = array('url' => '../usage/index.php?t=a', 'name' => $langUsage);
     draw($tool_content, null, null, $head_content);
 } elseif ($stats_type == 'course') {
     draw($tool_content, 2, null, $head_content);

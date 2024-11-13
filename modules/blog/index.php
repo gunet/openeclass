@@ -212,18 +212,17 @@ if ($blog_type == 'course_blog' && $is_editor) {
         $flex_grow = '';
         $column_content = '';
 
-        if(isset($course_id) and $course_id){
+        if (isset($course_id) and $course_id) {
             $flex_content = 'd-lg-flex gap-4';
             $flex_grow = 'flex-grow-1';
             $column_content = 'form-content-modules';
-        }else{
+        } else {
             $flex_content = 'row m-auto';
             $flex_grow = 'col-lg-6 col-12 px-0';
             $column_content = 'col-lg-6 col-12';
         }
 
         $tool_content .= "
-
             <div class='$flex_content mt-4'>
                 <div class='$flex_grow'>
                     <div class='form-wrapper form-edit rounded border-0 px-0'>
@@ -295,27 +294,20 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-
-
-
-                                         ".
-                                         form_buttons(array(
-                                             array(
-                                                 'class' => 'submitAdminBtn',
-                                                 'text'  =>  $langSave,
-                                                 'name'  =>  'submitSettings',
-                                                 'value' =>  $langSubmit
-                                             ),
-                                             array(
-                                                'class' => 'cancelAdminBtn ms-1',
-                                                 'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog"
-                                             )
-                                         ))
-                                         ."
-
-
-
-
+                                 ".
+                                 form_buttons(array(
+                                     array(
+                                         'class' => 'submitAdminBtn',
+                                         'text'  =>  $langSubmit,
+                                         'name'  =>  'submitSettings',
+                                         'value' =>  $langSubmit
+                                     ),
+                                     array(
+                                        'class' => 'cancelAdminBtn ms-1',
+                                         'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog"
+                                     )
+                                 ))
+                                 ."
                             </div>
                         </form>
                     </div>
@@ -324,19 +316,17 @@ if ($blog_type == 'course_blog' && $is_editor) {
                     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
             </div>
-                ";
-
-
-
+        ";
     }
 } elseif ($blog_type == 'perso_blog' && $is_blog_editor) {
-    $tool_content .= action_bar(array(
+    $action_bar = action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
                   'icon' => 'fa-reply',
                   'level' => 'primary',
                   'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
     ),false);
+    $tool_content .= $action_bar;
 }
 
 //instantiate the object representing this blog
@@ -386,7 +376,6 @@ if ($action == "createPost") {
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-4'>
                                        <div class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting <span class='asterisk Accent-200-cl'>(*)</span></div>
-
                                            <div class='radio mb-2'>
                                                 <label>
                                                     <input type='radio' value='1' name='commenting' checked>
@@ -399,10 +388,8 @@ if ($action == "createPost") {
                                                     $langCommentsDis
                                                 </label>
                                            </div>
-
                                    </div>";
         }
-
 
         $flex_content = '';
         $flex_grow = '';
@@ -419,40 +406,34 @@ if ($action == "createPost") {
         }
 
         $tool_content .= "
-<div class='col-12'>
-    <div class='$flex_content mt-4'>
-        <div class='$flex_grow'>
-            <div class='form-wrapper form-edit rounded border-0 px-0'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
-                    <fieldset>
-
-                        <legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='form-group'>
-                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
-                            <div class='col-sm-12'>
-                                <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
-                            </div>
-                        </div>
-
-
-
-                        <div class='form-group mt-4'>
-                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
-                            <div class='col-sm-12'>
-                                ".rich_text_editor('newContent', 4, 20, '')."
-                            </div>
-                        </div>
-                        $commenting_setting
-
-                        <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-
-
-
+            <div class='col-12'>
+                <div class='$flex_content mt-4'>
+                    <div class='$flex_grow'>
+                        <div class='form-wrapper form-edit rounded border-0 px-0'>
+                            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+                                <fieldset>
+            
+                                    <legend class='mb-0' aria-label='$langForm'></legend>
+                                    <div class='form-group'>
+                                        <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <div class='col-sm-12'>
+                                            <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
+                                        </div>
+                                    </div>
+            
+                                    <div class='form-group mt-4'>
+                                        <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
+                                        <div class='col-sm-12'>
+                                            ".rich_text_editor('newContent', 4, 20, '')."
+                                        </div>
+                                    </div>
+                                    $commenting_setting            
+                                    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
                                     ".
                                     form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
-                                            'text'  =>  $langSave,
+                                            'text'  =>  $langSubmit,
                                             'name'  =>  'submitBlogPost',
                                             'value' =>  $langAdd
                                         ),
@@ -462,10 +443,6 @@ if ($action == "createPost") {
                                         )
                                     ))
                                     ."
-
-
-
-
                         </div>
                         <input type='hidden' name='action' value='savePost' />
                     </fieldset>
@@ -576,7 +553,7 @@ if ($action == "editPost") {
                                 form_buttons(array(
                                     array(
                                         'class' => 'submitAdminBtn',
-                                        'text'  =>  $langSave,
+                                        'text'  =>  $langSubmit,
                                         'name'  =>  'submitBlogPost',
                                         'value' =>  $langModifBlogPost
                                     ),
