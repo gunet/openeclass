@@ -391,11 +391,14 @@
                                                                 </a>
                                                                 <div class='card-body'>
                                                                     <div class="col-12 text-center mt-2 line-height-default">
-                                                                        <h3 class='mb-0'><a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
-                                                                            {{$pop_course->title}} ({{$pop_course->public_code}})
-
-                                                                        </a></h3>
-                                                                        <p class='TextRegular msmall-text Neutral-900-cl mt-1'>{{$pop_course->prof_names}}</p>
+                                                                        <h3 class='mb-0'>
+                                                                            <div class='line-height-default'>
+                                                                                <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                                    {{$pop_course->title}} ({{$pop_course->public_code}})
+                                                                                </a>
+                                                                            </div>
+                                                                        </h3>
+                                                                        <p class='TextRegular msmall-text Neutral-900-cl mt-2'>{{$pop_course->prof_names}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>

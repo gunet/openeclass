@@ -63,7 +63,7 @@ function display_attendances() {
             $row_class = !$a->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
-                        <td style='width:46%;'>
+                        <td style='width:46%; line-height: 16px;'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".q($a->title)."</a>
                         </td>
                         <td style='width:22%;'>$start_date</td>

@@ -722,6 +722,11 @@ a{
 a:hover{
   text-decoration:underline;
 }
+@media(min-width: 992px){
+  .table-default tbody tr td:has(a) {
+    line-height: 16px;
+  }
+}
 @media(max-width: 991px){
   .table-default tbody tr td a {
     display: inline-block;
