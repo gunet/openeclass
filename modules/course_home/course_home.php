@@ -706,7 +706,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
             }
 
             if ($is_editor) {
@@ -822,7 +822,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
             }
 
             if ($is_editor) {
@@ -1014,7 +1014,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = format_locale_date(strtotime($ann->date));
                 $ann_content .= "<li class='list-group-item element'>
-                                    <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a>
+                                    <div class='line-height-default'><a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>
                                     <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                                 </li>";
                 }

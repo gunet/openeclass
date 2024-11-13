@@ -464,7 +464,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                         <li class='list-group-item element'>
-                            <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            <div class='line-height-default'><a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a></div>
                             <p class='TextBold mb-0'>$course_title</p>
                             <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                         </li>";
@@ -473,7 +473,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                     <li class='list-group-item element'>
-                        <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                        <div class='line-height-default'><a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a></div>
                         <p class='TextBold mb-0'>$langAdminAn&nbsp; <i class='fa-solid fa-user'></i></p>
                         <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                     </li>";
@@ -519,7 +519,9 @@ function getUserMessages() {
                                             <span>".display_user($message->author_id, false, false)."</span>
                                         </div>
 
-                                        <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        <div class='line-height-default'>
+                                            <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        </div>
 
                                         <p class='TextBold mb-0'>$course_title</p>
                                         <div class='TextRegular Neutral-900-cl'>$message_date</div>

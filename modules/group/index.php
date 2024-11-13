@@ -553,9 +553,9 @@ if ($is_editor) {
                     }
                     $tool_content .= "<tr class='$link_class'>
                                         <td style='width:40%;'>
-                                            <a class='TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>
+                                            <div class='line-height-default'><a class='TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>
                                                 " . q($group_name) . "
-                                            </a>
+                                            </a></div>
                                             <div class='mt-2'>";
                                                 if (!empty($group_description)) {
                                                     $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";

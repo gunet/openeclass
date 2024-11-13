@@ -502,20 +502,20 @@ foreach ($result as $list) { // while ... learning path list
 
         $susp_button = "";
         if ($list->suspend_data) {
-            $susp_button = "<a data-href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>$susp_img</a>";
+            $susp_button = "<div class='line-height-default'><a data-href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "&amp;cleanattempt=on' data-bd-toggle='modal' data-bs-target='#confirmLpCleanAttemptDialog'>$susp_img</a></div>";
         }
 
         if(!$is_editor) { // If is student
-            $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
+            $play_button = "<div class='line-height-default'><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a></div>";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
+                $play_url = "<div class='line-height-default'><a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a></div>";
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
             }
         } else { // If is admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
+                $play_url = "<div class='line-height-default'><a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a></div>";
             } else {
                 $play_url = htmlspecialchars($list->name);
             }

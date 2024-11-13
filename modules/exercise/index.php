@@ -389,7 +389,7 @@ if (!$nbrExercises) {
             if ($row->is_exam == 1) {
                 $exam_icon .= "&nbsp;&nbsp;" . icon('fa-solid fa-chalkboard-user', $langExam);
             }
-            $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>
+            $tool_content .= "<td><div class='line-height-default'><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a></div>
                         $lock_icon$exclamation_icon$exam_icon$descr
                         $assign_to_users_message
                         </td>";
@@ -527,7 +527,7 @@ if (!$nbrExercises) {
                     $tool_content .= "<td><a class='ex_settings paused_exercise $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id&amp;eurId=$paused_exercises->eurid'>" . q($row->title) . "</a>"
                             . "&nbsp;&nbsp;(<span style='color:darkgrey'>$langAttemptPausedS</span>)";
                 } else {
-                    $tool_content .= "<td><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon$exclamation_icon";
+                    $tool_content .= "<td><div class='line-height-default'><a class='ex_settings $link_class' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a></div>$lock_icon$exclamation_icon";
                 }
 
             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started

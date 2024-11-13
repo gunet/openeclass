@@ -79,7 +79,7 @@
                                             }
                                         ?>
                                         <tr class='link-subcategory-title'>
-                                            <td class='category-link p-3' >
+                                            <td class='category-link p-3' style='line-height: 16px;'>
                                                 {!! $folder_icon !!}&nbsp;
                                                 @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
                                                     <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>

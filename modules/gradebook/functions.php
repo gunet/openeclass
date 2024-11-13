@@ -1020,7 +1020,7 @@ function display_gradebooks() {
                         <td style='width:46%;'>
                             <div class='table_td'>
                                 <div class='tahle_td_header'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a>
+                                    <div class='line-height-default'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a></div>
                                 </div>
                             </div>
                         </td>

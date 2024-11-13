@@ -331,7 +331,7 @@ function expanded_faculte($facid, $uid) {
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td>
-                       <span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")
+                       <span id='cid$cid' style='line-height: 16px;'>$codelink</span> (" . q($mycours->public_code) . ")
                        <div>
                             <small class='vsmall-text TextRegular'>" .q($mycours->t) . "</small>
                        </div>

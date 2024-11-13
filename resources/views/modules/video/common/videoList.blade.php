@@ -1,7 +1,7 @@
 
 @foreach ($items as $result)
     <tr class='{{ $result->row_class }}'>
-        <td class='nocategory-link'>{!! $result->link_href !!}{!! $result->extradescription !!}</td>
+        <td class='nocategory-link' style='line-height: 16px;'>{!! $result->link_href !!}{!! $result->extradescription !!}</td>
         <td style='width:15%;'>{{ format_locale_date(strtotime($result->myrow->date), 'short', false) }}</td>
         @if (!$is_in_tinymce)
             @if ($display_tools)
