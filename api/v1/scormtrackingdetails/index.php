@@ -121,6 +121,12 @@ function api_method($access) {
         }
     }
     $tracking_data = [];
+
+    $from_date = null;
+    if (isset($_GET['from_date'])) {
+        $from_date = $_GET['from_date'] . ' 00:00:00';
+    }
+
     foreach ($scorms as $scorm) {
         $path_id = $scorm[0];
         $sco_id = (string)$scorm[1];
@@ -128,6 +134,9 @@ function api_method($access) {
             $attempts = get_learnPath_progress_details($path_id, $user_id, false);
             foreach ($attempts as $attempt) {
                 list($progress, $time, $started, $accessed, $status, $attemptNb) = $attempt;
+                if ($from_date && $started < $from_date) {
+                    continue;
+                }
                 $data = [
                     'userid' => $user_id,
                     'scormid' => $path_id,
