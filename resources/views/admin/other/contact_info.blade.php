@@ -8,7 +8,7 @@
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
             @include('layouts.partials.legend_view')
 
-            <div class='col-lg-6 col-12 mt-3'>
+            <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit'>
                     <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
 
