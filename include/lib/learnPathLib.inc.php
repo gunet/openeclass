@@ -592,7 +592,7 @@ function get_learnPath_progress($lpid, $lpUid) {
 }
 
 
-function get_learnPath_progress_details($lpid, $lpUid, $total=true): array {
+function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null): array {
     global $course_id;
 
     // find progression for this user in each module of the path
@@ -609,9 +609,21 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true): array {
               AND LP.`course_id` = ?d
               AND LPM.`visible` = 1
               AND M.`module_id` = LPM.`module_id`
-              AND M.`contentType` != ?s
-            ORDER BY UMP.`attempt`, LPM.`rank`";
-    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+              AND M.`contentType` != ?s";
+//            ORDER BY UMP.`attempt`, LPM.`rank`";
+
+    if ($from_date) {
+        $sql .= " AND UMP.`started` >= ?s";
+    }
+
+    $sql .= " ORDER BY UMP.`attempt`, LPM.`rank`";
+    $params = [$lpUid, $lpid, $course_id, CTLABEL_];
+    if ($from_date) {
+        $params[] = $from_date;
+    }
+
+//    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    $modules = Database::get()->queryArray($sql, ...$params);
     $totalProgress = 0;
     $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
     $totalTime = "0000:00:00";
