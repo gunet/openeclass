@@ -1475,13 +1475,13 @@ function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
                             AND attendance_activities.attendance_id ";
     if ($attendance_id) {
         $sql .= "= ?d";
-        array_push($params, $attendance_id);
+        $params[] = $attendance_id;
     } else {
         $sql .= "IN (
                     SELECT attendance_id
                     FROM attendance_users
                     WHERE uid = ?d)";
-        array_push($params, $uid);
+        $params[] = $uid;
     }
     // This query gets the attendance activities that:
     // 1) belong to attendance books (or specific attendance book if $attendance_id != 0)
