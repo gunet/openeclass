@@ -131,12 +131,9 @@ function api_method($access) {
         $path_id = $scorm[0];
         $sco_id = (string)$scorm[1];
         foreach ($users as $user_id) {
-            $attempts = get_learnPath_progress_details($path_id, $user_id, false);
+            $attempts = get_learnPath_progress_details($path_id, $user_id, false, $from_date);
             foreach ($attempts as $attempt) {
                 list($progress, $time, $started, $accessed, $status, $attemptNb) = $attempt;
-                if ($from_date && $started < $from_date) {
-                    continue;
-                }
                 $data = [
                     'userid' => $user_id,
                     'scormid' => $path_id,
