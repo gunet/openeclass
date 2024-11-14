@@ -254,7 +254,11 @@ $data['comments'] = rich_text_editor('comments', 5, 40, '' );
 
 $sql = "";
 if($is_consultant && !$is_coordinator){
-  $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members WHERE user_id = ?d AND is_tutor = ?d", $uid, 1);
+  $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members 
+                                                            WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)
+                                                            AND user_id = ?d 
+                                                            AND is_tutor = ?d", $uid, 1);
+
   if(count($consultant_as_tutor_group) > 0){
     $sql = "AND course_user.user_id IN (SELECT user_id FROM group_members
                                         WHERE group_id IN (SELECT group_id FROM group_members WHERE user_id = $uid AND is_tutor = 1))";
