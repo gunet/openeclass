@@ -67,7 +67,7 @@ function get_course_stats($cid, $interval, $start = null, $end = null, $user_id 
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_course_module_stats($cid, $mid, $interval, $start = null, $end = null, $user_id = null){
-    global $modules;
+
     $mtitle = which_module($mid);
     $g = build_group_selector_cond($interval);
     $groupby = $g['groupby'];
@@ -336,15 +336,16 @@ function get_course_preference_stats($user, $start = null, $end = null, $course 
  * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_user_course_stats($user, $course, $module, $interval, $start = null, $end = null){
+function get_user_course_stats($user, $course, $module, $interval, $start = null, $end = null) {
     $ctitle = course_id_to_title($course);
-    if(!is_null($module) && !empty($module)){
-        $formattedr = get_course_module_stats($start, $end, $interval, $course, $module, $user);
-    }
-    else{
+    if (!empty($module)) {
+        $formattedr = get_course_module_stats($course, $module, $interval, $start, $end);
+        return array('charttitle' => $ctitle, 'chartdata' => $formattedr);
+    } else {
         $formattedr = get_user_stats($user, $interval, $start, $end, $course);
+        return array('charttitle' => $ctitle, 'chartdata' => $formattedr);
     }
-    return array('charttitle'=>$ctitle, 'chartdata'=>$formattedr);
+
 }
 
 /**
