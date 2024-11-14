@@ -6288,8 +6288,8 @@ function download_assignments($id) {
         $zip = new ZipArchive();
         $zip->open($filepath, ZipArchive::CREATE);
         chdir($workPath);
+        create_zip_index("$secret/index.html", $id);
         if ($sub_type == 1) { // free text assignment
-            create_zip_index("$secret/index.html", $id);
             if (!is_dir($temp_online_text_path)) {
                 mkdir($temp_online_text_path);
             }
