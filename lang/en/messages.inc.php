@@ -6252,3 +6252,4 @@ $langNumberColumnsSmallerThanQ = "The number of columns you entered is less than
 $langUserAnswer = "User response";
 $langAddRowsColumns = "Registration";
 $langCurrentDuration = "Current duration";
+$langMaxHeightHalfMaxScreenJumbotron = "Alternatively the height is set to half the height of the current screen.";

@@ -400,8 +400,7 @@ function view($view_file, $view_data = array()) {
 
         }
 
-        $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
-
+        $gradient_str = 'radial-gradient(closest-corner at 30% 60%, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0))';
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -427,11 +426,11 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['loginImg'])){
                 $styles_str .= "
                     .jumbotron.jumbotron-login{
-                        background: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str;
+                        background: $gradient_str, url('$urlThemeData/$theme_options_styles[loginImg]');
                         border:0px;
                         background-size: cover;
                         background-repeat: no-repeat;
-                        background-position: 50% 0%;
+                        background-position: center;
                     }
                 ";
 
@@ -479,29 +478,17 @@ function view($view_file, $view_data = array()) {
                 @media(min-width:992px){
                     .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 80px)/2);
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-size: 100% 100%;
                     }
                     body:has(.fixed-announcement) .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 80px - 60px)/2);
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-size: 100% 100%;
                     }
                 }
                 @media(max-width:991px){
                     .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 56px)/2);
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-size: 100% 100%;
                     }
                     body:has(.fixed-announcement) .jumbotron.jumbotron-login{
                         min-height: calc((100vh - 56px - 60px)/2);
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-size: 100% 100%;
                     }
                 }
             ";
