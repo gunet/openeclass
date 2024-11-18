@@ -198,7 +198,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<div class='wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a></div>");
+                    'html' => "<div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a></div>");
                 $data['auth_url'] = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
                 $data['auth_title'] = $authNameDefault;
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {

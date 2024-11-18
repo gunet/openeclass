@@ -76,7 +76,7 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
                                   <div class='col-12 d-flex justify-content-center align-items-center'>
-                                       <div class='wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='$authUrl'>
+                                       <div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='$authUrl'>
                                             ".(!empty($authTitle) ? $authTitle : $langEnter)."
                                        </a></div>
                                   </div>",

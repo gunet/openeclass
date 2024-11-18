@@ -6971,3 +6971,4 @@ $langNumberColumnsSmallerThanQ = "Ο αριθμός των στηλών που �
 $langUserAnswer = "Απάντηση χρήστη";
 $langAddRowsColumns = "Καταχώριση";
 $langCurrentDuration = "Τρέχουσα διάρκεια";
+$langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται στο μισό ύψος της τρέχουσας οθόνης.";
