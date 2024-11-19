@@ -411,7 +411,7 @@ if (isset($_POST['install1'])) { // step 1 requirements
     set_config('dont_display_popular_courses', 1);
     set_config('dont_display_open_courses', 1);
     set_config('dont_display_texts', 1);
-    set_config('dont_display_login_form', 0);
+    set_config('dont_display_login_form', 1);
     $selectedTheme = Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', $availableThemes[$_POST['theme_selection']]);
     if($selectedTheme) {
         $selectedThemeId = $selectedTheme->id;
