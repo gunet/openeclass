@@ -121,29 +121,35 @@ function api_method($access) {
         }
     }
     $tracking_data = [];
+
+    $from_date = null;
+    if (isset($_GET['from_date'])) {
+        $from_date = $_GET['from_date'] . ' 00:00:00';
+    }
+
     foreach ($scorms as $scorm) {
         $path_id = $scorm[0];
         $sco_id = (string)$scorm[1];
         foreach ($users as $user_id) {
-            list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user_id);
-            if (!$lpAttemptsNb) {
-                continue;
+            $attempts = get_learnPath_progress_details($path_id, $user_id, false, $from_date);
+            foreach ($attempts as $attempt) {
+                list($progress, $time, $started, $accessed, $status, $attemptNb) = $attempt;
+                $data = [
+                    'userid' => $user_id,
+                    'scormid' => $path_id,
+                    'scoid' => $sco_id,
+                    'starttime' => $started,
+                    'endtime' => $accessed,
+                    'duration' => $time,
+                    'attempt' => $attemptNb,
+                ];
+                if (isset($_GET['group_id'])) {
+                    $data['groupid'] = $_GET['group_id'];
+                } elseif (isset($group_data[$user_id])) {
+                    $data['groupid'] = $group_data[$user_id];
+                }
+                $tracking_data[] = $data;
             }
-            $data = [
-                'userid' => $user_id,
-                'scormid' => $path_id,
-                'scoid' => $sco_id,
-                'starttime' => $lpTotalStarted,
-                'endtime' => $lpTotalAccessed,
-                'duration' => $lpTotalTime,
-                'attempts' => $lpAttemptsNb,
-            ];
-            if (isset($_GET['group_id'])) {
-                $data['groupid'] = $_GET['group_id'];
-            } elseif (isset($group_data[$user_id])) {
-                $data['groupid'] = $group_data[$user_id];
-            }
-            $tracking_data[] = $data;
         }
     }
 

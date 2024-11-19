@@ -1,23 +1,22 @@
 <?php
 
-/* ========================================================================
- * Open eClass 3.14
- * E-learning and Course Management System
- * ========================================================================
- * Copyright 2003-2023  Greek Universities Network - GUnet
- * A full copyright notice can be read in "/info/copyright.txt".
- * For a full list of contributors, see "credits.txt".
+/*
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
+ *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  *
+ *  * Open eClass is an open platform distributed in the hope that it will
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
+ *  * The full license can be read in "/info/license/license_gpl.txt".
+ *  *
+ *  * Contact address: GUnet Asynchronous eLearning Group
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
- * Open eClass is an open platform distributed in the hope that it will
- * be useful (without any warranty), under the terms of the GNU (General
- * Public License) as published by the Free Software Foundation.
- * The full license can be read in "/info/license/license_gpl.txt".
- *
- * Contact address: GUnet Asynchronous eLearning Group,
- *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
- * ======================================================================== */
+ */
 
 function api_method($access) {
     global $webDir;
@@ -25,6 +24,7 @@ function api_method($access) {
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $ok = register_posted_variables([
             'username' => true,
@@ -47,6 +47,7 @@ function api_method($access) {
                 Database::get()->query('UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                     WHERE id = ?d', $user->id);
             }
+            $statusmsg = 'updated';
             $user_id = $user_id;
         } else {
             $password = choose_password_strength();
@@ -65,10 +66,11 @@ function api_method($access) {
             }
             $user_id = $user->lastInsertID;
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
+            $statusmsg = 'created';
         }
         user_hook($id);
         header('Content-Type: application/json');
-        echo json_encode(['id' => $user_id]);
+        echo json_encode(['id' => $user_id, 'status' => $statusmsg]);
         exit();
     } elseif (isset($_GET['id']) or isset($_GET['username'])) {
         if (isset($_GET['username'])) {
