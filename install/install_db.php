@@ -409,7 +409,7 @@ $db->query("CREATE TABLE monthly_summary (
     profesNum int(11) NOT NULL default 0,
     studNum int(11) NOT NULL default 0,
     visitorsNum int(11) NOT NULL default 0,
-    coursNum int(11) NOT NULL default 0,    
+    coursNum int(11) NOT NULL default 0,
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -941,7 +941,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `homepagePriorities` (
     `visible` int(11) NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("INSERT INTO `homepagePriorities` (`title`, `order`, `visible`) VALUES 
+$db->query("INSERT INTO `homepagePriorities` (`title`, `order`, `visible`) VALUES
                                             ('announcements', 0, 1),
                                             ('popular_courses', 1, 1),
                                             ('texts', 2, 1),
@@ -1262,7 +1262,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
-    `question` TEXT,    
+    `question` TEXT,
     `description` TEXT,
     `feedback` TEXT,
     `weight` FLOAT(11,2) DEFAULT NULL,
@@ -1849,7 +1849,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
     `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
     `auto` TINYINT(4) NOT NULL DEFAULT 0,
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
-    `extra_credit` BOOL DEFAULT 0 NULL) $tbl_options");
+    `extra_credit` BOOL DEFAULT 0 NOT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2316,17 +2316,17 @@ $db->query("CREATE TABLE IF NOT EXISTS request_action (
     FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
 
-$db->query("CREATE TABLE `user_settings` ( 
-  `setting_id` int(11) NOT NULL, 
-  `user_id` int(11) NOT NULL, 
-  `course_id` int(11) DEFAULT NULL, 
-  `value` int(11) NOT NULL DEFAULT '0', 
-  PRIMARY KEY (`setting_id`,`user_id`), 
-  KEY `user_id` (`user_id`), 
-  KEY `course_id` (`course_id`), 
-  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) 
-    ON DELETE CASCADE ON UPDATE CASCADE, 
-  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) 
+$db->query("CREATE TABLE `user_settings` (
+  `setting_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `value` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`setting_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `user_settings_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_settings_ibfk_4` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE ) $tbl_options");
 
 // learning analytics
@@ -2477,7 +2477,7 @@ $db->query("CREATE TABLE `minedu_departments` (
     `Institution` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `School` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `Department` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-    `Comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL) 
+    `Comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL)
     $tbl_options");
 
 $db->query("CREATE TABLE `minedu_department_association` (
