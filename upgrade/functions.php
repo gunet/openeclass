@@ -2850,7 +2850,7 @@ function upgrade_to_4_0($tbl_options): void {
                                         `order` int(11) NOT NULL,
                                         PRIMARY KEY (`id`)) $tbl_options");
 
-        Database::get()->query("INSERT INTO `homepagePriorities` (`title`, `order`) VALUES 
+        Database::get()->query("INSERT INTO `homepagePriorities` (`title`, `order`) VALUES
                                             ('announcements', 0),
                                             ('popular_courses', 1),
                                             ('texts', 2),
@@ -2903,7 +2903,7 @@ function upgrade_to_4_0($tbl_options): void {
     }
 
     if (!DBHelper::fieldExists('gradebook_activities', 'extra_credit')) {
-        Database::get()->query("ALTER TABLE gradebook_activities ADD extra_credit BOOL DEFAULT 0 NULL");
+        Database::get()->query("ALTER TABLE gradebook_activities ADD extra_credit BOOL DEFAULT 0 NOT NULL");
     }
 
     if (!DBHelper::indexExists('attendance_book', 'attendance_activity_uid')) {
