@@ -258,10 +258,15 @@ if($is_consultant && !$is_coordinator){
                                                             WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)
                                                             AND user_id = ?d 
                                                             AND is_tutor = ?d", $uid, 1);
-
+                                                            
   if(count($consultant_as_tutor_group) > 0){
+    $arr_g = [];
+    foreach ($consultant_as_tutor_group as $g) {
+      $arr_g[] = $g->group_id;
+    }
+    $arr_as_str = implode(',',$arr_g);
     $sql = "AND course_user.user_id IN (SELECT user_id FROM group_members
-                                        WHERE group_id IN (SELECT group_id FROM group_members WHERE user_id = $uid AND is_tutor = 1))";
+                                        WHERE group_id IN ($arr_as_str))";
   }
 }
 $data['simple_users'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
