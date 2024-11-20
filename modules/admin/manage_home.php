@@ -34,7 +34,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     exit;
 }
 
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
     set_config('total_courses',$_POST['total_courses']);
     set_config('visits_per_week',$_POST['visits_per_week']);
     set_config('users_registered',$_POST['users_registered']);
@@ -47,14 +47,14 @@ if(isset($_POST['submit'])) {
     }
 
     set_config('homepage_testimonial_title', $_POST['homepage_testimonial_title']);
-    set_config('show_only_loginScreen', $_POST['show_only_loginScreen'] ?? '');
-    set_config('dont_display_login_form', $_POST['dont_display_login_form'] ?? '');
-    set_config('hide_login_link', $_POST['hide_login_link'] ?? '');
-    set_config('banner_link',$_POST['link_banner'] ?? '');
+    set_config('display_login_form', $_POST['display_login_form'] ?? '');
+    set_config('banner_link', $_POST['link_banner'] ?? '');
+    set_config('dont_display_login_link', $_POST['dont_display_login_link'] ?? '');
     set_config('dont_display_courses_menu', $_POST['dont_display_courses_menu'] ?? '');
     set_config('dont_display_contact_menu', $_POST['dont_display_contact_menu'] ?? '');
     set_config('dont_display_about_menu', $_POST['dont_display_about_menu'] ?? '');
     set_config('dont_display_manual_menu', $_POST['dont_display_manual_menu'] ?? '');
+    set_config('dont_display_faq_menu', $_POST['dont_display_faq_menu'] ?? '');
 
     Session::flash('message',"$langRegDone");
     Session::flash('alert-class', 'alert-success');
@@ -83,9 +83,26 @@ if(isset($_GET['edit_priority'])) {
     redirect_to_home_page("modules/admin/manage_home.php");
 }
 
+$display_login_form = get_config('display_login_form');
+if ($display_login_form == 0) {
+    $selected_dont_display_login_form = 'checked';
+    $selected_display_only_login_form = $selected_display_login_form_and_image = '';
+} else if ($display_login_form == 1) {
+    $selected_display_only_login_form = 'checked';
+    $selected_dont_display_login_form = $selected_display_login_form_and_image = '';
+} else if ($display_login_form == 2) {
+    $selected_display_login_form_and_image = 'checked';
+    $selected_dont_display_login_form = $selected_display_only_login_form = '';
+}
+
+$data['selected_dont_display_login_form'] = $selected_dont_display_login_form;
+$data['selected_display_only_login_form'] = $selected_display_only_login_form;
+$data['selected_display_login_form_and_image'] = $selected_display_login_form_and_image;
+$data['cbox_dont_display_login_link'] = get_config('dont_display_login_link') ? 'checked' : '';
 $data['cbox_dont_display_courses_menu'] = get_config('dont_display_courses_menu') ? 'checked' : '';
 $data['cbox_dont_display_about_menu'] = get_config('dont_display_about_menu') ? 'checked' : '';
 $data['cbox_dont_display_manual_menu']= get_config('dont_display_manual_menu') ? 'checked' : '';
+$data['cbox_dont_display_faq_menu']= get_config('dont_display_faq_menu') ? 'checked' : '';
 $data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu') ? 'checked' : '';
 
 $data['total_courses'] = get_config('total_courses');

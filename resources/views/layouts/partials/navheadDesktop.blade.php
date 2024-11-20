@@ -44,12 +44,14 @@
                                         </a>
                                     </li>
                                 @endif
-                                @if (faq_exist())
-                                    <li class="nav-item">
-                                        <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
-                                            {{ trans('langFaqAbbrev') }}
-                                        </a>
-                                    </li>
+                                @if (!get_config('dont_display_faq_menu'))
+                                    @if (faq_exist())
+                                        <li class="nav-item">
+                                            <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
+                                                {{ trans('langFaqAbbrev') }}
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endif
                             </ul>
                         @endif
@@ -85,7 +87,7 @@
                         @endif
                         <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
                             <div class='d-flex justify-content-start align-items-center h-80px'>
-                                @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
+                                @if(!isset($_SESSION['uid']) and !get_config('dont_display_login_link'))
                                     <div class='d-flex justify-content-center align-items-center split-left h-40px'>
                                         @if($authCase)
                                             @if(!empty($authNameEnabled))
@@ -105,7 +107,7 @@
                                             </a>
                                         @endif
                                     </div>
-                                @elseif(!isset($_SESSION['uid']) and !get_config('dont_display_login_form'))
+                                @elseif(!isset($_SESSION['uid']) and !get_config('dont_display_login_link'))
                                     @if(!empty($authNameEnabled))
                                         <div class='d-flex justify-content-center align-items-center split-left h-40px'>
                                             @if($authNameEnabled == 'cas')
@@ -312,11 +314,11 @@
                     @if (!isset($_SESSION['uid']))
                         <div class='d-flex justify-content-start align-items-center gap-3'>
                             {!! lang_selections_Desktop('idLangSelectionMobile') !!}
-                            @if(get_config('dont_display_login_form'))
+                            @if(!get_config('dont_display_login_link'))
                                 <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
                                     {{ trans('langUserLogin') }}
                                 </a>
-                            @elseif(!get_config('dont_display_login_form') and !empty($authNameEnabled))
+                            @elseif(get_config('dont_display_login_link') and !empty($authNameEnabled))
                                 <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
                                     {{ trans('langUserLogin') }}
                                 </a>
@@ -503,12 +505,14 @@
                                     </a>
                                 </p>
                             @endif
-                            @if (faq_exist())
-                                <p class='py-2 px-0'>
-                                    <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label="{{ trans('langFaq') }}">
-                                        <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
-                                    </a>
-                                </p>
+                            @if (!get_config('dont_display_faq_menu'))
+                                @if (faq_exist())
+                                    <p class='py-2 px-0'>
+                                        <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label="{{ trans('langFaq') }}">
+                                            <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
+                                        </a>
+                                    </p>
+                                @endif
                             @endif
 
                     </div>
