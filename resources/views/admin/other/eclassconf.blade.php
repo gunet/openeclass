@@ -39,7 +39,6 @@
                                 <a class="nav-link nav-link-adminTools Neutral-900-cl active" data-menuID="one" href="#">{{ trans('langBasicCfgSetting') }}</a>
                                 <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="two" href="#">{{ trans('langUpgReg') }}</a>
                                 <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="three" href="#">{{ trans('langSupportedLanguages') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="four" href="#">{{ trans('langHomePageSettings') }}</a>
 
                                 <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="five" href="#">{{ trans('langEmailSettings') }}</a>
                                 <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="six" href="#">{{ trans('langCourseSettings') }}</a>
@@ -368,14 +367,6 @@
                                 </div>
                             </div>
 
-                            <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="four" id='four'>
-
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-
-                                    <h3>{{trans('langHomePageSettings')}}</h3>
-
-                                </div>
-                            </div>
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="five" id='five'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
