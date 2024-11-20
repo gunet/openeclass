@@ -9,52 +9,50 @@
                         <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
-                        @if(!get_config('show_only_loginScreen'))
-                            <ul class="container-items nav">
-                                @if(!get_config('hide_login_link'))
+                        <ul class="container-items nav">
+                            @if(!get_config('hide_login_link'))
+                                <li class="nav-item">
+                                    <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true">
+                                        {{ trans('langHome') }}
+                                    </a>
+                                </li>
+                            @endif
+                            @if (!isset($_SESSION['uid']))
+                                <li class="nav-item">
+                                    <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
+                                        {{ trans('langRegistration') }}
+                                    </a>
+                                </li>
+                                @if (!get_config('dont_display_courses_menu'))
                                     <li class="nav-item">
-                                        <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}?show_home=true">
-                                            {{ trans('langHome') }}
-                                        </a>
-                                    </li>
-                                @endif
-                                @if (!isset($_SESSION['uid']))
-                                    <li class="nav-item">
-                                        <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
-                                            {{ trans('langRegistration') }}
-                                        </a>
-                                    </li>
-                                    @if (!get_config('dont_display_courses_menu'))
-                                        <li class="nav-item">
-                                            <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
-                                                {{ trans('langCourses') }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                @endif
-                                @if (isset($_SESSION['uid']))
-                                    <li class="nav-item">
-                                        <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php">
-                                            {{ trans('langPortfolio') }}
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php">
+                                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
                                             {{ trans('langCourses') }}
                                         </a>
                                     </li>
                                 @endif
-                                @if (!get_config('dont_display_faq_menu'))
-                                    @if (faq_exist())
-                                        <li class="nav-item">
-                                            <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
-                                                {{ trans('langFaqAbbrev') }}
-                                            </a>
-                                        </li>
-                                    @endif
+                            @endif
+                            @if (isset($_SESSION['uid']))
+                                <li class="nav-item">
+                                    <a id="link-portfolio" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}main/portfolio.php">
+                                        {{ trans('langPortfolio') }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php">
+                                        {{ trans('langCourses') }}
+                                    </a>
+                                </li>
+                            @endif
+                            @if (!get_config('dont_display_faq_menu'))
+                                @if (faq_exist())
+                                    <li class="nav-item">
+                                        <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
+                                            {{ trans('langFaqAbbrev') }}
+                                        </a>
+                                    </li>
                                 @endif
-                            </ul>
-                        @endif
+                            @endif
+                        </ul>
                     </nav>
                     <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
                         @if (get_config('enable_search'))

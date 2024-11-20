@@ -1589,7 +1589,6 @@ $default_config = array(
     'total_courses', 0,
     'visits_per_week', 0,
     'users_registered', 0,
-    'show_only_loginScreen', 0,
     'show_modal_openCourses', 0,
     'individual_group_bookings', 0,
     'enable_quick_note', 0,

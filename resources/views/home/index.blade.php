@@ -73,13 +73,13 @@
         {{-- login form --}}
         <div class='row m-auto'>
             @if(!isset($_GET['redirect_home']))
-                @if ($display_login_form != 0))
+                @if ($display_login_form != 0)
                     <!-- only one auth_method is enabled and this method is not eclass -->
                     @if(!$authCase)
-                        <div class="col-12 order-first homepage-login-container @if(get_config('show_only_loginScreen')) onlyLoginContainer @endif">
+                        <div class="col-12 order-first homepage-login-container">
                             <div class='{{ $container }} padding-default padding-default-form-login'>
                                 <div class='row row-cols-1 row-cols-lg-2 g-4'>
-                                    <div class="col @if($PositionFormLogin or get_config('show_only_loginScreen')) ms-auto me-auto @endif">
+                                    <div class="col @if($PositionFormLogin or $display_login_form == 1) ms-auto me-auto @endif">
 
                                         @if($auth_enabled_method == 1)
                                             @if(count($authLinks) > 0)
