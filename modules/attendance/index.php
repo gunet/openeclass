@@ -171,7 +171,7 @@ $display = TRUE;
 if (isset($_REQUEST['attendance_id'])) {
     $attendance_id = $_REQUEST['attendance_id'];
     $attendance = Database::get()->querySingle("SELECT * FROM attendance WHERE id = ?d", $attendance_id);
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+    $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langAttendance];
     $pageName = $langEditChange;
 }
 
@@ -304,9 +304,9 @@ if ($is_editor) {
             // Delete all students not in the Date Range
             $gu = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user
                     WHERE attendance_users.uid = course_user.user_id
-                    AND course_id = ?d 
+                    AND course_id = ?d
                     AND attendance_users.attendance_id = ?d
-                    AND course_user.status = " . USER_STUDENT . " 
+                    AND course_user.status = " . USER_STUDENT . "
                     AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $course_id, $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
 
             foreach ($gu as $u) {
@@ -319,7 +319,7 @@ if ($is_editor) {
             $already_inserted_users = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user
                     WHERE attendance_users.uid = course_user.user_id
                     AND course_id = ?d
-                    AND attendance_users.attendance_id = ?d 
+                    AND attendance_users.attendance_id = ?d
                     AND course_user.status = " . USER_STUDENT . "
                     AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $course_id, $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
             $already_inserted_ids = [];
@@ -358,13 +358,13 @@ if ($is_editor) {
     $tool_content .= "<div class='col-sm-12'>";
 
     if (isset($_GET['editUsers']) or isset($_GET['Book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langAttendanceManagement;
     } elseif(isset($_GET['editSettings'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         $pageName = $langConfig;
     } elseif (isset($_GET['attendanceBook'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         $pageName = $langAttendanceActiveUsers;
         $action_bar = action_bar(array(
             array('title' => $langBack,
@@ -378,11 +378,11 @@ if ($is_editor) {
             ));
         $tool_content .= $action_bar;
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         $pageName = $langEditChange;
     } elseif (isset($_GET['ins'])) {
         $actID = intval(getDirectReference($_GET['ins']));
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         $pageName = $langAttendanceBook;
         $action_bar = action_bar(
             array(
@@ -394,7 +394,7 @@ if ($is_editor) {
             ));
         $tool_content .= $action_bar;
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp']) or isset($_GET['addActivityTc'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
@@ -407,7 +407,7 @@ if ($is_editor) {
             $pageName = $langGradebookAddActivity;
         }
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
         $pageName = $langAttendanceBook;
         $action_bar = action_bar(array(
             array('title' => $langBack,
@@ -422,7 +422,7 @@ if ($is_editor) {
             ));
     $tool_content .= $action_bar;
     } elseif (isset($_GET['new'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langAttendance];
         $pageName = $langNewAttendance;
     } elseif (isset($_GET['attendance_id']) && $is_editor) {
         $pageName = get_attendance_title($_GET['attendance_id']);

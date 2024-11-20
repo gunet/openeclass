@@ -85,7 +85,7 @@ $(function() {
                           'class' : 'form-control input-sm ms-0 mb-3',
                           'placeholder' : '$langSearch...'
                     });
-                    $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');  
+                    $('#users_table{$course_id}_filter label').attr('aria-label', '$langSearch');
                 },
                'sPaginationType': 'full_numbers',
                 'bSort': true,
@@ -96,7 +96,7 @@ $(function() {
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '',                       
+                       'sSearch':       '',
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
@@ -172,7 +172,7 @@ $display = TRUE;
 if (isset($_REQUEST['gradebook_id'])) {
     $gradebook_id = getDirectReference($_REQUEST['gradebook_id']);
     $gradebook = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id);
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+    $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langGradebook];
     $pageName = $langEditChange;
 }
 
@@ -358,13 +358,13 @@ if ($is_editor) {
     $tool_content .= "<div class='col-sm-12'>";
 
     if (isset($_GET['editUsers']) or isset($_GET['gradeBooks'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langGradebookManagement;
     } elseif(isset($_GET['editSettings'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         $pageName = $langConfig;
     } elseif (isset($_GET['gradebookBook'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         $pageName = $langGradebookActiveUsers;
         $action_bar = action_bar(array(
             array('title' => $langRefreshList,
@@ -375,17 +375,17 @@ if ($is_editor) {
             ));
         $tool_content .= $action_bar;
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         $pageName = $langEditChange;
     } elseif (isset($_GET['imp'])) {
         $actID = intval($_GET['imp']);
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "", "name" => get_gradebook_activity_title($gradebook_id, $actID));
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . '&ins=' . getIndirectReference($actID), 'name' => get_gradebook_activity_title($gradebook_id, $actID)];
         $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langImportGrades . ")";
 
     } elseif (isset($_GET['ins'])) {
         $actID = intval(getDirectReference($_GET['ins']));
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langGradebookBook .")";
         $action_bar = action_bar(array(
             array('title' => $langImportGrades,
@@ -403,7 +403,7 @@ if ($is_editor) {
         $tool_content .= $action_bar;
 
     } elseif (isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
@@ -414,7 +414,7 @@ if ($is_editor) {
             $pageName = $langGradebookAddActivity;
         }
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), 'name' => $gradebook->title];
         $pageName = $langGradebookBook;
         $action_bar = action_bar(array(
             array('title' => $langGradebookBook,
@@ -427,7 +427,7 @@ if ($is_editor) {
         $tool_content .= $action_bar;
 
     } elseif (isset($_GET['new'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+        $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langGradebook];
         $pageName = $langNewGradebook;
     } elseif (isset($_GET['gradebook_id']) && $is_editor) {
         $pageName = get_gradebook_title($gradebook_id);

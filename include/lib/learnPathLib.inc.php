@@ -591,7 +591,6 @@ function get_learnPath_progress($lpid, $lpUid) {
     return calculate_learnPath_progress($lpid, $modules);
 }
 
-
 function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null): array {
     global $course_id;
 
@@ -672,7 +671,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
                     $global_accessed[$module->attempt] = $module->accessed;
                 } else if (strtotime($global_accessed[$module->attempt]) < $mat) {
                     $global_accessed[$module->attempt] = $module->accessed;
-               }
+                }
             }
 
             // total status calculation
