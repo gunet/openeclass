@@ -140,31 +140,29 @@
                                     </div>
                                 </div>
 
-
                                 <div class='form-group mt-4'>
-                                    <div class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </div>
+                                    <div class='col-sm-12 control-label-notes mb-2'>
+                                        {{ trans('lang_login_form') }}:
+                                    </div>
                                     <div class='col-sm-12'>
-                                            <div class='checkbox'>
-                                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
-                                                    <input id='showOnlyLoginScreen' type='checkbox' name='show_only_loginScreen' {!! get_config('show_only_loginScreen') ? 'checked' : '' !!}>
-                                                    <span class='checkmark'></span>
-                                                    {{ trans('langShowOnlyLoginScreen') }}
-                                                </label>
-                                            </div>
-                                            <div class='checkbox'>
-                                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
-                                                    <input id='hide_login_check' type='checkbox' name='dont_display_login_form' {!! get_config('dont_display_login_form') ? 'checked' : '' !!}>
-                                                    <span class='checkmark'></span>
-                                                    {{trans('lang_dont_display_login_form')}}
-                                                </label>
-                                            </div>
-                                            <div class='checkbox'>
-                                                <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
-                                                    <input id='hide_login_link_check' type='checkbox' name='hide_login_link' {!! get_config('hide_login_link') ? 'checked' : '' !!}>
-                                                    <span class='checkmark'></span>
-                                                    {{trans('lang_hide_login_link')}}
-                                                </label>
-                                            </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='display_login_form' value='0' {!! $selected_dont_display_login_form !!}>
+                                                {{ trans('lang_dont_display_login_form') }}
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='display_login_form' value='1' {!! $selected_display_only_login_form !!}>
+                                                {{ trans('langShowOnlyLoginScreen') }}
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' name='display_login_form' value='2' {!! $selected_display_login_form_and_image !!}>
+                                                {{ trans('lang_display_login_form_and_image') }}
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -173,32 +171,47 @@
                                         {{ trans('langOtherOptions') }}:
                                     </div>
                                     <div class='col-sm-12'>
+
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
+                                                <input type='checkbox' name='dont_display_login_link' {{ $cbox_dont_display_login_link }}>
+                                                <span class='checkmark'></span>
+                                                {{ trans('lang_dont_display_login_link') }}
+                                            </label>
+                                        </div>
                                         <div class='checkbox'>
                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                <input id='hide_login_check' type='checkbox' name='dont_display_courses_menu' value='1' {{ $cbox_dont_display_courses_menu }}>
+                                                <input type='checkbox' name='dont_display_courses_menu' value='1' {{ $cbox_dont_display_courses_menu }}>
                                                 <span class='checkmark'></span>
                                                 {{ trans('lang_dont_display_courses_menu') }}
                                             </label>
                                         </div>
                                         <div class='checkbox'>
                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                <input id='hide_login_check' type='checkbox' name='dont_display_contact_menu' value='1' {{ $cbox_dont_display_contact_menu }}>
+                                                <input type='checkbox' name='dont_display_contact_menu' value='1' {{ $cbox_dont_display_contact_menu }}>
                                                 <span class='checkmark'></span>
                                                 {{ trans('lang_dont_display_contact_menu') }}
                                             </label>
                                         </div>
                                         <div class='checkbox'>
                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                <input id='hide_login_check' type='checkbox' name='dont_display_about_menu' value='1' {{ $cbox_dont_display_about_menu }}>
+                                                <input type='checkbox' name='dont_display_about_menu' value='1' {{ $cbox_dont_display_about_menu }}>
                                                 <span class='checkmark'></span>
                                                 {{ trans('lang_dont_display_about_menu') }}
                                             </label>
                                         </div>
                                         <div class='checkbox'>
                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                <input id='hide_login_check' type='checkbox' name='dont_display_manual_menu' value='1' {{ $cbox_dont_display_manual_menu }}>
+                                                <input type='checkbox' name='dont_display_manual_menu' value='1' {{ $cbox_dont_display_manual_menu }}>
                                                 <span class='checkmark'></span>
                                                 {{ trans('lang_dont_display_manual_menu') }}
+                                            </label>
+                                        </div>
+                                        <div class='checkbox'>
+                                            <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                <input  type='checkbox' name='dont_display_faq_menu' value='1' {{ $cbox_dont_display_faq_menu }}>
+                                                <span class='checkmark'></span>
+                                                {{ trans('lang_dont_display_faq_menu') }}
                                             </label>
                                         </div>
                                     </div>
@@ -289,29 +302,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#showOnlyLoginScreen').on('click',function(){
-            if($('#showOnlyLoginScreen').is(":checked")){
-                document.getElementById('showOnlyLoginScreen').value = 1;
-            }else{
-                document.getElementById('showOnlyLoginScreen').value = 0;
-            }
-        });
-
-        $('#hide_login_check').on('click',function(){
-            if($('#hide_login_check').is(":checked")){
-                document.getElementById('hide_login_check').value = 1;
-            }else{
-                document.getElementById('hide_login_check').value = 0;
-            }
-        });
-
-        $('#hide_login_link_check').on('click',function(){
-            if($('#hide_login_link_check').is(":checked")){
-                document.getElementById('hide_login_link_check').value = 1;
-            }else{
-                document.getElementById('hide_login_link_check').value = 0;
-            }
-        });
 
         let initialLang = $('#langswitch').val();
         $('#langDropdown').val(initialLang);

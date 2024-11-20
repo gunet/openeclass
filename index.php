@@ -73,7 +73,7 @@ if (isset($_SESSION['uid'])) {
     $uid = 0;
 }
 
-// if we try to login... then authenticate user.
+// if we try to log in... then authenticate user.
 $warning = '';
 
 $Selected_Language = '';
@@ -312,7 +312,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
         $data['auth_enabled_method'] = 1;
     }
 
-    //priotities
+    //priorities
     $priority_order = 0;
     $priorities = Database::get()->queryArray("SELECT `title` FROM `homepagePriorities` ORDER BY `order` ASC");
     if(count($priorities) > 0){
@@ -343,12 +343,6 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
         $data['home_main_area_widgets'] .= $widget->run($key);
     }
 
-    // display extras right
-    $data['extra_right'] = $langExtrasRight ?:false;
-
-    // display online users
-    $data['online_users'] = getOnlineUsers();
-
     if (!isset($openCoursesExtraHTML)) {
         $openCoursesExtraHTML = '';
         setOpenCoursesExtraHTML();
@@ -360,6 +354,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     foreach ($home_page_sidebar->getWidgets() as $key => $widget) {
         $data['home_page_sidebar_widgets'] .= $widget->run($key);
     }
+
+    $data['display_login_form'] = $display_login_form = get_config('display_login_form');
 
     view('home.index', $data);
 }

@@ -26,7 +26,7 @@
 
         @include('layouts.partials.show_alert')
 
-        @if(!get_config('show_only_loginScreen'))
+        @if ($display_login_form != 1)
             <div class='row m-auto'>
                 <div class="col-12 jumbotron jumbotron-login">
                     <div class='{{ $container }} padding-default'>
@@ -35,11 +35,8 @@
                                 <div class='card bg-transparent card-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                         <div class='jumbotron-intro-text'>
-
                                             <h1 class='eclass-title'>{!! get_config('homepage_title_'.$language_code) !!}</h1>
-
                                             <p class='eclassInfo'>{!! get_config('homepage_intro_'.$language_code) !!}</p>
-
                                         </div>
                                     </div>
                                     <div class='card-body px-0'>
@@ -73,11 +70,10 @@
             </div>
         @endif
 
-
-
+        {{-- login form --}}
         <div class='row m-auto'>
             @if(!isset($_GET['redirect_home']))
-                @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
+                @if ($display_login_form != 0))
                     <!-- only one auth_method is enabled and this method is not eclass -->
                     @if(!$authCase)
                         <div class="col-12 order-first homepage-login-container @if(get_config('show_only_loginScreen')) onlyLoginContainer @endif">
@@ -94,11 +90,11 @@
                                                             <div class='col-12 container-pages d-flex align-items-center h-100'>
 
                                                                 @foreach($authLinks as $auth => $key)
-                                                                
+
                                                                     @if($i > 0 && $primary_method >= 2 && count($authLinks) == 2)
                                                                         @break
                                                                     @endif
-                                                                
+
                                                                     <div class="col-12 page @if($i == 0) slide-page @elseif($i == 1) next-page-1 @else next-page-2 @endif h-100">
                                                                         <div class="row h-100">
                                                                             <div class='col-12 align-self-start'>
@@ -274,7 +270,7 @@
                                                     <div class='col-12 mt-3'>
                                                         <div class='alert alert-warning'>
                                                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                                                            <span>{{trans('langAllAuthMethodsAreDisabled')}}</span>
+                                                            <span>{{ trans('langAllAuthMethodsAreDisabled') }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -283,7 +279,7 @@
 
                                     </div>
 
-                                    @if(!get_config('show_only_loginScreen'))
+                                    @if ($display_login_form != 1)
                                         <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif"
                                         role="img" aria-label="{{ trans('langLoginImg') }}" style="background: url({{ $loginIMG }});"></div>
                                     @endif
@@ -294,10 +290,9 @@
                 @endif
             @endif
 
-
-
-            @if(!get_config('show_only_loginScreen'))
-                @if(!get_config('dont_display_announcements'))
+            {{-- display announcements --}}
+            @if ($display_login_form != 1)
+                @if (!get_config('dont_display_announcements'))
                     <div class="col-12 order-{{ $announcements_priority }} homepage-annnouncements-container @if(get_config('dont_display_login_form')) drop-shadow @endif">
                         <div class='{{ $container }} padding-default'>
                             <div class='row row-cols-1 g-4'>
@@ -307,7 +302,7 @@
                                             <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                                 <h2 class='text-heading-h3 mb-0'>{{ trans('langAnnouncements') }}</h2>
                                                 <h3 class='mb-0' aria-label='Rss'><a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a></h3>
-                                            </div>
+                                        </div>
                                             @if(count($announcements) > 0)
                                                 <div class='d-flex justify-content-end align-items-center'>
                                                     <h3 class='mb-0'><a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a></h3>
@@ -362,7 +357,8 @@
             @endif
 
 
-            @if(!get_config('show_only_loginScreen'))
+            {{-- display popular courses --}}
+            @if ($display_login_form != 1)
                 @if(!get_config('dont_display_popular_courses'))
                     @if($popular_courses)
                         <div class='col-12 order-{{ $popular_courses_priority }} homepage-popoular-courses-container'>
@@ -416,7 +412,8 @@
             @endif
 
 
-            @if(!get_config('show_only_loginScreen'))
+            {{-- display texts --}}
+            @if ($display_login_form != 1)
                 @if(!get_config('dont_display_texts'))
                     @if($texts)
                         <div class='col-12 order-{{ $texts_priority }} homepage-texts-container'>
@@ -445,7 +442,8 @@
                 @endif
             @endif
 
-            @if(!get_config('show_only_loginScreen'))
+            {{-- display testimonials --}}
+            @if ($display_login_form != 1)
                 @if(!get_config('dont_display_testimonials') && count($testimonials) > 0)
                     <div class='col-12 order-{{ $testimonials_priority }} homepage-testimonials-container'>
                         <div class='{{ $container }} padding-default'>
@@ -481,7 +479,8 @@
                 @endif
             @endif
 
-            @if(!get_config('show_only_loginScreen'))
+            {{-- display statistics --}}
+            @if ($display_login_form != 1)
                 @if(!get_config('dont_display_statistics'))
                     <div class='col-12 order-{{ $statistics_priority }} homepage-statistics-container'>
                         <div class='{{ $container }} padding-default'>
@@ -553,8 +552,8 @@
             @endif
 
 
-
-            @if(!get_config('show_only_loginScreen'))
+            {{-- display open courses --}}
+            @if ($display_login_form != 1)
                 @if(!get_config('dont_display_open_courses'))
                     @if(get_config('opencourses_enable') && ((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform)))
                         <div class='col-12 order-{{ $open_courses_priority }} homepage-opencourses-container'>
@@ -572,31 +571,8 @@
                 @endif
             @endif
 
-
-            @if(get_config('show_only_loginScreen') && get_config('dont_display_login_form'))
-                <div class='col-12'>
-                    <div class='{{ $container }} padding-default'>
-                        <div class="row row-cols-1 g-4">
-                            <div class='col'>
-                                <div class='alert alert-info'>
-                                    <i class='fa-solid fa-circle-info fa-lg'></i>
-                                    <span>
-                                        {!! trans('langMoveOnLoginPage') !!}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-
         </div>
-
 </div>
-
-
-
 
 
 <script>
