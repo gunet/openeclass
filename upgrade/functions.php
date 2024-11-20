@@ -2753,32 +2753,51 @@ function upgrade_to_4_0($tbl_options): void {
             `order` int(11) NOT NULL) $tbl_options");
     }
 
+    // course
+    if (!DBHelper::fieldExists('course', 'is_collaborative')) {
+        Database::get()->query("ALTER TABLE course ADD `is_collaborative` int(11) NOT NULL DEFAULT 0");
+    }
     if (!DBHelper::fieldExists('course', 'view_units')) {
         Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
     }
-
     if (!DBHelper::fieldExists('course', 'popular_course')) {
         Database::get()->query("ALTER table course ADD `popular_course` INT(11) NOT NULL DEFAULT 0");
     }
-
-    if (!DBHelper::fieldExists('user', 'options')) {
-        Database::get()->query("ALTER TABLE `user` ADD `options` text");
+    if (!DBHelper::fieldExists('course', 'daily_access_limit')) {
+        Database::get()->query("ALTER TABLE `course` ADD daily_access_limit INT NULL");
     }
 
     if (!DBHelper::fieldExists('theme_options', 'version')) {
         Database::get()->query("ALTER TABLE theme_options ADD version TINYINT");
     }
 
+    // group properties
     if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `public_users_list` tinyint NOT NULL DEFAULT '1'");
     }
+    if (!DBHelper::fieldExists('group_properties', 'booking')) {
+        Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
+    }
 
+    // user
     if (!DBHelper::fieldExists('user','pic_public')) {
         Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
     }
-
+    if (!DBHelper::fieldExists('user', 'options')) {
+        Database::get()->query("ALTER TABLE `user` ADD `options` text");
+    }
+    if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
+        Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
+    }
+    // exercises
     if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
         Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
+    }
+    if (!DBHelper::fieldExists('exercise', 'is_exam')) {
+        Database::get()->query("ALTER TABLE exercise ADD is_exam INT DEFAULT 0 NULL");
+    }
+    if (!DBHelper::fieldExists('exercise', 'passing_grade')) {
+        Database::get()->query("ALTER TABLE exercise ADD passing_grade FLOAT NULL");
     }
 
     if (!DBHelper::fieldExists('personal_calendar', 'end')) {
@@ -2865,10 +2884,6 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE poll ADD `display_position` INT(1) NOT NULL DEFAULT 0 AFTER show_results");
     }
 
-    if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
-        Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
-    }
-
     if (!DBHelper::tableExists('course_invitation')) {
         Database::get()->query("CREATE TABLE `course_invitation` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2886,14 +2901,6 @@ function upgrade_to_4_0($tbl_options): void {
             CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
     }
 
-    if (!DBHelper::fieldExists('exercise', 'is_exam')) {
-        Database::get()->query("ALTER TABLE exercise ADD is_exam INT DEFAULT 0 NULL");
-    }
-
-    if (!DBHelper::fieldExists('exercise', 'passing_grade')) {
-        Database::get()->query("ALTER TABLE exercise ADD passing_grade FLOAT NULL");
-    }
-
     if (!DBHelper::fieldExists('assignment', 'passing_grade')) {
         Database::get()->query("ALTER TABLE assignment ADD passing_grade FLOAT NULL");
     }
@@ -2908,14 +2915,6 @@ function upgrade_to_4_0($tbl_options): void {
 
     if (!DBHelper::indexExists('attendance_book', 'attendance_activity_uid')) {
         Database::get()->query("ALTER TABLE attendance_book ADD UNIQUE attendance_activity_uid (attendance_activity_id, uid)");
-    }
-
-    if (!DBHelper::fieldExists('group_properties', 'booking')) {
-        Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
-    }
-
-    if (!DBHelper::fieldExists('course', 'daily_access_limit')) {
-        Database::get()->query("ALTER TABLE `course` ADD daily_access_limit INT NULL");
     }
 
     if (!DBHelper::tableExists('tutor_availability_group')) {
@@ -3001,10 +3000,6 @@ function upgrade_to_4_0($tbl_options): void {
         set_config('show_always_collaboration', 0);
     }
 
-    if (!DBHelper::fieldExists('course', 'is_collaborative')) {
-        Database::get()->query("ALTER TABLE course ADD `is_collaborative` int(11) NOT NULL DEFAULT 0");
-    }
-
     if (!DBHelper::tableExists('module_disable_collaboration')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `module_disable_collaboration` (
                                         module_id int(11) NOT NULL PRIMARY KEY) $tbl_options");
@@ -3050,10 +3045,6 @@ function upgrade_to_4_0($tbl_options): void {
                                 `date` DATETIME NOT NULL,
                                 PRIMARY KEY(id),
                                 FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
-    }
-
-    if (!DBHelper::fieldExists('mod_session', 'type_remote')) {
-        Database::get()->query("ALTER TABLE mod_session ADD `type_remote` int(11) NOT NULL DEFAULT 0");
     }
 
     if (!DBHelper::fieldExists('badge', 'session_id')) {
@@ -3108,10 +3099,6 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE session_resources ADD `is_completed` int(11) NOT NULL DEFAULT 0");
     }
 
-    if (!DBHelper::fieldExists('tc_session', 'id_session')) {
-        Database::get()->query("ALTER TABLE tc_session ADD `id_session` int(11) NOT NULL DEFAULT 0");
-    }
-
     if (!DBHelper::fieldExists('session_resources', 'deliverable_comments')) {
         Database::get()->query("ALTER TABLE session_resources ADD `deliverable_comments` TEXT DEFAULT NULL");
     }
@@ -3120,6 +3107,9 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE session_resources ADD `passage` TEXT DEFAULT NULL");
     }
 
+    if (!DBHelper::fieldExists('mod_session', 'type_remote')) {
+        Database::get()->query("ALTER TABLE mod_session ADD `type_remote` int(11) NOT NULL DEFAULT 0");
+    }
     if (!DBHelper::fieldExists('mod_session', 'consent')) {
         Database::get()->query("ALTER TABLE mod_session ADD `consent` int(11) NOT NULL DEFAULT 1");
     }
@@ -3140,8 +3130,22 @@ function upgrade_to_4_0($tbl_options): void {
               FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('tc_session', 'id_session')) {
+        Database::get()->query("ALTER TABLE tc_session ADD `id_session` int(11) NOT NULL DEFAULT 0");
+    }
+
     if (!DBHelper::fieldExists('document', 'prevent_download')) {
         Database::get()->query("ALTER TABLE document ADD `prevent_download` int(11) NOT NULL DEFAULT 0");
+    }
+
+    // default options
+    $display_login_form = get_config('display_login_form');
+    if (is_null($display_login_form)) {
+        set_config('display_login_form', 0);
+    }
+    $dont_display_login_link = get_config('dont_display_login_link');
+    if (is_null($dont_display_login_link)) {
+        set_config('dont_display_login_link', 0);
     }
 
 }
