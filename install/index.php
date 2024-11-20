@@ -406,12 +406,13 @@ if (isset($_POST['install1'])) { // step 1 requirements
     require 'install_db.php';
 
     // default home page settings
+    set_config('display_login_form', 0);
     set_config('dont_display_statistics', 1);
     set_config('dont_display_testimonials', 1);
     set_config('dont_display_popular_courses', 1);
     set_config('dont_display_open_courses', 1);
     set_config('dont_display_texts', 1);
-    set_config('dont_display_login_form', 1);
+    set_config('dont_display_login_link', 0);
     $selectedTheme = Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', $availableThemes[$_POST['theme_selection']]);
     if($selectedTheme) {
         $selectedThemeId = $selectedTheme->id;
