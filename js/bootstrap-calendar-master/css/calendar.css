@@ -135,6 +135,7 @@
   top: -1px;
   padding: 8px 5px;
   cursor: pointer;
+  z-index:-1;
 }
 #cal-day-tick {
   position: absolute;

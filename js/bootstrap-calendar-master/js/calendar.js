@@ -1284,22 +1284,46 @@ if(!String.prototype.formatNum) {
 	}
 
 	function getEasterDate(year, offsetDays) {
-		var a = year % 19;
-		var b = Math.floor(year / 100);
-		var c = year % 100;
-		var d = Math.floor(b / 4);
-		var e = b % 4;
-		var f = Math.floor((b + 8) / 25);
-		var g = Math.floor((b - f + 1) / 3);
-		var h = (19 * a + b - d - g + 15) % 30;
-		var i = Math.floor(c / 4);
-		var k = c % 4;
-		var l = (32 + 2 * e + 2 * i - h - k) % 7;
-		var m = Math.floor((a + 11 * h + 22 * l) / 451);
-		var n0 = (h + l + 7 * m + 114)
-		var n = Math.floor(n0 / 31) - 1;
-		var p = n0 % 31 + 1;
-		return new Date(year, n, p + (offsetDays ? offsetDays : 0), 0, 0, 0);
+		// var a = year % 19;
+		// var b = Math.floor(year / 100);
+		// var c = year % 100;
+		// var d = Math.floor(b / 4);
+		// var e = b % 4;
+		// var f = Math.floor((b + 8) / 25);
+		// var g = Math.floor((b - f + 1) / 3);
+		// var h = (19 * a + b - d - g + 15) % 30;
+		// var i = Math.floor(c / 4);
+		// var k = c % 4;
+		// var l = (32 + 2 * e + 2 * i - h - k) % 7;
+		// var m = Math.floor((a + 11 * h + 22 * l) / 451);
+		// var n0 = (h + l + 7 * m + 114)
+		// var n = Math.floor(n0 / 31) - 1;
+		// var p = n0 % 31 + 1;
+		// return new Date(year, n, p + (offsetDays ? offsetDays : 0), 0, 0, 0);
+
+		// Calculation of Orthodox Easter based upon
+		// https://en.wikipedia.org/wiki/Computus#Meeus_Julian_algorithm
+		var a = year % 4;
+		var b = year % 7;
+		var c = year % 19;
+		var d = (19 * c + 15) % 30;
+		var e = (2 * a + 4 * b - d + 34) % 7;
+		var m = Math.floor((d + e + 114) / 31);
+		var p = ((d + e + 114) % 31) + 1;
+		p = p + 13;
+		if (m == 3) {
+                    if (p > 31) {
+                        m = m + 1;
+                        p = p % 31;
+                    }
+                }
+                if (m == 4) {
+                    if (p > 30) {
+                        m = m + 1;
+                        p = p % 30;
+                    }
+                }
+                return new Date(year, m-1, p + (offsetDays ? offsetDays : 0), 0, 0, 0);
 	}
 
 	$.fn.calendar = function(params) {
