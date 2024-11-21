@@ -180,6 +180,7 @@
     animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+    opacity: 0;
   }
   @keyframes cssAnimationMenuHeaderTitle {
     to {
@@ -323,6 +324,7 @@
     animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+    opacity: 0;
   }
   @keyframes cssAnimationMenuHeaderTitle {
     to {
@@ -469,6 +471,7 @@
     animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+    opacity: 0;
   }
   @keyframes cssAnimationMenuHeaderTitle {
     to {
@@ -616,6 +619,7 @@
     animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+    opacity: 0;
   }
   @keyframes cssAnimationMenuHeaderTitle {
     to {
