@@ -43,6 +43,10 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/notes/notes.class.php';
 
+if (!get_config('enable_quick_note')) {
+    redirect_to_home_page();
+}
+
 $toolName = $langPortfolio;
 $pageName = $langNotes;
 

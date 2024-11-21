@@ -139,15 +139,17 @@ if (count($lpList) == 0) {
             $tool_content .= "<td>" . q($lpDetails->name) . "</td>";
         }
 
-        $tool_content .= "<td>" . q($lpAttemptsNb) ."</td>
+        $tool_content .= "<td style='text-align: center;'>" . q($lpAttemptsNb) ."</td>
                           <td>" . format_locale_date(strtotime($lpTotalStarted), 'short') . "</td>
-                         <td>" . format_locale_date(strtotime($lpTotalAccessed), 'short') . "</td>
-                         <td>" . q($lpTotalTime) . "</td>
-                         <td>" . $lp_total_status . "</td>
-                         <td>" . disp_progress_bar($lpProgress, 1) . "</td>
+                          <td>" . format_locale_date(strtotime($lpTotalAccessed), 'short') . "</td>
+                          <td>" . q($lpTotalTime) . "</td>
+                          <td>" . $lp_total_status . "</td>
+                          <td>" . disp_progress_bar($lpProgress, 1) . "</td>
                      </tr>";
     }
+
     $total_progress = round($totalProgress/count($lpList));
+
     $tool_content .= "<tr>
                         <td colspan='4'><strong>$langTotal</strong></td>
                         <td>" . q($totalTimeSpent) . "</td>

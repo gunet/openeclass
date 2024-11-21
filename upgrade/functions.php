@@ -3147,6 +3147,10 @@ function upgrade_to_4_0($tbl_options): void {
     if (is_null($dont_display_login_link)) {
         set_config('dont_display_login_link', 0);
     }
+    $enable_user_notes = get_config('enable_quick_note');
+    if (is_null($enable_user_notes)) {
+        set_config('enable_quick_note', 1);
+    }
 
 }
 

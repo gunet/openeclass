@@ -195,12 +195,14 @@
                                                                 {{ trans('langMyAnnouncements') }}
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/notes/index.php">
-                                                                <i class="fa-regular fa-file-lines settings-icons"></i>
-                                                                {{ trans('langNotes') }}
-                                                            </a>
-                                                        </li>
+                                                        @if (get_config('enable_quick_note'))
+                                                            <li>
+                                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/notes/index.php">
+                                                                    <i class="fa-regular fa-file-lines settings-icons"></i>
+                                                                    {{ trans('langNotes') }}
+                                                                </a>
+                                                            </li>
+                                                        @endif
                                                         @if (get_config('eportfolio_enable'))
                                                             <li>
                                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
@@ -370,25 +372,27 @@
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fa-regular fa-bell settings-icons"></i>{{ trans('langMyAnnouncements') }}</a>
                                     </li>
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/notes/index.php"><i class="fa-regular fa-file-lines settings-icons"></i>{{ trans('langNotes') }}</a>
-                                    </li>
+                                    @if (get_config('enable_quick_note'))
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/notes/index.php"><i class="fa-regular fa-file-lines settings-icons"></i>{{ trans('langNotes') }}</a>
+                                        </li>
+                                    @endif
                                     @if (get_config('eportfolio_enable'))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fa-regular fa-address-card settings-icons"></i>{{ trans('langMyePortfolio') }}</a>
-                                    </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fa-regular fa-address-card settings-icons"></i>{{ trans('langMyePortfolio') }}</a>
+                                        </li>
                                     @endif
                                     @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fa-solid fa-chart-line settings-icons"></i>{{ trans('langMyStats') }}</a>
-                                    </li>
+                                        <li>
+                                            <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fa-solid fa-chart-line settings-icons"></i>{{ trans('langMyStats') }}</a>
+                                        </li>
                                     @endif
                                     @if (get_config('personal_blog'))
-                                    @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <li>
-                                        <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fa-solid fa-globe settings-icons"></i>{{ trans('langMyBlog') }}</a>
-                                    </li>
-                                    @endif
+                                        @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                            <li>
+                                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fa-solid fa-globe settings-icons"></i>{{ trans('langMyBlog') }}</a>
+                                            </li>
+                                       @endif
                                     @endif
                                     <li>
                                         <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/message/index.php"><i class="fa-regular fa-envelope settings-icons"></i>{{ trans('langMyDropBox') }}</a>
