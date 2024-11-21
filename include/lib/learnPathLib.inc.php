@@ -541,13 +541,13 @@ function calculate_number_of_visible_modules($lpid) {
 }
 
 function calculate_learnPath_progress($lpid, $modules) {
-    global $course_id;
 
     if (!is_array($modules) || empty($modules)) {
         return 0;
     }
 
     list($bestAttempt, $bestProgress) = calculate_learnPath_bestAttempt_progress($modules);
+
     if ($bestAttempt <= 0) {
         return 0;
     }
@@ -645,6 +645,8 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
             $global_time[$i] = "0000:00:00";
             // total progress calculation
             $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
+            //echo $global_progress[$i];
+            //echo "<br>";
         }
 
         foreach ($modules as $module) {
@@ -682,9 +684,9 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         }
 
         $bestAttempt = 1; // discover best attempt
+
         for ($i = 1; $i <= $maxAttempt; $i++) {
-            if ($global_progress[$i] > $global_progress[$bestAttempt] or
-                enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
+            if ($global_progress[$i] > $global_progress[$bestAttempt] || enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
                 $bestAttempt = $i;
             }
         }
@@ -1451,15 +1453,14 @@ function disp_progress_bar($progress, $factor) {
     // display progress bar
     // origin of the bar
 
-    // $progressBar = "
-    // <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
-    //     <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
-    //         $progress%
-    //     </div>
-    // </div>";
+     /*$progressBar = "
+     <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+         <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
+             $progress%
+         </div>
+     </div>";*/
 
-    $progressBar = "
-    <div class='progress-circle-bar' role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
+    $progressBar = "<div class='progress-circle-bar' role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
 
     return $progressBar;
 }

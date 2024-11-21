@@ -22,7 +22,7 @@
  * @file details.php
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Piraux Sebastien <pir@cerdecam.be>
- * @brief Displays student's progress for a LP
+ * @brief Displays student's progress for an LP
  */
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
