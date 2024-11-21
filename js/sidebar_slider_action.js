@@ -1,12 +1,4 @@
 $(document).ready(function(){
-     
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    // set Min-Height of left menu in order to has the same witdh of colMainContent //
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////
 
     // Actions needed to be done after full DOM elements downloaded
     $(window).on("resize", function () {
@@ -35,26 +27,24 @@ $(document).ready(function(){
             }});
     }
 
-    onLoad();
+    var container = document.querySelector(".col_maincontent_active");
+    if(getNewCookieSlider("CookieSlideSidebar") != null){
+        if(container != null){
+            container.classList.add("active-cont");
+        }
+    }else{
+        if(container != null){
+            var active_container = document.querySelector(".active-cont");
+            if(active_container != null){
+                container.classList.remove("active-cont");
+            }
+        }
+    }
 
 });
 
 
-
-function onLoad() {
-    var sidebar = document.querySelector(".col_sidebar_active");
-    var container = document.querySelector(".col_maincontent_active");
-    if(window.localStorage.getItem("active-nav") && window.localStorage.getItem("active-nav") == "true"){
-        if(sidebar != null){
-            sidebar.classList.add("active-nav");
-        }
-        if(container != null){
-            container.classList.add("active-cont");
-        }
-    }
-}
-  
-function ToogleButton() {
+function ToggleButton() {
     var sidebar = document.querySelector(".col_sidebar_active");
     var container = document.querySelector(".col_maincontent_active");
 
@@ -62,9 +52,47 @@ function ToogleButton() {
     container.classList.toggle("active-cont");
     
     if(sidebar.classList.contains("active-nav")){
-        window.localStorage.setItem("active-nav", "true");
+        setNewCookieSlider("CookieSlideSidebar","true",30);
     }else{
-        window.localStorage.removeItem("active-nav");
+        setNewCookieSlider("CookieSlideSidebar","true",0);
     }
 }
 
+
+function setNewCookieSlider(name, value, days) {
+    var date = new Date(), expires = "";
+    if (days > 0) {
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        if (typeof(date.toUTCString)==="function") {
+            expires = "; expires=" + date.toUTCString();
+        } else {
+            //deprecated
+            expires = "; expires=" + date.toGMTString();
+        }
+    } else {
+        // remove cookie
+        let yesterday = new Date(date);
+        yesterday.setDate(yesterday.getDate() - 1);
+        expires = "; expires=" + yesterday.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/; samesite=strict";
+}
+
+
+function getNewCookieSlider(name) {
+    const nameEquals = name + '=';
+    const cookieArray = document.cookie.split(';');
+  
+    for (cookie of cookieArray) {
+      while (cookie.charAt(0) == ' ') {
+        cookie = cookie.slice(1, cookie.length);
+      }
+  
+      if (cookie.indexOf(nameEquals) == 0)
+        return decodeURIComponent(
+          cookie.slice(nameEquals.length, cookie.length),
+        );
+    }
+  
+    return null;
+}

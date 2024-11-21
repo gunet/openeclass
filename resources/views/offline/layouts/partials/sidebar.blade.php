@@ -1,7 +1,7 @@
 <div id="leftnav" class="col-12 sidebar float-menu pt-3">
 
     <div class='col-12 text-end d-none d-lg-block'>
-        <button type="button" id="menu-btn" class="btn menu_btn_button" data-bs-toggle="tooltip" data-bs-placement="right" onclick="ToogleButton()" aria-label="{{ trans('langMenu') }}">
+        <button type="button" id="menu-btn" class="btn menu_btn_button" data-bs-toggle="tooltip" data-bs-placement="right" onclick="ToggleButton()" aria-label="{{ trans('langMenu') }}">
             <svg id='collapse-left-menu-icon' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
                 <path d="M5 5C4.44772 5 4 5.44772 4 6V6.5C4 7.05228 4.44772 7.5 5 7.5H19.25C19.9404 7.5 20.5 6.94036 20.5 6.25C20.5 5.55964 19.9404 5 19.25 5H5Z" fill="#2B3944"/>
                 <path d="M5 10.5C4.44772 10.5 4 10.9477 4 11.5V12C4 12.5523 4.44772 13 5 13H14.75C15.4404 13 16 12.4404 16 11.75C16 11.0596 15.4404 10.5 14.75 10.5H5Z" fill="#2B3944"/>

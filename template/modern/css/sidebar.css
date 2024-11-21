@@ -5,10 +5,6 @@
   background: #F7F9FE;
 }
 
-/* .menu-items .fa{
-  color:#B4BED1;
-} */
-
 .contextual-sidebar{
   width:270px;
   list-style-type:none;
@@ -128,12 +124,6 @@
     padding-right: 10px;
   }
 }
-/* @media(min-width:992px){
-  .course-wrapper:not(:has(.active-cont)) .ContentLeftNav{
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-} */
 
 .navbar_breadcrumb{
   margin-left:60px;
@@ -172,7 +162,7 @@
     margin-right: auto;
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
-    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeader 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -187,7 +177,7 @@
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
-    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -262,7 +252,7 @@
 
   .col_sidebar_active.active-nav .menu-items,
   .col_sidebar_active.active-nav .menu-header{
-    transition: visibility 0s, opacity 0.5s ease-in-out;
+    transition: visibility 0s, opacity 0.01s ease-in-out;
   }
   .col_sidebar_active.active-nav .switch-sidebar .on,
   .col_sidebar_active.active-nav .switch-sidebar .off{
@@ -280,12 +270,12 @@
 
   .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 
   .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 }
 
@@ -315,7 +305,7 @@
     margin-right: auto;
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
-    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeader 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -330,7 +320,7 @@
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
-    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -405,7 +395,7 @@
 
   .col_sidebar_active.active-nav .menu-items,
   .col_sidebar_active.active-nav .menu-header{
-    transition: visibility 0s, opacity 0.5s ease-in-out;
+    transition: visibility 0s, opacity 0.01s ease-in-out;
   }
   .col_sidebar_active.active-nav .switch-sidebar .on,
   .col_sidebar_active.active-nav .switch-sidebar .off{
@@ -423,12 +413,12 @@
 
   .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 
   .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 
 }
@@ -461,7 +451,7 @@
     margin-right: auto;
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
-    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeader 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -476,7 +466,7 @@
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
-    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -551,7 +541,7 @@
 
   .col_sidebar_active.active-nav .menu-items,
   .col_sidebar_active.active-nav .menu-header{
-    transition: visibility 0s, opacity 0.5s ease-in-out;
+    transition: visibility 0s, opacity 0.01s ease-in-out;
   }
   .col_sidebar_active.active-nav .switch-sidebar .on,
   .col_sidebar_active.active-nav .switch-sidebar .off{
@@ -569,12 +559,12 @@
 
   .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 
   .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 }
 
@@ -608,7 +598,7 @@
     margin-right: auto;
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
-    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeader 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -623,7 +613,7 @@
       }
   }
   .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
-    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.01s forwards;
     -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
   }
@@ -716,12 +706,12 @@
 
   .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 
   .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.01s ease-in-out;
   }
 
 }
@@ -758,9 +748,6 @@
   }
 }
 
-/* .slider-btn-on{
-  width:140px;
-} */
 @media(max-width:991px){
   .slider-btn-on{
     width:200px;
