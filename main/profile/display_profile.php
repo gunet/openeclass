@@ -91,7 +91,7 @@ if ($data['userdata']) {
                     'icon' => 'fa-envelope',
                     'button-class' => 'submitAdminBtn',
                     'level' => 'primary-label',
-                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses']))),
+                    'show' => (!get_config('dont_mail_unverified_mails') or get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses']))),
                 array('title' => $langAvailableDateForUser,
                       'url' => "add_available_dates.php?user_id=$uid",
                       'icon' => 'fa-solid fa-calendar',
