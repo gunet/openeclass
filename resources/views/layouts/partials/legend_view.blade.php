@@ -111,9 +111,10 @@
                     @endif
 
                     @if (defined('RSS')) {{-- rss link --}}
-                        <a class='btn btn-default text-decoration-none' href="{{RSS}}" role="button"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}" aria-label="{{trans('langRSSFeed')}}">
-                           <span class="fa-solid fa-rss"></span>
+                        <a class='btn btn-default text-decoration-none tiny-icon-rss' href="{{RSS}}"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ defined('RSS_TITLE')? RSS_TITLE: trans('langRSSFeed') }}"
+                           aria-label="{{ defined('RSS_TITLE')? RSS_TITLE: trans('langRSSFeed') }}">
+                           <span class="fa-solid {{ defined('RSS_ICON')? RSS_ICON: 'fa-rss' }}"></span>
                         </a>
                     @endif
                     @if ($require_help) {{-- help icon / link --}}

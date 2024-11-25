@@ -404,13 +404,13 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     <!-- Modal content-->
                                         <div class='modal-content'>
                                             <div class='modal-header border-0'>
-                                                <div class='modal-title'>$langAddEvent</div> 
+                                                <div class='modal-title'>$langAddEvent</div>
                                                 <button aria-label='$langClose' type='button' class='close' data-bs-dismiss='modal'>
                                                 </button>
                                             </div>
                                             <div class='modal-body'>
                                                 <div class='form-wrapper form-edit rounded border-0 px-0'>
-                                                    
+
                                                     <input type='hidden' id='id' name='id' value='$eventToModify'>
                                                     <input type='hidden' name='rep' id='rep' value='$applytogroup'>
 
@@ -439,8 +439,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langTitle'>
                                                         </div>
                                                     </div>
-                                
-                                                    
+
+
                                                     <div class='form-group mt-4'>
                                                         <label for='newContent' class='col-sm-12 control-label-notes'>$langDescription</label>
                                                         <div class='col-sm-12'>
@@ -455,7 +455,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <div class='input-group'>
                                                                 <div class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                                                                 <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -467,7 +467,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <div class='input-group add-on'>
                                                                 <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
                                                                 <input class='form-control mt-0 border-start-0' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -509,9 +509,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <label for='enddate' class='col-12 control-label-notes'>$langUntil</label>
                                                             <div class='col-12'>
                                                                 <div class='input-group'>
-                                                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
+                                                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                                                     <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -521,7 +521,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         $eventtype = 'personal';
                                                         $tool_content .= "
 
-                                                        
+
                                                         <div class='form-group mt-4'>
                                                             <label class='col-sm-6 control-label-notes'>$langReferencedObject</label>
                                                             <div class='col-sm-12'>
@@ -550,8 +550,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                                 $tool_content .= "</div>
                                             </div>
-                                        
-                                        
+
+
                                             <div class='modal-footer border-0'>
                                                 <div class='form-group d-flex justify-content-center align-items-center'>
                                                     <input class='btn submitAdminBtn' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
@@ -576,7 +576,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 }else{
                                     isOnDuration = 'false';
                                 }
-                        
+
                                 var calendar = $('#EditCalendarEvents').fullCalendar({
                                     header:{
                                         left: 'prev,next ',
@@ -594,9 +594,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     selectable: true,
                                     allDaySlot: false,
                                     displayEventTime: true,
-                                    events: '{$urlServer}main/personal_calendar/test_edit_event.php?eventID={$eventID}&theUser={$showEventUser}',    
+                                    events: '{$urlServer}main/personal_calendar/test_edit_event.php?eventID={$eventID}&theUser={$showEventUser}',
 
-                                    
+
                                     eventRender: function( event, element, view ) {
                                         var title = element.find( '.fc-title' );
                                         title.html( title.text() );
@@ -610,7 +610,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     eventClick:  function(event) {
 
                                         var eventStart = event.start;
-                                        var eventEnd = event.end;  
+                                        var eventEnd = event.end;
 
                                         startDay =  moment(eventStart).format('DD');
                                         endDay = moment(eventEnd).format('DD');
@@ -619,65 +619,65 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                                             startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
                                             endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-    
+
                                             $('#editEventModal #fromNewDate').text(startS);
                                             $('#editEventModal #startdate').val(startS);
                                             $('#editEventModal #enddateEvent').val(endS);
-    
+
                                             //duration time
                                             var duration_start = moment(eventStart).format('HH:mm');
                                             var duration_end = moment(eventEnd).format('HH:mm');
                                             var value_start = duration_start.split(':');
                                             var value_end = duration_end.split(':');
-    
+
                                             var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
                                             var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
                                             var diff = endDate.getTime() - startDate.getTime();
                                             var hours = Math.floor(diff / 1000 / 60 / 60);
                                             diff -= hours * 1000 * 60 * 60;
                                             var minutes = Math.floor(diff / 1000 / 60);
-        
+
                                             if (hours < 0){
                                                 hours = hours + 24;
                                             }
-                                            
+
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-    
-                                            
-    
+
+
+
                                             if(isOnDuration == 'true'){
                                                 $('#editEventModal #duration').val(duration);
                                             }else{
                                                 $('#editEventModal #duration').val('00:00:00');
                                             }
-                                            
+
                                             $('#OnOffDuration').on('click',function(){
                                                 if($('#OnOffDuration').is(':checked')){
                                                     $('#editEventModal #duration').val(duration);
                                                 }else{
                                                     $('#editEventModal #duration').val('00:00:00');
                                                 }
-                                            }); 
-        
-                                            
+                                            });
+
+
                                             $('#editEventModal #idNewDuration').text(duration);
 
                                             $('#duration').val(duration);
-    
-                                            $('#editEventModal').modal('toggle');    
+
+                                            $('#editEventModal').modal('toggle');
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
                                         }
 
-                                                                   
+
                                     },
 
-                                    
+
                                 });
 
 
-                               
+
 
                             });
 
@@ -711,7 +711,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         <!-- Modal content-->
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
-                                                    <div class='modal-title'>$langAddEvent</div> 
+                                                    <div class='modal-title'>$langAddEvent</div>
                                                     <button aria-label='$langClose' type='button' class='close' data-bs-dismiss='modal'>
                                                     </button>
                                                 </div>
@@ -752,7 +752,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         <input type='hidden' name='startdate' id='startdate'>
                                                         <input type='hidden' name='enddateEvent' id='enddateEvent'>
                                                         <input type='hidden' name='duration' id='duration'>
-                                            
+
                                                         <div class='form-group mt-4'>
                                                             <label for='frequencynumber' class='col-sm-12 control-label-notes'>$langRepeat $langEvery</label>
                                                             <div class='row'>
@@ -787,17 +787,17 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     $tool_content .= "<div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                                                                             <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil</label>
                                                                             <div class='input-group'>
-                                                                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
+                                                                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                                                                 <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-                                                                                
+
                                                                             </div>
                                                                         </div>";
 
                                                         if (!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])) {
                                                             $eventtype = 'personal';
                                                             $tool_content .= "
-                                                
-                                                            
+
+
                                                             <div class='form-group mt-4'>
                                                                 <label for='refobjgentype' class='col-sm-6 control-label-notes mb-0'>$langReferencedObject</label>
                                                                 <div class='col-sm-12 mt-0'>
@@ -827,8 +827,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                                 $tool_content .=   "</div>
                                                 </div>
-                                            
-                                            
+
+
                                                 <div class='modal-footer border-0'>
                                                     <div class='form-group d-flex justify-content-center align-items-center'>
                                                         <input class='btn submitAdminBtn' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
@@ -840,8 +840,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     </div>
                                 </form>
                             </div>
-                
-                
+
+
                 ";
 
 
@@ -858,7 +858,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                             }else{
                                 isOnDuration = 'false';
                             }
-                    
+
                             var calendar = $('#calendarEvents').fullCalendar({
                                 header:{
                                     left: 'prev,next ',
@@ -873,12 +873,12 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 contentHeight:'auto',
                                 selectable: true,
                                 allDaySlot: false,
-                                displayEventTime: true,                               
+                                displayEventTime: true,
 
                                 eventClick:  function(event) {
-                                    var id = event.id;                                   
+                                    var id = event.id;
                                 },
-                                    
+
                                 //header and other values
                                 select: function(start, end) {
 
@@ -886,14 +886,14 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     endDay = moment(end).format('DD');
 
                                     if(parseInt(startDay)==parseInt(endDay)){
-                                    
+
                                         var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
                                         var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
-        
+
                                         endtime = $.fullCalendar.moment(end).format('h:mm');
                                         starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
                                         var mywhen = starttime + ' - ' + endtime;
-                                        
+
                                         startS = moment(start).format('DD-MM-YYYY HH:mm');
                                         endS = moment(end).format('DD-MM-YYYY HH:mm');
 
@@ -913,10 +913,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         if (hours < 0){
                                             hours = hours + 24;
                                         }
-                                        
+
                                         duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                                        
+
 
                                         $('#createEventModal #from').text(mywhen);
                                         $('#createEventModal #startdate').val(startS);
@@ -927,16 +927,16 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         }else{
                                             $('#createEventModal #duration').val('00:00:00');
                                         }
-                                        
+
                                         $('#OnOffDuration').on('click',function(){
                                             if($('#OnOffDuration').is(':checked')){
                                                 $('#createEventModal #duration').val(duration);
                                             }else{
                                                 $('#createEventModal #duration').val('00:00:00');
                                             }
-                                        }); 
+                                        });
 
-                                        
+
                                         $('#createEventModal #idDuration').text(duration);
                                         $('#createEventModal').modal('toggle');
                                     }else{
@@ -945,14 +945,14 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     }
                                 },
 
-                                
-                                
+
+
                             });
 
                         });
 
                     </script>
-                
+
                 ";
         }
 
@@ -997,12 +997,11 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
     } else {
         // Define iCal feed icon
-        $link = "main/personal_calendar/icalendar.php?uid=$uid&amp;token=" .
+        $iCalFeedLink = $urlServer . "main/personal_calendar/icalendar.php?uid=$uid&token=" .
             token_generate('ical' . $uid);
-        define('RSS', $link);
+        define('RSS', $iCalFeedLink);
         define('RSS_ICON', 'fa-calendar');
         define('RSS_TITLE', $langiCalFeed);
-        $iCalFeedLink = $urlServer . $link;
 
         /* display events */
         $day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
@@ -1014,7 +1013,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         <div class="calendar-header">
                             <div class="col-12">
                                 <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center">
-                                   
+
                                         <div class="btn-group">
                                                 <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="'.$langPrevious.'"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
                                                 <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
@@ -1028,9 +1027,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                 <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
                                         </div>
 
-                                        
-                                    
-                                        
+
+
+
                                 </div>
                             </div>
                         </div>'
@@ -1069,7 +1068,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
         $(".tiny-icon-rss").click(function (e) {
             e.preventDefault();
-            $("#iCalDescription").modal();
+            $("#iCalDescription").modal("show");
         });
 
         });
@@ -1079,7 +1078,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
-                        <div class='modal-title'>$langiCalFeed</div> 
+                        <div class='modal-title'>$langiCalFeed</div>
                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'>
                         </button>
                     </div>
@@ -1091,10 +1090,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                             <div class='form-group mt-3'>
                                 <input aria-label='$langText' type='text' class='form-control' value='$iCalFeedLink' readonly>
                             </div>
-                            <div class='form-group text-end'>
-                                <button class='btn cancelAdminBtn' data-bs-dismiss='modal'>$langClose</button>
-                            </div>
                         </form>
+                    </div>
+                    <div class='modal-footer text-end'>
+                        <button class='btn cancelAdminBtn' data-bs-dismiss='modal'>$langClose</button>
                     </div>
                 </div>
             </div>
