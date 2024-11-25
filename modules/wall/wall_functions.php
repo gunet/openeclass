@@ -274,22 +274,15 @@ function generate_single_post_html($post) {
 }
 
 
-function generate_infinite_container_html($posts, $next_page) {
-    global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
+function generate_infinite_container_html($posts, $posts_per_page, $next_page, $course_type = '') {
+    global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
     $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
-    $langWallPinPost, $langWallUnPinPost, $langWall, $langWallPostsShow, $langConfirmDelete, $langCancel;
+    $langWallPinPost, $langWallUnPinPost, $langWallPostsShow, $langConfirmDelete, $langCancel, $urlAppend;
 
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
                               var link = $(this).attr("href");
                               e.preventDefault();
-
-                            //   bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
-                            //       if (result) {
-                            //           document.location.href = link;
-                            //       }
-                            //   });
-
 
                             bootbox.confirm({
                                 closeButton: false,
@@ -311,7 +304,6 @@ function generate_infinite_container_html($posts, $next_page) {
                                     }
                                 }
                             });
-
 
                           });
                       </script>';
@@ -354,8 +346,7 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='commentPress float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
-                            c
+        $comm_content = "<a class='commentPress float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>                            
                             <span class='vsmall-text'>$langComments (".$comm->getCommentsNum().")</span>
                         </a>";
 
@@ -446,8 +437,13 @@ function generate_infinite_container_html($posts, $next_page) {
             </div>';
     }
     $ret .= '</div></div></div>';
+
     if (count($posts) == $posts_per_page) {
-        $ret .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page='.$next_page.'"></a>';
+        if ($course_type == 'wall') {
+            $ret .= "<a class='infinite-more-link' href='{$urlAppend}modules/wall/loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
+        } else {
+            $ret .= "<a class='infinite-more-link' href='loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";
+        }
     }
 
     return $ret;

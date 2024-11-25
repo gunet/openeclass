@@ -236,11 +236,15 @@
 @endpush
 @php
     $posts_per_page = 10;
-    $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
+    $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned
+                                        FROM wall_post
+                                        WHERE course_id = ?d
+                                        ORDER BY pinned DESC,
+                                        timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
 @endphp
 
     @if (count($posts) == 0)
         <div class="col-12 mt-5"><div class="alert alert-warning"><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoWallPosts') }}</span></div></div>
     @else
-        {!! generate_infinite_container_html($posts, $posts_per_page, 2) !!}<div class='mb-4'></div>
+        {!! generate_infinite_container_html($posts, $posts_per_page, 2, 'wall') !!}<div class='mb-4'></div>
     @endif
