@@ -228,83 +228,77 @@ function show_wall_posts() {
     } else {
         $tool_content .= generate_infinite_container_html($posts, $posts_per_page, 2);
 
-        $tool_content .= '<script>
-                              var infinite = new Waypoint.Infinite({
-                                  element: $(".infinite-container")[0]
-                              })
-                          </script>';
-
-        $tool_content .= "<script>
-                            $('body').on('click', '.colorboxframe', function() {
-                              $('.colorboxframe').colorbox();
-                            });
-                            $('body').on('click', '.colorbox', function() {
-                              $('.colorbox').colorbox();
-                            });
-                          </script>";
-
         load_js('screenfull/screenfull.min.js');
+
         $head_content .= "<script>
-        $(function(){
-            $('.fileModal').click(function (e)
-            {
-                e.preventDefault();
-                var fileURL = $(this).attr('href');
-                var downloadURL = $(this).prev('input').val();
-                var fileTitle = $(this).attr('title');
-                var buttons = {};
-                if (downloadURL) {
-                    buttons.download = {
-                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+            var infinite = new Waypoint.Infinite({
+              element: $('.infinite-container')[0]
+            })
+            $('body').on('click', '.colorboxframe', function() {
+              $('.colorboxframe').colorbox();
+            });
+            $('body').on('click', '.colorbox', function() {
+              $('.colorbox').colorbox();
+            });
+            $(function(){
+                $('.fileModal').click(function (e)
+                {
+                    e.preventDefault();
+                    var fileURL = $(this).attr('href');
+                    var downloadURL = $(this).prev('input').val();
+                    var fileTitle = $(this).attr('title');
+                    var buttons = {};
+                    if (downloadURL) {
+                        buttons.download = {
+                                label: '<i class=\"fa fa-download\"></i> $langDownload',
+                                className: 'submitAdminBtn gap-1',
+                                callback: function (d) {
+                                    window.location = downloadURL;
+                                }
+                        };
+                    }
+                    buttons.print = {
+                                label: '<i class=\"fa fa-print\"></i> $langPrint',
+                                className: 'submitAdminBtn gap-1',
+                                callback: function (d) {
+                                    var iframe = document.getElementById('fileFrame');
+                                    iframe.contentWindow.print();
+                                }
+                            };
+                    if (screenfull.enabled) {
+                        buttons.fullscreen = {
+                            label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
                             className: 'submitAdminBtn gap-1',
-                            callback: function (d) {
-                                window.location = downloadURL;
-                            }
-                    };
-                }
-                buttons.print = {
-                            label: '<i class=\"fa fa-print\"></i> $langPrint',
-                            className: 'submitAdminBtn gap-1',
-                            callback: function (d) {
-                                var iframe = document.getElementById('fileFrame');
-                                iframe.contentWindow.print();
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
                             }
                         };
-                if (screenfull.enabled) {
-                    buttons.fullscreen = {
-                        label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
+                    }
+                    buttons.newtab = {
+                        label: '<i class=\"fa fa-plus\"></i> $langNewTab',
                         className: 'submitAdminBtn gap-1',
                         callback: function() {
-                            screenfull.request(document.getElementById('fileFrame'));
+                            window.open(fileURL);
                             return false;
                         }
                     };
-                }
-                buttons.newtab = {
-                    label: '<i class=\"fa fa-plus\"></i> $langNewTab',
-                    className: 'submitAdminBtn gap-1',
-                    callback: function() {
-                        window.open(fileURL);
-                        return false;
-                    }
-                };
-                buttons.cancel = {
-                            label: '$langCancel',
-                            className: 'cancelAdminBtn'
-                        };
-                bootbox.dialog({
-                    size: 'large',
-                    title: fileTitle,
-                    message: '<div class=\"row\">'+
-                                '<div class=\"col-sm-12\">'+
-                                    '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
-                                '</div>'+
-                            '</div>',
-                    buttons: buttons
+                    buttons.cancel = {
+                                label: '$langCancel',
+                                className: 'cancelAdminBtn'
+                            };
+                    bootbox.dialog({
+                        size: 'large',
+                        title: fileTitle,
+                        message: '<div class=\"row\">'+
+                                    '<div class=\"col-sm-12\">'+
+                                        '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
+                                    '</div>'+
+                                '</div>',
+                        buttons: buttons
+                    });
                 });
             });
-        });
-
         </script>";
     }
 }
