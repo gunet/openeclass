@@ -1446,7 +1446,7 @@ class Calendar_Events {
            $duration = new DateTime($event->duration);
            $ical .= "DURATION:".$duration->format("\P\TH\Hi\Ms\S").PHP_EOL;
            $ical .= "SUMMARY:[".strtoupper($event->event_group)."] ".$event->title.PHP_EOL;
-           $ical .= "DESCRIPTION:".canonicalize_whitespace(strip_tags($event->content)).PHP_EOL;
+           $ical .= "DESCRIPTION:".canonicalize_whitespace(strip_tags($event->content ?? '')).PHP_EOL;
            if ($event->event_group == 'deadline')
            {
                $ical .= "BEGIN:VALARM".PHP_EOL;
