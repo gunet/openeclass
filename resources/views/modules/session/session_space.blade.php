@@ -66,7 +66,7 @@
                                 'level' => 'secondary',
                                 'show' => (!is_module_disable(MODULE_ID_DOCS) && $is_consultant)
                             ),
-                            array('title' => trans('langAttendance') . ' ' . trans('langUsersOf'),
+                            array('title' => trans('langAttendanceCriterion'),
                                 'url' => $urlAppend . 'modules/session/resource.php?course=' . $course_code . '&session=' . $sessionID . '&type=attendance',
                                 'icon' => 'fa-solid fa-clipboard-user',
                                 'level' => 'secondary',

@@ -3,9 +3,14 @@
 @push('head_scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-
-            $('#openSessionCal').on('click', function(e){
+            $('#creators').on('click', function(e){
                 e.preventDefault();
+                $('#selectedConsultant').val($(this).val());
+            });
+            $('#openSessionCal').click(function(e){
+                e.preventDefault();
+                var consultant_choosen = $('#selectedConsultant').val();
+                $('#calendarAddSessionDate').fullCalendar('destroy');
                 var calendar = $('#calendarAddSessionDate').fullCalendar({
                     header:{
                         left: 'prev,next ',
@@ -13,15 +18,15 @@
                         right: ''
                     },
                     defaultView: 'agendaWeek',
-                    slotDuration: '00:45' ,
+                    slotDuration: '00:05' ,
                     minTime: '08:00:00',
-                    maxTime: '23:00:00',
+                    maxTime: '23:55:00',
                     contentHeight:"auto",
                     editable: false,
                     selectable: true,
                     allDaySlot: false,
                     displayEventTime: true,
-                    events: "{{ $urlAppend }}modules/session/disabled_session_slots.php?course={{ $course_id }}&show_sessions=true",
+                    events: "{{ $urlAppend }}modules/session/disabled_session_slots.php?course={{ $course_id }}&show_sessions=true&from_coordinator={{ $tmp_coordinator }}&add=true&selectedConsultant="+consultant_choosen,
                 
                     eventRender: function( event, element, view ) {
                         var title = element.find( '.fc-title' );
@@ -37,90 +42,31 @@
                         });
                     },
 
-                    //header and other values
                     select: function(start, end) {
-
-                        var dateStart = $.fullCalendar.moment(start).format('hh:mm');
-                        var dateEnd = $.fullCalendar.moment(end).format('hh:mm');
-
-                        var startDate_hour = $.fullCalendar.moment(start).format('hh');
-                        startDate_hour = parseInt(startDate_hour);
-                        var startDate_min = $.fullCalendar.moment(start).format('mm');
-                        startDate_min = parseInt(startDate_min);
-
-                        var endDate_hour = $.fullCalendar.moment(end).format('hh');
-                        endDate_hour = parseInt(endDate_hour);
-                        var endDate_min = $.fullCalendar.moment(end).format('mm');
-                        endDate_min = parseInt(endDate_min);
-
-                        var start_day = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY');
-                        var end_day = $.fullCalendar.moment(end).format('dddd, Do MMMM YYYY');
-
-                        var is_hour_ok = 0;
-                        if(endDate_hour==startDate_hour+1){
-                            is_hour_ok = 1;
-                        }
-                        if(endDate_hour==1 && startDate_hour==12){
-                            is_hour_ok = 1;
-                        }
-                        if(endDate_hour==startDate_hour){
-                            is_hour_ok = 1;
-                        }
-
-                        var is_minute_ok = 0;
-                        if(startDate_min>=30){
-                            var diffStartMin = 60 - startDate_min;
-                        }else{
-                            var diffStartMin = 30 - startDate_min;
-                        }
-
-                        if(endDate_min>=30){
-                            var diffEndMin = 60 - endDate_min;
-                        }else{
-                            var diffEndMin = 30 - endDate_min;
-                        }
-
-                        var sumDiffMin = diffStartMin+diffEndMin;
-
-                        if(sumDiffMin<=45){
-                            is_minute_ok = 1;
-                        }
-                        if(endDate_hour==1 && startDate_hour==12){
-                            is_minute_ok = 1;
-                        }
-                        if(endDate_hour==startDate_hour){
-                            is_minute_ok = 1;
-                        }
-
-                        // Special cases for slot duration
-                        if( (dateStart=='10:15' && dateEnd=='11:45') ||
-                            (dateStart=='01:15' && dateEnd=='02:45') ||
-                            (dateStart=='04:15' && dateEnd=='05:45') ||
-                            (dateStart=='07:15' && dateEnd=='08:45')  ){
-                                is_minute_ok = 0;
-                            }
-
-                        if(is_hour_ok==1 && is_minute_ok==1 && start_day==end_day){
-                            if(!start.isBefore(moment())){
-                                endtime = $.fullCalendar.moment(end).format('h:mm');
-                                starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
+                        $('.popover').each(function () {
+                            $(this).removeClass('show');
+                        });
+                        var startDay =  moment(start).format('DD');
+                        var endDay = moment(end).format('DD');
+                        if(parseInt(startDay)==parseInt(endDay)){
+                            var CurrentDateTime = moment().format('YYYY-MM-DD HH:mm');
+                            var StartDateTime = moment(start).format('YYYY-MM-DD HH:mm');
+                            if(StartDateTime >= CurrentDateTime){
+                                var day_start = moment(start).format('YYYY-MM-DD HH:mm');
+                                var day_end = moment(end).format('YYYY-MM-DD HH:mm');
+                                var starttime = moment(start).format('dddd, Do MMMM YYYY, HH:mm');
+                                var endtime = moment(end).format('HH:mm');
                                 var mywhen = starttime + ' - ' + endtime;
-
-                                start = moment(start).format('YYYY-MM-DD HH:mm');
-                                end = moment(end).format('YYYY-MM-DD HH:mm');
-
-                                $('#startTimeTmp').val(start);
-                                $('#endTimeTmp').val(end);
+                                $('#startTimeTmp').val(day_start);
+                                $('#endTimeTmp').val(day_end);
                                 $('#whenTmp').val(mywhen);
                                 $('#createEventSession #when').text(mywhen);
                                 $('#createEventSession').modal('toggle');
-                                
                             }else{
                                 alert("{{ js_escape(trans('langDateHasExpired')) }}");
                             }
                         }else{
-                            alert("{{ js_escape(trans('langDateMaxMinutes')) }}");
-                            //window.location.reload();
+                            alert("{{ js_escape(trans('langChooseDayAgain')) }}");
                         }
                     },
 
@@ -131,9 +77,6 @@
                     }
  
                 });
-
-                $('#calendarAddSessionDate').removeClass('d-none');
-                $('#calendarAddSessionDate').removeClass('d-block');
 
                 $('.fc-next-button').trigger('click');
                 $('.fc-prev-button').trigger('click');
@@ -243,6 +186,7 @@
                                             @if(Session::getError('creators'))
                                                 <span class='help-block Accent-200-cl'>{!! Session::getError('creators') !!}</span>
                                             @endif
+                                            <input type='hidden' id='selectedConsultant' value="@if($is_coordinator) 0 @else {{ $uid }} @endif">
                                         </div>
 
                                         <div class="form-group mt-4">
@@ -304,7 +248,7 @@
                                             <div class="input-group mb-3 rounded-2 border-0 gap-2">
                                                 <span class="input-group-text p-0 border-0 bg-transparent" id="start-end-datetime-session">
                                                     <a type="button" class="btn submitAdminBtn d-inline-flex gap-1 rounded-2" 
-                                                        data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal'>
+                                                        data-bs-toggle="modal" data-bs-target="#staticDateTimeSession" id='openSessionCal' data-id="@if($is_coordinator) 0 @else {{ $uid }} @endif">
                                                         <i class='fa-solid fa-calendar'></i>
                                                     </a>
                                                 </span>
@@ -381,7 +325,7 @@
 
 
 <!-- Show Calendar for adding session datetime -->
-<div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel" aria-hidden="true">
+<div class="modal fade" id="staticDateTimeSession" tabindex="-1" aria-labelledby="staticDateTimeSessionLabel">
     <div class="modal-dialog modal-fullscreen mt-0">
         <div class="modal-content">
             <div class="modal-header">
@@ -389,12 +333,10 @@
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="{{ trans('langClose') }}"></button>
             </div>
             <div class="modal-body">
-                @if($is_consultant && !$is_coordinator)
                 <div class='alert alert-info'>
                     <i class='fa-solid fa-circle-info fa-lg'></i>
-                    <span>{!! trans('langInfoNewSession') !!}</span>
+                    <span>@if($is_coordinator) {!! trans('langInfoNewSessionCoordinator') !!} @else {!! trans('langInfoNewSession') !!} @endif</span>
                 </div>
-                @endif
                 @if($is_coordinator)
                     @if(count($view_sessions) > 0)
                         <div class='panel'>
@@ -425,7 +367,7 @@
                         </div>
                     @endif
                 @endif
-                <div id='calendarAddSessionDate' class='calendarAddDaysCl d-none'></div>
+                <div id='calendarAddSessionDate' class='calendarAddDaysCl'></div>
             </div>
         </div>
     </div>

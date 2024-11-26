@@ -72,18 +72,24 @@ if(isset($_POST['modify'])){
 
   if($v->validate()) {
 
+    print_r('start:'.$_POST['start_session'].'end:'.$_POST['end_session']);
+
     if(!empty($_POST['start_session'])){
-      $start_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['start_session']);
-      $start_session = $start_at->format("Y-m-d H:i");
-      $test_start_session = $start_at->format("Y-m-d H:i:s");
+      // $start_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['start_session']);
+      // $start_session = $start_at->format("Y-m-d H:i");
+      // $test_start_session = $start_at->format("Y-m-d H:i:s");
+      $start_session = date('Y-m-d H:i', strtotime($_POST['start_session']));
+      $test_start_session = date('Y-m-d H:i:s', strtotime($_POST['start_session']));
     }else{
       $start_session = null;
     }
 
     if(!empty($_POST['end_session'])){
-      $end_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['end_session']);
-      $end_session = $end_at->format("Y-m-d H:i");
-      $test_end_session = $end_at->format("Y-m-d H:i:s");
+      // $end_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['end_session']);
+      // $end_session = $end_at->format("Y-m-d H:i");
+      // $test_end_session = $end_at->format("Y-m-d H:i:s");
+      $end_session = date('Y-m-d H:i', strtotime($_POST['end_session']));
+      $test_end_session = date('Y-m-d H:i:s', strtotime($_POST['end_session']));
     }else{
       $end_session = null;
     }
@@ -395,7 +401,9 @@ if($exists_meeting){
   $data['meeting_disabled'] = 'disabled';
 }
 
+$data['tmp_coordinator'] = 0;
 if($is_coordinator){// is the tutor course
+  $data['tmp_coordinator'] = 1;
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
                                                     WHERE course_user.editor = ?d
@@ -413,6 +421,7 @@ if($is_coordinator){// is the tutor course
 
 $sql = "";
 if($is_consultant && !$is_coordinator){
+  $data['tmp_coordinator'] = 0;
   $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members 
                                                             WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)
                                                             AND user_id = ?d 
