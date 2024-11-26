@@ -194,7 +194,7 @@
                                                         </a>
                                                         @if(!$is_coordinator && !$is_consultant && !$s->is_accepted_user)
                                                             <a data-id='{{ $s->id }}' class="btn submitAdminBtnDefault do-acceptance" data-bs-toggle="modal" data-bs-target="#RegistrationInSession">
-                                                                {{ trans('langRegister') }}
+                                                                {{ trans('langConsent') }}
                                                             </a>
                                                         @endif
                                                     </div>

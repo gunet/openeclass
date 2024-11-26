@@ -232,8 +232,9 @@ if(isset($_POST['submit'])){
 
 }
 
-
+$data['tmp_coordinator'] = 0;
 if($is_coordinator){// is the tutor course
+  $data['tmp_coordinator'] = 1;
   $data['creators'] = Database::get()->queryArray("SELECT course_user.user_id,user.givenname,user.surname FROM course_user
                                                     LEFT JOIN user ON course_user.user_id=user.id
                                                     WHERE course_user.status = ?d
@@ -254,6 +255,7 @@ $data['comments'] = rich_text_editor('comments', 5, 40, '' );
 
 $sql = "";
 if($is_consultant && !$is_coordinator){
+  $data['tmp_coordinator'] = 0;
   $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members 
                                                             WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)
                                                             AND user_id = ?d 
