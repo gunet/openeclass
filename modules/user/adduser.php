@@ -123,11 +123,11 @@ if (isset($_GET['add'])) {
     }
     $query = join(' AND ', $search);
     if (!empty($query)) {
-        Database::get()->query("CREATE TEMPORARY TABLE lala AS
+        Database::get()->query("CREATE TEMPORARY TABLE register_users_to_course AS
                     SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
-        $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
-                                                user u LEFT JOIN lala c ON u.id = c.user_id WHERE
-                                                c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
+        $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am, c.user_id AS registered
+                                                FROM user u LEFT JOIN register_users_to_course c ON u.id = c.user_id
+                                                WHERE u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
             $results = "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
                                 <thead><tr class='list-header'>
@@ -151,7 +151,9 @@ if (isset($_GET['add'])) {
                 $results .= "<td class='count-col'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         $dep_content . "</td><td class='text-center'>" .
-                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
+                        ($myrow->registered ? "<span class='not_visible'>($langUserAlreadyRegisterd)</span>" :
+                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id))) .
+                        "</td></tr>";
                 $i++;
             }
             $results .= "</table></div></div>";
