@@ -17,7 +17,7 @@
         "bacon/bacon-qr-code": "^2.0",
         "phpoffice/phpspreadsheet": "^2.2.2",
         "dapphp/securimage": "dev-mantis",
-        "h5p/h5p-core": "<1.27",
+        "h5p/h5p-core": "^1.27",
         "h5p/h5p-editor": "<1.26",
         "snapappointments/bootstrap-select": "^1.13.18",
         "jenssegers/blade": "^1.4"
