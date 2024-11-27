@@ -160,7 +160,7 @@ if (isset($_GET['add'])) {
         } else {
             $results .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoUsersFound</span></div></div>";
         }
-        Database::get()->query("DROP TABLE lala");
+        Database::get()->query("DROP TEMPORARY TABLE register_users_to_course");
     }
 }
 

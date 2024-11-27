@@ -57,11 +57,11 @@ doc_init();
 
 if ($is_editor) {
 
-    if(isset($_GET['prevent_pdf'])){
+    if (isset($_GET['prevent_pdf'])) {
         Database::get()->query("UPDATE document SET prevent_download = ?d WHERE id = ?d AND course_id = ?d", $_GET['prevent_pdf'], $_GET['pdf'], $course_id);
-        if($_GET['prevent_pdf'] > 0){
+        if ($_GET['prevent_pdf'] > 0) {
             Session::flash('message', $langPreventEnablePDF);
-        }else{
+        } else {
             Session::flash('message', $langPreventDisablePDF);
         }
         Session::flash('alert-class', 'alert-success');
@@ -88,21 +88,12 @@ if ($is_editor) {
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
                 $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $files_in_zip[$i] = $stat['name'];
-//                if (!empty(my_basename($files_in_zip[$i]))) {
-//                    validateUploadedFile(my_basename($files_in_zip[$i]), $menuTypeID);
-//                }
             }
             // extract files
             for ($i = 0; $i < $zipFile->numFiles; $i++) {
                 $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $realFileSize += $stat["size"]; // check for free space
-//                if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-//                    Session::flash('message', $langNoSpace);
-//                    Session::flash('alert-class', 'alert-danger');
-//                    redirect_to_current_dir();
-//                }
                 $extracted_file_name = process_extracted_file($stat);
-//                die($extracted_file_name);
                 if (!is_null($extracted_file_name)) {
                     $zipFile->renameIndex($i, $extracted_file_name);
                     $zipFile->extractTo($basedir, $extracted_file_name);
@@ -690,7 +681,7 @@ if ($can_upload or $user_upload) {
         }
     }
     if ($error) {
-        Session::flash('message',$error);
+        Session::flash('message', $error);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_current_dir();
     } elseif ($uploaded) {
