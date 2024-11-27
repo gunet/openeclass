@@ -166,21 +166,21 @@ function show_resources($unit_id) {
     $head_content .= "<script>
         $(document).ready(function() {
             let confirmLpCleanAttemptHref;
-            
+
             $('#confirmLpCleanAttemptDialog').modal({
                 show: false,
                 keyboard: false,
                 backdrop: 'static'
             });
-            
+
             $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
               confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
             });
-        
+
             $('#confirmLpCleanAttemptCancel').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
             });
-        
+
             $('#confirmLpCleanAttemptOk').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
                 window.location.href = confirmLpCleanAttemptHref;
@@ -733,7 +733,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
 
         // display learning path results
         if ($is_editor) {
-            $lp_results_button = "<span data-toggle='tooltip' data-placement='top' title='$langDetails'>        
+            $lp_results_button = "<span data-toggle='tooltip' data-placement='top' title='$langDetails'>
                 <a href=" . $urlAppend . "modules/learnPath/details.php?course=" . $course_code . "&amp;path_id=" . $lp_id . ">
                 <span style='vertical-align: baseline' class='fa fa-line-chart'></span>
                 </a>
@@ -1179,8 +1179,8 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         $query = "SELECT * FROM poll WHERE course_id = ?d AND pid = ?d";
         $query .= " AND
                     (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
-                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d 
-                        UNION 
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d
+                        UNION
                        SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
                     )";
         $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
@@ -1662,7 +1662,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+            : $urlAppend . "template/icons/h5p_library.svg"; // fallback icon
         $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";

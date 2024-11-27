@@ -58,7 +58,7 @@ if ($is_editor) {
                 $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
                 $typeIconUrl = (file_exists($typeIconPath))
                     ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-                    : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+                    : $urlAppend . "template/icons/h5p_library.svg"; // fallback icon
                 $dataContent = "data-content=\"<img src='$typeIconUrl' alt='$typeTitle' width='24px' height='24px'>$typeTitle\"";
                 $tool_content .= "<option $dataContent>$typeVal</option>\n";
             }
@@ -138,7 +138,7 @@ if ($content) {
         $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
         $typeIconUrl = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+            : $urlAppend . "template/icons/h5p_library.svg"; // fallback icon
 
         $tool_content .= "<tr" . ($item->enabled ? '' : " class='not_visible'") . ">
                     <td class='col-sm-8'>
@@ -212,7 +212,7 @@ $head_content .= "
     </style>
     <script type='text/javascript'>
         $(document).ready(function() {
-            $('#createpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {                                
+            $('#createpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                 window.location.href = '{$urlAppend}modules/h5p/create.php?course=$course_code&library=' + $('#createpicker').val();
             });
         });
