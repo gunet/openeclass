@@ -51,7 +51,7 @@ function list_h5p() {
             $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
             $typeIcon = (file_exists($typeIconPath))
                 ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-                : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+                : $urlAppend . "template/icons/images/h5p_library.svg"; // fallback icon
             $tool_content .= "<tr>";
             $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='h5p[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='{$urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";

@@ -206,21 +206,21 @@ function show_resources($unit_id)
     $head_content .= "<script>
         $(document).ready(function() {
             let confirmLpCleanAttemptHref;
-            
+
             $('#confirmLpCleanAttemptDialog').modal({
                 show: false,
                 keyboard: false,
                 backdrop: 'static'
             });
-            
+
             $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
               confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
             });
-        
+
             $('#confirmLpCleanAttemptCancel').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
             });
-        
+
             $('#confirmLpCleanAttemptOk').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
                 window.location.href = confirmLpCleanAttemptHref;
@@ -782,8 +782,8 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
 
         // display learning path results
         if ($is_editor) {
-            $lp_results_button = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langDetails'>        
-                <a href=" . $urlAppend . "modules/learnPath/details.php?course=" . $course_code . "&amp;path_id=" . $lp_id . " aria-label='$langDetails'>
+            $lp_results_button = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langDetails'>
+                <a href=" . $urlAppend . "modules/learnPath/details.php?course=" . $course_code . "&amp;path_id=" . $lp_id . ">
                 <span style='vertical-align: baseline' class='fa fa-line-chart'></span>
                 </a>
             </span>";
@@ -792,8 +792,8 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
                 $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
                             &nbsp; &nbsp;
                            <span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
-                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langDetails'>
-                    <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. " aria-label='$langDetails'>
+                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langDetails'>
+                    <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
                     <span class='fa fa-line-chart'></span>
                     </a>
                 </span>";
@@ -1001,7 +1001,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             enable_password_bootbox();
             $class = 'class="password_protected"';
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$lock_description'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
         } else {
             $class = $exclamation_icon = '';
         }
@@ -1076,7 +1076,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if ($exercise->password_lock) {
             enable_password_bootbox();
             $link_class = 'password_protected';
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langPassCode'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
         }
 
         $assign_to_users_message = '';
@@ -1229,8 +1229,8 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         $query = "SELECT * FROM poll WHERE course_id = ?d AND pid = ?d";
         $query .= " AND
                     (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
-                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d 
-                        UNION 
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d
+                        UNION
                        SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
                     )";
         $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
@@ -1420,7 +1420,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             foreach ($sql2 as $l) {
                 $imagelink = icon('fa-link');
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
-                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank' aria-label='$langOpenNewTab'>$ltitle</a>";
+                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";
             }
         }
         if (!empty($comments)) {
@@ -1714,7 +1714,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+            : $urlAppend . "template/icons/h5p_library.svg"; // fallback icon
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
