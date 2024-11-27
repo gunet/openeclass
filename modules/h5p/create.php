@@ -217,7 +217,7 @@ function getH5pIntegrationObject(): array {
         'js' => $settings['core']['scripts']
     ];
 
-    $jsH5pEditor = "js/h5p-editor/";
+    $jsH5pEditor = "vendor/h5p/h5p-editor/";
 
     // Add editor styles
     foreach (H5peditor::$styles as $style) {
@@ -278,7 +278,7 @@ function getCoreAssets(): array {
     $settings['loadedJs'] = [];
     $settings['loadedCss'] = [];
 
-    $jsH5pCore = "js/h5p-core/";
+    $jsH5pCore = "vendor/h5p/h5p-core/";
 
     // Add core stylesheets
     foreach ($core::$styles as $style) {
@@ -325,7 +325,7 @@ function getCoreSettings(): array {
         'crossorigin' => null,
         'libraryConfig' => $core->h5pF->getLibraryConfig(),
         'pluginCacheBuster' => $jsCacheBuster,
-        'libraryUrl' => $urlServer . "js/h5p-core/js",
+        'libraryUrl' => $urlServer . "vendor/h5p/h5p-core/js",
     );
 }
 
