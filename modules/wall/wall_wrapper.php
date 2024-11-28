@@ -217,89 +217,21 @@ function show_post_form() {
 }
 
 function show_wall_posts() {
-    global $tool_content, $head_content, $course_id, $langNoWallPosts, $langDownload, $langPrint, $langCancel, $langFullScreen, $langNewTab;
+    global $tool_content, $course_id, $langNoWallPosts;
 
     $posts_per_page = 10;
 
     //show wall posts
     $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
     if (count($posts) == 0) {
-        $tool_content .= '<div class="col-12 mt-3"><div class="alert alert-warning"><i class="fa-solid fa-triangle-exclamation fa-lg"></i><span>'.$langNoWallPosts.'</span></div></div>';
+        $tool_content .= '<div class="col-12 mt-3">
+                            <div class="alert alert-warning">
+                                <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                                <span>'.$langNoWallPosts.'</span>
+                            </div>
+                        </div>';
     } else {
         $tool_content .= generate_infinite_container_html($posts, $posts_per_page, 2);
-
-        load_js('screenfull/screenfull.min.js');
-
-        $head_content .= "<script>
-            var infinite = new Waypoint.Infinite({
-              element: $('.infinite-container')[0]
-            })
-            $('body').on('click', '.colorboxframe', function() {
-              $('.colorboxframe').colorbox();
-            });
-            $('body').on('click', '.colorbox', function() {
-              $('.colorbox').colorbox();
-            });
-            $(function(){
-                $('.fileModal').click(function (e)
-                {
-                    e.preventDefault();
-                    var fileURL = $(this).attr('href');
-                    var downloadURL = $(this).prev('input').val();
-                    var fileTitle = $(this).attr('title');
-                    var buttons = {};
-                    if (downloadURL) {
-                        buttons.download = {
-                                label: '<i class=\"fa fa-download\"></i> $langDownload',
-                                className: 'submitAdminBtn gap-1',
-                                callback: function (d) {
-                                    window.location = downloadURL;
-                                }
-                        };
-                    }
-                    buttons.print = {
-                                label: '<i class=\"fa fa-print\"></i> $langPrint',
-                                className: 'submitAdminBtn gap-1',
-                                callback: function (d) {
-                                    var iframe = document.getElementById('fileFrame');
-                                    iframe.contentWindow.print();
-                                }
-                            };
-                    if (screenfull.enabled) {
-                        buttons.fullscreen = {
-                            label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
-                            className: 'submitAdminBtn gap-1',
-                            callback: function() {
-                                screenfull.request(document.getElementById('fileFrame'));
-                                return false;
-                            }
-                        };
-                    }
-                    buttons.newtab = {
-                        label: '<i class=\"fa fa-plus\"></i> $langNewTab',
-                        className: 'submitAdminBtn gap-1',
-                        callback: function() {
-                            window.open(fileURL);
-                            return false;
-                        }
-                    };
-                    buttons.cancel = {
-                                label: '$langCancel',
-                                className: 'cancelAdminBtn'
-                            };
-                    bootbox.dialog({
-                        size: 'large',
-                        title: fileTitle,
-                        message: '<div class=\"row\">'+
-                                    '<div class=\"col-sm-12\">'+
-                                        '<div class=\"iframe-container\"><iframe title=\"'+fileTitle+'\" id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
-                                    '</div>'+
-                                '</div>',
-                        buttons: buttons
-                    });
-                });
-            });
-        </script>";
     }
 }
 
