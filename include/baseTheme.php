@@ -108,9 +108,6 @@ function view($view_file, $view_data = array()) {
         $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
     }
 
-    // Check if there are any messages to display
-    $messages = Session::getMessages();
-
     if (!$toolName and $pageName) {
         $toolName = $pageName;
     } elseif (!$pageName and $toolName) {
@@ -3641,13 +3638,13 @@ function view($view_file, $view_data = array()) {
                         flex-shrink: 0;
                         padding-bottom: 0px;
                         min-height: 100%;
-                        background-image: url('$imgForm'); 
+                        background-image: url('$imgForm');
                         $typeImage
                     }
                     .form-image-registration,
                     .form-image-faq{
                         min-height: auto;
-                        background-image: none; 
+                        background-image: none;
                     }
                 }
             ";
@@ -3661,7 +3658,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['clLabelForms'])){
             $styles_str .= "
-            
+
                 .form-wrapper.form-edit .control-label-notes,
                 .form-group .control-label-notes{
                     color:$theme_options_styles[clLabelForms];
@@ -7134,7 +7131,7 @@ function view($view_file, $view_data = array()) {
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 'action_bar',
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
-            'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
+            'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
