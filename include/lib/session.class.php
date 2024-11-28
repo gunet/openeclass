@@ -162,6 +162,7 @@ class Session {
         }
         $_SESSION['flash_new'][] = $key;
     }
+
     public static function has($key) {
         if (isset($_SESSION[$key]['data'])) {
             return TRUE;
@@ -169,18 +170,26 @@ class Session {
             return FALSE;
         }
     }
+
     // Sets automatically generated on next request messages
     public static function Messages($messages, $class='alert-warning'){
-        if(!is_array($messages)) $messages = array($messages);
-
-        foreach ($messages as $i => $message) {
-            $_SESSION['messages'][$class][$i] = $message;
+        if (!is_array($messages)) {
+            $messages = [$messages];
         }
-
-        if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
+        if (!isset($_SESSION['messages'][$class])) {
+            $_SESSION['messages'][$class] = $messages;
+        } else {
+            foreach ($messages as $message) {
+                $_SESSION['messages'][$class][] = $message;
+            }
+        }
+        if (!isset($_SESSION['flash_new'])) {
+            $_SESSION['flash_new'] = [];
+        }
         $_SESSION['flash_new'][] = 'messages';
         return new self;
     }
+
     // Flashes posted variables
     public static function flashPost() {
         foreach ($_POST as $key => $value){
@@ -188,6 +197,7 @@ class Session {
         }
         return new self;
     }
+
     // Flashes posted variable errors
     public function Errors($errors){
         $keys = array();
@@ -203,6 +213,7 @@ class Session {
         $_SESSION['flash_new'][] = 'messages';
         return new self;
     }
+
     public static function get($key) {
         if(isset($_SESSION[$key]['data'])) {
             return $_SESSION[$key]['data'];
@@ -210,6 +221,7 @@ class Session {
             return FALSE;
         }
     }
+
     public static function hasErrors() {
         if(isset($_SESSION['flash_old'])) {
             foreach ($_SESSION['flash_old'] as $row) {
@@ -220,6 +232,7 @@ class Session {
         }
         return FALSE;
     }
+
     public static function hasError($key) {
         if (isset($_SESSION[$key]['errors'][0])){
             return TRUE;
@@ -227,6 +240,7 @@ class Session {
             return FALSE;
         }
     }
+
     public static function getError($key, $delimiter = '') {
         if (isset($_SESSION[$key]['errors'][0])){
             if ($delimiter) {
@@ -239,23 +253,21 @@ class Session {
             return FALSE;
         }
     }
+
+    public static function hasMessages() {
+        return isset($_SESSION['messages']);
+    }
+
     public static function getMessages() {
         if (!isset($_SESSION['messages'])) {
-            return null;
+            return [];
         }
         $item_messages = $_SESSION['messages'];
-        $msg_boxes = '';
-        foreach($item_messages as $class => $value){
-            $msg_boxes .= "
-                <div class='alert $class alert-dismissible fade show' role='alert'>
-                    <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                        <ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
-        }
         unset($_SESSION['messages']);
         if (isset($_SESSION['flash_new'])) {
             $_SESSION['flash_new'] = array_diff($_SESSION['flash_new'], ['messages']);
         }
-        return $msg_boxes;
+        return $item_messages;
     }
 
     // Make sure a language code is valid - if not, default language is Greek
