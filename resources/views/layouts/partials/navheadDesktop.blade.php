@@ -541,7 +541,8 @@
         localStorage.setItem("menu-item", "register");
     }
     if(current_url.includes('/modules/auth/opencourses.php')
-        || current_url.includes('/modules/auth/listfaculte.php')){
+        || current_url.includes('/modules/auth/listfaculte.php')
+        || current_url.includes('/modules/auth/courses.php')){
         localStorage.setItem("menu-item", "lessons");
     }
     if(current_url.includes('/main/portfolio.php')){
