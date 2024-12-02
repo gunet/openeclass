@@ -3138,6 +3138,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE document ADD `prevent_download` int(11) NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::fieldExists('certificate', 'session_id')) {
+        Database::get()->query("ALTER TABLE certificate ADD `session_id` int(11) NOT NULL DEFAULT 0");
+    }
+
     // default options
     $display_login_form = get_config('display_login_form');
     if (is_null($display_login_form)) {
