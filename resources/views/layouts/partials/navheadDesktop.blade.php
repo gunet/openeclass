@@ -557,6 +557,7 @@
        && !current_url.includes('/modules/auth/altnewuser.php')
        && !current_url.includes('/modules/auth/opencourses.php')
        && !current_url.includes('/modules/auth/listfaculte.php')
+       && !current_url.includes('/modules/auth/courses.php')
        && !current_url.includes('/main/portfolio.php')
        && !current_url.includes('/info/faq.php')
        && !current_url.includes('/?redirect_home')){
