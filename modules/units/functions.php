@@ -181,21 +181,21 @@ function show_resources($unit_id)
     $head_content .= "<script>
         $(document).ready(function() {
             let confirmLpCleanAttemptHref;
-            
+
             $('#confirmLpCleanAttemptDialog').modal({
                 show: false,
                 keyboard: false,
                 backdrop: 'static'
             });
-            
+
             $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
               confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
             });
-        
+
             $('#confirmLpCleanAttemptCancel').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
             });
-        
+
             $('#confirmLpCleanAttemptOk').click(function() {
                 $('#confirmLpCleanAttemptDialog').modal('hide');
                 window.location.href = confirmLpCleanAttemptHref;
@@ -966,7 +966,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         } else {
             $gids_sql_ready = "''";
         }
-        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d 
+        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d
                                  AND
                                 (assign_to_specific = 0 OR id IN
                                     (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
@@ -1050,7 +1050,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 $gids_sql_ready = implode("','", array_keys($gids));
             }
         }
-        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d 
+        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d
                        AND
                           (assign_to_specific = '0' OR
                            (assign_to_specific != '0' AND id IN (
@@ -1714,7 +1714,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-            : $urlAppend . "template/icons/h5p_library.svg"; // fallback icon
+            : $urlAppend . "resources/icons/h5p_library.svg"; // fallback icon
         $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
