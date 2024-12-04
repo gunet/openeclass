@@ -21,13 +21,13 @@
 </style>
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             @include('layouts.partials.left_menu')
 
-			<div class="col_maincontent_active">
-                    
+            <div class="col_maincontent_active">
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -43,7 +43,7 @@
 
 					@include('layouts.partials.legend_view')
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     @if($is_editor)
                         <div class='col-12'>
@@ -52,7 +52,7 @@
                                 @if ($h5pcontenttypes)
                                     <div class='btn-group'>
                                         <select id='createpicker' class='selectpicker' title="{{ trans('langCreate') }}" data-style='btn-primary' data-width='fit'>
-                                            
+
                                             <optgroup label="{{ trans('langH5pInteractiveContent') }}">
                                                 <?php $counter = 0; ?>
                                                 @foreach ($h5pcontenttypes as $h5pcontenttype)
@@ -64,7 +64,7 @@
                                                         $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
                                                         $typeIconUrl = (file_exists($typeIconPath))
                                                             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
-                                                            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+                                                            : $urlAppend . "resources/icons/h5p_library.svg"; // fallback icon
                                                         $dataContent = "data-content=\"<img src='$typeIconUrl' alt='$typeTitle' width='24px' height='24px'>$typeTitle\"";
                                                         ?>
                                                         @if($counter == 0)
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     @endif
 
                     @if ($content)
@@ -151,8 +151,8 @@
                 </div>
             </div>
         </div>
-    
-</div>
+
+    </div>
 </div>
 
 @endsection
