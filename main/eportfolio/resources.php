@@ -167,15 +167,14 @@ if ($userdata) {
                                                   <div class='alert alert-success alert-dismissible fade show' role='alert'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langePortfolioResourceAdded</span></div>
                                                   <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='$langClose'></button>
                                               </div>";
-                            redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
+                    } else {
+                        Session::flash('message', $langGeneralError);
+                        Session::flash('alert-class', 'alert-danger');
                     }
-                    Session::flash('message', $langGeneralError);
-                    Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-
                 } elseif ($rtype == 'work_submission') {
-                    $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d AND uid = ?d", $rid, $uid);
+                    $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE assignment_id = ?d AND uid = ?d", $rid, $uid);
                     if($submission) {
                         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $submission->assignment_id);
                         $course_status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $work->course_id)->visible;
@@ -225,16 +224,13 @@ if ($userdata) {
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
                                 Session::flash('message', $langePortfolioResourceAdded);
                                 Session::flash('alert-class', 'alert-success');
-                                redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-
                             }
                         }
+                    } else {
+                        Session::flash('message', $langGeneralError);
+                        Session::flash('alert-class', 'alert-danger');
                     }
-
-                    Session::flash('message', $langGeneralError);
-                    Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-
                 } elseif ($rtype == 'mydocs') {
                     if (($session->status == USER_TEACHER && get_config('mydocs_teacher_enable')) || ($session->status == USER_STUDENT && get_config('mydocs_student_enable'))) {
                         $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
@@ -264,14 +260,12 @@ if ($userdata) {
 
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class', 'alert-success');
-                            redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
+                    } else {
+                        Session::flash('message', $langGeneralError);
+                        Session::flash('alert-class', 'alert-danger');
                     }
-
-                    Session::flash('message', $langGeneralError);
-                    Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['er_id'])) {
@@ -449,7 +443,6 @@ if ($userdata) {
         //show blog_posts
         if ($blog_posts) {
             $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" >';
-            //usort($blog_posts, "cmp");
             $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
 
             foreach ($blog_posts as $post) {
