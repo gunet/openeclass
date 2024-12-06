@@ -83,16 +83,19 @@
 
                     },
                     allowedMetaFields: [
+                        'XHRUpload',
                         'uploadPath',
                         'file_creator',
                         'file_copyrighted',
                         'replace',
                         'uncompress',
-                    ]
+                    ],
+                    shouldRetry: () => false,
                 })
 
                 uppy.setMeta({
                     uploadPath: '{{ $curDirPath }}',
+                    XHRUpload: true,
                 });
 
                 uppy.on('file-added', (file) => {

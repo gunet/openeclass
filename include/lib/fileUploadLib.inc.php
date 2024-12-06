@@ -433,13 +433,25 @@ function make_path($path, $path_components) {
  *
  * @param string  $filename   - The given filename.
  * @param integer $menuTypeID - The menu type to display in case of error.
+ * @param string  $response   - How to handle errors - one of 'html', 'session' or 'json'
  */
-function validateUploadedFile($filename, $menuTypeID = 2) {
+function validateUploadedFile($filename, $menuTypeID = 2, $response = 'html') {
     global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed, $langContactAdmin;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></span></div><br>";
-        draw($tool_content, $menuTypeID, null, $head_content);
+        if ($response == 'html') {
+            $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></span></div><br>";
+            draw($tool_content, $menuTypeID, null, $head_content);
+        } elseif ($response == 'json') {
+            $data = ['message' => "$langUploadedFileNotAllowed '" . q($filename) . "'"];
+            http_response_code(400);
+            echo json_encode($data);
+        } elseif ($response == 'session') {
+            $_SESSION['upload_errors'][] = "$langUploadedFileNotAllowed <b>" . q($filename) . "</b>";
+            http_response_code(400);
+        } else {
+            die("$langUploadedFileNotAllowed $filename");
+        }
         exit;
     }
 }
