@@ -1188,7 +1188,7 @@ if ($can_upload or $user_upload) {
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
-                    Session::Messaeges($langReplaceOK, 'alert-success');
+                    Session::Messages($langReplaceOK, 'alert-success');
                     redirect_to_current_dir();
                 }
             }
