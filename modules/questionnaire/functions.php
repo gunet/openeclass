@@ -35,37 +35,23 @@ function validate_qtype($qtype)
 }
 
 /**
+ * @brief chech if poll has questions
+ * @param $pid
+ * @return bool
+ */
+function hasPollQuestions($pid)
+{
+    $pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
+    if (!$pq) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+/**
  * @brief create colles questions
- * @global type $qcolles1
- * @global type $qcolles2
- * @global type $qcolles3
- * @global type $qcolles4
- * @global type $qcolles5
- * @global type $qcolles6
- * @global type $qcolles7
- * @global type $qcolles8
- * @global type $qcolles9
- * @global type $qcolles10
- * @global type $qcolles11
- * @global type $qcolles12
- * @global type $qcolles13
- * @global type $qcolles14
- * @global type $qcolles15
- * @global type $qcolles16
- * @global type $qcolles17
- * @global type $qcolles18
- * @global type $qcolles19
- * @global type $qcolles20
- * @global type $qcolles21
- * @global type $qcolles22
- * @global type $qcolles23
- * @global type $qcolles24
- * @global type $lcolles1
- * @global type $lcolles2
- * @global type $lcolles3
- * @global type $lcolles4
- * @global type $lcolles5
- * @global type $lcolles6
  * @param type $pid
  */
 function createcolles($pid) {
@@ -199,26 +185,6 @@ function createcolles($pid) {
 
 /**
  * @brief create attls questions
- * @global type $question1
- * @global type $question2
- * @global type $question3
- * @global type $question4
- * @global type $question5
- * @global type $question6
- * @global type $question7
- * @global type $question8
- * @global type $question9
- * @global type $question10
- * @global type $question11
- * @global type $question12
- * @global type $question13
- * @global type $question14
- * @global type $question15
- * @global type $question16
- * @global type $question17
- * @global type $question18
- * @global type $question19
- * @global type $question20
  * @param type $pid
  */
 function createattls($pid) {

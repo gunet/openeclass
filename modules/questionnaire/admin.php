@@ -86,8 +86,8 @@ if (isset($_POST['submitPoll'])) {
         $PollAssignToSpecific = $_POST['assign_to_specific'];
         $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $PollSurveyType = $_POST['survey_type'];
-        $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
-        $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
+        $lti_template = $_POST['lti_template'] ?? NULL;
+        $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
 
         if (isset($pid)) {
@@ -104,6 +104,11 @@ if (isset($_POST['submitPoll'])) {
                         WHERE course_id = ?d AND pid = ?d",
                             $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
                             $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $course_id, $pid);
+                if ($PollSurveyType == POLL_COLLES) {
+                    createcolles($pid);
+                }   elseif($PollSurveyType == POLL_ATTLS) {
+                    createattls($pid);
+                }
             }
             if ($q->affectedRows > 0) {
                 Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_MODIFY,
@@ -525,43 +530,49 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </table>
                     </div>
                 </div>
-            </div>
-            <div class='form-group" . (Session::getError('survey_type') ? ' has-error' : '')." mt-4'>
+            </div>";
+            if (hasPollQuestions($pid)) {
+                $disabled = 'disabled';
+                $tool_content .= "<input type='hidden' name='survey_type' value='$PollSurveyType'>";
+            } else {
+                $disabled = '';
+            }
+            $tool_content .= "<div class='form-group" . (Session::getError('survey_type') ? ' has-error' : '')." mt-4'>
                 <div class='col-sm-12 control-label-notes'>$langType</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
-                        <input type='radio' id='general_type' name='survey_type' value='0'".(($PollSurveyType == POLL_NORMAL || isset($_GET['newPoll'])) ? " checked" : "").">
+                        <input type='radio' id='general_type' name='survey_type' value='0'" . (($PollSurveyType == POLL_NORMAL || isset($_GET['newPoll'])) ? " checked" : "") . " $disabled>
                         <span>$langGeneralSurvey </span>
                       </label>
                     </div>
                     <div class='radio mb-1'>
                       <label>
-                        <input type='radio' id='general_type' class='poll_quick' name='survey_type' value='3'".($PollSurveyType == POLL_QUICK ? " checked" : "").">
+                        <input type='radio' id='general_type' class='poll_quick' name='survey_type' value='3'".($PollSurveyType == POLL_QUICK ? " checked" : "")." $disabled>
                         <span>$langQuickSurvey</span>
                       </label>
                     </div>
                     <div class='radio mb-1 d-flex justify-content-start align-items-center gap-2'>
                       <label>
-                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
+                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "")." $disabled>
                         <span>$langCollesSurvey</span>
                       </label>
                       <span class='fa-solid fa-circle-info' data-bs-toggle='tooltip' data-bs-placement='top' title='$colles_desc' style='margin-bottom: 10px;'></span>
                     </div>
                     <div class='radio d-flex justify-content-start align-items-center gap-2'>
                       <label>
-                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
+                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "")." $disabled>
                         <span>$langATTLSSurvey</span>
                       </label>
                       <span class='fa-solid fa-circle-info' data-bs-toggle='tooltip' data-bs-placement='top' title='$rate_scale' style='margin-bottom: 10px;'></span>";
-    $limesurveyapp = ExtAppManager::getApp(strtolower(LimesurveyApp::NAME));
-    if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
-        $tool_content .= "</div><div class='radio'>
-                      <label>
-                        <input type='radio' id='limesurvey_type' name='survey_type' value='".POLL_LIMESURVEY."'".($PollSurveyType == POLL_LIMESURVEY ? " checked" : "").">
-                        <span>$langLimeSurvey</span>
-                      </label>";
-    }
+                    $limesurveyapp = ExtAppManager::getApp(strtolower(LimesurveyApp::NAME));
+                    if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
+                        $tool_content .= "</div><div class='radio'>
+                                      <label>
+                                        <input type='radio' id='limesurvey_type' name='survey_type' value='".POLL_LIMESURVEY."'".($PollSurveyType == POLL_LIMESURVEY ? " checked" : "").">
+                                        <span>$langLimeSurvey</span>
+                                      </label>";
+                    }
     $tool_content .= "<span class='help-block'>".Session::getError('survey_type')."</span>
                     </div>
                 </div>
