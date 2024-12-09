@@ -87,8 +87,7 @@ if ($pollObj && $pollObj->type == POLL_LIMESURVEY) {
     $pollIsLime = true;
 }
 // check poll validity
-$pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $_REQUEST['pid']);
-if(!$pq && !$pollIsLime) {
+if(!hasPollQuestions($_REQUEST['pid']) && !$pollIsLime) {
     Session::flash('message',$langPollNoQuestions);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
