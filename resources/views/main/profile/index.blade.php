@@ -34,7 +34,7 @@
                                     </div>
                                     <h3 class='text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h3>
                                     <div class='text-center title-default-line-height m-3'>
-                                        {!! mailto($userdata->username) !!}
+                                        {{ $userdata->username }}
                                     </div>
                                     @if(get_config('eportfolio_enable'))
                                         <p class='text-center mt-2'>
