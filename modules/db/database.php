@@ -268,7 +268,7 @@ final class Database {
     }
 
     private function queryImpl($statement, $isTransactional, $callback_fetch, $callback_error, $requestType, $variables) {
-        $init_time = microtime();
+        $init_time = microtime(true);
         $backtrace_entry = debug_backtrace();
         $backtrace_info = $backtrace_entry[2];
 
