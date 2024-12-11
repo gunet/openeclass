@@ -1584,6 +1584,18 @@ function format_time_duration($sec, $hourLimit = 24, $display_days = true) {
     }
 }
 
+
+/**
+ * @brief: convert a 'HH:MM:SS' string to seconds
+ * (https://stackoverflow.com/questions/4834202/convert-time-in-hhmmss-format-to-seconds-only)
+ * @param string $time
+ * @return int
+ */
+function timeToSeconds(string $time): int {
+    return array_reduce(explode(':', $time), fn ($x, $i) => $x * 60 + $i, 0);
+}
+
+
 // Move entry $id in $table to $direction 'up' or 'down', where
 // order is in field $order_field and id in $id_field
 // Use $condition as extra SQL to limit the operation

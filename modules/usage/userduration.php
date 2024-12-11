@@ -57,14 +57,14 @@ if (isset($_GET['u'])) { //  stats per user
     }
 
     $user_actions = Database::get()->queryArray("SELECT
-                                    SUM(ABS(actions_daily.duration)) AS duration,
-                                    module_id
-                                    FROM actions_daily
-                                    WHERE course_id = ?d
-                                    AND user_id = ?d
-                                    AND module_id != " . MODULE_ID_TC . "                             
-                                    GROUP BY module_id", $course_id, $_GET['u']);
-
+                            SUM(ABS(actions_daily.duration)) AS duration,
+                              module_id
+                            FROM actions_daily
+                            WHERE course_id = ?d
+                              AND user_id = ?d
+                             AND module_id != " . MODULE_ID_TC . "
+                             AND module_id != " . MODULE_ID_LP . "
+                            GROUP BY module_id", $course_id, $_GET['u']);
 
     if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
 
@@ -90,6 +90,13 @@ if (isset($_GET['u'])) { //  stats per user
         foreach ($user_actions as $ua) {
             $mod = which_module($ua->module_id);
             $dur = format_time_duration(0 + $ua->duration, 24, false);
+            $data[] = [ $mod, $dur ];
+        }
+        // learning path duration
+        $lp_time = timeToSeconds(get_lp_stats($course_id, $_GET['u']));
+        if ($lp_time > 0) {
+            $mod =  which_module(MODULE_ID_LP);
+            $dur = format_time_duration($lp_time, 24, false);
             $data[] = [ $mod, $dur ];
         }
 
@@ -173,6 +180,15 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= "<td>" . format_time_duration(0 + $ua->duration, 24, false) . "</td>";
             $tool_content .= "</tr>";
         }
+
+        // learning path duration
+        $lp_time = timeToSeconds(get_lp_stats($course_id, $_GET['u']));
+        if ($lp_time > 0) {
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>" . which_module(MODULE_ID_LP) . "</td>";
+            $tool_content .= "<td>" . format_time_duration($lp_time, 24, false) . "</td>";
+            $tool_content .= "</tr>";
+        }
         $tool_content .= "</table></div></div>";
 
         // user last logins
@@ -204,14 +220,16 @@ if (isset($_GET['u'])) { //  stats per user
         draw($tool_content, 2);
     }
 } else if ($is_course_reviewer and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
+
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT
-                            SUM(actions_daily.duration) AS duration, user_id,
-                              module_id
-                            FROM actions_daily
-                            WHERE course_id = ?d
-                              AND module_id = ?d
-                            GROUP BY user_id", $course_id, $module);
+                        SUM(actions_daily.duration) AS duration, user_id,
+                          module_id
+                        FROM actions_daily
+                        WHERE course_id = ?d
+                          AND module_id = ?d
+                        GROUP BY user_id", $course_id, $module);
+
 
 
     if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
@@ -229,7 +247,12 @@ if (isset($_GET['u'])) { //  stats per user
             $grp_name = user_groups($course_id, $um->user_id, false);
             $user_am = uid_to_am($um->user_id);
             $user_details = uid_to_name($um->user_id);
-            $data[] = [ $user_details, $grp_name, $user_am, format_time_duration(0 + $um->duration, 24, false) ];
+            if ($module == MODULE_ID_LP) {
+                $lp_time = timeToSeconds(get_lp_stats($course_id, $um->user_id));
+                $data[] = [$user_details, $grp_name, $user_am, format_time_duration(0 + $lp_time, 24, false)];
+            } else {
+                $data[] = [$user_details, $grp_name, $user_am, format_time_duration(0 + $um->duration, 24, false)];
+            }
         }
 
         $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
@@ -294,7 +317,13 @@ if (isset($_GET['u'])) { //  stats per user
             }
             $tool_content .= "<td>" . $grp_name . "</td>";
             $tool_content .= "<td>" . $user_am . "</td>";
-            $tool_content .= "<td>" . format_time_duration(0 + $um->duration, 24, false) . "</td>";
+
+            if ($module == MODULE_ID_LP) {
+                $lp_time = timeToSeconds(get_lp_stats($course_id, $um->user_id));
+                $tool_content .= "<td>" . format_time_duration(0 + $lp_time, 24, false) . "</td>";
+            } else {
+                $tool_content .= "<td>" . format_time_duration(0 + $um->duration, 24, false) . "</td>";
+            }
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div></div>";

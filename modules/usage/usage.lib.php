@@ -685,9 +685,6 @@ function count_course_users($cid, $user_type = null){
 /**
  * Return module title based on the course module id
  * @param int mid the id of the module
- * @global $modules,
- * @global $admin_modules,
- * @global static_modules,
  * @return string the title of the course module
 */
 function which_module($mid){
@@ -759,6 +756,30 @@ function course_visits($cid) {
 
     return $logins;
 }
+
+/**
+ * @brief get learning path statistics for user_id=$uid and course_id=$cid
+ * @param $cid
+ * @param $uid
+ * @return string
+ */
+function get_lp_stats($cid, $uid) {
+
+    require_once 'include/lib/learnPathLib.inc.php';
+
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $cid);
+    $time = "00:00:00";
+
+    foreach ($learningPathList as $learningPath) {
+        $data = get_learnPath_progress_details($learningPath->learnPath_id, $uid, true, null, $cid);
+        $lpTotalTime = $data[1];
+        if (!empty($lpTotalTime)) {
+            $time = addScormTime($time, $lpTotalTime);
+        }
+    }
+    return $time;
+}
+
 
 /**
  * @brief Transform seconds to h:mm:ss
@@ -855,17 +876,19 @@ function user_duration_per_course($u) {
                                         ON actions_daily.user_id = course_user.user_id
                                         AND actions_daily.course_id = course_user.course_id
                                         AND actions_daily.module_id != " . MODULE_ID_TC . "
+                                        AND actions_daily.module_id != " . MODULE_ID_LP . "
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
                                         GROUP BY course.id
                                         ORDER BY duration DESC", $u);
     if (count($result) > 0) {  // found courses ?
         foreach ($result as $item) {
-            $totalDuration += $item->duration;
+            $lp_duration = timeToSeconds(get_lp_stats(course_code_to_id($item->code), $u)); // learning path duration
+            $totalDuration += $item->duration + $lp_duration;
             $duration[$item->code] = $item->duration;
         }
 
-    $totalDuration = format_time_duration(0 + $totalDuration, 240);
+        $totalDuration = format_time_duration(0 + $totalDuration, 24);
 
     $tool_content .= "<div class='text-center mb-4'>
                         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoUserDuration</span></div>
@@ -885,7 +908,7 @@ function user_duration_per_course($u) {
         $tool_content .= "
                       <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                           <div>" . q(course_code_to_title($code)) . "</div>
-                          <div>" . format_time_duration(0 + $time) . "</div>
+                          <div>" . format_time_duration(0 + $time + timeToSeconds(get_lp_stats(course_code_to_id($code), $u))) . "</div>
                       </li>";
     }
     $tool_content .= "
