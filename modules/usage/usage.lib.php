@@ -687,9 +687,6 @@ function count_course_users($cid, $user_type = null){
 /**
  * Return module title based on the course module id
  * @param int mid the id of the module
- * @global $modules,
- * @global $admin_modules,
- * @global static_modules,
  * @return string the title of the course module
 */
 function which_module($mid){
@@ -761,6 +758,30 @@ function course_visits($cid) {
 
     return $logins;
 }
+
+/**
+ * @brief get learning path statistics for user_id=$uid and course_id=$cid
+ * @param $cid
+ * @param $uid
+ * @return string
+ */
+function get_lp_stats($cid, $uid) {
+
+    require_once 'include/lib/learnPathLib.inc.php';
+
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $cid);
+    $time = "00:00:00";
+
+    foreach ($learningPathList as $learningPath) {
+        $data = get_learnPath_progress_details($learningPath->learnPath_id, $uid, true, null, $cid);
+        $lpTotalTime = $data[1];
+        if (!empty($lpTotalTime)) {
+            $time = addScormTime($time, $lpTotalTime);
+        }
+    }
+    return $time;
+}
+
 
 /**
  * @brief Transform seconds to h:mm:ss
@@ -856,46 +877,48 @@ function user_duration_per_course($u) {
                                         ON actions_daily.user_id = course_user.user_id
                                         AND actions_daily.course_id = course_user.course_id
                                         AND actions_daily.module_id != " . MODULE_ID_TC . "
+                                        AND actions_daily.module_id != " . MODULE_ID_LP . "
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
                                         GROUP BY course.id
                                         ORDER BY duration DESC", $u);
     if (count($result) > 0) {  // found courses ?
         foreach ($result as $item) {
-            $totalDuration += $item->duration;
+            $lp_duration = timeToSeconds(get_lp_stats(course_code_to_id($item->code), $u)); // learning path duration
+            $totalDuration += $item->duration + $lp_duration;
             $duration[$item->code] = $item->duration;
         }
 
-    $totalDuration = format_time_duration(0 + $totalDuration, 240);
+        $totalDuration = format_time_duration(0 + $totalDuration, 24);
 
-    $tool_content .= "<div class='row alert alert-info text-center'>
-                        <span class='panel-title'>"  . uid_to_name($_SESSION['uid']) . "</span>
-                        <div style='margin-bottom: 10px;'><strong>$langTotalDuration:</strong> " . $totalDuration . "</div>
-                        <div>$langInfoUserDuration</div>
-                    </div>";
+        $tool_content .= "<div class='row alert alert-info text-center'>
+                            <span class='panel-title'>"  . uid_to_name($_SESSION['uid']) . "</span>
+                            <div style='margin-bottom: 10px;'><strong>$langTotalDuration:</strong> " . $totalDuration . "</div>
+                            <div>$langInfoUserDuration</div>
+                        </div>";
 
-    $tool_content .= "
-                <div class='row margin-bottom-fat margin-top-fat'>
-                  <div class='col-xs-12'>
-                    <ul class='list-group'>
-                      <li class='list-group-item disabled'>
-                        <div class='row'>
-                          <div class='col-sm-12'><strong>$langDurationVisitsPerCourse</strong></div>
-                        </div>
-                      </li>";
-    foreach ($duration as $code => $time) {
         $tool_content .= "
-                      <li class='list-group-item'>
-                        <div class='row'>
-                          <div class='col-sm-8'><b>" . q(course_code_to_title($code)) . "</b></div>
-                          <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time) . "</div>
-                        </div>
-                      </li>";
-    }
-    $tool_content .= "
-                    </ul>
-                  </div>
-                </div>";
+                    <div class='row margin-bottom-fat margin-top-fat'>
+                      <div class='col-xs-12'>
+                        <ul class='list-group'>
+                          <li class='list-group-item disabled'>
+                            <div class='row'>
+                              <div class='col-sm-12'><strong>$langDurationVisitsPerCourse</strong></div>
+                            </div>
+                          </li>";
+        foreach ($duration as $code => $time) {
+            $tool_content .= "
+                          <li class='list-group-item'>
+                            <div class='row'>
+                              <div class='col-sm-8'><b>" . q(course_code_to_title($code)) . "</b></div>
+                              <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time + timeToSeconds(get_lp_stats(course_code_to_id($code), $u))) . "</div>
+                            </div>
+                          </li>";
+        }
+        $tool_content .= "
+                        </ul>
+                      </div>
+                    </div>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons</div>";
     }
@@ -916,11 +939,12 @@ function user_duration_course($u) {
                                 FROM actions_daily
                                 WHERE course_id = ?d
                                 AND user_id = ?d
-                                AND actions_daily.module_id != " . MODULE_ID_TC,
+                                AND actions_daily.module_id != " . MODULE_ID_TC . "
+                                AND actions_daily.module_id != " . MODULE_ID_LP,
                             $course_id, $u);
 
     if ($q) {
-        $totalDuration = format_time_duration(0 + $q->duration, 24, false);
+        $totalDuration = format_time_duration(0 + $q->duration + timeToSeconds(get_lp_stats($course_id, $u)), 24, false);
     }
     return $totalDuration;
 }
