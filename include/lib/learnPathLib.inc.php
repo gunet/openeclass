@@ -591,8 +591,11 @@ function get_learnPath_progress($lpid, $lpUid) {
     return calculate_learnPath_progress($lpid, $modules);
 }
 
-function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null): array {
-    global $course_id;
+function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null): array {
+
+    if ($course_id == null) {
+        $course_id = $GLOBALS['course_id'];
+    }
 
     // find progression for this user in each module of the path
     $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`,
