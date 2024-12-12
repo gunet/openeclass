@@ -663,7 +663,7 @@ if ($can_upload or $user_upload) {
                                            $checkFileSQL LIMIT 1",
                                         "^$uploadPath/[^/]+$", $checkFileName);
         if ($result) {
-            if (isset($_POST['replace']) and (!$uploading_as_user or $result->lock_user_id == $uid)) {
+            if (isset($_POST['replace']) and $_POST['replace'] == 1 and (!$uploading_as_user or $result->lock_user_id == $uid)) {
                 // Delete old file record when replacing file
                 $file_path = $result->path;
                 $vis = $result->visible;
