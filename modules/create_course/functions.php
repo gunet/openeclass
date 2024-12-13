@@ -171,3 +171,133 @@ function default_modules_collaboration() {
     }
 
 }
+
+/**
+ * @brief Import CADMOS file (.cdm) into course
+ * @param string $code course code
+ * @param string $filename CADMOS file path
+ * @return boolean
+ */
+function import_cadmos_file($course_id, $course_code, $path) {
+    global $webDir;
+
+    $target = $webDir . "/courses/$course_code/cadmos";
+    mkdir($target, 0755);
+    $zip = new ZipArchive;
+    if ($zip->open($path)) {
+        $zip->extractTo($target);
+        $zip->close();
+        $cadmos = json_decode(file_get_contents("$target/source.json"), true);
+
+echo '<pre>'; print_r($cadmos); echo '<pre>';
+
+        $actorData = [];
+        $activityData = [];
+        $taskData = [];
+        $activityTypes = [];
+        $resourceTypes = [];
+        $resourceCopyrights = [];
+        $lessonInfoData = [];
+        $conceptualData = [];
+
+        foreach($FlowBase as $flowBase){
+
+            // Accessing the activities
+            $activities = $flowBase['Activities'];
+            foreach ($activities as $activity) {
+                if (isset($activity['Description']) and isset($activity['title'])) {
+                    $activityData[] = [
+                        'Activity Title' => $activity['title'],
+                        'Activity Description' => $activity['Description'],
+                    ];
+                }
+
+                if (isset($activity['tasks']) and $activity['tasks']) {
+                    foreach ($activity['tasks'] as $task){
+                        $tasktitle = $task['title'];
+                        $taskData[] = [
+                            'Task Title' => $tasktitle,
+                        ];
+                    }
+                }
+            }
+        }
+
+        $lessoninfoextras = $cadmos['data']['LessonInfoExtras'];
+        $simple_activity = $lessoninfoextras['Simple_activity_types'];
+        $resource_type = $lessoninfoextras['Resource_types'];
+        $resource_copyright = $lessoninfoextras['Resource_copyright'];
+
+        foreach ($simple_activity as $activity){
+            $activityTypes[] = $activity;
+        }
+
+        foreach ($resource_type as $types){
+            $resourceTypes[] = $types;
+        }
+
+        foreach ($resource_copyright as $copyright){
+            $resourceCopyrights[] = $copyright;
+        }
+
+        $lessonInfo = $cadmos['data']['LessonInfo'];
+        // Decode specific values
+        $strategyName = json_decode('"' . $lessonInfo['StrategyName'] . '"');
+        $durationNumber = $lessonInfo['DurationNumber'];
+        $durationType = $lessonInfo['DurationType'];
+        $educationLevel = json_decode('"' . $lessonInfo['EducationLevel'] . '"');
+        $subjectArea = json_decode('"' . $lessonInfo['SubjectArea'] . '"');
+        $description = $cadmos['data']['LessonInfo']['Description'];
+        $goals = $cadmos['data']['LessonInfo']['Goals'];
+        $actors = $cadmos['data']['LessonInfo']['Actors'];
+        $learners = $cadmos['data']['LessonInfo']['Learners'];
+        $staffroles = $cadmos['data']['LessonInfo']['StaffRoles'];
+
+        $lessonInfoData = array(
+            'Strategy Name' => $strategyName,
+            'Duration' => $durationNumber . ' ' . $durationType,
+            'Education Level' => $educationLevel,
+            'Subject Area' => $subjectArea,
+            'Description' => $description,
+            'Goals' => $goals,
+            'Actors' => $actors,
+            'Learners' => $learners,
+            'StaffRoles' => $staffroles,
+        );
+
+        $conceptualBase = $cadmos['data']['Conceptual']['ConceptualBase'];
+        // Looping through the "ConceptualBase" array
+        $titles = [];
+        $descriptions = [];
+        $resourceLocations = [];
+        $type1 = [];
+        $type2 = [];
+
+        // Extract data
+        foreach ($conceptualBase as $item) {
+            foreach ($item['children'] as $child) {
+                if (isset($child['ModalData'])) {
+                    $modalData = $child['ModalData'];
+                    $titles[] = $modalData['Title'];
+                    $descriptions[] = $modalData['Description'];
+                    $type1[] = $modalData['Type'];
+                    foreach($child['children'] as $child2){
+                        if (isset($child2['ModalData'])) {
+                            $modalData2 = $child2['ModalData'];
+                            $resourceLocations[] = $modalData2['ResourceLocation'];
+                            $type2[] = $modalData2['Type'];
+                        }
+                    }
+                }
+            }
+        }
+
+die('------ ok -----');
+
+    }
+    return true;
+}
+
+function applyMapping($value, $mapping) {
+    return isset($mapping[$value]) ? $mapping[$value] : $value;
+}

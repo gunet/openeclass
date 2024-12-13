@@ -411,6 +411,7 @@ $langDisableForumNotifications = "Aπενεργοποίηση ενημέρωση
 $langPublicDocumentManagement = 'Δημόσια διαχείριση εγγράφων';
 $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστολή και διαχείριση αρχείων στα «Έγγραφα» από όλους τους εγγεγραμμένους χρήστες.';
 $langPassCode = "Συνθηματικό πρόσβασης";
+$langUploadCadmosFile = 'Δημιουργία μαθήματος από αρχείο CADMOS';
 
 // listreq.php
 
@@ -2795,6 +2796,7 @@ $langHierarchyTestSubCategory = 'Υποκατηγορία';
 $langEmailSendWarn = 'Για την επιτυχή αποστολή ανακοινώσεων μέσω e-mail
     από την πλατφόρμα, θα πρέπει είτε να επιλέξετε μέθοδο αποστολής μηνυμάτων
     SMTP ή sendmail, είτε να ορίσετε τη διεύθυνση κοινοποίησης ανακοινώσεων.';
+$lang_course_cadmos = 'Ενεργοποίηση εισαγωγής αρχείων CADMOS κατά τη δημιουργία μαθημάτων';
 
 /* * ******************************************************
  * learnpath.php
@@ -6992,7 +6994,7 @@ $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langAddConsultantComments = "Οι παρατηρήσεις του συμβούλου προστέθηκαν με επιτυχία.";
 $langContinueToDelComment = "Θέλετε να προχωρήσετε στην διαγραφή των σχολίων για τον χρήστη?";
-$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και 
+$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και
                                 τα <strong>σχόλια</strong> θα διαγραφούν και θα αντικατασταθούν με τις νέες τιμές.";
 $langDelConsultantComments = "Τα σχόλια διαγράφηκαν με επιτυχία.";
 $langNotifyCommentsConsultant = "Ειδοποίηση μέσω email στον χρήστη σχετικά με τα τις παρατηρήσεις του συμβούλου";

@@ -6271,3 +6271,4 @@ $langAttendanceCriterion = "User attendance criterion";
 $langConsultingTools = "Consulting tools";
 $langChooseOtherSession = "You have selected a different session than the current one. Try again!";
 $langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the carpet will be removed from the current screen.";
+$lang_course_cadmos = 'Enable creation of courses from CADMOS files';

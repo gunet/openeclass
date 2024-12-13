@@ -99,6 +99,14 @@
             }
         });
 
+        $('input[name=view_type]').on('change', function () {
+            if ($('#units_cadmos').is(":checked")) {
+                $('#cadmos_file_div').show();
+            } else {
+                $('#cadmos_file_div').hide();
+            }
+        });
+
     });
 
 </script>
@@ -169,7 +177,7 @@
                                 </ul>
                                 <div class='tab-content mt-3' id='tabs-tabContent'>
                                     <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
-                                        <input type='file' name='course_image' id='course_image'>
+                                        <input type='file' name='course_image' id='course_image' class='form-control'>
                                     </div>
                                     <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
                                         <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#CoursesImagesModal'>
@@ -238,6 +246,17 @@
                                         {{ trans('langFlippedClassroom') }}
                                     </label>
                                 </div>
+                                @if (get_config('cadmos_course_creation'))
+                                <div class="radio mb-2" id="radio_cadmos">
+                                    <label>
+                                        <input type='radio' name='view_type' value='units' id='units_cadmos'>
+                                        {{ trans('langUploadCadmosFile') }}
+                                    </label>
+                                </div>
+                                <div class="mb-2" id="cadmos_file_div" style="display: none">
+                                    <input type="file" name="cadmos_file" class="form-control">
+                                </div>
+                                @endif
 
                                 <div class="radio
                                             @if(!get_config('show_collaboration') and !get_config('show_always_collaboration'))

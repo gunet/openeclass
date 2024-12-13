@@ -552,6 +552,13 @@
                                                     </label>
                                                     <span class="help-block">{{ trans('lang_openCourse_inModal_Info') }}</span>
                                                 </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='cadmos_course_creation' value='1' {{ $cbox_cadmos_course_creation }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_course_cadmos') }}
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </fieldset>
