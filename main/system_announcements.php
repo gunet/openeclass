@@ -25,40 +25,52 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-    $keyword = '%' . $_GET['sSearch'] . '%';
-
-    $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement");
-    $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement WHERE title LIKE ?s", $keyword);
-    if ($limit>0) {
-        $extra_sql = 'LIMIT ?d, ?d';
-        $extra_terms = array($offset, $limit);
+    if (isset($_GET['sSearch']) and $_GET['sSearch'] != '') {
+        $keyword = '%' . $_GET['sSearch'] . '%';
     } else {
-        $extra_sql = '';
-        $extra_terms = array();
+        $keyword = [];
     }
 
-    $student_sql = 'AND visible = 1 AND important = 0 AND (`begin` <= NOW() OR `begin` IS NULL) AND (`end` >= NOW() OR `end` IS NULL)';
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE title LIKE ?s $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $keyword, $extra_terms);
+    $announcement_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement WHERE visible = 1 AND important = 0")->total;
+    if ($limit > 0) {
+        $extra_sql = 'LIMIT ?d, ?d';
+        $extra_terms = [$offset, $limit];
+    } else {
+        $extra_sql = '';
+        $extra_terms = [];
+    }
 
-    $data['iTotalRecords'] = $all_announc->total;
-    $data['iTotalDisplayRecords'] = $filtered_announc->total;
-    $data['aaData'] = array();
+    $student_sql = ($keyword? 'title LIKE ?s AND': '') .
+        ' visible = 1 AND important = 0 AND (`begin` <= NOW() OR `begin` IS NULL) AND (`end` >= NOW() OR `end` IS NULL)';
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE $student_sql
+        ORDER BY `order` DESC , `date` DESC $extra_sql", $keyword, $extra_terms);
+
+    if ($keyword) {
+        $filtered_total = Database::get()->querySingle("SELECT COUNT(*) AS total
+            FROM admin_announcement WHERE $student_sql", $keyword)->total;
+    } else {
+        $filtered_total = $announcement_total;
+    }
+
+    $data['iTotalRecords'] = $announcement_total;
+    $data['iTotalDisplayRecords'] = $filtered_total;
+    $data['aaData'] = [];
     foreach ($result as $myrow) {
 
         if ($myrow->order != 0) {
             $pinned = "<span class='fa fa-thumb-tack float-end text-danger'></span>";
         } else {
-            $pinned = "";
+            $pinned = '';
         }
 
         $data['aaData'][] = array(
             '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
-                            <a href='".$_SERVER['SCRIPT_NAME']."?an_id=".$myrow->id."'>".standard_text_escape($myrow->title)."</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?an_id={$myrow->id}'>" . q($myrow->title) . "</a>
                             $pinned
                         </div>
-                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
-                        </div>",
+                        <div class='table_td_body' data-id='{$myrow->id}'>" . standard_text_escape($myrow->body) . "</div>
+                    </div>",
             '1' => format_locale_date(strtotime($myrow->date))
         );
     }
@@ -68,8 +80,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
 if (isset($_GET['an_id'])) {
 
-    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['an_id']));
-    if(empty($row)){
+    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ?d", $_GET['an_id']);
+    if (!$row) {
         redirect_to_home_page("main/system_announcements/");
     }
 
@@ -81,9 +93,9 @@ if (isset($_GET['an_id'])) {
             'button-class' => 'btn-secondary']
     ],false);
 
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAnnouncements);
+    $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'], "name" => $langAnnouncements);
 
-    $data['title'] = standard_text_escape($row->title);
+    $data['title'] = $row->title;
     $data['date'] = format_locale_date(strtotime($row->date));
     $data['body'] = standard_text_escape($row->body);
 
