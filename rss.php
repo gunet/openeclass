@@ -1,20 +1,19 @@
 <?php
-
 /*
-*  ========================================================================
-*  * Open eClass
-*  * E-learning and Course Management System
-*  * ========================================================================
+ *  ========================================================================
+ *  * Open eClass
+ *  * E-learning and Course Management System
+ *  * ========================================================================
  *  * Copyright 2003-2024, Greek Universities Network - GUnet
-*  *
+ *  *
  *  * Open eClass is an open platform distributed in the hope that it will
-*  * be useful (without any warranty), under the terms of the GNU (General
-    *  * Public License) as published by the Free Software Foundation.
+ *  * be useful (without any warranty), under the terms of the GNU (General
+ *  * Public License) as published by the Free Software Foundation.
  *  * The full license can be read in "/info/license/license_gpl.txt".
  *  *
  *  * Contact address: GUnet Asynchronous eLearning Group
-*  *                  e-mail: info@openeclass.org
-*  * ========================================================================
+ *  *                  e-mail: info@openeclass.org
+ *  * ========================================================================
  *
  */
 
@@ -24,12 +23,10 @@
 
 require_once 'include/init.php';
 
-
 $result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
     FROM admin_announcement
     WHERE visible = 1 AND lang = ?s
     ORDER BY `date` DESC", $language);
-
 
 if ($result) {
     $lastbuilddate = $result->dateformat;
@@ -48,7 +45,6 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>" . $language . "</language>";
 
-
 $sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
         FROM admin_announcement
         WHERE visible = 1 AND lang = ?s
@@ -58,9 +54,9 @@ if ($sql) {
     foreach ($sql as $r) {
         echo "<item>";
         echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-        echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r->id . "</link>";
+        echo "<link>{$urlServer}main/system_announcements.php?an_id={$r->id}</link>";
         echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
-        echo "<pubDate>" . $r->dateformat . "</pubDate>";
+        echo "<pubDate>{$r->dateformat}</pubDate>";
         echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
         echo "</item>";
     }

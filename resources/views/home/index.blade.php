@@ -305,7 +305,7 @@
                                         </div>
                                             @if(count($announcements) > 0)
                                                 <div class='d-flex justify-content-end align-items-center'>
-                                                    <h3 class='mb-0'><a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a></h3>
+                                                    <h3 class='mb-0'><a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlAppend }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a></h3>
                                                 </div>
                                             @endif
                                         </div>
@@ -330,7 +330,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class='col-md-10 mt-md-0 mt-2'>
-                                                                    <h3 class='mb-0'><a class='TextBold' style='font-size: 16px;' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                                    <h3 class='mb-0'><a class='TextBold' style='font-size: 16px;' href='{{ $urlAppend }}main/system_announcements.php?an_id={{ $announcement->id }}'>
                                                                         {!! $announcement->title !!}
                                                                     </a></h3>
                                                                     <div class='truncate-announcement'>{!! $announcement->body !!}</div>
