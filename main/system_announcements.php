@@ -21,7 +21,7 @@
 require_once '../include/baseTheme.php';
 $pageName = $langAdminAn;
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
@@ -84,14 +84,6 @@ if (isset($_GET['an_id'])) {
     if (!$row) {
         redirect_to_home_page("main/system_announcements/");
     }
-
-    $data['action_bar'] = action_bar([
-        ['title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary',
-            'button-class' => 'btn-secondary']
-    ],false);
 
     $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'], "name" => $langAnnouncements);
 
