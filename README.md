@@ -1,9 +1,6 @@
-# The Open eClass Platform 4.0 (in progress)
+# The Open eClass Platform 4.0.1
 
 http://www.openeclass.org/
-
-**Warning**: This is the next major release, currently under development. The
-current stable release is in the 3.15.x branch.
 
 The Open eClass platform (formerly known as GUnet eClass) is a complete Course
 Management System, used to store and present educational materials. It is the
@@ -18,22 +15,19 @@ have contributed a great amount of work and ideas and we would like to express
 our gratitude to all of them for their support. A complete list of
 contributors can be found in the CREDITS.txt file.
 
-Installation of Open eClass requires a web server with support for PHP >= 8.0
+Installation of Open eClass requires a web server with support for PHP >= 8.1
 and a database server (MySQL or MariaDB). You can find detailed installation
 instructions as well as other manuals at the following address:
 
 http://docs.openeclass.org/en/start
 
 GUnet Asychronous e-Learning Group
-June 2023
+December 2024
 
 
-# Πλατφόρμα Open eClass 4.0 (υπό ανάπτυξη)
+# Πλατφόρμα Open eClass 4.0.1
 
 http://www.openeclass.org/
-
-**Σημείωση**: Αυτή είναι η υπό ανάπτυξη επόμενη μείζων έκδοση της πλατφόρμας.
-Η τρέχουσα σταθερή έκδοση βρίσκεται στο branch 3.15.x.
 
 Η πλατφόρμα Open eClass (παλιότερη ονομασία: GUnet eClass) είναι ένα
 ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την
@@ -65,11 +59,10 @@ http://www.openeclass.org/
 και βελτίωση της πλατφόρμας. (Περισσότερες πληροφορίες στο αρχείο CREDITS.txt)
 
 Για την εγκατάσταση της πλατφόρμας απαιτείται ένας εξυπηρετητής web με υποστήριξη
-PHP >= 8.0 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
+PHP >= 8.1 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
 και άλλα εγχειρίδια της πλατφόρμας μπορούν να βρεθούν στη διεύθυνση:
 
 http://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Νοέμβριος 2023
-
+Δεκέμβριος 2024
