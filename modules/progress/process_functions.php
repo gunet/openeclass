@@ -39,9 +39,6 @@ function add_assignment_to_certificate($element, $element_id, $activity_type) {
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $operator = $_POST['operator'][$data];
                 $threshold = $_POST['threshold'][$data];
-            }elseif ($activity_type == AssignmentSubmitEvent::ACTIVITY){
-                $operator = null;
-                $threshold = null;
             }
             Database::get()->query("INSERT INTO {$element}_criterion
                                     SET $element = ?d,
@@ -410,8 +407,7 @@ function add_course_completion_to_certificate($element_id) {
         }
     }
 
-    Session::flash('message',$langQuotaSuccess);
-    Session::flash('alert-class', 'alert-success');
+    Session::Messages($langQuotaSuccess, 'alert-success');
     redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$element_id");
 
 }
@@ -464,8 +460,7 @@ function add_unit_completion_to_certificate($element_id, $unit_id) {
         }
     }
 
-    Session::flash('message', $langQuotaSuccess);
-    Session::flash('alert-class', 'alert-success');
+    Session::Messages($langQuotaSuccess, 'alert-success');
     $localhostUrl = localhostUrl();
 
     redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
@@ -719,7 +714,7 @@ function is_cert_visible($element, $element_id) {
  */
 function has_certificate_completed($uid, $element, $element_id) {
 
-    $sql = Database::get()->querySingle("SELECT completed FROM user_$element WHERE $element = ?d AND user = ?d", $element_id, $uid);
+    $sql = Database::get()->querySingle("SELECT completed FROM user_{$element} WHERE $element = ?d AND user = ?d", $element_id, $uid);
     if ($sql) {
         if (!$sql->completed) {
             return false;
@@ -1087,35 +1082,35 @@ function get_resource_details($element, $resource_id) {
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langExercise";
+                $type = $langExercise;
                 break;
         case AssignmentEvent::ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource);
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langAssignment";
+                $type = $langAssignment;
             break;
         case AssignmentSubmitEvent::ACTIVITY:
             $q = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource);
             if ($q) {
                 $title = $q->title;
             }
-            $type = "$langAssignmentParticipation";
+            $type = $langAssignmentParticipation;
             break;
         case LearningPathEvent::ACTIVITY:
                 $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
                 if ($q) {
                     $title = $q->name;
                 }
-                $type = "$langLearnPath";
+                $type = $langLearnPath;
             break;
         case LearningPathDurationEvent::ACTIVITY:
             $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
             if ($q) {
                 $title = $q->name;
             }
-            $type = "$langOfLearningPathDuration";
+            $type = $langOfLearningPathDuration;
             break;
         case ViewingEvent::DOCUMENT_ACTIVITY:
                 $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document
@@ -1123,21 +1118,21 @@ function get_resource_details($element, $resource_id) {
                 foreach ($cer_res as $res_data) {
                     $title = $res_data->file_details;
                 }
-                $type = "$langDocument";
+                $type = $langDocument;
             break;
         case ViewingEvent::VIDEO_ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $resource);
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langVideo";
+                $type = $langVideo;
             break;
         case ViewingEvent::VIDEOLINK_ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $resource);
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langsetvideo";
+                $type = $langsetvideo;
             break;
         case ViewingEvent::EBOOK_ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource);
@@ -1157,77 +1152,77 @@ function get_resource_details($element, $resource_id) {
                         }
                     }
                 }
-                $type = "$langEBook";
+                $type = $langEBook;
             break;
         case ViewingEvent::QUESTIONNAIRE_ACTIVITY:
                 $q = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $resource);
                 if ($q) {
                     $title = $q->name;
                 }
-                $type = "$langMetaQuestionnaire";
+                $type = $langMetaQuestionnaire;
             break;
         case BlogEvent::ACTIVITY:
-                $title = "$langNumOfBlogs";
-                $type = "$langBlog";
+                $title = $langNumOfBlogs;
+                $type = $langBlog;
             break;
         case CommentEvent::BLOG_ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource);
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langCommentsBlog";
+                $type = $langCommentsBlog;
             break;
         case CommentEvent::COURSE_ACTIVITY:
-                $type = "$langComments";
-                $title = "$langCommentsCourse";
+                $type = $langComments;
+                $title = $langCommentsCourse;
             break;
         case RatingEvent::SOCIALBOOKMARK_ACTIVITY:
                 $type = "$langPersoValue $langCourseSocialBookmarks";
-                $title = "$langPersoValue";
+                $title = $langPersoValu;
             break;
         case ForumEvent::ACTIVITY:
-                $title = "$langNumOfForums";
-                $type = "$langForums";
+                $title = $langNumOfForums;
+                $type = $langForums;
             break;
         case ForumTopicEvent::ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $resource);
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langForums";
+                $type = $langForums;
             break;
         case RatingEvent::FORUM_ACTIVITY:
-                $type = "$langForumRating";
-                $title = "$langPersoValue";
+                $type = $langForumRating;
+                $title = $langPersoValue;
             break;
         case WikiEvent::ACTIVITY:
-                $type = "$langWiki";
-                $title = "$langWikiPages";
+                $type = $langWiki;
+                $title = $langWikiPages;
             break;
         case CourseParticipationEvent::ACTIVITY:
-                $type = "$langCourseParticipation";
-                $title = "$langCourseHoursParticipation";
+                $type = $langCourseParticipation;
+                $title = $langCourseHoursParticipation;
             break;
         case GradebookEvent::ACTIVITY:
             $q = Database::get()->querySingle("SELECT title FROM gradebook WHERE gradebook.course_id = ?d AND gradebook.id = ?d", $course_id, $resource);
             if ($q) {
                 $title = $q->title;
             }
-            $type = "$langGradebook";
+            $type = $langGradebook;
             break;
         case CourseCompletionEvent::ACTIVITY:
-            $title = "$langGradeCourseCompletion";
-            $type = "$langCourseCompletion";
+            $title = $langGradeCourseCompletion;
+            $type = $langCourseCompletion;
             break;
         case AttendanceEvent::ACTIVITY:
             $q = Database::get()->querySingle("SELECT title FROM attendance WHERE attendance.course_id = ?d AND attendance.id = ?d", $course_id, $resource);
             if ($q) {
                 $title = $q->title;
             }
-            $type = "$langAttendance";
+            $type = $langAttendance;
             break;
         case 'noactivity':
-            $title = "$langCompletedSessionWithoutActivity";
+            $title = $langCompletedSessionWithoutActivity;
             break;
         case 'document-submit':
             $q = Database::get()->querySingle("SELECT title,filename FROM document WHERE document.course_id = ?d AND document.id = ?d", $course_id, $resource);
@@ -1238,24 +1233,24 @@ function get_resource_details($element, $resource_id) {
                     $title = $q->filename;
                 }
             }else{
-                $title = "$langFileName";
+                $title = $langFileName;
             }
-            $type = "$langSubmittedUploadedFile";
+            $type = $langSubmittedUploadedFile;
             break;
         case 'tc-completed':
             $q = Database::get()->querySingle("SELECT title FROM tc_session WHERE tc_session.course_id = ?d AND tc_session.id = ?d", $course_id, $resource);
             $title = $q->title;
-            $type = "$langTCComplited";
+            $type = $langTCComplited;
             break;
         case 'meeting-completed':
-            $title = "$langCompletedSessionWithMeeting";
+            $title = $langCompletedSessionWithMeeting;
             break;
         case 'consultant-completion':
-            $title = "$langWithAttendanceRegistrationByConsultant";
-            $type = "$langAttendance";
+            $title = $langWithAttendanceRegistrationByConsultant;
+            $type = $langAttendance;
             break;
         default:
-            $title = "$langAllActivities";
+            $title = $langAllActivities;
             break;
     }
     $data['type'] = $type;
