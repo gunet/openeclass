@@ -34,7 +34,7 @@ require_once 'game.php';
 require_once 'analytics.php';
 require_once 'include/log.class.php';
 
-$unit = isset($unit)? $unit: null;
+$unit = $unit ?? null;
 $back_url = $unit?
     "modules/units/index.php?course=$course_code&id=$unit":
     "modules/exercise/index.php?course=$course_code";
@@ -118,7 +118,10 @@ if (isset($_REQUEST['exerciseId'])) {
 // check if exercise is `exam` type
 if ($objExercise->isExam()) {
     if (!($is_admin or $is_editor or user_is_registered_to_course($uid, $course_id))) {
-        redirect_to_home_page();
+        Session::flash('message', $langExerciseRequireLogin);
+        Session::flash('alert-class', 'alert-warning');
+        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+        header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     }
 }
 
