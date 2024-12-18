@@ -45,11 +45,21 @@ if(isset($_GET['eventID']) and isset($_GET['course_id'])){
 
     if($result_events){
         foreach($result_events as $row){
+
+            if ($row->end == "0000-00-00 00:00:00") {
+                $startDateTime = new DateTime($row->start);
+                list($hours, $minutes) = explode(':', $row->duration);
+                $startDateTime->add(new DateInterval("PT{$hours}H{$minutes}M"));
+                $enddate = $startDateTime->format('Y-m-d H:i:s');
+            } else {
+                $enddate = $row->end;
+            }
+
             $eventArr[] = [
                 'id' => $row->id,
                 'title' => $row->title,
                 'start' => $row->start,
-                'end' => $row->end,
+                'end' => $enddate,
                 'course_id' => $row->course_id,
                 'backgroundColor' => '#1e90ff'
             ];
