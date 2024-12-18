@@ -467,7 +467,7 @@ if ($is_editor) {
                                     selectable: true,
                                     allDaySlot: false,
                                     displayEventTime: true,
-                                    events: '{$urlServer}modules/agenda/test_edit_event.php?eventID={$eventID}&course_id={$course_id}',
+                                    events: '{$urlServer}modules/agenda/edit_event.php?eventID={$eventID}&course_id={$course_id}',
 
 
                                     eventRender: function( event, element, view ) {
