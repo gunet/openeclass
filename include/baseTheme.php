@@ -7121,8 +7121,23 @@ function view($view_file, $view_data = array()) {
     }
 
     $views = $webDir . '/resources/views/';
-    $cache = $webDir . '/storage/views/';
-    $blade = new Blade($views, $cache);
+    $cacheDir = $webDir . '/storage/views/';
+
+    if (!is_dir($cacheDir)) {
+        $tempDir = $cacheDir;
+        $cacheDir = null;
+        if (mkdir($tempDir, 0755, true)) {
+            $cacheDir = $tempDir;
+        }
+    }
+    if (!is_writable($cacheDir) or !$cacheDir) {
+        $cacheDir = sys_get_temp_dir() . '/storage';
+        if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
+            die("Error: Unable to find a writable storage directory - tried '$tempDir', '$cacheDir'.");
+        }
+    }
+
+    $blade = new Blade($views, $cacheDir);
 
     $cache_suffix = CACHE_SUFFIX;
 

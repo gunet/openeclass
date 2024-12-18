@@ -3643,8 +3643,7 @@ $langUpgrade = "Database upgrade";
 $langLogFileWriteError = 'Error writing log file:';
 $langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>.
    Please make sure that the web server has access to <em>config.php</em>. For security reasons, current configuration settings of <em>config.php</em> will be stored in file <em>config_backup.php</em>.";
-$langExpl2Upgrade = "<ul><li>Also for security reasons make sure to backup all databases.</il>
- <li>Current version of Open eClass <b><u>DOESN'T</u></b> include database administration tool phpMyAdmin. If you wish, you can copy folder (path του eclass)/modules/admin/mysql/ in a temporary folder (e.g. /tmp). After upgrade has completed you can restore it to its previous location. Otherwise you can download latest version from <a href=\"http://www.phpmyadmin.net\" target=_blank>here</a>.</li></ul>";
+$langExpl2Upgrade = 'For security reasons, please make sure that you have a current backup of the platform database.';
 $langWarnUpgrade = "WARNING!";
 $langUpgradeInProgress = 'Use is temporary restricted, because the platform is
     being upgraded since %s ago. Please wait for the upgrade to finish before trying
@@ -3654,7 +3653,7 @@ $langUpgDetails = "Username / Password";
 $langUpgMan = "upgrade instructions";
 $langUpgLastStep = "before continue.";
 $langUpgToSee = "To review all the new features and changes of the new version of eClass click";
-$langUpgRead = "If you haven't done that, please read carefully";
+$langUpgRead = "If you haven't done that, please read carefully the";
 $langUpgTooOld = 'The currently installed version of Open eClass you are trying to upgrade is
 too old. Upgrade is only supported from version 3.0 and above.
 Please first upgrade your installation to 3.0 and then to the latest version.';
