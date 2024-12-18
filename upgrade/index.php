@@ -34,7 +34,7 @@ if ($language == 'el') {
     $link_changes_file = 'https://docs.openeclass.org/el/current';
 } else {
     $upgrade_info_file = 'https://docs.openeclass.org/en/upgrade';
-    $link_changes_file = 'https://docs.openeclass.org/el/current';
+    $link_changes_file = 'https://docs.openeclass.org/en/current';
 }
 $data['upgrade_info_file'] = $upgrade_info_file;
 $data['link_changes_file'] = $link_changes_file;

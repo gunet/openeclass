@@ -4,6 +4,9 @@
 
     <div class="col-12 main-section">
         <div class='{{ $container }} main-container'>
+
+            @include('layouts.partials.show_alert')
+
             <div class='row m-auto'>
                 <h1>{{ trans('langUserLogin') }}</h1>
                 <div class='padding-default mt-4'>
@@ -48,7 +51,7 @@
                                                             @endif
 
                                                             <div class='col-12 page next-page-{{ $loop->iteration-1 }} h-100'>
-                                                            
+
                                                         @endif
 
                                                         <div class='row h-100'>
