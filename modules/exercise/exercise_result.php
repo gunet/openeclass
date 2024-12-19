@@ -17,7 +17,6 @@
  *
  */
 
-
 include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
@@ -34,7 +33,7 @@ $unit = isset($unit)? $unit: null;
 if ($unit) {
     $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
         $course_id, $unit)->title;
-    $navigation[] = ['url' => "index.php?course=$course_code&amp;id=$unit", 'name' => q($unit_name)];
+    $navigation[] = ['url' => "index.php?course=$course_code&id=$unit", 'name' => q($unit_name)];
 } else {
     $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
 }
@@ -74,7 +73,7 @@ if (isset($_GET['eurId'])) {
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
     if (!$unit) {
-        $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
+        $navigation[] = array('url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
     }
 } else {
     // exercise user recird id is not set
@@ -773,7 +772,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
         exit;
     } else {
 
-             Session::flash('message',$langScoreDiffers .
+             Session::flash('message', $langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
                  <button class='btn submitAdminBtn mt-3' type='submit' name='regrade' value='true'>$langRegrade</button>
               </form>");
@@ -804,7 +803,7 @@ if (isset($_GET['pdf'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
           </style>
