@@ -142,11 +142,6 @@
             }
         });
 
-        $('#source_path').val($('select[name=\"moveTo\"] option:first').val());
-        $('select[name=\"moveTo\"]').change(function(){
-            $('#source_path').val($(this).val());
-        });
-
         $('.table-default').on('change', 'input[type=checkbox]', function() {
             let cbid = $(this).attr('cbid');
             let filepath = $(this).attr('filepath');
@@ -192,6 +187,10 @@
                         type: 'GET',
                         success: function(data) {
                             $('.moveToDiv').html(data);
+                            $('#source_path').val($('select[name=\"moveTo\"] option:first').val());
+                            $('select[name=\"moveTo\"]').change(function(){
+                                $('#source_path').val($(this).val());
+                            });
                         }
                     });
                 }
