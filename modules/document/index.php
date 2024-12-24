@@ -376,11 +376,11 @@ if (isset($_GET['showQuota'])) {
 
 $dialogBox = $metaDataBox = '';
 
-$dialogData = array(
+$dialogData = [
     'movePath' => '',
     'filename' => '',
     'file' => '',
-    'directories' => directory_selection('', 'moveTo', '', ''));
+    'directories' => '' ];
 
 // ---------------------------
 // Mindmap save button
