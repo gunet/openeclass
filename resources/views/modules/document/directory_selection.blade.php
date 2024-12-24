@@ -1,4 +1,4 @@
-<select name='moveTo' class='form-select' id='moveTo'>
+<select id='moveTo' name='moveTo' class='form-select qqr' aria-label="{{ trans('langMove')}} - {{ trans('langTo') }}">
     @if ($curDirPath and $curDirPath != '/')
         <option value=''>{{ trans('langParentDir') }}</option>
     @endif

@@ -173,8 +173,29 @@
 
 
         $('select[name=\"bulk_action\"]').change(function(){
+
             var selectedOption = $(this).val();
             if(selectedOption === 'move') {
+
+                if ($('#moveTo').length == 0) {
+
+                    let url = new URL(window.location.href);
+                    let course = url.searchParams.get('course');
+                    let openDir = url.searchParams.get('openDir');
+                    let dirUrl = `directory_selection.php?course=${course}`;
+                    if (openDir && openDir !== '/') {
+                        dirUrl += `&openDir=${openDir}`;
+                    }
+
+                    $.ajax({
+                        url: dirUrl,
+                        type: 'GET',
+                        success: function(data) {
+                            $('.moveToDiv').html(data);
+                        }
+                    });
+                }
+
                 $('.panel-move form .form-group:eq(1)').remove();
                 $('.panel-move').removeClass('d-none');
                 $('.checkbox_td input[type="checkbox"]').each(function() {
@@ -323,9 +344,10 @@
 
                     @if (count($fileInfo) or $curDirName)
 
+
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
 
-                                    <div class='d-flex justify-content-between gap-lg-5 gap-3 flex-wrap'>
+                            <div class='d-flex justify-content-between gap-lg-5 gap-3 flex-wrap'>
                                         <div class='d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
@@ -364,16 +386,8 @@
                                                                 {!! $group_hidden_input !!}
                                                                 <div class='form-group mt-4'>
                                                                     <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
-                                                                    <div class='col-12'>
-                                                                        <select id='moveTo' name='moveTo' class='form-select' aria-label="{{ trans('langMove')}} - {{ trans('langTo') }}">
-                                                                            @if ($curDirPath and $curDirPath != '/')
-                                                                                <option value=''>{{ trans('langParentDir') }}</option>
-                                                                            @endif
-                                                                            @foreach ($directories as $dir)
-                                                                                <option{{ $dir->disabled? ' disabled': '' }} value='{{ getIndirectReference($dir->path) }}'>{!!
-                                                                                    str_repeat('&nbsp;&nbsp;&nbsp;', $dir->depth) !!}{{ $dir->filename }}</option>
-                                                                            @endforeach
-                                                                        </select>
+                                                                    <div class='col-12 moveToDiv'>
+                                                                        {{-- directories load from ajax --}}
                                                                     </div>
                                                                 </div>
                                                                 {!! generate_csrf_token_form_field() !!}
