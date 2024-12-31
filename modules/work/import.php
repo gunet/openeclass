@@ -29,10 +29,15 @@ require_once 'modules/progress/AssignmentEvent.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 
-$id = $_GET['id'];
+$data['id'] = $id = $_GET['id'];
 $assignment = Database::get()->querySingle('SELECT * FROM assignment WHERE id = ?d', $id);
 
 if (isset($_FILES['userfile'])) {
+    if ($_FILES['userfile']['error'] == UPLOAD_ERR_NO_FILE) {
+        Session::flash('message', $langNoFileUploaded);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/work/import.php?course=$course_code&id=$id");
+    }
     $file = IOFactory::load($_FILES['userfile']['tmp_name']);
     $sheet = $file->getActiveSheet();
     $gradeComments = $userGrades = $errorLines = $invalidUsers = $extraUsers = [];
@@ -92,7 +97,7 @@ if (isset($_FILES['userfile'])) {
             update_gradebook_book($user_id, $id, $grade / $assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
         }
 
-        Session::flash('message',$langGradesImported);
+        Session::flash('message', $langGradesImported);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
@@ -120,7 +125,7 @@ if (isset($_FILES['userfile'])) {
                     </table></p>";
         }
 
-        Session::flash('message',$message);
+        Session::flash('message', $message);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/work/import.php?course=$course_code&id=$id");
     }
@@ -129,45 +134,17 @@ if (isset($_FILES['userfile'])) {
 $pageName = $langImportGrades;
 
 $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langWorks];
-$navigation[] = ['url' => "index.php?course=$course_code&amp;id=$id", 'name' => q($assignment->title)];
+$navigation[] = ['url' => "index.php?course=$course_code&amp;id=$id", 'name' => $assignment->title];
 
-enableCheckFileSize();
-$tool_content .= "
+$data['form_buttons'] = form_buttons([
+                                        [ 'class' => 'submitAdminBtn',
+                                          'name' => 'new_assign',
+                                          'value' => $langUpload,
+                                          'javascript' => ''
+                                        ],
+                                        [ 'class' => 'cancelAdminBtn',
+                                          'href' => "index.php?course=$course_code&id=$id"
+                                        ]
+                                    ]);
 
-<div class='d-lg-flex gap-4 mt-4'>
-<div class='flex-grow-1'>
-            <div class='form-wrapper form-edit rounded'>
-                <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
-                    <fieldset>
-                    <legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='form-group'>
-                            <div class='col-sm-12'>
-                                <p class='form-control-static'>$langImportGradesHelp</p>
-                            </div>
-                        </div>
-                        <div class='form-group mt-4'>
-                            <label for='userfile' class='col-sm-12 control-label-notes'>$langWorkFile:</label>
-                            <div class='col-sm-12'>" . fileSizeHidenInput() . "
-                                <input type='file' id='userfile' name='userfile'>
-                            </div>
-                        </div>
-                        <div class='form-group mt-4'>
-                            <div class='col-12 d-flex justify-content-end'>" .
-                                form_buttons([[ 'class' => 'submitAdminBtn',
-                                                'name' => 'new_assign',
-                                                'value' => $langUpload,
-                                                'javascript' => '' ],
-                                              [ 'class' => 'cancelAdminBtn',
-                                                  'href' => "index.php?course=$course_code&id=$id" ]
-                                            ]) . "
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-    </div>
-    </div>";
-
-draw($tool_content, 2, null, $head_content);
+view('modules.work.import_grades', $data);
