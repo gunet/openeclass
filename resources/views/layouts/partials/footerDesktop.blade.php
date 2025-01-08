@@ -6,14 +6,14 @@
                 <div class='col-12 d-flex justify-content-center align-items-center gap-3 pt-3'>
                     @if(get_config('link_footer_image'))
                     <a href="{!! get_config('link_footer_image') !!}" target="_blank">
-                        <img class='footer-image' style='max-width:280px; height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                     </a>
                     @else
-                    <img class='footer-image' style='max-width:280px; height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                    <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                     @endif
                 </div>
                 @if(get_config('footer_intro'))
-                    <div class='col-12 d-flex justify-content-center align-items-center gap-3 p-3 footer-text'>
+                    <div class='col-lg-8 col-12 d-flex justify-content-center align-items-center gap-3 p-3 footer-text m-auto'>
                         {!! get_config('footer_intro') !!}
                     </div>
                     <div class='col-lg-8 col-12 m-auto border-bottom-footer-text mb-3'></div>
@@ -133,12 +133,18 @@
                     <div class='col-12 d-flex justify-content-center align-items-center pb-3 gap-3'>
                         @if(get_config('link_footer_image'))
                         <a href="{!! get_config('link_footer_image') !!}" target="_blank">
-                            <img class='footer-image' style='max-width:280px; height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                            <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                         </a>
                         @else
-                        <img class='footer-image' style='max-width:280px; height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
+                        <img class='footer-image' style='max-width:280px; max-height:100px;' src='{{ $image_footer }}?<?php echo time(); ?>' alt="{{ trans('langMetaImage') }}">
                         @endif
                     </div>
+                @endif
+                @if(get_config('footer_intro'))
+                    <div class='col-12 d-flex justify-content-center align-items-center gap-3 p-3 footer-text m-auto'>
+                        {!! get_config('footer_intro') !!}
+                    </div>
+                    <div class='col-12 m-auto border-bottom-footer-text mb-3'></div>
                 @endif
                 <div class='col-12 d-flex d-flex justify-content-center align-items-center pb-3 gap-3 flex-wrap'>
                     @if (!get_config('dont_display_about_menu'))
