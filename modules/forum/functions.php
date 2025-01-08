@@ -256,11 +256,11 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     <div id='mail-header'>
         <br>
         <div>
-            <div id='header-title'>$langBodyForumNotify <a href='{$urlServer}courses/$course_code'>".q($title)."</a>.</div>
+            <div id='header-title'>$langBodyForumNotify <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
             <ul id='forum-category'>
                 <li><span><b>$langCategory:</b></span> <span>" . q($cat_name) . "</span></li>
                 <li><span><b>$langForum:</b></span> <span><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a></span></li>
-                <li><span><b>$langForumFrom :</b></span> <span>q($name)</span></li>
+                <li><span><b>$langForumFrom :</b></span> <span>" . q($name). "</span></li>
                 <li><span><b>$langDate:</b></span> <span> $topic_date </span></li>
             </ul>
         </div>
