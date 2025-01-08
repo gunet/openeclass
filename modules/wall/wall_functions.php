@@ -78,56 +78,36 @@ function allow_to_edit($post_id, $user_id, $is_editor) {
 function links_autodetection($text) {
     $ret_text = '';
 
-    $rexProtocol = '(https?://)?';
-    $rexDomain   = '((?:[-a-zA-Z0-9]{1,63}\.)+[-a-zA-Z0-9]{2,63}|(?:[0-9]{1,3}\.){3}[0-9]{1,3})';
-    $rexPort     = '(:[0-9]{1,5})?';
-    $rexPath     = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
-    $rexQuery    = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-    $rexFragment = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+    $rexProtocol = '(?<protocol>https?://)?';
+    $rexDomain   = '(?<domain>(?:[-a-zA-Z0-9]{1,63}\.)+[-a-zA-Z0-9]{2,63}|(?:[0-9]{1,3}\.){3}[0-9]{1,3})';
+    $rexPort     = '(?<port>:[0-9]{1,5})?';
+    $rexPath     = '(?<path>/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
+    $rexQuery    = '(?<query>\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+    $rexFragment = '(?<fragment>#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 
     $rexEmail = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}';
 
     $validTlds = array_fill_keys(explode(" ", ".aero .asia .biz .cat .com .coop .edu .gov .info .int .jobs .mil .mobi .museum .name .net .org .pro .tel .travel .ac .ad .ae .af .ag .ai .al .am .an .ao .aq .ar .as .at .au .aw .ax .az .ba .bb .bd .be .bf .bg .bh .bi .bj .bm .bn .bo .br .bs .bt .bv .bw .by .bz .ca .cc .cd .cf .cg .ch .ci .ck .cl .cm .cn .co .cr .cu .cv .cx .cy .cz .de .dj .dk .dm .do .dz .ec .ee .eg .er .es .et .eu .fi .fj .fk .fm .fo .fr .ga .gb .gd .ge .gf .gg .gh .gi .gl .gm .gn .gp .gq .gr .gs .gt .gu .gw .gy .hk .hm .hn .hr .ht .hu .id .ie .il .im .in .io .iq .ir .is .it .je .jm .jo .jp .ke .kg .kh .ki .km .kn .kp .kr .kw .ky .kz .la .lb .lc .li .lk .lr .ls .lt .lu .lv .ly .ma .mc .md .me .mg .mh .mk .ml .mm .mn .mo .mp .mq .mr .ms .mt .mu .mv .mw .mx .my .mz .na .nc .ne .nf .ng .ni .nl .no .np .nr .nu .nz .om .pa .pe .pf .pg .ph .pk .pl .pm .pn .pr .ps .pt .pw .py .qa .re .ro .rs .ru .rw .sa .sb .sc .sd .se .sg .sh .si .sj .sk .sl .sm .sn .so .sr .st .su .sv .sy .sz .tc .td .tf .tg .th .tj .tk .tl .tm .tn .to .tp .tr .tt .tv .tw .tz .ua .ug .uk .us .uy .uz .va .vc .ve .vg .vi .vn .vu .wf .ws .ye .yt .yu .za .zm .zw .xn--0zwm56d .xn--11b5bs3a9aj6g .xn--80akhbyknj4f .xn--9t4b11yi5a .xn--deba0ad .xn--g6w251d .xn--hgbk6aj7f53bba .xn--hlcj6aya9esc7a .xn--jxalpdlp .xn--kgbechtv .xn--zckzah .arpa"), true);
 
-    $position = 0;
-    while (preg_match("{\\b($rexEmail|$rexProtocol$rexDomain$rexPort$rexPath$rexQuery$rexFragment)(?=[?.!,;:\"]?(\s|$))}i", $text, $match, PREG_OFFSET_CAPTURE, $position))
-    {
-        list($url, $urlPosition) = $match[0];
+    $ret_text = preg_replace_callback("{\\b($rexEmail|$rexProtocol$rexDomain$rexPort$rexPath$rexQuery$rexFragment)(?=[?.!,;:\"]?(\s|$))}i",
+        function ($match) use ($validTlds) {
+            $url = $match[0];
 
-        // Print the text leading up to the URL.
-        $ret_text .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
-
-        if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
-            $ret_text .= sprintf('<a href="mailto:%s">%s</a>', htmlspecialchars($url), htmlspecialchars($url));
-        } else {
-            $domain = $match[2][0];
-            $port   = $match[3][0];
-            $path   = $match[4][0];
-
-            // Check if the TLD is valid - or that $domain is an IP address.
-            $tld = strtolower(strrchr($domain, '.'));
-            if (preg_match('{\.[0-9]{1,3}}', $tld) || isset($validTlds[$tld]))
-            {
-                // Prepend http:// if no protocol specified
-                $completeUrl = $match[1][0] ? $url : "http://$url";
-                $completeUrl = htmlspecialchars($completeUrl);
-                // Print the hyperlink.
-                $ret_text .= sprintf('<a target="_blank" href="%s">%s</a>', $completeUrl, $completeUrl);
+            if (filter_var($url, FILTER_VALIDATE_EMAIL)) {
+                return sprintf('<a href="mailto:%s">%s</a>', $url, $url);
+            } else {
+                // Check if the TLD is valid - or that $domain is an IP address.
+                $tld = strtolower(strrchr($match['domain'], '.'));
+                if (preg_match('{\.[0-9]{1,3}}', $tld) || isset($validTlds[$tld])) {
+                    // Prepend http:// if no protocol specified
+                    $completeUrl = $match['protocol'] ? $url : "http://$url";
+                    // Print the hyperlink.
+                    return sprintf('<a target="_blank" href="%s">%s</a>', $completeUrl, $match[0]);
+                } else {
+                    return $url;
+                }
             }
-            else
-            {
-                // Not a valid URL.
-                $ret_text .= htmlspecialchars($url);
-            }
-        }
-
-
-        // Continue text parsing from after the URL.
-        $position = $urlPosition + strlen($url);
-    }
-
-    // Print the remainder of the text.
-    $ret_text .= htmlspecialchars(substr($text, $position));
+        }, q($text));
 
     return $ret_text;
 }
@@ -353,7 +333,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='commentPress float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>                            
+        $comm_content = "<a class='commentPress float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
                             <span class='vsmall-text'>$langComments (".$comm->getCommentsNum().")</span>
                         </a>";
 
