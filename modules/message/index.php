@@ -164,18 +164,17 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
                     break;
                 }
             }
-            $tool_content .= "<div class='col-12 mt-3'>
-            <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</span></div></div>";
+            $message = sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released));
+            Session::flash('message', $message);
+            Session::flash('alert-class', 'alert-success');
         } else { //provide option to free some space
-            $tool_content .= "<div class='col-12 mt-3'>
-            <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>                                
-                                <a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>                                
-                              </span></div></div>";
+            $message = "<a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>";
+            Session::flash('message', $message);
+            Session::flash('alert-class', 'alert-danger');
         }
     }
-
     $backPath = "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : "");
-    $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released);
+    showquota($diskQuotaDropbox, $diskUsed-$space_released);
     exit;
 }
 
