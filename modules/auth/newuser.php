@@ -417,9 +417,9 @@ if (!isset($_POST['submit'])) {
                                 <li><span><b>$langFaculty:</b></span> <span>$dep_body</span></li>
                                 <li><span><b>$langComments:</b></span> <span>$usercomment</a></span></li>
                                 $am_html
-                                <li><span><b>$langProfUname:</b></span> <span> $username </span></li>
-                                <li><span><b>$langProfEmail:</b></span> <span> $usermail </span></li>
-                                <li><span><b>$contactphone:</b></span> <span> $userphone </span></li>
+                                <li><span><b>$langProfUname:</b></span> <span>$username</span></li>
+                                <li><span><b>$langProfEmail:</b></span> <span>$usermail</span></li>
+                                $phone_html
                             </ul><br><br>$logo
                         </div>
                     </div>";
