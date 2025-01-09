@@ -247,6 +247,11 @@ if ($is_valid) { // user credentials successful check
                     $emailhelpdesk = get_config('email_helpdesk');
                     // send email
 
+                    $fullname = q("$surname_form $givenname_form");
+                    $am_html = $am? ("<li><span><b>$langAm :</b></span> <span>" . q($am) . "</span></li>"): '';
+                    $username = q($uname);
+                    $usermail = q($email);
+                    $phone_html = $phone? ("<li><span><b>$contactphone:</b></span> <span>" . q($phone) . "</span></li>"): '';
                     $header_html_topic_notify = "<!-- Header Section -->
                 <div id='mail-header'>
                     <br>
@@ -262,11 +267,12 @@ if ($is_valid) { // user credentials successful check
                         <p>$mailbody2 $givenname_form $surname_form $mailbody3
                          $mailbody4  $mailbody5 $mailbody6 </p>
                 <ul id='forum-category'>
-                    <li><span><b>$langProfUname:</b></span> <span>$uname</span></li>
-                    <li><span><b>$contactphone :</b></span> <span>$_POST[userphone]</span></li>
-                    <li><span><b>$langProfEmail :</b></span> <span>$email</span></li>
+                    <li><span><b>$langProfUname:</b></span> <span>$username</span></li>
+                    <li><span><b>$langComments:</b></span> <span>$usercomment</span></li>
+                    $am_html
+                    $phone_html
+                    <li><span><b>$langProfEmail :</b></span> <span>$usermail</span></li>
                     <li><span><b>$langFaculty:</b></span> <span>" . $tree->getFullPath($_POST['department']) . "</span></li>
-                    <li><span><b>$langComments:</b></span> <span> $usercomment </span></li>
                 </ul>
                 <p>$logo</p>
                     </div>
@@ -279,8 +285,7 @@ if ($is_valid) { // user credentials successful check
                         Session::flash('message', "$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>");
                         Session::flash('alert-class', 'alert-warning');
                     }
-                    Session::flash('message', "$success<br><span></div><p>$infoprof</p><b><p>&laquo; <a href='$urlServer'>$langBack</a>");
-                    Session::flash('alert-class', 'alert-success');
+                    Session::Messages("<p>$success<br>$infoprof<br>&laquo; <a href='$urlAppend'>$langBack</a></p>", 'alert-success');
                 } else {
                     // email needs verification -> mail user
                     $hmac = token_generate($uname . $email . $request_id);
@@ -392,7 +397,7 @@ if ($is_valid) { // user credentials successful check
                         </ul>
                         <p>" . ($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "") . "</p>
                         <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
-    
+
                 </div>
             </div>";
 
@@ -434,7 +439,6 @@ if ($is_valid) { // user credentials successful check
     }
 }
 
-//$data['menuTypeID'] = 0;
 view('modules.auth.altsearch', $data);
 
 /**
