@@ -371,24 +371,26 @@ if (!isset($_POST['submit'])) {
         // user account request
         if (isset($_POST['account_request'])) {
             $res = Database::get()->query("INSERT INTO user_request SET
-                    givenname = ?s, 
-                    surname = ?s, 
-                    username = ?s, 
+                    givenname = ?s,
+                    surname = ?s,
+                    username = ?s,
                     email = ?s,
-                    faculty_id = ?d, 
+                    faculty_id = ?d,
                     phone = ?s,
-                    state = 1, 
+                    state = 1,
                     status = " . USER_STUDENT . ",
-                    verified_mail = $verified_mail, 
+                    verified_mail = $verified_mail,
                     date_open = " . DBHelper::timeAfter() . ",
-                    comment = ?s, 
-                    lang = ?s, 
+                    comment = ?s,
+                    lang = ?s,
                     request_ip = '" . Log::get_client_ip() . "'",
                 $givenname_form, $surname_form, $uname, $email,
                 $_POST['department'], $phone, $_POST['usercomment'], $language);
 
             $request_id = $res?->lastInsertID;
 
+            $emailhelpdesk = get_config('email_helpdesk');
+            $emailAdministrator = get_config('email_sender');
             if (!$vmail) { // email verification not needed
                 //----------------------------- Email Request Message --------------------------
                 $dep_body = $tree->getFullPath($_POST['department']);
@@ -400,15 +402,21 @@ if (!isset($_POST['submit'])) {
                             </div>
                         </div>";
 
+                $fullname = q("$surname_form $givenname_form");
+                $usercomment = q($_POST['usercomment']);
+                $am_html = $am? ("<li><span><b>$langAm :</b></span> <span>" . q($am) . "</span></li>"): '';
+                $username = q($uname);
+                $usermail = q($email);
+                $phone_html = $phone? ("<li><span><b>$contactphone:</b></span> <span>" . q($phone) . "</span></li>"): '';
                 $body_html_topic_notify = "<!-- Body Section -->
                     <div id='mail-body'>
                         <br>
                         <div id='mail-body-inner'>
-                        $mailbody2 $givenname $surname $mailbody3 $mailbody4 $mailbody5 $mailbody8
+                        $mailbody2 <b>$fullname</b> $mailbody3 $mailbody4 $mailbody5 $mailbody8
                             <ul id='forum-category'>
                                 <li><span><b>$langFaculty:</b></span> <span>$dep_body</span></li>
                                 <li><span><b>$langComments:</b></span> <span>$usercomment</a></span></li>
-                                <li><span><b>$langAm :</b></span> <span>$am</span></li>
+                                $am_html
                                 <li><span><b>$langProfUname:</b></span> <span> $username </span></li>
                                 <li><span><b>$langProfEmail:</b></span> <span> $usermail </span></li>
                                 <li><span><b>$contactphone:</b></span> <span> $userphone </span></li>
@@ -418,7 +426,6 @@ if (!isset($_POST['submit'])) {
 
                 $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
                 $plainMailMessage = html2text($MailMessage);
-                $emailAdministrator = get_config('email_sender');
                 if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $mailsubject2, $plainMailMessage, $MailMessage)) {
                     $data['email_errors'] = $email_errors = true;
                 }
@@ -426,8 +433,6 @@ if (!isset($_POST['submit'])) {
                 $data['email_errors'] = $email_errors = false;
                 $hmac = token_generate($uname . $email . $request_id);
                 $subject = $langMailVerificationSubject;
-                $emailhelpdesk = get_config('email_helpdesk');
-                $emailAdministrator = get_config('email_sender');
 
                 $activateLink = "<a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;rid=$request_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$request_id</a>";;
 
