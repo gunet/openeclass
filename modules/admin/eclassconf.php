@@ -166,10 +166,6 @@ if (isset($_POST['submit'])) {
         'offline_course' => true,
         'activate_privacy_policy_consent' => true,
         'maintenance' => true,
-        'dont_display_courses_menu' => true,
-        'dont_display_about_menu' => true,
-        'dont_display_contact_menu' => true,
-        'dont_display_manual_menu' => true,
         'allow_rec_video' => true,
         'allow_rec_audio' => true,
         'course_invitation' => true,
@@ -345,10 +341,6 @@ else {     // Display config.php edit form
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
     $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
     $data['cbox_maintenance'] = get_config('maintenance') ? 'checked' : '';
-    $data['cbox_dont_display_courses_menu'] = get_config('dont_display_courses_menu') ? 'checked' : '';
-    $data['cbox_dont_display_about_menu'] = get_config('dont_display_about_menu') ? 'checked' : '';
-    $data['cbox_dont_display_manual_menu']= get_config('dont_display_manual_menu') ? 'checked' : '';
-    $data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu') ? 'checked' : '';
     $data['cbox_allow_rec_video'] = get_config('allow_rec_video') ? 'checked' : '';
     $data['cbox_allow_rec_audio'] = get_config('allow_rec_audio') ? 'checked' : '';
     $data['cbox_allow_modal_courses'] = get_config('show_modal_openCourses') ? 'checked' : '';
