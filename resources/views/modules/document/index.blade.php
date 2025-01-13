@@ -462,15 +462,10 @@
                                                         @endif
 
                                                         @if ($file->is_dir)
-                                                            @if($file->visible == 1)
-
-                                                                <a class='fileURL-link' href='{!! $file->url !!}' aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
-                                                            @else
-                                                                <a class="fileURL-link opacity-50" href='{!! $file->url !!}' aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
-                                                            @endif
+                                                            <a class="fileURL-link @if(!$file->visible) opacity-50 @endif" href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @else
                                                             @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
-                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={{ urlencode($file->url) }}" target="_blank" aria-label="@if(!empty($file->title)) {{ $file->title }} @else {{ $file->filename }} @endif">{{ $file->filename }}</a>
+                                                                <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={{ urlencode($file->url) }}" target="_blank">{{ $file->title !== ''? $file->title: $file->filename }}</a>
                                                                 {!! icon('fa-shield', trans('langEnablePreventDownloadPdf')) !!}
                                                             @else
                                                                 {!! $file->link !!}
