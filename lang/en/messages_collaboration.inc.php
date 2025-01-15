@@ -97,17 +97,17 @@ $langsstudent_acc = "member";
 $langGuest = "Guest User";
 $langGuests = "Users Visitors";
 
-$langCourse = "Cooperation";
-$langCourses = "Partnerships";
+$langCourse = "Collaboration";
+$langCourses = "Collaborations";
 $langOfCourses = "Collaborations";
-$langOfCourse = "Cooperation";
+$langOfCourse = "Collaboration";
 
-$langsCourse = "cooperation";
+$langsCourse = "collaboration";
 $langsCourses = "collaborations";
-$langsOfCourse = "cooperation";
+$langsOfCourse = "collaboration";
 $langsOfCourses = "collaborations";
 $langCourseS = "collaboration";
-$langMyCourses = "My collaborations";
+$langMyCourses = "My Collaborations";
 
 $langFaculty = "Category";
 $langOfFaculty = "Category";
@@ -126,10 +126,6 @@ $langInfoAbout = "The $siteName platform is a complete Electronic Collaboration 
 
 
 $langOfUserS = "user";
-
-
-
-
 
 
 $langIntro = "The <strong>$siteName</strong> platform is an integrated $langOfCourses Electronic Management System and supports the Asynchronous Distance Learning Service at <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution< /a>.";
