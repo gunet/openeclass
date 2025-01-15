@@ -3002,7 +3002,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgInput];
                 }
 
-                .form-control:disabled {
+                .form-control:disabled,
+                .form-control[readonly] {
                     background-color: $theme_options_styles[BgInput];
                 }
 
@@ -3099,7 +3100,8 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
 
-                .form-control:disabled {
+                .form-control:disabled,
+                .form-control[readonly] {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
 

@@ -178,7 +178,7 @@ if (!isset($_POST['next'])) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
-                        <input name='title' id='title' type='text' class='form-control pe-none greyColor text-dark fw-bold' value='" . q($_SESSION['title']) . "' placeholder='$langTitle' readonly>
+                        <input name='title' id='title' type='text' class='form-control pe-none fw-bold' value='" . q($_SESSION['title']) . "' placeholder='$langTitle' readonly>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
