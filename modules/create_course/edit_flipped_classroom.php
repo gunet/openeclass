@@ -58,14 +58,14 @@ $(document).ready(function() {
     var j = parseInt(units.length) +1;
     $('#add_g').click(function() {
         if (i <= 20) {
-            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes mt-2">' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes text-nowrap mt-2">' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
     });
     $('#add_u').click(function() {
         if (j <= 20) {
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes mt-2">' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes text-nowrap mt-2">' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -268,7 +268,7 @@ if (!isset($_POST['next'])) {
                     foreach($q2 as $goal){
 
                         $tool_content .="<div class='col-12 d-inline-flex mb-4' id='row_g_".$count_goals."'>
-                                            <label for='goal_$count_goals' class='control-label-notes mt-2' id='gtitle_$count_goals'>$count_goals: </label>
+                                            <label for='goal_$count_goals' class='control-label-notes text-nowrap mt-2' id='gtitle_$count_goals'>$count_goals: </label>
                                             <input name='goals[]' id='goal_$count_goals' type='text' class='form-control w-100 ms-2' value='".$goal->title."' placeholder='$langGoals'>
                                         ";
                                     if($count_goals > 1){
