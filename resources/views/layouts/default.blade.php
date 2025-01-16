@@ -42,14 +42,7 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ $cache_suffix }}"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?v={{ $cache_suffix }}"/>
 
-    {{-- if change eclass theme then put styles css of this theme --}}
-    @if (isset($styles_str) && $styles_str)
-    <style>
-        {!! $styles_str !!}
-    </style>
-    @endif
     @stack('head_styles')
-
 
     {{-- jQuery --}}
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
@@ -117,6 +110,11 @@
 
     @if (file_exists('node_modules/mathjax/es5/tex-chtml.js'))
         <script type="text/javascript" id="MathJax-script" async src="{{ $urlAppend }}node_modules/mathjax/es5/tex-chtml.js"></script>
+    @endif
+
+    {{-- Override the default.css and all .css files from load_js function with the currect theme.css file --}}
+    @if ($theme_id && file_exists($theme_css))
+        <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}courses/theme_data/{{ $theme_id }}/style_str.css?v={{ $cache_suffix }}"/>
     @endif
 
 </head>

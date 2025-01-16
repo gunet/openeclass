@@ -53,11 +53,9 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
 
-
-    @if (isset($styles_str) && $styles_str)
-    <style>
-        {!! $styles_str !!}
-    </style>
+    {{-- Override the default.css and all .css files from load_js function with the currect theme.css file --}}
+    @if ($theme_id && file_exists($theme_css))
+        <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}courses/theme_data/{{ $theme_id }}/style_str.css?v={{ $cache_suffix }}"/>
     @endif
 
     <!-- Our js modern -->
@@ -74,7 +72,7 @@
 <body class='py-5 px-3'>
     <div class="container p-0">
         <div class="row m-auto" id="Frame">
-            <div id="leftnav" class="col-2 sidebar embeded bg-transparent pt-5 ps-0">
+            <div id="leftnav" class="col-3 sidebar embeded bg-transparent pt-5 ps-0">
                 <div class="panel-group accordion mt-1" id="sidebar-accordion">
                     <div class="m-0 p-0 contextual-sidebar w-auto border-0">
                         <ul class="list-group list-group-flush">
@@ -82,7 +80,7 @@
                                 <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
                                     @foreach ($tool_group[1] as $key2 => $tool)
                                         <a href="{{ $tool_group[2][$key2] }}" class="list-group-item d-flex justify-content-start align-items-start module-tool rounded-0 gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
-                                            <span class='menu-items TextBold w-100'>{!! $tool !!}</span>
+                                            <span class='menu-items TextBold w-100 text-wrap'>{!! $tool !!}</span>
                                         </a>
                                     @endforeach
                                 </div>
@@ -91,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            <div id="main-content" class="col-10 px-0">
+            <div id="main-content" class="col-9 px-0">
                 @if ($messages)
                     {!! $messages !!}
                 @endif
