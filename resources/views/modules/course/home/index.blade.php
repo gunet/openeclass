@@ -386,6 +386,12 @@
                                                                 {{ trans('langShowUnitRow') }}
                                                             </a>
                                                         </li>
+                                                        <li>
+                                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=2' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class="fa-solid fa-list-ul settings-icon"></i>
+                                                                {{ trans('langShowUnitTitle') }}
+                                                            </a>
+                                                        </li>
                                                     @endif
                                                 </ul>
                                             </div>

@@ -4886,6 +4886,7 @@ $langUpdates = "ενημερώσεις";
 $langAddUnit = "Προσθήκη ενότητας";
 $langShowUnitCarousel = "Εμφάνιση σε μία γραμμή";
 $langShowUnitRow = "Εμφάνιση σε λίστα";
+$langShowUnitTitle = "Εμφάνιση σε τίτλους";
 $langEditUnit = "Επεξεργασία ενότητας";
 $langEditUnitSection = "Επεξεργασία";
 $langUnitTitle = "Τίτλος ενότητας";
