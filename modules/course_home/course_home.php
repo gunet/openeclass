@@ -853,21 +853,25 @@ if ($total_cunits > 0) {
                 $cunits_content .= "</span>";
             }
 
-            $cunits_content .= "<p><span class='help-block $class_vis'>";
-            if (!(is_null($cu->start_week))) {
-                $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
+            if (!(is_null($cu->start_week)) || !(is_null($cu->finish_week))) {
+                $cunits_content .= "<p><span class='help-block $class_vis'>";
+                if (!(is_null($cu->start_week))) {
+                    $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
+                }
+                if (!(is_null($cu->finish_week))) {
+                    $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
+                }
+                $cunits_content .= "</span></p>";
             }
-            if (!(is_null($cu->finish_week))) {
-                $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
+
+            $cunits_content .= "</div>";
+            $cunits_content .= "</div>";
+            if ($carousel_or_row == 1) {
+                $cunits_content .= "<div class='item-body $class_vis'>";
+                $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
+                $cunits_content .= "</div>";
             }
-            $cunits_content .= "</span></p>";
 
-
-            $cunits_content .= "</div>";
-            $cunits_content .= "</div>";
-            $cunits_content .= "<div class='item-body $class_vis'>";
-            $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
-            $cunits_content .= "</div>";
             $cunits_content .= "</div></div></div></div>";
         }
     }

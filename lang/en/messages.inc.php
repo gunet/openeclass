@@ -4383,6 +4383,7 @@ $langUpdates = "updates";
 $langAddUnit = "Add new $langCourseS unit";
 $langShowUnitCarousel = "Display section in one line per column";
 $langShowUnitRow = "Show section by line";
+$langShowUnitTitle = "Show section by Title";
 $langEditUnit = "Edit $langCourseS unit details";
 $langEditUnitSection = 'Edit';
 $langUnitTitle = "Unit title";
