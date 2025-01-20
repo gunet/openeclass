@@ -710,7 +710,7 @@ if ($total_cunits > 0) {
             }
 
             if ($is_editor) {
-                $cunits_content .= "<span class='float-end d-flex justify-content-center mb-3 text-end'>" .
+                $cunits_content .= "<span class='float-end d-flex justify-content-center mb-3 text-end' style='margin-top: -1rem;'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
@@ -826,7 +826,7 @@ if ($total_cunits > 0) {
             }
 
             if ($is_editor) {
-                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center mb-3'>
+                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center mb-3' style='margin-top: -1rem;'>
                 <span class='reorder-btn me-3'>
                     <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                 </span>
