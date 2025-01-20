@@ -176,18 +176,18 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
         foreach ($q as $l) {
-            if($l->auth_name == 'eclass' && $l->auth_default == 2){
+            if ($l->auth_name == 'eclass' && $l->auth_default == 2) {
                 $primary_method = 2;
-            }elseif($l->auth_name == 'cas' && $l->auth_default == 2){
+            } elseif ($l->auth_name == 'cas' && $l->auth_default == 2) {
                 $primary_method = 3;
-            }elseif($l->auth_name == 'shibboleth' && $l->auth_default == 2){
+            } elseif ($l->auth_name == 'shibboleth' && $l->auth_default == 2) {
                 $primary_method = 4;
             }
             if (in_array($l->auth_name, $extAuthMethods)) {
                 $authNameDefault = '';
-                if(!empty($l->auth_title)){
+                if (!empty($l->auth_title)) {
                     $authNameDefault = getSerializedMessage($l->auth_title);
-                }else{
+                } else {
                     $authNameDefault = $langEnter;
                 }
                 $authLinks[] = array(
@@ -197,9 +197,9 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'nameAuth' => $l->auth_name,
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
-                    'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$authNameDefault</a></div>");
-                $data['auth_url'] = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+                    'title' => empty($l->auth_title) ? "$langLogInWith {$l->auth_name}" : q(getSerializedMessage($l->auth_title)),
+                    'html' => "<div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='" . $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php' : 'secure/') . "'>$authNameDefault</a></div>");
+                $data['auth_url'] = $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php' : 'secure/');
                 $data['auth_title'] = $authNameDefault;
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
@@ -215,7 +215,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     $hybridLinkId = count($authLinks) - 1;
                 }
             } elseif (!$loginFormEnabled) {
-                $autofocus = count($authLinks)? '' : 'autofocus' ;
+                $autofocus = count($authLinks) ? '' : 'autofocus';
                 $loginFormEnabled = true;
                 $authLinks[] = array(
                     'authId' => $l->auth_id,
@@ -224,7 +224,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     'nameAuth' => $l->auth_name,
                     'showTitle' => false,
                     'class' => 'login-option',
-                    'title' => empty($l->auth_title)? "$langLogInWith {$l->auth_name}": q(getSerializedMessage($l->auth_title)),
+                    'title' => empty($l->auth_title) ? "$langLogInWith {$l->auth_name}" : q(getSerializedMessage($l->auth_title)),
                     'html' => " <div class='col-12'><div class='form-wrapper form-edit'><form action='$urlServer' method='post'>
                                     <div class='form-group text-start'>
                                         <label for='uname' class='form-label'>$langUsername</label>
@@ -258,7 +258,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                     $authLinks[$hybridLinkId]['html'] .= '<br>';
                 }
                 $provider_link = $provider;
-                if($provider_link == 'live'){
+                if ($provider_link == 'live') {
                     $provider_link = 'microsoft';
                 }
                 $authLinks[$hybridLinkId]['html'] .=
@@ -289,7 +289,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
 
     }
 
-    $data['total_collaboration_courses'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course WHERE is_collaborative = ?d",1)->total;
+    $data['total_collaboration_courses'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course WHERE is_collaborative = ?d", 1)->total;
 
     $data['popular_courses'] = Database::get()->queryArray('SELECT * FROM `course`
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
@@ -303,31 +303,31 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
                                                     AND (NOW() <= `end` or `end` IS null)
                                             ORDER BY `order` DESC", $language);
 
-    $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,1);
-    $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,2);
+    $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC", $language, 1);
+    $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC", $language, 2);
 
     $data['auth_enabled_method'] = 0;
-    $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default = ?d OR auth_default = ?d",1,2);
-    if(count($active_method) > 0){
+    $active_method = Database::get()->queryArray("SELECT * FROM auth WHERE auth_default = ?d OR auth_default = ?d", 1, 2);
+    if (count($active_method) > 0) {
         $data['auth_enabled_method'] = 1;
     }
 
     //priorities
     $priority_order = 0;
     $priorities = Database::get()->queryArray("SELECT `title` FROM `homepagePriorities` ORDER BY `order` ASC");
-    if(count($priorities) > 0){
-        foreach($priorities as $p){
-            if($p->title == 'announcements'){
+    if (count($priorities) > 0) {
+        foreach ($priorities as $p) {
+            if ($p->title == 'announcements') {
                 $data['announcements_priority'] = $priority_order;
-            }elseif($p->title == 'popular_courses'){
+            } elseif ($p->title == 'popular_courses') {
                 $data['popular_courses_priority'] = $priority_order;
-            }elseif($p->title == 'texts'){
+            } elseif ($p->title == 'texts') {
                 $data['texts_priority'] = $priority_order;
-            }elseif($p->title == 'testimonials'){
+            } elseif ($p->title == 'testimonials') {
                 $data['testimonials_priority'] = $priority_order;
-            }elseif($p->title == 'statistics'){
+            } elseif ($p->title == 'statistics') {
                 $data['statistics_priority'] = $priority_order;
-            }else{
+            } else {
                 $data['open_courses_priority'] = $priority_order;
             }
             $priority_order++;
@@ -356,6 +356,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     }
 
     $data['display_login_form'] = $display_login_form = get_config('display_login_form');
+
+    if (!get_config('dont_display_statistics')) {
+        $digit_separator = '.';
+        if (isset($_GET['localize']) and $_GET['localize'] != 'el') {
+            $digit_separator = ',';
+        }
+        $data['digit_separator'] = $digit_separator;
+    }
 
     view('home.index', $data);
 }
