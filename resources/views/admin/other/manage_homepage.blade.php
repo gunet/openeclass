@@ -60,7 +60,7 @@
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label for='answer' class='col-sm-12 control-label-notes'>{{trans('langUserLogins')}}/{{trans('langWeek')}}</label>
+                                    <label for='answer' class='col-sm-12 control-label-notes'>{{trans('langUserLogins')}} {{trans('langPerMonth')}}</label>
                                     <div class='col-sm-12'>
                                         <input id='answer' class='form-control' type='number' name='visits_per_week' value="{{ get_config('visits_per_week') }}"/>
                                     </div>
