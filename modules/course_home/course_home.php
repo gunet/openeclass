@@ -706,7 +706,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
             }
 
             if ($is_editor) {
@@ -815,18 +815,18 @@ if ($total_cunits > 0) {
             if($counter_hr < $countUnits){
                 $legendViewContent = 'legendViewContent';
             }
-            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 pb-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 " . ($carousel_or_row < 2 ? "pb-3 mb-3" : "") . "' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content mb-2'>
                     <div class='item-header clearfix'>
                         <div class='item-title $class_vis'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
             }
 
             if ($is_editor) {
-                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center mb-3' style='margin-top: -1rem;'>
+                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center " . ($carousel_or_row < 2 ? "mb-3" : "") . "' style='margin-top: -1rem;'>
                 <span class='reorder-btn me-3'>
                     <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                 </span>
