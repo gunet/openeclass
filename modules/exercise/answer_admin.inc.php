@@ -455,7 +455,7 @@ if (isset($_GET['modifyAnswers'])) {
                           <th>$langCorrect</th>
                           <th>$langAnswer</th>
                           <th>$langComment</th>
-                          <th>$langScore</th>
+                          <th>$langGradebookGrade</th>
                         </tr>";
 
             for ($i = 1; $i <= $nbrAnswers; $i++) {
@@ -602,15 +602,15 @@ if (isset($_GET['modifyAnswers'])) {
                  <tr>
                <td>&nbsp;</td>
                <td>
-                    <b>$langColumnA:</b> 
+                    <strong>$langColumnA:</strong> 
                     <span style='valign:middle;'>$langMoreLessChoices:</span> 
                     <div class='d-flex gap-2 mt-2 flex-wrap'>
                         <input type='submit' name='moreMatches' value='+' />
                         <input type='submit' name='lessMatches' value='-' />
                     </div>
                 </td>
-               <td><div align='text-end'>$langColumnB</div></td>
-               <td>$langScore</td>
+               <td><div align='text-end'><strong>$langColumnB</strong></div></td>
+               <td>$langGradebookGrade</td>
              </tr>";
          $i = $objAnswer->getFirstMatchingPosition();
          for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
@@ -700,15 +700,15 @@ if (isset($_GET['modifyAnswers'])) {
              <input type='hidden' name='reponse[2]' value='$langFalse'>
              <table class='table table-default'>
              <tr>
-               <td colspan='2'><b>$langAnswer</b></td>
-               <td><b>$langComment</b></td>
-               <td><b>$langScore</b></td>
+               <td style='width: 10%;' colspan='2'><strong>$langAnswer</strong></td>
+               <td><strong>$langComment</strong></td>
+               <td style='width: 15%;'><strong>$langGradebookGrade</strong></td>
              </tr>
              <tr>
-               <td width='30'>$langTrue</td>
+               <td style='width: 10%;'>$langTrue</td>
                <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
-               <td width='80%'>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
-               <td><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
+               <td>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
+               <td style='width: 15%'><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
              </tr>
              <tr>
                <td>$langFalse</td>
