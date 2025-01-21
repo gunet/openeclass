@@ -248,19 +248,19 @@ if (isset($_GET['group_as'])) {
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                             <h3>" . q($group_name) . "</h3>
                         </div>
-                        <div class='card-body'>                        
+                        <div class='card-body'>
                                 <p class='form-label'>$langGroupTutor</p>";
-                                if($tutors){
+                                if ($tutors) {
                                     $tool_content .= "<ul>";
-                                    foreach($tutors as $t){
+                                    foreach ($tutors as $t){
                                         $tool_content .= "<li class='mt-2'>$t</li>";
                                     }
                                     $tool_content .= "</ul>";
-                                }else{
+                                } else {
                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                 }
                $tool_content .= "<p class='form-label mt-4'>$langDescription</p>
-                                <p class='small-text'>$tool_content_description</p>
+                                <p class='small-text' style='white-space: pre-wrap'>$tool_content_description</p>
                                 <div class='card-footer d-flex justify-content-end align-items-center border-0 pb-3'>";
                             if ($max_members > 0) {
                                 $tool_content .= " <span class='badge Primary-600-bg'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
