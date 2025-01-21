@@ -558,7 +558,7 @@ if ($is_editor) {
                                             </a></div>
                                             <div class='mt-2'>";
                                                 if (!empty($group_description)) {
-                                                    $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";
+                                                    $tool_content .= "<p class='small-text' style='white-space: pre-wrap'>" . q($group_description) . "</p>";
                                                 }
                                                 if ($user_group_description && $student_desc) {
                                                     $tool_content .= "</br><small>
@@ -690,7 +690,7 @@ if ($is_editor) {
 
                                                 $tool_content .= "<p class='form-label mt-3'>$langDescription</p>";
                                                                 if (!empty($group_description)) {
-                                                                    $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";
+                                                                    $tool_content .= "<p class='small-text' style='white-space: pre-wrap'>" . q($group_description) . "</p>";
                                                                 } else {
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                                 }
@@ -867,7 +867,7 @@ if ($is_editor) {
                                                             }
 
                                                             if(!empty($group_description)){
-                                                                $tool_content .= "<p class='small-text mt-2'>" . q($group_description) . "</p>";
+                                                                $tool_content .= "<p class='small-text mt-2' style='white-space: pre-wrap'>" . q($group_description) . "</p>";
                                                             }
                                                             if ($student_desc) {
                                                                 if ($user_group_description) {
@@ -974,7 +974,7 @@ if ($is_editor) {
                                                                     }
                                                 $tool_content .= "<p class='form-label mt-3'>$langDescription</p>";
                                                                     if(!empty($group_description)){
-                                                                        $tool_content .= "<p class='small-text'>" . q($group_description) . "</p>";
+                                                                        $tool_content .= "<p class='small-text' style='white-space: pre-wrap'>" . q($group_description) . "</p>";
                                                                     }else{
                                                                         $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                                     }
