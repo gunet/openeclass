@@ -699,18 +699,32 @@ if ($total_cunits > 0) {
             }else{
                 $cunits_content .= "<div class='carousel-item'>";
             }
+
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content mb-2'>
                     <div class='item-header clearfix'>
-                        <div class='item-title $class_vis mb-2'>";
+                        <div class='item-title d-flex justify-content-between $class_vis'>";
+
+            $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
                 $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
             }
 
+            $cunits_content .= "<p><small><span class='help-block'>";
+            if (!(is_null($cu->start_week))) {
+                $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
+            }
+            if (!(is_null($cu->finish_week))) {
+                $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
+            }
+            $cunits_content .= "</span></small></p>";
+
+            $cunits_content .= "</div>";
+
             if ($is_editor) {
-                $cunits_content .= "<span class='float-end d-flex justify-content-center mb-3 text-end' style='margin-top: -1rem;'>" .
+                $cunits_content .= "<span class='float-end d-flex justify-content-center text-end'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
@@ -734,17 +748,10 @@ if ($total_cunits > 0) {
                 $cunits_content .= "</span>";
             }
 
-            $cunits_content .= "<p><small><span class='help-block'>";
-            if (!(is_null($cu->start_week))) {
-                $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
-            }
-            if (!(is_null($cu->finish_week))) {
-                $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
-            }
-            $cunits_content .= "</span></small></p>";
+
             $cunits_content .= "</div>";
             $cunits_content .= "</div>
-                <div class='item-body'>";
+                <div class='item-body" . ($cu->comments ? " mt-3" : "") . "'>";
             if (!is_null($cu->comments)) {
                 $cunits_content .= standard_text_escape($cu->comments);
             }
@@ -815,20 +822,35 @@ if ($total_cunits > 0) {
             if($counter_hr < $countUnits){
                 $legendViewContent = 'legendViewContent';
             }
-            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 " . ($carousel_or_row < 2 ? "pb-3 mb-3" : "") . "' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
-                <div class='item-content mb-2'>
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 mb-3' data-id='$cu->id' style='border: 1px solid #e8edf8; padding: 1rem !important; border-radius: 4px;'><div class='panel clearfix'><div class='col-12'>
+                <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title $class_vis'>";
+                        <div class='item-title d-flex justify-content-between $class_vis'>";
+
+            $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
                 $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
             }
 
+            if (!(is_null($cu->start_week)) || !(is_null($cu->finish_week))) {
+                $cunits_content .= "<p><span class='help-block $class_vis'>";
+                if (!(is_null($cu->start_week))) {
+                    $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
+                }
+                if (!(is_null($cu->finish_week))) {
+                    $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
+                }
+                $cunits_content .= "</span></p>";
+            }
+
+            $cunits_content .= "</div>";
+
             if ($is_editor) {
-                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center " . ($carousel_or_row < 2 ? "mb-3" : "") . "' style='margin-top: -1rem;'>
+                $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center " . ($carousel_or_row < 2 ? "" : "") . "'>
                 <span class='reorder-btn me-3'>
-                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder' style='cursor: grab;'></span>
                 </span>
 
                 ".action_button(array(
@@ -853,21 +875,10 @@ if ($total_cunits > 0) {
                 $cunits_content .= "</span>";
             }
 
-            if (!(is_null($cu->start_week)) || !(is_null($cu->finish_week))) {
-                $cunits_content .= "<p><span class='help-block $class_vis'>";
-                if (!(is_null($cu->start_week))) {
-                    $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
-                }
-                if (!(is_null($cu->finish_week))) {
-                    $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
-                }
-                $cunits_content .= "</span></p>";
-            }
-
             $cunits_content .= "</div>";
             $cunits_content .= "</div>";
             if ($carousel_or_row == 1) {
-                $cunits_content .= "<div class='item-body $class_vis'>";
+                $cunits_content .= "<div class='item-body $class_vis" . ($cu->comments ? " mt-3" : "") . "'>";
                 $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
                 $cunits_content .= "</div>";
             }
