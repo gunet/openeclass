@@ -77,12 +77,13 @@ $(function() {
         language: '".$language."',
         autoclose: true
     });
-    $('#duration').timepicker({
+    $('#duration,#durationCreate').timepicker({
         showMeridian: false,
         pickerPosition: 'bottom-right',
         minuteStep: 5,
         defaultTime: false,
-        autoclose: true});
+        autoclose: true
+    });
 });
 " .
         '
@@ -200,26 +201,34 @@ if (isset($_POST['newTitle'])) {
         $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
         $visibility = null;
     }
+
     $start = $_POST['startdate'];
     $duration = $_POST['duration'];
+
+    $duration_arr = explode(':',$_POST['duration']); // Duration to be added
+    if (empty($_POST['duration']) or ($duration_arr[0] == '0' and $duration_arr[1] == '00')) {
+        Session::flash('message',$langNowAllowNullDuration);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("main/personal_calendar/index.php");
+    }
+    $originalDatetime = date('Y-m-d H:i:s', strtotime($_POST['startdate']));
+    $duration_text = '+'.$duration_arr[0].' hours'.' +'.$duration_arr[1].' minutes';
+    $enddateEvent = date('d-m-Y H:i', strtotime($originalDatetime . $duration_text));
+
+    // If the dates are different do not continue.
+    $start_day_check = date('Y-m-d', strtotime($start));
+    $start_day_check = explode('-',$start_day_check);
+    $end_day_check = date('Y-m-d', strtotime($enddateEvent));
+    $end_day_check = explode('-',$end_day_check);
+    if ($start_day_check[2] != $end_day_check[2]) {
+        Session::flash('message',$langChooseDayAgain);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("main/personal_calendar/index.php");
+    }
+
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
         $recursion = null;
-        $duration_arr = explode(':',$_POST['duration']); // Duration to be added
-        $originalDatetime = date('Y-m-d H:i:s', strtotime($_POST['startdate']));
-        $duration_text = '+'.$duration_arr[0].' hours'.' +'.$duration_arr[1].' minutes';
-        $enddateEvent = date('d-m-Y H:i', strtotime($originalDatetime . $duration_text));
-
-        // If the dates are different do not continue.
-        $start_day_check = date('Y-m-d', strtotime($start));
-        $start_day_check = explode('-',$start_day_check);
-        $end_day_check = date('Y-m-d', strtotime($enddateEvent));
-        $end_day_check = explode('-',$end_day_check);
-        if ($start_day_check[2] != $end_day_check[2]) {
-            Session::flash('message',$langChooseDayAgain);
-            Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("main/personal_calendar/index.php");
-        }
 
         if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
             $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
@@ -249,7 +258,7 @@ if (isset($_POST['newTitle'])) {
         redirect_to_home_page('main/personal_calendar/index.php');
     } else { // new event
         $recursion = null;
-        $enddateEvent = $_POST['enddateEvent'];
+
         if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
             $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
         }
@@ -415,22 +424,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     <input type='hidden' name='rep' id='rep' value='$applytogroup'>
 
                                                     <div class='form-group'>
-
                                                         <div class='form-label'>$langStartDate</div>
                                                         <div id='fromNewDate'></div>
-
-                                                        <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
-                                                        <div class='small-text'>$durationToModify</div>
-
-                                                        <div class='control-label-notes mt-2'>$langCalculateNewDuration <small>$langInHour</small></div>
-                                                        <div class='d-flex justify-content-start align-items-center gap-2'>
-                                                            <div id='idNewDuration'></div>
-                                                            <label class='label-container' aria-label='$langSelect'>
-                                                                <input type='checkbox' id='OnOffDuration' checked>
-                                                                <span class='checkmark'></span>
-                                                            </label>
-                                                        </div>
-
                                                     </div>
 
                                                     <div class='form-group mt-4'>
@@ -502,9 +497,6 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             </div>
                                                         </div>
 
-
-
-
                                                         <div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                                                             <label for='enddate' class='col-12 control-label-notes'>$langUntil</label>
                                                             <div class='col-12'>
@@ -568,15 +560,6 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         <script type='text/javascript'>
                             $(document).ready(function () {
 
-
-                                //initial clicker duration
-                                var isOnDuration = '';
-                                if($('#OnOffDuration').is(':checked')){
-                                    isOnDuration = 'true';
-                                }else{
-                                    isOnDuration = 'false';
-                                }
-
                                 var calendar = $('#EditCalendarEvents').fullCalendar({
                                     header:{
                                         left: 'prev,next ',
@@ -601,10 +584,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         var title = element.find( '.fc-title' );
                                         title.html( title.text() );
                                         title.addClass('text-center');
-
                                         var time = element.find( '.fc-time' );
                                         time.addClass('text-center');
-
                                     },
 
                                     eventClick:  function(event) {
@@ -641,28 +622,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                 hours = hours + 24;
                                             }
 
-                                            duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
+                                            duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
 
-
-
-                                            if(isOnDuration == 'true'){
-                                                $('#editEventModal #duration').val(duration);
-                                            }else{
-                                                $('#editEventModal #duration').val('00:00:00');
-                                            }
-
-                                            $('#OnOffDuration').on('click',function(){
-                                                if($('#OnOffDuration').is(':checked')){
-                                                    $('#editEventModal #duration').val(duration);
-                                                }else{
-                                                    $('#editEventModal #duration').val('00:00:00');
-                                                }
-                                            });
-
-
-                                            $('#editEventModal #idNewDuration').text(duration);
-
-                                            $('#duration').val(duration);
+                                            $('#editEventModal #duration').val(duration);
 
                                             $('#editEventModal').modal('toggle');
                                         }else{
@@ -670,14 +632,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             window.location.reload();
                                         }
 
-
                                     },
 
 
                                 });
-
-
-
 
                             });
 
@@ -718,21 +676,15 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                 <div class='modal-body'>
                                                     <div class='form-wrapper form-edit rounded border-0 px-0'>
 
+                                                        <input type='hidden' name='startdate' id='startdate'>
+                                                        <input type='hidden' name='enddateEvent' id='enddateEvent'>
+                                                        <input type='hidden' id='id' name='id' value='$eventToModify'>
+                                                        <input type='hidden' name='rep' id='rep' value='$applytogroup'>
+
                                                         <div class='form-group'>
                                                             <div class='control-label-notes'>$langStartDate</div>
                                                             <div id='from'></div>
-                                                            <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
-                                                            <div class='d-flex justify-content-start align-items-center gap-2'>
-                                                                <div id='idDuration'></div>
-                                                                <label class='label-container' aria-label='$langSelect'>
-                                                                    <input type='checkbox' id='OnOffDuration' checked>
-                                                                    <span class='checkmark'></span>
-                                                                </label>
-                                                            </div>
                                                         </div>
-
-                                                        <input type='hidden' id='id' name='id' value='$eventToModify'>
-                                                        <input type='hidden' name='rep' id='rep' value='$applytogroup'>
 
                                                         <div class='form-group mt-4'>
                                                             <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
@@ -748,10 +700,15 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             </div>
                                                         </div>
 
-
-                                                        <input type='hidden' name='startdate' id='startdate'>
-                                                        <input type='hidden' name='enddateEvent' id='enddateEvent'>
-                                                        <input type='hidden' name='duration' id='duration'>
+                                                        <div class='input-append bootstrap-timepicker form-group mt-4'>
+                                                            <label for='durationCreate' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
+                                                            <div class='col-sm-12'>
+                                                                <div class='input-group add-on'>
+                                                                    <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
+                                                                    <input class='form-control mt-0 border-start-0' name='duration' id='durationCreate' type='text' class='input-small'>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class='form-group mt-4'>
                                                             <label for='frequencynumber' class='col-sm-12 control-label-notes'>$langRepeat $langEvery</label>
@@ -851,14 +808,6 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     <script type='text/javascript'>
                         $(document).ready(function () {
 
-                            //initial clicker duration
-                            var isOnDuration = '';
-                            if($('#OnOffDuration').is(':checked')){
-                                isOnDuration = 'true';
-                            }else{
-                                isOnDuration = 'false';
-                            }
-
                             var calendar = $('#calendarEvents').fullCalendar({
                                 header:{
                                     left: 'prev,next ',
@@ -914,31 +863,15 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             hours = hours + 24;
                                         }
 
-                                        duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-
-
+                                        duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
 
                                         $('#createEventModal #from').text(mywhen);
                                         $('#createEventModal #startdate').val(startS);
                                         $('#createEventModal #enddateEvent').val(endS);
+                                        $('#createEventModal #durationCreate').val(duration);
 
-                                        if(isOnDuration == 'true'){
-                                            $('#createEventModal #duration').val(duration);
-                                        }else{
-                                            $('#createEventModal #duration').val('00:00:00');
-                                        }
-
-                                        $('#OnOffDuration').on('click',function(){
-                                            if($('#OnOffDuration').is(':checked')){
-                                                $('#createEventModal #duration').val(duration);
-                                            }else{
-                                                $('#createEventModal #duration').val('00:00:00');
-                                            }
-                                        });
-
-
-                                        $('#createEventModal #idDuration').text(duration);
                                         $('#createEventModal').modal('toggle');
+
                                     }else{
                                         alert('$langChooseDayAgain');
                                         window.location.reload();

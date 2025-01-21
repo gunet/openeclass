@@ -128,6 +128,11 @@
   height: 32px;
   width: 32px;
 }
+.cal-day-today span[data-cal-date]{
+  color: #2B3944;
+  background-color: transparent;
+  border: solid 1px #0073E6;
+}
 .cal-month-box .cal-day-today span[data-cal-date] {
   font-size: 14px !important;
 }
