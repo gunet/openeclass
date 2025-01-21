@@ -822,10 +822,12 @@ if ($total_cunits > 0) {
             if($counter_hr < $countUnits){
                 $legendViewContent = 'legendViewContent';
             }
-            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 mb-3' data-id='$cu->id' style='border: 1px solid #e8edf8; padding: 1rem !important; border-radius: 4px;'><div class='panel clearfix'><div class='col-12'>
-                <div class='item-content'>
-                    <div class='item-header clearfix'>
-                        <div class='item-title d-flex justify-content-between $class_vis'>";
+            $cunits_content .= "
+            <div id='unit_$cu_indirect' class='col-12 $legendViewContent my-3' data-id='$cu->id'>
+                <div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'>
+                    <div class='item-content'>
+                        <div class='item-header clearfix'>
+                            <div class='item-title d-flex justify-content-between $class_vis'>";
 
             $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
@@ -849,29 +851,30 @@ if ($total_cunits > 0) {
 
             if ($is_editor) {
                 $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center " . ($carousel_or_row < 2 ? "" : "") . "'>
-                <span class='reorder-btn me-3'>
-                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder' style='cursor: grab;'></span>
-                </span>
+                                        <span class='reorder-btn me-3'>
+                                            <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder' style='cursor: grab;'></span>
+                                        </span>
 
-                ".action_button(array(
-                        array('title' => $langEditChange,
-                            'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
-                            'icon' => 'fa-edit'),
-                        array('title' => $vis == 1? $langViewHide : $langViewShow,
-                            'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;vis=$cu_indirect",
-                            'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
-                        array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                            'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;access=$cu_indirect",
-                            'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
-                            'show' => $visible == COURSE_OPEN),
-                        array('title' => $langDelete,
-                            'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
-                            'icon' => 'fa-solid fa-xmark Accent-200-cl',
-                            'class' => 'delete',
-                            'confirm' => $langCourseUnitDeleteConfirm)))."</span>";
+                                        ".action_button(array(
+                                                array('title' => $langEditChange,
+                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                                                    'icon' => 'fa-edit'),
+                                                array('title' => $vis == 1? $langViewHide : $langViewShow,
+                                                    'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;vis=$cu_indirect",
+                                                    'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                                                array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                                                    'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;access=$cu_indirect",
+                                                    'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                                                    'show' => $visible == COURSE_OPEN),
+                                                array('title' => $langDelete,
+                                                    'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
+                                                    'icon' => 'fa-solid fa-xmark Accent-200-cl',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langCourseUnitDeleteConfirm))).
+                                    "</span>";
             } else {
                 $cunits_content .= "<span class='float-end d-flex justify-content-center align-items-center mb-3'>";
-                $cunits_content .= $icon;
+                    $cunits_content .= $icon;
                 $cunits_content .= "</span>";
             }
 
@@ -885,6 +888,7 @@ if ($total_cunits > 0) {
 
             $cunits_content .= "</div></div></div></div>";
         }
+
     }
 
 } else {

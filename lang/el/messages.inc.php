@@ -7021,3 +7021,4 @@ $langAttendanceCriterion = "Κριτήριο καταχώρισης παρουσ
 $langConsultingTools = "Εργαλεία συμβουλευτικής";
 $langChooseOtherSession = "Έχετε επιλέξει διαφορετική συνεδρία από την τρέχουσα. Δοκιμάστε πάλι!";
 $langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται στο μισό ύψος της τρέχουσας οθόνης.";
+$langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είναι μηδενική.";

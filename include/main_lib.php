@@ -8996,6 +8996,12 @@ function theme_initialization() {
                 }
 
 
+                .cal-day-today span[data-cal-date],
+                .cal-day-today span[data-cal-date]:hover,
+                .cal-day-today span[data-cal-date]:focus{
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+
             ";
         }
 
@@ -9299,9 +9305,14 @@ function theme_initialization() {
                     border-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
-                .cal-day-today span[data-cal-date],
+
                 .cal-day-holiday span[data-cal-date]{
                     background-color:$theme_options_styles[bgColorActiveDateTime] !important;
+                }
+
+                .cal-day-today span[data-cal-date]{
+                    background-color: transparent !important;
+                    border: solid 1px $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
             ";
@@ -9381,9 +9392,6 @@ function theme_initialization() {
                     color: $theme_options_styles[TextColorActiveDateTime] !important;
                 }
 
-                .cal-day-today span[data-cal-date],
-                .cal-day-today span[data-cal-date]:hover,
-                .cal-day-today span[data-cal-date]:focus,
                 .cal-day-holiday span[data-cal-date],
                 .cal-day-holiday span[data-cal-date]:hover,
                 .cal-day-holiday span[data-cal-date]:focus{
@@ -11117,6 +11125,7 @@ function theme_initialization() {
                 .card-affixed{
                     border: solid 1px $theme_options_styles[clBorderPanels];
                 }
+
 
             ";
         }
