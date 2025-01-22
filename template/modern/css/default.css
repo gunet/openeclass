@@ -2257,7 +2257,8 @@ input[type="submit"].warningAdminBtn:hover {
 /******************************************************** BASIC BUTTON ************************************************/
 /**********************************************************************************************************************/
 
-.btn.btn-default{
+.btn.btn-default,
+.btn.btn-secondary{
   border: solid thin;
   border-color: #0073E6;
   color: #0073E6;
@@ -2272,8 +2273,10 @@ input[type="submit"].warningAdminBtn:hover {
   background-color: #ffffff;
   letter-spacing: 0px;
   line-height: 16px;
+  transition: 0.3s ease;
 }
-.btn.btn-default:hover{
+.btn.btn-default:hover,
+.btn.btn-secondary:hover{
   border-color: #2546F0;
   color: #2546F0;
   background-color: #ffffff;
@@ -2372,18 +2375,6 @@ input[type="submit"].warningAdminBtn:hover {
   background-color: #ffffff;
   border-color: #2546F0;
   color: #2546F0;
-}
-
-
-.btn.btn-secondary{
-  backface-visibility: hidden;
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  white-space: nowrap;
-  border-color: rgb(93, 97, 95);
-  background: linear-gradient(180deg,#DCDCDC 0%,rgb(93, 97, 95) 49%, rgb(93, 97, 95) 51%,rgba(93, 97, 95, 0.963) 100%);
-  border-radius: 4px;
 }
 
 /**********************************************************************************************************************/

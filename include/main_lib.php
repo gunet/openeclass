@@ -6163,6 +6163,10 @@ function theme_initialization() {
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .btn.btn-secondary{
+                    background-color:  $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -6244,6 +6248,10 @@ function theme_initialization() {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
+                .btn.btn-secondary{
+                    color: $theme_options_styles[whiteButtonTextColor];
+                }
+
             ";
         }
 
@@ -6302,6 +6310,10 @@ function theme_initialization() {
                 }
 
                 .mycourses-pagination .page-item .page-link {
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .btn.btn-secondary{
                     border: solid 1px $theme_options_styles[whiteButtonBorderTextColor];
                 }
 
@@ -6400,6 +6412,11 @@ function theme_initialization() {
                 .mycourses-pagination .page-item .page-link:focus {
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+
+                .btn.btn-secondary:hover,
+                .btn.btn-secondary:focus{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -6466,6 +6483,11 @@ function theme_initialization() {
 
                 .mycourses-pagination .page-item .page-link:hover,
                 .mycourses-pagination .page-item .page-link:focus {
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .btn.btn-secondary:hover,
+                .btn.btn-secondary:focus{
                     border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor];
                 }
 
@@ -6539,6 +6561,11 @@ function theme_initialization() {
 
                 .mycourses-pagination .page-item .page-link:hover,
                 .mycourses-pagination .page-item .page-link:focus {
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .btn.btn-secondary:hover,
+                .btn.btn-secondary:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
 
