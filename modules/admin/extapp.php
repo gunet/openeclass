@@ -20,8 +20,36 @@
 
 $require_admin = true;
 $require_help = true;
-$helpTopic = 'system_settings';
-$helpSubTopic = 'external_tools';
+
+if (isset($_GET['edit'])) {
+    $helpTopic = 'external_tools';
+    switch ($_GET['edit']) {
+        case 'onedrive':
+                $helpSubTopic = 'one_drive';
+            break;
+        case 'dropbox':
+                $helpSubTopic = 'drop_box';
+            break;
+        case 'owncloud':
+                $helpSubTopic = 'own_cloud';
+            break;
+        case 'webdav':
+                $helpSubTopic = 'web_dav';
+            break;
+        case 'analytics':
+                $helpSubTopic = 'analytics';
+            break;
+        case 'ftp':
+                $helpSubTopic = 'ftp';
+            break;
+        default:
+                $helpSubTopic = 'external_tools';
+            break;
+    }
+} else {
+    $helpTopic = 'system_settings';
+    $helpSubTopic = 'external_tools';
+}
 
 require_once '../../include/baseTheme.php';
 require_once 'extconfig/externals.php';

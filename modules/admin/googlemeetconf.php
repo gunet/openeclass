@@ -18,6 +18,10 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'google_meet';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/googlemeetapp.php';

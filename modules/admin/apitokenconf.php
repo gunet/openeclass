@@ -18,6 +18,10 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'api_token';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/apitokenapp.php';
@@ -42,7 +46,7 @@ $app = ExtAppManager::getApp('apitoken');
 $duration_time = 365*24*60*60; // one year (in seconds)
 
 $toolName = $langCreateAPIToken;
-$tool_content .= action_bar(array(
+$action_bar = action_bar(array(
     array('title' => $langAdd,
         'url' => 'apitokenconf.php?add',
         'icon' => 'fa-plus',
@@ -50,6 +54,7 @@ $tool_content .= action_bar(array(
         'button-class' => 'btn-success')
     ));
 
+$tool_content .= $action_bar;
 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $app->getLongDescription() . "</span></div>";
 
 if (isset($_GET['delete'])) {

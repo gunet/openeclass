@@ -23,6 +23,9 @@ const LTI_TYPE = 'turnitin';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'turntit_in';
 require_once '../../include/baseTheme.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 

@@ -20,6 +20,10 @@
 
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'antivirus';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/extconfig/externals.php';

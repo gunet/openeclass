@@ -18,6 +18,10 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'jitsi';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/jitsiapp.php';
@@ -47,7 +51,7 @@ $head_content .= "<script type='text/javascript'>
         }
         $('#enabled-courses').val(csvSelection);
         
-        // remove allcourses selection when selected other courses
+        // remove all courses selection when selected other courses
         if (selectedVals.length > 1) {
             let index = selectedVals.indexOf('0');
             if (index > -1) {
@@ -62,7 +66,7 @@ $head_content .= "<script type='text/javascript'>
         }
     }
     
-    $(document).ready(function () {                
+    $(document).ready(function () {
         $('#select-courses').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();

@@ -19,6 +19,9 @@
  */
 
 $require_admin = true;
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'big_blue_button';
 require_once '../../include/baseTheme.php';
 require_once 'modules/tc/functions.php';
 require_once 'include/lib/hierarchy.class.php';
