@@ -10465,7 +10465,7 @@ function theme_initialization() {
                     color: $theme_options_styles[linkHoverColor];
                 }
 
-                .extapps-container .appIcon:hover{
+                .appIcon:hover{
                     background-color: $theme_options_styles[linkHoverColor];
                 }
 
