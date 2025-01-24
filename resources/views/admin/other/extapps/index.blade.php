@@ -30,13 +30,13 @@
                                 @foreach (ExtAppManager::getApps() as $app)
                                     <tr>
                                     <!--WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!-->
-                                        <td style="width:90px; padding:0px;">
+                                        <td style="width:140px; padding:0px;">
                                             <div style="padding:10px;">
-                                                <a href="{{ $urlAppend . $app->getConfigUrl() }}">
+                                                <a class="d-flex flex-column justify-content-center align-items-center gap-3" href="{{ $urlAppend . $app->getConfigUrl() }}">
                                                 @if ($app->getAppIcon() !== null)
                                                     <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ trans('langTool') }}:{{ $app->getName() }}">
                                                 @endif
-                                                {{ $app->getDisplayName() }}
+                                                <span class="fw-bold">{{ $app->getDisplayName() }}</span>
                                                 </a>
                                             </div>
                                         </td>
