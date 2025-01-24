@@ -5788,12 +5788,12 @@ th.grade-col a{
   z-index: 1061 !important;
 }
 
-.appIcon {
+
+.extapps-container .appIcon {
   padding: 10px;
 }
 
-.appIcon:hover {
-  background-color: #EFF6FF;
+.extapps-container .appIcon:hover {
   border-radius: 5px;
   text-decoration: none;
 }
