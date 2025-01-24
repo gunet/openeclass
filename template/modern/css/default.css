@@ -5787,3 +5787,13 @@ th.grade-col a{
 .bootstrap-timepicker-widget.open{
   z-index: 1061 !important;
 }
+
+.appIcon {
+  padding: 10px;
+}
+
+.appIcon:hover {
+  background-color: #EFF6FF;
+  border-radius: 5px;
+  text-decoration: none;
+}

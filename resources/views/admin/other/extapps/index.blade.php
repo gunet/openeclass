@@ -2,20 +2,8 @@
 
 @section('content')
 
-    <style>
-        .appIcon {
-            padding: 10px;
-        }
-
-        .appIcon:hover {
-            background-color: #F3F3F0;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-    </style>
-
 <div class="col-12 main-section">
-<div class='{{ $container }} main-container'>
+    <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -103,7 +91,7 @@
                     </div>
                
         </div>
-</div>
+    </div>
 </div>
 
 

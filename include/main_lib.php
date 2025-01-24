@@ -10429,6 +10429,10 @@ function theme_initialization() {
                     color: $theme_options_styles[linkColor];
                 }
 
+                .appIcon span{
+                   color: $theme_options_styles[linkColor];
+                }
+
             ";
         }
 
@@ -10459,6 +10463,10 @@ function theme_initialization() {
                 .link-color:hover,
                 .link-color:focus{
                     color: $theme_options_styles[linkHoverColor];
+                }
+
+                .appIcon:hover{
+                    background-color: $theme_options_styles[linkHoverColor];
                 }
 
             ";
