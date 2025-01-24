@@ -5794,6 +5794,7 @@ th.grade-col a{
 }
 
 .appIcon:hover {
+  background-color: #EFF6FF;
   border-radius: 5px;
   text-decoration: none;
 }
