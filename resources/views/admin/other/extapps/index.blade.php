@@ -2,6 +2,18 @@
 
 @section('content')
 
+    <style>
+        .appIcon {
+            padding: 10px;
+        }
+
+        .appIcon:hover {
+            background-color: #F3F3F0;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+
 <div class="col-12 main-section">
 <div class='{{ $container }} main-container'>
         <div class="row m-auto">
@@ -32,9 +44,11 @@
                                     <!--WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!-->
                                         <td style="width:140px; padding:0px;">
                                             <div style="padding:10px;">
-                                                <a class="d-flex flex-column justify-content-center align-items-center gap-3" href="{{ $urlAppend . $app->getConfigUrl() }}">
+                                                <a class="appIcon d-flex flex-column justify-content-center align-items-center" href="{{ $urlAppend . $app->getConfigUrl() }}">
                                                 @if ($app->getAppIcon() !== null)
-                                                    <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ trans('langTool') }}:{{ $app->getName() }}">
+                                                    <div class="d-flex flex-column justify-content-center align-items-center" style="width:89px;height: 89px">
+                                                        <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ trans('langTool') }}:{{ $app->getName() }}">
+                                                    </div>
                                                 @endif
                                                 <span class="fw-bold">{{ $app->getDisplayName() }}</span>
                                                 </a>
