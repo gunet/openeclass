@@ -5789,11 +5789,11 @@ th.grade-col a{
 }
 
 
-.extapps-container .appIcon {
+.appIcon {
   padding: 10px;
 }
 
-.extapps-container .appIcon:hover {
+.appIcon:hover {
   border-radius: 5px;
   text-decoration: none;
 }
