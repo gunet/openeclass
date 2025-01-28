@@ -321,11 +321,11 @@ $langUserDeactivated = 'Ο λογαριασμός του χρήστη "%s" απ�
 $langUserActivated = 'Ο λογαριασμός του χρήστη "%s" ενεργοποιήθηκε!';
 
 // listcours
-$langOpenCourse = "Ανοικτό $langsCourse";
-$langClosedCourse = "Κλειστό $langsCourse";
+$langOpenCourse = "Ανοικτό";
+$langClosedCourse = "Κλειστό";
 $langClosedCourses = "Κλειστά $langsCourses";
 $langRegCourse = "Απαιτείται εγγραφή";
-$langInactiveCourse = "Ανενεργό $langsCourse";
+$langInactiveCourse = "Ανενεργό";
 $langTcCourseEnabled = "Η δυνατότητα τηλεσυνεργασίας ενεργοποιήθηκε.";
 $langTcCourseDisabled = "Η δυνατότητα τηλεσυνεργασίας απενεργοποιήθηκε.";
 
@@ -386,11 +386,9 @@ $langActivityEdit = 'Επεξεργασία δραστηριότητας';
 $langCourseEditSuccess = "Τα στοιχεία του $langsOfCourse άλλαξαν με επιτυχία!";
 $langCourseInfoEdit = "Αλλαγή στοιχείων $langsOfCourse";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του $langsOfCourse";
-$langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
 $langCourseActivityFormat = 'Μορφή δραστηριότητας';
 $langCourseWallFormat = 'Μορφή τοίχου';
-$langWithCourseUnits = "$langCourse με ενότητες (εβδομαδιαίες, θεματικές)";
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
 $langEditWeek = 'Επεξεργασία εβδομάδας';
@@ -1277,7 +1275,7 @@ $langRequestReasons = "Αναφέρετε τους λόγους που επιθ�
 /* * **************************************************
  * create_course.php
  * *************************************************** */
-$langDescrInfo = "Σύντομη περιγραφή του $langsOfCourse";
+$langDescrInfo = "Σύντομη περιγραφή";
 $langFieldsRequ = "Όλα τα πεδία είναι υποχρεωτικά!";
 $langFieldsOptional = "Προαιρετικά πεδία";
 $langFieldsOptionalNote = "Σημ.: Μπορείτε να αλλάξετε οποιεσδήποτε από τις πληροφορίες αργότερα";
@@ -6782,30 +6780,18 @@ $langFavicon = "Favicon";
 $langCollaborationPlatform = "Πλατφόρμα συνεργασίας";
 $langEnableCollaboration = "Ενεργοποίηση πλατφόρμας συνεργασίας";
 $langAlwaysEnabledCollaboration = "Μόνιμα ενεργοποιημένη";
-if (file_exists('config/config.php')) {
-    if(!get_config('show_always_collaboration') and get_config('show_collaboration')){
-        $langTypeCourse = "μάθημα";
-        $langTypeCollaboration = "Συνεργασία";
-        $langDescrInfo = "Σύντομη περιγραφή";
-        $langOpenCourse = "Ανοικτή";
-        $langClosedCourse = "Κλειστή";
-        $langInactiveCourse = "Ανενεργή";
-        $langCourseInactive= "Πρόσβαση έχουν οι χρήστες με δικαιώματα δημιουργίας μαθήματος ή συνεργασίας";
-        $langClosedCourseShort = "Πρόσβαση έχουν οι χρήστες που βρίσκονται στη λίστα Χρηστών του μαθήματος ή της συνεργασίας";
-        $langCourseFormat = "Μορφή";
-        $langWithCourseUnits = "Μορφή με ενότητες";
-        $langMyCollaborations = "Οι συνεργασίες μου";
-        $langNoParticipatedInCollab = "Δεν συμμετέχετε σε κάποια συνεργασία";
-        $langPreviewCollaboration = " συνεργασίας";
-        $langUnregCollaboration = "Απεγγραφή από την συνεργασία";
-        $langListOfCollaboration = "Παρακάτω εμφανίζεται η λίστα με τις συνεργασίες στις οποίες συμμετέχετε.";
-        $langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
-        $langDefaultModulesCollaborationHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ ορισμού στις νέες συνεργασίες της πλατφόρμας κατά τη δημιουργία τους.";
-    }
-    if(get_config('show_always_collaboration') and get_config('show_collaboration')){
-        $langCourseCreate = "Δημιουργία συνεργασίας";
-    }
-}
+
+$langTypeCourse = "μάθημα";
+$langTypeCollaboration = "Συνεργασία";
+$langCourseFormat = "Μορφή";
+$langWithCourseUnits = "Μορφή με ενότητες";
+$langMyCollaborations = "Οι συνεργασίες μου";
+$langNoParticipatedInCollab = "Δεν συμμετέχετε σε κάποια συνεργασία";
+$langPreviewCollaboration = " συνεργασίας";
+$langUnregCollaboration = "Απεγγραφή από την συνεργασία";
+$langListOfCollaboration = "Παρακάτω εμφανίζεται η λίστα με τις συνεργασίες στις οποίες συμμετέχετε.";
+$langDisableCollaborationModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλες τις συνεργασίες της πλατφόρμας.";
+$langDefaultModulesCollaborationHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ ορισμού στις νέες συνεργασίες της πλατφόρμας κατά τη δημιουργία τους.";
 $langWelcomeStudCollab = "«<strong>Συνεργασίες</strong>» και την κατηγορία που περιλαμβάνει τις διαθέσιμες ηλεκτρονικές συνεργασίες.";
 $langWelcomeProfCollab = "«<strong>$langCourseCreate</strong>» και την μορφή «<strong>συνεδρίας</strong>» για να δημιουργήσετε τις ηλεκτρονικές σας συνεργασίες.";
 $langNotEnrolledToCollaborations = "Δεν έχετε εγγραφεί σε συνεργασίες";
