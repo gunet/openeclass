@@ -48,7 +48,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
     if (isset($_POST['expires_at'])) {
-        $expires_at = $_POST['expires_at'];
+        $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['expires_at'])->format("Y-m-d H:i");
     } else {
         $expires_at = null;
     }
@@ -153,7 +153,7 @@ $tool_content .= "
                                 <div class='input-group'>
                                     <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
                                     <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='expires_at' type='text' value='22-09-2027 16:59'>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@ $tool_content .= "
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                     <label class='label-container' aria-label='$langSelect'>
-                                        <input name='customEmailBody' id='customEmailBody' type='checkbox'> 
+                                        <input name='customEmailBody' id='customEmailBody' type='checkbox'>
                                         <span class='checkmark'></span>
                                         $langCustomEmailBody
                                     </label>
