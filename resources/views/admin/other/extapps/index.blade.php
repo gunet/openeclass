@@ -20,6 +20,12 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class="extapp">
+                        <div class="col-12 mb-3 d-flex gap-1">
+                            <button class="btn btn-success filter-btn" data-category="all">{{ trans('langExtAppAll') }}</button>
+                            @foreach (array_keys(ExtAppManager::$AppCategories) as $category)
+                                <button class="btn btn-primary filter-btn" data-category="{{ $category }}">{{ trans('langExtApp' . ucfirst($category)) }}</button>
+                            @endforeach
+                        </div>
                         <div class='col-12 table-responsive'>
                             <table class="table-default extapp-table">
                                 <thead class='list-header'>
@@ -28,7 +34,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach (ExtAppManager::getApps() as $app)
-                                    <tr>
+                                    <tr data-category="{{ ExtAppManager::getAppCategory($app->getName()) }}">
                                     <!--WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!-->
                                         <td style="width:140px; padding:0px;">
                                             <div style="padding:10px;">
@@ -115,6 +121,18 @@
                     newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
+    });
+
+    $('.filter-btn').on('click', function () {
+        var category = $(this).data('category');
+        $('.filter-btn').removeClass('btn-success').addClass('btn-primary');
+        $(this).removeClass('btn-primary').addClass('btn-success');
+        if (category === 'all') {
+            $('tr[data-category]').removeClass('d-none');
+        } else {
+            $('tr[data-category]').addClass('d-none');
+            $('tr[data-category="' + category + '"]').removeClass('d-none');
+        }
     });
 
 </script>

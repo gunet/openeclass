@@ -18,41 +18,62 @@
  *
  */
 
-foreach (ExtAppManager::$AppNames as $appName) {
-    require_once strtolower($appName) . '.php';
+foreach (ExtAppManager::$AppCategories as $category => $appNames) {
+    foreach ($appNames as $appName) {
+        require_once strtolower($appName) . '.php';
+    }
 }
 require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
-    public static $AppNames = ['H5PApp', 'BBBApp', 'GoogleMeetApp', 'JitsiApp', 'ZoomApp', 'MicrosoftTeamsApp',
-        'APITokenApp', 'WebexApp', 'TurnitinApp', 'LtiPublishApp', 'UnPlagApp', 'OpenDelosApp', 'GoogleDriveApp',
-        'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp',
-        'AutojudgeApp', 'AntivirusApp', 'secondfaApp',
-        'AnalyticsApp', 'UserWayApp', 'LimesurveyApp', 'ColmoocApp'];
+    public static $AppCategories = [
+        'general' => ['APITokenApp', 'H5PApp', 'TurnitinApp', 'LtiPublishApp', 'LimesurveyApp'],
+        'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp'],
+        'cloud' => ['GoogleDriveApp', 'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp'],
+        'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp', 'ColmoocApp', 'UnPlagApp', 'UnPlagApp'],
+    ];
+
 
     private static $APPS = null;
-
+    private static $CATEGORIES = null;
     /**
      * @return ExtApp[]
      */
+//    public static function getApps() {
+//        if (ExtAppManager::$APPS == null) {
+//            $apps = array();
+//            foreach (ExtAppManager::$AppNames as $appName) {
+//                $app = new $appName();
+//                $apps[$app->getName()] = $app;
+//            }
+//            ExtAppManager::$APPS = $apps;
+//        }
+//        return ExtAppManager::$APPS;
+//    }
+
     public static function getApps() {
         if (ExtAppManager::$APPS == null) {
             $apps = array();
-            foreach (ExtAppManager::$AppNames as $appName) {
-                $app = new $appName();
-                $apps[$app->getName()] = $app;
+            $categories = array();
+            foreach (ExtAppManager::$AppCategories as $category => $appNames) {
+                foreach ($appNames as $appName) {
+                    require_once strtolower($appName) . '.php';
+                    $app = new $appName();
+                    $apps[$app->getName()] = $app;
+                    $categories[$app->getName()] = $category;
+                }
             }
             ExtAppManager::$APPS = $apps;
+            ExtAppManager::$CATEGORIES = $categories;
         }
         return ExtAppManager::$APPS;
     }
 
-    /**
-     *
-     * @param string $appname
-     * @return ExtApp
-     */
+    public static function getAppCategory($appName) {
+        return ExtAppManager::$CATEGORIES[$appName] ?? 'unknown';
+    }
+
     public static function getApp($appname) {
         $apps = ExtAppManager::getApps();
         return array_key_exists($appname, $apps) ? $apps[$appname] : null;
