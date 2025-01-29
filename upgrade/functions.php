@@ -1000,7 +1000,7 @@ function upgrade_to_3_3($tbl_options): void
  */
 function upgrade_to_3_4($tbl_options): void
 {
-    global $webDir;
+    global $webDir, $langUntitledChat;
 
     // Conference table
     Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
@@ -1198,6 +1198,13 @@ function upgrade_to_3_5($tbl_options): void
  */
 function upgrade_to_3_6($tbl_options): void
 {
+    global $webDir, $langPersInfo, $langEduEmpl, $langAchievements, $langGoalsSkills, $langContactInfo,
+        $langBirthDate, $langBirthPlace, $langGender, $langMale, $langFemale,
+        $langAboutMe, $langAboutMeDescr, $langPersWebsite, $langEducation,
+        $langEducationDescr, $langEmployment, $langCertAwards, $langPublications,
+        $langPersGoals, $langAcademicGoals, $langCareerGoals, $langPersSkills,
+        $langAcademicSkills, $langCareerSkills, $langEmail, $langPhone, $langAddress,
+        $langFBProfile, $langTwitterAccount, $langLinkedInProfile;
 
     Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1227,11 +1234,12 @@ function upgrade_to_3_6($tbl_options): void
             `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
         Database::get()->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
-                (1, '$langPersInfo', 0),
-                (2, '$langEduEmpl', -1),
-                (3, '$langAchievements', -2),
-                (4, '$langGoalsSkills', -3),
-                (5, '$langContactInfo', -4)");
+                (1, ?s, 0),
+                (2, ?s, -1),
+                (3, ?s, -2),
+                (4, ?s, -3),
+                (5, ?s, -4)",
+                $langPersInfo, $langEduEmpl, $langAchievements, $langGoalsSkills, $langContactInfo);
     }
 
     if (!DBHelper::tableExists('eportfolio_fields')) {
@@ -1246,28 +1254,35 @@ function upgrade_to_3_6($tbl_options): void
                 `required` TINYINT NOT NULL DEFAULT 0,
                 `data` TEXT NULL DEFAULT NULL) $tbl_options");
 
-        Database::get()->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
-                (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
-                (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-                (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
-                (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-                (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
-                (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-                (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
-                (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
-                (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
-                (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
-                (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
-                (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
-                (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
-                (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
-                (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
-                (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
-                (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
-                (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
-                (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
-                (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-                (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        Database::get()->query("INSERT INTO `eportfolio_fields`
+                (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
+                (1, 'birth_date', ?s, '', '3', 1, 0, 0, ''),
+                (2, 'birth_place', ?s, '', '1', 1, -1, 0, ''),
+                (3, 'gender', ?s, '', '4', 1, -2, 0, ?s),
+                (4, 'about_me', ?s, ?s, '2', 1, -3, 0, ''),
+                (5, 'personal_website', ?s, '', '5', 1, -4, 0, ''),
+                (6, 'education', ?s, ?s, '2', 2, 0, 0, ''),
+                (7, 'employment', ?s, '', '2', 2, -1, 0, ''),
+                (8, 'certificates_awards', ?s, '', '2', 3, 0, 0, ''),
+                (9, 'publications', ?s, '', '2', 3, -1, 0, ''),
+                (10, 'personal_goals', ?s, '', '2', 4, 0, 0, ''),
+                (11, 'academic_goals', ?s, '', '2', 4, -1, 0, ''),
+                (12, 'career_goals', ?s, '', '2', 4, -2, 0, ''),
+                (13, 'personal_skills', ?s, '', '2', 4, -3, 0, ''),
+                (14, 'academic_skills', ?s, '', '2', 4, -4, 0, ''),
+                (15, 'career_skills', ?s, '', '2', 4, -5, 0, ''),
+                (16, 'email', ?s, '', '1', 5, 0, 0, ''),
+                (17, 'phone_number', ?s, '', '1', 5, -1, 0, ''),
+                (18, 'Address', ?s, '', '1', 5, -2, 0, ''),
+                (19, 'fb', ?s, '', '5', 5, -3, 0, ''),
+                (20, 'twitter', ?s, '', '5', 5, -4, 0, ''),
+                (21, 'linkedin', ?s, '', '5', 5, -5, 0, '')",
+            $langBirthDate, $langBirthPlace, $langGender, serialize([$langMale, $langFemale]),
+            $langAboutMe, $langAboutMeDescr, $langPersWebsite, $langEducation,
+            $langEducationDescr, $langEmployment, $langCertAwards, $langPublications,
+            $langPersGoals, $langAcademicGoals, $langCareerGoals, $langPersSkills,
+            $langAcademicSkills, $langCareerSkills, $langEmail, $langPhone, $langAddress,
+            $langFBProfile, $langTwitterAccount, $langLinkedInProfile);
     }
 
     Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
@@ -1552,6 +1567,7 @@ function upgrade_to_3_6_3() {
  */
 function upgrade_to_3_7($tbl_options): void
 {
+    global $langWeek;
 
     if (!DBHelper::fieldExists('wiki_properties', 'visible')) {
         Database::get()->query("ALTER TABLE `wiki_properties`
@@ -1577,9 +1593,9 @@ function upgrade_to_3_7($tbl_options): void
         // If yes then delete them since they are not appeared anywhere and we don't want to have stale db records.
         $s = Database::get()->queryArray("SELECT id FROM course_units WHERE course_id = ?d", $courseid);
         foreach ($s as $oldcu) {
-            Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $oldcu);
+            Database::get()->query("DELETE FROM unit_resources WHERE unit_id = ?d", $oldcu->id);
         }
-        Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $courseid);
+        Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $courseid->id);
 
         // Now we can continue
         // Move weekly_course_units to course_units
@@ -1594,7 +1610,7 @@ function upgrade_to_3_7($tbl_options): void
                               AS title,
                               comments, start_week, finish_week, visible, public, `order`, ?d
                                 FROM course_weekly_view
-                                WHERE course_id = ?d ORDER BY id", $courseid, $courseid);
+                                WHERE course_id = ?d ORDER BY id", $courseid->id, $courseid->id);
         $unit_map = [];
         $current_id = Database::get()->querySingle("SELECT MAX(id) AS max_id FROM course_units")->max_id;
         Database::get()->queryFunc("SELECT id FROM course_weekly_view
@@ -1603,7 +1619,7 @@ function upgrade_to_3_7($tbl_options): void
                 $unit_map[$current_id] = $item->id;
                 $current_id--;
             },
-            $courseid, $result->affectedRows);
+            $courseid->id, $result->affectedRows);
 
         // move weekly_course_unit_resources to course_unit_resources
         foreach ($unit_map as $unit_id => $weekly_id) {
@@ -1614,7 +1630,7 @@ function upgrade_to_3_7($tbl_options): void
                                 WHERE course_weekly_view_id = ?d", $unit_id, $weekly_id);
         }
         // update course with new view type (=units)
-        Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid);
+        Database::get()->query("UPDATE course SET view_type = 'units' WHERE id = ?d", $courseid->id);
     }
     // drop tables
     if (DBHelper::tableExists('course_weekly_view')) {
