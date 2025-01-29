@@ -40,18 +40,17 @@ class ExtAppManager {
     /**
      * @return ExtApp[]
      */
-//    public static function getApps() {
-//        if (ExtAppManager::$APPS == null) {
-//            $apps = array();
-//            foreach (ExtAppManager::$AppNames as $appName) {
-//                $app = new $appName();
-//                $apps[$app->getName()] = $app;
-//            }
-//            ExtAppManager::$APPS = $apps;
-//        }
-//        return ExtAppManager::$APPS;
-//    }
 
+    /**
+     * Get all external apps.
+     *
+     * This method initializes and returns an array of all external apps.
+     * It loads the apps from the categories defined in the $AppCategories array,
+     * instantiates each app, and stores them in the $APPS array.
+     * The categories of the apps are stored in the $CATEGORIES array.
+     *
+     * @return ExtApp[] An array of all external apps.
+     */
     public static function getApps() {
         if (ExtAppManager::$APPS == null) {
             $apps = array();
@@ -70,10 +69,28 @@ class ExtAppManager {
         return ExtAppManager::$APPS;
     }
 
+    /**
+     * Get the category of a given app.
+     *
+     * This method returns the category of the specified app name.
+     * If the app name does not exist in the categories, it returns 'unknown'.
+     *
+     * @param string $appName The name of the app.
+     * @return string The category of the app, or 'unknown' if the app name is not found.
+     */
     public static function getAppCategory($appName) {
         return ExtAppManager::$CATEGORIES[$appName] ?? 'unknown';
     }
 
+    /**
+     * Get the instance of a given app.
+     *
+     * This method returns the instance of the specified app name.
+     * If the app name does not exist in the apps array, it returns null.
+     *
+     * @param string $appname The name of the app.
+     * @return ExtApp|null The instance of the app, or null if the app name is not found.
+     */
     public static function getApp($appname) {
         $apps = ExtAppManager::getApps();
         return array_key_exists($appname, $apps) ? $apps[$appname] : null;
