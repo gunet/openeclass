@@ -634,9 +634,9 @@ if (count($exercise_question_ids) > 0) {
 
                         $tool_content .= standard_text_escape($answer);
                         if ($answerCorrect) {
-                            $tool_content .= "&nbsp;<span class='text-success'><small>($langCorrectS)</small></span>";
+                            $tool_content .= "&nbsp;<span class='text-success text-nowrap'><small>($langCorrectS)</small></span>";
                         } else {
-                            $tool_content .= "&nbsp;<span class='text-danger'><small>($langIncorrectS)</small></span>";
+                            $tool_content .= "&nbsp;<span class='text-danger text-nowrap'><small>($langIncorrectS)</small></span>";
                         }
                         $tool_content .= "</div>";
                         if ($studentChoice or $answerCorrect) {
