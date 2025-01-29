@@ -463,72 +463,120 @@ if ($is_editor) {
                                     displayEventTime: true,
                                     events: '{$urlServer}modules/agenda/edit_event.php?eventID={$eventID}&course_id={$course_id}',
 
-
                                     eventRender: function( event, element, view ) {
                                         var title = element.find( '.fc-title' );
                                         title.html( title.text() );
                                         title.addClass('text-center');
-
                                         var time = element.find( '.fc-time' );
                                         time.addClass('text-center');
                                     },
 
                                     eventClick:  function(event) {
-
                                         var eventStart = event.start;
                                         var eventEnd = event.end;
-
                                         startDay =  moment(eventStart).format('DD');
                                         endDay = moment(eventEnd).format('DD');
-
                                         if(parseInt(startDay)==parseInt(endDay)){
-
                                             startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
                                             endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-
                                             $('#editAgendaEventModal #fromNewDate').text(startS);
                                             $('#editAgendaEventModal #startdate').val(startS);
                                             $('#editAgendaEventModal #enddateEvent').val(endS);
-
                                             //duration time
                                             var duration_start = moment(eventStart).format('HH:mm');
                                             var duration_end = moment(eventEnd).format('HH:mm');
                                             var value_start = duration_start.split(':');
                                             var value_end = duration_end.split(':');
-
                                             var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
                                             var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
                                             var diff = endDate.getTime() - startDate.getTime();
                                             var hours = Math.floor(diff / 1000 / 60 / 60);
                                             diff -= hours * 1000 * 60 * 60;
                                             var minutes = Math.floor(diff / 1000 / 60);
-
                                             if (hours < 0){
                                                 hours = hours + 24;
                                             }
-
                                             duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
-
-
                                             $('#editAgendaEventModal #durationcal').val(duration);
-
                                             $('#editAgendaEventModal').modal('toggle');
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
                                         }
-
                                     },
+
+                                    eventResize:  function(event) {
+                                        var eventStart = event.start;
+                                        var eventEnd = event.end;
+                                        startDay =  moment(eventStart).format('DD');
+                                        endDay = moment(eventEnd).format('DD');
+                                        if(parseInt(startDay)==parseInt(endDay)){
+                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
+                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
+                                            $('#editAgendaEventModal #fromNewDate').text(startS);
+                                            $('#editAgendaEventModal #startdate').val(startS);
+                                            $('#editAgendaEventModal #enddateEvent').val(endS);
+                                            //duration time
+                                            var duration_start = moment(eventStart).format('HH:mm');
+                                            var duration_end = moment(eventEnd).format('HH:mm');
+                                            var value_start = duration_start.split(':');
+                                            var value_end = duration_end.split(':');
+                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
+                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
+                                            var diff = endDate.getTime() - startDate.getTime();
+                                            var hours = Math.floor(diff / 1000 / 60 / 60);
+                                            diff -= hours * 1000 * 60 * 60;
+                                            var minutes = Math.floor(diff / 1000 / 60);
+                                            if (hours < 0){
+                                                hours = hours + 24;
+                                            }
+                                            duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
+                                            $('#editAgendaEventModal #durationcal').val(duration);
+                                            $('#editAgendaEventModal').modal('toggle');
+                                        }else{
+                                            alert('$langChooseDayAgain');
+                                            window.location.reload();
+                                        }
+                                    },
+
+                                    eventDrop:  function(event) {
+                                        var eventStart = event.start;
+                                        var eventEnd = event.end;
+                                        startDay =  moment(eventStart).format('DD');
+                                        endDay = moment(eventEnd).format('DD');
+                                        if(parseInt(startDay)==parseInt(endDay)){
+                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
+                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
+                                            $('#editAgendaEventModal #fromNewDate').text(startS);
+                                            $('#editAgendaEventModal #startdate').val(startS);
+                                            $('#editAgendaEventModal #enddateEvent').val(endS);
+                                            //duration time
+                                            var duration_start = moment(eventStart).format('HH:mm');
+                                            var duration_end = moment(eventEnd).format('HH:mm');
+                                            var value_start = duration_start.split(':');
+                                            var value_end = duration_end.split(':');
+                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
+                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
+                                            var diff = endDate.getTime() - startDate.getTime();
+                                            var hours = Math.floor(diff / 1000 / 60 / 60);
+                                            diff -= hours * 1000 * 60 * 60;
+                                            var minutes = Math.floor(diff / 1000 / 60);
+                                            if (hours < 0){
+                                                hours = hours + 24;
+                                            }
+                                            duration = hours + ':' + (minutes <= 9 ? '0' : '') + minutes;
+                                            $('#editAgendaEventModal #durationcal').val(duration);
+                                            $('#editAgendaEventModal').modal('toggle');
+                                        }else{
+                                            alert('$langChooseDayAgain');
+                                            window.location.reload();
+                                        }
+                                    },
+
                                 });
                             });
                         </script>
                     ";
-
-
-
-
-
-
 
         } else {
             $event_title = '';
