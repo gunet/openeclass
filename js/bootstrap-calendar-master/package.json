@@ -5,14 +5,17 @@
   "main": "./js/calendar.js",
   "dependencies": {
     "bower": ">=1.8.8",
-    "grunt": "^0.4.1",
-    "grunt-contrib-cssmin": "^0.5.0",
-    "grunt-contrib-less": "^0.7.0",
-    "grunt-contrib-uglify": "^0.2.0"
+    "grunt": "^1.6.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-uglify": "^5.1.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -27,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/Serhioromano/bootstrap-calendar/issues"
   },
-  "homepage": "https://github.com/Serhioromano/bootstrap-calendar#readme"
+  "homepage": "https://github.com/Serhioromano/bootstrap-calendar#readme",
+  "snyk": true
 }
