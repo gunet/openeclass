@@ -44,7 +44,7 @@
                                                         <img width="89" src="{{ $app->getAppIcon() }}" alt="{{ trans('langTool') }}:{{ $app->getName() }}">
                                                     </div>
                                                 @endif
-                                                <span class="fw-bold">{{ $app->getDisplayName() }}</span>
+                                                <span class="fw-bold text-center">{{ $app->getDisplayName() }}</span>
                                                 </a>
                                             </div>
                                         </td>
