@@ -720,8 +720,10 @@ function student_view_gradebook($gradebook_id, $uid) {
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookAlertToChange</span></div>";
         }
         $tool_content .= "<div class='badge Primary-200-bg p-2'>" . display_user($uid, false, false) . "</div>";
-        $tool_content .= "<div class='table-responsive'><table class='table-default' >";
-        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
+        $tool_content .= "<div class='col-sm-12'>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<thead><tr class='list-header'>
+                              <th style='width: 50%;'>$langTitle</th>
                               <th>$langGradebookActivityDate2</th>
                               <th>$langType</th>
                               <th>$langGradebookActivityWeight</th>
@@ -733,7 +735,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         foreach ($result as $details) {
             $tool_content .= "
                 <tr>
-                    <td class='text-nowrap'>
+                    <td>
                         " .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "
                     </td>
                     <td class='text-nowrap'>
@@ -778,7 +780,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                 <th>". (($s_grade != "&mdash;") ? $s_grade . " / $range" : "$s_grade"). "</th>
             </tr>";
     }
-    $tool_content .= "</table></div>";
+    $tool_content .= "</table></div></div>";
 }
 
 /**
@@ -1437,30 +1439,32 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
             }
         } elseif ($gradebookActivity->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
             $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $gradebookActivity->module_auto_id);
-            if ($assignment->group_submissions) {
-                $group_members = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id = ?d", $uid);
-                if ($group_members) {
-                    $group_ids_arr = [];
-                    foreach ($group_members as $group_member) {
-                        array_push($group_ids_arr, $group_member->group_id);
-                    }
-                    $sql_ready_group_ids = implode(', ', $group_ids_arr);
-                    $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+            if ($assignment) {
+                if ($assignment->group_submissions) {
+                    $group_members = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id = ?d", $uid);
+                    if ($group_members) {
+                        $group_ids_arr = [];
+                        foreach ($group_members as $group_member) {
+                            $group_ids_arr[] = $group_member->group_id;
+                        }
+                        $sql_ready_group_ids = implode(', ', $group_ids_arr);
+                        $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
                             . "FROM assignment_submit, assignment "
                             . "WHERE assignment_submit.assignment_id = assignment.id "
                             . "AND assignment.id =?d "
                             . "AND assignment_submit.submission_date <= '$gradebook->end_date' "
                             . "AND assignment_submit.submission_date >= '$gradebook->start_date' "
                             . "AND assignment_submit.group_id IN ($sql_ready_group_ids)", $gradebookActivity->module_auto_id);
-                }
-            } else {
-                $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+                    }
+                } else {
+                    $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
                         . "FROM assignment_submit, assignment "
                         . "WHERE assignment_submit.assignment_id = assignment.id "
                         . "AND assignment.id =?d "
                         . "AND assignment_submit.submission_date <= '$gradebook->end_date' "
                         . "AND assignment_submit.submission_date >= '$gradebook->start_date' "
                         . "AND assignment_submit.uid = $uid", $gradebookActivity->module_auto_id);
+                }
             }
             if (isset($grd) && $grd && isset($grd->grade)) {
                 $grade = $grd->grade/$grd->max_grade;
