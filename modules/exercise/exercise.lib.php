@@ -216,7 +216,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:-30px;'><i class='fa-solid fa-xmark'></i> $langClear</button>";
+        $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:0px;'><i class='fa-solid fa-xmark'></i> $langClear</button>";
     }
     $tool_content .= "
                 </div>

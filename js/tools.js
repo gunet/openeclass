@@ -446,7 +446,7 @@ function exercise_init_countdown(params) {
                 buttons: {
                     goBack: {
                         label: params.goBack,
-                        className: 'submitAdminBtn',
+                        className: 'cancelAdminBtn',
                         callback: function () {
                             finishClicked = false;
                             var moveTo = $('#qPanel' + firstUnanswered);

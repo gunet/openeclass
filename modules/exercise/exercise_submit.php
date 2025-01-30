@@ -769,28 +769,32 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
             .exercise-action-buttons .btn { margin: 0 5px; }
         </style>";
 
-    $tool_content .= "<div class='exercise-nav-buttons col-md-12' style='margin-top: 20px;'>";
+    $tool_content .= "<div class='exercise-nav-buttons col-12' style='margin-top: 20px;'>
+                        <div class='row row-cols-2 g-4'>";
 
     $prevLabel = '&lt; ' . $langPrevious;
     $nextLabel = $langNext . ' &gt';
     if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
-        $tool_content .= "<input class='btn submitAdminBtn blockUI navbutton' style='float: left;' type='submit' name='prev' value='$prevLabel'>";
+        $tool_content .= "<div class='col'><input class='btn blockUI navbutton btn-exercise-nav w-100' type='submit' name='prev' value='$prevLabel'></div>";
     }
     if ($questionId != end($questionList)) { // `next` button
-        $tool_content .= "<input class='btn submitAdminBtn blockUI navbutton' style='float: right;' type='submit' value='$nextLabel'>";
+        if (($exerciseType == ONE_WAY_TYPE) or ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId == $questionList[1])) {
+            $tool_content .= "<div class='col'></div>";
+        }
+        $tool_content .= "<div class='col'><input class='btn blockUI navbutton btn-exercise-nav w-100' type='submit' value='$nextLabel'></div>";
     } else {
         $isFinalQuestion = 'true';
     }
-    $tool_content .= "</div>";
+    $tool_content .= "</div></div>";
 } else {
-    // $head_content .= "<style>
-    //         @media only screen and (max-width: 460px) {
-    //             .exercise-action-buttons { text-align: center; width: 100%; }
-    //         }
-    //         .exercise-action-buttons { margin-top: 15px; }
-    //         .exercise-action-buttons .btn { margin: 0 5px; }
-    //         .exercise-action-buttons { float: right; }
-    //     </style>";
+    $head_content .= "<style>
+            @media only screen and (max-width: 460px) {
+                .exercise-action-buttons { text-align: center; width: 100%; }
+            }
+            .exercise-action-buttons { margin-top: 15px; }
+            .exercise-action-buttons .btn { margin: 0 5px; }
+            .exercise-action-buttons { float: right; }
+        </style>";
 }
 
 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
