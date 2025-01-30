@@ -163,6 +163,13 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         } else {
             $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
         }
+
+        if ($myrow->id == $_SESSION["uid"]) {
+            $self_id = 1;
+        } else {
+            $self_id = 0;
+        }
+
         // open-courses reviewer right
         if (get_config('opencourses_enable')) {
             if ($myrow->reviewer == '1') {
@@ -177,6 +184,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'level' => 'primary',
               'url' => '#',
               'icon' => 'fa-xmark',
+              'disabled' => ($myrow->id == $_SESSION["uid"] && get_number_of_course_admins($course_id, $myrow->id) == 0),
               'btn_class' => 'delete_btn deleteAdminBtn'
             ),
             array(
@@ -255,13 +263,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 <div class='text-muted'><small>$am_message</small></div>
                             </div>
                         </div>";
-        $roleColumn = "<div class='text-muted'>$user_role_string</div>";
+        $roleColumn = "<div class='text-muted' data-id='$self_id'>$user_role_string</div>";
         // search for inactive users
         $inactive_user = is_inactive_user($myrow->id);
         //setting data table column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
+            'DT_RowData' => [
+                'self_id' => $self_id
+            ],
             '0' => $nameColumn,
             '1' => $roleColumn,
             '2' => "<div style='width: 200px;'>" . user_groups($course_id, $myrow->id) . "</div>",
@@ -412,3 +423,25 @@ $data['action_bar'] = action_bar([
 ]);
 
 view('modules.user.index', $data);
+
+
+/**
+ * @brief get number of course admins
+ * @param $course_id
+ * @param $uid
+ * @return int
+ */
+function get_number_of_course_admins($course_id, $uid) {
+
+    $result = Database::get()->querySingle("SELECT COUNT(user_id) AS cnt FROM course_user
+                                            WHERE course_id = ?d AND
+                                                  status = " . USER_TEACHER . " AND
+                                                  user_id != ?d
+                                            LIMIT 1", $course_id, $uid);
+
+    if ($result) {
+        return $result->cnt;
+    } else {
+        return 0;
+    }
+}

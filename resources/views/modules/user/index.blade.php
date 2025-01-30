@@ -150,44 +150,11 @@
         $(document).on('click', '.delete_btn', function (e) {
             e.preventDefault();
             var row_id = $(this).closest('tr').attr('id');
-
-            // bootbox.confirm('{{ js_escape(trans('langDeleteUser') . ' ' . trans('langDeleteUser2')) }}',
-            //     function (result) {
-            //         if (result) {
-            //             $.ajax({
-            //                 type: 'POST',
-            //                 url: '',
-            //                 datatype: 'json',
-            //                 data: {
-            //                     action: 'delete',
-            //                     value: row_id
-            //                 },
-            //                 success: function(data) {
-            //                     var info = oTable.page.info();
-            //                     var per_page = info.length;
-            //                     var page_number = info.page;
-            //                     if (info.recordsDisplay % info.length == 1) {
-            //                         if (page_number != 0) {
-            //                             page_number--;
-            //                         }
-            //                     }
-            //                     $('#tool_title').after('<p class="success">{{ js_escape(trans('langUserDeleted')) }}</p>');
-            //                     $('.success').delay(3000).fadeOut(1500);
-            //                     oTable.page(page_number).draw(false);
-            //                 },
-            //                 error: function(xhr, textStatus, error) {
-            //                     console.log(xhr.statusText);
-            //                     console.log(textStatus);
-            //                     console.log(error);
-            //                 }
-            //             });
-            //         }
-            //     }
-            // );
+            var self_id = $(this).closest('tr').data('self_id');
 
             bootbox.confirm({
                 closeButton: false,
-                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</div>",
+                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langDeleteUser')) }}</div>",
                 message: "<p class='text-center'>{{ js_escape(trans('langDeleteUser')) }}&nbsp;{{ js_escape(trans('langDeleteUser2')) }}</p>",
                 buttons: {
                     cancel: {
@@ -200,7 +167,7 @@
                     }
                 },
                 callback: function (result) {
-                    if(result) {
+                    if (result) {
                         $.ajax({
                             type: 'POST',
                             url: '',
@@ -210,17 +177,21 @@
                                 value: row_id
                             },
                             success: function(data) {
-                                var info = oTable.page.info();
-                                var per_page = info.length;
-                                var page_number = info.page;
-                                if (info.recordsDisplay % info.length == 1) {
-                                    if (page_number != 0) {
-                                        page_number--;
+                                if (self_id) {
+                                    window.location.href = '{{ $urlServer }}';
+                                } else {
+                                    var info = oTable.page.info();
+                                    var per_page = info.length;
+                                    var page_number = info.page;
+                                    if (info.recordsDisplay % info.length == 1) {
+                                        if (page_number != 0) {
+                                            page_number--;
+                                        }
                                     }
+                                    $('#tool_title').after('<p class="success">{{ js_escape(trans('langUserDeleted')) }}</p>');
+                                    $('.success').delay(3000).fadeOut(1500);
+                                    oTable.page(page_number).draw(false);
                                 }
-                                $('#tool_title').after('<p class="success">{{ js_escape(trans('langUserDeleted')) }}</p>');
-                                $('.success').delay(3000).fadeOut(1500);
-                                oTable.page(page_number).draw(false);
                             },
                             error: function(xhr, textStatus, error) {
                                 console.log(xhr.statusText);
@@ -236,7 +207,7 @@
             .attr({ style: 'width: 200px',
                     class: 'form-control input-sm mb-3',
                     placeholder: '{{ js_escape(trans('langName') . ', Username, Email') }}' });
-        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}'); 
+        $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
         $('.success').delay(3000).fadeOut(1500);
     });
 </script>
@@ -269,7 +240,7 @@
 
                     {!! $action_bar !!}
 
-                    @include('layouts.partials.show_alert') 
+                    @include('layouts.partials.show_alert')
 
                     <div class='col-12'>
                         <div class='table-responsive'>
