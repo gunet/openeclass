@@ -358,8 +358,9 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                             <th>$langPercentage</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr></thead>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
-                    $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
-
+                    if (!is_null($this_chart_data['answer'])) {
+                        $this_chart_data['percentage'][array_search($answer->answer_text, $this_chart_data['answer'])] = $percentage;
+                    }
                     if ($thePoll->anonymized != 1) {
                         $names_str = $ellipsized_names_str = '';
                         // Gets names for registered users and emails for unregistered
