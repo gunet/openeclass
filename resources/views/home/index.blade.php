@@ -36,15 +36,11 @@
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                         <div class='jumbotron-intro-text'>
                                             @if(get_config('homepage_title_'.$language_code))
-                                                <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{!! get_config('homepage_title_'.$language_code) !!}</h1>
-                                            @else
-                                                <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{{ trans('langEclass') }}</h1>
+                                                <h1 class='eclass-title' aria-label="{{ trans('langEclass') }}">{{ get_config('homepage_title_'.$language_code) }}</h1>
                                             @endif
 
                                             @if(get_config('homepage_intro_'.$language_code))
                                                 <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{!! get_config('homepage_intro_'.$language_code) !!}</p>
-                                            @else
-                                                <p class='eclassInfo mb-0' aria-label="{{ trans('langInfo') }}">{{ trans('langEclassInfo')}}</p>
                                             @endif
                                         </div>
                                     </div>
