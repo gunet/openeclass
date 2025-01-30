@@ -450,15 +450,17 @@ if ($is_editor) {
             }
             if (this.id=='group_button') {
                $('#assign_button_all_text').text('$m[WorkToAllGroups]');
+               $('#assign_button_some').val('2');
                $('#assign_button_some_text').text('$m[WorkToGroup]');
                $('#assignees').text('$langGroups');
                $('#assign_group_div').hide();
             } else {
                $('#assign_button_all_text').text('$m[WorkToAllUsers]');
+               $('#assign_button_some').val('1');
                $('#assign_button_some_text').text('$m[WorkToUser]');
                $('#assign_button_group_text').text('$m[WorkToGroup]');
                $('#assignees').text('$langStudents');
-               $('#assign_group_div').show();
+               $('#assign_group_div').removeClass('d-none').show();
             }
         }
         function ajaxAssignees()
@@ -2615,7 +2617,7 @@ function new_assignment() {
                                       <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
                                       <td>
                                           <a href='#' class='autojudge_remove_scenario' style='display: none;' aria-label='$langDelete'>
-                                            <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
+                                            <span class='fa fa-fw fa-xmark text-danger' data-bs-title='$langDelete' data-bs-toggle='tooltip'></span>
                                           </a>
                                       </td>
                                     </tr>
@@ -3606,30 +3608,60 @@ function show_edit_assignment($id) {
                           </label>
                         </div>
                     </div>
-                </div>
+                </div>";
+
+        if ($row->group_submissions) {
+            $tool_content .= "
                 <div class='row form-group mt-4'>
                     <div class='col-12 control-label-notes'>$m[WorkAssignTo]</div>
                     <div class='col-12'>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".(($row->assign_to_specific==1) ? '' : 'checked').">
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".($row->assign_to_specific==0 ? 'checked' : '').">
+                            <span id='assign_button_all_text'>$m[WorkToAllGroups]</span>
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='2' ".($row->assign_to_specific==2 ? 'checked' : '').">
+                            <span id='assign_button_some_text'>$m[WorkToGroup]</span>
+                          </label>
+                        </div>
+                        <div class='radio d-none' id='assign_group_div'>
+                          <label>
+                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'>
+                            <span id='assign_button_group_text'>$m[WorkToGroup]</span>
+                          </label>
+                        </div>
+                    </div>
+                </div>";
+        } else {
+            $tool_content .= "
+                <div class='row form-group mt-4'>
+                    <div class='col-12 control-label-notes'>$m[WorkAssignTo]</div>
+                    <div class='col-12'>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".($row->assign_to_specific==0 ? 'checked' : '').">
                             <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".(($row->assign_to_specific==1) ? 'checked' : '').">
+                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".($row->assign_to_specific==1 ? 'checked' : '').">
                             <span id='assign_button_some_text'>$m[WorkToUser]</span>
                           </label>
                         </div>
                         <div class='radio' id='assign_group_div'>
                           <label>
-                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2' ".(($row->assign_to_specific==2) ? 'checked' : '').">
+                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2' ".($row->assign_to_specific==2 ? 'checked' : '').">
                             <span id='assign_button_group_text'>$m[WorkToGroup]</span>
                           </label>
                         </div>
                     </div>
-                </div>
+                </div>";
+        }
+        $tool_content .= "
                 <div class='form-group mt-4'>
                     <div class='col-12'>
                         <div class='table-responsive'>
@@ -3658,7 +3690,7 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                 </div>";
-                    // `auto judge` assignment
+                // `auto judge` assignment
                 if ($autojudge->isEnabled()) {
                     $auto_judge = $row->auto_judge;
                     $lang = $row->lang;
@@ -3721,7 +3753,7 @@ function show_edit_assignment($id) {
                             $tool_content .= "
                                     <td><input type='text' value='$aajudge[weight]' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
                                     <td><a href='#' aria-label='$langDelete' class='autojudge_remove_scenario' style='display: ".($rows <= 0 ? 'none': 'visible').";'>
-                                    <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
+                                    <span class='fa fa-fw fa-xmark text-danger' data-bs-title='$langDelete' data-bs-toggle='tooltip'></span>
                                     </a>
                                     </td>
                                 </tr>";
@@ -3759,7 +3791,7 @@ function show_edit_assignment($id) {
                                     <td><input type='text' name='auto_judge_scenarios[$rows][output]' class='auto_judge_output' /></td>
                                     <td><input type='text' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
                                     <td><a href='#' class='autojudge_remove_scenario' style='display: none;' aria-label='$langDelete'>
-                                        <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
+                                        <span class='fa fa-fw fa-xmark text-danger' data-bs-title='$langDelete' data-bs-toggle='tooltip'></span>
                                     </a></td>
                                 </tr>";
                     }
@@ -4202,7 +4234,7 @@ function show_assignment_review($id, $display_graph_results = false) {
             } else {
                 $edit_grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
             }
-            $icon_field = "<a class='link' href='$edit_grade_link' aria-label='$langEdit'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
+            $icon_field = "<a class='link' href='$edit_grade_link' aria-label='$langEdit'><span class='fa fa-fw fa-edit' title='$langEdit' data-bs-toggle='tooltip'></span></a>";
 
             $grade = Database::get()->querySingle("SELECT grade FROM assignment_grading_review WHERE id = ?d ", $row->id )->grade;
             if (!empty($grade)) {
@@ -4214,7 +4246,7 @@ function show_assignment_review($id, $display_graph_results = false) {
                 } else {
                     $grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 }
-                $grade_field = "<a class='link' href='$grade_link' aria-label='$langSGradebookBook'><span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
+                $grade_field = "<a class='link' href='$grade_link' aria-label='$langSGradebookBook'><span class='fa fa-fw fa-plus' title='$langSGradebookBook' data-bs-toggle='tooltip'></span></a>";
             }
             $tool_content .= "<tr><td class='text-end' width='4'>$i.</td>";
             // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
@@ -4742,8 +4774,8 @@ function assignment_details($id, $row, $x =false) {
                 $m[WorkInfo]
             </h3>
                 ". (($is_editor) ?
-                "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit' aria-label='$langEditChange'>
-                    <span class='fa-solid fa-edit fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
+                "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit' data-bs-toggle='tooltip' title='$langEditChange'>
+                    <span class='fa-solid fa-edit fa-lg'></span>
                 </a>" : "")."
 
         </div>
@@ -5200,7 +5232,7 @@ function show_assignment($id) {
                 $grade_edit_link = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
             }
 
-            $icon_field = "<a class='link' href='$grade_edit_link' aria-label='$langEdit'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
+            $icon_field = "<a class='link' href='$grade_edit_link' aria-label='$langEdit'><span class='fa fa-fw fa-edit' data-bs-title='$langEdit' data-bs-toggle='tooltip'></span></a>";
             if ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_SCALING_GRADE) {
                 $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                 $scales = unserialize($serialized_scale_data);
@@ -5236,7 +5268,7 @@ function show_assignment($id) {
                     $icon_field = '';
                     if ($is_editor) {
                         $grade_field = "<a class='link' href='{$urlAppend}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
-                                    <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
+                                    <span class='fa fa-fw fa-plus' data-bs-title='$langSGradebookBook' data-bs-toggle='tooltip'></span></a>";
                     } else {
                         $grade_field = "";
                     }
@@ -5297,7 +5329,7 @@ function show_assignment($id) {
                         $icon_field = '';
                         if ($is_editor) {
                             $grade_field = "<a class='link' href='{$urlAppend}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id' aria-label='$langSGradebookBook'>
-                                    <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
+                                    <span class='fa fa-fw fa-plus' data-bs-title='$langSGradebookBook' data-bs-toggle='tooltip'></span></a>";
                         } else {
                             $grade_field = "";
                         }
@@ -5369,7 +5401,7 @@ function show_assignment($id) {
                 $tool_content .= "<td class='text-end'>
                                     $icon_field
                                 <a class='linkdelete ps-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' aria-label='$langDeleteSubmission'>
-                                    <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
+                                    <span class='fa fa-fw fa-xmark text-danger' data-bs-title='$langDeleteSubmission' data-bs-toggle='tooltip'></span>
                                 </a>
                             </td>";
                 }
@@ -5616,12 +5648,12 @@ function show_student_assignments() {
                         $lock_description .= "<li>$langIPUnlock</li>";
                     }
                     $lock_description .= "</ul>";
-                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$lock_description'></span>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$lock_description'></span>";
                 }
             }
 
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             $title_temp = q($row->title);
@@ -5792,10 +5824,10 @@ function show_assignments() {
                     $lock_description .= "<li>$langIPUnlock</li>";
                 }
                 $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$lock_description'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$lock_description'></span>";
             }
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             if ($row->assign_to_specific == 1) {
