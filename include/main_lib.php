@@ -6167,6 +6167,10 @@ function theme_initialization() {
                     background-color:  $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .btn-exercise-nav[type=submit] {
+                    background-color:  $theme_options_styles[bgWhiteButtonColor] !important;
+                }
+
             ";
         }
 
@@ -6252,6 +6256,10 @@ function theme_initialization() {
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
 
+                .btn-exercise-nav[type=submit] {
+                    color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
             ";
         }
 
@@ -6315,6 +6323,10 @@ function theme_initialization() {
 
                 .btn.btn-secondary{
                     border: solid 1px $theme_options_styles[whiteButtonBorderTextColor];
+                }
+
+                .btn-exercise-nav[type=submit] {
+                    border: solid 1px $theme_options_styles[whiteButtonBorderTextColor] !important;
                 }
 
             ";
@@ -6417,6 +6429,11 @@ function theme_initialization() {
                 .btn.btn-secondary:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+
+                .btn-exercise-nav[type=submit]:hover,
+                .btn-exercise-nav[type=submit]:focus{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
             ";
         }
 
@@ -6489,6 +6506,11 @@ function theme_initialization() {
                 .btn.btn-secondary:hover,
                 .btn.btn-secondary:focus{
                     border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor];
+                }
+
+                .btn-exercise-nav[type=submit]:hover,
+                .btn-exercise-nav[type=submit]:focus{
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
             ";
@@ -6567,6 +6589,11 @@ function theme_initialization() {
                 .btn.btn-secondary:hover,
                 .btn.btn-secondary:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .btn-exercise-nav[type=submit]:hover,
+                .btn-exercise-nav[type=submit]:focus{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
                 }
 
             ";

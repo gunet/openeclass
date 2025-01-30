@@ -2047,7 +2047,8 @@ label:has(input[type="checkbox"]:disabled){
 .helpAdminBtn,
 .secodandary-submit,
 .btn-submit,
-.reg_button{
+.reg_button,
+.btn-exercise-nav{
   transition: 0.3s ease;
 }
 
@@ -2251,6 +2252,29 @@ input[type="submit"].warningAdminBtn:hover {
 
 .warningAdminBtn .fa-rss::before{
   color: #000000 !important;
+}
+
+.btn-exercise-nav[type="submit"]{
+  border: solid thin;
+  border-color: #0073E6;
+  color: #0073E6;
+  font-size: 14px;
+  height:40px;
+  font-weight: 700; font-style: normal;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  letter-spacing: 0px;
+  line-height: 16px;
+}
+
+.btn-exercise-nav[type="submit"]:hover,
+.btn-exercise-nav[type="submit"]:focus{
+  border-color: #0073E6;
+  color: #0073E6;
+  background-color: #ffffff;
 }
 
 /**********************************************************************************************************************/
