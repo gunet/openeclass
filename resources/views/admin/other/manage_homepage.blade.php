@@ -100,24 +100,24 @@
                                         <div class='form-group'>
                                             <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}} - {{$langName}}</label>
                                             <div class='col-sm-12'>
-                                                <input class='form-control' type='text' name='homepage_title_{{$langCode}}' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title_'.$langCode, trans('langEclass'))) !!}">
-                                                <p class='help-block mt-1'>{{trans('langHomePageTitleHelpText')}}</p>
+                                                <input class='form-control' type='text' name='homepage_title_{{$langCode}}' id='defaultHomepageTitle' value="{{ get_config('homepage_title_'.$langCode, trans('langEclass')) }}">
+                                                <p class='help-block mt-1'>{{ trans('langHomePageTitleHelpText') }}</p>
                                             </div>
                                         </div>
 
                                         <div class='form-group mt-4'>
                                             <label for='defaultHomepageTestimonialTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}&nbsp(Testimonials) - {{$langName}}</label>
                                             <div class='col-sm-12'>
-                                                <input class='form-control' type='text' name='homepage_testimonial_title_{{$langCode}}' id='defaultHomepageTestimonialTitle' value="{!! q(get_config('homepage_testimonial_title_'.$langCode, trans('langSaidForUs'))) !!}">
-                                                <p class='help-block mt-1'>{{trans('langHomePageTitleHelpText')}}</p>
+                                                <input class='form-control' type='text' name='homepage_testimonial_title_{{$langCode}}' id='defaultHomepageTestimonialTitle' value="{{ get_config('homepage_testimonial_title_'.$langCode, trans('langSaidForUs')) }}">
+                                                <p class='help-block mt-1'>{{ trans('langHomePageTitleHelpText') }}</p>
                                             </div>
                                         </div>
 
                                         <div class='form-group mt-4'>
                                             <label for='defaultHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}} - {{$langName}}</label>
                                             <div class='col-sm-12'>
-                                                <input class='form-control' type='text' name='homepage_name_{{$langCode}}' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name_'.$langCode, trans('langHomePage'))) !!}">
-                                                <p class='help-block mt-1'>{{trans('langHomePageNavTitleHelp')}}</p>
+                                                <input class='form-control' type='text' name='homepage_name_{{$langCode}}' id='defaultHomepageBcrmp' value="{{ get_config('homepage_name_'.$langCode, trans('langHomePage')) }}">
+                                                <p class='help-block mt-1'>{{ trans('langHomePageNavTitleHelp') }}</p>
                                             </div>
                                         </div>
 
@@ -126,7 +126,7 @@
                                             <label for='homepage_intro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}} - {{$langName}}</label>
                                             <div class='col-sm-12'>
                                                 {!! rich_text_editor('homepage_intro_'.$langCode, 5, 20, get_config('homepage_intro_'.$langCode)) !!}
-                                                <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
+                                                <p class='help-block mt-1'>{{ trans('langHomePageIntroTextHelp') }}</p>
                                             </div>
                                         </div>
 
