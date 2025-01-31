@@ -57,7 +57,7 @@ if (isset($_POST['submitAnnouncement'])) {
 
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
-        $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
+        $send_mail = $is_visible && isset($_POST['recipients']) && (count($_POST['recipients'])>0);
         if (isset($_POST['startdate_active']) && isset($_POST['startdate']) && !empty($_POST['startdate'])) {
             $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
             $start_display = $startDate_obj->format('Y-m-d H:i:s');
