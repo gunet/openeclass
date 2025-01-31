@@ -640,7 +640,8 @@ function show_resource($info) {
  */
 function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToUnitPrereq;
+           $id, $course_code, $langResourceBelongsToUnitPrereq, 
+           $langDownloadPdfNotAllowed;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
@@ -675,10 +676,18 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
             $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
             $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                 "<input type='hidden' value='$download_url'>" : '';
-            $file_obj = MediaResourceFactory::initFromDocument($file);
-            $file_obj->setAccessURL(file_url($file->path, $file->filename));
-            $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
-            $link = MultimediaHelper::chooseMediaAhref($file_obj);
+            if (get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download){
+                $file_title = $file->title !== '' ? $file->title : $file->filename;
+                $file_url = file_url($file->path, $file->filename);
+                $link = "<a class='fileURL-link' target='_blank' href='{$urlServer}main/prevent_pdf.php?urlPr=" . urlencode($file_url) . "'>
+                            $file_title&nbsp;&nbsp;" . icon('fa-shield', $langDownloadPdfNotAllowed) . 
+                         "</a>";
+            } else {
+                $file_obj = MediaResourceFactory::initFromDocument($file);
+                $file_obj->setAccessURL(file_url($file->path, $file->filename));
+                $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+                $link = MultimediaHelper::chooseMediaAhref($file_obj);
+            }
         }
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
