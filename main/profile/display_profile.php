@@ -53,13 +53,29 @@ $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, use
 
 //Get status for user
 $is_user_teacher = false;
+$data['privilege_message'] = ' - ';
 $myBooks = '';
-if($data['userdata']->status == USER_TEACHER){
+if ($data['userdata']->status == USER_TEACHER) {
     $is_user_teacher = true;
-}else{
+    $data['privilege_message'] = $langWithCourseCreationRights;
+} else {
     $myBooks = '&myBooks=true';
 }
-$data['is_user_teacher'] = $is_user_teacher;
+
+$q = Database::get()->querySingle('SELECT privilege FROM admin WHERE user_id = ?d', $data['id']);
+if ($q) {
+    $privilege = $q->privilege;
+    switch ($privilege) {
+        case ADMIN_USER: $data['privilege_message'] = $langAdministrator;
+                        break;
+        case POWER_USER: $data['privilege_message'] = $langPowerUser;
+                        break;
+        case USERMANAGE_USER: $data['privilege_message'] = $langManageUser;
+                        break;
+        case DEPARTMENTMANAGE_USER: $data['privilege_message'] = $langManageDepartment;
+                        break;
+    }
+}
 
 if ($data['userdata']) {
     $auth = array_search($data['userdata']->password, $auth_ids);

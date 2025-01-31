@@ -64,30 +64,16 @@
                             </div>
                             <div class="card-body">
                                 <ul class='list-group list-group-flush'>
-                                    @if ($is_admin)
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                                <div class='col-lg-4 col-12'>
-                                                    <div class='title-default'>{{ trans('langUserPermissions') }}</div>
-                                                </div>
-                                                <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ trans('langAdministrator') }}
-                                                </div>
+                                    <li class='list-group-item element'>
+                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                            <div class='col-lg-4 col-12'>
+                                                <div class='title-default'>{{ trans('langUserPermissions') }}</div>
                                             </div>
-                                        </li>
-                                    @elseif ($userdata->status == USER_TEACHER)
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                                <div class='col-lg-4 col-12'>
-                                                    <div class='title-default'>{{ trans('langUserPermissions') }}</div>
-                                                </div>
-                                                <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ trans('langWithCourseCreationRights') }}
-                                                </div>
+                                            <div class='col-lg-8 col-12 title-default-line-height'>
+                                                {{ $privilege_message }}
                                             </div>
-                                        </li>
-                                   @endif
-
+                                        </div>
+                                    </li>
                                     @if (!empty($userdata->email) and allow_access($userdata->email_public))
                                         <li class='list-group-item element'>
                                             <div class='row row-cols-1 row-cols-lg-2 g-1'>
