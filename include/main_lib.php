@@ -1157,31 +1157,32 @@ function visible_module($module_id) {
 }
 
 /**
- * @brief check if a module is disabled
+ * @brief Check if a module is disabled.
+ *        If called inside of a course, takes in account course / collaboration setting
  * @return boolean
  */
 function is_module_disable($module_id) {
+    global $require_current_course, $is_collaborative_course;
 
-    $is_disabled = false;
-    if(get_config('show_collaboration') && get_config('show_always_collaboration')){
+    if ((get_config('show_collaboration') && get_config('show_always_collaboration')) or
+        ($require_current_course && $is_collaborative_course)) {
         $q = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
         if ($q) {
-            $is_disabled = true;
+            return true;
         }
-    }elseif(get_config('show_collaboration') && !get_config('show_always_collaboration')){
+    } elseif (!$require_current_course && get_config('show_collaboration') && !get_config('show_always_collaboration')){
         $q1 = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
         $q2 = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
         if ($q1 or $q2) {
-            $is_disabled = true;
+            return true;
         }
-    }else{
+    } else {
         $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
         if ($q) {
-            $is_disabled = true;
+            return true;
         }
     }
-
-    return $is_disabled;
+    return false;
 }
 
 // Flipped Classroom
@@ -5070,9 +5071,9 @@ function module_path($path) {
 function theme_initialization() {
 
     global $urlAppend, $urlServer, $langRegistration, $langFaq,
-           $head_content, $webDir, $theme_id, $container, 
-           $leftsideImg, $eclass_banner_value, $PositionFormLogin, 
-           $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img, 
+           $head_content, $webDir, $theme_id, $container,
+           $leftsideImg, $eclass_banner_value, $PositionFormLogin,
+           $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
            $logo_img_small, $theme_css;
 
     // Add Theme Options styles
