@@ -20,7 +20,17 @@
                     @include('layouts.partials.show_alert') 
 
                     <div class="extapp">
-                        <div class="col-12 mb-3 d-flex gap-1">
+
+                        <div class="col-12 mb-3 d-flex d-lg-none col-md-6 col-sm-12">
+                            <select name="filter-dropdown" class="filter-dropdown form-select">
+                                <option value="dropdown-all" data-category="all">{{ trans('langExtAppAll') }}</option>
+                                @foreach (array_keys(ExtAppManager::$AppCategories) as $category)
+                                    <option value="{{ $category }}" data-category="{{ $category }}">{{ trans('langExtApp' . ucfirst($category)) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-12 mb-3 d-flex gap-1 d-none d-lg-flex">
                             <button class="btn btn-success filter-btn" data-category="all">{{ trans('langExtAppAll') }}</button>
                             @foreach (array_keys(ExtAppManager::$AppCategories) as $category)
                                 <button class="btn btn-primary filter-btn" data-category="{{ $category }}">{{ trans('langExtApp' . ucfirst($category)) }}</button>
@@ -123,17 +133,32 @@
                 });
     });
 
-    $('.filter-btn').on('click', function () {
-        var category = $(this).data('category');
-        $('.filter-btn').removeClass('btn-success').addClass('btn-primary');
-        $(this).removeClass('btn-primary').addClass('btn-success');
-        if (category === 'all') {
-            $('tr[data-category]').removeClass('d-none');
-        } else {
-            $('tr[data-category]').addClass('d-none');
-            $('tr[data-category="' + category + '"]').removeClass('d-none');
-        }
-    });
+     $('.filter-dropdown').on('change', function () {
+         var category = $(this).find('option:selected').data('category');
+         $('.filter-btn').removeClass('btn-success').addClass('btn-primary');
+         $('.filter-btn[data-category="' + category + '"]').removeClass('btn-primary').addClass('btn-success');
+         if (category === 'all') {
+             $('tr[data-category]').removeClass('d-none');
+         } else {
+             $('tr[data-category]').addClass('d-none');
+             $('tr[data-category="' + category + '"]').removeClass('d-none');
+         }
+     });
+
+     $('.filter-btn').on('click', function () {
+         var category = $(this).data('category');
+         $('.filter-btn').removeClass('btn-success').addClass('btn-primary');
+         $(this).removeClass('btn-primary').addClass('btn-success');
+         $('.filter-dropdown option').removeAttr('selected');
+         $('.filter-dropdown option[data-category="' + category + '"]').attr('selected', 'selected');
+         $('.filter-dropdown').change();
+         if (category === 'all') {
+             $('tr[data-category]').removeClass('d-none');
+         } else {
+             $('tr[data-category]').addClass('d-none');
+             $('tr[data-category="' + category + '"]').removeClass('d-none');
+         }
+     });
 
 </script>
 @endsection
