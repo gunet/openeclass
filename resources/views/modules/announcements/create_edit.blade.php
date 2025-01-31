@@ -1,5 +1,13 @@
-
 @extends('layouts.default')
+
+@push('head_styles')
+    <style>
+      .not_visible {
+          opacity: 0.5;
+          pointer-events: none;
+      }
+    </style>
+@endpush
 
 @section('content')
 
@@ -60,6 +68,13 @@
             autoclose: true
         });
 
+        $('#show_public').change(function () {
+            if (this.checked) {
+                $('#recipients-form-group').removeClass('not_visible');
+            } else {
+                $('#recipients-form-group').addClass('not_visible');
+            }
+        });
     });
 </script>
 
@@ -104,7 +119,7 @@
                                             <div class='col-12'>{!! $contentToModify !!}</div>
                                         </div>
 
-                                        <div class='row mt-4 form-group'>
+                                        <div id='recipients-form-group' class='row mt-4 form-group @if (!$checked_public) not_visible @endif'>
                                             <label for='select-recipients' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
                                             <div class='col-12'>
                                                 <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
@@ -158,7 +173,7 @@
                                             <div class='col-12'>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                        <input class='mt-0' type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('langViewShow') }}
+                                                        <input class='mt-0' type='checkbox' id='show_public' name='show_public' {{ $checked_public }}> {{ trans('langViewShow') }}
                                                         <span class='checkmark'></span>
                                                     </label>
                                                 </div>
