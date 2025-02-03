@@ -139,12 +139,12 @@ if(isset($_GET['term'])){
                                     if($course->visible == 3){
                                       $invisibleCourse = 'InvisibleCourse';
                                     }
-                                    $html .= "<a class='$invisibleCourse TextBold mt-2' href='{$urlServer}courses/{$course->code}/index.php'>".q($course->title)."</a>
+                                    $html .= "<a class='$invisibleCourse TextBold my-2' href='{$urlServer}courses/{$course->code}/index.php'>".q($course->title)."</a>
                                 </div>
                             </div>
 
 
-                            <div class='card-body pt-0'>
+                            <div class='card-body'>
                                 <img src='{$courseImage}' class='card-img-top cardImgCourse rounded-0 $invisibleCourse' alt='$langCourseImage&nbsp;(".q($course->title).")'>
                                 <div class='card-text mt-3'>
                                     <p class='d-inline $invisibleCourse mb-0 TextBold'>$langCode:</p>
