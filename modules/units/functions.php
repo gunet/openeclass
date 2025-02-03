@@ -782,7 +782,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         $lp_susp_button = "";
         if ($suspend_data) {
             $lp_susp_button = "
-                <span class='pull-right' style='padding-left: 15px;' data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>
+                <span class='pull-right' style='padding-left: 15px;' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
                     <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>
                         <span class='fa fa-repeat' style='font-size:15px;'></span>
                     </a>
@@ -801,7 +801,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
                 $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
                             &nbsp; &nbsp;
                            <span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
-                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langDetails'>
+                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
                     <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
                     <span class='fa fa-line-chart'></span>
                     </a>
