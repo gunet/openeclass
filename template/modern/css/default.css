@@ -5813,6 +5813,23 @@ th.grade-col a{
   z-index: 1061 !important;
 }
 
+#unitResources div[data-id] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+#unitResources .actionbtn {
+  margin-left: auto;
+  max-width:70px
+}
+
+#unitResources .unitIcon span {
+  font-size: 20px;
+}
+
+/******************************** Ext Apps *********************************/
 
 .appIcon {
   padding: 10px;
@@ -5823,3 +5840,4 @@ th.grade-col a{
   border-radius: 5px;
   text-decoration: none;
 }
+
