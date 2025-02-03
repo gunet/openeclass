@@ -28,9 +28,18 @@ require_once 'modules/admin/modalconfirmation.php';
 $toolName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
+$col_size = '';
+
 if (isset($is_admin) and $is_admin) {
     $data['is_admin'] = $is_admin;
+    $col_size = '3';
+} else if($is_power_user or $is_departmentmanage_user) {
+    $col_size = '2';
+} else if($is_usermanage_user) {
+    $col_size = '1';
 }
+$data['col_size'] = $col_size;
+
 $data['release_info'] = get_eclass_release();
 
 // Construct a table with platform identification info
@@ -86,7 +95,14 @@ if (get_config('enable_indexing')) {
     $data['idxModal'] = modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }
 // CRON RELATED
-$data['cronParams'] = Database::get()->queryArray("SELECT name, last_run FROM cron_params");
+$data['cronParams'] = $cronParams = Database::get()->queryArray("SELECT name, last_run FROM cron_params");
+$colSize = '';
+if (count($cronParams) > 0) {
+    $colSize = '2';
+} else {
+    $colSize = '1';
+}
+$data['colSize'] = $colSize;
 
 // H5P related
 $ts = get_config('h5p_update_content_ts');

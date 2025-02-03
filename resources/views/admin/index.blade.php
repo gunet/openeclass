@@ -80,7 +80,7 @@
                 {!! $action_bar !!}
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             @include('layouts.partials.sidebarAdmin')
 
@@ -195,14 +195,6 @@
 
             <div class='col-12 mt-4'>
 
-                @php
-                    $colSize = '';
-                    if (count($cronParams) > 0) {
-                        $colSize = '2';
-                    } else {
-                        $colSize = '1';
-                    }
-                @endphp
                 <div class="row row-cols-1 row-cols-lg-{{ $colSize }} g-3 g-lg-4">
 
                     <div class='col'>
