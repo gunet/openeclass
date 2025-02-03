@@ -4650,7 +4650,6 @@ body .delThemeBtn{
   height: 200px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  object-fit: cover;
 }
 
 .mycourses-pagination{
@@ -4774,9 +4773,9 @@ body .delThemeBtn{
 /**********************************************************************************************************************/
 
 .course_info_img{
-  max-height:300px;
+  height:300px;
   width:100%;
-  object-fit: cover;
+  border-radius: 4px;
 }
 
 
