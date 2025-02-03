@@ -4287,7 +4287,7 @@ function show_assignment_review($id, $display_graph_results = false) {
               <div class='col-12'>
                  <div class='checkbox'>
                  <label class='label-container' aria-label='$langSelect'>
-                     <input type='checkbox' value='1' name='send_email' checked><span class='checkmark'></span> $m[email_users]
+                     <input type='checkbox' value='1' name='send_email'><span class='checkmark'></span> $m[email_users]
                    </label>
                  </div>
               </div>
@@ -4414,7 +4414,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                 <label class='label-container' aria-label='$langSelect'>
-                                    <input type='checkbox' name='send_email' id='email_button' value='1' checked>
+                                    <input type='checkbox' name='send_email' id='email_button' value='1'>
                                     <span class='checkmark'></span>
                                     $m[email_users]
                                   </label>
@@ -5421,7 +5421,7 @@ function show_assignment($id) {
                     <div class='col-12'>
                         <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' value='1' name='send_email' checked><span class='checkmark'></span> $langMailToUsers
+                            <input type='checkbox' value='1' name='send_email'><span class='checkmark'></span> $langMailToUsers
                           </label>
                         </div>
                     </div>
