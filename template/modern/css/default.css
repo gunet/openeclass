@@ -4954,7 +4954,7 @@ body .delThemeBtn{
   justify-content: center;
   align-items: center;
   gap: 8px;
-  width: 200px;
+  width: 150px;
   height: 88px;
   border: solid 1px #E8EDF8;
   background-color: #ffffff;
@@ -4963,6 +4963,7 @@ body .delThemeBtn{
   font-weight: 700;
   color: #0073E6;
   text-align: center;
+  padding: 10px;
 }
 
 .quickLink:hover{

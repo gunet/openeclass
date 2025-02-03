@@ -71,20 +71,6 @@
 
 </div>
 
-
-
-@php
-    $col_size = '';
-    if($is_admin) {
-        $col_size = '3';
-    }
-    else if($is_power_user or $is_departmentmanage_user) {
-        $col_size = '2';
-    } else if($is_usermanage_user) {
-        $col_size = '1';
-    }
-@endphp
-
 <div class='col-12 mt-4'>
     <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-3 g-lg-4">
         <div class='col'>
