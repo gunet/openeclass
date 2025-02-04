@@ -137,7 +137,7 @@ if (isset($_REQUEST['submit'])) {
     exit();
 }
 
-// if we haven't choose 'system actions'
+// if we haven't chosen 'system actions'
 if (!isset($_GET['from_other'])) {
     $letterlinks = '';
     $result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
@@ -180,11 +180,11 @@ $flex_content = '';
 $flex_grow = '';
 $column_content = '';
 
-if(!isset($_GET['from_admin']) and !isset($_GET['from_other'])){
+if (!isset($_GET['from_admin']) and !isset($_GET['from_other'])) {
     $flex_content = 'd-lg-flex gap-4';
     $flex_grow = 'flex-grow-1';
     $column_content = 'form-content-modules';
-}else{
+} else {
     $flex_content = 'row m-auto';
     $flex_grow = 'col-lg-6 col-12 px-0';
     $column_content = 'col-lg-6 col-12';
@@ -228,7 +228,7 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="row form-group mt-4">
-        <label for="log_typeID" class="col-12 control-label-notes">' . $langLogTypes . ' <span class="asterisk Accent-200-cl">(*)</span></label>        
+        <label for="log_typeID" class="col-12 control-label-notes">' . $langActions . ' <span class="asterisk Accent-200-cl">(*)</span></label>        
          <div class="col-12">';
 
 if (isset($_GET['from_other'])) {   // system actions
@@ -282,25 +282,28 @@ if (!isset($_GET['from_other'])) {
       </div>';
 }
 
-$tool_content .= "<div class='row form-group mt-5'><div class='col-12 d-flex justify-content-end align-items-center'>
-
-    ".form_buttons(array(
-        array(
-            'class' => 'submitAdminBtn',
-            'text' => $langSubmit,
-            'name' => 'submit',
-            'value'=> $langSubmit
-        ),
-        array(
-            'class' => 'cancelAdminBtn',
-            'href' => "index.php?course=$course_code",
-        )
-    ))."
-  
-
-</div></div></form></div></div><div class='$column_content d-none d-lg-block'>
-<img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-</div>
+$cancel_url = (isset($_GET['from_other']))? "index.php?t=a" : "index.php?course=$course_code";
+$tool_content .= "<div class='row form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>
+                        ".form_buttons(array(
+                            array(
+                                'class' => 'submitAdminBtn',
+                                'text' => $langSubmit,
+                                'name' => 'submit',
+                                'value'=> $langSubmit
+                            ),
+                            array(
+                                'class' => 'cancelAdminBtn',
+                                'href' => "$cancel_url",
+                            )
+                        ))."      
+                    </div>
+                </div>
+                </form>
+    </div></div>
+    <div class='$column_content d-none d-lg-block'>
+        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+    </div>
 </div>";
 
 if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
