@@ -8091,6 +8091,10 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgSelect] !important;
                 }
 
+                .select2-container--default .select2-selection--single{
+                    background-color: $theme_options_styles[BgSelect] !important;
+                }
+
             ";
         }
 
@@ -8134,6 +8138,10 @@ function theme_initialization() {
 
                 .mce-floatpanel {
                     border: 1px solid $theme_options_styles[clBorderSelect] !important;;
+                }
+
+                .select2-container--default .select2-selection--single{
+                    border: 1px solid $theme_options_styles[clBorderSelect] !important;
                 }
 
             ";
@@ -8208,6 +8216,10 @@ function theme_initialization() {
                 }
 
                 .mce-menu-item .mce-text {
+                    color: $theme_options_styles[clOptionSelect] !important;
+                }
+
+                .select2-container--default .select2-selection--single .select2-selection__rendered{
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
