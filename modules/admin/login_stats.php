@@ -84,7 +84,7 @@ function refresh_oldstats_plot(startdate, enddate) {
 </script>";
 
 $toolName = $langAdmin;
-$pageName = $langUsageVisits;
+$pageName = "$langLoginUser $langUsersOf";
 
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
