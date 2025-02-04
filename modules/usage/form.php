@@ -62,10 +62,10 @@ elseif($stats_type == 'admin'){
     $statsDepOptions = "";
     foreach($result as $d){
        $indentation = "";
-       for($i=0;$i<$d->depth;$i++){
+       for($i=0;$i<$d->depth;$i++) {
            $indentation .= "&nbsp;&nbsp;";
        }
-       $statsDepOptions .= '<option value="'.$d->id.'" >' . q($indentation.hierarchy::unserializeLangField($d->name)) . "</option>\n";
+       $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation . q(hierarchy::unserializeLangField($d->name)) . "</option>";
     }
 }
 else{
@@ -75,9 +75,9 @@ else{
     } else {
         $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $uid);
     }
-    $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
+    $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>";
     foreach($result as $c){
-       $statsCourseOptions .= '<option value="'.$c->id.'" >' . q($c->title) . "</option>\n";
+       $statsCourseOptions .= '<option value="'.$c->id.'" >' . q($c->title) . "</option>";
     }
 }
 
@@ -106,13 +106,9 @@ $tool_content .= "
 $tool_content .= '<div class="row mt-3">
 <div class="col-md-6 col-12"><select name="interval" id="interval" class="form-select" aria-label="'.$langType.'">' . $statsIntervalOptions . '</select></div>';
 
-//$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
-
 if($stats_type == 'course'){
-
     $tool_content .= '
     <div class="col-md-6 col-12 mt-md-0 mt-3" style="display:none;"><select aria-label="'.$langUser.'" name="module" id="module" class="form-select">' . $mod_opts . '</select></div>';
-
     $tool_content .= '
     <div class="col-md-6 col-12 mt-md-0 mt-3"><select name="user" id="user" aria-label="'.$langUser.'" class="form-select">' . $statsUserOptions . '</select></div>';
 }
@@ -125,11 +121,10 @@ elseif($stats_type == 'user'){
     <div class="col-md-6 col-12 mt-md-0 mt-3"><select aria-label="'.$langCourse.'" name="course" id="course" class="form-select">' . $statsCourseOptions . '</select></div>';
 }
 $tool_content .= "</div>";
-//<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>
 
 $tool_content .= '<div class="float-end pt-4">
     <div id="toggle-view" class="btn-group gap-2">
-        <a id="plots-view" class="btn submitAdminBtn submitAdminBtnClassic active rounded-2" data-bs-placement="top" title="'.$langPlots.'" data-bs-toggle="tooltip" data-bs-original-title="'.$langPlots.'" aria-label="'.$langPlots.'">
+        <a id="plots-view" class="btn submitAdminBtn submitAdminBtnClassic active rounded-2" data-bs-placement="top" title="'.$langCharts.'" data-bs-toggle="tooltip" data-bs-original-title="'.$langCharts.'" aria-label="'.$langCharts.'">
             <span class="fa fa-bar-chart" data-bs-toggle="tooltip" data-bs-placement="top"></span>
         </a>
         <a id="list-view" class="btn submitAdminBtn submitAdminBtnClassic rounded-2" data-bs-placement="top" title="'.$langDetails.'" data-bs-toggle="tooltip" data-bs-original-title="'.$langDetails.'" aria-label="'.$langDetails.'">
