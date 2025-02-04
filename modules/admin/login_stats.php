@@ -90,7 +90,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
 // recent logins
-$interval = [ $langToday => 1, $langLast7Days => 7, $langLast30Days => 30 ];
+$interval = [ $langToday => 1, $langLast7Days => 7];
 foreach ($interval as $legend => $value) {
     $loginUsers = Database::get()->querySingle("SELECT COUNT(*) AS cnt 
                         FROM loginout
