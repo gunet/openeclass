@@ -34,7 +34,7 @@ $action_bar = action_bar(array(
         'url' => "displaylog.php?course=$course_code",
         'icon' => 'fa-user',
         'show' => $is_course_admin),
-    array('title' => $langPlatformGenStats,
+    array('title' => $langCharts,
         'url' => "index.php?course=$course_code&gc_stats=true",
         'icon' => 'fa-bar-chart'),
     array('title' => $langStatsReports,
