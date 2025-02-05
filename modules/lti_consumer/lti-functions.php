@@ -361,7 +361,7 @@ function edit_lti_app($session_id) {
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
         $langConfirmDelete, $langUnitDescr,
-        $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
+        $langTitle,$langActivate, $langDeactivate, $langActions,
         $langEditChange, $langDelete, $langNoLTIApps, $langSettingSelect;
 
     load_js('trunk8');
@@ -378,7 +378,7 @@ function lti_app_details() {
                              <thead><tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
                                <th>$langUnitDescr</th>
-                               <th>$langLTIAppActions</th>";
+                               <th>$langActions</th>";
         if ($is_editor) {
             $headings .= "<th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>";
         }
