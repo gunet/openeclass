@@ -6278,3 +6278,4 @@ $langExtAppTeleconference = "Teleconference";
 $langExtAppCloud = "Cloud";
 $langExtAppOther = "Other";
 $langDownloadPdfNotAllowed = "File download not allowed";
+$langCharts = "Charts";

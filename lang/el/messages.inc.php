@@ -7015,3 +7015,4 @@ $langChooseOtherSession = "Έχετε επιλέξει διαφορετική σ
 $langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος διαμορφώνεται στο μισό ύψος της τρέχουσας οθόνης.";
 $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είναι μηδενική.";
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
+$langCharts = "Διαγράμματα";
