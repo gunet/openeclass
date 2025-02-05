@@ -491,13 +491,15 @@ function printPolls() {
                     </td></tr>";
                 } else if ($is_course_reviewer) {
                         $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
-                        $tool_content .= "<td>$total_participants";
+                        $tool_content .= "<td style='text-align: center;'>$total_participants";
                         $tool_content .= "</td>";
-                        $tool_content .= "<td class='text-end option-btn-cell'>
-                                    <div style='padding-top:7px;padding-bottom:7px;'>
-                                        <a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>
-                                    </div>
-                                </td></tr>";
+                    $tool_content .= "<td class='text-end option-btn-cell'>";
+                        if ($total_participants > 0 && $thepoll->type != POLL_LIMESURVEY) {
+                            $tool_content .= "<div style='padding-top:7px;padding-bottom:7px;'>
+                                            <a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>
+                                        </div>";
+                        }
+                        $tool_content .= "</td></tr>";
                 } else {
                     $tool_content .= "<td>";
                     if ($poll_not_started == 1) {
@@ -525,10 +527,10 @@ function printPolls() {
               <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                   <form action='$_SERVER[SCRIPT_NAME]' method='POST' id='clone_form'>
-                    <div class='modal-header'> 
+                    <div class='modal-header'>
                         <div class='modal-title'>$langCreateDuplicateIn</div>
                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langCancel'></button>
-                     
+
                     </div>
                     <div class='modal-body'>
                         <div class='form-group'>
