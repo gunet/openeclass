@@ -1793,7 +1793,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
     return "
         <div $class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$tclink $comment_box</div>" .
         actions('tc', $resource_id, $visibility) . '
         </div>';
