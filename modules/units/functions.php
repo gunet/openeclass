@@ -532,6 +532,7 @@ function show_resources($unit_id)
         </script>";
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+            $html .= "<div class='spacer card-units'></div>";
             $html .= "<div class='table-responsive'>";
             $html .= "<div class='table table-striped table-hover table-default'><div id='unitResources'>";
             foreach ($req as $info) {
@@ -720,7 +721,7 @@ function show_text($comments, $resource_id, $visibility, $act_name) {
         if(!empty($act_name)){
             $content .= " <div class='text-start'>$act_name</div> ";
         }
-    $content .= "<div colspan='3'>$comments</div>" .
+    $content .= "<div class='col-10'>$comments</div>" .
                     actions('text', $resource_id, $visibility) .
                 "</div>";
 
@@ -878,7 +879,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>".icon($imagelink)."</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div> $videolink $res_prereq_icon $comment_box</div>" . actions('video', $resource_id, $visibility) . "
         </div>";
 }
