@@ -738,7 +738,7 @@ function show_description($title, $comments, $id, $res_id, $visibility, $act_nam
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
     $content .= "
         <div>
-        <div class='text-start'>$act_name</div>
+        " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div colspan='2'>
             <div class='title'>" . q($title) . "</div>
             <div class='content'>$comments</div>
@@ -818,7 +818,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     return "
         <div data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$link $res_prereq_icon <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
@@ -912,7 +912,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
     $content = "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>".icon('fa-folder-open')."</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>" . q($title);
 
     if (!empty($comments)) {
@@ -1029,7 +1029,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
     return "
         <div data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$exlink $res_prereq_icon $comment_box $assign_to_users_message</div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
@@ -1148,7 +1148,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$exlink $res_prereq_icon $comment_box</div>" . actions('lp', $resource_id, $visibility) . "
         </div>";
 }
@@ -1204,7 +1204,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$forumlink $res_prereq_icon $comment_box</div>" .
             actions('forum', $resource_id, $visibility) . '
         </div>';
@@ -1278,7 +1278,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$polllink $res_prereq_icon $comment_box $assign_to_users_message</div>" .
             actions('poll', $resource_id, $visibility) . '
         </div>';
@@ -1336,7 +1336,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$wikilink $res_prereq_icon $comment_box</div>" .
             actions('wiki', $resource_id, $visibility) . '
         </div>';
@@ -1384,7 +1384,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$exlink $comment_box</div>" . actions('link', $resource_id, $visibility) . "
         </div>";
 }
@@ -1411,7 +1411,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
         } else {
             $content = "<div class='not_visible' data-id='$resource_id'>
                         <div class='unitIcon' width='1'>" . icon('fa-folder-open') . "</div>
-                        <div class='text-start'>$act_name</div>
+                        " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
                         <div>" . q($title) . " ($langWasDeleted)";
 
         }
@@ -1420,7 +1420,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             $content .= "
                         <div$class_vis data-id='$resource_id'>
                           <div class='unitIcon' width='1'>".icon('fa-folder-open')."</div>
-                          <div class='text-start'>$act_name</div>
+                          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
                           <div>" . q($lcat->name);
             if (!empty($lcat->description)) {
                 $comment_box = "<br><small>$lcat->description</small>";
@@ -1489,7 +1489,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$exlink $res_prereq_icon $comment_box</div>" . actions('ebook', $resource_id, $visibility) . "
         </div>";
 }
@@ -1604,7 +1604,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$exlink $comment_box</div>" . actions('section', $resource_id, $visibility) . "
         </div>";
 }
@@ -1648,7 +1648,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$chatlink $comment_box</div>" .
         actions('chat', $resource_id, $visibility) . '
         </div>';
@@ -1689,7 +1689,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
     return "
         <div data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$bloglink $comment_box</div>" .
         actions('blog', $resource_id, $visibility) . '
         </div>';
@@ -1737,7 +1737,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
     return "
         <div data-id='$resource_id'>
           <div>$imagelink</div>
-          <div class='text-start'>$act_name</div>
+          " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
           <div>$h5plink $comment_box</div>" .
         actions('h5p', $resource_id, $visibility) . '
         </div>';
