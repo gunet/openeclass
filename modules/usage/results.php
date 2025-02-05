@@ -96,7 +96,8 @@ if(isset($_REQUEST['t'])){
         case 'cd':
             $result = get_course_details($plotcourse, $startdate, $enddate, $plotuser);
             break;
-        case 'ug':$result = get_user_stats($plotuser, $interval, $startdate, $enddate, $plotcourse);
+        case 'ug':
+            $result = get_user_stats($plotuser, $interval, $startdate, $enddate, $plotcourse);
             break;
         case 'ucp':
             $result = get_course_preference_stats($plotuser, $startdate, $enddate, $plotcourse);
