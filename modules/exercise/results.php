@@ -176,8 +176,12 @@ foreach ($result as $row) {
                 FROM exercise b
                     JOIN exercise_user_record a ON a.eid = b.id
                     LEFT JOIN exercise_answer_record ON a.eurid = exercise_answer_record.eurid
-                WHERE a.uid = ?d AND a.eid = ?d $extra_sql
-                GROUP BY a.eurid
+                WHERE a.uid = ?d AND a.eid = ?d $extra_sql                
+                GROUP BY a.eurid, record_start_date, 
+                    record_end_date, attempt_status, 
+                    time_constraint, secs_remaining, 
+                    total_score, total_weighting, 
+                    assigned_to
                 ORDER BY record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
