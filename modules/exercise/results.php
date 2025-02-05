@@ -178,7 +178,7 @@ foreach ($result as $row) {
                     LEFT JOIN exercise_answer_record ON a.eurid = exercise_answer_record.eurid
                 WHERE a.uid = ?d AND a.eid = ?d $extra_sql
                 GROUP BY a.eurid
-                ORDER BY a.record_start_date ASC", $sid, $exerciseId);
+                ORDER BY record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'><div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
