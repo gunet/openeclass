@@ -28,18 +28,8 @@ $head_content .=
         stats = 'c';
     </script>";
 
-$pageName = $langPlatformGenStats;
+$pageName = $langCharts;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsage);
-
-$action_bar = action_bar(array(
-        array('title' => $langOldStats,
-            'url' => "old_stats.php?course=$course_code",
-            'icon' => 'fa-bar-chart',
-            'level' => 'primary',
-            'button-class' => 'btn-success')
-    ),false);
-
-$tool_content .= $action_bar;
 
 require_once 'modules/usage/form.php';
 
