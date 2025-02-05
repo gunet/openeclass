@@ -46,11 +46,13 @@ if(isset($_GET['eventID']) and isset($_GET['course_id'])){
     if($result_events){
         foreach($result_events as $row){
 
-            if ($row->end == "0000-00-00 00:00:00") {
-                $startDateTime = new DateTime($row->start);
-                list($hours, $minutes) = explode(':', $row->duration);
-                $startDateTime->add(new DateInterval("PT{$hours}H{$minutes}M"));
-                $enddate = $startDateTime->format('Y-m-d H:i:s');
+            if (is_null($row->end) or $row->end == "0000-00-00 00:00:00") {
+                $duration_arr = explode(':', $row->duration);
+                $startDatetime = date('Y-m-d H:i:s', strtotime($row->start));
+                $duration_text = '+'.$duration_arr[0].' hours'.' +'.$duration_arr[1].' minutes';
+                $enddateEvent = date('Y-m-d H:i:s', strtotime($startDatetime . $duration_text));
+                Database::get()->query("UPDATE agenda SET end = ?t WHERE id = ?d", $enddateEvent, $row->id);
+                $enddate = $enddateEvent;
             } else {
                 $enddate = $row->end;
             }

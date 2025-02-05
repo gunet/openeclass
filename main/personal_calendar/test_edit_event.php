@@ -48,22 +48,33 @@ if(isset($_GET['eventID'])){
         $result_events = Database::get()->queryArray("SELECT * FROM personal_calendar WHERE id = ?d",$eventId);
         $bgColor = '#800080';
     }
+   
 
-
-
+   
     if($result_events){
         foreach($result_events as $row){
+            if (is_null($row->end) or $row->end == "0000-00-00 00:00:00") {
+                $duration_arr = explode(':', $row->duration);
+                $startDatetime = date('Y-m-d H:i:s', strtotime($row->start));
+                $duration_text = '+'.$duration_arr[0].' hours'.' +'.$duration_arr[1].' minutes';
+                $enddateEvent = date('Y-m-d H:i:s', strtotime($startDatetime . $duration_text));
+                $table = (isset($_GET['theUser']) and $_GET['theUser'] == 'admin') ? 'admin_calendar' : 'personal_calendar';
+                Database::get()->query("UPDATE $table SET end = ?t WHERE id = ?d", $enddateEvent, $row->id);
+                $enddate = $enddateEvent;
+            } else {
+                $enddate = $row->end;
+            }
             $eventArr[] = [
                 'id' => $row->id,
                 'title' => $row->title,
                 'start' => $row->start,
-                'end' => $row->end,
+                'end' => $enddate,
                 'user_id' => $row->user_id,
                 'backgroundColor' => $bgColor
             ];
         }
     }
-
+    
     header('Content-Type: application/json');
 
     echo json_encode($eventArr);
