@@ -305,7 +305,7 @@ $tool_content .= "<div class='col-12'>
                                             $sql_g = "SELECT `group`.id, name, COUNT(user_id) AS members_present
                                                 FROM `group` LEFT JOIN group_members ON group_id = `group`.id
                                                 WHERE course_id = ?d
-                                                GROUP BY `group`.id
+                                                GROUP BY `group`.id, `group`.name
                                                 ORDER BY name";
                                             $result_g = Database::get()->queryArray($sql_g, $course_id);
                                             foreach ($result_g as $res_g) {
