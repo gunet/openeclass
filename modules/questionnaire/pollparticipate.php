@@ -261,7 +261,7 @@ function printPollForm() {
             if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
                 <div class='col-12'>
-                   <div class='alert alert-info m-0 TextBold text-uppercase text-center mb-4'>" . standard_text_escape($theQuestion->question_text) . "</div>
+                   <div class='alert alert-info m-0 TextBold text-center mb-4'>" . standard_text_escape($theQuestion->question_text) . "</div>
                 </div>";
             } else {
                 $columnPanel = 'col';
