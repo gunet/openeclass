@@ -448,7 +448,9 @@ if (isset($require_current_course) and $require_current_course) {
             $dbname);
 
         if (!isset($course_code) or empty($course_code)) {
-            $toolContent_ErrorExists = $langLessonDoesNotExist;
+            Session::flash('alert-class', 'alert-danger');
+            Session::flash('message', $langLessonDoesNotExist);
+            redirect_to_home_page();
         }
 
         // Get essential messages when a course is collaborative course
