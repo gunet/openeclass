@@ -17,8 +17,8 @@
                 <h1>{!! $toolName !!}</h1>
             </div>
 
-            @include('layouts.partials.show_alert') 
-            
+            @include('layouts.partials.show_alert')
+
             @if (!$alt_auth_stud_reg || !$user_registration || !in_array($auth, get_auth_active_methods()))
                 <div class='col-12 mt-4'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i>
@@ -50,7 +50,7 @@
                                         <div class='form-group mt-lg-0 mt-4'>
                                             <label for='email_id' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                             <div class='col-sm-12'>
-                                                <input type='text' name='email' id='email_id' class='form-control' maxlength='100' placeholder='{{ $email_placeholder }}'>
+                                                <div class='col-sm-12{!! $emailClass !!}'>{!! $emailInput !!}</div>
                                             </div>
                                         </div>
                                     </div>
