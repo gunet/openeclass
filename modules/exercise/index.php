@@ -628,13 +628,13 @@ if ($is_editor) {
         $courses_options1 .= "</tbody></table>";
         $countResJs = json_encode($TotalExercises2);
 
-        $question_types = Database::get()->queryArray("SELECT exq.question, ear.q_position, eur.eid, eur.eurid as eurid "
+        $question_types = Database::get()->queryArray("SELECT exq.id, exq.question, ear.q_position, eur.eid, eur.eurid as eurid "
                 . "FROM exercise_question AS exq "
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid IN (".implode(',', $ids_array).") AND ear.weight IS NULL "
                 . "AND exq.type = " . FREE_TEXT . " "
-                . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position");
+                . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position, exq.question");
         $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 
         $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
