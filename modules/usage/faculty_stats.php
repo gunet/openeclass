@@ -154,7 +154,7 @@ if (isset($_GET['stats_submit'])) {
                         WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d
                         GROUP BY module_id", $_GET['c']);
         foreach ($q3 as $data) {
-            if ($data->module_id > 0) {
+            if ($data->module_id > 0 and $data->module_id != MODULE_ID_DESCRIPTION) {
                 if ($data->module_id == MODULE_ID_UNITS) { // course_units
                     $mod_id = $static_modules[$data->module_id];
                 } else {
