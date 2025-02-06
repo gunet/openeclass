@@ -60,18 +60,6 @@ if (isset($_POST['submit'])) {
         set_config('default_language', $_POST['default_language']);
     }
 
-    $homepageSet = $_POST['homepageSet'];
-    if ($homepageSet == 'external') {
-        set_config('homepage', 'external');
-        set_config('landing_name', $_POST['landing_name']);
-        set_config('landing_url', $_POST['landing_url']);
-    } elseif ($homepageSet == 'toolbox') {
-        set_config('homepage', 'toolbox');
-        set_config('toolbox_name', $_POST['toolbox_name']);
-        set_config('toolbox_title', $_POST['toolbox_title']);
-        set_config('toolbox_intro', $_POST['toolbox_intro']);
-    }
-
     set_config('maintenance_theme', $_POST['maintenance_theme']);
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
@@ -210,7 +198,7 @@ if (isset($_POST['submit'])) {
         $GLOBALS['enable_indexing'] = 1;
     }
 
-    // restrict_owndep and restrict_teacher_owndep are interdependent
+    // restrict_owndep and restrict_teacher_owndep are independent
     if ($GLOBALS['restrict_owndep'] == 0) {
         $GLOBALS['restrict_teacher_owndep'] = 0;
     }
@@ -230,7 +218,6 @@ if (isset($_POST['submit'])) {
         require_once 'modules/search/indexer.class.php';
         Indexer::deleteAll();
     }
-
     // update table `config`
     foreach ($config_vars as $varname => $what) {
         set_config($varname, $GLOBALS[$varname]);
@@ -348,20 +335,14 @@ else {     // Display config.php edit form
     $data['cbox_individual_group_bookings'] = get_config('individual_group_bookings') ? 'checked' : '';
     $data['cbox_enable_quick_note'] = get_config('enable_quick_note') ? 'checked' : '';
 
-    $data['emailTransports'] = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
-    $email_transport = get_var('email_transport');
-    if (!is_numeric($email_transport)) {
-        if ($email_transport == 'smtp') {
-            $email_transport = 1;
-        } elseif ($email_transport == 'sendmail') {
-            $email_transport = 2;
-        } else {
-            $email_transport = 0;
-        }
+    $data['emailTransports'] = array(1 => 'SMTP', 2 => 'sendmail');
+    $email_transport = 1;
+    if (get_var('email_transport') == 'sendmail') {
+        $email_transport = 2;
     }
     $data['email_transport'] = $email_transport;
 
-    $data['emailEncryption'] = array(0 => 'Όχι', 1 => 'SSL', 2 => 'TLS');
+    $data['emailEncryption'] = array(0 => "$langNo", 1 => 'SSL', 2 => 'TLS');
     $smtp_encryption = get_var('smtp_encryption');
     if ($smtp_encryption == 'ssl') {
         $smtp_encryption = 1;

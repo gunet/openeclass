@@ -62,16 +62,17 @@ function store_mail_config() {
     if ($email_announce == '' or valid_email($email_announce)) {
         set_config('email_announce', $email_announce);
     } else {
-            Session::flash('message',"$langEmailAnnounce: $langInvalidEmail: " . q($email_announce));
-            Session::flash('alert-class', 'alert-warning');
+        Session::flash('message',"$langEmailAnnounce: $langInvalidEmail: " . q($email_announce));
+        Session::flash('alert-class', 'alert-warning');
     }
     $email_bounces = trim($_POST['email_bounces']);
     if ($email_bounces == '' or valid_email($email_bounces)) {
         set_config('email_bounces', $email_bounces);
     } else {
-            Session::flash('message',"$langEmailBounces: $langInvalidEmail: " . q($email_bounces));
-            Session::flash('alert-class', 'alert-warning');
+        Session::flash('message',"$langEmailBounces: $langInvalidEmail: " . q($email_bounces));
+        Session::flash('alert-class', 'alert-warning');
     }
+
     if ($_POST['email_transport'] == 1) {
         set_config('email_transport', 'smtp');
         register_posted_variables(array('smtp_encryption' => true,
@@ -95,8 +96,6 @@ function store_mail_config() {
     } elseif ($_POST['email_transport'] == 2) {
         set_config('email_transport', 'sendmail');
         set_config('sendmail_command', $_POST['sendmail_command']);
-    } else {
-        set_config('email_transport', 'mail');
     }
 }
 
@@ -117,13 +116,13 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $langEmailBounces, $langSave, $langEG, $langForm, $langSelect;
+        $langEmailBounces, $langEG, $langForm, $langSelect;
 
     $content = '';
     // True if running initial install
     $install = isset($_SESSION['step']);
 
-    $emailTransports = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
+    $emailTransports = array(1 => 'SMTP', 2 => 'sendmail');
     $email_transport = get_var('email_transport');
     if (!is_numeric($email_transport)) {
         if ($email_transport == 'smtp') {

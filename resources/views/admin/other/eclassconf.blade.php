@@ -287,16 +287,6 @@
                                         <div class='form-group mt-4'>
                                             <label for='GuestLoginId' class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
                                             <div class='col-sm-12'>
-                                                {{-- {!! selection([
-                                                                'off' => trans('m[deactivate]'),
-                                                                'on' => trans('m[activate]'),
-                                                                'link' => trans('langGuestLoginLinks')
-                                                                ],
-                                                                'course_guest',
-                                                                get_config('course_guest', 'on'),
-                                                                "class='form-control form-control-admin'"
-                                                            ) !!} --}}
-
                                                 {!! selection([
                                                     'off' => trans('langDeactivate'),
                                                     'on' => trans('langActivate'),
@@ -348,11 +338,11 @@
                                             <label for='default_language' class='col-sm-12 control-label-notes'>{{ trans('langMainLang') }}: </label>
                                             <div class='col-sm-12'>
                                                 {!! selection(
-                                                                    $selectable_langs,
-                                                                    'default_language',
-                                                                    get_config('default_language'),
-                                                                    "class='form-control form-control-admin' id='default_language'"
-                                                                ) !!}
+                                                            $selectable_langs,
+                                                            'default_language',
+                                                            get_config('default_language'),
+                                                            "class='form-control form-control-admin' id='default_language'"
+                                                        ) !!}
                                             </div>
                                         </div>
 
