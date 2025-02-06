@@ -148,11 +148,20 @@ if ($is_valid) { // user credentials successful check
             }
             $data['amClass'] = $amClass;
             $data['amInput'] = $amInput;
-            $data['email_placeholder'] = get_config("email_required")? $langCompulsory: $langOptional;
+            if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['email'])) {
+                $emailClass = ' form-control-static';
+                $emailInput = $_SESSION['auth_user_info']['email'];
+            } else {
+                $email_placeholder = get_config("email_required")? $langCompulsory: $langOptional;
+                $emailClass = '';
+                $emailInput = "<input type='text' class='form-control' name='email' id='email_id' maxlength='100'" . set('email') . " placeholder='$email_placeholder'>";
+            }
+            $data['emailClass'] = $emailClass;
+            $data['emailInput'] = $emailInput;
     } else {
         $ip = Log::get_client_ip();
         $ext_info = !isset($_SESSION['auth_user_info']);
-        $ext_mail = !empty($_SESSION['auth_user_info']['email']);
+        $ext_mail = !(!empty($_SESSION['auth_user_info']['email']));
         $missing_posted_variables = array();
         $ok = register_posted_variables(
             array('submit' => false,
