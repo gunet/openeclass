@@ -74,7 +74,7 @@ if (isset($_GET['stats'])) {
     switch ($_GET['stats']) {
         case 'failurelogin':
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
-            $date_start = date("Y-m-d", strtotime("-15 days"));
+            $date_start = date("Y-m-d", strtotime("-1 month"));
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=failurelogin";
             $log = new Log();
@@ -90,19 +90,13 @@ if (isset($_GET['stats'])) {
             $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end);
             $data['extra_info'] = $tool_content;
             break;
-        case 'musers':
-            $data['loginDouble'] = list_ManyResult("SELECT DISTINCT BINARY(username) AS username, COUNT(*) AS nb
-				FROM user GROUP BY username HAVING nb > 1 ORDER BY nb DESC", 'username');
-            break;
         case 'memail':
-            $sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email
-				HAVING nb > 1 ORDER BY nb DESC";
-            $data['loginDouble'] = list_ManyResult($sqlLoginDouble, 'email');
-            break;
-        case 'mlogins':
-            $sqlLoginDouble = "SELECT DISTINCT BINARY(CONCAT(username, \"-- \", password)) AS pair,
-                COUNT(*) AS nb FROM user GROUP BY pair HAVING nb > 1 ORDER BY nb DESC";
-            $data['loginDouble'] = list_ManyResult($sqlLoginDouble, 'pair');
+            $result = [];
+            $sql = Database::get()->queryArray("SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email HAVING nb > 1 ORDER BY nb DESC");
+            foreach ($sql as $d) {
+                $result[$d->email] = $d->nb;
+            }
+            $data['loginDouble'] = $result;
             break;
         case 'vmusers':
             $data['verifiedEmailUserCnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt;
@@ -168,21 +162,4 @@ function tablize($table, $search) {
         }
     }
     return $ret;
-}
-
-/**
- *
- * @param type $sql
- * @param type $fieldname
- * @return array
- */
-function list_ManyResult($sql, $fieldname) {
-
-    $resu = array();
-    $res = Database::get()->queryArray($sql);
-    foreach ($res as $resA) {
-        $name = $resA->$fieldname;
-        $resu[$name] = $resA->nb;
-    }
-    return $resu;
 }

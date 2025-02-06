@@ -18,39 +18,19 @@
  *
  */
 
-/**** Summary info    ****/
-
-$action_bar = action_bar(array(
-                array('title' => $langSystemActions,
-                    'url' => "../usage/displaylog.php?from_other=TRUE",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label',                 ),
-                array('title' => $langPlatformGenStats,
-                    'url' => "index.php?t=a&g_stats",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
-                array('title' => $langStatOfFaculty,
-                    'url' => "faculty_stats.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
-                array('title' => $langMonthlyReport,
-                    'url' => "../admin/monthlyReport.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
-                array('title' => $langUsageVisits,
-                    'url' => "../admin/login_stats.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
-                array('title' => $langDetails,
-                    'url' => "analytical_course_stats.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label')
-            ),false);
-$tool_content .= $action_bar;
+$tool_content .= "
+            <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-start gap-3 flex-wrap pb-4'>
+                <a class='quickLink' href='../usage/displaylog.php?from_other=TRUE'><i class='fa-solid fa-glasses'></i>$langSystemActions</a>
+                <a class='quickLink' href='../admin/monthlyReport.php'><i class='fa-solid fa-chalkboard'></i>$langMonthlyReport</a>                                                                            
+                <a class='quickLink' href='../admin/login_stats.php'><i class='fa-solid fa-users-line'></i>$langLoginUser $langUsersOf</a>
+                <a class='quickLink' href='faculty_stats.php'><i class='fa-solid fa-bar-chart'></i>$langStatOfFaculty</a>            
+                <a class='quickLink' href='index.php?t=a&g_stats'><i class='fa-solid fa-chart-simple'></i>$langCharts</a>                
+            </div>
+";
 
 $tool_content .= "
         <div class='col-12'>
-                <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
+                <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>                
                     <div class='col'>
                         <ul class='list-group list-group-flush'>
                             <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 flex-wrap'>
@@ -115,32 +95,29 @@ $tool_content .= "
                     </div>
                 </div>
                 <div class='row row-cols-1 mt-md-4 mt-3'>
-                    <div class='col'>
-                        <ul class='list-group list-group-flush'>
-                            <li class='list-group-item element'>
-                                <a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a>
-                                <small> ($langLast15Days)</small>
-                            </li>
-                            <li class='list-group-item element'>
-                                <a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a>
-                            </li>
+                    <h3>
+                        $langChecks / $langReports
+                    </h3>
+                    <div class='col'>                        
+                        <ul class='list-group list-group-flush'>                                                        
                             <li class='list-group-item element'>
                                 <a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a>
-                            </li>
+                            </li>                            
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a>
+                            </li>                            
                             <li class='list-group-item element'>
                                 <a href='../admin/otheractions.php?stats=popularcourses'>$langPopularCourses</a>
                                 <small> ($langLast30Entries)</small>
-                            </li>
-                            <li class='list-group-item element'>
-                                <a href='../admin/otheractions.php?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a>
-                            </li>
+                            </li>                            
                             <li class='list-group-item element'>
                                 <a href='../admin/otheractions.php?stats=cusers'>$langMultipleCourseUsers</a>
                                 <small> ($langLast30Entries)</small>
                             </li>
                             <li class='list-group-item element'>
-                                <a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a>
-                            </li>
+                                <a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a>
+                                <small> ($langLastMonth)</small>
+                            </li>                            
                             <li class='list-group-item element'>
                                 <a href='../admin/otheractions.php?stats=unregusers'>$langUnregUsers</a>
                                 <small> ($langLastMonth)</small>

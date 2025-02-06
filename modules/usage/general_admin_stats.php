@@ -53,7 +53,6 @@ $tool_content .= "</div>";
 $tool_content .= "</div>";
 
 /****   Datatables   ****/
-
 $tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr class='list-header'>"
     . "<th rowspan='2'>$langCategory</th>"
@@ -67,8 +66,8 @@ foreach(array($langTypesInactive, $langTypesAccessControlled, $langTypesOpen, $l
     $tschema .= "<th>" . q($ct) . "</th>";
 }
 $tschema .= "</tr></thead>"
-    . "<tbody></tbody>"
-    . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
+         . "<tbody></tbody>"
+         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("adetails1", "table table-default dataTable", $tschema, "$langUsers $langAnd $langCourses");
 $tool_content .= "</div></div>";
 

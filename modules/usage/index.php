@@ -66,7 +66,7 @@ $head_content .= "
     var langCourses = '" . js_escape($langCourses) . "';
     var langUsers = '" . js_escape($langUsers) . "';
     var maxintervals = 20;
-    var views = {plots:{class: 'fa fa-bar-chart', title: '" . js_escape($langPlots) . "'}, list:{class: 'fa fa-list', title: '" . js_escape($langDetails) . "'}};
+    var views = {plots:{class: 'fa fa-bar-chart', title: '" . js_escape($langCharts) . "'}, list:{class: 'fa fa-list', title: '" . js_escape($langDetails) . "'}};
     var langNoResult = '" . js_escape($langNoResult) . "';
     var langDisplay ='" . js_escape($langDisplay) . "';
     var langResults = '" . js_escape($langResults2) . "';    
@@ -165,7 +165,7 @@ if (isset($_GET['per_course_dur'])) {
     } elseif($stats_type == 'admin' && $is_admin) { // admin statistics
         $toolName = $langAdmin;
         if (isset($_REQUEST['g_stats'])) {
-            $pageName = $langPlatformGenStats;
+            $pageName = $langCharts;
             require_once 'modules/usage/general_admin_stats.php';
         } else {
             require_once 'modules/usage/admin.php';
@@ -180,7 +180,6 @@ add_units_navigation(true);
 
 if ($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))) {
     $navigation[] = array('url' => '../admin/', 'name' => $langAdmin);
-    $navigation[] = array('url' => '../usage/index.php?t=a', 'name' => $langUsage);
     draw($tool_content, null, null, $head_content);
 } elseif ($stats_type == 'course') {
     draw($tool_content, 2, null, $head_content);
