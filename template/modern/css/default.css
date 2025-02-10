@@ -5824,8 +5824,23 @@ th.grade-col a{
   max-width:70px
 }
 
+#unitResources .unitIcon {
+  width: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #unitResources .unitIcon span {
-  font-size: 20px;
+  font-size: 34px;
+}
+
+#unitResources .unitIcon-svg {
+  padding: 0px !important;
+}
+
+#unitResources .module-name {
+  font-size: 0.75rem;
 }
 
 /******************************** Ext Apps *********************************/
