@@ -2817,15 +2817,15 @@ function upgrade_to_4_0($tbl_options): void {
     }
 
     if (!DBHelper::fieldExists('personal_calendar', 'end')) {
-        Database::get()->query("ALTER TABLE `personal_calendar` ADD `end` DATETIME NOT NULL");
+        Database::get()->query("ALTER TABLE `personal_calendar` ADD `end` DATETIME DEFAULT NULL");
     }
 
     if (!DBHelper::fieldExists('admin_calendar', 'end')) {
-        Database::get()->query("ALTER TABLE `admin_calendar` ADD `end` DATETIME NOT NULL");
+        Database::get()->query("ALTER TABLE `admin_calendar` ADD `end` DATETIME DEFAULT NULL");
     }
 
     if (!DBHelper::fieldExists('agenda', 'end')) {
-        Database::get()->query("ALTER TABLE `agenda` ADD `end` DATETIME NOT NULL");
+        Database::get()->query("ALTER TABLE `agenda` ADD `end` DATETIME DEFAULT NULL");
     }
 
     Database::get()->query("ALTER TABLE tag_element_module MODIFY COLUMN module_id int NULL");
@@ -3171,7 +3171,8 @@ function upgrade_to_4_0($tbl_options): void {
     if (is_null($enable_user_notes)) {
         set_config('enable_quick_note', 1);
     }
-
+    set_config('homepage_title_el', $langEclass);
+    set_config('homepage_intro_el', $langEclassInfo);
 }
 
 
