@@ -99,7 +99,7 @@ define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 46);
-define('MODULE_ID_MINDMAP', 47);
+define('MODULE_ID_MINDMAP', 47); /* deprecated, user only for compatibility in statistics*/
 define('MODULE_ID_PROGRESS', 48);
 define('MODULE_ID_COURSEPREREQUISITE', 49);
 define('MODULE_ID_LTI_CONSUMER', 50);  /* deprecated. used only for compatibility in statistics*/
