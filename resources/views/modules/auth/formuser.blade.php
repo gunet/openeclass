@@ -10,7 +10,7 @@
                     <h1>{!! $toolName !!}</h1>
                 </div>
 
-                @include('layouts.partials.show_alert') 
+                @include('layouts.partials.show_alert')
 
                 @if (!$eclass_prof_reg)
                     <div class='col-sm-12'>
@@ -61,7 +61,6 @@
                                                 </div>
 
 
-
                                                 <div class='col-12'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPhone' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
@@ -72,7 +71,6 @@
                                                 </div>
 
 
-
                                                 <div class='col-12'>
                                                     <div class='form-group mt-4'>
                                                         <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
@@ -81,7 +79,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
 
 
                                                 <div class='col-12 d-flex justify-content-end mt-4'>

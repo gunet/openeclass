@@ -22,7 +22,8 @@ $require_login = true;
 
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
-include 'include/lib/hierarchy.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
 require_once 'include/lib/user.class.php';
 require_once 'modules/auth/auth.inc.php';
 
@@ -47,13 +48,16 @@ if (!uid_to_email($uid)) {
 }
 
 if (isset($_POST['submit']))  {
-
-    if (count($_POST['department']) < 1 || empty($_POST['department'][0])) {
+    if (!isset($_POST['department'])) {
         Session::flash('message', $langEmptyAddNode);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page('modules/auth/formuser.php');
     }
-
+    if (count($_POST['department']) > 1) {
+        Session::flash('message', $langOneNodeSelect);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page('modules/auth/formuser.php');
+    }
     if (trim($_POST['usercomment']) == '' || trim($_POST['userphone']) == '') {
         Session::flash('message', $langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
@@ -117,33 +121,12 @@ if (isset($_POST['submit']))  {
     }
 
 } else { // display the form
-    $allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin; // departments and validation
-    $allowables = array();
-    if ($allow_only_defaults) {
-        // Method: getDepartmentIdsAllowedForCourseCreation
-        // fetches only specific tree nodes, not their sub-children
-        //$user->getDepartmentIdsAllowedForCourseCreation($uid);
-        // the code below searches for the allow_course flag in the user's department subtrees
-        $userdeps = $user->getDepartmentIds($uid);
-        $subs = $tree->buildSubtreesFull($userdeps);
-        foreach ($subs as $node) {
-            if (intval($node->allow_course) === 1) {
-                $allowables[] = $node->id;
-            }
-        }
-    }
     $departments = $_POST['department'] ?? array();
-    $deps_valid = true;
-
-    foreach ($departments as $dep) {
-        if ($allow_only_defaults && !in_array($dep, $allowables)) {
-            $deps_valid = false;
-            break;
-        }
+    if (isDepartmentAdmin()) {
+        list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($uid), 'allowables' => $user->getDepartmentIds($u)));
+    } else {
+        list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($uid)));
     }
-    $data['deps_valid'] = $deps_valid;
-
-    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
     $head_content .= $js;
     $data['buildusernode'] = $html;
     $data['usercomment'] = '';
