@@ -1,3 +1,17 @@
+@push('head_scripts')
+    <script type='text/javascript'>
+        $(function() {
+            $('#user_date_expires_at').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '{{ js_escape($language) }}',
+                minuteStep: 10,
+                autoclose: true
+            });
+        });
+    </script>
+@endpush
+
 @extends('layouts.default')
 
 @section('content')
@@ -218,14 +232,14 @@
                                                     <div class='d-flex justify-content-start align-items-start gap-1 flex-wrap'>
                                                         <a class='pt-1' href='{{ $urlServer }}courses/{{ $logs->code }}/'>
                                                             {{ $logs->title }}
-                                                        </a> 
+                                                        </a>
                                                         ({{ $logs->code }})
                                                         @if ($logs->reg_date)
                                                             <small>
                                                                 <span class='small-text'>{{ trans('langRegistrationDate') }}&nbsp;</span>
                                                                 <span class='TextBold small-text'>({{ format_locale_date(strtotime($logs->reg_date), 'short', false) }})</span>
                                                             </small>
-                                                           
+
                                                         @endif
                                                     </div>
                                                 </td>
