@@ -2314,6 +2314,7 @@ $langReturnToAddNode = "Επιστροφή στην προσθήκη";
 $langReturnToEditNode = "Επιστροφή στην επεξεργασία $langsOfFaculty";
 $langEmptyNodeSelect = "Παρακαλώ κάντε μια επιλογή από τη λίστα και μετά πατήστε Επιλογή";
 $langEmptyAddNode = "Παρακαλώ επιλέξτε $langFaculty και ξαναπροσπαθήστε";
+$langOneNodeSelect = "Παρακαλώ επιλέξτε μόνο μία κατηγορία";
 $langFacultyImage = "Φωτογραφία $langOfFaculty";
 
 /* * *************************************************************
@@ -4316,7 +4317,7 @@ $langPerMonth = "ανά μήνα";
 $langPerYear = "ανά έτος";
 $langRegisterActions = "Εγγραφές";
 $langUnregisterActions = "Απεγγραφές";
-$langMonthlyCourseRegistrations = "Εγγραφές χρηστών στο $langsCourse";
+$langMonthlyCourseRegistrations = "Εγγραφές χρηστών";
 $langMonthlyCourseRegistration = "Εγγραφή χρήστη στο $langsCourse";
 $langDurationOfVisits = "διάρκεια επισκέψεων";
 $langDurationVisits = "Χρονική Διάρκεια Επισκέψεων";
