@@ -517,10 +517,12 @@ function get_department_user_stats($root_department = 1, $total = false){
 */
 function get_department_course_stats($root_department = 1){
     global $langTypesInactive, $langTypesAccessControlled, $langTypesOpen, $langTypesClosed;
+
     $courseVisibility = array(COURSE_CLOSED => $langTypesClosed,
         COURSE_REGISTRATION => $langTypesAccessControlled,
         COURSE_OPEN => $langTypesOpen,
         COURSE_INACTIVE => $langTypesInactive);
+
     $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
 
@@ -540,14 +542,21 @@ function get_department_course_stats($root_department = 1){
             GROUP BY descendant.id having c=1) toph
      ON ch.lft>=toph.lft AND ch.lft<=toph.rgt
     GROUP BY toph.id, ch.visible ORDER BY did";
+
     $r = Database::get()->queryArray($q);
-    $formattedr = array('department'=>array(),$courseVisibility[COURSE_CLOSED]=>array(),$courseVisibility[COURSE_REGISTRATION]=>array(), $courseVisibility[COURSE_OPEN]=>array(), $courseVisibility[COURSE_INACTIVE]=>array());
+
+    $formattedr = array('department'=>array(),
+                        $courseVisibility[COURSE_CLOSED]=>array(),
+                        $courseVisibility[COURSE_REGISTRATION]=>array(),
+                        $courseVisibility[COURSE_OPEN]=>array(),
+                        $courseVisibility[COURSE_INACTIVE]=>array()
+    );
     $depids = array();
     $leaves = array();
     $d = '';
     $i = -1;
-    foreach($r as $record){
-        if($record->dname != $d){
+    foreach($r as $record) {
+        if($record->dname != $d) {
             $i++;
             $depids[] = $record->did;
             $leaves[] = $record->leaf;
@@ -879,7 +888,7 @@ function user_duration_per_course($u) {
                                         AND actions_daily.module_id != " . MODULE_ID_LP . "
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
-                                        GROUP BY course.id
+                                        GROUP BY course.id, course.code
                                         ORDER BY duration DESC", $u);
     if (count($result) > 0) {  // found courses ?
         foreach ($result as $item) {
