@@ -201,7 +201,7 @@ if (isset($_GET['all'])) {
                                                           u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                         WHERE `group`.id = group_members.group_id AND
                                                                         `group`.course_id = ?d)
-                                                    GROUP BY u.id
+                                                    GROUP BY u.id, u.surname, u.givenname, u.am 
                                                     ORDER BY u.surname, u.givenname", $course_id);
     }
     $tool_content_not_Member = $tool_content_group_members = '';
