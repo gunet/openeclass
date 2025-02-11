@@ -3270,7 +3270,7 @@ $langAddAU = "Add a user";
 $langAddHereSomeCourses = "<p>To register to / unregister from a course,
 select the $langsFaculty and then select / unselect the desired course.</p>
 <p>To save your preferences click on 'Submit changes'</p><br>";
-$langDeleteUser = "Are you sure you want to unregister";
+$langDeleteUser = "Are you sure you want to delete the user";
 $langDeleteUser2 = "from this course";
 $langSurnameName = "Full Name";
 $langAskUser = "Search for user you want to add. User must already have an account in the platform.";
@@ -5960,7 +5960,6 @@ $langCategoryExcercise = "Exercise";
 $langCategoryDescription = "Course description";
 $langAnalyticsEditElements = 'Edit Elements';
 $langViewStatics = "Traffic Statistics";
-$langCommands = "Actions";
 $langTypeOutMessage = "Write your message...";
 $langDateHasExpire = "The date has passed. Try again.";
 $langCalculateNewDuration = "Calculation of new duration";
