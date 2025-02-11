@@ -531,7 +531,7 @@ if (isset($require_current_course) and $require_current_course) {
     # force a specific interface language
     if (!empty($currentCourseLanguage)) {
         $languageInterface = $currentCourseLanguage;
-        // If course language is different from global language,
+        // If language course is different from global language,
         // include more messages
         if ($language != $languageInterface) {
             $language = $languageInterface;
@@ -760,7 +760,8 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
 // --------------------------------------------------
 $deprecated_modules = array(
     MODULE_ID_DESCRIPTION => array('title' => $langCourseDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
-    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => '', 'image' => '')
+    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => '', 'image' => ''),
+    MODULE_ID_MINDMAP => array('title' => $langFCMindMap, 'link' => '', 'image' => '')
 );
 
 // the system admin and power users have rights to all courses

@@ -76,16 +76,13 @@ if (isset($_GET['c'])) {
     $data[] = [ $langTotal, $total_visits, $total_users ];
     $data[] = [];
     $data[] = [ $langModule, $langVisits, $langUsers ];
+    $all_modules = $modules+$static_modules+$deprecated_modules; // union of all modules
     $q4 = Database::get()->queryArray("SELECT COUNT(*) AS cnt, module_id, COUNT(DISTINCT user_id) AS users FROM actions_daily
             WHERE (day BETWEEN ?s AND ?s) AND course_id = ?d
             GROUP BY module_id", $u_date_start, $u_date_end, $_GET['c']);
     foreach ($q4 as $item) {
-        if ($item->module_id > 0) {
-            if ($item->module_id == MODULE_ID_UNITS) { // course_units
-                $mod_id = $static_modules[$item->module_id];
-            } else {
-                $mod_id = $modules[$item->module_id];
-            }
+        if ($item->module_id > 0 ) {
+            $mod_id = $all_modules[$item->module_id];
             $data[] = [ $mod_id['title'], $item->cnt, $item->users ];
         }
     }
