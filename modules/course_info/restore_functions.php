@@ -351,7 +351,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
     return "<div class='row m-auto'>
-                <div class='col-lg-6 col-12'>
+                <div class='col-lg-10 col-12'>
                     <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
                             <fieldset>
@@ -449,11 +449,10 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                         </form>
                     </div>
                 </div>
-                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                <div class='col-lg-2 col-12 d-none d-md-none d-lg-block text-end'>
                     <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
                 </div>
             </div>
-
     ";
 }
 
