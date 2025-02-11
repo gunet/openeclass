@@ -48,18 +48,6 @@ $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_
 load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
-$head_content .= "<script type='text/javascript'>
-        $(function() {
-            $('#user_date_expires_at').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
-                language: '".$language."',
-                minuteStep: 10,
-                autoclose: true
-            });
-        });
-    </script>";
-
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 $toolName = $langAdmin;
@@ -70,7 +58,6 @@ $u_submitted = $_POST['u_submitted'] ?? '';
 if ($u) {
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
-
 
     $data['info'] = $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am, lang,
@@ -165,7 +152,7 @@ if ($u) {
         }
 
         $data['verified_mail_data'] = array();
-        $data['verified_mail_data'][0] = $m['pending'];
+        $data['verified_mail_data'][0] = $langMailVerificationPendingU;
         $data['verified_mail_data'][1] = $langYes;
         $data['verified_mail_data'][2] = $langNo;
 
@@ -180,7 +167,7 @@ if ($u) {
         $data['checked_force_password_change'] = $checked_force_password_change;
 
         if (isDepartmentAdmin()) {
-            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
+            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($u)));
         } else {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         }
