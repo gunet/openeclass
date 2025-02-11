@@ -167,7 +167,7 @@ $db->query("CREATE TABLE `agenda` (
     `title` VARCHAR(255) NOT NULL,
     `content` TEXT NOT NULL,
     `start` DATETIME NOT NULL,
-    `end` DATETIME NOT NULL,
+    `end` DATETIME DEFAULT NULL,
     `duration` VARCHAR(20) NOT NULL,
     `visible` TINYINT(4),
     `recursion_period` varchar(30) DEFAULT NULL,
@@ -350,7 +350,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
     `title` varchar(255) NOT NULL,
     `content` text NOT NULL,
     `start` datetime NOT NULL,
-    `end` datetime NOT NULL,
+    `end` datetime DEFAULT NULL,
     `duration` time NOT NULL,
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
@@ -383,7 +383,7 @@ $db->query("CREATE TABLE `admin_calendar` (
     `title` varchar(255) NOT NULL,
     `content` text NOT NULL,
     `start` datetime NOT NULL,
-    `end` datetime NOT NULL,
+    `end` datetime DEFAULT NULL,
     `duration` time NOT NULL,
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
@@ -394,7 +394,7 @@ $db->query("CREATE TABLE `admin_calendar` (
     KEY `user_events` (`user_id`),
     KEY `admin_events_dates` (`start`)) $tbl_options");
 
-//  loginout rollups
+//  login out roll ups
 $db->query("CREATE TABLE `loginout_summary` (
     id int(11) NOT NULL auto_increment,
     login_sum int(11) unsigned  NOT NULL default 0,
