@@ -105,8 +105,10 @@ if (isset($_POST['submit_doc'])) {
 } elseif (isset($_POST['submit_tc'])) {
     insert_tc($id);
 }
-
 switch ($_GET['type']) {
+    case 'divider';
+        insert_divider($id);
+        break;
     case 'work': $pageName = "$langAdd $langInsertWork";
         include 'insert_work.php';
         list_assignments();
@@ -272,6 +274,36 @@ function insert_text($id) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
     }
+    header('Location: index.php?course=' . $course_code . '&id=' . $id);
+    unset($_SESSION['fc_type']);
+    unset($_SESSION['act_name']);
+    unset($_SESSION['act_id']);
+    exit;
+}
+
+/**
+ * @brief insert divider in database
+ * @param integer $id
+ */
+function insert_divider($id) {
+    global $comments, $course_code, $course_id;
+
+    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+    $order++;
+//    $divider = purify($comments);
+    $divider = '<div class="unit-divider"></div>';
+    if(isset($_SESSION['fc_type']) && isset($_SESSION['act_name'])){
+        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
+                            comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0,fc_type=?d,activity_title=?s,activity_id=?s", $id, $divider, $order,$_SESSION['fc_type'],$_SESSION['act_name'],$_SESSION['act_id']);
+    }else{
+        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
+                            comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $divider, $order);
+    }
+    $uresId = $q->lastInsertID;
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     unset($_SESSION['fc_type']);
     unset($_SESSION['act_name']);
