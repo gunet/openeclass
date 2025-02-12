@@ -223,14 +223,11 @@ if (isset($_GET['u'])) { //  stats per user
 
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT
-                        SUM(actions_daily.duration) AS duration, user_id,
-                          module_id
+                        SUM(actions_daily.duration) AS duration, user_id, module_id
                         FROM actions_daily
                         WHERE course_id = ?d
                           AND module_id = ?d
-                        GROUP BY user_id", $course_id, $module);
-
-
+                        GROUP BY user_id, module_id", $course_id, $module);
 
     if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
         $spreadsheet = new Spreadsheet();
