@@ -222,7 +222,8 @@ function details($qid, $eurid) {
     $content = '';
     if ($qid) {
         $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record
-                                WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
+                                WHERE eurid = ?d AND question_id = ?d 
+                                GROUP BY question_id", $eurid, $qid);
         foreach ($sql2 as $user_question) {
             $content = question_answer_details($eurid, $user_question->question_id); // question answer
         }
