@@ -5843,6 +5843,12 @@ th.grade-col a{
   font-size: 0.75rem;
 }
 
+#unitResources .not_visible .unitIcon, #unitResources .not_visible .text-start, #unitResources .not_visible svg {
+  opacity: 0.5;
+}
+
+
+
 /******************************** Ext Apps *********************************/
 
 .appIcon {
