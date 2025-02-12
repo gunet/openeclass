@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div id="main-content" class="col-9 px-0">
-                @if ($messages)
+                @if (@$messages)
                     {!! $messages !!}
                 @endif
                 @yield('content')
