@@ -135,7 +135,8 @@ if ($is_editor) {
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#assignment_table').DataTable ({
+            $('#assignment_table_$course_code').DataTable ({
+                'stateSave': true,
                 'columns': [ $columns ],
                 'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
                 'aLengthMenu': [
@@ -5618,7 +5619,7 @@ function show_student_assignments() {
         $tool_content .= "
             <div class='col-sm-12'>
             <div class='table-responsive'>
-                <table id='assignment_table' class='table-default'>
+                <table id='assignment_table_$course_code' class='table-default'>
                   <thead>
                       <tr class='list-header'>
                           <th style='width:40%'>$langTitle</th>
@@ -5799,7 +5800,7 @@ function show_assignments() {
         $tool_content .= "
             <div class='col-sm-12'>
                     <div class='table-responsive'>
-                    <table id='assignment_table' class='table-default'>
+                    <table id='assignment_table_$course_code' class='table-default'>
                     <thead>
                     <tr class='list-header'>
                       <th style='width:45%;'>$langTitle</th>
