@@ -712,6 +712,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
  * @return string
  */
 function show_text($comments, $resource_id, $visibility, $act_name) {
+    global $is_editor;
 
     $content = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
@@ -721,7 +722,8 @@ function show_text($comments, $resource_id, $visibility, $act_name) {
         if(!empty($act_name)){
             $content .= " <div class='text-start'>$act_name</div> ";
         }
-    $content .= "<div class='text-start col-10'>$comments</div>" .
+    $width = $is_editor ? 'col-10' : 'col-12';
+    $content .= "<div class='text-start $width'>$comments</div>" .
                     actions('text', $resource_id, $visibility) .
                 "</div>";
 
