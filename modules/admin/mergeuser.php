@@ -158,7 +158,7 @@ function do_user_merge($source, $target) {
                                      favorite
                                  FROM course_user
                                  WHERE user_id IN ($source_id, $target_id)
-                                 GROUP BY course_id");
+                                 GROUP BY course_id, favorite");
     if ($q) {
         fix_table('user_badge_criterion', 'user', $source_id, $target_id);
         fix_table('user_badge', 'user', $source_id, $target_id);
