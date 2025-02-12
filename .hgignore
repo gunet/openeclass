@@ -7,6 +7,7 @@ syntax: regexp
 ^config/.*\.php
 ^html/
 ^node_modules/
+^bun\..*
 
 ^composer\.phar
 ^storage/views/
