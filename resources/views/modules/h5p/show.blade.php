@@ -1,8 +1,8 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<link type="text/css" rel="stylesheet" media="all" href="{{$urlServer}}/js/h5p-standalone/styles/h5p.css" />
-<script type="text/javascript" src="{{$urlServer}}/js/h5p-standalone/main.bundle.js"></script>
+<link type="text/css" rel="stylesheet" media="all" href="{{$urlServer}}node_modules/h5p-standalone/dist/styles/h5p.css" />
+<script type="text/javascript" src="{{$urlServer}}node_modules/h5p-standalone/dist/main.bundle.js"></script>
 @endpush
 
 @section('content')
@@ -14,7 +14,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                          
+
                       <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -30,21 +30,21 @@
 
                         @include('layouts.partials.legend_view')
 
-                        @include('layouts.partials.show_alert') 
+                        @include('layouts.partials.show_alert')
 
                         {!! $action_bar !!}
-                        
+
                         <div class="col-12 mt-4">
                             <div id="h5p-container"></div>
                         </div>
-                        
+
                 </div>
             </div>
         </div>
-  
+
 </div>
 </div>
-	
+
 <script type='text/javascript'>
         $(document).ready(function() {
             const el = document.getElementById('h5p-container');
