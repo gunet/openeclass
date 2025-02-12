@@ -222,6 +222,9 @@ if (($is_editor) and isset($_GET['topicdel'])) {
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
 
     $last_post = Database::get()->querySingle("SELECT MAX(last_post_id) AS last_post FROM forum_topic WHERE forum_id = ?d", $forum_id)->last_post;
+    if (!$last_post) {
+        $last_post = 0;
+    }
 
     Database::get()->query("UPDATE forum SET num_topics = ?d,
                                 num_posts = num_posts-$number_of_posts,
