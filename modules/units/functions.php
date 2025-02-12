@@ -721,7 +721,7 @@ function show_text($comments, $resource_id, $visibility, $act_name) {
         if(!empty($act_name)){
             $content .= " <div class='text-start'>$act_name</div> ";
         }
-    $content .= "<div class='col-10'>$comments</div>" .
+    $content .= "<div class='text-start col-10'>$comments</div>" .
                     actions('text', $resource_id, $visibility) .
                 "</div>";
 
