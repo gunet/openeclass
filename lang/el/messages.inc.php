@@ -4911,6 +4911,7 @@ $langCourseUnitModified = "Τα στοιχεία της ενότητας τρο�
 $langResourceCourseUnitDeleted = "Ο πόρος της ενότητας διαγράφηκε";
 $langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";
 $langInsertText = "κειμένου";
+$langInsertDivider = "διαχωριστή";
 $langInsertDoc = "εγγράφου";
 $langInsertExercise = "άσκησης";
 $langInsertVideo = "πολυμεσικού αρχείου";

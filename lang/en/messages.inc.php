@@ -4398,6 +4398,7 @@ $langCourseUnitModified = "$langCourse unit details modified";
 $langResourceCourseUnitDeleted = "$langCourse unit resource has been deleted";
 $langResourceUnitModified = "Resource details modified";
 $langInsertText = "text";
+$langInsertDivider = "separator";
 $langInsertDoc = "document";
 $langInsertExercise = "exercise";
 $langInsertVideo = "multimedia file";

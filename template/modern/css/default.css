@@ -5847,6 +5847,10 @@ th.grade-col a{
   opacity: 0.5;
 }
 
+#unitResources .unit-divider {
+  background-color: #000;
+  height: 1px;
+}
 
 
 /******************************** Ext Apps *********************************/
