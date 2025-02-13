@@ -250,7 +250,7 @@ if ($unit) {
 }
 
 $t = new Template();
-$t->set_root($webDir . '/template/' . $theme);
+$t->set_root($webDir . '/template/modern');
 $t->set_file('page', 'ebook_fullscreen.html');
 $t->set_var('URL_PATH', $urlAppend);
 $t->set_var('langBack', $langClose);
@@ -262,7 +262,7 @@ $t->set_var('course_ebook', q($navigation_label));
 $t->set_var('course_ebook_link', $exit_fullscreen_link);
 $t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
 $t->set_var('unit_parameter', $unit_parameter);
-$t->set_var('template_base', $urlAppend . 'template/' . $theme . '/');
+$t->set_var('template_base', $urlAppend . 'template/modern/');
 $t->set_var('img_base', $themeimg);
 $t->set_var('js_base', $urlAppend . 'js');
 $t->set_var('logo_img_small', $logoUrl);
