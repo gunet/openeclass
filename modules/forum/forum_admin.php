@@ -88,6 +88,12 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langF
 // forum go
 if (isset($_GET['forumgo'])) {
     $ctg = category_name($cat_id);
+    // Add a forum to a group which has enabled the forum option but its forum_id is equals with zero.
+    $gr_no_forums = Database::get()->queryArray("SELECT `id`,`name` FROM `group` 
+                                                 WHERE `id` IN (SELECT `group_id` FROM `group_properties` WHERE `course_id` = ?d AND `forum` = ?d) 
+                                                 AND `course_id` = ?d 
+                                                 AND `forum_id` = ?d", $course_id, 1, $course_id, 0);
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -111,7 +117,20 @@ if (isset($_GET['forumgo'])) {
                 <div class='col-sm-12'>
                     <textarea class='form-control' name='forum_desc' id='forum_desc' rows='3'></textarea>
                 </div>
-            </div>
+            </div>";
+            if (count($gr_no_forums) > 0) {
+               $tool_content .= "
+                <div class='form-group mt-4'>
+                    <label for='to_group' class='col-sm-12 control-label-notes'>$langGroup</label>
+                    <select id='to_group' name='to_group' class='form-select'>
+                        <option value='0' selected>$langSelect</option>";
+                foreach ($gr_no_forums as $g) {
+                    $tool_content .= "<option value='$g->id'>$g->name</option>";
+                }
+ $tool_content .= "</select>
+                </div>";
+            }
+$tool_content .= "
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                     <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
@@ -134,6 +153,13 @@ elseif (isset($_GET['forumgoedit'])) {
     $forum_name = $result->name;
     $forum_desc = $result->desc;
     $cat_id_1 = $result->cat_id;
+
+    // Add a forum to a group which has enabled the forum option but its forum_id is equals with zero.
+    $gr_no_forums = Database::get()->queryArray("SELECT `id`,`name` FROM `group` 
+                                                 WHERE `id` IN (SELECT `group_id` FROM `group_properties` WHERE `course_id` = ?d AND `forum` = ?d) 
+                                                 AND `course_id` = ?d 
+                                                 AND `forum_id` = ?d", $course_id, 1, $course_id, 0);
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -174,7 +200,20 @@ elseif (isset($_GET['forumgoedit'])) {
         $tool_content .= "</select></div>";
     }
     $tool_content .= "
-       </div>
+       </div>";
+       if (count($gr_no_forums) > 0) {
+        $tool_content .= "
+         <div class='form-group mt-4'>
+             <label for='to_group' class='col-sm-12 control-label-notes'>$langGroup</label>
+             <select id='to_group' name='to_group' class='form-select'>
+                 <option value='0' selected>$langSelect</option>";
+         foreach ($gr_no_forums as $g) {
+             $tool_content .= "<option value='$g->id'>$g->name</option>";
+         }
+$tool_content .= "</select>
+         </div>";
+     }
+     $tool_content .= "
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                 <input class='btn submitAdminBtn' type='submit' value='$langModify'>
@@ -239,6 +278,11 @@ elseif (isset($_GET['forumgosave'])) {
                                 AND course_id = ?d"
             , $_POST['forum_name'], purify($_POST['forum_desc']), $cat_id, $forum_id, $course_id);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forum_id);
+
+    if (isset($_POST['to_group']) and $_POST['to_group'] > 0) {
+        Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forum_id, $_POST['to_group']);
+    }
+
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langForumDataChanged</span></div></div>";
 }
 
@@ -260,6 +304,10 @@ elseif (isset($_GET['forumgoadd'])) {
                                 VALUES (?s, ?s, ?d, ?d)"
             , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id)->lastInsertID;
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forid);
+
+    if (isset($_POST['to_group']) and $_POST['to_group'] > 0) {
+        Database::get()->query("UPDATE `group` SET `forum_id` = ?d WHERE `id` = ?d", $forid, $_POST['to_group']);
+    }
     // --------------------------------
     // notify users
     // --------------------------------
@@ -331,6 +379,16 @@ elseif (isset($_GET['forumcatdel'])) {
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
+        // Don't delete the forum that is associated with a group.
+        $CategoryforumInGroup = Database::get()->querySingle("SELECT `id`,`name` FROM `group` WHERE `course_id` = ?d AND `forum_id` = ?d", $course_id, $forum_id);
+        if ($CategoryforumInGroup) {
+            $CategoryforumGroupProperty = Database::get()->querySingle("SELECT `forum` FROM `group_properties` WHERE `group_id` = ?d", $CategoryforumInGroup->id)->forum;
+            if ($CategoryforumGroupProperty) {
+                Session::flash('message', $langForumCategoryNotDeleted);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("modules/forum/index.php?course=$course_code");
+            }
+        }
         $result2 = Database::get()->queryArray("SELECT id FROM forum_topic WHERE forum_id = ?d", $forum_id);
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
@@ -387,6 +445,21 @@ elseif (isset($_GET['forumcatdel'])) {
 
 // delete forum
 elseif (isset($_GET['forumgodel'])) {
+
+    // Don't delete the forum that is associated with a group.
+    $forumInGroup = Database::get()->querySingle("SELECT `id`,`name` FROM `group` WHERE `course_id` = ?d AND `forum_id` = ?d", $course_id, $forum_id);
+    if ($forumInGroup) {
+        $groupId = $forumInGroup->id;
+        $forumGroupProperty = Database::get()->querySingle("SELECT `forum` FROM `group_properties` WHERE `group_id` = ?d", $groupId)->forum;
+        if ($forumGroupProperty) {
+            $urlGroup = $urlAppend . "modules/group/group_space.php?course=$course_code&group_id=$groupId";
+            $msgForum = $langTheForum . "&nbsp;<a href='$urlGroup'>" . $forumInGroup->name . "</a>&nbsp;" . $langTheForumInGroupNotDeleted;
+            Session::flash('message', $msgForum);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("modules/forum/index.php?course=$course_code");
+        }
+    }
+
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
     foreach ($result as $result_row) {
         $forum_id = $result_row->id;
@@ -458,7 +531,7 @@ elseif (isset($_GET['forumgodel'])) {
        <legend class='mb-0' aria-label='$langForm'></legend>
        <div class='form-group'>
         <div class='col-sm-12'>
-        <select name='forum_id' class='form-select'>";
+        <select name='forum_id' class='form-select' aria-label='$langSelect'>";
         $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
         foreach ($result as $result_row) {
            $forum_id = $result_row->forum_id;
@@ -574,7 +647,7 @@ elseif (isset($_GET['forumgodel'])) {
         <fieldset>
         <legend class='mb-0' aria-label='$langForm'></legend>
         <div class='form-group'>
-            <label for='categories' class='col-sm-6 control-label-notes'>$langCategory <span class='asterisk Accent-200-cl'>(*)</span></label>
+            <label for='categories' class='col-sm-12 control-label-notes'>$langCategory <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-sm-12'>
               <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCategory'>
             </div>

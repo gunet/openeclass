@@ -3308,6 +3308,9 @@ $langForumPostFlatViewAsc = "Με ημερομηνία (πρόσφατο τελ�
 $langForumPostFlatViewDesc = "Με ημερομηνία (πρόσφατο πρώτο)";
 $langForumPostThreadedView = "Ομαδοποιημένα";
 $langForumAttachmentDeleted = "Το αρχείο διαγράφηκε";
+$langTheForum = "Η περιοχή συζητήσεων δεν μπορεί να διαγραφεί.</br> Θα πρέπει να απενεργοποιηθεί από την ομάδα χρηστών:";
+$langTheForumInGroupNotDeleted = "στην οποία περιλαμβάνεται.";
+$langForumCategoryNotDeleted = "Η κατηγορία δεν μπορεί να διαγραφει.";
 
 /* * ***************************************************************
  * questionnaire.php
