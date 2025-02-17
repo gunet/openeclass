@@ -191,7 +191,7 @@
 
 
 
-                                <div>
+                                <div style="display: flow-root;">
                                     {!! $comments !!}
                                 </div>
                                 <div class='unit-resources mt-3'>
