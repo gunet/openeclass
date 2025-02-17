@@ -48,9 +48,6 @@
                     </div>
                 </div>
 
-                <pre>
-                    {{var_dump($faqs)}}
-                </pre>
             </div>
         </div>
     </div>
