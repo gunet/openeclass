@@ -5840,6 +5840,10 @@ th.grade-col a{
 }
 
 #unitResources .module-name {
+  font-size: 0.65rem;
+}
+
+#unitResources .text-start p {
   font-size: 0.75rem;
 }
 
