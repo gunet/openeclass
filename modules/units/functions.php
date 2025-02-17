@@ -1786,7 +1786,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
  * @return string
  */
 function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name) {
-    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id;
+    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id, $langBBB;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
     $class_vis = '';
@@ -1825,7 +1825,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
         <div $class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
-          <div>$tclink $comment_box</div>" .
+          <div><div class='module-name'>$langBBB</div>$tclink $comment_box</div>" .
         actions('tc', $resource_id, $visibility) . '
         </div>';
 }
