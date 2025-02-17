@@ -3308,9 +3308,8 @@ $langForumPostFlatViewAsc = "Με ημερομηνία (πρόσφατο τελ�
 $langForumPostFlatViewDesc = "Με ημερομηνία (πρόσφατο πρώτο)";
 $langForumPostThreadedView = "Ομαδοποιημένα";
 $langForumAttachmentDeleted = "Το αρχείο διαγράφηκε";
-$langTheForum = "Η περιοχή συζητήσεων δεν μπορεί να διαγραφεί.</br> Θα πρέπει να απενεργοποιηθεί από την ομάδα χρηστών:";
-$langTheForumInGroupNotDeleted = "στην οποία περιλαμβάνεται.";
-$langForumCategoryNotDeleted = "Η κατηγορία δεν μπορεί να διαγραφει.";
+$langTheForumInGroupNotDeleted = "Η περιοχή συζητήσεων δεν μπορεί να διαγραφεί γιατί ανήκει σε ομάδα χρηστών. Αν θέλετε να τη διαγράψετε θα πρέπει να την απενεργοποιήσετε από την αντίστοιχη ομάδα χρηστών.";
+$langForumCategoryNotDeleted = "Η κατηγορία δεν μπορεί να διαγραφεί.";
 
 /* * ***************************************************************
  * questionnaire.php
@@ -4637,7 +4636,9 @@ $m['WorkUserNoSubmission'] = 'Χρήστες που δεν έχουν υποβά
 $m['NoneWorkUserNoSubmission'] = 'Δεν υπάρχουν χρήστες που δεν έχουν υποβάλει εργασία';
 $m['WorkTitleValidation'] = 'Παρακαλώ εισάγετε Τίτλο Εργασίας';
 $m['SubmissionWorkInfo'] = 'Στοιχεία υποβολής εργασίας';
+$langSubmissionWorkInfo = 'Στοιχεία υποβολής εργασίας';
 $m['SubmissionStatusWorkInfo'] = 'Κατάσταση υποβολής εργασίας';
+$langSubmissionStatusWorkInfo = 'Κατάσταση υποβολής εργασίας';
 $m['subm'] = 'Υποβλ.';
 $m['nogr'] = 'Μη βαθμ.';
 $m['comments_exist'] = 'Υπάρχουν σχόλια';
