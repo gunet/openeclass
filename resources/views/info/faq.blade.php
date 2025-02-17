@@ -47,6 +47,10 @@
                         <img class='form-image-modules form-image-faq' src='{!! get_FAQ_image() !!}' alt="{{ trans('langFaq')}}" />
                     </div>
                 </div>
+
+                <pre>
+                    {{var_dump($faqs)}}
+                </pre>
             </div>
         </div>
     </div>
