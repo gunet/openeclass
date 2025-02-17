@@ -56,6 +56,22 @@ if (isset($_POST['reg_flag'])) {
 } else {
     $reg_flag = 'before';
 }
+
+load_js('jstree3');
+$tree = new Hierarchy();
+list($js, $html) = $tree->buildUserNodePicker(array('multiple' => true));
+$head_content .= $js;
+$data['buildusernode'] = $html;
+$data['reg_flag'] = $reg_flag;
+
+$data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag);
+$data['selection_department'] = selection(array('yes' => $langWithDepartment, 'no' => $langWithoutDepartment), 'dept_flag', 'yes');
+$data['selection_am'] = selection(array('am' => $langWithStudentId, 'uname' => $langWithUsernames), 'id_flag', 'am');
+$data['date_format'] = date("d-m-Y", time());
+
+$data['form_url'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+$data['form_url_from_user'] = "$_SERVER[SCRIPT_NAME]?course=$course_code&from_user=true";
+
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -92,35 +108,22 @@ if (isset($_POST['submit'])) {
         $output[] = del_blog_posts();
     }
 
-    if (($count_events = count($output)) > 0) {
-        $data['count_events'] = $count_events;
-        $data['output'] = $output;
-        view('modules.course_info.refresh_course_results', $data);
-    }
-} else { // display form
-    load_js('jstree3');
-    $tree = new Hierarchy();
-    list($js, $html) = $tree->buildUserNodePicker(array('multiple' => true));
-    $head_content .= $js;
-    $data['buildusernode'] = $html;
-    $data['reg_flag'] = $reg_flag;
-
-    $data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag);
-    $data['selection_department'] = selection(array('yes' => $langWithDepartment, 'no' => $langWithoutDepartment), 'dept_flag', 'yes');
-    $data['selection_am'] = selection(array('am' => $langWithStudentId, 'uname' => $langWithUsernames), 'id_flag', 'am');
-    $data['date_format'] = date("d-m-Y", time());
-
-    $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
-    $data['form_url_from_user'] = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;from_user=true";
-
-    view('modules.course_info.refresh_course', $data);
+    $data['output'] = $output;
+    $count_events = count($output);
+    $data['count_events'] = $count_events;
+} else {
+    $data['output'] = [];
+    $data['count_events'] = 0;
 }
+
+view('modules.course_info.refresh_course', $data);
 
 /**
  * @brief unregister users from course
  * @return string
  */
-function delete_users() {
+function delete_users(): string
+{
     global $course_id, $langUsersDeleted;
 
     $details = array('multiple' => true, 'params' => array());
@@ -218,51 +221,45 @@ function delete_users() {
  * @brief delete announcements
  * @return string
  */
-function delete_announcements() {
+function delete_announcements(): string
+{
     global $course_id, $langAnnDeleted;
 
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $course_id);
-    return "<p>$langAnnDeleted</p>";
+    return "$langAnnDeleted";
 }
 
 /**
  * @brief delete calendar events
  * @return string
  */
-function delete_agenda() {
+function delete_agenda(): string
+{
     global $langAgendaDeleted, $course_id;
 
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $course_id);
-    return "<p>$langAgendaDeleted</p>";
+    return "$langAgendaDeleted";
 }
 
-/**
- * @brief hide documents
- * @return string
- */
-function hide_doc() {
-    global $langDocsDeleted, $course_id;
-
-    Database::get()->query("UPDATE document SET visible=0, public=0 WHERE course_id = ?d", $course_id);
-    return "<p>$langDocsDeleted</p>";
-}
 
 /**
  * @brief hide assignments
  * @return string
  */
-function hide_work() {
+function hide_work(): string
+{
     global $langWorksDeleted, $course_id;
 
     Database::get()->query("UPDATE assignment SET active=0 WHERE course_id = ?d", $course_id);
-    return "<p>$langWorksDeleted</p>";
+    return "$langWorksDeleted";
 }
 /**
  *
  @brief hide assignments submission
  * @return string
  */
-function del_work_subs()  {
+function del_work_subs(): string
+{
     global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
 
     $workPath = $webDir."/courses/".$course_code."/work";
@@ -282,7 +279,7 @@ function del_work_subs()  {
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);
         }
     }
-    return "<p>$langAllAssignmentSubsDeleted</p>";
+    return "$langAllAssignmentSubsDeleted";
 }
 
 
@@ -290,18 +287,20 @@ function del_work_subs()  {
  * @brief hide exercises
  * @return string
  */
-function hide_exercises() {
+function hide_exercises(): string
+{
     global $langExercisesDeleted, $course_id;
 
     Database::get()->query("UPDATE exercise SET active = 0 WHERE course_id = ?d", $course_id);
-    return "<p>$langExercisesDeleted</p>";
+    return "$langExercisesDeleted";
 }
 
 /**
  * @brief purge exercise results
  * @return string
  */
-function purge_exercises() {
+function purge_exercises(): string
+{
     global $langPurgeExercisesResults, $course_id;
 
     Database::get()->query("DELETE d FROM exercise_answer_record d,exercise_question s
@@ -309,28 +308,30 @@ function purge_exercises() {
     Database::get()->query("DELETE d FROM exercise_user_record d,exercise s
                     WHERE d.eid=s.id AND s.course_id = ?d", $course_id);
 
-    return "<p>$langPurgeExercisesResults</p>";
+    return "$langPurgeExercisesResults";
 }
 
 /**
  * @brief clear statistics
  * @return string
  */
-function clear_stats() {
+function clear_stats(): string
+{
     global $langStatsCleared;
 
     require_once 'include/action.php';
     $action = new action();
     $action->summarizeAll();
 
-    return "<p>$langStatsCleared</p>";
+    return "$langStatsCleared";
 }
 
 /**
  * @brief delete wall posts
  * @return string
  */
-function del_wall_posts() {
+function del_wall_posts(): string
+{
     global $langWallPostsDeleted, $course_id;
 
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `wall_post` ON `rating`.`rid` = `wall_post`.`id`
@@ -344,7 +345,7 @@ function del_wall_posts() {
     Database::get()->query("DELETE FROM abuse_report WHERE rtype = ?s AND course_id = ?d", 'wallpost', $course_id);
     Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $course_id);
 
-    return "<p>$langWallPostsDeleted</p>";
+    return "$langWallPostsDeleted";
 }
 
 /**
@@ -352,7 +353,8 @@ function del_wall_posts() {
  * @brief delete blog posts
  * @return string
  */
-function del_blog_posts() {
+function del_blog_posts(): string
+{
     global $langBlogPostsDeleted, $course_id;
 
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id`
@@ -363,5 +365,5 @@ function del_blog_posts() {
                             WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $course_id);
     Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $course_id);
 
-    return "<p>$langBlogPostsDeleted</p>";
+    return "$langBlogPostsDeleted";
 }
