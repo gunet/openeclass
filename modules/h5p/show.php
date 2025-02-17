@@ -47,6 +47,12 @@ $tool_content .= action_bar([
       'icon' => 'fa-reply',
       'level' => 'primary'
     ],
+    [ 'title' => $langEdit,
+        'url' => $urlServer . "modules/h5p/create.php?course=" . $course_code . "&id=" . $content->id,
+        'icon' => 'fa-edit',
+        'level' => 'primary',
+        'show' => $is_editor
+    ],
     [ 'title' => $langDownload,
       'url' => $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id,
       'icon' => 'fa-download',
