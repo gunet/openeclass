@@ -453,7 +453,7 @@ elseif (isset($_GET['forumgodel'])) {
         $forumGroupProperty = Database::get()->querySingle("SELECT `forum` FROM `group_properties` WHERE `group_id` = ?d", $groupId)->forum;
         if ($forumGroupProperty) {
             $urlGroup = $urlAppend . "modules/group/group_space.php?course=$course_code&group_id=$groupId";
-            $msgForum = $langTheForum . "&nbsp;<a href='$urlGroup'>" . $forumInGroup->name . "</a>&nbsp;" . $langTheForumInGroupNotDeleted;
+            $msgForum = $langTheForumInGroupNotDeleted;
             Session::flash('message', $msgForum);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/forum/index.php?course=$course_code");
