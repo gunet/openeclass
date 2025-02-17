@@ -884,7 +884,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     } else {
         $comment_box = "";
     }
-    $class_vis = ($visible == 0 or $status == 'del') ? ' class="not_visible"' : ' ';
+    $class_vis = ($visible == 0 or $visibility == 0 or $status == 'del' ) ? ' class="not_visible"' : ' ';
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>".icon($imagelink)."</div>
@@ -1219,7 +1219,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
-          <div><div class='module-name'>$langForums</div> $forumlink $res_prereq_icon $comment_box</div>" .
+          <div class='text-start'><div class='module-name'>$langForums</div> $forumlink $res_prereq_icon $comment_box</div>" .
             actions('forum', $resource_id, $visibility) . '
         </div>';
 }
