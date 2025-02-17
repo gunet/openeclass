@@ -496,10 +496,10 @@ elseif (isset($_GET['forumgodel'])) {
                 $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
                         INNER JOIN forum ON forum.id = forum_topic.forum_id
-                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $author, $course_id);
-                Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $author, $course_id);
+                        WHERE forum_post.poster_id = ?d AND forum.course_id = ?d", $author->poster_id, $course_id);
+                Database::get()->query("DELETE FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $author->poster_id, $course_id);
                 if ($forum_user_stats->c != 0) {
-                    Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
+                    Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author->poster_id, $forum_user_stats->c, $course_id);
                 }
             }
         }
