@@ -916,10 +916,12 @@ $tool_content = $head_content = '';
 $tinymce_color_text = '#687DA3';
 get_tinymce_color_text();
 
-// Theme initialization
-$theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
-$theme_css = "courses/theme_data/{$theme_id}/style_str.css";
-theme_initialization();
+// Theme initialization only if not running via cli
+if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
+    $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
+    $theme_css = "courses/theme_data/{$theme_id}/style_str.css";
+    theme_initialization();
+}
 
 // Regarding the course reviewer in a session
 if (isset($is_collaborative_course) and $is_collaborative_course){
