@@ -42,9 +42,9 @@ $user = new User();
 $toolName = $langPortfolio;
 $pageName = $langCourseCreate;
 
-register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
+register_posted_variables(array('title' => true, 'password' => true));
 if (empty($prof_names)) {
-    $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
+    $data['prof_names'] = $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
 }
 
 // departments and validation
@@ -63,7 +63,7 @@ if ($allow_only_defaults) {
         }
     }
 }
-$departments = isset($_POST['department']) ? $_POST['department'] : array();
+$departments = $_POST['department'] ?? array();
 $deps_valid = true;
 
 foreach ($departments as $dep) {
@@ -73,6 +73,10 @@ foreach ($departments as $dep) {
     }
 }
 $data['deps_valid'] = $deps_valid;
+$data['title'] = Session::has('title') ? Session::get('title') : '';
+$data['public_code'] = Session::has('public_code') ? Session::get('public_code') : '';
+$description = Session::has('description') ? Session::get('description') : '';
+$data['prof_names'] = $prof_names = Session::has('prof_names') ? Session::get('prof_names') : "$_SESSION[givenname] $_SESSION[surname]";
 
 // display form
 if (!isset($_POST['create_course'])) {
@@ -80,7 +84,6 @@ if (!isset($_POST['create_course'])) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         $data['buildusernode'] = $html;
-        $public_code = $title = $description = '';
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
@@ -133,7 +136,7 @@ if (!isset($_POST['create_course'])) {
     $_SESSION['description'] = purify($_POST['description']);
 
     if (empty($title)) {
-        Session::flash('message',$langFieldsMissing);
+        Session::flash('message', $langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
         $validationFailed = true;
     }
@@ -147,134 +150,122 @@ if (!isset($_POST['create_course'])) {
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $validationFailed = false;
-    if (count($departments) < 1 || empty($departments[0])) {
-        Session::flash('message',$langEmptyAddNode);
-        Session::flash('alert-class', 'alert-warning');
-        $validationFailed = true;
-    }
-
-    if (empty($title)) {
-        Session::flash('message',$langFieldsMissing);
-        Session::flash('alert-class', 'alert-warning');
-        $validationFailed = true;
-    }
-
-    if ($validationFailed) {
-        redirect_to_home_page('modules/create_course/create_course.php');
-    }
-
-    // create new course code: uppercase, no spaces allowed
-    $code = strtoupper(new_code($departments[0]));
-    $code = str_replace(' ', '', $code);
-
-    // include_messages
-    include "lang/$language/common.inc.php";
-    $extra_messages = "config/{$language_codes[$language]}.inc.php";
-    if (file_exists($extra_messages)) {
-        include $extra_messages;
-    } else {
-        $extra_messages = false;
-    }
-    include "lang/$language/messages.inc.php";
-    if (file_exists('config/config.php')) {
-        if(get_config('show_always_collaboration') and get_config('show_collaboration')){
-          include "lang/$language/messages_collaboration.inc.php";
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('title'));
+    $v->labels(array('title' => "$langTheField $langTitle"));
+    if ($v->validate()) {
+        if (count($departments) < 1 || empty($departments[0])) {
+            Session::flashPost()->Messages($langEmptyAddNode)->Errors($v->errors());
+            redirect_to_home_page('modules/create_course/create_course.php');
         }
-    }
-    if ($extra_messages) {
-        include $extra_messages;
-    }
-
-    // create course directories
-    if (!create_course_dirs($code)) {
-        Session::flash('message',$langGeneralError);
-        Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page('modules/create_course/create_course.php');
-    }
-
-    // get default quota values
-    $doc_quota = get_config('doc_quota');
-    $group_quota = get_config('group_quota');
-    $video_quota = get_config('video_quota');
-    $dropbox_quota = get_config('dropbox_quota');
-
-    // get course_license
-    if (isset($_POST['l_radio'])) {
-        $l = $_POST['l_radio'];
-        switch ($l) {
-            case 'cc':
-                if (isset($_POST['cc_use'])) {
-                    $course_license = intval($_POST['cc_use']);
-                }
-                break;
-            case '10':
-                $course_license = 10;
-                break;
-            default:
-                $course_license = 0;
-                break;
+        // create new course code: uppercase, no spaces allowed
+        $code = strtoupper(new_code($departments[0]));
+        $code = str_replace(' ', '', $code);
+        // include_messages
+        include "lang/$language/common.inc.php";
+        $extra_messages = "config/{$language_codes[$language]}.inc.php";
+        if (file_exists($extra_messages)) {
+            include $extra_messages;
+        } else {
+            $extra_messages = false;
         }
-    }
-
-    if (ctype_alnum($_POST['view_type'])) {
-        $view_type = $_POST['view_type'];
-    }
-
-    if (empty($_POST['public_code'])) {
-        $public_code = $code;
-    } else {
-        $public_code = mb_substr($_POST['public_code'], 0 ,20);
-    }
-    $description = purify($_POST['description']);
-
-    $course_image = '';
-
-    if (isset($_FILES['course_image']) && is_uploaded_file($_FILES['course_image']['tmp_name'])) {
-        $file_name = $_FILES['course_image']['name'];
-        validateUploadedFile($file_name, 2);
-        move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$code/image/$file_name");
-        require_once 'modules/admin/extconfig/externals.php';
-        $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled()){
-            $output=$connector->check("$webDir/courses/$course_code/image/$file_name");
-            if($output->status==$output::STATUS_INFECTED){
-                AntivirusApp::block($output->output);
+        include "lang/$language/messages.inc.php";
+        if (file_exists('config/config.php')) {
+            if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
+                include "lang/$language/messages_collaboration.inc.php";
             }
         }
-        $course_image = $file_name;
-    }
-
-    if(!empty($_POST['choose_from_list'])) {
-        $imageName = $_POST['choose_from_list'];
-        $imagePath = "$webDir/template/modern/images/courses_images/$imageName";
-        $newPath = "$webDir/courses/$code/image/";
-        $name = pathinfo($imageName, PATHINFO_FILENAME);
-        $ext =  get_file_extension($imageName);
-        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
-        $newName  = $newPath.$image_without_ext.".".$ext;
-        $copied = copy($imagePath , $newName);
-        if ((!$copied)) {
-            echo "Error : Not Copied";
-        } else {
-            $course_image = $image_without_ext.".".$ext;
+        if ($extra_messages) {
+            include $extra_messages;
         }
-    }
 
-    $typeCourse = 0;
-    if(isset($view_type) && $view_type == 'sessions'){
-        $typeCourse = 1;
-    }
-    if(get_config('show_collaboration') && get_config('show_always_collaboration')){
-        $typeCourse = 1;
-    }
-    if(get_config('show_collaboration') && !get_config('show_always_collaboration')){
-        if (isset($_POST['is_type_collaborative']) and $_POST['is_type_collaborative'] == 'on') {
+        // create course directories
+        if (!create_course_dirs($code)) {
+            Session::flash('message', $langGeneralError);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/create_course/create_course.php');
+        }
+
+        // get default quota values
+        $doc_quota = get_config('doc_quota');
+        $group_quota = get_config('group_quota');
+        $video_quota = get_config('video_quota');
+        $dropbox_quota = get_config('dropbox_quota');
+        // get course_license
+        if (isset($_POST['l_radio'])) {
+            $l = $_POST['l_radio'];
+            switch ($l) {
+                case 'cc':
+                    if (isset($_POST['cc_use'])) {
+                        $course_license = intval($_POST['cc_use']);
+                    }
+                    break;
+                case '10':
+                    $course_license = 10;
+                    break;
+                default:
+                    $course_license = 0;
+                    break;
+            }
+        }
+
+        if (ctype_alnum($_POST['view_type'])) {
+            $view_type = $_POST['view_type'];
+        }
+
+        if (empty($_POST['public_code'])) {
+            $public_code = $code;
+        } else {
+            $public_code = mb_substr($_POST['public_code'], 0, 20);
+        }
+        $description = purify($_POST['description']);
+
+        $course_image = '';
+        if (isset($_FILES['course_image']) && is_uploaded_file($_FILES['course_image']['tmp_name'])) {
+            $file_name = $_FILES['course_image']['name'];
+            validateUploadedFile($file_name, 2);
+            move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$code/image/$file_name");
+            require_once 'modules/admin/extconfig/externals.php';
+            $connector = AntivirusApp::getAntivirus();
+            if ($connector->isEnabled()) {
+                $output = $connector->check("$webDir/courses/$course_code/image/$file_name");
+                if ($output->status == $output::STATUS_INFECTED) {
+                    AntivirusApp::block($output->output);
+                }
+            }
+            $course_image = $file_name;
+        }
+
+        if (!empty($_POST['choose_from_list'])) {
+            $imageName = $_POST['choose_from_list'];
+            $imagePath = "$webDir/template/modern/images/courses_images/$imageName";
+            $newPath = "$webDir/courses/$code/image/";
+            $name = pathinfo($imageName, PATHINFO_FILENAME);
+            $ext = get_file_extension($imageName);
+            $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+            $newName = $newPath . $image_without_ext . "." . $ext;
+            $copied = copy($imagePath, $newName);
+            if ((!$copied)) {
+                echo "Error : Not Copied";
+            } else {
+                $course_image = $image_without_ext . "." . $ext;
+            }
+        }
+
+        $typeCourse = 0;
+        if (isset($view_type) && $view_type == 'sessions') {
             $typeCourse = 1;
         }
-    }
+        if (get_config('show_collaboration') && get_config('show_always_collaboration')) {
+            $typeCourse = 1;
+        }
+        if (get_config('show_collaboration') && !get_config('show_always_collaboration')) {
+            if (isset($_POST['is_type_collaborative']) and $_POST['is_type_collaborative'] == 'on') {
+                $typeCourse = 1;
+            }
+        }
 
-    $result = Database::get()->query("INSERT INTO course SET
+        $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
                         title = ?s,
@@ -298,53 +289,55 @@ if (!isset($_POST['create_course'])) {
                         description = ?s,
                         course_image = ?s",
             $code, $language, $title, $_POST['formvisible'],
-            $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
+            $course_license, $_POST['prof_names'], $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
             $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description, $course_image);
-    $new_course_id = $result->lastInsertID;
-    if (!$new_course_id) {
-        Session::flash('message',$langGeneralError);
-        Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page('modules/create_course/create_course.php');
-    }
+        $new_course_id = $result->lastInsertID;
+        if (!$new_course_id) {
+            Session::flash('message', $langGeneralError);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/create_course/create_course.php');
+        }
+        // create course modules
+        create_modules($new_course_id);
 
-    // create course modules
-    create_modules($new_course_id);
-
-    Database::get()->query("INSERT INTO course_user SET
+        Database::get()->query("INSERT INTO course_user SET
                                         course_id = ?d,
                                         user_id = ?d,
                                         status = " . USER_TEACHER . ",
                                         tutor = 1,
                                         reg_date = " . DBHelper::timeAfter() . ",
-                                        document_timestamp = " . DBHelper::timeAfter() . "",
-                           $new_course_id, $uid);
+                                        document_timestamp = " . DBHelper::timeAfter(),
+            $new_course_id, $uid);
 
-    $course->refresh($new_course_id, $departments);
+        $course->refresh($new_course_id, $departments);
 
-    // create courses/<CODE>/index.php
-    course_index($code);
-
-    // add a default forum category
-    Database::get()->query("INSERT INTO forum_category
+        // create courses/<CODE>/index.php
+        course_index($code);
+        // add a default forum category
+        Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
 
-    $_SESSION['courses'][$code] = USER_TEACHER;
+        $_SESSION['courses'][$code] = USER_TEACHER;
 
-    $data['action_bar'] = action_bar(array(
-        array('title' => $langEnter,
-              'url' => $urlAppend . "courses/$code/",
-              'icon' => 'fa-arrow-right',
-              'level' => 'primary',
-              'button-class' => 'btn-success')));
+        $data['action_bar'] = action_bar(array(
+            array('title' => $langEnter,
+                'url' => $urlAppend . "courses/$code/",
+                'icon' => 'fa-arrow-right',
+                'level' => 'primary',
+                'button-class' => 'btn-success')));
 
-    // logging
-    Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
-                                               'code' => $code,
-                                               'title' => $title,
-                                               'language' => $language,
-                                               'visible' => $_POST['formvisible']));
-    $data['title'] = $title;
+        // logging
+        Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
+            'code' => $code,
+            'title' => $title,
+            'language' => $language,
+            'visible' => $_POST['formvisible']));
+        $data['title'] = $title;
+    } else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page('modules/create_course/create_course.php');
+    }
     view('modules.create_course.create_course', $data);
 } // end of submit
