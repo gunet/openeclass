@@ -28,7 +28,6 @@ $require_current_course = true;
 $guest_allowed = true;
 $require_help = TRUE;
 $helpTopic = 'course_units';
-$helpSubTopic = 'units_actions';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -39,6 +38,10 @@ require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/tc/functions.php';
+
+if ($is_editor) {
+    $helpSubTopic = 'units_actions';
+}
 
 doc_init();
 
@@ -226,4 +229,3 @@ $data['activities'] = $activities;
 $data['tool_content_units'] = show_resources($data['unitId']);
 
 view('modules.units.index', $data);
-
