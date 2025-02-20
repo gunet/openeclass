@@ -191,7 +191,7 @@
 
 
 
-                                <div style="display: flow-root;">
+                                <div style="display: flow-root;" class="{{ $comments ? 'border-bottom-default pb-4' : '' }}">
                                     {!! $comments !!}
                                 </div>
                                 <div class='unit-resources mt-3'>
