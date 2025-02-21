@@ -156,7 +156,7 @@ if (isset($_POST['submitAnnouncement'])) {
                         </div>
                     </div>";
 
-                $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
+                $emailSubject = "$professorMessage ($public_code - $title - $langAnnouncement)";
                 $emailBody = html2text($emailContent);
                 $general_to = 'Members of course ' . $course_code;
                 // select students email list
