@@ -150,7 +150,6 @@ if (isset($_POST['submit'])) {
                                     </div>
                             </div>";
        $tool_content .= "</div>";
-
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
@@ -209,8 +208,8 @@ function getdepnumcourses($fac) {
  */
 function expanded_faculte($facid, $uid) {
     global $m, $langTutor, $langRegistration, $langCourse, $langLabelCourseUserRequest,
-    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess,
-    $langLabelCollabUserRequest, $langSelect;
+    $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess,
+    $langLabelCollabUserRequest;
 
     $retString = '';
 
@@ -223,8 +222,6 @@ function expanded_faculte($facid, $uid) {
     } else {
         $unlock_all_courses = false;
     }
-
-
 
     // build a list of course followed by user.
     $myCourses = array();
@@ -243,7 +240,7 @@ function expanded_faculte($facid, $uid) {
     $retString .= "<th class='text-end'>$langGroupAccess</th>";
     $retString .= "</tr></thead>";
 
-    Database::get()->queryFunc("SELECT
+    $q = Database::get()->queryFunc("SELECT
                             course.id cid,
                             course.code k,
                             course.public_code public_code,
@@ -339,9 +336,15 @@ function expanded_faculte($facid, $uid) {
                    </td>                   
                    <td class='text-end pe-4'>" . course_access_icon($mycours->visible) . "</td></tr>";
     }, intval($facid), COURSE_INACTIVE);
+
     $retString .= "</table></div>";
 
-    return $retString;
+    if ($q->affectedRows > 0) { // found courses?
+        return $retString;
+    } else {
+        return '';
+    }
+
 }
 
 /**
