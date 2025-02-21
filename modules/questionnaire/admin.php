@@ -381,9 +381,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
     $PollAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : (isset($poll) ? $poll->assign_to_specific : 0);
-    $MulSubmissions = Session::has('MulSubmissions') ? Session::get('MulSubmissions') : (isset($poll) ? $poll->multiple_submissions : '');
-    $DefaultAnswer = Session::has('DefaultAnswer') ? Session::get('DefaultAnswer') : (isset($poll) ? $poll->default_answer : '');
-    $PollSurveyType = Session::has('PollType') ? Session::get('PollType') : (isset($poll) ? $poll->type : '');
+    $PollAnonymized = Session::has('PollAnonymized') ? Session::get('PollAnonymized') : ($poll->anonymized ?? '');
+    $PollShowResults = Session::has('PollShowResults') ? Session::get('PollShowResults') : ($poll->show_results ?? '');
+    $MulSubmissions = Session::has('MulSubmissions') ? Session::get('MulSubmissions') : ($poll->multiple_submissions ?? '');
+    $DefaultAnswer = Session::has('DefaultAnswer') ? Session::get('DefaultAnswer') : ($poll->default_answer ?? '');
+    $PollSurveyType = Session::has('survey_type') ? Session::get('survey_type') : ($poll->type ?? '');
 
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
@@ -443,7 +445,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1'" .
-                        ((isset($poll->anonymized) && $poll->anonymized) ? ' checked' : '') .
+                        ($PollAnonymized ? ' checked' : '') .
                         ($attempt_counter > 0 ? ' disabled' : '') . ">
                                 <span class='checkmark'></span>
                                 $langPollAnonymize
@@ -451,7 +453,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
-                            <input type='checkbox' name='PollShowResults' id='PollShowResults' value='1' ".((isset($poll->show_results) && $poll->show_results) ? 'checked' : '').">
+                            <input type='checkbox' name='PollShowResults' id='PollShowResults' value='1' ".($PollShowResults ? 'checked' : '').">
                             <span class='checkmark'></span>
                             $langPollShowResults
                         </label>
@@ -464,7 +466,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='MulSubmissions' id='MulSubmissions' value='1'" .
-                            ((isset($poll->multiple_submissions) && $poll->multiple_submissions) ? ' checked' : '') .">
+                            ($MulSubmissions ? ' checked' : '') .">
                             <span class='checkmark'></span>
                             $langActivateMulSubmissions
                         </label>
@@ -472,7 +474,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='DefaultAnswer' id='DefaultAnswer' value='1'" .
-                            ((isset($poll->default_answer) && $poll->default_answer) ? ' checked' : '') . ">
+                            ($DefaultAnswer ? ' checked' : '') . ">
                             <span class='checkmark'></span>
                             $langActivateDefaultAnswer
                         </label>
@@ -481,24 +483,24 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4'>
-                <div class='col-sm-12 control-label-notes'>$m[WorkAssignTo]</div>
+                <div class='col-sm-12 control-label-notes'>$langWorkAssignTo</div>
                 <div class='col-sm-12'>
                     <div class='radio mb-1'>
                       <label>
                         <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
-                        <span>$m[WorkToAllUsers]</span>
+                        <span>$langWorkToAllUsers</span>
                       </label>
                     </div>
                     <div class='radio mb-1'>
                       <label>
                         <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
-                        <span>$m[WorkToUser]</span>
+                        <span>$langWorkToUser</span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "").">
-                        <span>$m[WorkToGroup]</span>
+                        <span>$langWorkToGroup</span>
                       </label>
                     </div>
                 </div>
@@ -531,7 +533,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>
             </div>";
-            if (hasPollQuestions($pid)) {
+
+            if (isset($_GET['modifyPoll']) and hasPollQuestions($pid)) {
                 $disabled = 'disabled';
                 $tool_content .= "<input type='hidden' name='survey_type' value='$PollSurveyType'>";
             } else {
