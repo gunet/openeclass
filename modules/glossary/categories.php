@@ -73,6 +73,7 @@ if ($is_editor) {
                       'icon' => 'fa-gear'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
+                      'level' => 'primary-label',
                       'icon' => 'fa-tasks'
                       )
             ));
