@@ -318,6 +318,7 @@ if ($is_editor) {
         $data['definition'] = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $glossary_item->definition );
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $glossary_item->notes );
         $data['category_selection'] = '';
+        $category_id = Session::has('category_id') ? Session::get('category_id') : $category_id;
 
         if ($categories) {
             $categories[0] = '-';
