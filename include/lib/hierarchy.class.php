@@ -1094,7 +1094,7 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true), $subtrees = array()) {
-        global $langAvCours, $langAvCourses;
+        global $langAvCours, $langAvCourses, $urlServer;
         $ret = '';
 
         if (count($nodes) > 0) {
@@ -1164,11 +1164,19 @@ jContent;
                         continue;
                     }
 
+                    $f_img = '';
+                    $faqulty_sql = Database::get()->querySingle("SELECT name,code,faculty_image FROM hierarchy WHERE id = ?d", $id);
+                    if ($faqulty_sql and !empty($faqulty_sql->faculty_image)) {
+                        $faq_img_path = $urlServer . "courses/facultyimg/$faqulty_sql->code/image/$faqulty_sql->faculty_image";
+                        $f_img = "<img src='$faq_img_path' style='width:80px; height:80px; object-fit:cover; border-radius: 5px;' alt='$faqulty_sql->name'>";
+                    }
+
                     $ret .= "<li class='list-group-item element'>
-                                <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap'>
-                                    <div>
+                                <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
+                                    <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                        $f_img
                                         <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                                $ret .= (!empty($code)) ? "&nbsp;<span>(" . q($code) . ")</span>" : '';
+                                $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : '';
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";
