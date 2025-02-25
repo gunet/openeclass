@@ -245,6 +245,7 @@ function show_resources($unit_id)
                 var count_3 = $('#unitResources_3').length;
 
                 if(count_1>0){
+                    console.log('1');
                     Sortable.create(unitResources_1,{
                         handle: '.fa-arrows',
                         animation: 150,
@@ -268,6 +269,7 @@ function show_resources($unit_id)
                 }
 
                 if(count_2>0){
+                    console.log('2');
                     Sortable.create(unitResources_2,{
                         handle: '.fa-arrows',
                         animation: 150,
@@ -291,6 +293,7 @@ function show_resources($unit_id)
                 }
 
                 if(count_3>0){
+                    console.log('3')
                     Sortable.create(unitResources_3,{
                         handle: '.fa-arrows',
                         animation: 150,
@@ -448,9 +451,14 @@ function show_resources($unit_id)
             load_js('screenfull/screenfull.min.js');
             $head_content .= "<script>
             $(document).ready(function(){
+ 
                 Sortable.create(unitResources,{
                     handle: '.fa-arrows',
                     animation: 150,
+                    scroll: true,
+                    scrollSensitivity: 100,
+                    scrollSpeed: 50,
+                    forceAutoScrollFallback: true,
                     onEnd: function (evt) {
 
                     var itemEl = $(evt.item);
