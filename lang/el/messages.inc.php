@@ -713,7 +713,7 @@ $langInvalidEmail = 'Μη έγκυρο e-mail';
 $langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
 
 $langFlippedClassroom = "Mοντέλο Ανεστραμμένης Τάξης";
-$langCΕnabled = "Ενεργό";
+$langCEnabled = "Ενεργό";
 $langGoals = "Μαθησιακοί στόχοι";
 $langGoalTitle = "Στόχος";
 $langClassInfoTitle = "Στοιχεία μαθήματος";
@@ -6177,6 +6177,8 @@ $langAPITokenLongDesc = "Λεπτομέρειες σχετικά με τις υ�
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='Open Eclass api - (opens in a new tab)'>εδώ</a>.";
 $langCreateAPIToken = 'Δημιουργία νέου Token';
 $langAPITokenCreated = "Το token δημιουργήθηκε. Αντιγράψτε το έτσι ώστε να το χρησιμοποιήσετε στην εφαρμογή σας.";
+$langAPITokenAccess = 'Πρόσβαση μέσω του API';
+$langAPITokenIP = 'Εισαγάγετε μία ή περισσότερες διευθύνσεις IP ή υποδίκτυα σε μορφή CIDR χωρισμένα με κενά.';
 
 $langExtAppAll = "Όλα";
 $langExtAppGeneral = "Γενικά εργαλεία";
@@ -7018,7 +7020,7 @@ $langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langAddConsultantComments = "Οι παρατηρήσεις του συμβούλου προστέθηκαν με επιτυχία.";
 $langContinueToDelComment = "Θέλετε να προχωρήσετε στην διαγραφή των σχολίων για τον χρήστη?";
-$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και 
+$langInfoCommentsConsultant = "Σε περίπτωση που επιλέξετε χρήστη για τον οποίο έχετε υποβάλει τις παρατηρήσεις σας, τότε o <strong>τίτλος</strong> και
                                 τα <strong>σχόλια</strong> θα διαγραφούν και θα αντικατασταθούν με τις νέες τιμές.";
 $langDelConsultantComments = "Τα σχόλια διαγράφηκαν με επιτυχία.";
 $langNotifyCommentsConsultant = "Ειδοποίηση μέσω email στον χρήστη σχετικά με τα τις παρατηρήσεις του συμβούλου";

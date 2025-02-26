@@ -3175,6 +3175,30 @@ function upgrade_to_4_0($tbl_options): void {
     set_config('homepage_intro_el', $langEclassInfo);
 }
 
+/**
+ * @brief upgrade queries to 4.1
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_1($tbl_options) : void {
+    Database::get()->querySingle("ALTER TABLE `api_token`
+              MODIFY `ip` TEXT CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT ''");
+    if (!DBHelper::fieldExists('api_token', 'read_only')) {
+        Database::get()->query('ALTER TABLE `api_token` ADD `read_only` BOOLEAN NOT NULL DEFAULT 0');
+    }
+    if (!DBHelper::fieldExists('api_token', 'all_courses')) {
+        Database::get()->query('ALTER TABLE `api_token` ADD `all_courses` BOOLEAN NOT NULL DEFAULT 1');
+    }
+    if (!DBHelper::tableExists('api_token_course')) {
+        Database::get()->query("CREATE TABLE `api_token_course` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `course_id` int(11) NOT NULL,
+              `token_id` smallint(11) NOT NULL,
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+              FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+}
 
 /**
  * @brief Create Indexes
