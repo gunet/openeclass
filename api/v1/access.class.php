@@ -21,6 +21,9 @@
 
 class Access {
     public $isValid = false;
+    public $allCourses = true;
+    public $courseIDs = null;
+    public $courseCodes = null;
     public $token;
 
     /**
@@ -64,8 +67,26 @@ class Access {
         $ip = Log::get_client_ip();
         $result = Database::get()->querySingle('SELECT *, expired < NOW() AS token_expired
             FROM api_token WHERE token = ?s', $token);
-        if ($result and $result->enabled and !$result->token_expired and (!$result->ip or match_ip_to_ip_or_cidr($ip, [$result->ip]))) {
+        if ($result
+                and $result->enabled
+                and !$result->token_expired
+                and (!$result->ip
+                     or match_ip_to_ip_or_cidr($ip, explode(' ', canonicalize_whitespace($result->ip))))) {
             $access->isValid = true;
+            if ($result->all_courses) {
+                $access->allCourses = true;
+            } else {
+                $access->allCourses = false;
+                $courses = Database::get()->queryArray('SELECT course_id, course.code
+                    FROM api_token_course JOIN course
+                        ON course_id = course.id AND token_id = ?d', $result->id);
+                $access->courseCodes = array_map(function ($course) {
+                    return $course->code;
+                }, $courses);
+                $access->courseIDs = array_map(function ($course) {
+                    return $course->course_id;
+                }, $courses);
+            }
         }
         return $access;
     }
@@ -74,13 +95,15 @@ class Access {
      * End the request with an error
      * @param int $code Error code
      * @param string $message Error message
+     * @param int $http_response HTTP response status code
      */
-    public static function error($code, $message) {
+    public static function error($code, $message, $http_response = 400) {
+        http_response_code($http_response);
         header('Content-Type: application/json');
         echo json_encode([
             'errorcode' => $code,
             'errormessage' => $message,
-        ], JSON_UNESCAPED_UNICODE);
+        ], JSON_UNESCAPED_UNICODE), "\n";
         exit;
     }
 }

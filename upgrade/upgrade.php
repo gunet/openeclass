@@ -112,7 +112,7 @@ if ($command_line or $ajax_call) {
     if (!isset($_SESSION['upgrade_started']) and version_compare($oldversion, '3.15', '>') and version_compare($oldversion, '4.0', '<')) {
         $_SESSION['upgrade_started'] = true;
     }
-    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0'];
+    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0', '4.1'];
 
     if (isset($_SESSION['upgrade_step'])) {
         $step = $_SESSION['upgrade_step'];
@@ -252,6 +252,9 @@ if ($command_line or $ajax_call) {
                 steps_finished();
             } elseif ($version === '4.0') {
                 upgrade_to_4_0($tbl_options);
+                steps_finished();
+            } elseif ($version === '4.1') {
+                upgrade_to_4_1($tbl_options);
                 steps_finished();
             }
         }
@@ -407,7 +410,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
         if(get_config('dont_display_open_courses')){
             Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'open_courses');
         }
-        
+
         unset($_SESSION['upgrade_step']);
         unset($_SESSION['upgrade_tag']);
 
