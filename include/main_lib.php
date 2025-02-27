@@ -1712,7 +1712,7 @@ function findUserVisibleUnits($uid, $all_units) {
     global $course_id;
 
     $user_units = [];
-    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed
+    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, cu.assign_to_specific, ub.completed
                                                           FROM course_units cu
                                                           INNER JOIN badge b ON (b.unit_id = cu.id)
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
@@ -1908,6 +1908,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM unit_resources d,course_units s WHERE d.unit_id=s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM course_units_to_specific d,course_units s WHERE d.unit_id=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id`
@@ -2485,77 +2486,6 @@ function units_get_maxorder() {
         $maxorder = 1;
     }
     return $maxorder;
-}
-
-/**
- *
- * @return type
- */
-function handle_unit_info_edit() {
-    global $course_id, $course_code, $langCourseUnitModified, $webDir, $langCourseUnitAdded;
-
-    $title = $_REQUEST['unittitle'];
-    $descr = $_REQUEST['unitdescr'];
-    $unitdurationfrom = $unitdurationto = null;
-    if (!empty($_REQUEST['unitdurationfrom'])) {
-            $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
-    }
-    if (!empty($_REQUEST['unitdurationto'])) {
-        $unitdurationto = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationto'])->format('Y-m-d');
-    }
-    if (isset($_REQUEST['unit_id'])) { // update course unit
-        $unit_id = $_REQUEST['unit_id'];
-        Database::get()->query("UPDATE course_units SET
-                                        title = ?s,
-                                        comments = ?s,
-                                        start_week = ?s,
-                                        finish_week = ?s
-                                    WHERE id = ?d AND course_id = ?d",
-                            $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
-        // tags
-        if (!isset($_POST['tags'])) {
-            $tagsArray = [];
-        } else {
-            $tagsArray = $_POST['tags'];
-        }
-        $moduleTag = new ModuleElement($unit_id);
-        $moduleTag->syncTags($tagsArray);
-        $successmsg = $langCourseUnitModified;
-    } else { // add new course unit
-        $order = units_get_maxorder()+1;
-        $q = Database::get()->query("INSERT INTO course_units SET
-                                  title = ?s,
-                                  comments = ?s,
-                                  start_week = ?s,
-                                  finish_week = ?s,
-                                  visible = 1,
-                                 `order` = ?d, course_id = ?d", $title, $descr,
-                                        $unitdurationfrom, $unitdurationto,
-                                        $order, $course_id);
-
-        if (units_get_maxorder() == 1) { // make 'list' default unit view
-            Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
-        }
-
-        $successmsg = $langCourseUnitAdded;
-        $unit_id = $q->lastInsertID;
-        // tags
-        if (isset($_POST['tags'])) {
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->attachTags($_POST['tags']);
-        }
-    }
-    // update index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    // refresh course metadata
-    require_once 'modules/course_metadata/CourseXML.php';
-    CourseXMLElement::refreshCourse($course_id, $course_code);
-
-    Session::flash('message',$successmsg);
-    Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
 }
 
 function math_unescape($matches) {

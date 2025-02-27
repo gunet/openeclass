@@ -19,14 +19,49 @@
                     language: '{{ $language }}',
                     autoclose: true
                 });
+                $('#assign_button_all').click(hideAssignees);
+                $('#assign_button_user, #assign_button_group').click(ajaxAssignees);
             });
+
+            function ajaxAssignees()
+            {
+                $('#assignees_tbl').removeClass('hide');
+                var type = $(this).val();
+                $.post('',
+                    {
+                        assign_type: type
+                    },
+                    function(data,status){
+                        var index;
+                        var parsed_data = JSON.parse(data);
+                        var select_content = '';
+                        if(type==1){
+                            for (index = 0; index < parsed_data.length; ++index) {
+                                select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                            }
+                        } else {
+                            for (index = 0; index < parsed_data.length; ++index) {
+                                select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                            }
+                        }
+                        $('#assignee_box').find('option').remove();
+                        $('#assign_box').find('option').remove().end().append(select_content);
+                    });
+            }
+
+            function hideAssignees()
+            {
+                $('#assignees_tbl').addClass('hide');
+                $('#assignee_box').find('option').remove();
+            }
+
     </script>
 @endpush
 
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             @include('layouts.partials.left_menu')
@@ -96,14 +131,70 @@
                                         </div>
                                     </div>
 
+                                    <div class='row form-group mt-4'>
+                                        <div class='control-label-notes mb-1'>{{ trans('langWorkAssignTo') }}</div>
+                                        <div class='col-12'>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' @if ($unitAssignToSpecific == 0) checked @endif>
+                                                    {{ trans('langWorkToAllUsers') }}
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' id='assign_button_user' name='assign_to_specific' value='1' @if ($unitAssignToSpecific == 1) checked @endif>
+                                                    {{ trans('langWorkToUser') }}
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' id='assign_button_group' name='assign_to_specific' value='2' @if ($unitAssignToSpecific == 2) checked @endif>
+                                                    {{ trans('langWorkToGroup') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row form-group mt-4'>
+                                        <div class='col-12'>
+                                            <div class='table-responsive mt-0'>
+                                                <table id='assignees_tbl' class='table-default @if (!in_array($unitAssignToSpecific, [1, 2])) hide @endif'>
+                                                <thead>
+                                                <tr class='title1 list-header'>
+                                                    <td class='form-label' id='assignees'>{{ trans('langStudents') }}</td>
+                                                    <td class='form-label text-center'>{{ trans('langMove') }}</td>
+                                                    <td class='form-label'>{{ trans('langWorkAssignTo') }}</td>
+                                                </tr>
+                                                </thead>
+                                                <tr>
+                                                    <td>
+                                                        <select aria-label='{{ trans('langStudents') }}' class='form-select h-100' id='assign_box' size='10' multiple>
+                                                            {!! $unassigned_options !!}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class='d-flex align-items-center flex-column gap-2'>
+                                                            <input aria-label='{{ trans('langMove') }}' class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick="move('assign_box','assignee_box')" value='   &gt;&gt;   ' />
+                                                            <input aria-label='{{ trans('langMove') }}' class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick="move('assignee_box','assign_box')" value='   &lt;&lt;   ' />
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <select aria-label='{{ trans('langWorkAssignTo') }}' class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                                            {!! $assignee_options !!}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="mt-4"></div>
 
                                     {!! $tagInput !!}
 
-
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                           <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
+                                           <button class='btn submitAdminBtn' type='submit' name='edit_submit' onclick="selectAll('assignee_box',true)">{{ trans('langSubmit') }}</button>
                                            <a class='btn cancelAdminBtn' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
@@ -119,6 +210,6 @@
             </div>
         </div>
 
-</div>
+    </div>
 </div>
 @endsection

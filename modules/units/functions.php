@@ -138,6 +138,102 @@ function process_actions() {
 }
 
 /**
+ * @brief new / edit course unit info
+ * @return type
+ */
+function handle_unit_info_edit() {
+    global $course_id, $course_code, $langCourseUnitModified, $webDir, $langCourseUnitAdded;
+
+    $title = $_REQUEST['unittitle'];
+    $descr = $_REQUEST['unitdescr'];
+    $assign_to_specific = $_REQUEST['assign_to_specific'];
+    $unitdurationfrom = $unitdurationto = null;
+    if (!empty($_REQUEST['unitdurationfrom'])) {
+        $unitdurationfrom = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationfrom'])->format('Y-m-d');
+    }
+    if (!empty($_REQUEST['unitdurationto'])) {
+        $unitdurationto = DateTime::createFromFormat('d-m-Y', $_REQUEST['unitdurationto'])->format('Y-m-d');
+    }
+    if (isset($_REQUEST['unit_id'])) { // update course unit
+        $unit_id = $_REQUEST['unit_id'];
+        Database::get()->query("UPDATE course_units SET
+                                        title = ?s,
+                                        comments = ?s,
+                                        start_week = ?s,
+                                        finish_week = ?s,
+                                        assign_to_specific = ?d
+                                    WHERE id = ?d AND course_id = ?d",
+            $title, $descr, $unitdurationfrom, $unitdurationto, $assign_to_specific, $unit_id, $course_id);
+        // course unit assigned info (if any)
+        unit_assign_to($unit_id, $assign_to_specific, filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
+        // tags
+        if (!isset($_POST['tags'])) {
+            $tagsArray = [];
+        } else {
+            $tagsArray = $_POST['tags'];
+        }
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
+        $successmsg = $langCourseUnitModified;
+    } else { // add new course unit
+        $order = units_get_maxorder()+1;
+        $q = Database::get()->query("INSERT INTO course_units SET
+                                  title = ?s,
+                                  comments = ?s,
+                                  start_week = ?s,
+                                  finish_week = ?s,
+                                  visible = 1,
+                                  assign_to_specific = ?d,
+                                 `order` = ?d, course_id = ?d",
+            $title, $descr, $unitdurationfrom, $unitdurationto, $assign_to_specific, $order, $course_id);
+
+        $unit_id = $q->lastInsertID;
+        // course unit assigned info (if any)
+        unit_assign_to($unit_id, $assign_to_specific, filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
+
+        if (units_get_maxorder() == 1) { // make 'list' default unit view
+            Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
+        }
+        $successmsg = $langCourseUnitAdded;
+        // tags
+        if (isset($_POST['tags'])) {
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->attachTags($_POST['tags']);
+        }
+    }
+    // update index
+    require_once 'modules/search/indexer.class.php';
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    // refresh course metadata
+    require_once 'modules/course_metadata/CourseXML.php';
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+
+    Session::flash('message',$successmsg);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+}
+
+
+function unit_assign_to($unit_id, $assign_specific_type, $assignees)
+{
+    Database::get()->query("DELETE FROM course_units_to_specific WHERE unit_id = ?d", $unit_id);
+    if ($assign_specific_type && !empty($assignees)) {
+        if ($assign_specific_type == 1) {
+            foreach ($assignees as $assignee_id) {
+                Database::get()->query("INSERT INTO course_units_to_specific (user_id, unit_id) VALUES (?d, ?d)", $assignee_id, $unit_id);
+            }
+        } else {
+            foreach ($assignees as $group_id) {
+                Database::get()->query("INSERT INTO course_units_to_specific (group_id, unit_id) VALUES (?d, ?d)", $group_id, $unit_id);
+            }
+        }
+    }
+}
+
+
+
+/**
  * @brief Check that a specified resource id belongs to a resource in the
           current course, and that the user is an admin in this course.
           Return the id of the unit or false if user is not an admin
@@ -649,7 +745,7 @@ function show_resource($info) {
  */
 function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $langResourceBelongsToUnitPrereq, 
+           $id, $course_code, $langResourceBelongsToUnitPrereq,
            $langDownloadPdfNotAllowed, $langDoc;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
@@ -689,7 +785,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
                 $file_title = $file->title !== '' ? $file->title : $file->filename;
                 $file_url = file_url($file->path, $file->filename);
                 $link = "<a class='fileURL-link' target='_blank' href='{$urlServer}main/prevent_pdf.php?urlPr=" . urlencode($file_url) . "'>
-                            $file_title&nbsp;&nbsp;" . icon('fa-shield', $langDownloadPdfNotAllowed) . 
+                            $file_title&nbsp;&nbsp;" . icon('fa-shield', $langDownloadPdfNotAllowed) .
                          "</a>";
             } else {
                 $file_obj = MediaResourceFactory::initFromDocument($file);

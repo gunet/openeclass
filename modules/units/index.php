@@ -225,7 +225,6 @@ $cu_indirect = getIndirectReference($id);
 $data['q'] = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 $data['activities'] = $activities;
 
-
 $data['tool_content_units'] = show_resources($data['unitId']);
 
 view('modules.units.index', $data);
