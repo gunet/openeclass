@@ -9,7 +9,7 @@
             @include('layouts.partials.left_menu')
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -25,16 +25,16 @@
                     </div>
 
                     @include('layouts.partials.legend_view')
-                    
+
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    @include('layouts.partials.show_alert') 
-                    
+                    @include('layouts.partials.show_alert')
+
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
-                        
+
                         <div class='form-wrapper form-edit rounded'>
-                            
+
                             <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}'>
                                 @if ($action == 'editlink')
                                     <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
@@ -49,7 +49,7 @@
                                             </div>
                                         </div>
 
-                                       
+
 
                                         <div class='form-group mt-4'>
                                             <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langLinkName') }}</label>
@@ -58,7 +58,7 @@
                                             </div>
                                         </div>
 
-                                       
+
 
 
                                         <div class='form-group mt-4'>
@@ -66,7 +66,7 @@
                                             <div class='col-sm-12'>{!! $description_textarea !!}</div>
                                         </div>
 
-                                        
+
 
                                         <div class='form-group mt-4'>
                                             <label for='selectcategory' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
@@ -87,11 +87,11 @@
                                             </div>
                                         </div>
 
-                                       
+
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                                <input type='submit' class='btn submitAdminBtn' name='submitLink' value='{{ $submit_label }}' />
+                                                <input type='submit' class='btn submitAdminBtn' name='submitLink' value='{{ trans('langSubmit') }}' />
                                                 <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
                                             </div>
                                         </div>
@@ -103,13 +103,13 @@
                             <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                         </div>
                         </div>
-                
+
                 </div>
             </div>
 
         </div>
-   
-</div>        
-</div>       
+
+</div>
+</div>
 @endsection
 
