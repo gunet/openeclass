@@ -515,24 +515,24 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                    <div class='control-label-notes mb-1'>$m[WorkAssignTo]</div>
+                    <div class='control-label-notes mb-1'>$langWorkAssignTo</div>
                     <div class='col-12'>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($exerciseAssignToSpecific == 0 ? " checked" : "").">
-                            $m[WorkToAllUsers]
+                            $langWorkToAllUsers
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($exerciseAssignToSpecific == 1 ? " checked" : "").">
-                            $m[WorkToUser]
+                            $langWorkToUser
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($exerciseAssignToSpecific == 2 ? " checked" : "").">
-                            $m[WorkToGroup]
+                            $langWorkToGroup
                           </label>
                         </div>
                     </div>
@@ -545,7 +545,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     <tr class='title1 list-header'>
                                         <td class='form-label' id='assignees'>$langStudents</td>
                                         <td class='form-label text-center'>$langMove</td>
-                                        <td class='form-label'>$m[WorkAssignTo]</td>
+                                        <td class='form-label'>$langWorkAssignTo</td>
                                     </tr>
                                 </thead>
                                 <tr>
@@ -561,7 +561,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     </div>
                                   </td>
                                   <td>
-                                    <select aria-label='$m[WorkAssignTo]' class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                    <select aria-label='$langWorkAssignTo' class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
                                     ".((isset($assignee_options)) ? $assignee_options : '')."
                                     </select>
                                   </td>
@@ -698,9 +698,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             break;
     }
     switch ($exerciseAssignToSpecific) {
-        case 1: $assign_to_users_message = $m['WorkToUser'];
+        case 1: $assign_to_users_message = $langWorkToUser;
             break;
-        case 2: $assign_to_users_message = $m['WorkToGroup'];
+        case 2: $assign_to_users_message = $langWorkToGroup;
             break;
     }
     if ($exerciseType == MULTIPLE_PAGE_TYPE) {
