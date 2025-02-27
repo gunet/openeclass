@@ -140,7 +140,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `log_archive` (
 $db->query("CREATE TABLE `announcement` (
     `id` INT(11) NOT NULL auto_increment,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
-    `content` TEXT,
+    `content` MEDIUMTEXT,
     `date` DATETIME NOT NULL,
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
@@ -1682,8 +1682,17 @@ $db->query("CREATE TABLE `course_units` (
     `visible` TINYINT(4),
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `order` INT(11) NOT NULL DEFAULT 0,
+    `assign_to_specific` tinyint NOT NULL DEFAULT '0',
     `course_id` INT(11) NOT NULL,
     UNIQUE KEY `course_units_order` (`course_id`,`order`)) $tbl_options");
+
+$db->query("CREATE TABLE course_units_to_specific (
+        id INT auto_increment NOT NULL,
+        unit_id INT NOT NULL,
+        user_id INT NULL,
+        group_id INT NULL,
+      PRIMARY KEY (`id`),
+      KEY `unit_id` (`unit_id`)) $tbl_options");
 
 $db->query("CREATE TABLE `unit_resources` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

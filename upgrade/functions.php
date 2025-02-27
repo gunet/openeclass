@@ -3181,6 +3181,7 @@ function upgrade_to_4_0($tbl_options): void {
  * @return void
  */
 function upgrade_to_4_1($tbl_options) : void {
+
     Database::get()->querySingle("ALTER TABLE `api_token`
               MODIFY `ip` TEXT CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT ''");
     if (!DBHelper::fieldExists('api_token', 'read_only')) {
@@ -3198,6 +3199,57 @@ function upgrade_to_4_1($tbl_options) : void {
               FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
               FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE) $tbl_options");
     }
+
+    Database::get()->query("ALTER TABLE announcement CHANGE content content MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+
+    if (DBHelper::fieldExists('monthly_summary', 'details')) {
+        Database::get()->query("ALTER TABLE monthly_summary DROP COLUMN details");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'dep_id')) {
+        Database:;get()->query("ALTER TABLE monthly_summary ADD dep_id INT DEFAULT 0 AFTER id");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'inactive_courses')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD inactive_courses INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'documents')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD documents INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'exercises')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD exercises INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'assignments')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD assignments INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'forum_posts')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD forum_posts INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'profesNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE profesNum teachers INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'studNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE studNum students  INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'visitorsNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE visitorsNum guests INT DEFAULT 0");
+    }
+    if (DBHelper::fieldExists('monthly_summary', 'coursNum')) {
+        Database::get()->query("ALTER TABLE monthly_summary CHANGE coursNum courses INT DEFAULT 0");
+    }
+
+    if (DBHelper::fieldExists('course_units', 'assign_to_specific')) {
+        Database::get()->query("ALTER TABLE course_units ADD assign_to_specific TINYINT NOT NULL DEFAULT 0 AFTER `order`");
+    }
+
+    if (!DBHelper::tableExists('course_units_to_specific')) {
+        Database::get()->query("CREATE TABLE course_units_to_specific (
+                id INT auto_increment NOT NULL,
+                unit_id INT NOT NULL,
+                user_id INT NULL,
+                group_id INT NULL,
+              PRIMARY KEY (`id`),
+              KEY `unit_id` (`unit_id`)) $tbl_options");
+    }
+
 }
 
 /**
