@@ -113,6 +113,7 @@ if ($is_editor) {
         if ($course_info->view_type == 'units') {
             Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
             Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
+            Database::get()->query("DELETE FROM course_units_to_specific WHERE unit_id = ?d", $id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNIT, $id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
@@ -469,9 +470,9 @@ if ($is_editor) {
     if ($last_id) {
         $last_id = $last_id->id;
     }
-    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order` FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
+    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
 } else {
-    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order` FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
+    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
 }
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
@@ -660,17 +661,16 @@ if ($total_cunits > 0) {
         foreach ($all_units as $cu) {
             $not_shown = false;
             $icon = '';
-                // check if unit has started
             if (!$is_editor) {
-                if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
+                if (!has_access_to_units($cu->id, $cu->assign_to_specific, $uid)) { // unit has assigned to users or groups ?
+                    $not_shown = true;
+                } else if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) { // unit has started ?
                     $not_shown = true;
                     $icon = icon('fa-clock fa-md', $langUnitNotStarted);
-                // or has completed units (if any)
-                } else if (!in_array($cu->id, $visible_units_id)) {
+                } else if (!in_array($cu->id, $visible_units_id)) { //  has completed units (if any) ?
                     $not_shown = true;
                     $icon = icon('fa-minus-circle fa-md', $langUnitNotCompleted);
                 } else {
-
                     if (in_array($cu->id, $visible_units_id)) {
                         $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
                         if ($sql_badge) {
@@ -785,17 +785,17 @@ if ($total_cunits > 0) {
             $counter_hr++;
             $not_shown = false;
             $icon = '';
-                // check if unit has started
+
             if (!$is_editor) {
-                if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
+                if (!has_access_to_units($cu->id, $cu->assign_to_specific, $uid)) { // unit has assigned to users or groups ?
+                    $not_shown = true;
+                } else if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) { // unit has started ?
                     $not_shown = true;
                     $icon = icon('fa-clock fa-md', $langUnitNotStarted);
-                // or has completed units (if any)
-                } else if (!in_array($cu->id, $visible_units_id)) {
+                } else if (!in_array($cu->id, $visible_units_id)) { //  has completed units (if any) ?
                     $not_shown = true;
                     $icon = icon('fa-minus-circle fa-md', $langUnitNotCompleted);
                 } else {
-
                     if (in_array($cu->id, $visible_units_id)) {
                         $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
                         if ($sql_badge) {
@@ -996,6 +996,37 @@ if($course_info->view_type == 'sessions' && isset($_SESSION['uid'])){
                                                             ORDER BY start ASC",$course_id,1);
 }
 view('modules.course.home.index', $data);
+
+/**
+ * @brief check if user has access to unit if it is assigned to specific users or groups
+ * @param $unit_id
+ * @return bool
+ */
+function has_access_to_units($unit_id, $assign_to_specific, $user_id)
+{
+    switch ($assign_to_specific) {
+        case 0:
+            return true;
+        case 1:
+            $q = Database::get()->querySingle("SELECT user_id FROM course_units_to_specific WHERE unit_id = ?d AND user_id = ?d", $unit_id, $user_id);
+            if ($q) {
+                return true;
+            } else {
+                return false;
+            }
+        case 2:
+            $unit_to_group_id = Database::get()->querySingle("SELECT group_id FROM course_units_to_specific WHERE unit_id = ?d", $unit_id)->group_id;
+            $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $unit_to_group_id);
+            foreach ($q as $group_data) {
+                if ($group_data->user_id == $user_id) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+    }
+}
+
 
 /**
  * @brief fetch course announcements
