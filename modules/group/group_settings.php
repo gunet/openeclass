@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
                                 ".form_buttons(array(
                                     array(
                                         'class' => 'submitAdminBtn',
-                                        'text' => $langSave,
+                                        'text' => $langSubmit,
                                         'name' => 'submit',
                                         'value'=> $langSubmit
                                     ),
