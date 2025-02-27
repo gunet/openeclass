@@ -41,15 +41,6 @@ if (isset($_GET['all'])) {
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
-/*$tool_content .= action_bar(array(
-    array(
-        'title' => $langBack,
-        'level' => 'primary',
-        'icon' => 'fa-reply',
-        'url' => "index.php?course=$course_code"
-    )
-)); */
-
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
@@ -114,7 +105,7 @@ if (isset($_GET['all'])) {
         $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
         $tool_content .= "<div class='form-group mt-5'>
         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-            <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation'>
+            <input class='btn submitAdminBtn' type='submit' value='$langSubmit' name='creation'>
             <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
         </div>
         </div>
@@ -372,7 +363,7 @@ if (isset($_GET['all'])) {
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
         $tool_content .= "<div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
+                <input class='btn submitAdminBtn' type='submit' value='$langSubmit' name='creation' onClick=\"selectAll('members_box', true)\" >
                 <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>

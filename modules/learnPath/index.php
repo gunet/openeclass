@@ -206,7 +206,6 @@ if ($is_editor) {
                          <div class='col-12'>
                         <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         
-                       
 
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
@@ -232,7 +231,7 @@ if ($is_editor) {
                                     form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
-                                            'text' => $langSave,
+                                            'text' => $langSubmit,
                                             'value' => $langCreate
                                         ),
                                         array(
@@ -265,11 +264,7 @@ if ($is_editor) {
                                     <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
                                     </div>
                                 </div>
-                            
-                        
-
-                       
-
+                                                   
                                 <div class='form-group mt-5'>
                                     <div class='col-12 d-flex justify-content-end align-items-center'>
                                     <input type='hidden' name='cmd' value='create'>                                    
@@ -278,7 +273,7 @@ if ($is_editor) {
                                                 form_buttons(array(
                                                     array(
                                                         'class' => 'submitAdminBtn',
-                                                        'text' => $langSave,
+                                                        'text' => $langSubmit,
                                                         'value' => $langCreate
                                                     ),
                                                     array(

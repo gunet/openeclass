@@ -203,9 +203,6 @@ if ($is_editor) {
         $data['categoryNameError'] = Session::getError('categoryname') ? " has-error" : "";
         if ($action == 'editcategory') {
             $data['category'] = Database::get()->querySingle("SELECT name, description  FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
-            $data['form_legend'] = trans('langCategoryMod');
-        } else {
-            $data['form_legend'] = trans('langCategoryAdd');
         }
 
         view('modules.link.createCategory', $data);
@@ -276,10 +273,8 @@ if ($is_editor) {
                         } else {
                             $description = '';
                         }
-                        $data['submit_label'] = $langLinkModify;
                     } else {
                         $description = '';
-                        $data['submit_label'] = $langAdd;
                     }
                     $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
                     $data['description_textarea'] = rich_text_editor('description', 3, 30, $description);
