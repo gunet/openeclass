@@ -512,7 +512,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <tr class='title1 list-header'>
                               <td id='assignees' class='form-label'>$langStudents</td>
                               <td class='text-center form-label'>$langMove</td>
-                              <td class='form-label'>$m[WorkAssignTo]</td>
+                              <td class='form-label'>$langWorkAssignTo</td>
                             </tr>
                             <tr>
                               <td>
@@ -524,7 +524,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <input class='btn btn-outline-primary h-40px rounded-2' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary h-40px rounded-2 mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
-                                <select aria-label='$m[WorkAssignTo]' class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                <select aria-label='$langWorkAssignTo' class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
                                 ".((isset($assignee_options)) ? $assignee_options : '')."
                                 </select>
                               </td>
@@ -932,11 +932,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     }
 
     if ($poll->assign_to_specific == 1) {
-        $assign_to_users_message = "$m[WorkToUser]";
+        $assign_to_users_message = "$langWorkToUser";
     } else if ($poll->assign_to_specific == 2) {
-        $assign_to_users_message = "$m[WorkToGroup]";
+        $assign_to_users_message = "$langWorkToGroup";
     } else {
-        $assign_to_users_message = "$m[WorkToAllUsers]";
+        $assign_to_users_message = "$langWorkToAllUsers";
     }
 
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);

@@ -4149,7 +4149,9 @@ $m['group_assignment_no_groups'] = 'You need to <a href="%s">register into a gro
 $m['noguest'] = 'To submit work to an assignment you must login as a normal
 	user, not as a guest.';
 $m['one_non_submission'] = 'One assignment has not been submitted';
-$m['more_submissions'] = '%d files have been submitteD';
+$langOneNonSubmission =  'One assignment has not been submitted';
+$m['more_submissions'] = '%d files have been submitted';
+$langMoreNonSubmissions = '%d files have been submitted';
 $m['more_non_submissions'] = '%d ssignments have not been submitted';
 $m['plainview'] = 'Concise list of submissions and grades';
 $m['WorkInfo'] = 'Assignment info';
@@ -4165,10 +4167,13 @@ $m['WorkToGroup'] = 'Specific '.$langGroups;
 $m['WorkAssignTo'] = 'Assign to';
 $m['WorkNoSubmission'] = 'The assignment submission you are looking for does not exist.';
 $m['WorkUserGroupNoSubmission'] = 'Users/groups without submissions';
-$m['WorkGroupNoSubmission'] = 'User groups that haven\'t submitted their assignment' ;
+$m['WorkGroupNoSubmission'] = 'User groups that haven\'t submitted their assignment';
 $m['NoneWorkGroupNoSubmission'] = 'There are no user groups that haven\'t submitted their assignment';
-$m['WorkUserNoSubmission'] = 'Users that haven\'t submitted their assignment' ;
-$m['NoneWorkUserNoSubmission'] = 'There are no users that haven\'t submitted their assignment' ;
+$langNoneWorkGroupNoSubmission = 'There are no user groups that haven\'t submitted their assignment';
+$m['WorkUserNoSubmission'] = 'Users that haven\'t submitted their assignment';
+$langWorkUserNoSubmission = 'Users that haven\'t submitted their assignment';
+$m['NoneWorkUserNoSubmission'] = 'There are no users that haven\'t submitted their assignment';
+$langNoneWorkUserNoSubmission = 'There are no users that haven\'t submitted their assignment';
 $m['WorkTitleValidation'] = 'Please enter Assignment Title';
 $m['SubmissionWorkInfo'] = 'Submission info';
 $m['SubmissionStatusWorkInfo'] = 'Submission status';
