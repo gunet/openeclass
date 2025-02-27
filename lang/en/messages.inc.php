@@ -2187,7 +2187,7 @@ $langWarningInfoBooking = "<div class='TextBold' style='color:#ffa500;'>In ORANG
 $langBlueInfoBooking = "<div class='TextBold' style='color:#337ab7;'>The available date of the team leader to make a reservation is shown in BLUE.</br>Click on the available slot to submit a reservation.</div>";
 $langSuccessInfoBooking = "<div class='TextBold' style='color:#1E7E0E;'>Your reservation to the group manager is displayed in GREEN color (Waiting for approval or rejection).</br>Click on the available   slot to cancel a reservation.</div>";
 $langPinkInfoBooking = "<div class='TextBold Pink-cl'>Your reservation to the group manager is displayed in PINK color (Request approval by the manager).</br>Click on the available slot to cancel a reservation.</div>";
-$langAvailableTutorBookings = "Manager reservations available";
+$langAvailableTutorBookings = "Manager bookings available";
 $langAVailableBookingsForTutor = "Bookings available for manager:";
 $langMyAvailableBookings = "My available bookings";
 $langContinueToBooking = "Do you want to proceed with this action?";
@@ -2198,13 +2198,13 @@ $langUpdateSoon = "You will be informed shortly about your meeting with the mana
 $langHasAcceptedBookingAndContinue = "The reservation has been accepted.</br> You can cancel it at any time.";
 $langBookingHasCalceled = "Booking successfully cancelled. An information email has been sent to the user.";
 $langYourBookingHasCanceled = "Your reservation has been cancelled";
-$langNoAcceptanceOfBooking = "The reservation has not been accepted.</br> By pressing the button << Accept reservation >> you accept the request.";
-$langMYBookings = "My reservations";
-$langBookingWithTutor = "My reservations with the manager:";
+$langNoAcceptanceOfBooking = "The reservation has not been accepted.</br> By pressing the button << Accept booking >> you accept the request.";
+$langMYBookings = "My bookings";
+$langBookingWithTutor = "My bookings with the manager:";
 $langBookingAgenda = "Book";
 $langAvailableHistoryBookings = "Expired bookings";
 $langDelHistoryBook = "Deletion completed successfully!";
-$langInfoColourEvent = "Information about colourful calendar events";
+$langInfoColourEvent = "Information";
 $langEmailGroup = "Send message to group";
 $langTypeMessage = "Type your message below";
 $langSend = "Submit";
@@ -6046,8 +6046,8 @@ $langExistBookingForThisDateDelete = "You cannot delete this date.
  Please contact the platform administrator if you experience any problem.";
 $langSuccessBookingUser = "<div class='TextBold' style='color:#1E7E0E;'>Your available date for reservation by a user is displayed in GREEN.</br>
 Possibility of cancellation by clicking on the date slot only if it has not been booked by a user.</br>
-Otherwise, the cancellation is made from the page of my reservations.</div>";
-$langPinkBookingUser = "<div class='TextBold' style='color:#ffc0cb;'>The reservation by a user is displayed in PINK.</br>Possibility to cancel a reservation only from the --My reservations-- page.</div>";
+Otherwise, the cancellation is made from the page of my bookings.</div>";
+$langPinkBookingUser = "<div class='TextBold' style='color:#ffc0cb;'>The reservation by a user is displayed in PINK.</br>Possibility to cancel a reservation only from the --My bookings-- page.</div>";
 $langMoveOnLoginPage = "Head to the login screen via the <span style='font-weight:700;'> <<Login>> </span> option at the top of the page.";
 $langImportant = "Permanent placement on the top of the platform";
 $langNotImportant = "Removal from the top of the platform";
