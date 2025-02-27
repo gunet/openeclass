@@ -27,7 +27,13 @@ $pageName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-$data['monthly_data'] = $monthly_data = get_monthly_archives();
+if (isset($_GET['d'])) { // detailed statistics per faculty
+    $monthly_data = get_monthly_archives(true, $_GET['m']);
+} else {
+    $monthly_data = get_monthly_archives();
+}
+
+$data['monthly_data'] = $monthly_data;
 
 view('admin.other.stats.monthlyReport', $data);
 
