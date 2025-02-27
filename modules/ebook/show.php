@@ -181,6 +181,7 @@ if (!$q) {
 }
 $last_section_id = null;
 $sections = array();
+$back_section_id = $next_section_id = $back_title = $next_title = '';
 foreach ($q as $row) {
     $url_filename = public_file_path($row->path, $row->filename);
     $sid = $row->sid;
@@ -236,12 +237,6 @@ if ($file_path) {
     }
 }
 
-$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
-$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-$theme_options_styles = unserialize($theme_options->styles);
-$urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
-
 if ($unit) {
     $navigation_label = Database::get()->querySingle('SELECT title FROM course_units
         WHERE course_id = ?d AND id = ?d', $course_id, $unit)->title;
@@ -249,41 +244,23 @@ if ($unit) {
     $navigation_label = $langEBook;
 }
 
-$t = new Template();
-$t->set_root($webDir . '/template/modern');
-$t->set_file('page', 'ebook_fullscreen.html');
-$t->set_var('URL_PATH', $urlAppend);
-$t->set_var('langBack', $langClose);
-$t->set_var('page_title', q($currentCourseName . ': ' . $pageName));
-$t->set_var('course_title', q($currentCourseName));
-$t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));
-$t->set_var('course_home_link', $urlAppend . 'courses/' . $course_code . '/');
-$t->set_var('course_ebook', q($navigation_label));
-$t->set_var('course_ebook_link', $exit_fullscreen_link);
-$t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
-$t->set_var('unit_parameter', $unit_parameter);
-$t->set_var('template_base', $urlAppend . 'template/modern/');
-$t->set_var('img_base', $themeimg);
-$t->set_var('js_base', $urlAppend . 'js');
-$t->set_var('logo_img_small', $logoUrl);
-
-$t->set_var('ebook_url_base', $ebook_url_base);
-if (!$show_orphan_file) {
-    if (isset($back_section_id)) {
-        $t->set_block('page', 'back_link_inactive', 'back_link_hide');
-        $t->set_var('back_chapter_link', q($ebook_url_base . $back_section_id . '/' . $unit_parameter));
-        $t->set_var('back_chapter_title', q($back_title));
-    } else {
-        $t->set_block('page', 'back_link_active', 'back_link_hide');
-    }
-    if (isset($next_section_id)) {
-        $t->set_block('page', 'next_link_inactive', 'next_link_hide');
-        $t->set_var('next_chapter_link', q($ebook_url_base . $next_section_id . '/' . $unit_parameter));
-        $t->set_var('next_chapter_title', q($next_title));
-    } else {
-        $t->set_block('page', 'next_link_active', 'next_link_hide');
-    }
-}
+$data['url_path'] = $urlAppend;
+$data['page_title'] = $currentCourseName . ': ' . $pageName;
+$data['course_title'] = $currentCourseName;
+$data['course_title_short'] = ellipsize($currentCourseName, 35);
+$data['course_home_link'] = $urlAppend . 'courses/' . $course_code . '/';
+$data['course_ebook'] = $navigation_label;
+$data['course_ebook_link'] = $exit_fullscreen_link;
+$data['exit_fullscreen_link'] = $exit_fullscreen_link;
+$data['unit_parameter'] = $unit_parameter;
+$data['template_base'] = $urlAppend . 'template/modern/';
+$data['logo_img_small'] = $logoUrl;
+$data['ebook_url_base'] = $ebook_url_base;
+$data['back_section_id'] = $back_section_id;
+$data['back_title'] = $back_title;
+$data['next_section_id'] = $next_section_id;
+$data['next_title'] = $next_title;
+$data['show_orphan_file'] = $show_orphan_file;
 
 $ebook_body = '';
 $ebook_head = '';
@@ -318,43 +295,38 @@ foreach ($body_node->childNodes as $element) {
 $ebook_body = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $ebook_body);
 $ebook_body = mathfilter($ebook_body, 12, $urlAppend . 'courses/mathimg/');
 unset($dom);
-$t->set_var('ebook_head', $ebook_head);
-$t->set_var('ebook_body', $ebook_body);
 
-$t->set_block('page', 'chapter_select_options', 'option_var');
+$data['ebook_head'] = $ebook_head;
+$data['ebook_body'] = $ebook_body;
+
+$chapter_select_options = '';
 if (!$show_orphan_file) {
     foreach ($sections as $section_info) {
-        $t->set_var('chapter_title', ($section_info['indent'] ? '&nbsp;&nbsp;&nbsp;' : '') .
-                q(ellipsize($section_info['title'], 40)));
-        $t->set_var('chapter_id', $section_info['id']);
+        $chapter_title = ($section_info['indent'] ? '&nbsp;&nbsp;&nbsp;' : '') . q(ellipsize($section_info['title'], 40));
+        $chapter_id = $section_info['id'];
         if ($section_info['current']) {
-            $t->set_var('chapter_selected', ' selected="selected"');
+            $chapter_selected =  'selected="selected"';
         } else {
-            $t->set_var('chapter_selected', '');
+            $chapter_selected =  '';
         }
-        $t->parse('option_var', 'chapter_select_options', true);
+        $chapter_select_options .= "<option value='$chapter_id' $chapter_selected>$chapter_title</option>";
     }
-} else {
-    $t->set_block('page', 'chapter_select', 'delete');
-    $t->set_block('page', 'back_link_active', 'delete');
-    $t->set_block('page', 'back_link_inactive', 'delete');
-    $t->set_block('page', 'next_link_active', 'delete');
-    $t->set_block('page', 'next_link_inactive', 'delete');
 }
+$data['chapter_select_options'] = $chapter_select_options;
 
 $ebook_title = Database::get()->querySingle("SELECT title FROM ebook WHERE id = ?d", $ebook_id)->title;
-$t->set_var('ebook_title', q($ebook_title));
-$t->set_var('ebook_title_short', q(ellipsize($ebook_title, 35)));
+$data['ebook_title_short'] = ellipsize($ebook_title, 35);
 
 if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
-    $t->set_var('HTML_FOOTER', $html_footer);
+    $data['html_footer'] = $html_footer;
+} else {
+    $data['html_footer'] = '';
 }
 
-$t->pparse('Output', 'page');
+view('modules.ebook.show', $data);
 
 /**
- *
- * @global type $basedir
+ * @brief send file to user
  * @param type $file_path
  * @param type $initial_path
  */
@@ -370,6 +342,11 @@ function send_file_by_url_file_path($file_path, $initial_path = '') {
     exit;
 }
 
+/**
+ * @brief gamification
+ * @param $ebookId
+ * @return void
+ */
 function triggerGame($ebookId) {
     global $course_id, $uid;
 
