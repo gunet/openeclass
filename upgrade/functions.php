@@ -2662,6 +2662,8 @@ function upgrade_to_3_16($tbl_options) : void
  */
 function upgrade_to_4_0($tbl_options): void {
 
+    global $langEclass, $langEclassInfo;
+
     // widgets
     if (!DBHelper::tableExists('widget')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
@@ -3236,7 +3238,7 @@ function upgrade_to_4_1($tbl_options) : void {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE coursNum courses INT DEFAULT 0");
     }
 
-    if (DBHelper::fieldExists('course_units', 'assign_to_specific')) {
+    if (!DBHelper::fieldExists('course_units', 'assign_to_specific')) {
         Database::get()->query("ALTER TABLE course_units ADD assign_to_specific TINYINT NOT NULL DEFAULT 0 AFTER `order`");
     }
 

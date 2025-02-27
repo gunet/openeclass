@@ -2487,7 +2487,7 @@ $langBookingWithTutor = "Οι κρατήσεις μου με τον υπεύθυ
 $langBookingAgenda = "Κάντε κράτηση στον υπεύθυνο";
 $langAvailableHistoryBookings = "Κρατήσεις που έχουν παρέλθει";
 $langDelHistoryBook = "Η διαγραφή ολοκληρώθηκε με επιτυχία!";
-$langInfoColourEvent = "Πληροφορίες χρωμάτων ημερολογίου";
+$langInfoColourEvent = "Πληροφορίες";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
