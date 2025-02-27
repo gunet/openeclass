@@ -3183,7 +3183,7 @@ function upgrade_to_4_0($tbl_options): void {
 function upgrade_to_4_1($tbl_options) : void {
 
     Database::get()->querySingle("ALTER TABLE `api_token`
-              MODIFY `ip` TEXT CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT ''");
+              MODIFY `ip` TEXT CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
     if (!DBHelper::fieldExists('api_token', 'read_only')) {
         Database::get()->query('ALTER TABLE `api_token` ADD `read_only` BOOLEAN NOT NULL DEFAULT 0');
     }
@@ -3206,7 +3206,7 @@ function upgrade_to_4_1($tbl_options) : void {
         Database::get()->query("ALTER TABLE monthly_summary DROP COLUMN details");
     }
     if (!DBHelper::fieldExists('monthly_summary', 'dep_id')) {
-        Database:;get()->query("ALTER TABLE monthly_summary ADD dep_id INT DEFAULT 0 AFTER id");
+        Database::get()->query("ALTER TABLE monthly_summary ADD dep_id INT DEFAULT 0 AFTER id");
     }
     if (!DBHelper::fieldExists('monthly_summary', 'inactive_courses')) {
         Database::get()->query("ALTER TABLE monthly_summary ADD inactive_courses INT DEFAULT 0");
