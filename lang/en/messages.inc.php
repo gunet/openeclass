@@ -3160,6 +3160,28 @@ $langPollOutcomeClose = "You may close this window or return to the previous pag
 $langOnlySubmissions = 'Only participants';
 $langOnlyNonSubmissions = 'Only non-participants';
 $langShowFront = 'Show in home page';
+$langNumberScaleDiffAnswers = "The maximum scale number you entered should equal the number of possible answers you provided.";
+$langInfoAddSliderLabels = "Add to the text field the possible answers that the scale will include based on its maximum number.</br>
+Each answer is separated by the symbol | .</br>
+For example, if the maximum number of the scale is 5, then you should give 5 possible answers of the form: (not at all|very little|a little|a lot|very much).";
+$langTableDimension = "Create the dimension of the table (N*N) by entering the number of its columns and rows.</br></br>
+<ul><li>Columns = Questions to the user</li><li>Rows = Answers from the user</li></ul>";
+$langNumberOfColumns = "Number of columns";
+$langNumberOfRows = "Number of lines";
+$langWriteQuestion = "Write the question...";
+$langNumberRowColBigger = "The number of rows and columns in the table must be greater than zero.";
+$langRowsColumnsInsertd = "The table rows and columns were successfully inserted.";
+$langSubmitQuestions = "Ask questions";
+$langEditRowsColsTable = "Editing table dimensions and queries";
+$langQuestionsInsertd = "The questions were added successfully.";
+$langNumberColumnsSmallerThanQ = "The number of columns you entered is less than the available entered questions.";
+$langUserAnswer = "User response";
+$langAddRowsColumns = "Registration";
+$langUsersAnswers = "User responses";         
+$langEnablePagination = "Enable pagination";
+$langPreviousQuestion = "Previous";        
+$langNextQuestion = "Next";
+$langEnableRequiredAnswer = "Mandatory answer to every question";
 $langSee = "Preview";
 $langCourseName = "Course name";
 $langNoCoursesAvailable = "There are no available courses for registration";

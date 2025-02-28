@@ -103,7 +103,7 @@
                                 @endif
                             </tr>
                         </thead>
-                        <tbody>@php //print_a($bookings); @endphp
+                        <tbody>
                             @foreach($bookings as $b)
                                 <tr>
                                     <td @if($is_user_teacher) style='width:40%;' @else style='width:30%;' @endif>{{ $b->title }}</td>

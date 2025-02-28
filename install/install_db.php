@@ -1051,8 +1051,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `default_answer` TINYINT NOT NULL DEFAULT '0',
     `type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
-     `lti_template` INT(11) DEFAULT NULL,
-    `launchcontainer` TINYINT DEFAULT NULL) $tbl_options");
+    `lti_template` INT(11) DEFAULT NULL,
+    `launchcontainer` TINYINT DEFAULT NULL,
+    `pagination` INT(11) NOT NULL DEFAULT 0,
+    `require_answer` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1075,6 +1077,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
     `submit_date` DATETIME NOT NULL,
+    `sub_qid` INT(11) NOT NULL DEFAULT 0,
+    `sub_qid_row` int(11) NOT NULL DEFAULT 0,
     FOREIGN KEY (`poll_user_record_id`)
     REFERENCES `poll_user_record` (`id`)
     ON DELETE CASCADE) $tbl_options");
@@ -1085,12 +1089,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `question_text` TEXT NOT NULL,
     `qtype` tinyint(3) UNSIGNED NOT NULL,
     `q_position` INT(11) DEFAULT 1,
-    `q_scale` INT(11) NULL DEFAULT NULL) $tbl_options");
+    `q_scale` INT(11) NULL DEFAULT NULL,
+    `description` TEXT DEFAULT NULL,
+    `answer_scale` TEXT DEFAULT NULL,
+    `q_row` INT(11) NOT NULL DEFAULT 0,
+    `q_column` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
     `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pqid` INT(11) NOT NULL DEFAULT 0,
-    `answer_text` TEXT NOT NULL) $tbl_options");
+    `answer_text` TEXT NOT NULL,
+    `sub_question` INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

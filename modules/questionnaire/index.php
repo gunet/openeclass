@@ -266,15 +266,26 @@ if ($is_editor) {
                                             WHERE poll_id = ?d", $new_pid, $pid)->lastInsertID;
                 }
                 foreach ($questions as $question) {
+                    $q_description = !empty($question->description) ? $question->description : '';
+                    $answer_scales = !empty($question->answer_scale) ? $question->answer_scale : '';
+                    $q_row = $question->q_row;
+                    $q_column = $question->q_column;
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
                                                    question_text = ?s,
-                                                   qtype = ?d, q_position = ?d, q_scale = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale)->lastInsertID;
+                                                   qtype = ?d, 
+                                                   q_position = ?d, 
+                                                   q_scale = ?d,
+                                                   `description` = ?s,
+                                                   answer_scale = ?s,
+                                                   q_row = ?d,
+                                                   q_column = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale, $q_description, $answer_scales, $q_row, $q_column)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer
                                                 SET pqid = ?d,
-                                                    answer_text = ?s", $new_pqid, $answer->answer_text);
+                                                    answer_text = ?s,
+                                                    sub_question = ?d", $new_pqid, $answer->answer_text, $answer->sub_question);
                     }
                 }
                 $message = $langCopySuccess;
@@ -430,9 +441,9 @@ function printPolls() {
                     $tool_content .= "<div class='text-muted' style='font-size: 12px;'>$langQuickSurvey</div>";
                 }
 
-                $tool_content .= "</div>
-                                    <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
-                                    </div></td>";
+                $tool_content .= "</div>";
+                                    // <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
+                $tool_content .= "</div></td>";
                 if (isset($thepoll->start_date)) {
                     $sort_date = date("Y-m-d H:i", strtotime($thepoll->start_date));
                 } else {
@@ -527,10 +538,10 @@ function printPolls() {
               <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                   <form action='$_SERVER[SCRIPT_NAME]' method='POST' id='clone_form'>
-                    <div class='modal-header'>
+                    <div class='modal-header'> 
                         <div class='modal-title'>$langCreateDuplicateIn</div>
                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langCancel'></button>
-
+                     
                     </div>
                     <div class='modal-body'>
                         <div class='form-group'>
