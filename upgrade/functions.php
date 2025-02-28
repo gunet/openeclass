@@ -3252,6 +3252,43 @@ function upgrade_to_4_1($tbl_options) : void {
               KEY `unit_id` (`unit_id`)) $tbl_options");
     }
 
+    // About table type question in a poll
+    if (!DBHelper::fieldExists('poll_question', 'description')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `description` TEXT DEFAULT NULL");
+    }
+        
+    if (!DBHelper::fieldExists('poll_question', 'answer_scale')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `answer_scale` TEXT DEFAULT NULL");
+    }
+        
+    if (!DBHelper::fieldExists('poll_question', 'q_row')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `q_row` int(11) NOT NULL DEFAULT 0");
+    }
+        
+    if (!DBHelper::fieldExists('poll_question', 'q_column')) {
+        Database::get()->query("ALTER TABLE poll_question ADD `q_column` int(11) NOT NULL DEFAULT 0");
+    }
+        
+    if (!DBHelper::fieldExists('poll_question_answer', 'sub_question')) {
+        Database::get()->query("ALTER TABLE poll_question_answer ADD `sub_question` int(11) NOT NULL DEFAULT 0");
+    }
+        
+    if (!DBHelper::fieldExists('poll_answer_record', 'sub_qid')) {
+        Database::get()->query("ALTER TABLE poll_answer_record ADD `sub_qid` int(11) NOT NULL DEFAULT 0");
+    }
+        
+    if (!DBHelper::fieldExists('poll_answer_record', 'sub_qid_row')) {
+        Database::get()->query("ALTER TABLE poll_answer_record ADD `sub_qid_row` int(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('poll', 'pagination')) {
+        Database::get()->query("ALTER TABLE poll ADD `pagination` int(11) NOT NULL DEFAULT 0");
+    }
+        
+    if (!DBHelper::fieldExists('poll', 'require_answer')) {
+        Database::get()->query("ALTER TABLE poll ADD `require_answer` int(11) NOT NULL DEFAULT 0");
+    }
+
 }
 
 /**

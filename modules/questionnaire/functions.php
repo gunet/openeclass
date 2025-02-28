@@ -23,11 +23,12 @@ define('QTYPE_FILL', 2);
 define('QTYPE_MULTIPLE', 3);
 define('QTYPE_LABEL', 4);
 define('QTYPE_SCALE', 5);
+define('QTYPE_TABLE', 6);
 
 function validate_qtype($qtype)
 {
     $qtype = intval($qtype);
-    if (in_array($qtype, array(QTYPE_SINGLE, QTYPE_MULTIPLE, QTYPE_FILL, QTYPE_LABEL, QTYPE_SCALE))) {
+    if (in_array($qtype, array(QTYPE_SINGLE, QTYPE_MULTIPLE, QTYPE_FILL, QTYPE_LABEL, QTYPE_SCALE, QTYPE_TABLE))) {
         return $qtype;
     } else {
         return QTYPE_LABEL;
