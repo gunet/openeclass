@@ -23,6 +23,11 @@
  * @brief main script for the questionnaire tool
  */
 
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+
 $require_current_course = TRUE;
 $require_user_registration = true;
 $require_help = TRUE;
@@ -121,6 +126,67 @@ if (isset($_GET['verification_code'])) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 if ($is_editor) {
+
+    // QR code generation for specific poll
+    if (isset($_GET['gen_qrcode'])) {
+        $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
+        $writer = new Writer($renderer);
+        $string = $urlServer . "/modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$_GET[pollId]";
+        
+        // Generate the QR image using a string
+        $qr_image = $writer->writeString($string);
+    
+        // Base64 encode the SVG string
+        $qr_image_base64 = base64_encode($qr_image);
+        
+        // Prepare the data URL for the SVG
+        $qr_image_data_url = "data:image/svg+xml;base64,$qr_image_base64";
+    
+        $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function() {
+                    var bts = {
+                        print: {
+                            label: '" . js_escape($langPrint) . "',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function () {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();
+                            }
+                        }
+                    };
+                    if (screenfull.enabled) {
+                        bts.fullscreen = {
+                            label: '" . js_escape($langFullScreen) . "',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
+                            }
+                        };
+                    }
+                    bts.cancel = {
+                        label: '" . js_escape($langCancel) . "',
+                        className: 'cancelAdminBtn'
+                    };
+                    bootbox.dialog({
+                        size: 'large',
+                        title: '" . js_escape($langGenQrCode) . "',
+                        onEscape: function() {},
+                        backdrop: true,
+                        message: '<div class=\"row\">' +
+                                    '<div class=\"col-sm-12\">' +
+                                        '<div class=\"iframe-container\" style=\"height:300px;\">' +
+                                            '<iframe title=\"{$langGenQrCode}\" id=\"fileFrame\" src=\"{$qr_image_data_url}\" style=\"width:260px; height:260px; margin:auto; display:block;\"></iframe>' +
+                                        '</div>' +
+                                    '</div>' +
+                                 '</div>',
+                        buttons: bts
+                    });
+                });
+            </script>
+        ";
+    }
 
     // info about polls assigned to users and groups
     if (isset($_GET['poll_info_assigned_to'])) {
@@ -331,7 +397,7 @@ function printPolls() {
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
-        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson;
+        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson, $langGenQrCode;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -488,6 +554,10 @@ function printPolls() {
                                 'icon-class' => 'warnLink',
                                 'icon-extra' => "data-pid='$pid'",
                                 'show' => $thepoll->type == POLL_NORMAL],
+                            ['title' => $langGenQrCode,
+                                'icon' => 'fa-solid fa-qrcode',
+                                'icon-class' => 'QRcodeOpen',
+                                'url' => "index.php?course=$course_code&amp;pollId=$pid&amp;gen_qrcode=true"],
                             ['title' => $langPurgeExercises,
                                 'icon' => 'fa-eraser',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",

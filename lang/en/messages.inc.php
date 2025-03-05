@@ -3182,6 +3182,7 @@ $langEnablePagination = "Enable pagination";
 $langPreviousQuestion = "Previous";        
 $langNextQuestion = "Next";
 $langEnableRequiredAnswer = "Mandatory answer to every question";
+$langGenQrCode = "QR code creation";
 $langSee = "Preview";
 $langCourseName = "Course name";
 $langNoCoursesAvailable = "There are no available courses for registration";

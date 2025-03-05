@@ -3544,6 +3544,7 @@ $langEnablePagination = "Ενεργοποίηση σελιδοποίησης";
 $langPreviousQuestion = "Προηγούμενη";        
 $langNextQuestion = "Επόμενη";
 $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθε ερώτηση";
+$langGenQrCode = "Δημιουργία QR code";
 
 /* * **********************************************************
  * registration.php
