@@ -995,6 +995,15 @@ if($course_info->view_type == 'sessions' && isset($_SESSION['uid'])){
                                                             $sql_session
                                                             ORDER BY start ASC",$course_id,1);
 }
+
+// Hide agenda, announcements, course completion and widgets on course home
+$right_col_display = false;
+$hidden_sql = setting_get(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $course_id);
+if ($hidden_sql) {
+    $right_col_display = true;
+}
+$data['right_col_display'] = $right_col_display;
+
 view('modules.course.home.index', $data);
 
 /**

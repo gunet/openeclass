@@ -234,6 +234,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['enable_access_users_list'])) {
                 setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
             }
+            if (isset($_POST['enable_agenda_announcement_widget_courseCompletion'])) {
+                setting_set(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $_POST['enable_agenda_announcement_widget_courseCompletion'], $course_id);
+            }
             // Course settings modified, will get success message after redirect in current course language
             Session::flash('course-modify-success', true);
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -484,6 +487,16 @@ if (isset($_POST['submit'])) {
     }
     $data['log_course_user_requests_disable'] = $log_course_user_requests_disable;
     $data['log_course_user_requests_enable'] = $log_course_user_requests_enable;
+
+    if (setting_get(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $course_id) == 1) {
+        $check_enable_agenda_announcement_widget_courseCompletion = ' checked';
+        $check_disable_agenda_announcement_widget_courseCompletion = '';
+    } else {
+        $check_enable_agenda_announcement_widget_courseCompletion = '';
+        $check_disable_agenda_announcement_widget_courseCompletion = ' checked';
+    }
+    $data['check_enable_agenda_announcement_widget_courseCompletion'] = $check_enable_agenda_announcement_widget_courseCompletion;
+    $data['check_disable_agenda_announcement_widget_courseCompletion'] = $check_disable_agenda_announcement_widget_courseCompletion;
 
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
 
