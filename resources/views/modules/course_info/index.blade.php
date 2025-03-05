@@ -542,6 +542,25 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langDisplayRightContentInCPage') }}</div>
+                                        <div class='col-sm-12'>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='1' name='enable_agenda_announcement_widget_courseCompletion' {!! $check_enable_agenda_announcement_widget_courseCompletion !!}>
+                                                    {{ trans('langActivate') }}
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='0' name='enable_agenda_announcement_widget_courseCompletion' {!! $check_disable_agenda_announcement_widget_courseCompletion !!} >
+                                                    {{ trans('langDeactivate') }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {!! showSecondFactorChallenge() !!}
 
                                     <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center'>

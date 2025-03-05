@@ -7056,3 +7056,4 @@ $langMaxHeightHalfMaxScreenJumbotron = "Εναλλακτικά το ύψος δ�
 $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είναι μηδενική.";
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
 $langCharts = "Διαγράμματα";
+$langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, ανακοινώσεων, μικροεφαρμογές, ολοκλήρωση μαθήματος στην αρχική σελίδα";

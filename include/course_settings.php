@@ -50,7 +50,8 @@ function setting_default($setting_id) {
         SETTING_COURSE_FORUM_NOTIFICATIONS => 0,
         SETTING_DOCUMENTS_PUBLIC_WRITE => 0,
         SETTING_OFFLINE_COURSE => 0,
-        SETTING_USERS_LIST_ACCESS => 1);
+        SETTING_USERS_LIST_ACCESS => 1,
+        SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION => 1);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {

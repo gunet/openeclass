@@ -616,7 +616,7 @@
 
 
 
-                    <div>
+                    <div class="@if(!$right_col_display) d-none @else d-block @endif">
                         <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3 mt-4 mt-xl-0'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                 <h3 class='mb-0'>{{ trans('langAgenda') }}</h3>
