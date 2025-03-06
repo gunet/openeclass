@@ -221,6 +221,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 ($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1') ||
                                 ($myrow->id != $_SESSION["uid"] && $is_opencourses_reviewer && $is_admin)
                             ) && ((isset($is_collaborative_course) && !$is_collaborative_course) or is_null($is_collaborative_course))
+            ),
+            array(
+                'title' => $langModify,
+                'url' => "guestuser.php?course=$course_code",
+                'icon' => "fa-edit",
+                'show' => $myrow->status == USER_GUEST,
             )
         ));
         if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
