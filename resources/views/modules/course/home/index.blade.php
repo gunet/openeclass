@@ -485,7 +485,7 @@
                                     <h3>{{ trans('langSession') }}</h3>
                                     <a class='TextRegular text-decoration-underline vsmall-text'
                                          href="{{ $urlAppend }}modules/session/index.php?course={{ $course_code }}">
-                                         {{ trans('langAllAnnouncements') }}
+                                         {{ trans('langAllSessions') }}
                                     </a>
                                 </div>
                                 <div class='card-body card-body-default px-0 pt-0'>
