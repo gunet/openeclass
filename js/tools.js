@@ -153,7 +153,7 @@ function course_list_handler() {
     var td = $(this).parent().next();
     $('#res' + cid).remove();
     if (!$('#ind' + cid).length) {
-        td.append(' <img id="ind' + cid + '" src="' + themeimg + '/ajax_loader.gif" alt="">');
+        td.append(' <img id="ind' + cid + '" src="' + urlAppend + 'resources/img/ajax_loader.gif" alt="">');
     }
     var submit_info = {
       cid: cid,
