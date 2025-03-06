@@ -89,7 +89,6 @@ if (isset($_SESSION['uid'])) {
     }
 }
 
-
 if ($data['isInOpenCoursesMode']) {
     $navigation[] = array('url' => '../auth/listfaculties.php', 'name' => $langSelectFac);
     require_once 'modules/course_metadata/CourseXML.php';
@@ -100,28 +99,29 @@ if ($data['isInOpenCoursesMode']) {
         header("Location: {$urlServer}");
         exit();
     }
-} else {
-    //$navigation[] = array('url' => 'listfaculties.php', 'name' => $langSelectFac);
 }
 
 if (isset($_GET['fc'])) { // fetch specific department
-    $data['fc'] = intval($_GET['fc']);
+    $fc = intval($_GET['fc']);
 } else if (isset($_SESSION['uid'])) { // fetch user department (default) if user logged in
     $fc = getfcfromuid($_SESSION['uid']);
+    if (!$fc) { // if user does not belong to department
+        list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
+        $fc = intval($roots[0]->id);
+    }
 }
 
 // parse the faculty id in a session
 // This is needed in case the user decides to switch language.
-if (isset($data['fc'])) {
-    $_SESSION['fc_memo'] = $data['fc'];
+if (isset($fc)) {
+    $_SESSION['fc_memo'] = $fc;
 } elseif (isset($_SESSION['fc_memo'])) {
-    $data['fc'] = $_SESSION['fc_memo'];
+    $fc = $_SESSION['fc_memo'];
 } else {
     redirect_to_home_page();
 }
 
-
-$fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $data['fc']);
+$fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $fc);
 if (!$fac) {
     die("ERROR: no faculty with id $data[fc]");
 }
@@ -130,10 +130,10 @@ if (!$tree->checkVisibilityRestrictions($fac->id, $fac->visible)) {
     redirect_to_home_page();
 }
 if (count($tree->buildRootsArray()) > 1) {
-    $data['buildRoots'] = $tree->buildRootsSelectForm($data['fc']);
+    $data['buildRoots'] = $tree->buildRootsSelectForm($fc);
 }
 
-list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($data['fc'], 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
 
 $queryCourseIds = '';
 $queryExtraSelect = '';
@@ -152,7 +152,7 @@ if ($data['isInOpenCoursesMode']) { // find sub node's certified open courses
                                    AND course_department.department = ?d
                                    AND course_review.is_certified = 1", function($course) use (&$opencourses) {
         $opencourses[$course->id] = $course->code;
-    }, $data['fc']);
+    }, $fc);
 
     // construct comma seperated string with open courses ids
     $commaIds = "";
@@ -206,7 +206,7 @@ if ($runQuery) {
                            AND course_department.department = ?d
                            AND course.visible != " . COURSE_INACTIVE . "
                            $queryCourseIds
-                      ORDER BY course.title, course.prof_names", $data['fc']);
+                      ORDER BY course.title, course.prof_names", $fc);
 }
 
 if (count($data['courses']) > 0) {
@@ -221,6 +221,7 @@ if (count($data['courses']) > 0) {
     }
 }
 
+$data['fc'] = $fc;
 $data['tree'] = $tree;
 $data['childHTML'] = $childHTML;
 $data['myCourses'] = $myCourses;
