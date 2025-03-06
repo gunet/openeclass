@@ -50,13 +50,18 @@ if (isset($_GET['id'])) {
 $backPath = $data['backPath'] = $urlAppend . "modules/video/index.php?course=" . $course_code;
 $navigation[] = array('url' => $backPath, 'name' => $langVideo);
 
-
 if (isset($_GET['form_input'])) {
     $form_input = $_GET['form_input'];
+    $form_enctype = 'application/x-www-form-urlencoded';
+    if ($form_input === 'file') {
+        $form_enctype = 'multipart/form-data';
+    }
 } else {
-    $form_input = '';
+    $form_input = $form_enctype = '';
 }
+
 $data['form_input'] = $form_input;
+$data['form_enctype'] = $form_enctype;
 
 // handle submitted data
 if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit

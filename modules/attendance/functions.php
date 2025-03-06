@@ -768,7 +768,7 @@ function update_user_attendance_activities($attendance_id, $uid) {
 function new_attendance() {
 
     global $tool_content, $course_code, $langNewAttendance2, $head_content,
-           $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber,
+           $langTitle, $langSubmit, $langInsert, $langAttendanceLimitNumber,
            $attendance_limit, $langStart, $langEnd, $language, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
@@ -842,7 +842,7 @@ function new_attendance() {
                                     .form_buttons(array(
                                         array(
                                                 'class'=> 'submitAdminBtn',
-                                                'text' => $langSave,
+                                                'text' => $langSubmit,
                                                 'name' => 'newAttendance',
                                                 'value'=> $langInsert
                                         ),
@@ -1055,7 +1055,7 @@ function attendance_settings($attendance_id) {
 
     global $tool_content, $course_code, $language,
            $langTitle, $langAttendanceLimitNumber,
-           $langAttendanceUpdate, $langSave, $head_content,
+           $langAttendanceUpdate, $langSubmit, $head_content,
            $attendance, $langStart, $langEnd, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
@@ -1130,7 +1130,7 @@ function attendance_settings($attendance_id) {
                                  ".form_buttons(array(
                                     array(
                                         'class' => 'submitAdminBtn',
-                                        'text' => $langSave,
+                                        'text' => $langSubmit,
                                         'name' => 'submitAttendanceBookSettings',
                                         'value'=> $langAttendanceUpdate
                                     ),
