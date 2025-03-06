@@ -136,7 +136,7 @@ if ($is_editor) {
             </div>";
 
         $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2 mt-1'>
-                        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'>
+                        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                         <a href='index.php?course=$course_code' class='btn cancelAdminBtn'>$langCancel</a>
                         </div>";
         $tool_content .= "</form></div></div><div class='d-none d-lg-block'>
