@@ -164,7 +164,7 @@ $head_content .= "
 draw($tool_content, 2, null, $head_content);
 
 function addActionButtons(): string {
-    global $langSave, $langCancel, $backUrl;
+    global $langSubmit, $langCancel, $backUrl;
 
     return "
         <div id='fgroup_id_buttonar' class='form-group row fitem femptylabel' data-groupname='buttonar'>
@@ -182,7 +182,7 @@ function addActionButtons(): string {
                                        class='btn submitAdminBtn'
                                        name='submitbutton'
                                        id='id_submitbutton'
-                                       value='$langSave' >
+                                       value='$langSubmit' >
                             </span>
                             <div class='form-control-feedback invalid-feedback' id='id_error_submitbutton'></div>
                         </div>
