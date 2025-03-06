@@ -3172,6 +3172,7 @@ $m['mailprof'] = "Για να εγγραφείτε στο $langsCourse θα πρ
 κάνοντας κλικ";
 $m['here'] = " εδώ.";
 $m['unsub'] = "Το $langsCourse είναι κλειστό και δεν θα μπορέσετε να επανεγγραφείτε.";
+$langWarningUnsub = "Το $langsCourse είναι κλειστό και δεν θα μπορέσετε να επανεγγραφείτε.";
 
 $langMyPersoAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
 $langMyPersoMessages = "Τα τελευταία μου μηνύματα";
@@ -3539,9 +3540,9 @@ $langQuestionsInsertd = "Οι ερωτήσεις προστέθηκαν με ε�
 $langNumberColumnsSmallerThanQ = "Ο αριθμός των στηλών που καταχωρίσατε είναι μικρότερος από τις διαθέσιμες καταχωρημένες ερωτήσεις.";
 $langUserAnswer = "Απάντηση χρήστη";
 $langAddRowsColumns = "Καταχώριση";
-$langUsersAnswers = "Απαντήσεις χρηστών";         
+$langUsersAnswers = "Απαντήσεις χρηστών";
 $langEnablePagination = "Ενεργοποίηση σελιδοποίησης";
-$langPreviousQuestion = "Προηγούμενη";        
+$langPreviousQuestion = "Προηγούμενη";
 $langNextQuestion = "Επόμενη";
 $langEnableRequiredAnswer = "Υποχρεωτική απάντηση σε κάθε ερώτηση";
 $langGenQrCode = "Δημιουργία QR code";
@@ -4291,7 +4292,7 @@ $langThanks = "Ευχαριστούμε για τη χρήση της πλατφ
 //unregcours.php
 $langCoursDelSuccess = "Η απεγγραφή σας από το $langsCourse έγινε με επιτυχία";
 $langCoursError = "Σφάλμα κατά την απεγγραφή του χρήστη";
-$langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφείτε από το $langsCourse";
+$langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφείτε από το $langsCourse;";
 
 /* * *****************************************************************
  * usage.php
@@ -4628,12 +4629,13 @@ $m['group_work'] = 'Ομαδική εργασία';
 $m['user_work'] = 'Ατομική εργασία';
 $m['delete_work'] = 'Διαγραφή';
 $m['submitted_by_other_member'] = 'Το αρχείο αυτό υποβλήθηκε από άλλο μέλος της';
-$m['your_group'] = 'ομάδας σας';
+$langSubmittedByOtherMember = 'Το αρχείο αυτό υποβλήθηκε από άλλο μέλος της';
+$langYourGroup = 'ομάδας σας';
 $m['this_is_group_assignment'] = 'Η εργασία αυτή είναι ομαδική.';
-$m['group_assignment_publish'] = 'Μπορείτε να στείλετε κάποιο υπάρχον αρχείο από
+$langGroupAssignmentPublish = 'Μπορείτε να στείλετε κάποιο υπάρχον αρχείο από
         <a href="%s">το χώρο αρχείων της ομάδας σας</a> επιλέγοντας «Δημοσίευση»
         για το αρχείο που θέλετε.';
-$m['group_assignment_no_groups'] = 'Θα πρέπει <a href="%s">να εγγραφείτε σε κάποια
+$langGroupAssignmentNoGroups = 'Θα πρέπει <a href="%s">να εγγραφείτε σε κάποια
         ομάδα</a> πριν μπορέσετε να υποβάλετε κάποιο αρχείο.';
 $m['noguest'] = 'Για να αποστείλετε εργασία πρέπει να συνδεθείτε ως κανονικός χρήστης.';
 $langOneNonSubmission = 'Δεν έχει υποβληθεί μία εργασία';
