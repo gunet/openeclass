@@ -7,7 +7,6 @@
     @push('head_scripts')
         <script type="text/javascript">
             var dialog;
-
             var showMetadata = function(course) {
                 $('.modal-body', dialog).load('anoninfo.php', {course: course}, function(response, status, xhr) {
                     if (status === "error") {
@@ -21,6 +20,7 @@
             $(document).ready(function() {
                 dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><div class="modal-title" id="modal-label">{!! trans('langCourseMetadata') !!}</div><button type="button" class="close" data-bs-dismiss="modal"></button></div><div class="modal-body">body</div></div></div></div>');
             });
+
         </script>
     @endpush
 @endif
@@ -28,7 +28,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} main-container'>
+    <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
             @if(isset($_SESSION['uid']))
@@ -61,23 +61,72 @@
                         <table class='table-default' id="myopencourses_table">
                             <thead>
                                 <tr class='list-header'>
+                                    @if (isset($_SESSION['uid']))
+                                        <th style='width:10%'>{{ trans('langRegistration') }}</th>
+                                    @endif
                                     <th>{{ trans('langCourse') }}</th>
-                                    <th class='text-end' aria-label="{{ trans('langOptions') }}"></th>
+                                    <th class='text-end' aria-label="{{ trans('langOptions') }}">{{ trans('langGroupAccess') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($courses as $mycourse)
                                     <tr>
+                                        @if (isset($_SESSION['uid'])) {{-- logged in user --}}
+                                            <td style='width:10%'>
+                                                @if (isset($myCourses[$mycourse->id]))
+                                                    @if ($myCourses[$mycourse->id]->status != 1) {{-- display registered courses --}}
+                                                        <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                            <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}' checked='checked' @if ($mycourse->visible == COURSE_CLOSED) class='reg_closed' @endif @if (get_config('disable_student_unregister_cours')) 'disabled' @endif>
+                                                            <span class='checkmark'></span>
+                                                        </label>
+                                                    @else
+                                                        <i class='fa fa-user'></i>
+                                                    @endif
+                                                @else {{-- display unregistered courses--}}
+                                                        <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                            <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}' @if(!is_enabled_course_registration($_SESSION['uid']) or $mycourse->visible == COURSE_CLOSED) disabled @endif @if ($mycourse->visible == COURSE_CLOSED) class='reg_closed' @endif>
+                                                            <span class='checkmark'></span>
+                                                        </label>
+                                                @endif
+                                                <input type='hidden' name='changeCourse[]' value='{{ $mycourse->id }}'>
+                                            </td>
+                                        @endif
+
                                         <td>
                                             <div class='d-flex justify-content-start align-items-start gap-3 flex-wrap'>
                                                 <div>
-                                                    @if ($mycourse->visible == COURSE_OPEN)
+                                                    @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id]))
                                                         <a class='TextBold' href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @else
-                                                        <span class='TextBold'>{!! $mycourse->i !!}</span>&nbsp;<small>({!! $mycourse->c !!})</small>
+                                                        <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold'>{!! $mycourse->i !!}</span>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @endif
                                                     <div>
                                                         <small class='vsmall-text TextRegular'>{{ $mycourse->t }}</small>
+                                                        @if (isset($_SESSION['uid']))           {{--  user is logged in --}}
+                                                            @if ($mycourse->visible == COURSE_CLOSED and !setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $mycourse->id) and !isset($myCourses[$mycourse->id])) {{-- user is not registered --}}
+                                                                <br><br><small><em>
+                                                                <a class='text-decoration-underline' href='../contact/index.php?course_id={{ $mycourse->id }}'>
+                                                                    @if($mycourse->clb)
+                                                                        {{ trans('langLabelCollabUserReques') }}
+                                                                    @else
+                                                                        {{ trans('langLabelCourseUserRequest') }}
+                                                                    @endif
+                                                                </a>
+                                                                </em></small>
+                                                            @endif
+                                                            @if (isset($myCourses[$mycourse->id]))
+                                                                @if ($myCourses[$mycourse->id]->status != 1 and (!empty($mycourse->password)))
+                                                                    <span class='badge Warning-200-bg'>{{ trans('langPassword') }}:</span>
+                                                                    <input class='form-control' type='password' name='pass{{ $mycourse->id }}' value='{{ $mycourse->password }}' autocomplete='off' />
+                                                                @endif
+                                                            @else
+                                                                @if (!empty($mycourse->password) and ($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN))
+                                                                    <span class='badge Warning-200-bg'>{{ trans('langPassword') }}:</span>
+                                                                    <input class='form-control' type='password' name='pass{{ $mycourse->id }}' autocomplete='off' />
+                                                                @endif
+                                                            @endif
+                                                            {!! getCoursePrerequisites($mycourse->id) !!}
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 @if ($displayGuestLoginLinks)
@@ -183,13 +232,24 @@
                     </div>
                 </div>
             @endif
-
         </div>
-
     </div>
 </div>
 
 <script type="text/javascript">
+    $(course_list_init);
+    var urlAppend = {{ $urlAppend }};
+    var lang = {
+        unCourse: '{{ js_escape(trans('langUnCourse')) }}',
+        cancel: '{{ js_escape(trans('langCancel')) }}',
+        close: '{{ js_escape(trans('langClose')) }}',
+        unregCourse: '{{ js_escape(trans('langDeleteUser')) }}',
+        reregisterImpossible: '{{ js_escape(trans('langConfirmUnregCours')) }}',
+        invalidCode: '{{ js_escape(trans('langWrongPassCourse')) }} ',
+        prereqsNotComplete: '{{ js_escape(trans('langPrerequisitesNotComplete')) }}',
+    };
+    var courses = {!! json_encode($courses_list) !!};
+
     var idCourse = '';
     var btn = '';
     var modal = '';
