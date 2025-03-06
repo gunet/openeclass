@@ -21,7 +21,7 @@
 include '../../include/baseTheme.php';
 
 $toolName = $langPreview;
-$navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
+$navigation[] = array('url' => 'listfaculties.php', 'name' => $langSelectFac);
 
 $data['courseId'] = $courseId = course_code_to_id($_GET['c']);
 
@@ -40,7 +40,7 @@ $data['course_descriptions'] = $res = Database::get()->queryArray("SELECT cd.id,
 
 $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => 'listfaculte.php',
+                                      'url' => 'listfaculties.php',
                                       'icon' => 'fa-reply',
                                       'level' => 'primary',
                                       'button-class' => 'btn-default')

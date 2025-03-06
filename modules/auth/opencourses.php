@@ -91,7 +91,7 @@ if (isset($_SESSION['uid'])) {
 
 
 if ($data['isInOpenCoursesMode']) {
-    $navigation[] = array('url' => '../auth/listfaculte.php', 'name' => $langSelectFac);
+    $navigation[] = array('url' => '../auth/listfaculties.php', 'name' => $langSelectFac);
     require_once 'modules/course_metadata/CourseXML.php';
     $countCallback = CourseXMLElement::getCountCallback();
     $showEmpty = false;
@@ -101,7 +101,7 @@ if ($data['isInOpenCoursesMode']) {
         exit();
     }
 } else {
-    //$navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
+    //$navigation[] = array('url' => 'listfaculties.php', 'name' => $langSelectFac);
 }
 
 if (isset($_GET['fc'])) { // fetch specific department
