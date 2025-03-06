@@ -34,6 +34,10 @@ $require_help = TRUE;
 $helpTopic = 'questionnaire';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -127,34 +131,90 @@ if (isset($_GET['verification_code'])) {
 }
 if ($is_editor) {
 
+    if (isset($_GET['download_qrcode'])) {
+        $pID = intval($_GET['download_qrcode']);
+        $fileNamePoll = $pID . '_QRcode.svg';
+        $dload_filename = "$webDir/courses/$course_code/pollQrCode/$pID/$fileNamePoll";
+        //send_file_to_client($dload_filename, $fileNamePoll, null, true, false);
+
+        $filePath = $dload_filename; // Update this with the actual path to your SVG file
+        // Check if the file exists
+        if (file_exists($filePath)) {
+            // Set the appropriate headers to trigger a download
+            header('Content-Description: File Transfer');
+            header('Content-Type: image/svg+xml');
+            header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filePath));
+
+            // Clear output buffer
+            ob_clean();
+            flush();
+
+            // Read the file and send it to the output buffer
+            readfile($filePath);
+            exit;
+        } else {
+            // Handle the error if the file does not exist
+            echo "File not found.";
+        }
+    }
+
     // QR code generation for specific poll
     if (isset($_GET['gen_qrcode'])) {
+
+        $pollID = intval($_GET['pollId']);
+        $fileNamePoll = $pollID . '_QRcode.svg';
+
+        // Initialize URL and parameters
+        $string = $urlServer . "/modules/questionnaire/pollparticipate.php?course=" . $course_code . "&UseCase=1&pid=" . $pollID;
+    
+        // Create QR Code
         $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
         $writer = new Writer($renderer);
-        $string = $urlServer . "/modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$_GET[pollId]";
         
-        // Generate the QR image using a string
+        // Generate the QR image
         $qr_image = $writer->writeString($string);
-    
+        
         // Base64 encode the SVG string
         $qr_image_base64 = base64_encode($qr_image);
         
         // Prepare the data URL for the SVG
-        $qr_image_data_url = "data:image/svg+xml;base64,$qr_image_base64";
+        $qr_image_data_url = "data:image/svg+xml;base64," . $qr_image_base64;
+
+        // Specify the path where you want to save the image
+        $qrCode_dir = "$webDir/courses/$course_code/pollQrCode/$pollID";
+        if (!file_exists($qrCode_dir)) {
+            mkdir("$webDir/courses/$course_code/pollQrCode/$pollID", 0755, true);
+        }
+        if (file_exists($qrCode_dir . '/' . $fileNamePoll)) {
+            unlink($qrCode_dir . '/' . $fileNamePoll);
+        }
+        file_put_contents($qrCode_dir . '/' . $fileNamePoll, $qr_image);
+        
+        $downloadURL = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&download_qrcode=$pollID";
     
+        // Prepare JavaScript content for modal
         $head_content .= "
             <script type='text/javascript'>
                 $(document).ready(function() {
+                    var downloadURL = '$downloadURL';
                     var bts = {
-                        print: {
-                            label: '" . js_escape($langPrint) . "',
+                        download: {
+                            label: '" . js_escape($langDownload) . "',
                             className: 'submitAdminBtn gap-1',
-                            callback: function () {
-                                var iframe = document.getElementById('fileFrame');
-                                iframe.contentWindow.print();
+                            callback: function (d) {
+                                var anchor = document.createElement('a');
+                                anchor.href = downloadURL;
+                                anchor.target = '_blank';
+                                anchor.download = '$fileNamePoll';
+                                anchor.click();
                             }
                         }
                     };
+    
                     if (screenfull.enabled) {
                         bts.fullscreen = {
                             label: '" . js_escape($langFullScreen) . "',
@@ -169,6 +229,7 @@ if ($is_editor) {
                         label: '" . js_escape($langCancel) . "',
                         className: 'cancelAdminBtn'
                     };
+    
                     bootbox.dialog({
                         size: 'large',
                         title: '" . js_escape($langGenQrCode) . "',
