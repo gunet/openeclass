@@ -641,7 +641,7 @@ if ($total_cunits > 0) {
     $data['countUnits'] = $countUnits;
 
     if($carousel_or_row == 0){
-        $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
+        $cunits_content .= "<div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'><div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
 
         //this is foreach for indicators carousel-units
         $counterIndicator = 0;
@@ -778,7 +778,7 @@ if ($total_cunits > 0) {
         $cunits_content .= "</div>";
 
         //end courseUnitsControls
-        $cunits_content .= "</div>";
+        $cunits_content .= "</div></div></div>";
     } else {
         $counter_hr = 0;
         foreach ($all_units as $cu) {
