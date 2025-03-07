@@ -239,7 +239,8 @@ function display_attendance_activities($attendance_id) {
            $langHere, $langAttendanceNoActMessage3, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
-           $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect;
+           $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect,
+           $langQRCodePresence;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
@@ -365,6 +366,11 @@ function display_attendance_activities($attendance_id) {
                         array('title' => $langEditChange,
                             'icon' => 'fa-edit',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;modify=" . getIndirectReference($details->id)
+                        ),
+                        array('title' => $langQRCodePresence,
+                            'icon' => 'fa-solid fa-qrcode',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;gen_qrcodePr=true&amp;actId=" . getIndirectReference($details->id),
+                            'show' => !$details->module_auto_id
                         ),
                         array('title' => $langDelete,
                             'icon' => 'fa-xmark',

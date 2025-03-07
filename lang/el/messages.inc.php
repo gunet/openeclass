@@ -1339,7 +1339,8 @@ $langEnterFile = "Δώστε το όνομα αρχείου";
 $langOpenCamera = "Άνοιγμα κάμερας";
 $langMaxRecAudioTime = "μέγιστος χρόνος ηχογράφησης: 5 λεπτά";
 $langMaxRecVideoTime = "μέγιστος χρόνος βιντεοσκόπησης: 2 λεπτά";
-
+$langQRCodePresence = "Παρουσία μέσω QR code";
+$langAddPresenceSuccess = "Η παρουσία σας καταχωρήθηκε επιτυχώς.";
 $langAttendance = "Παρουσιολόγιο";
 $langAttendances = "Παρουσιολόγια";
 $langAttendanceManagement = "Διαχείριση παρουσιολογίου";
