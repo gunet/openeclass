@@ -33,6 +33,8 @@ if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TTFONTDATAPATH", $webDir . '/courses/temp/pdf/');
 }
 require_once 'constants.php';
+require_once 'include/log.class.php';
+require_once 'modules/course_info/archive_functions.php';
 require_once 'lib/session.class.php';
 require_once 'lib/file_cache.class.php';
 
@@ -1854,7 +1856,8 @@ function course_id_to_prof($cid) {
  * @param type $cid
  * @brief Delete course with id = $cid
  */
-function delete_course($cid) {
+function delete_course($cid): void
+{
     global $webDir;
 
     $course_code = course_id_to_code($cid);
@@ -2009,8 +2012,34 @@ function deleteUser($id, $log) {
     if ($u == 1) { // don't delete admin user
         return false;
     } else {
-        // validate if this is an existing user
-        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {
+        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) { // validate existing user
+
+            $q = Database::get()->queryArray("SELECT * FROM course_user WHERE user_id = ?d AND status = " . USER_TEACHER, $u);
+            if (count($q) > 0) {  // user has courses as admin?
+                foreach ($q as $user_courses) {
+                    $q2 = Database::get()->queryArray("SELECT * FROM course_user WHERE course_id = ?d AND status = " . USER_TEACHER, $user_courses->course_id);
+                    if (count($q2) > 1) { // course has co admins
+                        continue; // don't delete course
+                    } else {
+                        $course_code = course_id_to_code($user_courses->course_id);
+                        $course_title = course_id_to_title($user_courses->course_id);
+                        // first archive course
+                        $zipfile = doArchive($user_courses->course_id, $course_code);
+                        $garbage = "$webDir/courses/garbage";
+                        $target = "$garbage/$course_code.$_SESSION[csrf_token]";
+                        is_dir($target) or make_dir($target);
+                        touch("$garbage/index.html");
+                        rename($zipfile, "$target/$course_code.zip");
+                        // delete course
+                        delete_course($user_courses->course_id);
+                        // logging
+                        Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $user_courses->course_id,
+                            'code' => $course_code,
+                            'title' => $course_title));
+                    }
+                }
+            }
+
             Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
             // delete user assignments (if any)
