@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
                 foreach ($courses_codes as $codes) {
                     $cid = course_code_to_id($codes);
                     if ($cid) {
-                        if (adduser($userid, $cid)) {
+                        if (adduser($userid, $cid, $_POST['status'])) {
                             $ok[] = $userid;
                         } else {
                             $existing[] = $userid;
@@ -115,14 +115,35 @@ function finduser($user, $field) {
  * @param type $cid
  * @return boolean
  */
-function adduser($userid, $cid) {
+function adduser($userid, $cid, $status): bool
+{
 
     $result = Database::get()->querySingle("SELECT * FROM course_user WHERE user_id = ?d AND course_id = ?d", $userid, $cid);
     if ($result) {
-            return false;
+        return false;
     } else {
-        $result = Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
-                                            VALUES (?d, ?d, ".USER_STUDENT.",  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $userid, $cid);
+        switch ($status) {
+            case USER_TEACHER:
+                Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
+                                        VALUES (?d, ?d, ". USER_TEACHER . ",  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")",
+                                    $userid, $cid);
+                break;
+            case USER_STUDENT:
+                Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
+                                        VALUES (?d, ?d, ".USER_STUDENT.",  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")",
+                                    $userid, $cid);
+                break;
+            case 2:
+                Database::get()->query("INSERT INTO course_user (user_id, course_id, status, editor, reg_date, document_timestamp)
+                                        VALUES (?d, ?d, " . USER_STUDENT . ", 1,  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")",
+                                    $userid, $cid);
+                break;
+            case 6:
+                Database::get()->query("INSERT INTO course_user (user_id, course_id, status, course_reviewer, reg_date, document_timestamp)
+                                        VALUES (?d, ?d, " . USER_STUDENT . ", 1,  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")",
+                                    $userid, $cid);
+                break;
+        }
         return true;
     }
 }
