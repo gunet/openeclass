@@ -6311,3 +6311,5 @@ $langExtAppOther = "Other";
 $langDownloadPdfNotAllowed = "File download not allowed";
 $langCharts = "Charts";
 $langDisplayRightContentInCPage = "Display calendar, announcements, widgets, course completion on the home page";
+$langQRCodePresence = "Presence via QR code";
+$langAddPresenceSuccess = "Your presence was successfully registered.";

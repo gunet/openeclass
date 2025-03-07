@@ -18,6 +18,11 @@
  *
  */
 
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+
 $require_login = true;
 $require_current_course = true;
 $require_user_registration = true;
@@ -175,8 +180,149 @@ if (isset($_REQUEST['attendance_id'])) {
     $pageName = $langEditChange;
 }
 
+if (isset($_GET['qrCode_presence'])) {
+    $attendance_id = $_REQUEST['attendance_id'];
+    $activeUser = Database::get()->querySingle("SELECT id,`uid` FROM attendance_users WHERE attendance_id = ?d AND `uid` = ?d", $attendance_id, $uid);
+    if ($activeUser) {
+        $userID = $activeUser->uid;
+        $actID = intval($_GET['actId']);
+        $attend = 1;
+        $checkForBook = Database::get()->querySingle("SELECT id, attend FROM attendance_book WHERE attendance_activity_id = ?d AND `uid` = ?d", $actID, $userID);
+        if ($checkForBook) {
+            if ($checkForBook->attend != $attend) {
+                Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d", $attend, $checkForBook->id);
+            }
+        } else {
+            Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ''", $userID, $actID, $attend);
+        }
+        triggerAttendanceGame($course_id, $userID, $attendance_id, AttendanceEvent::UPDATE);
+        Session::flash('message', $langAddPresenceSuccess);
+        Session::flash('alert-class', 'alert-success');
+    } else {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+    }
+    redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+}
+
 
 if ($is_editor) {
+
+    if (isset($_GET['download_qrcode'])) {
+        $actID = intval($_GET['download_qrcode']);
+        $fileNameAct = $actID . '_QRcode.svg';
+        $dload_filename = "$webDir/courses/$course_code/attendance_qrcode/$actID/$fileNameAct";
+        $filePath = $dload_filename;
+        // Check if the file exists
+        if (file_exists($filePath)) {
+            // Set the appropriate headers to trigger a download
+            header('Content-Description: File Transfer');
+            header('Content-Type: image/svg+xml');
+            header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filePath));
+
+            // Clear output buffer
+            ob_clean();
+            flush();
+
+            // Read the file and send it to the output buffer
+            readfile($filePath);
+            exit;
+        } else {
+            // Handle the error if the file does not exist
+            echo "File not found.";
+        }
+    }
+
+    // Presence via QR code
+    if (isset($_GET['gen_qrcodePr'])) {
+        $actId = intval(getDirectReference($_GET['actId']));
+        $fileNameAct = $actId . '_QRcode.svg';
+
+        // Initialize URL and parameters
+        $string = $urlServer . "/modules/attendance/index.php?course=" . $course_code . "&attendance_id=" . $attendance_id . "&actId=" . $actId . "&qrCode_presence=true";
+    
+        // Create QR Code
+        $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
+        $writer = new Writer($renderer);
+        
+        // Generate the QR image
+        $qr_image = $writer->writeString($string);
+        
+        // Base64 encode the SVG string
+        $qr_image_base64 = base64_encode($qr_image);
+        
+        // Prepare the data URL for the SVG
+        $qr_image_data_url = "data:image/svg+xml;base64," . $qr_image_base64;
+
+        // Specify the path where you want to save the image
+        $qrCode_dir = "$webDir/courses/$course_code/attendance_qrcode/$actId";
+        if (!file_exists($qrCode_dir)) {
+            mkdir("$webDir/courses/$course_code/attendance_qrcode/$actId", 0755, true);
+        }
+        if (file_exists($qrCode_dir . '/' . $fileNameAct)) {
+            unlink($qrCode_dir . '/' . $fileNameAct);
+        }
+        file_put_contents($qrCode_dir . '/' . $fileNameAct, $qr_image);
+        
+        $downloadURL = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&download_qrcode=$actId";
+    
+        // Prepare JavaScript content for modal
+        $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function() {
+                    var downloadURL = '$downloadURL';
+                    var bts = {
+                        download: {
+                            label: '" . js_escape($langDownload) . "',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function (d) {
+                                var anchor = document.createElement('a');
+                                anchor.href = downloadURL;
+                                anchor.target = '_blank';
+                                anchor.download = '$fileNamePoll';
+                                anchor.click();
+                            }
+                        }
+                    };
+    
+                    if (screenfull.enabled) {
+                        bts.fullscreen = {
+                            label: '" . js_escape($langFullScreen) . "',
+                            className: 'submitAdminBtn gap-1',
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
+                            }
+                        };
+                    }
+                    bts.cancel = {
+                        label: '" . js_escape($langCancel) . "',
+                        className: 'cancelAdminBtn'
+                    };
+    
+                    bootbox.dialog({
+                        size: 'large',
+                        title: '" . js_escape($langGenQrCode) . "',
+                        onEscape: function() {},
+                        backdrop: true,
+                        message: '<div class=\"row\">' +
+                                    '<div class=\"col-sm-12\">' +
+                                        '<div class=\"iframe-container\" style=\"height:300px;\">' +
+                                            '<iframe title=\"{$langGenQrCode}\" id=\"fileFrame\" src=\"{$qr_image_data_url}\" style=\"width:260px; height:260px; margin:auto; display:block;\"></iframe>' +
+                                        '</div>' +
+                                    '</div>' +
+                                 '</div>',
+                        buttons: bts
+                    });
+                });
+            </script>
+        ";
+    }
+
     // change attendance visibility
     if (isset($_GET['vis'])) {
         Database::get()->query("UPDATE attendance SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['attendance_id'], $course_id);
