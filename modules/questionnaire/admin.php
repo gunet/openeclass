@@ -42,8 +42,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
             $data = Database::get()->queryArray("SELECT name, id FROM `group`
-                                WHERE course_id = ?d
-                                  AND `group`.visible = 1
+                                WHERE course_id = ?d                                  
                                 ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
@@ -334,12 +333,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             if ($poll->assign_to_specific == 2) {
                 $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                        FROM poll_to_specific, `group`
-                                       WHERE `group`.id = poll_to_specific.group_id
-                                       AND `group`.visible = 1
+                                       WHERE `group`.id = poll_to_specific.group_id                                       
                                        AND `group`.course_id = ?d
                                        AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid);
-                $all_groups = Database::get()->queryArray("SELECT name, id FROM `group`
-                                        WHERE course_id = ?d AND `group`.visible = 1", $course_id);
+                $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
                 foreach ($assignees as $assignee_row) {
                     $assignee_options .= "<option value='{$assignee_row->id}'>".q($assignee_row->name)."</option>";
                 }
