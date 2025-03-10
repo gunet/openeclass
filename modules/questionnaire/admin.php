@@ -42,9 +42,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
             $data = Database::get()->queryArray("SELECT name, id FROM `group`
-                                WHERE course_id = ?d
-                                  AND `group`.visible = 1
-                                ORDER BY name", $course_id);
+                                WHERE course_id = ?d ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
@@ -90,7 +88,7 @@ if (isset($_POST['submitPoll'])) {
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
         $display_pagination = (isset($_POST['display_pagination'])) ? $_POST['display_pagination'] : 0;
-        $require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0; 
+        $require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
 
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
@@ -184,7 +182,7 @@ if (isset($_POST['submitQuestion'])) {
         $qtype = $_POST['answerType'];
         $question_description = (isset($_POST['description_question']) && $_POST['description_question'] != '' ? purify($_POST['description_question']) : '');
         $answerScale = (isset($_POST['answersScale']) && $_POST['answersScale'] != '' ? purify($_POST['answersScale']) : '');
-        
+
         if (isset($_GET['modifyQuestion'])) {
             $pqid = intval($_GET['modifyQuestion']);
             $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
@@ -357,53 +355,51 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
     </script>";
 
-        if (isset($poll) && $poll->assign_to_specific) {
-            //preparing options in select boxes for assigning to specific users/groups
-            $assignee_options='';
-            $unassigned_options='';
-            if ($poll->assign_to_specific == 2) {
-                $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
-                                       FROM poll_to_specific, `group`
-                                       WHERE `group`.id = poll_to_specific.group_id
-                                       AND `group`.visible = 1
-                                       AND `group`.course_id = ?d
-                                       AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid);
-                $all_groups = Database::get()->queryArray("SELECT name, id FROM `group`
-                                        WHERE course_id = ?d AND `group`.visible = 1", $course_id);
-                foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='{$assignee_row->id}'>".q($assignee_row->name)."</option>";
-                }
-                $unassigned = array_udiff($all_groups, $assignees,
-                  function ($obj_a, $obj_b) {
-                    return $obj_a->id - $obj_b->id;
-                  }
-                );
-                foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='{$unassigned_row->id}'>" . q($unassigned_row->name) . "</option>";
-                }
+    if (isset($poll) && $poll->assign_to_specific) {
+        //preparing options in select boxes for assigning to specific users/groups
+        $assignee_options='';
+        $unassigned_options='';
+        if ($poll->assign_to_specific == 2) {
+            $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
+                                   FROM poll_to_specific, `group`
+                                   WHERE `group`.id = poll_to_specific.group_id                                   
+                                   AND `group`.course_id = ?d
+                                   AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid);
+            $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='{$assignee_row->id}'>".q($assignee_row->name)."</option>";
+            }
+            $unassigned = array_udiff($all_groups, $assignees,
+              function ($obj_a, $obj_b) {
+                return $obj_a->id - $obj_b->id;
+              }
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='{$unassigned_row->id}'>" . q($unassigned_row->name) . "</option>";
+            }
 
-            } else {
-                $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                       FROM poll_to_specific, user
-                                       WHERE user.id = poll_to_specific.user_id AND poll_to_specific.poll_id = ?d", $poll->pid);
-                $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
-                                        FROM user, course_user
-                                        WHERE user.id = course_user.user_id
-                                        AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
-                                        AND user.id", $course_id);
-                foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='{$assignee_row->id}'>" . q($assignee_row->surname . ' ' . $assignee_row->givenname) . "</option>";
-                }
-                $unassigned = array_udiff($all_users, $assignees,
-                  function ($obj_a, $obj_b) {
-                    return $obj_a->id - $obj_b->id;
-                  }
-                );
-                foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='{$unassigned_row->id}'>" . q($unassigned_row->surname . ' ' . $unassigned_row->givenname) . "</option>";
-                }
+        } else {
+            $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                   FROM poll_to_specific, user
+                                   WHERE user.id = poll_to_specific.user_id AND poll_to_specific.poll_id = ?d", $poll->pid);
+            $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
+                                    FROM user, course_user
+                                    WHERE user.id = course_user.user_id
+                                    AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
+                                    AND user.id", $course_id);
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='{$assignee_row->id}'>" . q($assignee_row->surname . ' ' . $assignee_row->givenname) . "</option>";
+            }
+            $unassigned = array_udiff($all_users, $assignees,
+              function ($obj_a, $obj_b) {
+                return $obj_a->id - $obj_b->id;
+              }
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='{$unassigned_row->id}'>" . q($unassigned_row->surname . ' ' . $unassigned_row->givenname) . "</option>";
             }
         }
+    }
 
     $PollName = Session::has('PollName') ? Session::get('PollName') : (isset($poll) ? $poll->name : '');
     $PollDescription = Session::has('PollDescription') ? Session::get('PollDescription') : (isset($poll) ? $poll->description : '');
@@ -1022,7 +1018,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     // Ιnsert rows and columns of a question in db
     if (isset($_POST['submit_dimension'])) {
-        if (isset($_POST['table_col_questions']) && $_POST['table_col_questions'] > 0 
+        if (isset($_POST['table_col_questions']) && $_POST['table_col_questions'] > 0
             && isset($_POST['table_row_questions']) && $_POST['table_row_questions'] > 0) {
                 $q_row = $_POST['table_row_questions'];
                 $q_column = $_POST['table_col_questions'];
@@ -1030,7 +1026,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 // Number of columbs should be bigger or same than possible questions in db.
                 $countQuestionsAns = database::get()->querySingle("SELECT COUNT(*) as total FROM poll_question_answer
                                                                     WHERE pqid = ?d", $question_id)->total;
-                                                                
+
                 if ($q_column < $countQuestionsAns) {
                     Session::flash('message',$langNumberColumnsSmallerThanQ);
                     Session::flash('alert-class', 'alert-warning');
@@ -1071,7 +1067,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     if (count($all_questions) > 0) {
         foreach ($all_questions as $q) {
-            $all_table_questions[] = $q->answer_text; 
+            $all_table_questions[] = $q->answer_text;
         }
     } else {
         $all_table_questions = [];
@@ -1101,7 +1097,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </span>
             </div>
         </div>
-    "; 
+    ";
 
     // Create table with rows and columns
     if ($q_row > 0 && $q_column > 0) {
