@@ -56,7 +56,7 @@ foreach($q as $server) {
     // read the XML format of bbb answer and ...
     $bbb = new BigBlueButton($salt, $bbb_url);
     $xml = $bbb->getMeetingInfo($xml_url);
-    if ($xml) {
+    if ($xml and $xml->meetings->meeting) {
         // ... for each meeting room scan connected users
         foreach ($xml->meetings->meeting as $row) {
             $meet_id = $row->meetingID;
