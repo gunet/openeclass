@@ -2662,6 +2662,8 @@ function upgrade_to_3_16($tbl_options) : void
  */
 function upgrade_to_4_0($tbl_options): void {
 
+    global $langEclass, $langEclassInfo;
+
     // widgets
     if (!DBHelper::tableExists('widget')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
