@@ -29,7 +29,11 @@ $require_user_registration = true;
 $require_help = true;
 $helpTopic = 'attendance';
 
-require_once '../../include/baseTheme.php';
+if (isset($_GET['qrCode_presence'])) {
+    require_once '../../include/init.php';
+} else {
+    require_once '../../include/baseTheme.php';
+}
 require_once 'functions.php';
 require_once 'include/log.class.php';
 
@@ -193,7 +197,7 @@ if (isset($_GET['qrCode_presence'])) {
                 Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d", $attend, $checkForBook->id);
             }
         } else {
-            Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ''", $userID, $actID, $attend);
+            Database::get()->query("INSERT INTO attendance_book SET `uid` = ?d, attendance_activity_id = ?d, attend = ?d, comments = ''", $userID, $actID, $attend);
         }
         triggerAttendanceGame($course_id, $userID, $attendance_id, AttendanceEvent::UPDATE);
         Session::flash('message', $langAddPresenceSuccess);
@@ -202,7 +206,12 @@ if (isset($_GET['qrCode_presence'])) {
         Session::flash('message', $langForbidden);
         Session::flash('alert-class', 'alert-warning');
     }
-    redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+    // If the attendance tool is inactive, redirect the user to the portfolio.
+    if (isset($toolContent_ErrorExists)) { 
+        redirect_to_home_page("main/portfolio.php");
+    } else {
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+    }
 }
 
 
