@@ -943,7 +943,7 @@ b a {
   }
 
   #bgr-cheat-header.fixed img.eclass-nav-icon {
-    width: 150px;
+    max-width: 150px;
     height: 50px;
   }
 
@@ -973,7 +973,7 @@ b a {
 }
 
 .eclass-nav-icon{
-  width:200px;
+  max-width:200px;
   height:60px;
   border-radius: 4px;
 }
@@ -5205,7 +5205,7 @@ body .delThemeBtn{
   }
 
   .eclass-nav-icon{
-    width:150px; height:40px;
+    max-width:150px; height:40px;
   }
   .eclass-nav-icon-footer{
     max-width:220px;

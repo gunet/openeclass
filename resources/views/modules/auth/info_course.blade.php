@@ -64,7 +64,7 @@
                                             @if($c->is_collaborative)
                                                 {{ trans('langPageCollaboration')}}
                                             @else
-                                                {{ trans('langNavSettings')}}
+                                                {{ trans('langCoursePage')}}
                                             @endif
                                             <i class="fa-solid fa-circle-right"></i>
                                         </a>
