@@ -1026,7 +1026,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAlerts' aria-controls='navsettingsAlerts' role='tab' data-bs-toggle='tab'>$langNavSettingsAlert</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langCoursePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navMoreOptions' aria-controls='navMoreOptions' role='tab' data-bs-toggle='tab'>$langNavMoreOptions</a></li>
   </ul>
 

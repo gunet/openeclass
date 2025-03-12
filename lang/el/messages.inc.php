@@ -7061,3 +7061,4 @@ $langNowAllowNullDuration = "Η διάρκεια δεν μπορεί να είν
 $langDownloadPdfNotAllowed = "Μη επιτρεπτή λήψη αρχείου";
 $langCharts = "Διαγράμματα";
 $langDisplayRightContentInCPage = "Εμφάνιση ημερολογίου, ανακοινώσεων, μικροεφαρμογές, ολοκλήρωση μαθήματος στην αρχική σελίδα";
+$langCoursePage = "Σελίδα $langsOfCourse";
