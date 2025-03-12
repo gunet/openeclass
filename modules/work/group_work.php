@@ -22,8 +22,12 @@
 $require_current_course = true;
 $require_login = true;
 
-require_once 'functions.php';
 require_once '../../include/baseTheme.php';
+require_once 'utilities.php';
+require_once 'functions.php';
+require_once 'modules/progress/AssignmentEvent.php';
+require_once 'modules/progress/AssignmentSubmitEvent.php';
+require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'modules/document/doc_init.php';
@@ -46,10 +50,10 @@ $pageName = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
     $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGroupWorkIntro</span></div></div>";
-    show_assignments();
+    group_show_assignments();
     draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
-    submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
+    group_submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
     draw($tool_content, 2);
 } else {
     header("Location: index.php?course=$course_code");
@@ -60,10 +64,10 @@ if (isset($_GET['submit'])) {
  * @brief show non-expired assignments list to allow selection
  * @return type
  */
-function show_assignments() {
-    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langSelect,
-            $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission,
-            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS, $urlAppend, $langImgFormsDes, $langForm;
+function group_show_assignments() {
+    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langSelect, $langComments, $langDaysLeft,
+            $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission, $langByGroupMate,
+            $langCancel, $urlServer, $langTitle, $langHasExpiredS, $langImgFormsDes, $langForm, $langSubmitted;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -104,7 +108,7 @@ function show_assignments() {
         if ($subm == 'user') {
             $table_content .= $langYes;
         } elseif ($subm == 'group') {
-            $table_content .= $m['by_groupmate'];
+            $table_content .= $langByGroupMate;
         } else {
             $table_content .= $langNo;
         }
@@ -134,7 +138,7 @@ function show_assignments() {
                                     <tr class='list-header'>
                                         <th colspan='2'>$langTitle</th>
                                         <th align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
-                                        <th align='center' width='10%'>$m[submitted]</th>
+                                        <th align='center' width='10%'>$langSubmitted</th>
                                         <th align='center' width='10%'>$langSelect</th>
                                     </tr></thead>
                                     $table_content
@@ -143,7 +147,7 @@ function show_assignments() {
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='comments_id' class='col-sm-6 control-label-notes'>$m[comments]</label>
+                        <label for='comments_id' class='col-sm-6 control-label-notes'>$langComments</label>
                         <div class='col-sm-12'>
                             <textarea id='comments_id' name='comments' rows='4' cols='60' class='form-control'></textarea>
                         </div>
@@ -162,16 +166,26 @@ function show_assignments() {
     </div>";
 }
 
-// Insert a group work submitted by user uid to assignment id
-function submit_work($uid, $group_id, $id, $file) {
+
+/**
+ * @brief Insert a group work submitted by user uid to assignment id
+ * @param $uid
+ * @param $group_id
+ * @param $id
+ * @param $file
+ * @return void
+ */
+function group_submit_work($uid, $group_id, $id, $file) {
 
     global $groupPath, $langUploadError, $langUploadSuccess,
-    $langBack, $m, $tool_content, $workPath,
-    $group_sql, $webDir, $course_code, $is_editor;
+    $langBack, $tool_content, $workPath, $langTheFile, $course_id,
+    $langWasSubmitted, $group_sql, $webDir, $course_code, $is_editor;
 
     $ext = get_file_extension($file);
     $local_name = greek_to_latin('Group ' . $group_id . (empty($ext) ? '' : '.' . $ext));
-    $original_filename = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $file)->filename;
+    $q = Database::get()->querySingle("SELECT path, filename FROM document WHERE $group_sql AND course_id = ?d", $course_id);
+    $original_filename = $q->filename;
+    $file = $q->path;
     $source = $groupPath . $file;
     $destination = work_secret($id) . "/$local_name";
 
@@ -184,12 +198,12 @@ function submit_work($uid, $group_id, $id, $file) {
         $source = $zip_filename;
     }
     if (copy($source, "$workPath/$destination")) {
-        Database::get()->query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
-                                submission_ip, file_path, file_name, comments, group_id, grade_comments)
-                                VALUES (?d, ?d, NOW(), '$_SERVER[REMOTE_ADDR]', ?s, ?s, ?s, ?d, ''", $uid, $id, $destination, $original_filename, $_POST['comments'], $group_id);
+        Database::get()->query("INSERT INTO assignment_submit(uid, assignment_id, submission_date, submission_ip, file_path, file_name, comments, group_id)
+                                VALUES (?d, ?d,  ". DBHelper::timeAfter() . ", ?s, ?s, ?s, ?s, ?d)",
+                            $uid, $id, $_SERVER['REMOTE_ADDR'], $destination, $original_filename, $_POST['comments'], $group_id);
 
         $tool_content .="<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUploadSuccess
-			<br>$m[the_file] \"$original_filename\" $m[was_submitted]<br>
+			<br>$langTheFile \"$original_filename\" $langWasSubmitted<br>
 			<a href='index.php?course=$course_code'>$langBack</a></span></div><br>";
     } else {
         $tool_content .="<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadError<br>
