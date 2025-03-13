@@ -1231,7 +1231,7 @@ jContent;
                          WHERE node.id IN (" . implode(', ', $this->buildRootIdsArray()) . ")");
 
         $ret = '';
-        if (buildRootsSelection($res) > 0) {
+        if (count($res) > 0) {
             // locate root parent of current Node
             $node0 = $this->getNodeLftRgt($currentNode);
             $parent = $this->getRootParent($node0->lft, $node0->rgt);

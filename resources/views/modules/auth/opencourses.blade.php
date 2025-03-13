@@ -60,7 +60,7 @@
                     <div class='table-responsive'>
                         <table class='table-default' id="myopencourses_table">
                             <div>
-                                <div class='list-header d-flex align-items-center gap-3' style="padding: 10px 0;">
+                                <div class='list-header d-flex align-items-center gap-3 pt-2 pb-2'>
                                     @if (isset($_SESSION['uid']))
                                         <div style="max-width: 60px;width:100%">{{ trans('langRegistration') }}</div>
                                     @endif
@@ -70,7 +70,7 @@
                             </div>
                             <div class="d-flex flex-column">
                                 @foreach($courses as $mycourse)
-                                    <div class="d-flex align-items-center gap-3" style="border-top: solid 1px #EFF2FB;padding: 10px 0;">
+                                    <div class="d-flex align-items-center gap-3 border-top-default pt-2 pb-2">
                                         @if (isset($_SESSION['uid'])) {{-- logged in user --}}
                                             <div class="d-flex justify-content-center" style="max-width: 60px;width:100%">
                                                 @if (isset($myCourses[$mycourse->id]))
