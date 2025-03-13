@@ -52,7 +52,7 @@ foreach ($q as $l) {
                                           <input id='username_id' class='login-input w-100' placeholder='&#xf007;' type='text' name='uname' autocomplete='on' />
                                         </div>
                                         <div class='form-group text-start mt-3'>
-                                          <label for='password_id' class='form-label mt-4'>$langPassword&nbsp;(password)</label>
+                                          <label for='password_id' class='form-label'>$langPassword&nbsp;(password)</label>
                                           <div class='input-group flex-nowrap'>
                                             <input id='password_id' class='login-input border-end-0 w-100 mt-0' placeholder='&#xf084;' type='password' name='pass' autocomplete='on' aria-label='reveal Password'>
                                             <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color'>
@@ -60,7 +60,7 @@ foreach ($q as $l) {
                                             </span>
                                           </div>
                                         </div>
-                                        <input class='btn w-100 login-form-submit mt-4 mb-2' type='submit' name='submit' value='$langEnter'>
+                                        <input class='btn w-100 login-form-submit mt-5 mb-2' type='submit' name='submit' value='$langEnter'>
                                       </div>
                                     </form></div>
                                     <div class='col-12 text-md-start text-center mt-4'>
