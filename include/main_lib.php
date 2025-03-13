@@ -33,8 +33,7 @@ if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TTFONTDATAPATH", $webDir . '/courses/temp/pdf/');
 }
 require_once 'constants.php';
-require_once 'include/log.class.php';
-require_once 'modules/course_info/archive_functions.php';
+require_once 'log.class.php';
 require_once 'lib/session.class.php';
 require_once 'lib/file_cache.class.php';
 
@@ -2003,6 +2002,8 @@ function deleteUser($id, $log) {
 
     global $webDir;
 
+    require_once 'modules/course_info/archive_functions.php';
+
     $u = intval($id);
 
     if (!isset($webDir) or empty($webDir)) { // security
@@ -3378,7 +3379,7 @@ function faq_exist() {
 function copyright_info($id, $noImg = 1, $type = 'course'): string
 {
 
-    global $language, $license, $langCopyrightedNotFree, $langOpenNewTab;
+    global $language, $license, $langOpenNewTab;
 
     $lang = langname_to_code($language);
     $link = '';
