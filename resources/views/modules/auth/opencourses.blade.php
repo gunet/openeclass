@@ -59,20 +59,20 @@
                 <div class='col-12 mt-4'>
                     <div class='table-responsive'>
                         <table class='table-default' id="myopencourses_table">
-                            <thead>
-                                <tr class='list-header'>
+                            <div>
+                                <div class='list-header d-flex align-items-center gap-3' style="padding: 10px 0;">
                                     @if (isset($_SESSION['uid']))
-                                        <th style='width:10%'>{{ trans('langRegistration') }}</th>
+                                        <div style="max-width: 60px;width:100%">{{ trans('langRegistration') }}</div>
                                     @endif
-                                    <th>{{ trans('langCourse') }}</th>
-                                    <th class='text-end' aria-label="{{ trans('langOptions') }}">{{ trans('langGroupAccess') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                    <div>{{ trans('langCourse') }}</div>
+                                    <div style="margin-left: auto" aria-label="{{ trans('langOptions') }}">{{ trans('langGroupAccess') }}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
                                 @foreach($courses as $mycourse)
-                                    <tr>
+                                    <div class="d-flex align-items-center gap-3" style="border-top: solid 1px #EFF2FB;padding: 10px 0;">
                                         @if (isset($_SESSION['uid'])) {{-- logged in user --}}
-                                            <td style='width:10%'>
+                                            <div class="d-flex justify-content-center" style="max-width: 60px;width:100%">
                                                 @if (isset($myCourses[$mycourse->id]))
                                                     @if ($myCourses[$mycourse->id]->status != 1) {{-- display registered courses --}}
                                                         <label class='label-container' aria-label='{{ trans('langSelect') }}'>
@@ -89,10 +89,10 @@
                                                         </label>
                                                 @endif
                                                 <input type='hidden' name='changeCourse[]' value='{{ $mycourse->id }}'>
-                                            </td>
+                                            </div>
                                         @endif
 
-                                        <td>
+                                        <div>
                                             <div class='d-flex justify-content-start align-items-start gap-3 flex-wrap'>
                                                 <div>
                                                     @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id]))
@@ -150,12 +150,12 @@
                                                     @endif
                                                 @endif
                                             </div>
-                                        </td>
+                                        </div>
 
-                                        <td class='border-top-0 border-start-0 border-end-0'>
+                                        <div class='border-top-0 border-start-0 border-end-0' style="margin-left: auto;max-width: 65px;width:100%">
 
-                                            <div class="d-flex justify-content-end align-items-center gap-3">
-                                                <div>
+                                            <div class="d-flex justify-content-start align-items-center">
+                                                <div style="max-width: 30px;width:100%">
                                                     @if (!get_config('show_modal_openCourses'))
                                                         <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}" aria-label="{{ trans('langPreview') }}">
                                                             <i class="fa-solid fa-display"></i>
@@ -223,11 +223,11 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                        </td>
+                                        </div>
 
-                                    </tr>
+                                    </div>
                                 @endforeach
-                            </tbody>
+                            </div>
                         </table>
                     </div>
                 </div>
