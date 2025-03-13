@@ -117,8 +117,11 @@
 
               @include('layouts.partials.show_alert')
 
-             <div class='text-start mt-4 alert alert-info'>
-                {{ trans('langFieldsOptionalNote') }}
+             <div class='col-12'>
+                <div class='alert alert-info'>
+                    <i class='fa-solid fa-circle-info fa-lg'></i>
+                    <span>{{ trans('langFieldsOptionalNote') }}</span>
+                </div>
              </div>
 
               <div class='col-lg-6 col-12'>
