@@ -232,7 +232,7 @@ if(isset($_GET['term'])){
 
 $data['action_bar']  = action_bar([
     [ 'title' => $langRegCourses,
-      'url' => $urlAppend . 'modules/auth/courses.php',
+      'url' => $urlAppend . 'modules/auth/opencourses.php',
       'icon' => 'fa-pen-to-square',
       'level' => 'primary-label',
       'button-class' => 'submitAdminBtn' ],

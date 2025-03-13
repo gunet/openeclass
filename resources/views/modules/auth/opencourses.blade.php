@@ -95,7 +95,7 @@
                                         <div>
                                             <div class='d-flex justify-content-start align-items-start gap-3 flex-wrap'>
                                                 <div>
-                                                    @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id]))
+                                                    @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id])) {{-- open course or user is registered to it --}}
                                                         <a class='TextBold' href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @else
                                                         <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold'>{!! $mycourse->i !!}</span>&nbsp;<small>({!! $mycourse->c !!})</small>
@@ -114,6 +114,7 @@
                                                                 </a>
                                                                 </em></small>
                                                             @endif
+                                                            {{-- course is password protected --}}
                                                             @if (isset($myCourses[$mycourse->id]))
                                                                 @if ($myCourses[$mycourse->id]->status != 1 and (!empty($mycourse->password)))
                                                                     <span class='badge Warning-200-bg'>{{ trans('langPassword') }}:</span>
@@ -125,6 +126,7 @@
                                                                     <input class='form-control' type='password' name='pass{{ $mycourse->id }}' autocomplete='off' />
                                                                 @endif
                                                             @endif
+                                                            {{-- course has prerequisites --}}
                                                             {!! getCoursePrerequisites($mycourse->id) !!}
                                                         @endif
                                                     </div>

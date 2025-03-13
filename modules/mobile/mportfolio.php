@@ -69,7 +69,7 @@ function populateTools($baseurl) {
     global $langRegCourses, $session;
 
     $toolsArr = array();
-    $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/courses.php', 'coursesubscribe');
+    $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/opencourses.php', 'coursesubscribe');
     if ($session->status == USER_TEACHER) {
         $toolsArr[] = createNewTool($baseurl, $GLOBALS['langCourseCreate'], 'modules/create_course/create_course.php', 'createcourse');
     }
