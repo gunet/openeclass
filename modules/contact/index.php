@@ -61,7 +61,7 @@ if (empty($userdata->email)) {
 
         $tool_content .= action_bar(array(
         array('title' => "$langBack",
-            'url' => "../auth/courses.php",
+            'url' => "../auth/opencourses.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
         ));

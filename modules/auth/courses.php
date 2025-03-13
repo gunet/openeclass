@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
         if (count($roots) <= 0) {
             die("ERROR: no root nodes");
         } else if (count($roots) == 1) {
-            header("Location:" . $urlServer . "modules/auth/courses.php?fc=" . intval($roots[0]->id));
+            header("Location:" . $urlServer . "modules/auth/opencourses.php?fc=" . intval($roots[0]->id));
             exit();
         } else {
             $tool_content .= '<ul class="px-0">' .

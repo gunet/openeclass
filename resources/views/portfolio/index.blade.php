@@ -539,7 +539,7 @@
 
                                             </h2>
                                             <div class='d-flex mt-md-0 mt-3'>
-                                                <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
+                                                <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/opencourses.php">
                                                     <i class="fa-regular fa-pen-to-square"></i>&nbsp
                                                     {{ trans('langRegister') }}
                                                 </a>
