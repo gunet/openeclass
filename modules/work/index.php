@@ -61,7 +61,6 @@ load_js('tools.js');
 // D3 / C3 used to display assignment grade graph
 if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
     require_once 'modules/usage/usage.lib.php';
-    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
     load_js('d3/d3.min.js');
     load_js('c3-0.4.10/c3.min.js');
 }
@@ -75,7 +74,6 @@ $autojudge = new AutojudgeApp();
 if ($autojudge->isConfigured()) {
     $autojudge = AutojudgeApp::getAutojudge();
 }
-
 // ajax requests
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if ($is_course_reviewer) {
@@ -85,8 +83,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $q = Database::get()->queryArray("SELECT user_id, group_id FROM assignment_to_specific WHERE assignment_id = ?d", $_GET['ass_id']);
             foreach ($q as $user_data) {
                 if ($user_data->user_id == 0) { // assigned to group
-                    $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
-                    echo "<li>$group_name</li>";
+                    $q_group = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id);
+                    if ($q_group) {
+                        echo "<li>" . q($q_group->name) . "</li>";
+                    }
                 } else { // assigned to user
                     echo "<li>" . q(uid_to_name($user_data->user_id)) . "</li>";
                 }
@@ -116,35 +116,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit;
 }
 
-$head_content .= "<script type='text/javascript'>
-        $(document).ready(function() {
-            $(document).on('click', '.assigned_to', function(e) {
-                  e.preventDefault();
-                  var ass_id = $(this).data('ass_id');
-                  url = '$urlAppend' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;
-                  $.ajax({
-                    url: url,
-                    success: function(data) {
-                        var dialog = bootbox.dialog({
-                            message: data,
-                            title : '$langWorkAssignTo',
-                            onEscape: true,
-                            backdrop: true,
-                            buttons: {
-                                success: {
-                                    label: '$langClose',
-                                    className: 'cancelAdminBtn',
-                                }
-                            }
-                        });
-                        dialog.init(function() {
-                            typeof MathJax !== 'undefined' && MathJax.typeset();
-                        });
-                    }
-                  });
-              });
-        });
-        </script>";
 
 //Gets the student's assignment file ($file_type=NULL)
 //or the teacher's assignment ($file_type=1)
@@ -196,175 +167,7 @@ if ($is_editor) {
     }
 }
 
-// Whether to include AutoJudge JavaScript code
-$need_autojudge_js = isset($_GET['add']) || (isset($_GET['choice']) && $_GET['choice'] == 'edit');
-
 if ($is_editor) {
-    if ($need_autojudge_js and $autojudge->isEnabled() and !isset($_GET['disp_results'])) {
-        $head_content .= "
-            function check_weights() {
-                /* function to check weight validity */
-                if($('#hidden-opt').is(':visible') && $('#auto_judge').is(':checked')) {
-                    var weights = document.getElementsByClassName('auto_judge_weight');
-                    var weight_sum = 0;
-                    var max_grade = parseFloat(document.getElementById('max_grade').value);
-                    max_grade = Math.round(max_grade * 1000) / 1000;
-        
-                    for (i = 0; i < weights.length; i++) {
-                        // match ints or floats
-                        w = weights[i].value.match(/^\d+\.\d+$|^\d+$/);
-                        if(w != null) {
-                            w = parseFloat(w);
-                            if(w >= 0  && w <= max_grade)  // 0->max_grade allowed
-                            {
-                                /* allow 3 decimal digits */
-                                weight_sum += w;
-                                continue;
-                            }
-                            else{
-                                alert('Weights must be between 1 and max_grade!');
-                                return false;
-                            }
-                        }
-                        else {
-                            alert('Only numbers as weights!');
-                            return false;
-                        }
-                    }
-                    diff = Math.round((max_grade - weight_sum) * 1000) / 1000;
-                    if (diff >= 0 && diff <= 0.001) {
-                        return true;
-                    }
-                    else {
-                        alert('Weights do not sum up to ' + max_grade +
-                            '!\\n(Remember, 3 decimal digits precision)');
-                        return false;
-                    }
-                }
-                else
-                    return true;
-            }
-            function updateWeightsSum() {
-                var weights = document.getElementsByClassName('auto_judge_weight');
-                var weight_sum = 0;
-                var max_grade = parseFloat(document.getElementById('max_grade').value);
-                max_grade = Math.round(max_grade * 1000) / 1000;
-        
-                for (i = 0; i < weights.length; i++) {
-                    // match ints or floats
-                    w = weights[i].value.match(/^\d+\.\d+$|^\d+$/);
-                    if(w != null) {
-                        w = parseFloat(w);
-                        if(w >= 0  && w <= max_grade)  // 0->max_grade allowed
-                        {
-                            /* allow 3 decimal digits */
-                            weight_sum += w;
-                            continue;
-                        }
-                        else{
-                            $('#weights-sum').html('-');
-                            $('#weights-sum').css('color', 'red');
-                            return;
-                        }
-                    }
-                    else {
-                        $('#weights-sum').html('-');
-                        $('#weights-sum').css('color', 'red');
-                        return;
-                    }
-                }
-                $('#weights-sum').html(weight_sum);
-                diff = Math.round((max_grade - weight_sum) * 1000) / 1000;
-                if (diff >= 0 && diff <= 0.001) {
-                    $('#weights-sum').css('color', 'green');
-                } else {
-                    $('#weights-sum').css('color', 'red');
-                }
-            }
-        $(document).ready(function() {
-            updateWeightsSum();
-            $('.auto_judge_weight').change(updateWeightsSum);
-            $('#max_grade').change(updateWeightsSum);
-        });
-    ";
-    }
-    if ($need_autojudge_js and $autojudge->isEnabled()) {
-        $head_content .= "
-            $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
-            $(document).ready(function() { 
-                changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); 
-            });
-            
-            function changeAutojudgeScenariosVisibility() {
-                if($(this).is(':checked')) {
-                    $(this).parent().parent().find('table').show();
-                    $('#lang').parent().parent().show();
-                } else {
-                    $(this).parent().parent().find('table').hide();
-                    $('#lang').parent().parent().hide();
-                }
-            }
-            $('#autojudge_new_scenario').click(function(e) {
-                var rows = $(this).parent().parent().parent().find('tr').size()-1;
-                // Clone the first line
-                var newLine = $(this).parent().parent().parent().find('tr:first').clone();
-                // Replace 0 wth the line number
-                newLine.html(newLine.html().replace(/auto_judge_scenarios\[0\]/g, 'auto_judge_scenarios['+rows+']'));
-                // Initialize the remove event and show the button
-                newLine.find('.autojudge_remove_scenario').show();
-                newLine.find('.autojudge_remove_scenario').click(removeRow);
-                // Clear out any potential content
-                newLine.find('input').val('');
-                // Insert it just before the final line
-                newLine.insertBefore($(this).parent().parent().parent().find('tr:last'));
-                // Add the event handler
-                newLine.find('.auto_judge_weight').change(updateWeightsSum);
-                e.preventDefault();
-                return false;
-            });
-            // Remove row
-            function removeRow(e) {
-                $(this).parent().parent().remove();
-                e.preventDefault();
-                return false;
-            }
-            $('.autojudge_remove_scenario').click(removeRow);
-            
-            $(document).on('change', 'select.auto_judge_assertion', function(e) {
-                e.preventDefault();
-                var value = $(this).val();
-    
-                // Change selected attr.
-                $(this).find('option').each(function() {
-                    if ($(this).attr('selected') == 'selected') {
-                        $(this).removeAttr('selected');
-                    } else if ($(this).attr('value') == value) {
-                        $(this).attr('selected', true);
-                    }
-                });
-                var row       = $(this).parent().parent();
-                var tableBody = $(this).parent().parent().parent();
-                var indexNum  = row.index() + 1;
-    
-                if (value === 'eq' ||
-                    value === 'same' ||
-                    value === 'notEq' ||
-                    value === 'notSame' ||
-                    value === 'startsWith' ||
-                    value === 'endsWith' ||
-                    value === 'contains'
-                ) {
-                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').removeAttr('disabled');
-                } else {
-                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').val('');
-                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').attr('disabled', 'disabled');
-                }
-                return false;
-            });
-        ";
-    }
-    $head_content .= "</script>";
-
     $email_notify = (isset($_POST['send_email']) && $_POST['send_email']);
     if (isset($_POST['grade_comments'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
@@ -542,4 +345,3 @@ if ($is_editor) {
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, null, $head_content);

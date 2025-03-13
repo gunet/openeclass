@@ -191,6 +191,33 @@
                 'placeholder': '{{ trans('langSearch') }}...'
             });
             $('.dataTables_filter label').attr('aria-label', '{{ trans('langSearch') }}');
+
+            $(document).on('click', '.assigned_to', function(e) {
+                e.preventDefault();
+                var ass_id = $(this).data('ass_id');
+                let url = '{{ $urlAppend }}' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;
+                $.ajax({
+                    url: url,
+                    success: function(data) {
+                        var dialog = bootbox.dialog({
+                            message: data,
+                            title : '{{ trans('langWorkAssignTo') }}',
+                            onEscape: true,
+                            backdrop: true,
+                            buttons: {
+                                success: {
+                                    label: '{{ trans('langClose') }}',
+                                    className: 'cancelAdminBtn',
+                                }
+                            }
+                        });
+                        dialog.init(function() {
+                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                        });
+                    }
+                });
+            });
+
         });
     </script>
 

@@ -157,8 +157,11 @@ function new_edit_assignment($assignment_id = null) {
 
         $data['auto_judge'] = $row->auto_judge;
         if ($row->auto_judge == true) {
-            $data['auto_judge_scenarios'] = unserialize($row->auto_judge_scenarios);
+            $auto_judge_scenarios = unserialize($row->auto_judge_scenarios);
+        } else {
+            $auto_judge_scenarios = null;
         }
+        $data['auto_judge_scenarios'] = $auto_judge_scenarios;
         $data['submit_name'] = 'do_edit';
     } else { // new assignment
 
@@ -222,6 +225,7 @@ function new_edit_assignment($assignment_id = null) {
         $data['language'] = $language;
         $data['assignment_filename'] = '';
         $data['auto_judge_scenarios'] = null;
+        $data['auto_judge'] = false;
         $data['submit_name'] = 'new_assign';
     }
 
@@ -239,7 +243,7 @@ function new_edit_assignment($assignment_id = null) {
             $data['autojudge_enabled'] = true;
         }
     }
-
+    $data['autojudge'] = $autojudge;
     $data['grading_scales_exist'] = grading_scales_exist();
     $data['rubrics_exist'] = rubrics_exist();
     $data['assignee_options'] = $assignee_options;
@@ -256,7 +260,6 @@ function new_edit_assignment($assignment_id = null) {
     rich_text_editor(null, null, null, null);
 
     view('modules.work.new_edit_assignment', $data);
-    exit;
 }
 
 
@@ -505,8 +508,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['submit_ok'] = $submit_ok;
 
     view('modules.work.submit_assignment', $data);
-    exit;
-
 }
 
 /**
@@ -822,7 +823,6 @@ function display_assignment_submissions($id) {
     $data['assign'] = $assign;
 
     view('modules.work.assignment_submissions', $data);
-    exit;
 }
 
 
@@ -1122,7 +1122,6 @@ function display_assignments($editor = true) {
 
         view('modules.work.index_st', $data);
     }
-    exit;
 }
 
 
@@ -1372,7 +1371,6 @@ function display_assignment_submissions_graph_results($id)
     $data['action_bar'] = $action_bar;
 
     view('modules.work.plot_results', $data);
-    exit;
 }
 
 /**
@@ -3058,7 +3056,6 @@ function display_not_submitted($id) {
     $data['row'] = $row;
 
     view('modules.work.not_submitted', $data);
-    exit;
 }
 
 
