@@ -1231,7 +1231,7 @@ jContent;
                          WHERE node.id IN (" . implode(', ', $this->buildRootIdsArray()) . ")");
 
         $ret = '';
-        if (count($res) > 0) {
+        if (buildRootsSelection($res) > 0) {
             // locate root parent of current Node
             $node0 = $this->getNodeLftRgt($currentNode);
             $parent = $this->getRootParent($node0->lft, $node0->rgt);
@@ -1247,12 +1247,22 @@ jContent;
             }
             asort($nodenames);
 
-            $ret .= "<div class='col-sm-12 mt-3'><select class='form-select' $params>";
-            foreach ($nodenames as $id => $name) {
-                $selected = ($id == $parentId) ? "selected=''" : '';
-                $ret .= "<option value='" . intval($id) . "' $selected>" . q($name) . "</option>";
+            if (count($res) < 6 ) {
+                $ret .= "<div class='col-sm-12 mt-3 d-flex flex-column gap-2'>";
+                foreach ($nodenames as $id => $name) {
+                    $ret .= "<a href='$_SERVER[SCRIPT_NAME]?fc=" . intval($id) . "' class='text-decoration-none'>- " . q($name) . "</a>";
+                }
+                $ret .= "</div>";
             }
-            $ret .= "</select></div>";
+            else {
+                $ret .= "<div class='col-sm-12 mt-3'><select class='form-select' $params>";
+                foreach ($nodenames as $id => $name) {
+                    $selected = ($id == $parentId) ? "selected=''" : '';
+                    $ret .= "<option value='" . intval($id) . "' $selected>" . q($name) . "</option>";
+                }
+                $ret .= "</select></div>";
+            }
+
         }
 
         return $ret;
