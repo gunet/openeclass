@@ -15,7 +15,7 @@
             </div>
 
             <div class="col-12">
-                @foreach($infoCourse as $c)
+
                     <div class="card card-course-info px-lg-4 py-lg-4 p-3 mb-3">
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="col-md-4 col d-flex justify-content-center justify-content-md-start">
@@ -35,7 +35,6 @@
                                             {!! copyright_info($c->id) !!}
                                         @endif
                                     </div>
-
 
                                     <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;- &nbsp;{!! $c->prof_names !!}</p>
 
@@ -73,10 +72,9 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
             </div>
 
-            @if(!$is_collab_course)
+            @if (!$c->is_collaborative)
                 <div class='col-12 mt-4'>
                     <div class='row'>
                         <div class='panel'>

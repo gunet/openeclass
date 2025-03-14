@@ -24,29 +24,18 @@ $toolName = $langPreview;
 $navigation[] = array('url' => 'listfaculties.php', 'name' => $langSelectFac);
 
 $data['courseId'] = $courseId = course_code_to_id($_GET['c']);
+$data['c'] = $c = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d",$courseId);
 
-$is_collab_course = 0;
-$data['infoCourse'] = $infoCourse = Database::get()->queryArray("SELECT * FROM course WHERE id = ?d",$courseId);
-foreach($infoCourse as $c){
-      if($c->is_collaborative){
-            $is_collab_course = 1;
-      }
+if ($c->visible == COURSE_INACTIVE) {
+    redirect_to_home_page();
 }
-$data['is_collab_course'] = $is_collab_course;
 
-$data['course_descriptions'] = $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
+if (!isset($_SESSION['uid']) and $c->visible == COURSE_CLOSED) {
+    redirect_to_home_page();
+}
+
+$data['course_descriptions'] = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $courseId);
-
-$data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => 'listfaculties.php',
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-default')
-                            ),false);
-
-
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
 view('modules.auth.info_course', $data);

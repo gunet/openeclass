@@ -157,63 +157,68 @@
                                         <div class='border-top-0 border-start-0 border-end-0' style="margin-left: auto;max-width: 65px;width:100%">
 
                                             <div class="d-flex justify-content-start align-items-center">
-                                                <div style="max-width: 30px;width:100%">
-                                                    @if (!get_config('show_modal_openCourses'))
-                                                        <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}" aria-label="{{ trans('langPreview') }}">
-                                                            <i class="fa-solid fa-display"></i>
-                                                        </a>
-                                                    @else
-                                                        <button class="ClickCourse border-0 rounded-pill bg-transparent" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}" aria-label="{{trans('langPreview')}}">
-                                                            <i class='fa-solid fa-display'></i>
-                                                        </button>
+                                                @if (!isset($_SESSION['uid']) and $mycourse->visible == COURSE_CLOSED)
+                                                    <div style="max-width: 30px;width:100%">
+                                                        &mdash;
+                                                    </div>
+                                                @else
+                                                    <div style="max-width: 30px;width:100%">
+                                                        @if (!get_config('show_modal_openCourses'))
+                                                            <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}" aria-label="{{ trans('langPreview') }}">
+                                                                <i class="fa-solid fa-display"></i>
+                                                            </a>
+                                                        @else
+                                                            <button class="ClickCourse border-0 rounded-pill bg-transparent" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}" aria-label="{{trans('langPreview')}}">
+                                                                <i class='fa-solid fa-display'></i>
+                                                            </button>
 
-                                                        <!-- The Modal -->
-                                                        <div id="myModal{{$mycourse->k}}" class="modal">
+                                                            <!-- The Modal -->
+                                                            <div id="myModal{{$mycourse->k}}" class="modal">
 
-                                                            <!-- Modal content -->
-                                                            <div class="modal-content modal-content-opencourses px-lg-5 py-lg-5">
-                                                                <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
-                                                                    <div>
-                                                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                                                            <h2 class='mb-0'>{{$mycourse->i}}</h2>
-                                                                            {!! course_access_icon($mycourse->visible) !!}
-                                                                            @if($mycourse->cls > 0)
-                                                                                {!! copyright_info($mycourse->id) !!}
+                                                                <!-- Modal content -->
+                                                                <div class="modal-content modal-content-opencourses px-lg-5 py-lg-5">
+                                                                    <div class='col-12 d-flex justify-content-between align-items-start modal-display'>
+                                                                        <div>
+                                                                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                                                <h2 class='mb-0'>{{$mycourse->i}}</h2>
+                                                                                {!! course_access_icon($mycourse->visible) !!}
+                                                                                @if($mycourse->cls > 0)
+                                                                                    {!! copyright_info($mycourse->id) !!}
+                                                                                @endif
+                                                                            </div>
+                                                                            <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <button type='button' class="close" aria-label="{{ trans('langClose') }}"></button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class='course-content mt-4'>
+                                                                        <div class='col-12 d-flex justify-content-center align-items-start'>
+                                                                            @if($mycourse->img == NULL)
+                                                                                <img class='openCourseImg' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
+                                                                            @else
+                                                                                <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ trans('langCourseImage') }}" /></a>
                                                                             @endif
                                                                         </div>
-                                                                        <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <button type='button' class="close" aria-label="{{ trans('langClose') }}"></button>
-                                                                    </div>
-                                                                </div>
 
-                                                                <div class='course-content mt-4'>
-                                                                    <div class='col-12 d-flex justify-content-center align-items-start'>
-                                                                        @if($mycourse->img == NULL)
-                                                                            <img class='openCourseImg' src="{{ $urlAppend }}resources/img/ph1.jpg" alt="{{ trans('langCourseImage') }}" /></a>
-                                                                        @else
-                                                                            <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ trans('langCourseImage') }}" /></a>
-                                                                        @endif
-                                                                    </div>
-
-                                                                    <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'>
-                                                                        @if(empty($mycourse->de))
-                                                                            @if($mycourse->clb)
-                                                                                <p class='text-center'>{{ trans('langThisCollabDescriptionIsEmpty') }}</p>
+                                                                        <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'>
+                                                                            @if(empty($mycourse->de))
+                                                                                @if($mycourse->clb)
+                                                                                    <p class='text-center'>{{ trans('langThisCollabDescriptionIsEmpty') }}</p>
+                                                                                @else
+                                                                                    <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                                                                @endif
                                                                             @else
-                                                                                <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                                                                {!! $mycourse->de !!}
                                                                             @endif
-                                                                        @else
-                                                                            {!! $mycourse->de !!}
-                                                                        @endif
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @endif
-                                                </div>
-
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div>
                                                     @if ($isInOpenCoursesMode)
                                                         {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
