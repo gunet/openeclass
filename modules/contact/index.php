@@ -116,9 +116,9 @@ function form($user) {
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
         <legend class='mb-0' aria-label='$langForm'></legend>
-        <div class='col-sm-12'><div class='control-label-notes'>$langRequest $langOfCourse:</div>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
-        <div class='col-sm-12'><div class='control-label-notes'>$langFrom:&nbsp;</div><small>$user</small></div>
-        <div class='col-sm-12'><div class='control-label-notes'>$langSendTo:&nbsp;</div><small>$userprof</small></div>
+        <div class='col-sm-12'><div class='control-label-notes'>$langRequest $langOfCourse:</div><small>" . course_id_to_title($course_id) . "</small></div>
+        <div class='col-sm-12'><div class='control-label-notes mt-4'>$langFrom:&nbsp;</div><small>$user</small></div>
+        <div class='col-sm-12'><div class='control-label-notes mt-4'>$langSendTo:&nbsp;</div><small>$userprof</small></div>
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
               <textarea aria-label='$langRequestReasons' name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
