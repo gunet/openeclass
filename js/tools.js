@@ -174,7 +174,7 @@ function course_list_handler() {
                     text: title_span.text()
                 }
                 ));
-                title_span.append(' <i class="fa solid fa-check">');
+                title_span.append(' <i class="fa-solid fa-check fa-lg Success-200-cl">');
             } else {
                 if (result === 'prereqsnotcomplete') {
                     alert(lang.prereqsNotComplete);
