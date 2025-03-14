@@ -305,6 +305,7 @@ if (isset($_POST['optionsSave'])) {
     clear_default_settings();
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
+    $_SESSION['theme_changed'] = true;
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_GET['delThemeId'])) {
     $theme_id = intval($_GET['delThemeId']);
@@ -329,6 +330,7 @@ if (isset($_POST['optionsSave'])) {
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $new_theme_id);
     $_SESSION['theme_options_id'] = $new_theme_id;
+    $_SESSION['theme_changed'] = true;
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['active_theme_options'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -342,6 +344,7 @@ if (isset($_POST['optionsSave'])) {
         set_config('theme_options_id', $_POST['active_theme_options']);
         unset($_SESSION['theme_options_id']);
     }
+    $_SESSION['theme_changed'] = true;
     redirect_to_home_page('modules/admin/theme_options.php');
 } else {
     $toolName = $langAdmin;

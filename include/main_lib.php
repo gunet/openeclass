@@ -5051,7 +5051,7 @@ function theme_initialization() {
            $head_content, $webDir, $theme_id, $container,
            $leftsideImg, $eclass_banner_value, $PositionFormLogin,
            $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
-           $logo_img_small, $theme_css;
+           $logo_img_small;
 
     // Add Theme Options styles
     $styles_str = '';
@@ -11933,15 +11933,13 @@ function theme_initialization() {
             ";
         }
 
-
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
-        if (isset($styles_str) && $styles_str){
-            $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
-            if(!file_exists($fileStyleStr)){
-                file_put_contents($fileStyleStr,"");
-            }else{
-                file_put_contents($fileStyleStr,$styles_str);
-            }
+        $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
+        if (!file_exists($fileStyleStr)) {
+            file_put_contents($fileStyleStr, "");
+        } else if (isset($_SESSION['theme_changed'])) { // theme has changed ?
+            file_put_contents($fileStyleStr, $styles_str);
+            unset($_SESSION['theme_changed']);
         }
     }
 }
