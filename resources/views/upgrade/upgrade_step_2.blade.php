@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu() ] )
+                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu(false) ] )
 
                 </div>
 

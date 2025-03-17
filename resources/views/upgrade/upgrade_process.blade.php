@@ -32,7 +32,7 @@
                         <div class='col-sm-12' id='upgrade-container'></div>
                     </div>
 
-                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu() ] )
+                    @include('upgrade.upgrade_menu', [ 'upgrade_menu' => upgrade_menu($skip_theme) ] )
                 </div>
 
                 <script>
