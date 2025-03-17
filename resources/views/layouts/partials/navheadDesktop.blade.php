@@ -38,7 +38,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/opencourses.php">
+                                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/courses.php">
                                         {{ trans('langCourses') }}
                                     </a>
                                 </li>
@@ -502,7 +502,7 @@
                                     </a>
                                 </p>
                                 <p class='py-2 px-0'>
-                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/opencourses.php" aria-label="{{ trans('langOtherCourses') }}">
+                                    <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/courses.php" aria-label="{{ trans('langOtherCourses') }}">
                                         <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                     </a>
                                 </p>
@@ -540,9 +540,9 @@
        || current_url.includes('/modules/auth/altnewuser.php')){
         localStorage.setItem("menu-item", "register");
     }
-    if(current_url.includes('/modules/auth/opencourses.php')
+    if(current_url.includes('/modules/auth/courses.php')
         || current_url.includes('/modules/auth/listfaculties.php')
-        || current_url.includes('/modules/auth/opencourses.php')){
+        || current_url.includes('/modules/auth/courses.php')){
         localStorage.setItem("menu-item", "lessons");
     }
     if(current_url.includes('/main/portfolio.php')){
@@ -555,9 +555,9 @@
        && !current_url.includes('/modules/auth/formuser.php')
        && !current_url.includes('/modules/auth/newuser.php')
        && !current_url.includes('/modules/auth/altnewuser.php')
-       && !current_url.includes('/modules/auth/opencourses.php')
+       && !current_url.includes('/modules/auth/courses.php')
        && !current_url.includes('/modules/auth/listfaculties.php')
-       && !current_url.includes('/modules/auth/opencourses.php')
+       && !current_url.includes('/modules/auth/courses.php')
        && !current_url.includes('/main/portfolio.php')
        && !current_url.includes('/info/faq.php')
        && !current_url.includes('/?redirect_home')){

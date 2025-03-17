@@ -112,7 +112,7 @@ if (get_config('activate_privacy_policy_text')) {
 
 $data['action_bar'] = action_bar(array(
         array('title' => $langRegCourses,
-              'url' => $urlAppend . 'modules/auth/opencourses.php',
+              'url' => $urlAppend . 'modules/auth/courses.php',
               'icon' => 'fa-check',
               'level' => 'primary-label',
               'show' => is_enabled_course_registration($uid),

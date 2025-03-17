@@ -83,7 +83,7 @@
                                                 <ul>
                                                 @foreach ($rule['auto_enroll_deps'] as $auto_enroll_dep)
                                                     <li>
-                                                        <a href='{{ $urlAppend }}modules/auth/opencourses.php?fc={{ $auto_enroll_dep->id }}'>
+                                                        <a href='{{ $urlAppend }}modules/auth/courses.php?fc={{ $auto_enroll_dep->id }}'>
                                                             {{ getSerializedMessage($auto_enroll_dep->name) }}
                                                         </a>
                                                     </li>
