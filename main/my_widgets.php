@@ -114,19 +114,16 @@ $head_content .=
                         },
                         // Changed sorting within list
                         onUpdate: function (e) {
-                            changePos(e);       
-                            window.location.reload();                     
+                            changePos(e);                    
                         },                       
                         onRemove: function (e) {
                             // When a widget is moved between widgets areas
                             moveWidget(e);
-                            window.location.reload();
                         },                     
                         onAdd: function (e) {
                             // When a widget is added to a widget area
                             // from the widgets list
-                            addWidget(e);    
-                            window.location.reload();   
+                            addWidget(e);      
                         }                    
                     });                
                 });           
@@ -147,7 +144,7 @@ $head_content .=
                      action: 'changePos'
                   },
                   success: function(data){
-
+                    window.location.reload(); 
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -200,6 +197,7 @@ $head_content .=
                           },
                           success: function(data){ 
                                 initializeWidget(e, data);
+                                window.location.reload(); 
                           },
                           error: function(xhr, textStatus, error){
                               console.log(xhr.statusText);
@@ -230,6 +228,7 @@ $head_content .=
                   success: function(data){
                     item.removeClass('panel-default').addClass('panel-success');
                     item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
+                    window.location.reload(); 
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
