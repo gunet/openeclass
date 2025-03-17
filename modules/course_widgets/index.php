@@ -118,23 +118,24 @@ $head_content .=
                         animation: 150,
                         filter: '.remove',
                         onFilter: function (e) {
+                            console.log('000000000000000000000')
                             removeWidget(e);
                         },
                         // Changed sorting within list
                         onUpdate: function (e) {
+                            console.log('11111111111111111111')
                             changePos(e);
-                            window.location.reload();
                         },
                         onRemove: function (e) {
+                            console.log('222222222222222222222')
                             // When a widget is moved between widgets areas
                             moveWidget(e);
-                            window.location.reload();
                         },
                         onAdd: function (e) {
+                            console.log('333333333333333333333333')
                             // When a widget is added to a widget area
                             // from the widgets list
                             addWidget(e);
-                            window.location.reload();
                         }
                     });
                 });
@@ -155,7 +156,7 @@ $head_content .=
                      action: 'changePos'
                   },
                   success: function(data){
-
+                        window.location.reload();
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -180,6 +181,7 @@ $head_content .=
                   },
                   success: function(data){
                     item.hide('slow', function(){ item.remove(); });
+                    window.location.reload();
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -208,6 +210,7 @@ $head_content .=
                           },
                           success: function(data){
                                 initializeWidget(e, data);
+                                window.location.reload();
                           },
                           error: function(xhr, textStatus, error){
                               console.log(xhr.statusText);
@@ -238,6 +241,7 @@ $head_content .=
                   success: function(data){
                     item.removeClass('panel-default').addClass('panel-success');
                     item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
+                    window.location.reload();
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -280,6 +284,7 @@ $head_content .=
                             item.removeClass('panel-default').addClass('panel-success');
                             item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
                             item.find('div.panel-heading a span:nth-child(2)').html('<small>".trans('langWidgetCourse')."</small>');
+                            
                       },
                       error: function(xhr, textStatus, error){
                           console.log(xhr.statusText);
