@@ -118,21 +118,17 @@ $head_content .=
                         animation: 150,
                         filter: '.remove',
                         onFilter: function (e) {
-                            console.log('000000000000000000000')
                             removeWidget(e);
                         },
                         // Changed sorting within list
                         onUpdate: function (e) {
-                            console.log('11111111111111111111')
                             changePos(e);
                         },
                         onRemove: function (e) {
-                            console.log('222222222222222222222')
                             // When a widget is moved between widgets areas
                             moveWidget(e);
                         },
                         onAdd: function (e) {
-                            console.log('333333333333333333333333')
                             // When a widget is added to a widget area
                             // from the widgets list
                             addWidget(e);
