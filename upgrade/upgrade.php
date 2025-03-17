@@ -314,9 +314,15 @@ touch_or_error('courses/eportfolio/mydocs/index.php');
 
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
+    if (version_compare(get_config('version'), '4.0', '>')) {
+        $data['skip_theme'] = $skip_theme = true;
+    } else {
+        $data['skip_theme'] = $skip_theme = false;
+    }
+
     if (isset($_POST['submit_1'])) {
         $_SESSION['step'] = 1;
-        view('upgrade.upgrade_step_1');
+        view('upgrade.upgrade_step_1', $data);
 
     } else if (isset($_POST['submit_2'])) {
         $_SESSION['step'] = 2;
@@ -386,29 +392,31 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
             store_mail_config();
         }
 
-        set_config('homepage_intro', $_POST['homepage_intro']);
-        set_config('theme_options_id', $_POST['theme_selection']);
-        set_config('dont_display_statistics', get_config('dont_display_statistics') ?? 1);
-        set_config('dont_display_popular_courses', get_config('dont_display_popular_courses') ?? 1);
-        set_config('dont_display_testimonials', get_config('dont_display_testimonials') ?? 1);
-        set_config('dont_display_texts', get_config('dont_display_texts') ?? 1);
-        set_config('dont_display_open_courses', get_config('dont_display_open_courses') ?? 1);
-        set_config('dont_display_login_form', get_config('dont_display_login_form') ?? 0);
+        if (!$skip_theme) {
+            set_config('homepage_intro', $_POST['homepage_intro']);
+            set_config('theme_options_id', $_POST['theme_selection']);
+            set_config('dont_display_statistics', get_config('dont_display_statistics') ?? 1);
+            set_config('dont_display_popular_courses', get_config('dont_display_popular_courses') ?? 1);
+            set_config('dont_display_testimonials', get_config('dont_display_testimonials') ?? 1);
+            set_config('dont_display_texts', get_config('dont_display_texts') ?? 1);
+            set_config('dont_display_open_courses', get_config('dont_display_open_courses') ?? 1);
+            set_config('dont_display_login_form', get_config('dont_display_login_form') ?? 0);
 
-        if(get_config('dont_display_statistics')){
-            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'statistics');
-        }
-        if(get_config('dont_display_popular_courses')){
-            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'popular_courses');
-        }
-        if(get_config('dont_display_testimonials')){
-            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'testimonials');
-        }
-        if(get_config('dont_display_texts')){
-            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'texts');
-        }
-        if(get_config('dont_display_open_courses')){
-            Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'open_courses');
+            if (get_config('dont_display_statistics')) {
+                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'statistics');
+            }
+            if (get_config('dont_display_popular_courses')) {
+                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'popular_courses');
+            }
+            if (get_config('dont_display_testimonials')) {
+                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'testimonials');
+            }
+            if (get_config('dont_display_texts')) {
+                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'texts');
+            }
+            if (get_config('dont_display_open_courses')) {
+                Database::get()->query("UPDATE homepagePriorities SET visible = 0 WHERE title = ?s", 'open_courses');
+            }
         }
 
         unset($_SESSION['upgrade_step']);
@@ -521,16 +529,22 @@ function break_on_step() {
  * @brief display upgrade steps menu
  * @return string
  */
-function upgrade_menu()
+function upgrade_menu($skip_theme): string
 {
     global $langRequirements, $langThemeSettings, $langUpgradeBase;
 
-
-    $step_messages = [
-        1 => $langRequirements,
-        2 => $langThemeSettings,
-        3 => $langUpgradeBase,
-    ];
+    if ($skip_theme) {
+        $step_messages = [
+            1 => $langRequirements,
+            3 => $langUpgradeBase,
+        ];
+    } else {
+        $step_messages = [
+            1 => $langRequirements,
+            2 => $langThemeSettings,
+            3 => $langUpgradeBase,
+        ];
+    }
 
     $menu = '';
     $menu .= "<ul class='list-group list-group-flush list-group-upgrade'>";
