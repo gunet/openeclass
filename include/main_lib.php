@@ -5027,7 +5027,7 @@ function module_path($path) {
     } elseif (strpos($path, '/main/') !== false) {
         return preg_replace('|^.*(main/.*\.php)|', '\1', $path);
     } elseif (preg_match('+/auth/(opencourses|listfaculte)\.php+', $path)) {
-        return '/auth/opencourses.php';
+        return '/auth/courses.php';
     } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
         return '/auth/registration.php';
     } elseif (isset($GLOBALS['course_code']) and

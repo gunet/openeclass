@@ -25,13 +25,13 @@ if (get_config('dont_display_courses_menu')) {
     redirect_to_home_page();
 }
 
-$redirectUrl = "modules/auth/opencourses.php?fc=";
+$redirectUrl = "modules/auth/courses.php?fc=";
 $countCallback = null;
 $showEmpty = true;
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     require_once 'modules/course_metadata/CourseXML.php';
-    $redirectUrl = "modules/course_metadata/opencourses.php?fc=";
+    $redirectUrl = "modules/course_metadata/courses.php?fc=";
     $countCallback = CourseXMLElement::getCountCallback();
     $showEmpty = false;
     // exit if feature disabled
@@ -53,6 +53,6 @@ if (count($roots) <= 0) {
     header("Location:" . $urlServer . $redirectUrl . intval($roots[0]->id));
     exit();
 } else {
-    $data['tree'] = $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
+    $data['tree'] = $tree->buildNodesNavigationHtml($roots, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
     view('modules.auth.listfaculties', $data);
 }
