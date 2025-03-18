@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class='col-md-9 col-12 title-default-line-height'>
-                            @if ($preview_rubric == 1 AND $points_to_graded == 1)
+                            @if ($preview_rubric == 1 and $points_to_graded == 1)
                                 <a role='button' data-bs-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>
                                      {{ $grade }}
                                 </a>
