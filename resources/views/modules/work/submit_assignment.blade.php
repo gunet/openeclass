@@ -26,6 +26,13 @@
                         {{-- Submission details --}}
                         @if ($submissions_exist)
                             @include('modules.work.submission_details')
+                            @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $ass)
+                                @if ($start_date_review < $cdate)
+                                    @if ($reviews_per_assignment < $count_of_assign && $result)
+                                        @include('modules.work.assignment_review')
+                                    @endif
+                                @endif
+                            @endif
                         @endif
 
                         @if ($submit_ok)

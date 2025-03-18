@@ -3,7 +3,6 @@
 
 @push('head_styles')
     <style>
-        .table-responsive { width: 100%; }
         .table-responsive td { word-break: break-word; }
     </style>
 @endpush
@@ -11,15 +10,6 @@
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
-
-            /*initialize_filemodal({
-                download: '{{ trans('langDownload') }}',
-                print: '{{ trans('langPrint') }}',
-                fullScreen: '{{ trans('langFullScreen') }}',
-                newTab: '{{ trans('langNewTab') }}',
-                cancel: '{{ trans('langCancel') }}'
-            }); */
-
             $('.onlineText') . click(function (e){
                 e.preventDefault();
                 var sid = $(this) . data('id');
@@ -79,7 +69,7 @@
                 });
             });
 
-            $('a#transfer_grades').click(function(e) {
+            $('button#transfer_grades').click(function(e) {
                 e.preventDefault();
                 $('input[name=grade_review]').each(function() {
                     if (this.value) {
@@ -119,7 +109,7 @@
 
                         {{--  Peer Review assignment distribution --}}
                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline)
-                            @if ($assign->reviews_per_assignment < $count_of_ass)
+                            @if ($assign->reviews_per_assignment < $count_of_assignments)
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}' enctype='multipart/form-data'>
                                     <input type='hidden' name='assign' value='{{ $id }}'>
                                     <div class='form-group'>
@@ -149,13 +139,13 @@
                                 <br>
                                 <div class='alert alert-success'>
                                     <strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}
-                                    {{-- button for transferring student peer review grades to teacher grades --}}
-                                    @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0) && $is_editor)
-                                        <div class='text-end' style='margin-bottom: 15px;'>
-                                            <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</a>
-                                        </div>
-                                    @endif
                                 </div>
+                                {{-- button for transferring student peer review grades to teacher grades --}}
+                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_assignments > 0) && $is_editor)
+                                    <div class='mt-4'>
+                                        <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
+                                    </div>
+                                @endif
 
                                 <div class='table-responsive mt-3'>
                                     <table class='table table-default'>
@@ -200,7 +190,7 @@
                                                             </div>
                                                         @endif
 
-                                                        {{ $mess }}
+                                                        {!! $review_message !!}
 
                                                         @if (trim($row->comments != '')) {{-- student comments --}}
                                                             <div class='mt-1'>
@@ -263,8 +253,8 @@
                                                     @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                                         <td class='col-md-1 text-center'>
                                                             <div class='form-group'>
-                                                                $grade_review_field
-                                                                $condition
+                                                                {!! $grade_review_field !!}
+                                                                {!! $condition !!}
                                                             </div>
                                                         </td>
                                                     @endif
