@@ -177,7 +177,9 @@
                                             @foreach ($result as $row)
                                             {{-- student data --}}
                                                 <tr>
-                                                    <td class='count-col' style='width: 5%'>{{ $loop->iteration }}.</td>
+                                                    <td class='count-col' style='width: 5%'>
+                                                        {{ $loop->iteration }}.
+                                                    </td>
                                                     <td class='user-col' style='width: 45%'>
                                                         @if (empty($row->group_id))
                                                             {!! display_user($row->uid) !!}
@@ -197,7 +199,8 @@
                                                             @endif
                                                         @endif
 
-                                                        @if (trim($row->comments != '')) {{-- student comments --}}
+                                                            {{-- student comments --}}
+                                                        @if (trim($row->comments != ''))
                                                             <div class='mt-1'>
                                                                 <small> {{ $row->comments }}</small>
                                                             </div>
@@ -256,7 +259,7 @@
                                                         </small>
                                                     </td>
 
-                                                    {{-- Peer Review results --}}
+                                                    {{-- Peer Review Grade results --}}
                                                     @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                                         @if ($count_of_assignments > $reviews_per_assignment && $rows_assignment_grading_review)
                                                             <td class='col-md-1 text-center'>
