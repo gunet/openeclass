@@ -316,12 +316,19 @@ if ($is_editor) {
     if (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
         if (isset($_POST['work_submit'])) {
-            $pageName = $m['SubmissionStatusWorkInfo'];
+            $pageName = $langSubmissionStatusWorkInfo;
             if (!$unit) {
                 $navigation[] = $works_url;
             }
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
+        } else if (isset($_POST['grade_comments_review'])) {  //call  submit_grade_reviews
+            $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
+            $pageName = q($work_title_raw);
+            if (!isset($unit)) {
+                $navigation[] = $works_url;
+            }
+            submit_grade_reviews($_POST);
         } else {
             $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             $pageName = q($work_title_raw);
@@ -332,15 +339,6 @@ if ($is_editor) {
         }
     } else {
         display_assignments(false);
-    }
-    //call  submit_grade_reviews
-    if (isset($_POST['grade_comments_review'])) {
-        $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
-        $pageName = q($work_title_raw);
-        if (!isset($unit)) {
-            $navigation[] = $works_url;
-        }
-        submit_grade_reviews($_POST);
     }
 }
 

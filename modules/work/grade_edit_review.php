@@ -51,18 +51,18 @@ draw($tool_content, 2);
  * @param type $assign (contains an array with the assignment's details)
  */
 function show_form($id, $sid, $assign) {
-    global $unit, $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
+    global $unit, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
            $langBack, $assign, $langWorkOnlineText, $course_id, $pageName, $langEndPeerReview,
            $langReviewStart, $langReviewEnd, $langImgFormsDes, $langGradeComments,
-           $langFileName;
+           $langFileName, $langSGradebookBook, $langWorkNoSubmission;
 
-    $pageName = $m['addgradecomments'];
+    $pageName = $langSGradebookBook;
 
 	$cdate = date('Y-m-d H:i:s');
 	$sub = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d", $sid);
 	if ($sub) {
 		$comments = Session::has('comments') ? Session::get('comments') : q($sub->comments);
-		//ean uparxei to to submission_type grapse ws etiketa online keimeno me to keimeno tou dipla alliws grapse ws etiketa onoma arxeioy kai to arxeio dipla ws download link
+		//ean uparxei to submission_type grapse ws etiketa online keimeno me to keimeno tou dipla alliws grapse ws etiketa onoma arxeioy kai to arxeio dipla ws download link
 		if($assign->submission_type) {
 			$submission = "<div class='form-group mt-3'>
 							<label class='col-sm-3 control-label-notes'>$langWorkOnlineText:</label>
@@ -148,13 +148,13 @@ function show_form($id, $sid, $assign) {
                     <div class='form-group mt-4'>
                         <div class='col-sm-12 control-label-notes'>$langReviewStart</div>
                         <div class='col-sm-12'>
-                            <span>".q($assign->start_date_review)."</span>
+                            <span>" . format_locale_date(strtotime($assign->start_date_review)) . "</span>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
                         <div class='col-sm-12 control-label-notes'>$langReviewEnd</div>
                         <div class='col-sm-12'>
-                            <span>".q($assign->due_date_review)."</span>
+                            <span>" . format_locale_date(strtotime($assign->due_date_review)) . "</span>
                         </div>
                     </div>
                     $submission
@@ -178,7 +178,7 @@ function show_form($id, $sid, $assign) {
                             </div>
                         </div>";
                     } else {
-                        Session::flash('message',$langEndPeerReview);
+                        Session::flash('message', $langEndPeerReview);
                         Session::flash('alert-class', 'alert-danger');
                     }
 			$tool_content .= "
@@ -190,7 +190,7 @@ function show_form($id, $sid, $assign) {
     </div>";
 	} else {
 		//an den uparxoun ergasies pou eginan submit
-        Session::flash('message',$m['WorkNoSubmission']);
+        Session::flash('message', $langWorkNoSubmission);
         Session::flash('alert-class', 'alert-danger');
 		redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
 	}

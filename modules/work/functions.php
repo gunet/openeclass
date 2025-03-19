@@ -595,7 +595,7 @@ function display_assignment_review($id) {
  */
 function display_assignment_submissions($id) {
 
-    global $m, $course_code, $course_id, $urlAppend, $autojudge;
+    global $course_id, $autojudge;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
@@ -605,6 +605,7 @@ function display_assignment_submissions($id) {
                                                       WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $data = display_assignment_details($assign);
 
+    $grade_review_field = $condition = $review_message = '';
     $cdate = date('Y-m-d H:i:s');
 
     $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
@@ -622,15 +623,9 @@ function display_assignment_submissions($id) {
         $order = 'surname';
     }
 
-    $grade_review_field = $condition = $review_message = '';
-    $data['start_date_review'] = $assign->start_date_review;
-    $data['due_date_review'] = $assign->due_date_review;
-    $data['reviews_per_assignment'] = $assign->reviews_per_assignment;
-    // disabled grades submit if turnitin
-    $data['disabled'] = ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? ' disabled': '';
     $count_of_assignments = countSubmissions($id);
     if ($count_of_assignments > 0) {
-        $data['result'] = $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
+        $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                 assign.uid uid, assign.group_id group_id,
                                                 assign.submission_date submission_date,
                                                 assign.grade_submission_date grade_submission_date,
@@ -646,37 +641,13 @@ function display_assignment_submissions($id) {
                                                ORDER BY $order $rev, assign.id", $id);
 
         $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
-        //--------------------------------------------------------------------------------------------------------
-        $seen = [];
-        foreach ($result as $row) {
-            // is it a group assignment?
-            if (!empty($row->group_id)) {
-                if (isset($seen[$row->group_id])) {
-                    continue;
-                }
-                $subContentGroup = "$m[groupsubmit] " .
-                    "<a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
-                    "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
-            } else {
-                if (isset($seen[$row->uid])) {
-                    continue;
-                }
-                $subContentGroup = '';
-            }
-
-            if (Session::has("grades")) {
-                $grades = Session::get('grades');
-                $grade = $grades[$row->id]['grade'];
-            } else {
-                $grade = $row->grade;
-            }
-            $seen[$row->group_id] = $seen[$row->uid] = true;
-        } //END of Foreach
-
-        // disabled grades submit if turnitin
-        $disabled_submit = ($assign->assignment_type == 1) ? ' disabled': '';
-        //----------------------------------------------------------------------------------------
     }
+
+    $data['start_date_review'] = $assign->start_date_review;
+    $data['due_date_review'] = $assign->due_date_review;
+    $data['reviews_per_assignment'] = $assign->reviews_per_assignment;
+    // disabled grades submit if turnitin
+    $data['disabled'] = ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? ' disabled': '';
     $data['id'] = $id;
     $data['autojudge'] = $autojudge;
     $data['grade_review_field'] = $grade_review_field;
@@ -3078,7 +3049,7 @@ function submit_grade_reviews($args) {
         if ($unit) {
             redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
         } else {
-            redirect_to_home_page("modules/work/index.php?course=$course_code");
+            redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
