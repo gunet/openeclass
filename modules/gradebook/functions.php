@@ -137,7 +137,7 @@ function display_user_grades($gradebook_id) {
 function new_gradebook() {
 
     global $tool_content, $course_code, $langStart, $langEnd, $head_content, $language,
-           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect, $urlAppend, $langImgFormsDes;
+           $langTitle, $langSubmit, $langInsert, $langGradebookRange, $langGradeScalesSelect, $langImgFormsDes;
 
         load_js('bootstrap-datetimepicker');
         $head_content .= "
@@ -226,7 +226,7 @@ function new_gradebook() {
                                 .form_buttons(array(
                                     array(
                                             'class' => 'submitAdminBtn',
-                                            'text' => $langSave,
+                                            'text' => $langSubmit,
                                             'name' => 'newGradebook',
                                             'value'=> $langInsert
                                     ),
@@ -333,9 +333,9 @@ function delete_gradebook_user($gradebook_id, $userid) {
 function gradebook_settings($gradebook_id) {
 
     global $tool_content, $course_code,
-           $langTitle, $langSave, $langStart, $langEnd, $head_content,
+           $langTitle, $langSubmit, $langStart, $langEnd, $head_content,
            $langSave, $langGradebookRange, $langGradebookUpdate,
-           $gradebook, $langGradeScalesSelect, $language, $urlAppend, $langImgFormsDes;
+           $gradebook, $langGradeScalesSelect, $language, $langImgFormsDes;
     load_js('bootstrap-datetimepicker');
     $head_content .= "
     <script type='text/javascript'>
@@ -420,7 +420,7 @@ function gradebook_settings($gradebook_id) {
                                       ".form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
-                                            'text' => $langSave,
+                                            'text' => $langSubmit,
                                             'name' => 'submitGradebookSettings',
                                             'value'=> $langGradebookUpdate
                                         ),
