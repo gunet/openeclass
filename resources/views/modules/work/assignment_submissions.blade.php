@@ -190,7 +190,12 @@
                                                             </div>
                                                         @endif
 
-                                                        {!! $review_message !!}
+                                                        {{-- peer review status message --}}
+                                                        @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
+                                                            @if ($count_of_assignments > $assign->reviews_per_assignment && $rows_assignment_grading_review)
+                                                                {!! get_review_status_message($start_date_review, $id, $row->uid) !!}
+                                                            @endif
+                                                        @endif
 
                                                         @if (trim($row->comments != '')) {{-- student comments --}}
                                                             <div class='mt-1'>
@@ -200,7 +205,9 @@
 
                                                         <div class='mt-2'>
                                                             @if ($row->grade_comments or $row->grade_comments_filename) {{-- teacher comments --}}
-                                                                <strong>{{ trans('langGradeComments') }} </strong>
+                                                                <strong>
+                                                                    {{ trans('langGradeComments') }}
+                                                                </strong>
                                                                 @if (preg_match('/[\n\r] +\S/', trim(q_math($row->grade_comments))))
                                                                     <div style='white-space: pre-wrap'>{!! trim(q_math($row->grade_comments)) !!}</div>
                                                                 @else
@@ -251,12 +258,13 @@
 
                                                     {{-- Peer Review results --}}
                                                     @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
-                                                        <td class='col-md-1 text-center'>
-                                                            <div class='form-group'>
-                                                                {!! $grade_review_field !!}
-                                                                {!! $condition !!}
-                                                            </div>
-                                                        </td>
+                                                        @if ($count_of_assignments > $reviews_per_assignment && $rows_assignment_grading_review)
+                                                            <td class='col-md-1 text-center'>
+                                                                <div class='form-group'>
+                                                                    {!! get_grade_review_field($due_date_review, $row->id, $reviews_per_assignment) !!}
+                                                                </div>
+                                                            </td>
+                                                        @endif
                                                     @endif
 
                                                     {{-- grade input text --}}

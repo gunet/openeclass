@@ -595,10 +595,7 @@ function display_assignment_review($id) {
  */
 function display_assignment_submissions($id) {
 
-    global $m, $course_code, $course_id, $urlAppend,
-           $langQuestionView, $langPeerReviewCompletedByStudent,
-           $autojudge, $langPeerReviewPendingByStudent,
-           $langPeerReviewMissingByStudent, $langQuestionCorrectionTitle2, $langFrom2;
+    global $m, $course_code, $course_id, $urlAppend, $autojudge;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
@@ -626,6 +623,11 @@ function display_assignment_submissions($id) {
     }
 
     $grade_review_field = $condition = $review_message = '';
+    $data['start_date_review'] = $assign->start_date_review;
+    $data['due_date_review'] = $assign->due_date_review;
+    $data['reviews_per_assignment'] = $assign->reviews_per_assignment;
+    // disabled grades submit if turnitin
+    $data['disabled'] = ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? ' disabled': '';
     $count_of_assignments = countSubmissions($id);
     if ($count_of_assignments > 0) {
         $data['result'] = $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
@@ -643,9 +645,7 @@ function display_assignment_submissions($id) {
                                                WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                ORDER BY $order $rev, assign.id", $id);
 
-        // disabled grades submit if turnitin
-        $data['disabled'] = ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? ' disabled': '';
-
+        $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
         //--------------------------------------------------------------------------------------------------------
         $seen = [];
         foreach ($result as $row) {
@@ -662,57 +662,6 @@ function display_assignment_submissions($id) {
                     continue;
                 }
                 $subContentGroup = '';
-            }
-            if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
-                $grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
-                $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
-                if ($count_of_assignments > $assign->reviews_per_assignment && $rows) {
-                    if ($cdate > $assign->start_date_review) { //status aksiologhshs kathe foithth
-                        $assigns = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid);
-                        $r_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $id, $row->uid)->count;
-                        $counter = 0;
-                        foreach ($assigns as $ass) {
-                            if (empty($ass->grade)) {
-                                $counter++;
-                            }
-                        }
-                        if ($counter == 0) {
-                            $review_message = "<div class='text-heading-h6' style='color: green;'>$langPeerReviewCompletedByStudent</div>&nbsp;";
-                        } elseif ($counter < $r_count){
-                            $review_message = "<div class='text-heading-h6' style='color: darkorange;'>$langPeerReviewPendingByStudent<br>($langQuestionCorrectionTitle2 $counter $langFrom2 $r_count)</div>";
-                        } else {
-                            $review_message = "<div class='text-heading-h6' style='color: red;'>$langPeerReviewMissingByStudent</div>";
-                        }
-                    }
-                    // grade_field pedio
-                    if ($cdate > $assign->due_date_review){
-                        //select tous vathmous ths kathe upovolhs kai vres ton mo kai topothethse ton sto pedio
-                        $grades= Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id = ?d", $row->id);
-                        $count_grade = 0;
-                        $sum = 0;
-                        $grade_review = '';
-                        foreach ($grades as $as){
-                            if ($as->grade){
-                                $count_grade++;
-                            }
-                            if ($count_grade == $assign->reviews_per_assignment){
-                                $condition = "<span class='fa fa-fw fa-check text-success' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
-                            }else{
-                                $condition = "<span class='fa fa-fw fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
-                            }
-                            $sum = $sum + $as->grade;
-                        }
-                        if ($sum != 0) {
-                            $grade = $sum / $count_grade;
-                            if (is_float($grade)) {
-                                $grade_review = number_format($grade,1);
-                            } else {
-                                $grade_review = $grade;
-                            }
-                        }
-                        $grade_review_field = "<input class='form-control' id='$row->id' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
-                    }
-                }
             }
 
             if (Session::has("grades")) {
@@ -3319,4 +3268,83 @@ function submit_review_per_ass($id) {
     Session::flash('message', $success_msgs);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+}
+
+/**
+ * @brief Teacher view: for peer review submissions get student review status message
+ * @param $start_date_review
+ * @param $assignment_id
+ * @param $user_id
+ * @return string
+ */
+function get_review_status_message ($start_date_review, $assignment_id, $user_id): string
+{
+    global $langPeerReviewCompletedByStudent, $langPeerReviewPendingByStudent,
+           $langPeerReviewMissingByStudent, $langQuestionCorrectionTitle2, $langFrom2;
+
+    $cdate = date('Y-m-d H:i:s');
+    $review_message = '';
+
+    if ($cdate > $start_date_review) { //status aksiologhshs kathe foithth
+        $assigns = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $assignment_id, $user_id);
+        $r_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_grading_review WHERE assignment_id = ?d AND users_id = ?d", $assignment_id, $user_id)->count;
+        $counter = 0;
+        foreach ($assigns as $ass) {
+            if (empty($ass->grade)) {
+                $counter++;
+            }
+        }
+        if ($counter == 0) {
+            $review_message = "<div class='text-heading-h6' style='color: green;'>$langPeerReviewCompletedByStudent</div>&nbsp;";
+        } elseif ($counter < $r_count) {
+            $review_message = "<div class='text-heading-h6' style='color: darkorange;'>$langPeerReviewPendingByStudent<br>($langQuestionCorrectionTitle2 $counter $langFrom2 $r_count)</div>";
+        } else {
+            $review_message = "<div class='text-heading-h6' style='color: red;'>$langPeerReviewMissingByStudent</div>";
+        }
+    }
+    return $review_message;
+}
+
+
+/**
+ * @brief Teacher view: for peer review submissions get grade review field
+ * @param $due_date_review
+ * @param $user_submit_id
+ * @param $reviews_per_assignment
+ * @return string
+ */
+function get_grade_review_field($due_date_review, $user_submit_id, $reviews_per_assignment): string
+{
+
+    $cdate = date('Y-m-d H:i:s');
+    $condition = '';
+    $grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
+    if ($cdate > $due_date_review) {
+        //select tous vathmous ths kathe upovolhs kai vres ton mo kai topothethse ton sto pedio
+        $grades= Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id = ?d", $user_submit_id);
+        $count_grade = 0;
+        $sum = 0;
+        $grade_review = '';
+        foreach ($grades as $as) {
+            if ($as->grade){
+                $count_grade++;
+            }
+            if ($count_grade == $reviews_per_assignment) {
+                $condition = "<span class='fa fa-fw fa-check text-success' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$reviews_per_assignment'></span>";
+            } else {
+                $condition = "<span class='fa fa-fw fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$reviews_per_assignment'></span>";
+            }
+            $sum = $sum + $as->grade;
+        }
+        if ($sum != 0) {
+            $grade = $sum / $count_grade;
+            if (is_float($grade)) {
+                $grade_review = number_format($grade,1);
+            } else {
+                $grade_review = $grade;
+            }
+        }
+        $grade_review_field = "<input class='form-control' id='$row->id' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
+    }
+    return $grade_review_field.$condition;
 }
