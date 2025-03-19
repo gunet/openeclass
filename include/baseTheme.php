@@ -66,9 +66,9 @@ function view($view_file, $view_data = array()) {
             $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
             $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
             $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
-            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user, $langFaq, $langRegistration,
-            $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer, 
-            $favicon_img, $theme_css, $theme_id;
+            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user,
+            $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer,
+            $favicon_img, $theme_css, $theme_id, $langClose;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
@@ -105,9 +105,6 @@ function view($view_file, $view_data = array()) {
     $template_base = $urlAppend . 'template/' . $theme;
     if (isset($_SESSION['uname'])) {
         $uname = $_SESSION['uname'];
-    }
-    if (isset($GLOBALS['leftNavExtras'])) {
-        $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
     }
 
     if (!$toolName and $pageName) {
@@ -162,7 +159,6 @@ function view($view_file, $view_data = array()) {
                     $item['bread_href'] = $urlAppend . 'main/portfolio.php';
                 }
             } else {
-                $hideStart = true;
                 $homebreadcrumb = get_config('homepage_name');
                 if (isset($homebreadcrumb)) {
                     $item['bread_text'] = $homebreadcrumb;
@@ -231,24 +227,24 @@ function view($view_file, $view_data = array()) {
     if ($require_help) {
         $head_content .= "
         <script>
-        $(function() {
-            $('#help-btn').click(function(e) {
-                e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {
-                    bootbox.alert({
-                        size: 'large',
-                        backdrop: true,
-                        message: data,
-                        buttons: {
-                            ok: {
-                                label: '". js_escape($GLOBALS['langClose']). "',
-                                className: 'submitAdminBtnDefault'
+            $(function() {
+                $('#help-btn').click(function(e) {
+                    e.preventDefault();
+                    $.get($(this).attr(\"href\"), function(data) {
+                        bootbox.alert({
+                            size: 'large',
+                            backdrop: true,
+                            message: data,
+                            buttons: {
+                                ok: {
+                                    label: '". js_escape($langClose). "',
+                                    className: 'submitAdminBtnDefault'
+                                }
                             }
-                        }
+                        });
                     });
                 });
             });
-        });
         </script>
         ";
     }
@@ -344,7 +340,7 @@ function view($view_file, $view_data = array()) {
             'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin',
             'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
             'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
-            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator', 
+            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator',
             'is_simple_user', 'theme_css', 'theme_id');
     $data = array_merge($global_data, $view_data);
 
