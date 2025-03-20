@@ -67,85 +67,88 @@
                                             {!! $group_select_form !!}
 
                                             @if (!$is_group_assignment || $count_user_group_info || $on_behalf_of)
-                                                @if ($submission_type == 1)  {{-- online text submission--}}
-                                                    <div class='form-group mt-0'>
-                                                        <label for='submission_text' class='col-sm-6 control-label-notes'>{{ trans('langWorkOnlineText') }}:</label>
-                                                        <div class='col-sm-12'>
-                                                            {!! rich_text_editor('submission_text', 10, 20, '')!!}
-                                                        </div>
-                                                    </div>
-                                                @elseif ($submission_type == 2) {{-- Multiple file submission --}}
-                                                    <script>
-                                                        $(function () { initialize_multifile_submission({{ $max_submissions }}) });
-                                                    </script>
-                                                    <div class='form-group mt-0'>
-                                                        <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>
-                                                        <div class='col-sm-10'>
-                                                            <div>
-                                                                <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
-                                                                    <span class='fa fa-plus'></span>
-                                                                </button>
+                                                @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN)
+                                                    {!! show_turnitin_integration($id) !!}
+                                                @else
+                                                    @if ($submission_type == 1)  {{-- online text submission--}}
+                                                        <div class='form-group mt-0'>
+                                                            <label for='submission_text' class='col-sm-6 control-label-notes'>{{ trans('langWorkOnlineText') }}:</label>
+                                                            <div class='col-sm-12'>
+                                                                {!! rich_text_editor('submission_text', 10, 20, '')!!}
                                                             </div>
-                                                            <input type='file' name='userfile[]' id='userfile'>
+                                                        </div>
+                                                    @elseif ($submission_type == 2) {{-- Multiple file submission --}}
+                                                        <script>
+                                                            $(function () { initialize_multifile_submission({{ $max_submissions }}) });
+                                                        </script>
+                                                        <div class='form-group mt-0'>
+                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFileLimit') }}: {{ $max_submissions }} </label>
+                                                            <div class='col-sm-10'>
+                                                                <div>
+                                                                    <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
+                                                                        <span class='fa fa-plus'></span>
+                                                                    </button>
+                                                                </div>
+                                                                <input type='file' name='userfile[]' id='userfile'>
+                                                            </div>
+                                                        </div>
+                                                    @else {{-- Single file submission --}}
+                                                        <div class='form-group mt-0'>
+                                                            <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>
+                                                            <div class='col-sm-10'>
+                                                                <input type='file' name='userfile' id='userfile'>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                    @if ($on_behalf_of)
+                                                        <div class='form-group mt-4'>
+                                                            <div class='col-sm-6 control-label-notes'>{{ trans('langGradebookGrade') }}:</div>
+                                                            <div class='col-sm-2'>
+                                                                {!! $grade_field !!}
+                                                                <input type='hidden' name='on_behalf_of' value='1'>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group mt-4'>
+                                                            <div class='col-sm-10 col-sm-offset-2'>
+                                                                <div class='checkbox'>
+                                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                        <input type='checkbox' name='send_email' id='email_button' value='1'>
+                                                                        <span class='checkmark'></span>
+                                                                        {{ trans('langEmailToUsers') }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif`
+
+                                                    <div class='form-group mt-4'>
+                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                        <div class='col-sm-12'>
+                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                                                         </div>
                                                     </div>
-                                                @else {{-- Single file submission --}}
-                                                    <div class='form-group mt-0'>
-                                                        <label for='userfile' class='col-sm-6 control-label-notes'>{{ trans('langWorkFile') }}:</label>
-                                                        <div class='col-sm-10'>
-                                                            <input type='file' name='userfile' id='userfile'>
+
+                                                    <div class='form-group mt-4'>
+                                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                                            {!!
+                                                                form_buttons(array(
+                                                                    array(
+                                                                    'class'         => 'submitAdminBtn',
+                                                                    'text'          => trans('langSubmit'),
+                                                                    'name'          => 'work_submit',
+                                                                    'value'         => trans('langSubmit')
+                                                                    ),
+                                                                    array(
+                                                                        'class' => 'cancelAdminBtn',
+                                                                        'href' => $back_link
+                                                                        )
+                                                                ))
+                                                            !!}
                                                         </div>
                                                     </div>
-                                                @endif
+                                               @endif
                                             @endif
-
-                                            @if ($on_behalf_of)
-                                                <div class='form-group mt-4'>
-                                                    <div class='col-sm-6 control-label-notes'>{{ trans('langGradebookGrade') }}:</div>
-                                                    <div class='col-sm-2'>
-                                                        {!! $grade_field !!}
-                                                        <input type='hidden' name='on_behalf_of' value='1'>
-                                                    </div>
-                                                </div>
-                                                <div class='form-group mt-4'>
-                                                    <div class='col-sm-10 col-sm-offset-2'>
-                                                        <div class='checkbox'>
-                                                            <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                <input type='checkbox' name='send_email' id='email_button' value='1'>
-                                                                <span class='checkmark'></span>
-                                                                {{ trans('langEmailToUsers') }}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                            <div class='form-group mt-4'>
-                                                <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-12 d-flex justify-content-end align-items-center'>
-                                                    {!!
-                                                        form_buttons(array(
-                                                            array(
-                                                            'class'         => 'submitAdminBtn',
-                                                            'text'          => trans('langSubmit'),
-                                                            'name'          => 'work_submit',
-                                                            'value'         => trans('langSubmit')
-                                                            ),
-                                                            array(
-                                                                'class' => 'cancelAdminBtn',
-                                                                'href' => $back_link
-                                                                )
-                                                        ))
-                                                    !!}
-                                                </div>
-                                            </div>
-
                                         </fieldset>
                                     </form>
                                     <small>
