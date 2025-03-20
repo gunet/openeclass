@@ -1029,10 +1029,9 @@ function has_access_to_units($unit_id, $assign_to_specific, $user_id)
             foreach ($q as $group_data) {
                 if ($group_data->user_id == $user_id) {
                     return true;
-                } else {
-                    return false;
                 }
             }
+            return false;
     }
 }
 
