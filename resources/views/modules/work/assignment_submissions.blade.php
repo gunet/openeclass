@@ -177,7 +177,7 @@
                                             @foreach ($result as $row)
                                             {{-- student data --}}
                                                 <tr>
-                                                    <td class='count-col' style='width: 5%'>
+                                                    <td class='count-col' style='width: 1%'>
                                                         {{ $loop->iteration }}.
                                                     </td>
                                                     <td class='user-col' style='width: 45%'>
@@ -302,7 +302,6 @@
                                                             </a>
                                                         </td>
                                                     @endif
-
                                                 </tr>
                                             @endforeach
                                         </tbody>

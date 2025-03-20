@@ -279,7 +279,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $_SESSION['has_unlocked'] = array();
 
     $group_select_form = $form_link = $back_link = $group_select_hidden_input = '';
-    //$grade_field = '';
     $submissions_exist = false;
     $submit_ok = false;
     $submission_details_data = $assignment_review_data = [];
@@ -334,7 +333,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
 
         $WorkStart = new DateTime($row->submission_date);
         $current_date = new DateTime('NOW');
-        $interval = $WorkStart->diff($current_date);
         if ($WorkStart > $current_date) {
             Session::flash('message',$langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
             Session::flash('alert-class', 'alert-warning');
@@ -366,71 +364,62 @@ function display_student_assignment($id, $on_behalf_of = false) {
         }
 
         if ($submit_ok) {
-            if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $tool_content .= show_turnitin_integration($id);
-            } else { // display submission form
-
-                if (!$_SESSION['courses'][$course_code]) {
-                    return;
-                }
-                /*if ($assignment->late_submission) {
-                    $tool_content .= "<div class='alert alert-warning'>$langWarnAboutDeadLine</div>";
-                }*/
-
-                if ($is_group_assignment) {
-                    if (!$on_behalf_of) {
-                        if (count($user_group_info) == 1) {
-                            $gids = array_keys($user_group_info);
-                            $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
-                            $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
-                        } elseif ($user_group_info) {
-                            $group_select_form = "
-                            <div class='form-group mt-4'>
-                                <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
-                                <div class='col-sm-12'>
-                                  " . selection($user_group_info, 'group_id') . "
-                                </div>
-                            </div>";
-                        } else {
-                            $group_link = $urlAppend . 'modules/group/';
-                            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langThisIsGroupAssignment <br />" .
-                                sprintf(count($user_group_info) ?
-                                    $langGroupAssignmentPublish :
-                                    $langGroupAssignmentNoGroups, $group_link) .
-                                "</span></div></div>\n";
-                        }
-                    } else {
-                        $groups_with_no_submissions = groups_with_no_submissions($id);
-                        if (count($groups_with_no_submissions)>0) {
-                            $group_select_form = "
-                            <div class='form-group mt-4'>
-                                <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
-                                <div class='col-sm-12'>
-                                  " . selection($groups_with_no_submissions, 'group_id') . "
-                                </div>
-                            </div>";
-                        } else {
-                            Session::flash('message', $langNoneWorkGroupNoSubmission);
-                            Session::flash('alert-class', 'alert-danger');
-                            redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
-                        }
-                    }
-                } elseif ($on_behalf_of) {
-                    $users_with_no_submissions = users_with_no_submissions($id);
-
-                    if (count($users_with_no_submissions) > 0) {
+            if (!$_SESSION['courses'][$course_code]) {
+                return;
+            }
+            if ($is_group_assignment) {
+                if (!$on_behalf_of) {
+                    if (count($user_group_info) == 1) {
+                        $gids = array_keys($user_group_info);
+                        $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
+                        $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
+                    } elseif ($user_group_info) {
                         $group_select_form = "
                         <div class='form-group mt-4'>
-                            <label for='user_id' class='col-sm-6 control-label-notes'>$langOnBehalfOf:</label>
+                            <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
-                              " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
+                              " . selection($user_group_info, 'group_id') . "
                             </div>
                         </div>";
                     } else {
-                        Session::flash('message', $langNoneWorkUserNoSubmission);
+                        $group_link = $urlAppend . 'modules/group/';
+                        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langThisIsGroupAssignment <br />" .
+                            sprintf(count($user_group_info) ?
+                                $langGroupAssignmentPublish :
+                                $langGroupAssignmentNoGroups, $group_link) .
+                            "</span></div></div>\n";
+                    }
+                } else {
+                    $groups_with_no_submissions = groups_with_no_submissions($id);
+                    if (count($groups_with_no_submissions)>0) {
+                        $group_select_form = "
+                        <div class='form-group mt-4'>
+                            <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
+                            <div class='col-sm-12'>
+                              " . selection($groups_with_no_submissions, 'group_id') . "
+                            </div>
+                        </div>";
+                    } else {
+                        Session::flash('message', $langNoneWorkGroupNoSubmission);
                         Session::flash('alert-class', 'alert-danger');
                         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
                     }
+                }
+            } elseif ($on_behalf_of) {
+                $users_with_no_submissions = users_with_no_submissions($id);
+
+                if (count($users_with_no_submissions) > 0) {
+                    $group_select_form = "
+                    <div class='form-group mt-4'>
+                        <label for='user_id' class='col-sm-6 control-label-notes'>$langOnBehalfOf:</label>
+                        <div class='col-sm-12'>
+                          " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
+                        </div>
+                    </div>";
+                } else {
+                    Session::flash('message', $langNoneWorkUserNoSubmission);
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
                 }
             }
         }
@@ -482,7 +471,8 @@ function display_student_assignment($id, $on_behalf_of = false) {
     }
 
     $data['row'] = $row;
-    //$data['grade_field'] = $grade_field;
+    $data['assignment_type'] = $row->assignment_type;
+    $data['grading_type'] = $grading_type;
     $data['submission_type'] = $row->submission_type;
     $data['max_submissions'] = $row->max_submissions;
     $data['count_user_group_info'] = count($user_group_info);
