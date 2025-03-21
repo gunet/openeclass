@@ -750,9 +750,6 @@ function check_opencourses_reviewer() {
 
 /**
  * @brief just make sure that the $uid variable isn't faked
- * @global type $urlServer
- * @global type $require_valid_uid
- * @global type $uid
  */
 function check_uid() {
 
@@ -1042,11 +1039,22 @@ function datetime_remove_seconds($datetime) {
     return preg_replace('/:\d\d$/', '', $datetime);
 }
 
-// Returns user's previous login date, or today's date if no previous login
-function last_login($uid) {
+/**
+ * @brief returns user's previous login date, or today's date if no previous login
+ * @param $uid
+ * @param $time
+ * @return string
+ */
+function last_login($uid, $time = false) {
 
-    $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') AS last_login FROM loginout
+    if ($time) {
+        $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d %H:%i') AS last_login FROM loginout
                           WHERE id_user = ?d AND action = 'LOGIN'", $uid)->last_login;
+    } else {
+        $last_login = Database::get()->querySingle("SELECT DATE_FORMAT(MAX(`when`), '%Y-%m-%d') AS last_login FROM loginout
+                          WHERE id_user = ?d AND action = 'LOGIN'", $uid)->last_login;
+    }
+
     if (!$last_login) {
         $last_login = date('Y-m-d');
     }
@@ -1111,7 +1119,6 @@ function randomkeys($length) {
 // and optionally the number of decimal places required,
 // it returns a formated number string, with unit identifier.
 function format_bytesize($kbytes, $dec_places = 2) {
-    global $text;
 
     if ($kbytes > 1048576) {
         $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
@@ -1139,10 +1146,6 @@ function is_javascript_enabled() {
     return isset($_COOKIE['javascriptEnabled']) and $_COOKIE['javascriptEnabled'];
 }
 
-function add_check_if_javascript_enabled_js() {
-    return '<script type="text/javascript">document.cookie="javascriptEnabled=true";</script>';
-}
-
 // Check if we can display activation link (e.g. module_id is one of our modules)
 // Link is displayed only on main page of each module
 function display_activation_link($module_id) {
@@ -1162,8 +1165,13 @@ function display_activation_link($module_id) {
  * @param type $module_id
  * @return boolean
  */
-function visible_module($module_id) {
-    global $course_id;
+function visible_module($module_id, $course_id = null): bool
+{
+    if ($course_id == null) {
+        $course_id = $GLOBALS['course_id'];
+    } else {
+        $course_id = $course_id;
+    }
 
     $v = Database::get()->querySingle("SELECT visible FROM course_module
                                 WHERE module_id = ?d AND
@@ -1253,6 +1261,37 @@ function current_module_id() {
     }
     return false;
 }
+
+/**
+ * @brief fills an array with user groups (group_id => group_name)
+ * passing $as_id will give back only the groups that have been given the specific assignment
+ * @param type $uid
+ * @param type $course_id
+ * @param type $as_id
+ * @return type
+ */
+function user_group_info($uid, $course_id, $as_id = NULL) {
+    $gids = array();
+
+    if ($uid != null) {
+        $q = Database::get()->queryArray("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
+            WHERE group_members.group_id = `group`.id
+            AND `group`.course_id = ?d AND group_members.user_id = ?d", $course_id, $uid);
+    } else {
+        if (!is_null($as_id) && Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?d", $as_id)->assign_to_specific) {
+            $q = Database::get()->queryArray("SELECT `group`.name AS grp_name,`group`.id AS grp_id FROM `group`, assignment_to_specific WHERE `group`.id = assignment_to_specific.group_id AND `group`.course_id = ?d AND assignment_to_specific.assignment_id = ?d", $course_id, $as_id);
+        } else {
+            $q = Database::get()->queryArray("SELECT name AS grp_name,id AS grp_id FROM `group` WHERE course_id = ?d", $course_id);
+        }
+    }
+
+    foreach ($q as $r) {
+        $gids[$r->grp_id] = $r->grp_name;
+    }
+    return $gids;
+}
+
+
 
 // Returns true if a string is invalid UTF-8
 function invalid_utf8($s) {

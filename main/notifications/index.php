@@ -30,6 +30,9 @@ if(isset($_SESSION['dbname'])){
 require_once '../../include/baseTheme.php';
 require_once 'notifications.inc.php';
 
+//print_a(get_course_notifications(course_code_to_id('TMAPRE104')));
+//exit;
+
 if(isset($_GET['c']) && isset($_GET['m'])){
     $x='cm';$res = get_course_module_notifications($_GET['c'], $_GET['m']);
 }
@@ -43,7 +46,7 @@ elseif(isset($_GET['m'])){
 }
 
 if(!is_null($res)){
-        echo json_encode($res);
+    echo json_encode($res);
 } else {
     echo "$x: No data";
 }
