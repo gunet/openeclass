@@ -5570,6 +5570,9 @@ function theme_initialization() {
                 .label.label-success{
                     color: $theme_options_styles[ColorGreenText] !important;
                 }
+                .active-unit::after{
+                    background: $theme_options_styles[ColorGreenText] !important;
+                }
             ";
         }
 
@@ -10412,10 +10415,6 @@ function theme_initialization() {
                 .tree-units summary::before,
                 .tree-sessions summary::before{
                     background: $theme_options_styles[linkColor] url($urlServer/resources/img/units-expand-collapse.svg) 0 0;
-                }
-
-                .active-unit::after {
-                    background: $theme_options_styles[linkColor] !important;
                 }
 
                 .prev-next-learningPath{

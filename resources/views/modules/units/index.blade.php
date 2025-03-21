@@ -137,7 +137,7 @@
                                                 <ul>
                                                     @foreach ($units as $cu)
                                                         <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
-                                                            <a class='TextBold{{ $cu->id != $id ? " gray-color" : "" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
+                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
                                                                 {{ $cu->title }}
                                                             </a>
                                                             <br>

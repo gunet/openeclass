@@ -58,7 +58,7 @@
                                     <p>{!! format_locale_date(strtotime($c->created), null, false) !!}</p>
 
                                     <div class='col-12 mt-4 d-flex justify-content-md-start justify-content-center'>
-                                        <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/index.php'>
+                                        <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/'>
 
                                             @if($c->is_collaborative)
                                                 {{ trans('langPageCollaboration')}}
