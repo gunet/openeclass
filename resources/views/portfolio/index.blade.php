@@ -489,7 +489,7 @@
                             </div>
                             @endif
                             <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($last_login)) }}</span>
                             </p>
                         </div>
                     </div>

@@ -40,10 +40,6 @@ load_js('datatables');
 
 $data['tree'] = new Hierarchy();
 $user = new User();
-
-$_user['persoLastLogin'] = last_login($uid);
-$_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
-
 $user_announcements = '';
 $lesson_content = '';
 $lesson_ids = [];
@@ -142,15 +138,12 @@ foreach ($portfolio_page_sidebar->getUserAndAdminWidgets($uid) as $key => $widge
 }
 
 $data['departments'] = $user->getDepartmentIds($uid);
-
-$data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout
-                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
-
 $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, registered_at,
                                             has_icon, description, password,
                                             email_public, phone_public, am_public
                                         FROM user
                                         WHERE id = ?d", $uid);
+$data['last_login'] = last_login($uid, true);
 
 if ($_SESSION['status'] == USER_TEACHER) {
     if(!get_config('show_always_collaboration')){
