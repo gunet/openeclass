@@ -11980,7 +11980,9 @@ function theme_initialization() {
         }
         if (!empty($theme_options_styles['bgColor'])){
             $styles_str .= "
-                .body-learning-path{
+                .body-learning-path,
+                .iframe-learningPath,
+                .body-learningPath{
                     background-color:$theme_options_styles[bgColor]; 
                 }
             ";

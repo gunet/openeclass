@@ -24,6 +24,8 @@
 $require_current_course = true;
 require_once '../../../include/init.php';
 
+$theme_id = get_config('theme_options_id') ?? 0;
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -34,6 +36,9 @@ require_once '../../../include/init.php';
         <link rel="stylesheet" href="../../../template/modern/css/fonts_all/typography.css?<?php echo time(); ?> ">
         <link href='../../../template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
         <link rel="stylesheet" href="../../../template/modern/css/default.css?<?php echo time(); ?> ">
+        <?php if($theme_id > 0){ ?>
+            <link href="../../../courses/theme_data/<?php echo $theme_id; ?>/style_str.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" />
+        <?php } ?>
         <script src="../../../js/bootstrap.bundle.min.js"></script>
     </head>
     <body class='body-learningPath' style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">
