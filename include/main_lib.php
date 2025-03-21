@@ -10456,14 +10456,6 @@ function theme_initialization() {
                     background: $theme_options_styles[linkColor] url($urlServer/resources/img/units-expand-collapse.svg) 0 0;
                 }
 
-                .prev-next-learningPath{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                #leftTOCtoggler{
-                    color: $theme_options_styles[linkColor];
-                }
-
                 .more-enabled-login-methods div{
                     color: $theme_options_styles[linkColor];
                 }
@@ -11967,6 +11959,29 @@ function theme_initialization() {
             $styles_str .= "
                 .contact-content{
                     background-image: url($contact_image);
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// LEARNPATH - SPECIAL CASES  ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkColorHeader'])){
+            $styles_str .= "
+                #leftTOCtoggler,
+                .prev-next-learningPath{
+                    color:$theme_options_styles[linkColorHeader];
+                }
+
+            ";
+        }
+        if (!empty($theme_options_styles['bgColor'])){
+            $styles_str .= "
+                .body-learning-path{
+                    background-color:$theme_options_styles[bgColor]; 
                 }
             ";
         }

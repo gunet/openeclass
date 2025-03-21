@@ -4219,14 +4219,6 @@ function get_theme_options() {
                     background: $theme_options_styles[linkColor] url(../../resources/img/units-expand-collapse.svg) 0 0;
                 }
 
-                .prev-next-learningPath{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                #leftTOCtoggler{
-                    color: $theme_options_styles[linkColor];
-                }
-
                 .more-enabled-login-methods div{
                     color: $theme_options_styles[linkColor];
                 }
@@ -4954,6 +4946,22 @@ function get_theme_options() {
                 .module-container{
                     background-color: $theme_options_styles[bgColorContentPlatform];
                 }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// LEARNPATH - SPECIAL CASES  ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['linkColorHeader'])){
+            $styles_str .= "
+                #leftTOCtoggler,
+                .prev-next-learningPath{
+                    color:$theme_options_styles[linkColorHeader];
+                }
+
             ";
         }
 
