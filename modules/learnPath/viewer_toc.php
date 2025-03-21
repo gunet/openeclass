@@ -174,14 +174,14 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<div class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath"></span> </a></div>';
+        $prevNextString .= '<div class="prevnext"><a class="btn-next-prev" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath"></span> </a></div>';
     } else {
-        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive'><span class='fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive btn-next-prev'><span class='fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath'></span></a></div>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<div class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath"></span></a></div>';
+        $prevNextString .= '<div class="prevnext"><a class="btn-next-prev" href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath"></span></a></div>';
     } else {
-        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive'><span class='fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive btn-next-prev'><span class='fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath'></span></a></div>";
     }
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
@@ -270,9 +270,9 @@ echo "<!DOCTYPE HTML>
     /* ]]> */
     </script>
 </head>
-<body>
-    <nav class='navbar navbar-eclass navbar-learningPath py-0'>
-        <div class='container-fluid header-container-learningPath py-0'>
+<body class='body-learning-path'>
+    <nav class='navbar navbar-eclass navbar-learningPath py-0 w-100'>
+        <div class='w-100 header-container-learningPath py-0'>
             <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
                 <div>
                     <a id='leftTOCtoggler' class='btn'><span class='fa fa-bars fa-lg'></span></a>
