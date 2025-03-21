@@ -703,7 +703,7 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content mb-2'>
                     <div class='item-header clearfix'>
-                        <div class='item-title d-flex justify-content-between $class_vis'>";
+                        <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
 
             $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
@@ -827,7 +827,7 @@ if ($total_cunits > 0) {
                 <div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'>
                     <div class='item-content'>
                         <div class='item-header clearfix'>
-                            <div class='item-title d-flex justify-content-between $class_vis'>";
+                            <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
 
             $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
             if ($not_shown) {
