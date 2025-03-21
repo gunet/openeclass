@@ -90,16 +90,16 @@ function select_tc_server($course_id) {
  */
 function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
-    global $course_id, $uid, $tool_content, $langAdd, $course_code,
+    global $course_id, $uid, $tool_content, $course_code,
         $langUnitDescr, $langStart, $langVisible, $langInvisible,
         $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore,
         $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay,
-        $langTitle, $langNo, $langYes,
+        $langTitle, $langNo, $langYes, $langSubmit,
         $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers,
         $langAllUsers, $langParticipants, $langBBBRecord,
         $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2,
         $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll,
-        $langNewBBBSessionEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
+        $langNewBBBSessionEnd, $langBBBEndHelpBlock, $langBBBExternalUsers,
         $langReadMore, $langBBBmuteOnStart, $langBBBlockSettingsDisableCam,
         $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat,
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
@@ -138,6 +138,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $status = ($row->active == 1 ? 1 : 0);
         $record = ($row->record == "true" ? true : false);
         $running_at = $row->running_at;
+        $data_external_users = [];
         $unlock_interval = $row->unlock_interval;
         $r_group = explode(",",$row->participants);
         $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
@@ -183,7 +184,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         $submit_name = 'update_tc_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
-        $value_message = $langModify;
         $meeting_id_input = $row->meeting_id;
     } else { // new TC meeting
         $meeting_id_input = '';
@@ -206,7 +206,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_name = 'new_tc_session';
         $submit_id = '';
         $google_meet_link = $zoom_link = $webex_link = $microsoft_teams_link = '';
-        $value_message = $langAdd;
         $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
         $checked_lockSettingsDisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
@@ -655,7 +654,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_id
         <div class='form-group mt-5'>
             <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='$submit_name' value='$value_message'>
+                <input class='btn btn-primary' type='submit' name='$submit_name' value='$langSubmit'>
             </div>
         </div>
         </fieldset>
