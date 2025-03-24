@@ -141,7 +141,7 @@
                                     <strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}
                                 </div>
                                 {{-- button for transferring student peer review grades to teacher grades --}}
-                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_assignments > 0) && $is_editor)
+                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline)
                                     <div class='mt-4'>
                                         <button class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}' id='transfer_grades'>{{ trans('langTransferGrades') }}</button>
                                     </div>
@@ -163,7 +163,7 @@
 
                                                 {!! sort_link(trans('langSubDate'), 'date', 'class="date-col"') !!}
 
-                                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
+                                                @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
                                                     {!! sort_link(trans('langPeerReviewGrade'), '') !!}
                                                 @endif
                                                 {!! sort_link(trans('langGradebookGrade'), 'grade', 'style="width: 10%;" class="grade-col"') !!}

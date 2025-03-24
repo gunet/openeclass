@@ -439,16 +439,12 @@ function display_student_assignment($id, $on_behalf_of = false) {
 
         // h sunarthhsh theloume na kaleitai an einai peer review kai an exei
         // upovalei ergasia o foithths dhladh an einai true h $submissions_exist
-        $data['ass'] = $ass = Database::get()->querySingle("SELECT * FROM assignment_submit
-                                 WHERE assignment_id = ?d AND uid = ?d ", $id, $uid);
-        $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
-                                 WHERE assignment_id = ?d ", $id);
+        $data['ass'] = $ass = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE assignment_id = ?d AND uid = ?d ", $id, $uid);
+        $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
         $data['start_date_review'] = $row->start_date_review;
         if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $submissions_exist && $ass) {
             if ($row->start_date_review < $cdate) {
-                if ($reviews_per_assignment < $count_of_assign && $rows) {
-                    $assignment_review_data = display_assignment_review($id);
-                } elseif ($reviews_per_assignment < $count_of_assign && empty($rows)) {
+                if ($reviews_per_assignment < $count_of_assign && empty($rows)) {
                     Session::flash('message', $langPendingPeerSubmissions);
                     Session::flash('alert-class', 'alert-warning');
                 } elseif ($reviews_per_assignment > $count_of_assign) {
@@ -459,6 +455,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 Session::flash('message', $langPendingPeerSubmissions);
                 Session::flash('alert-class', 'alert-warning');
             }
+            $assignment_review_data = display_assignment_review($id);
         }
     } else {
         redirect_to_home_page("modules/work/index.php?course=$course_code");
@@ -469,7 +466,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
     } else {
         $data = $submission_details_data+$assignment_details_data;
     }
-
     $data['row'] = $row;
     $data['assignment_type'] = $row->assignment_type;
     $data['grading_type'] = $grading_type;
@@ -3305,7 +3301,7 @@ function get_grade_review_field($due_date_review, $user_submit_id, $reviews_per_
                 $grade_review = $grade;
             }
         }
-        $grade_review_field = "<input class='form-control' id='$row->id' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
+        $grade_review_field = "<input class='form-control' id='$user_submit_id' type='text' value='$grade_review' name='grade_review' maxlength='4' size='3' disabled>";
     }
     return $grade_review_field.$condition;
 }
