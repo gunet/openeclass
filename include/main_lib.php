@@ -11988,6 +11988,23 @@ function theme_initialization() {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// PROGRESSBAR - SPEACIAL CASES /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) &&
+                            !empty($theme_options_styles['BgColorProgressBarAndText'])){
+
+            $styles_str .= "
+                .progress-circle-bar::before{
+                    color: $theme_options_styles[BgColorProgressBarAndText];
+                }
+            ";
+        }
+
+
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
         $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
         if (!file_exists($fileStyleStr)) {
