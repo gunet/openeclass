@@ -1748,8 +1748,13 @@ function add_units_navigation($entry_page = false) {
  * @param type $all_units
  * @return array
  */
-function findUserVisibleUnits($uid, $all_units) {
-    global $course_id;
+function findUserVisibleUnits($uid, $all_units, $course_id = null) {
+
+    if ($course_id == null) {
+        $course_id = $GLOBALS['course_id'];
+    } else {
+        $course_id = $course_id;
+    }
 
     $user_units = [];
     $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, cu.assign_to_specific, ub.completed
