@@ -190,6 +190,24 @@ function get_course_notifications($course = NULL) {
             }
         }
     }
+
+    // course units notifications
+    $all_units = Database::get()->queryArray("SELECT id
+                                            FROM course_units
+                                            WHERE course_id = ?d
+                                            AND visible = 1 ", $cid);
+    $visible_user_units = findUserVisibleUnits($uid, $all_units, $cid);
+    foreach ($visible_user_units as $unit_id) {
+        $cnt_unit_resources = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM unit_resources
+                                                WHERE unit_id = ?d
+                                                AND date > ?t
+                                                AND visible = 1", $unit_id->id, $last_login)->cnt;
+        if ($cnt_unit_resources > 0) {
+            $notifications[] = (object) [ 'course_id' => $cid, 'unit_id' => $unit_id->id, 'notcount' => $cnt_unit_resources, 'last_visit' => $last_login ];
+            break;
+        }
+    }
+
     return $notifications;
 }
 

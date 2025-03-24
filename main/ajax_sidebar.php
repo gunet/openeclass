@@ -40,7 +40,7 @@ echo json_encode($json_obj, JSON_UNESCAPED_UNICODE);
 
 function getCoursesNotifications(): array
 {
-    global $modules, $icons_map, $urlAppend;
+    global $modules, $icons_map, $urlAppend, $langCourseUnits;
 
     $notifications_arr = array();
     $notification_content = array();
@@ -60,13 +60,26 @@ function getCoursesNotifications(): array
                         <div class='card-body p-lg-2 p-3'>
                             <div class='d-flex justify-content-start align-items-center gap-4 flex-wrap'>";
                 foreach ($notifications as $n) {
-                    $modules_array = (isset($modules[$n->module_id]))? $modules : '';
-                    if (isset($modules_array[$n->module_id]['image']) && isset($icons_map['icon_map'][$n->module_id])) {
-                        $sideBarCourseNotifyIcon = $icons_map['icon_map'][$n->module_id];
-                        $sideBarCourseNotifyCount = $n->notcount;
-                        $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
-                        $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] . '/index.php?course=' . $course_code;
+                    if (isset($n->unit_id)) {
                         $notification_content['notification_content'] .= "
+                                <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative link-color' 
+                                    href='" . $urlAppend . "modules/units/index.php?course=" . $course_code . "&id=" . $n->unit_id . "'
+                                    data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langCourseUnits' aria-label='$langCourseUnits'>
+                                    <i class='fa-regular fa-file fa-md'></i>
+                                    <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill Accent-200-bg vsmall-text'>
+                                        $n->notcount
+                                        <span class='visually-hidden'></span>
+                                    </span>
+                                </a>";
+                        $existNotification++;
+                    }  else {
+                        $modules_array = (isset($modules[$n->module_id])) ? $modules : '';
+                        if (isset($modules_array[$n->module_id]['image']) && isset($icons_map['icon_map'][$n->module_id])) {
+                            $sideBarCourseNotifyIcon = $icons_map['icon_map'][$n->module_id];
+                            $sideBarCourseNotifyCount = $n->notcount;
+                            $sideBarCourseNotifyTitle = q($modules_array[$n->module_id]['title']);
+                            $sideBarCourseNotifyURL = $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] . '/index.php?course=' . $course_code;
+                            $notification_content['notification_content'] .= "
                                 <a type='button' class='btn btn-sm btn-portfolio-notifications text-decoration-none position-relative link-color' href='$sideBarCourseNotifyURL'
                                     data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$sideBarCourseNotifyTitle' aria-label='$sideBarCourseNotifyTitle'>
                                     <i class='$sideBarCourseNotifyIcon fa-md'></i>
@@ -74,9 +87,9 @@ function getCoursesNotifications(): array
                                         $sideBarCourseNotifyCount
                                         <span class='visually-hidden'></span>
                                     </span>
-                                </a>
-                        ";
-                        $existNotification++;
+                                </a>";
+                            $existNotification++;
+                        }
                     }
                 }
                 if ($existNotification == 0) {

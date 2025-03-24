@@ -30,9 +30,6 @@ if(isset($_SESSION['dbname'])){
 require_once '../../include/baseTheme.php';
 require_once 'notifications.inc.php';
 
-//print_a(get_course_notifications(course_code_to_id('TMAPRE104')));
-//exit;
-
 if(isset($_GET['c']) && isset($_GET['m'])){
     $x='cm';$res = get_course_module_notifications($_GET['c'], $_GET['m']);
 }
