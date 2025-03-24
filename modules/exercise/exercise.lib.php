@@ -61,8 +61,8 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
                 </h3>
             </div>
             <div class='panel-body'>
-                <h4 class='mb-2'>" . q_math($questionName) . "</h4>
-                <div class='mb-2'>$questionDescription</div>
+                <h4 class='mb-4'>" . q_math($questionName) . "</h4>
+                <div class='mb-4'>$questionDescription</div>
                 <div class='text-center'>" .
                     (file_exists($picturePath . '/quiz-' . $questionId) ?
                         "<img src='../../$picturePath/quiz-$questionId'>" : "") . "
