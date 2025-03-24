@@ -262,8 +262,10 @@
                                         </small>
                                     </div>
                                 @elseif (intval($row->due_date_review))
-                                    <div class='alert alert-danger'>
+                                    <div>
+                                        <small class="label label-danger">
                                             {{ trans('langEndDeadLine') }}
+                                        </small>
                                     </div>
                                 @endif
                             </div>
