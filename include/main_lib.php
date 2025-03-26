@@ -5978,6 +5978,10 @@ function theme_initialization() {
                 .border-bottom-default{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
                 }
+
+                #unitResources .unit-divider{
+                    background-color: $theme_options_styles[clBorderBottomAccordions];
+                }
             ";
         }
 
