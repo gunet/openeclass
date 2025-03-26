@@ -2374,6 +2374,16 @@ function groups_with_no_submissions($id) {
     return $groups;
 }
 
+/**
+ * @brief Returns an array of the details of assignment $id
+ * @param type $id
+ * @return type
+ */
+function get_assignment_details($id) {
+    global $course_id;
+    return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+}
+
 
 /**
  * @brief get user assignment's file submissions
@@ -3018,9 +3028,11 @@ function submit_grade_reviews($args) {
         $criteria = unserialize($rubric->scales);
         $r_grade = 0;
         foreach ($criteria as $ci => $criterio) {
-            if(is_array($criterio['crit_scales']))
+            if(is_array($criterio['crit_scales']) and isset($args['grade_rubric'][$ci])) {
                 $r_grade += $criterio['crit_scales'][$args['grade_rubric'][$ci]]['scale_item_value'] * $criterio['crit_weight'];
+            }
         }
+
         $grade = $r_grade/100;
         $grade = is_numeric($grade) ? $grade : null;
         $comment = $args['comments'];
