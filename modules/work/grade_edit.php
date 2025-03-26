@@ -87,16 +87,6 @@ if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
 } else {
     redirect_to_home_page('modules/work/index.php?course='.$course_code);
 }
-/**
- * @brief Returns an array of the details of assignment $id
- * @global type $course_id
- * @param type $id
- * @return type
- */
-function get_assignment_details($id) {
-    global $course_id;
-    return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
-}
 
 /**
  * @brief delete user assignment review
@@ -161,7 +151,7 @@ function show_edit_form($id, $sid, $assign): void
                             if(is_array($criterio['crit_scales'])){
                                 $criteria_list .= "<li><ul class='list-unstyled'>";
                                 foreach ($criterio['crit_scales'] as $si=>$scale) {
-                                    @$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
+                                    $selectedrb = (isset($sel_criteria[$ci]) and $sel_criteria[$ci]==$si)?"checked=\"checked\"":"";
                                     $criteria_list .= "<li class='list-group-item'>
                                         <input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
                                         $scale[scale_item_name] ( $scale[scale_item_value] )
