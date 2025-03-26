@@ -645,7 +645,7 @@
                                                                     <div class='card-body'>
 
                                                                         <div class="lesson-title line-height-default">
-                                                                            <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
+                                                                            <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/">
                                                                                 {{ $course->title }}&nbsp;({{ $course->public_code }})
                                                                             </a>
                                                                         </div>

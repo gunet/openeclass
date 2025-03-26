@@ -139,7 +139,7 @@ if(isset($_GET['term'])){
                                     if($course->visible == 3){
                                       $invisibleCourse = 'InvisibleCourse';
                                     }
-                                    $html .= "<a class='$invisibleCourse TextBold my-2' href='{$urlServer}courses/{$course->code}/index.php'>".q($course->title)."</a>
+                                    $html .= "<a class='$invisibleCourse TextBold my-2' href='{$urlServer}courses/{$course->code}/'>".q($course->title)."</a>
                                 </div>
                             </div>
 

@@ -807,6 +807,8 @@ if (isset($_GET['pdf'])) {
             h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
+            .text-danger{color: red;}
+            .text-success{color: green;}
           </style>
         </head>
         <body>" . get_platform_logo() .
