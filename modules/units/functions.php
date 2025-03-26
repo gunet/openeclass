@@ -920,7 +920,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     }
 
     if (!empty($comments)) {
-        $comment_box = "<small>$comments</small>";
+        $comment_box = "<small class='comment-lp'>$comments</small>";
     }
     $class_vis = ($status == 0) ? ' class="not_visible"' : ' ';
     return "
