@@ -18,10 +18,6 @@
  *
  */
 
-/**
- * @file ajax_sidebar.php
- * @brief Sidebar AJAX handler
- */
 $require_login = true;
 
 require_once '../include/baseTheme.php';
@@ -47,8 +43,7 @@ function getCoursesNotifications(): array
 
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs']) > 0) {
         foreach ($_GET['courseIDs'] as $id) {
-            //if (isset($_SESSION['notifications'][$id]) and time() - $_SESSION['notifications'][$id]['ts'] < 300) {
-            if (isset($_SESSION['notifications'][$id]) and time() - $_SESSION['notifications'][$id]['ts'] < 1) {
+            if (isset($_SESSION['notifications'][$id]) and time() - $_SESSION['notifications'][$id]['ts'] < 300) {
                 $notifications_arr[$id] = $_SESSION['notifications'][$id]['content'];
             } else {
                 $existNotification = 0;

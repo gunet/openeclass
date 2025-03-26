@@ -83,7 +83,7 @@
         bootbox.setDefaults({
             locale: "{{ $language }}"
         });
-        var notificationsCourses = { getNotifications: '{{ $urlAppend }}main/ajax_sidebar.php' };
+        var notificationsCourses = { getNotifications: '{{ $urlAppend }}main/notifications.php' };
     </script>
 
     {{-- owl-carousel js --}}
