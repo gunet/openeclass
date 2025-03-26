@@ -1024,10 +1024,10 @@ function has_access_to_units($unit_id, $assign_to_specific, $user_id)
                 return false;
             }
         case 2:
-            $unit_to_group_id = Database::get()->querySingle("SELECT group_id FROM course_units_to_specific WHERE unit_id = ?d", $unit_id)->group_id;
-            $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $unit_to_group_id);
-            foreach ($q as $group_data) {
-                if ($group_data->user_id == $user_id) {
+            $unit_to_group_ids = Database::get()->queryArray("SELECT group_id FROM course_units_to_specific WHERE unit_id = ?d", $unit_id);
+            foreach ($unit_to_group_ids as $g) {
+                $q = Database::get()->querySingle("SELECT * FROM group_members WHERE group_id = ?d AND user_id = ?d", $g->group_id, $user_id);
+                if ($q) {
                     return true;
                 }
             }
