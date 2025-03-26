@@ -265,7 +265,7 @@
                                             <div class='row form-group @if ($review_error_user) has-error @endif @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) mt-4 @else hidden mt-4 @endif'>
                                                 <label for='reviews_per_user' class='col-12 control-label-notes mb-1'>{{ trans('langReviewsPerUser') }}</label>
                                                 <div class='col-12'>
-                                                    <input name='reviews_per_user' type='text' class='form-control' id='reviews_per_user' @if (!$grading_type) disabled @endif>
+                                                    <input name='reviews_per_user' type='text' class='form-control' id='reviews_per_user' value='{{ $reviews_per_user }}' @if (!$grading_type) disabled @endif>
                                                     <span class='help-block'>{{ trans('langAllowableReviewValues') }} {{ $review_error_user }}</span>
                                                 </div>
                                             </div>
