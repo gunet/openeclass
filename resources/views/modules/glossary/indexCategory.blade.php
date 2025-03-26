@@ -26,9 +26,11 @@
 
                             @include('layouts.partials.legend_view')
 
-                            <div class="col-12 bg-transparent">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
+                            <div class="col-12 bg-transparent">
+                                {!! isset($action_bar) ?  $action_bar : '' !!}
+                            </div>
 
-                            @include('layouts.partials.show_alert') 
+                            @include('layouts.partials.show_alert')
 
                             @if (count($categories))
                             <div class='col-12'>
