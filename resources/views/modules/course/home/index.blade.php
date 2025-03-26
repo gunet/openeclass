@@ -348,7 +348,7 @@
 
                                     <div class='d-flex gap-2 flex-wrap'>
                                         <a id='cu-help-btn' class='helpAdminBtn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
-                                            <i class="fa-solid fa-circle-info"></i>
+                                            <i class="fa-solid fa-circle-question"></i>
                                         </a>
                                         @if($is_editor)
                                             <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" aria-label="{{ trans('langCourseInfo') }}" role="button">
