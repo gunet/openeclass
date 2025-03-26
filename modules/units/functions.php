@@ -2199,3 +2199,32 @@ function resource_belongs_to_unit_completion($unit_id, $unit_resource_id) {
         return false;
     }
 }
+
+/**
+ * @brief check if user has access to unit if it is assigned to specific users or groups
+ * @param $unit_id
+ * @return bool
+ */
+function has_access_to_unit($unit_id, $assign_to_specific, $user_id)
+{
+    switch ($assign_to_specific) {
+        case 0:
+            return true;
+        case 1:
+            $q = Database::get()->querySingle("SELECT user_id FROM course_units_to_specific WHERE unit_id = ?d AND user_id = ?d", $unit_id, $user_id);
+            if ($q) {
+                return true;
+            } else {
+                return false;
+            }
+        case 2:
+            $unit_to_group_ids = Database::get()->queryArray("SELECT group_id FROM course_units_to_specific WHERE unit_id = ?d", $unit_id);
+            foreach ($unit_to_group_ids as $g) {
+                $q = Database::get()->querySingle("SELECT * FROM group_members WHERE group_id = ?d AND user_id = ?d", $g->group_id, $user_id);
+                if ($q) {
+                    return true;
+                }
+            }
+            return false;
+    }
+}

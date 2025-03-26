@@ -41,6 +41,13 @@ require_once 'modules/tc/functions.php';
 
 if ($is_editor) {
     $helpSubTopic = 'units_actions';
+} else {
+    $assign_to_specific = Database::get()->querySingle("SELECT assign_to_specific FROM course_units WHERE id = ?d", $_GET['id'])->assign_to_specific;
+    if (!has_access_to_unit($_GET['id'], $assign_to_specific, $uid)) {
+        Session::flash('message',$langForbidden);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("courses/$course_code/");
+    }
 }
 
 doc_init();
