@@ -5869,3 +5869,8 @@ th.grade-col a{
   text-decoration: none;
 }
 
+#unitResources .fileURL{
+  font-weight: 700 !important;
+  font-style: normal;
+}
+

@@ -773,7 +773,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
         if ($file->format == '.dir') {
             $image = 'fa-folder-open';
             $download_hidden_link = '';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>" .
+            $link = "<a class='TextBold' href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>" .
                 q($title) . "</a>";
         } else {
             $file->title = $title;
@@ -784,7 +784,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
             if (get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download){
                 $file_title = $file->title !== '' ? $file->title : $file->filename;
                 $file_url = file_url($file->path, $file->filename);
-                $link = "<a class='fileURL-link' target='_blank' href='{$urlServer}main/prevent_pdf.php?urlPr=" . urlencode($file_url) . "'>
+                $link = "<a class='fileURL-link TextBold' target='_blank' href='{$urlServer}main/prevent_pdf.php?urlPr=" . urlencode($file_url) . "'>
                             $file_title&nbsp;&nbsp;" . icon('fa-shield', $langDownloadPdfNotAllowed) .
                          "</a>";
             } else {
@@ -887,12 +887,12 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         }
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
         $suspend_data = Database::get()->querySingle("SELECT MAX(suspend_data) AS suspend_data FROM lp_user_module_progress WHERE user_id = ?d AND learnPath_id = ?d", $uid, $lp_id)->suspend_data;
-        $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
+        $link = "<a class='TextBold' href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
 
         $lp_susp_button = "";
         if ($suspend_data) {
             $lp_susp_button = "
-                <span class='pull-right' style='padding-left: 15px;' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
+                <span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
                     <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>
                         <span class='fa fa-repeat' style='font-size:15px;'></span>
                     </a>
@@ -909,15 +909,14 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         } else {
                 list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
                 $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
-                            &nbsp; &nbsp;
-                           <span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
-                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
+                               <span style='margin-top:10px !important;' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
+                $lp_results_button = "<span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
                     <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
                     <span class='fa fa-line-chart'></span>
                     </a>
                 </span>";
         }
-        $imagelink = icon('fa-ellipsis-h');
+        $imagelink = icon('fa-solid fa-timeline');
     }
 
     if (!empty($comments)) {
@@ -928,7 +927,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langLearnPath</div> $link $res_prereq_icon <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </div>" .
+          <div class='text-start'><div class='module-name'>$langLearnPath</div> $link $res_prereq_icon <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
 }
@@ -1133,7 +1132,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
@@ -1248,12 +1247,12 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<a class='ex_settings $pending_class $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<a class='ex_settings $pending_class $link_class TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<a class='ex_settings $link_class TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
         $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
-        $imagelink = $link . "</a>" . icon('fa-square-pen'). "";
+        $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
 
@@ -1307,7 +1306,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
                 }
             }
             $forum_id = $r->forum_id;
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
             $imagelink = icon('fa-comments'). "";
         }
@@ -1386,7 +1385,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
@@ -1441,7 +1440,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
         $wikilink = $link . "$title</a>";
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
@@ -1498,7 +1497,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
         } else {
             $title = q($title);
         }
-        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
+        $link = "<a class='TextBold' href='" . q($l->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
         $exlink = $link . "$title</a>";
         $imagelink = icon('fa-link');
     }
@@ -1606,7 +1605,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-book') . "";
     }
@@ -1718,7 +1717,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
+        $link = "<a class='TextBold' href='${urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
         $exlink = $link . q($title) . '</a>';
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
@@ -1766,7 +1765,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         if (!$is_editor and $chat->status == 'inactive') {
             return '';
         }
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $chatlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-commenting') . "";
     }
@@ -1808,7 +1807,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
             $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
+        $link = "<a class='TextBold' href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
         $bloglink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-columns') . "";
     }
@@ -1860,7 +1859,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "resources/icons/h5p_library.svg"; // fallback icon
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
+        $link = "<a class='TextBold' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
     }
