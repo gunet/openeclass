@@ -5814,7 +5814,7 @@ th.grade-col a{
 
 #unitResources div[data-id] {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: flex-start;
   gap: 10px;
 }
@@ -5874,3 +5874,6 @@ th.grade-col a{
   font-style: normal;
 }
 
+.comment-lp p{
+  line-height: 16px !important;
+}
