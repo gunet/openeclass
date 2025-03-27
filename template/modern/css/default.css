@@ -5812,48 +5812,92 @@ th.grade-col a{
   z-index: 1061 !important;
 }
 
-#unitResources div[data-id] {
+#unitResources div[data-id],
+#unitResources_1 div[data-id],
+#unitResources_2 div[data-id],
+#unitResources_3 div[data-id] {
   display: flex;
   align-items: start;
   justify-content: flex-start;
   gap: 10px;
 }
 
-#unitResources .actionbtn {
+#unitResources .actionbtn,
+#unitResources_1 .actionbtn,
+#unitResources_2 .actionbtn,
+#unitResources_3 .actionbtn {
   margin-left: auto;
   max-width:70px
 }
 
-#unitResources .unitIcon {
+#unitResources .unitIcon,
+#unitResources_1 .unitIcon,
+#unitResources_2 .unitIcon,
+#unitResources_3 .unitIcon {
   width: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#unitResources .unitIcon span {
+#unitResources .unitIcon span,
+#unitResources_1 .unitIcon span,
+#unitResources_2 .unitIcon span,
+#unitResources_3 .unitIcon span {
   font-size: 34px;
 }
 
-#unitResources .unitIcon-svg {
+#unitResources .unitIcon-svg,
+#unitResources_1 .unitIcon-svg,
+#unitResources_2 .unitIcon-svg,
+#unitResources_3 .unitIcon-svg
+ {
   padding: 0px !important;
 }
 
-#unitResources .module-name {
+#unitResources .module-name,
+#unitResources_1 .module-name,
+#unitResources_2 .module-name,
+#unitResources_3 .module-name {
   font-size: 0.65rem;
 }
 
-#unitResources .text-start p {
+#unitResources .text-start p,
+#unitResources_1 .text-start p,
+#unitResources_2 .text-start p,
+#unitResources_3 .text-start p {
   font-size: 0.75rem;
 }
 
-#unitResources .not_visible .unitIcon, #unitResources .not_visible .text-start, #unitResources .not_visible svg {
+#unitResources .not_visible .unitIcon, 
+#unitResources .not_visible .text-start, 
+#unitResources .not_visible svg,
+#unitResources_1 .not_visible .unitIcon, 
+#unitResources_1 .not_visible .text-start, 
+#unitResources_1 .not_visible svg,
+#unitResources_2 .not_visible .unitIcon, 
+#unitResources_2 .not_visible .text-start, 
+#unitResources_2 .not_visible svg,
+#unitResources_3 .not_visible .unitIcon, 
+#unitResources_3 .not_visible .text-start, 
+#unitResources_3 .not_visible svg{
   opacity: 0.5;
 }
 
-#unitResources .unit-divider {
+#unitResources .unit-divider,
+#unitResources_1 .unit-divider,
+#unitResources_2 .unit-divider,
+#unitResources_3 .unit-divider {
   background-color: #000;
   height: 1px;
+}
+
+#unitResources .fileURL,
+#unitResources_1 .fileURL,
+#unitResources_2 .fileURL,
+#unitResources_3 .fileURL{
+  font-weight: 700 !important;
+  font-style: normal;
 }
 
 
@@ -5867,11 +5911,6 @@ th.grade-col a{
   background-color: #EFF6FF;
   border-radius: 5px;
   text-decoration: none;
-}
-
-#unitResources .fileURL{
-  font-weight: 700 !important;
-  font-style: normal;
 }
 
 .comment-lp p{
