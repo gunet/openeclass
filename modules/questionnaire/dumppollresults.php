@@ -215,7 +215,7 @@ if ($full) { // user questions results
                                     WHERE b.qid = ?d
                                     AND b.poll_user_record_id = a.id
                                     AND (a.email_verification = 1 OR a.email_verification IS NULL)
-                                    GROUP BY b.aid", $q->pqid);
+                                    GROUP BY b.aid, c.answer_text", $q->pqid);
             } else {
                 $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
                                                         FROM poll_answer_record a, poll_user_record b
