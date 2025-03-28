@@ -337,10 +337,10 @@ function showQuestion($questionId, $onlyAnswers = false) {
     if (!$onlyAnswers) {
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        echo "<strong>" . q_math($questionName) . "</strong><br>" .
+        echo "<strong>" . q_math($questionName) . "</strong><br><br>" .
             standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
-            echo "<img src='$urlServer/$picturePath/quiz-$questionId' />";
+            echo "<img src='$urlServer/$picturePath/quiz-$questionId' /><br><br>";
         }
     }  // end if(!$onlyAnswers)
     // construction of the Answer object
@@ -394,7 +394,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
         }
         // fill in blanks
         elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-            echo $answer;
+            echo "<div class='container-fill-in-the-blank'>". $answer . "</div>";
         } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
             $temp_string = unserialize($answer);
             $answer_string = $temp_string[0];
@@ -407,7 +407,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 return selection($selection_text, "choice[$questionId][$id]", 0);
             };
             $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
-            echo $answer_string;
+            echo "<div class='container-fill-in-the-blank'>" . $answer_string . "</div>";
         } elseif ($answerType == MATCHING) { // matching
             if (!$answerCorrect) {
                 // options (A, B, C, ...) that will be put into the list-box
