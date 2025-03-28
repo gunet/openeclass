@@ -34,7 +34,6 @@
                                 @endif
                             @endif
                         @endif
-
                         @if ($submit_ok)
                             @if ($submissions_exist)
                                 <div class='col-12 mt-3'>
@@ -50,23 +49,24 @@
                                     </div>
                                 </div>
                             @endif
+                            @if (!$is_group_assignment || $count_user_group_info || $on_behalf_of)
+                                <div class='d-lg-flex gap-4 mt-4'>
+                                    <div class='flex-grow-1'>
+                                        <div class='form-wrapper form-edit rounded'>
 
-                            <div class='d-lg-flex gap-4 mt-4'>
-                                <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-                                    <form class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
-                                        <input type='hidden' name='id' value='{{ $id }}'>
-                                        {!! $group_select_hidden_input !!}
+                                        <form class='form-horizontal' enctype='multipart/form-data' action='{{ $form_link }}' method='post'>
+                                            <input type='hidden' name='id' value='{{ $id }}'>
+                                            {!! $group_select_hidden_input !!}
 
-                                        @if (isset($_GET['unit']))
-                                            <input type='hidden' name='unit' value='{{ $_GET['unit'] }}'>
-                                            <input type='hidden' name='res_type' value='assignment'>
-                                        @endif
+                                            @if (isset($_GET['unit']))
+                                                <input type='hidden' name='unit' value='{{ $_GET['unit'] }}'>
+                                                <input type='hidden' name='res_type' value='assignment'>
+                                            @endif
 
-                                        <fieldset>
-                                            <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
-                                            {!! $group_select_form !!}
+                                            <fieldset>
+                                                <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
+                                                {!! $group_select_form !!}
 
-                                            @if (!$is_group_assignment || $count_user_group_info || $on_behalf_of)
                                                 @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN)
                                                     {!! show_turnitin_integration($id) !!}
                                                 @else
@@ -120,7 +120,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @endif`
+                                                    @endif
 
                                                     <div class='form-group mt-4'>
                                                         <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
@@ -147,13 +147,13 @@
                                                             !!}
                                                         </div>
                                                     </div>
-                                               @endif
+                                                    <small>
+                                                        {{ trans('langMaxFileSize') }} {!! ini_get('upload_max_filesize') !!}
+                                                    </small>
+                                              @endif
                                             @endif
                                         </fieldset>
                                     </form>
-                                    <small>
-                                        {{ trans('langMaxFileSize') }} {!! ini_get('upload_max_filesize') !!}
-                                    </small>
                                 </div>
                             </div>
                         @endif

@@ -269,7 +269,7 @@ function new_edit_assignment($assignment_id = null) {
  */
 function display_student_assignment($id, $on_behalf_of = false) {
 
-    global $tool_content, $uid, $urlAppend, $langNoneWorkGroupNoSubmission,
+    global $uid, $urlAppend, $langNoneWorkGroupNoSubmission,
            $course_id, $course_code, $langAssignmentWillBeActive, $langOnBehalfOf,
            $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
            $langNoneWorkUserNoSubmission, $langGroupSpaceLink, $langPendingPeerSubmissions,
@@ -371,7 +371,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 if (!$on_behalf_of) {
                     if (count($user_group_info) == 1) {
                         $gids = array_keys($user_group_info);
-                        $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
                         $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
                     } elseif ($user_group_info) {
                         $group_select_form = "
@@ -383,11 +382,13 @@ function display_student_assignment($id, $on_behalf_of = false) {
                         </div>";
                     } else {
                         $group_link = $urlAppend . 'modules/group/';
-                        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langThisIsGroupAssignment <br />" .
+                        $GroupWorkWarning = "<span>$langThisIsGroupAssignment<br>" .
                             sprintf(count($user_group_info) ?
                                 $langGroupAssignmentPublish :
                                 $langGroupAssignmentNoGroups, $group_link) .
-                            "</span></div></div>\n";
+                            "</span>";
+                        Session::flash('message', $GroupWorkWarning);
+                        Session::flash('alert-class', 'alert-warning');
                     }
                 } else {
                     $groups_with_no_submissions = groups_with_no_submissions($id);
@@ -2467,10 +2468,11 @@ function submission_grade($subid) {
  * @param $comments
  * @return void
  */
-function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
+function grade_email_notify($assignment_id, $submission_id, $grade, $comments): void
+{
 
     global $currentCourseName, $urlServer, $course_code, $langLinkFollows,
-           $langWorkEmailSubject, $langGradebookGrade, $langGradeComments, $langWorkEmailMessage;
+           $langWorkEmailSubject, $langGradebookGrade, $langComments, $langWorkEmailMessage;
     static $title, $group;
 
     if (!isset($title)) {
@@ -2478,23 +2480,19 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
         $title = $res->title;
         $group = $res->group_submissions;
     }
-    $info = Database::get()->querySingle("SELECT uid, group_id
-                                         FROM assignment_submit WHERE id= ?d", $submission_id);
+    $info = Database::get()->querySingle("SELECT uid, group_id FROM assignment_submit WHERE id= ?d", $submission_id);
 
     $subject = sprintf($langWorkEmailSubject, $title);
-    $body = sprintf($langWorkEmailMessage, $title, $currentCourseName) . "\n\n";
-    if ($grade != '') {
-        $body .= ": $langGradebookGrade$grade\n";
-    }
+    $grade_comments = '';
     if ($comments) {
-        $body .= "$langGradeComments: $comments\n";
+        $grade_comments = "<div><strong>$langComments: </strong>$comments<br><br></div>\n";
     }
 
     $header_html_topic_notify = "<!-- Header Section -->
     <div id='mail-header'>
         <br>
         <div>
-            <div id='header-title'>".sprintf($langWorkEmailMessage, $title, $currentCourseName)."</a>.</div>
+            <div id='header-title'>" . sprintf($langWorkEmailMessage, $title, $currentCourseName) . "</a></div>
         </div>
     </div>";
 
@@ -2502,10 +2500,7 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     <div id='mail-body'>
         <br>
         <div><b>$langGradebookGrade: </b> <span class='left-space'>$grade</span></div><br>
-        <div><b>$langGradeComments: </b></div>
-        <div id='mail-body-inner'>
-            $comments<br><br>
-        </div>
+        $grade_comments
         $langLinkFollows <a href='{$urlServer}modules/work/index.php?course=$course_code&id=$assignment_id'>{$urlServer}modules/work/index.php?course=$course_code&id=$assignment_id</a>
     </div>";
 
