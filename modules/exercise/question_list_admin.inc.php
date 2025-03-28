@@ -494,7 +494,7 @@ if ($nbrQuestions) {
         <table class='table-default'>
         <thead class='list-header'>        
             <tr>
-                <th class='count-col'>#</th>
+                <th style='width:6%;' class='count-col'>#</th>
                  <th>$langQuestionList $info_random_text</th>
                  <th aria-label='$langSettingSelect'></th>
             </tr>
