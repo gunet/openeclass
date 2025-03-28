@@ -188,7 +188,7 @@ function lessonToolsMenu(bool $rich=true): array
                 continue;
             }
 
-            if ($mid == MODULE_ID_SESSION and $is_collaborative_course and 
+            if ($mid == MODULE_ID_SESSION and $is_collaborative_course and
                 (is_null($view_course->view_type) or $view_course->view_type != 'sessions')) {
                     continue;
             }
@@ -283,7 +283,8 @@ function pickerMenu() {
     $append_module = $originating_module ? "&originating_module=$originating_module" : '';
     $append_forum = $originating_forum ? "&originating_forum=$originating_forum" : '';
     $docsfilter = isset($_REQUEST['docsfilter']) ? ('&docsfilter=' . q($_REQUEST['docsfilter'])) : '';
-    $params = "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . $docsfilter;
+    $append_course = $course_code ? "&course=$course_code" : '';
+    $params = "?embedtype=tinymce" . $append_course . $append_module . $append_forum . $docsfilter;
 
     $sideMenuGroup = array();
 
@@ -399,7 +400,8 @@ function openCoursesExtra() {
  * @param type $course_id
  * @return int
  */
-function get_new_document_count($course_id) {
+function get_new_document_count($course_id): int
+{
     global $session;
 
     $document_timestamp = $session->getDocumentTimestamp($course_id, false);
