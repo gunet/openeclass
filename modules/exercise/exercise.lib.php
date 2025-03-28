@@ -61,12 +61,13 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
                 </h3>
             </div>
             <div class='panel-body'>
-                <h4 class='mb-2'>" . q_math($questionName) . "</h4>
-                <div class='mb-2'>$questionDescription</div>
-                <div class='text-center'>" .
-                    (file_exists($picturePath . '/quiz-' . $questionId) ?
-                        "<img src='../../$picturePath/quiz-$questionId'>" : "") . "
-                </div>";
+                <div class='text-heading-h4 mb-4'>" . q_math($questionName) . "</div>";
+                if (!empty($questionDescription)) {
+                    $tool_content .= " <div class='mb-4'>$questionDescription</div>";
+                }
+                if (file_exists($picturePath . '/quiz-' . $questionId)) {
+                    $tool_content .= "<div class='mb-4'><img src='../../$picturePath/quiz-$questionId'></div>";
+                }
 
     // construction of the Answer object
     $objAnswerTmp = new Answer($questionId);
@@ -93,7 +94,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
     }
 
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-        $tool_content .= "<div class='form-inline' style='line-height:2.2;'>";
+        $tool_content .= "<div class='container-fill-in-the-blank'>";
     }
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -111,7 +112,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
                     static $id = 0;
                     $id++;
                     $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
-                    return "<input class='form-control mb-4' type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
+                    return "<input class='form-control fill-in-the-blank' type='text' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
             $tool_content .= $answer;
@@ -127,7 +128,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
                 $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
                 array_unshift($selection_text, "--- $langSelect ---");
                 $value = (isset($exerciseResult[$questionId][$id])) ? ($exerciseResult[$questionId][$id]) : '';
-                return selection($selection_text, "choice[$questionId][$id]", $value,"class='form-select' onChange='questionUpdateListener($question_number, $questionId)'");
+                return selection($selection_text, "choice[$questionId][$id]", $value,"class='form-select fill-in-the-blank' onChange='questionUpdateListener($question_number, $questionId)'");
             };
             $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
             $tool_content .= $answer_string;
@@ -166,7 +167,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = [], 
                 $tool_content .= "<tr>
                                   <td><strong>$cpt2.</strong> " . q($answer) . "</td>
                                   <td><div class='text-start'>
-                                   <select class='form-select w-50' name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
+                                   <select class='form-select fill-predefined-answers' name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
                                      <option value='0'>--</option>";
 
                 // fills the list-box

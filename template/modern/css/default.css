@@ -4642,6 +4642,17 @@ body .delThemeBtn{
   background-color: #ffffff;
 }
 
+.container-fill-in-the-blank{
+  line-height: 18px;
+}
+.container-fill-in-the-blank .form-select,
+.container-fill-in-the-blank .form-control {
+  display: inline-block;
+  max-width: 200px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 /**********************************************************************************************************************/
 /*************************************************** MY COURSES *******************************************************/
 /**********************************************************************************************************************/
