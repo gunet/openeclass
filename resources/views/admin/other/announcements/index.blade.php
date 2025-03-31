@@ -1,3 +1,40 @@
+@push('head_scripts')
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $('.table_td_body').each(function() {
+                $(this).trunk8({
+                    lines: '3',
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single.php?ann_id='
+                        + $(this).data('id')+'\">{{ trans('langMore') }}</div>'
+                })
+            });
+
+            if ( $('#submitAnnouncement').length > 0 ) {
+                $('input[type=checkbox]').eq(0).prop('checked') ? $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+                $('input[type=checkbox]').eq(1).prop('checked') ? $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
+
+                $('input[type=checkbox]').eq(0).on('click', function() {
+                    if ($('input[type=checkbox]').eq(0).prop('checked')) {
+                        $('input[type=checkbox]').eq(1).prop('disabled', false);
+                    } else {
+                        $('input[type=checkbox]').eq(1).prop('disabled', true);
+                        $('input[type=checkbox]').eq(1).prop('checked', false);
+                        $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+                $('.input-group-addon input[type=checkbox]').on('click', function(){
+                    var prop = $(this).parents('.input-group').children('input').prop('disabled');
+                    if(prop){
+                        $(this).parents('.input-group').children('input').prop('disabled', false);
+                    } else {
+                        $(this).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+            }
+        });
+    </script>
+@endpush
+
 @extends('layouts.default')
 
 @section('content')
@@ -17,7 +54,7 @@
                 <div class='mt-4'></div>
             @endif
 
-            @include('layouts.partials.show_alert') 
+            @include('layouts.partials.show_alert')
 
             @if ($announcements)
             <div class='col-12'>
