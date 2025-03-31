@@ -744,14 +744,44 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr><br>
+                                        <hr>
+
+                                        <div class='form-group mt-4'>
+                                            <h5>{{ trans('langUserNotifications') }}</h5>
+                                            <div class='form-group'>
+                                                <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='user_notifications' value='0' {!! $user_notifications0 !!}>
+                                                        {{ trans('langDisableUserNotifications') }}
+                                                    </label>
+                                                </div>
+                                                <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='user_notifications' value='1' {!! $user_notifications1 !!}>
+                                                        {{ trans('langEnableUserNotifications') }}
+                                                    </label>
+                                                </div>
+                                                <div class='radio mb-0'>
+                                                    <label>
+                                                        <input type='radio' id='user_notifications_interval' name='user_notifications' value='2' {!! $user_notifications2 !!}>
+                                                        {{ trans('langCustomEnableUserNotifications') }}
+                                                    </label>
+                                                </div>
+                                                <div class='col-sm-3 col-sm-offset-2' id='notifications_interval'>
+                                                    <label class='mb-0' for='notifications_interval_id' aria-label='{{ trans('langCustomEnableUserNotifications') }}'></label>
+                                                    {!! $user_notifications_interval !!}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <hr>
                                         <div class='form-group mt-4'>
                                             <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langMinPasswordLen') }}: </label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control form-control-admin' name='min_password_len' id='min_password_len' value='{{ get_config('min_password_len') }}'>
                                             </div>
                                         </div>
-
 
 
                                         <div class='form-group mt-4'>
@@ -1378,6 +1408,14 @@
                 $('[data-menuID]').removeClass('active');
                 $(this).addClass('active');
             });
+
+            $('input[name=user_notifications]').change(function () {
+                if ($('#user_notifications_interval').is(":checked")) {
+                    $('#notifications_interval').show();
+                } else {
+                    $('#notifications_interval').hide();
+                }
+            }).change();
 
         });
 

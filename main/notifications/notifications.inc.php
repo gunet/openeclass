@@ -41,7 +41,9 @@ function get_user_notifications(){
 function get_course_notifications($course = NULL) {
 
     global $uid, $modules;
-
+    if (is_null($uid)) {
+        return null;
+    }
     if (is_null($course)) {
         $cid = $GLOBALS['course_id'];
     } else {
@@ -49,10 +51,17 @@ function get_course_notifications($course = NULL) {
     }
 
     $notifications = [];
-    if (is_null($uid)) {
-        return null;
+
+    $config_user_notifications = get_config('user_notifications');
+    switch ($config_user_notifications) {
+        case 0: return null; // no notifications
+        case 1: $last_login = last_login($uid); // notifications since last login
+            break;
+        case 2: $user_notifications_interval = get_config('user_notifications_interval'); // notifications since given interval (in days)
+            $last_login = date('Y-m-d', strtotime("-$user_notifications_interval days", strtotime(date('Y-m-d'))));
+            break;
     }
-    $last_login = last_login($uid); // user last login
+
     $gids = user_group_info($uid, $cid); // course user groups (if any)
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
@@ -185,6 +194,22 @@ function get_course_notifications($course = NULL) {
                                                                     AND course_id = ?d", $last_login, $cid)->cnt;
                     if ($cnt_wall_post > 0) {
                         $notifications[] = (object) [ 'course_id' => $cid, 'module_id' => $module_id, 'notcount' => $cnt_wall_post, 'last_visit' => $last_login ];
+                    }
+                    break;
+                case MODULE_ID_GLOSSARY:
+                    $cnt_glossary_post = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM glossary
+                                                                    WHERE datestamp > ?t
+                                                                    AND course_id = ?d", $last_login, $cid)->cnt;
+                    if ($cnt_glossary_post > 0) {
+                        $notifications[] = (object) [ 'course_id' => $cid, 'module_id' => $module_id, 'notcount' => $cnt_glossary_post, 'last_visit' => $last_login ];
+                    }
+                    break;
+                case MODULE_ID_BLOG:
+                    $cnt_blog_post = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM blog_post
+                                                                    WHERE time > ?t
+                                                                    AND course_id = ?d", $last_login, $cid)->cnt;
+                    if ($cnt_blog_post > 0) {
+                        $notifications[] = (object) [ 'course_id' => $cid, 'module_id' => $module_id, 'notcount' => $cnt_blog_post, 'last_visit' => $last_login ];
                     }
                     break;
             }
