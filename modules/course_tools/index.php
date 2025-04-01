@@ -124,6 +124,19 @@ if (isset($_POST['submit'])) {
     $pageName = $langAddExtLink;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
     view('modules.course_tools.external_link_store', $data);
+} elseif (isset($_GET['show_lti_template'])) {
+    $pageName = $langTurnitinConfDetails;
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $appId = getDirectReference($_GET['show_lti_template']);
+    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $appId);
+    $data['lti'] = $lti;
+    $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+            'url' => "../course_tools/index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary')
+    ));
+    view('modules.course_tools.show_lti_template', $data);
 } elseif(!isset($_GET['action'])) {
 
     $data['toolSelection'][0] = $data['toolSelection'][1] = array();

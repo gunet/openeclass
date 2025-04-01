@@ -113,4 +113,61 @@ class CurlUtil {
         return array($response, $http_code, $headers);
     }
 
+    /**
+     * Fetches content from Internet. Uses cURL extension. Only downloads from http(s) sources are supported.
+     *
+     * @param string $url URL starting with http(s)://
+     * @param int $connecttimeout timeout for connection to server; this is the timeout that usually happens if the remote server is completely down (default 20 seconds);
+     * @param bool $certverify If false, the peer's SSL certificate will not be checked.
+     * @return string|bool false if request failed, true if content as a string.
+     */
+    public static function downloadFileContent(string $url, int $connecttimeout = 20, bool $certverify = true): bool|string {
+        // Only http and https links supported.
+        if (!preg_match('|^https?://|i', $url)) {
+            return false;
+        }
+
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $certverify);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $connecttimeout);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, false);
+
+        $curlResponse = curl_exec($ch);
+        $info         = curl_getinfo($ch);
+        $error_no     = curl_errno($ch);
+
+        if ($error_no) {
+            $error = curl_error($ch);
+            error_log("CurlUtil Error: cURL request for \"$url\" failed with: $error ($error_no)");
+            return false;
+        }
+
+        $response = new stdClass();
+
+        if (empty($info['http_code'])) {
+            // Support only true http connections (Location: file:// does not work).
+            $response->status        = '0';
+            $response->headers       = array();
+            $response->response_code = 'Unknown cURL error';
+            $response->results       = false; // ignore the result
+            $response->error         = 'Unknown cURL error';
+        } else {
+            $response->status        = (string) $info['http_code'];
+            $response->results       = $curlResponse;
+            $response->error         = '';
+        }
+
+        if ($info['http_code'] != 200) {
+            error_log("CurlUtil Error: cURL request for \"$url\" failed, HTTP response code: " . $info['http_code']);
+            return false;
+        }
+
+        curl_close($ch);
+        return $response->results;
+    }
+
 }
