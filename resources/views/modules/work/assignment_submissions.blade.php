@@ -67,7 +67,7 @@
                 });
             });
 
-            $('.onlineText') . click(function (e){
+            $('.table-default').on('click', '.onlineText', function (e) {
                 e.preventDefault();
                 var sid = $(this) . data('id');
                 var assignment_title = $('#assignment_title') . text();
