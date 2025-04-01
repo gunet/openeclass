@@ -101,7 +101,7 @@
                 });
             });
 
-            $('.linkdelete') .click(function(e) {
+            $('.table-default').on('click', '.linkdelete', function(e) {
                 var link = $(this).attr('href');
                 e.preventDefault();
                 bootbox.confirm({
@@ -208,7 +208,9 @@
                                     <table id ='submissions_table_{{ $course_code }}' class='table table-default'>
                                         <thead>
                                             <tr class='list-header'>
-                                                {!! sort_link(trans('langSurnameName'), 'username', 'class="user-col"') !!}
+                                                <th class="user-col">
+                                                    {{ trans('langSurnameName') }}
+                                                </th>
                                                 @if ($assign->submission_type == 1)
                                                     <th>{{ trans('langWorkOnlineText') }}</th>
                                                 @elseif ($assign->submission_type == 2)
@@ -216,13 +218,15 @@
                                                 @else
                                                     <th>{{ trans('langFileName') }}</th>
                                                 @endif
-
-                                                {!! sort_link(trans('langSubDate'), 'date', 'class="date-col"') !!}
-
+                                                <th class="date-col">
+                                                    {{ trans('langSubDate') }}
+                                                </th>
                                                 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
-                                                    {!! sort_link(trans('langPeerReviewGrade'), '') !!}
+                                                <th class="grade-col">
+                                                    {{ trans('langPeerReviewGrade') }}
+                                                </th>
                                                 @endif
-                                                {!! sort_link(trans('langGradebookGrade'), 'grade', 'style="width: 10%;" class="grade-col"') !!}
+                                                <th class="grade-col" style="width: 10%;">{{ trans('langGradebookGrade') }}</th>
                                                 @if ($is_editor)
                                                     <th class='tools-col' style='width:10%;' aria-label='{{ trans('langSettingSelect') }}'></th>
                                                 @endif
@@ -231,6 +235,9 @@
 
                                         <tbody>
                                             @foreach ($result as $row)
+                                                @if (isset($seen[$row->uid])) {{-- used for submission with multiple files --}}
+                                                    @continue
+                                                @endif
                                             {{-- student data --}}
                                                 <tr>
                                                     <td class='user-col' style='width: 45%'>
@@ -356,6 +363,10 @@
                                                         </td>
                                                     @endif
                                                 </tr>
+                                                @php
+                                                    /* used for submissions with multiple files */
+                                                    $seen[$row->uid] = true;
+                                                @endphp
                                             @endforeach
                                         </tbody>
                                     </table>

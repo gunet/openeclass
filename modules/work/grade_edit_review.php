@@ -21,6 +21,7 @@ $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'utilities.php';
 require_once 'modules/group/group_functions.php';
 
 $toolName = $langScore;
