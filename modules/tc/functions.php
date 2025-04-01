@@ -1957,16 +1957,17 @@ function get_active_rooms_details($salt, $bbb_url)
  * @brief display video recordings in multimedia
  * @param type $course_id
  * @param type $id
+ * @param type $course_code
  * @return boolean
  */
-function publish_video_recordings($course_id, $id)
+function publish_video_recordings($course_id, $id, $course_code)
 {
     global $langBBBImportRecordingsOK, $langBBBImportRecordingsNo, $langBBBImportRecordingsNoNew, $tool_content;
 
     $sessions = Database::get()->queryArray("SELECT tc_session.id, tc_session.course_id AS course_id,"
             . "tc_session.title, tc_session.description, tc_session.start_date,"
             . "tc_session.meeting_id, course.prof_names FROM tc_session "
-            . "LEFT JOIN course ON tc_session.course_id=course.id WHERE course.code=?s AND tc_session.id=?d", $course_id, $id);
+            . "LEFT JOIN course ON tc_session.course_id=course.id WHERE course.code=?s AND tc_session.id=?d", $course_code, $id);
 
     $servers = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled='true' AND `type` = 'bbb'");
 

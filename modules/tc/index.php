@@ -397,7 +397,7 @@ elseif(isset($_GET['choice']))
             }
             break;
         case 'import_video':
-            publish_video_recordings($course_code, getDirectReference($_GET['id']));
+            publish_video_recordings($course_id, getDirectReference($_GET['id']), $course_code);
             break;
     }
 
