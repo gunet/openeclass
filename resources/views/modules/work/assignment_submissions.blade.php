@@ -22,11 +22,32 @@
                     .toArray();
             };
 
-            var table = $('.table-default').DataTable({
+            var table = $('#submissions_table_{{ $course_code }}').DataTable({
                 "columnDefs": [
                     { "orderable": false, "targets": 'tools-col' },
                     { "type": "num", "orderDataType": "dom-text-numeric", "targets": 'grade-col' } // FIXED: No dot (.)
-                ]
+                ],
+                'aLengthMenu': [
+                    [10, 20, 50 , -1],
+                    [10, 20, 50, '{{ trans('langAllOfThem') }}']
+                ],
+                'searchDelay': 1000,
+                'oLanguage': {
+                    'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
+                    'sZeroRecords': '{{ trans('langNoResult') }}',
+                    'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
+                    'sInfoEmpty': '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                    'sInfoFiltered': '',
+                    'sInfoPostFix': '',
+                    'sSearch': '',
+                    'sUrl': '',
+                    'oPaginate': {
+                        'sFirst': '&laquo;',
+                        'sPrevious': '&lsaquo;',
+                        'sNext': '&rsaquo;',
+                        'sLast': '&raquo;'
+                    }
+                }
             });
 
             $('.work-form').on('submit', function(e) {
@@ -184,7 +205,7 @@
                                 @endif
 
                                 <div class='table-responsive mt-3'>
-                                    <table class='table table-default'>
+                                    <table id ='submissions_table_{{ $course_code }}' class='table table-default'>
                                         <thead>
                                             <tr class='list-header'>
                                                 {!! sort_link(trans('langSurnameName'), 'username', 'class="user-col"') !!}
