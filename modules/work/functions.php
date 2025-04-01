@@ -1371,16 +1371,16 @@ function add_assignment() {
         }
         $assignment_type = intval($_POST['assignment_type']);
 
-        $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
-        $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
+        $lti_template = $_POST['lti_template'] ?? NULL;
+        $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $tii_feedbackreleasedate = isset($_POST['tii_feedbackreleasedate']) && !empty($_POST['tii_feedbackreleasedate']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['tii_feedbackreleasedate'])->format('Y-m-d H:i:s') : NULL;
         $tii_internetcheck = isset($_POST['tii_internetcheck']) ? 1 : 0;
         $tii_institutioncheck = isset($_POST['tii_institutioncheck']) ? 1 : 0;
         $tii_journalcheck = isset($_POST['tii_journalcheck']) ? 1 : 0;
-        $tii_s_view_reports = isset($_POST['tii_s_view_reports']) ? 1 : 0;;
-        $tii_studentpapercheck = isset($_POST['tii_studentpapercheck']) ? 1 : 0;;
-        $tii_use_biblio_exclusion = isset($_POST['tii_use_biblio_exclusion']) ? 1 : 0;;
-        $tii_use_quoted_exclusion = isset($_POST['tii_use_quoted_exclusion']) ? 1 : 0;;
+        $tii_s_view_reports = isset($_POST['tii_s_view_reports']) ? 1 : 0;
+        $tii_studentpapercheck = isset($_POST['tii_studentpapercheck']) ? 1 : 0;
+        $tii_use_biblio_exclusion = isset($_POST['tii_use_biblio_exclusion']) ? 1 : 0;
+        $tii_use_quoted_exclusion = isset($_POST['tii_use_quoted_exclusion']) ? 1 : 0;
         $tii_report_gen_speed = 0;
         if (isset($_POST['tii_report_gen_speed']) && intval($_POST['tii_report_gen_speed']) == 1) {
             $tii_report_gen_speed = 1;
@@ -1402,6 +1402,7 @@ function add_assignment() {
                 $tii_exclude_value = 100;
             }
         }
+        $tii_instructorcustomparameters = $_POST['tii_instructorcustomparameters'] ?? NULL;
 
         $fileCount = isset($_POST['fileCount'])? $_POST['fileCount']: 0;
 
@@ -1415,10 +1416,10 @@ function add_assignment() {
                     launchcontainer, tii_feedbackreleasedate, tii_internetcheck, tii_institutioncheck,
                     tii_journalcheck, tii_report_gen_speed, tii_s_view_reports, tii_studentpapercheck,
                     tii_submit_papers_to, tii_use_biblio_exclusion, tii_use_quoted_exclusion,
-                    tii_exclude_type, tii_exclude_value, reviews_per_assignment,
+                    tii_exclude_type, tii_exclude_value, tii_instructorcustomparameters, reviews_per_assignment,
                     start_date_review, due_date_review, max_submissions)
                 VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, 1, ?s, ?d, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d, ?s, ?s, ?d, ?d, ?d, ?t,
-                ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?t, ?t, ?d)",
+                ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?d, ?s, ?d, ?t, ?t, ?d)",
                 $course_id, $title, $desc, $deadline, $late_submission, '',
                 $submission_type, $submission_date, $secret, $group_submissions, $grade_type,
                 $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge,
@@ -1426,7 +1427,7 @@ function add_assignment() {
                 $ip_lock, $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
                 $tii_internetcheck, $tii_institutioncheck, $tii_journalcheck, $tii_report_gen_speed,
                 $tii_s_view_reports, $tii_studentpapercheck, $tii_submit_papers_to, $tii_use_biblio_exclusion,
-                $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user,
+                $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $tii_instructorcustomparameters, $reviews_per_user,
                 $submission_date_review, $deadline_review, $fileCount)->lastInsertID;
 
             if ($id) {
@@ -1654,6 +1655,7 @@ function edit_assignment($id) {
                 $tii_exclude_value = 100;
             }
         }
+        $tii_instructorcustomparameters = $_POST['tii_instructorcustomparameters'] ?? NULL;
 
         Database::get()->query("UPDATE assignment SET title = ?s, description = ?s,
                 group_submissions = ?d, comments = ?s, submission_type = ?d,
@@ -1664,7 +1666,7 @@ function edit_assignment($id) {
                 tii_feedbackreleasedate = ?t, tii_internetcheck = ?d, tii_institutioncheck = ?d,
                 tii_journalcheck = ?d, tii_report_gen_speed = ?d, tii_s_view_reports = ?d, tii_studentpapercheck = ?d,
                 tii_submit_papers_to = ?d, tii_use_biblio_exclusion = ?d, tii_use_quoted_exclusion = ?d,
-                tii_exclude_type = ?s, tii_exclude_value = ?d, reviews_per_assignment = ?d,
+                tii_exclude_type = ?s, tii_exclude_value = ?d, tii_instructorcustomparameters = ?s, reviews_per_assignment = ?d,
                 start_date_review = ?t, due_date_review = ?t,
                 max_submissions = ?d
             WHERE course_id = ?d AND id = ?d",
@@ -1677,7 +1679,7 @@ function edit_assignment($id) {
             $assignment_type, $lti_template, $launchcontainer, $tii_feedbackreleasedate,
             $tii_internetcheck, $tii_institutioncheck, $tii_journalcheck, $tii_report_gen_speed,
             $tii_s_view_reports, $tii_studentpapercheck, $tii_submit_papers_to, $tii_use_biblio_exclusion,
-            $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $reviews_per_user,
+            $tii_use_quoted_exclusion, $tii_exclude_type, $tii_exclude_value, $tii_instructorcustomparameters, $reviews_per_user,
             $submission_date_review, $deadline_review, $fileCount, $course_id, $id);
 
         // purge old entries (if any)
