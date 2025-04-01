@@ -187,7 +187,6 @@
                                     <table class='table table-default'>
                                         <thead>
                                             <tr class='list-header'>
-                                                <th class='count-col'>#</th>
                                                 {!! sort_link(trans('langSurnameName'), 'username', 'class="user-col"') !!}
                                                 @if ($assign->submission_type == 1)
                                                     <th>{{ trans('langWorkOnlineText') }}</th>
@@ -213,9 +212,6 @@
                                             @foreach ($result as $row)
                                             {{-- student data --}}
                                                 <tr>
-                                                    <td class='count-col' style='width: 1%'>
-                                                        {{ $loop->iteration }}.
-                                                    </td>
                                                     <td class='user-col' style='width: 45%'>
                                                         @if (empty($row->group_id))
                                                             {!! display_user($row->uid) !!}
