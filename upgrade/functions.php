@@ -3297,7 +3297,6 @@ function upgrade_to_4_1($tbl_options) : void {
     foreach ($guest_users as $guest) {
         Database::get()->query("DELETE FROM user WHERE id = ?d", $guest->id);
     }
-
     // lti apps
     if (!DBHelper::fieldExists('lti_apps', 'lti_version')) {
         Database::get()->query("ALTER TABLE lti_apps ADD lti_version VARCHAR(255) NOT NULL DEFAULT '1.1' AFTER `description`");
@@ -3329,7 +3328,8 @@ function upgrade_to_4_1($tbl_options) : void {
     if (!DBHelper::fieldExists('assignment', 'tii_instructorcustomparameters')) {
         Database::get()->query("ALTER TABLE assignment ADD tii_instructorcustomparameters TEXT AFTER `tii_exclude_value`");
     }
-
+    // user notifications setting
+    set_config('user_notifications', 1);
 }
 
 /**
