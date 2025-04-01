@@ -3298,6 +3298,38 @@ function upgrade_to_4_1($tbl_options) : void {
         Database::get()->query("DELETE FROM user WHERE id = ?d", $guest->id);
     }
 
+    // lti apps
+    if (!DBHelper::fieldExists('lti_apps', 'lti_version')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_version VARCHAR(255) NOT NULL DEFAULT '1.1' AFTER `description`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'lti_provider_public_keyset_url')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_provider_public_keyset_url VARCHAR(255) DEFAULT NULL AFTER `lti_provider_secret`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'lti_provider_initiate_login_url')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_provider_initiate_login_url VARCHAR(255) DEFAULT NULL AFTER `lti_provider_public_keyset_url`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'lti_provider_redirection_uri')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD lti_provider_redirection_uri VARCHAR(255) DEFAULT NULL AFTER `lti_provider_initiate_login_url`");
+    }
+    if (!DBHelper::fieldExists('lti_apps', 'client_id')) {
+        Database::get()->query("ALTER TABLE lti_apps ADD client_id VARCHAR(255) DEFAULT NULL AFTER `lti_provider_redirection_uri`");
+    }
+    if (!DBHelper::tableExists('lti_access_tokens')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `lti_access_tokens` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `lti_app` int(11) NOT NULL,
+              `scope` TEXT,
+              `token` VARCHAR(128) NOT NULL,
+              `valid_until` int(11) NOT NULL,
+              `time_created` int(11) NOT NULL,
+              `last_access` int(11),
+              PRIMARY KEY (`id`),
+              FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('assignment', 'tii_instructorcustomparameters')) {
+        Database::get()->query("ALTER TABLE assignment ADD tii_instructorcustomparameters TEXT AFTER `tii_exclude_value`");
+    }
+
 }
 
 /**
