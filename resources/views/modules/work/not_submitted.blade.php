@@ -28,27 +28,25 @@
                             @if ($num_results > 0)
                                 <div class='row'>
                                     <div class='col-sm-12'>
-                                        <div class='alert alert-info'>
+                                        <div class='alert alert-warning mt-4'>
                                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
                                             @if ($num_results == 1)
                                                 {{ trans('langOneNonSubmission') }}
                                             @else
-                                                {!! sprintf(trans('langMoreSubmissions'), $num_results) !!}
+                                                {!! sprintf(trans('langMoreNonSubmissions'), $num_results) !!}
                                             @endif
                                         </div>
                                         <div class='table-responsive'>
                                             <table class='table-default sortable'>
                                                 <thead>
                                                     <tr class='list-header'>
-                                                        <th class='count-col' aria-label='{{ trans('langSettingSelect') }}'>#</th>
-                                                        {!! sort_link(trans('langGroup'), 'username') !!}
+                                                        <th>
+                                                            {{ trans('langGroups') }}
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 @foreach ($groups as $row => $value)
                                                     <tr>
-                                                        <td class='count-col' style='width: 5%'>
-                                                            {{ $loop->iteration }}.
-                                                        </td>
                                                         <td>
                                                             <a href='../group/group_space.php?course={{ $course_code }}&group_id={{ $row }}'>{{ $value }}</a>
                                                         </td>
@@ -82,15 +80,11 @@
                                         <table class='table-default'>
                                             <thead>
                                                 <tr class='list-header'>
-                                                    <th class='count-col' aria-label='{{ trans('langSettingSelect') }}'>#</th>
                                                     <th>{{ trans('langSurnameName') }}</th>
                                                 </tr>
                                             </thead>
                                             @foreach ($users as $row => $value)
                                                 <tr>
-                                                    <td class='count-col' style='width: 5%'>
-                                                        {{ $loop->iteration }}.
-                                                    </td>
                                                     <td> {!! display_user($row) !!}
                                                         @if (!is_null(uid_to_am($row)))
                                                             <div class='text-heading-h6'>

@@ -17,6 +17,17 @@
  *
  */
 
+
+/**
+ * @brief Returns an array of the details of assignment $id
+ * @param type $id
+ * @return type
+ */
+function get_assignment_details($id) {
+    global $course_id;
+    return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+}
+
 /**
  * @brief Check if a file has been submitted by user uid or by the user's group, and has been graded.
  * Returns the submission id or the whole submission details row (depending on ret_val),

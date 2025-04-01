@@ -584,6 +584,7 @@ function display_assignment_submissions($id) {
 
     global $course_id, $autojudge;
 
+    $grade_review_field = $condition = $review_message = '';
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
                                                         CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due,
@@ -591,25 +592,6 @@ function display_assignment_submissions($id) {
                                                     FROM assignment
                                                       WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $data = display_assignment_details($assign);
-
-    $grade_review_field = $condition = $review_message = '';
-    $cdate = date('Y-m-d H:i:s');
-
-    $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
-    if (isset($_REQUEST['sort'])) {
-        if ($_REQUEST['sort'] == 'date') {
-            $order = 'submission_date';
-        } elseif ($_REQUEST['sort'] == 'grade') {
-            $order = 'grade';
-        } elseif ($_REQUEST['sort'] == 'filename') {
-            $order = 'file_name';
-        } else {
-            $order = 'surname';
-        }
-    } else {
-        $order = 'surname';
-    }
-
     $count_of_assignments = countSubmissions($id);
     if ($count_of_assignments > 0) {
         $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
@@ -625,11 +607,11 @@ function display_assignment_submissions($id) {
                                                 assignment.grading_type
                                                FROM assignment_submit AS assign, user, assignment
                                                WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
-                                               ORDER BY $order $rev, assign.id", $id);
+                                               ORDER BY surname", $id);
 
         $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
     }
-
+    $data['seen'] = [];
     $data['start_date_review'] = $assign->start_date_review;
     $data['due_date_review'] = $assign->due_date_review;
     $data['reviews_per_assignment'] = $assign->reviews_per_assignment;
@@ -643,7 +625,7 @@ function display_assignment_submissions($id) {
     $data['count_of_assignments'] = $count_of_assignments;
     $data['row'] = $assign;
     $data['assign'] = $assign;
-    $data['cdate'] = $cdate;
+    $data['cdate'] = date('Y-m-d H:i:s');
 
     view('modules.work.assignment_submissions', $data);
 }
@@ -2376,17 +2358,6 @@ function groups_with_no_submissions($id) {
 }
 
 /**
- * @brief Returns an array of the details of assignment $id
- * @param type $id
- * @return type
- */
-function get_assignment_details($id) {
-    global $course_id;
-    return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
-}
-
-
-/**
  * @brief get user assignment's file submissions
  * @param $assignment
  * @param $result
@@ -2403,7 +2374,7 @@ function get_user_file_submissions($assignment, $result, $row): string
     } else {
         $allFiles = [$row];
     }
-    $filelink = implode('<br>', array_map(function ($item) {
+    $filelink = implode('<div class="mb-2"></div>', array_map(function ($item) {
         global $urlAppend, $course_code;
         $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$item->id";
         $namelen = mb_strlen($item->file_name);
