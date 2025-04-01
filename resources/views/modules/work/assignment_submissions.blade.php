@@ -10,6 +10,42 @@
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
+
+            $.fn.dataTable.ext.order['dom-text-numeric'] = function(settings, col) {
+                return this.api()
+                    .column(col, { order: 'index' })
+                    .nodes()
+                    .map(function(td) {
+                        let val = parseFloat($('input', td).val().trim()); // Ensure numeric parsing
+                        return isNaN(val) ? -Infinity : val; // Use -Infinity for empty values
+                    })
+                    .toArray();
+            };
+
+            var table = $('.table-default').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": 'tools-col' },
+                    { "type": "num", "orderDataType": "dom-text-numeric", "targets": 'grade-col' } // FIXED: No dot (.)
+                ]
+            });
+
+            $('.work-form').on('submit', function(e) {
+                var form = this;
+
+                table.rows().every(function() {
+                    var row = $(this.node());
+
+                    row.find('input').each(function() {
+                        var input = $(this);
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: input.attr('name'),
+                            value: input.val()
+                        }).appendTo(form);
+                    });
+                });
+            });
+
             $('.onlineText') . click(function (e){
                 e.preventDefault();
                 var sid = $(this) . data('id');
@@ -134,7 +170,7 @@
 
                         {{-- list of submissions --}}
                         @if ($count_of_assignments > 0)
-                            <form action='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}' method='post' class='form-inline'>
+                            <form action='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}' method='post' class='form-inline work-form'>
                                 <input type='hidden' name='grades_id' value='{{ $id }}'>
                                 <br>
                                 <div class='alert alert-success'>
