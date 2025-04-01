@@ -42,21 +42,5 @@ if (!$lti) {
     die();
 }
 
-echo create_join_button(
-    $lti->lti_provider_url,
-    $lti->lti_provider_key,
-    $lti->lti_provider_secret,
-    $assignment->id,
-    "assignment",
-    $assignment->title,
-    $assignment->description,
-    $assignment->launchcontainer,
-    '',
-    $assignment
-);
-
-echo '<script type="text/javascript">
-//<![CDATA[
-document.ltiLaunchForm.submit();
-//]]>
-</script>';
+echo create_join_button_for_assignment($lti, $assignment);
+echo create_js_for_immediatelaunch($lti);

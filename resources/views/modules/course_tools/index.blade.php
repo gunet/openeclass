@@ -139,6 +139,7 @@
                             <div class='card-body'>
                                 @php
                                     load_js('trunk8');
+                                    $head_content .= head_content_for_modal_lti_1_3();
                                     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
                                     $result = Database::get()->queryArray("SELECT * FROM lti_apps
                                         WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
@@ -169,16 +170,7 @@
                                                                 @php $joinLink = create_launch_button($row->id); @endphp
                                                             @else
                                                                 @php
-                                                                    $joinLink = create_join_button(
-                                                                        $row->lti_provider_url,
-                                                                        $row->lti_provider_key,
-                                                                        $row->lti_provider_secret,
-                                                                        $row->id,
-                                                                        "lti_tool",
-                                                                        $row->title,
-                                                                        $row->description,
-                                                                        $row->launchcontainer
-                                                                    );
+                                                                    $joinLink = create_join_button_for_ltitool($row);
                                                                 @endphp
                                                             @endif
                                                         @else
@@ -186,33 +178,38 @@
                                                         @endif
 
                                                         @if ($is_editor)
-                                                            @if (!$headingsSent)
-                                                            @php $headingsSent = true; @endphp
-                                                            @endif
+                                                            @php
+                                                                $buttonActions = array();
+                                                                $ltiTitle = $row->title;
+                                                                if ($row->lti_version === LTI_VERSION_1_3) {
+                                                                    $buttonActions[] = array(
+                                                                        'title' => trans('langViewShow'),
+                                                                        'url' => "$_SERVER[SCRIPT_NAME]?show_lti_template=" . getIndirectReference($row->id),
+                                                                        'icon' => 'fa-eye'
+                                                                    );
+                                                                    $ltiTitle = create_a_href_for_modal_lti_1_3($row);
+                                                                }
+                                                                $buttonActions[] = array('title' => trans('langEditChange'),
+                                                                    'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
+                                                                    'icon' => 'fa-edit');
+                                                                $buttonActions[] = array('title' => $row->enabled? trans('langDeactivate') : trans('langActivate'),
+                                                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
+                                                                            ($row->enabled? 'disable' : 'enable'),
+                                                                    'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash');
+                                                                $buttonActions[] = array(  'title' => trans('langDelete'),
+                                                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
+                                                                    'icon' => 'fa-xmark',
+                                                                    'class' => 'delete',
+                                                                    'confirm' => trans('langConfirmDelete'));
+                                                            @endphp
                                                             <tr {!!($row->enabled? '': " class='not_visible'")!!}>
-                                                                <td class='text-start'><p>{!! $title !!}</p></td>
+                                                                <td class='text-start'><p>{!! $ltiTitle !!}</p></td>
                                                                 <td><p>{!! $desc !!}</p></td>
                                                                 <td class='text-nowrap'>{!! $joinLink !!}</td>
                                                                 <td class='option-btn-cell text-center'>
-                                                                {!! action_button(array(
-                                                                        array(  'title' => trans('langEditChange'),
-                                                                                'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
-                                                                                'icon' => 'fa-edit'),
-                                                                        array(  'title' => $row->enabled? trans('langDeactivate') : trans('langActivate'),
-                                                                                'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
-                                                                                        ($row->enabled? 'disable' : 'enable'),
-                                                                                'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
-                                                                        array(  'title' => trans('langDelete'),
-                                                                                'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                                                                                'icon' => 'fa-xmark',
-                                                                                'class' => 'delete',
-                                                                                'confirm' => trans('langConfirmDelete'))
-                                                                        )) !!}
+                                                                {!! action_button($buttonActions) !!}
                                                                 </td></tr>
                                                         @else
-                                                            @if (!$headingsSent)
-                                                                @php $headingsSent = true; @endphp
-                                                            @endif
                                                             <tr>
                                                                 <td class='text-center'><p>{!! $title !!}</p></td>
                                                                 <td><p>{!! $desc !!}</p></td>
@@ -220,15 +217,9 @@
                                                             </tr>
                                                         @endif
                                                 @endforeach
-                                                    @if ($headingsSent)
                                             </table>
-
+(??)                                        
                                         </div>
-                                    @endif
-
-                                    @if (!$is_editor and !$headingsSent)
-                                        {{trans('langNoLTIApps')}}
-                                    @endif
                                 @else
                                     {{trans('langNoLTIApps')}}
                                 @endif

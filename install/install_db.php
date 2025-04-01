@@ -1142,6 +1142,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `tii_use_quoted_exclusion` TINYINT NOT NULL DEFAULT '0',
     `tii_exclude_type` VARCHAR(20) NOT NULL DEFAULT 'none',
     `tii_exclude_value` INT(11) NOT NULL DEFAULT '0',
+    `tii_instructorcustomparameters` TEXT,
     `reviews_per_assignment` int(4) DEFAULT NULL,
     `start_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     `due_date_review` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -1309,15 +1310,31 @@ $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `course_id` INT(11) DEFAULT NULL,
     `title` VARCHAR(255) DEFAULT NULL,
     `description` TEXT,
+    `lti_version` VARCHAR(255) NOT NULL DEFAULT '1.1',
     `lti_provider_url` VARCHAR(255) DEFAULT NULL,
     `lti_provider_key` VARCHAR(255) DEFAULT NULL,
     `lti_provider_secret` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_public_keyset_url` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_initiate_login_url` VARCHAR(255) DEFAULT NULL,
+    `lti_provider_redirection_uri` VARCHAR(255) DEFAULT NULL,
+    `client_id` VARCHAR(255) DEFAULT NULL,
     `launchcontainer` TINYINT(4) NOT NULL DEFAULT 1,
     `is_template` TINYINT(4) NOT NULL DEFAULT 0,
     `enabled` TINYINT(4) NOT NULL DEFAULT 1,
     `all_courses` TINYINT(1) NOT NULL DEFAULT 1,
     `type` VARCHAR(255) NOT NULL DEFAULT 'turnitin',
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `lti_access_tokens` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `lti_app` int(11) NOT NULL,
+    `scope` TEXT,
+    `token` VARCHAR(128) NOT NULL,
+    `valid_until` int(11) NOT NULL,
+    `time_created` int(11) NOT NULL,
+    `last_access` int(11),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`lti_app`) REFERENCES `lti_apps` (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_lti_app` (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

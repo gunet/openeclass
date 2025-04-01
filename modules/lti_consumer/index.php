@@ -54,7 +54,7 @@ if ($is_editor) {
             $pageName = $langModify;
         }
     } else {
-        if (isset($_GET['id'])) {
+        if (isset($_GET['id']) || isset($_GET['show_template'])) {
             $action_bar = action_bar(array(
                 array('title' => $langBack,
                       'url' => "../course_tools/index.php?course=$course_code",
@@ -80,9 +80,9 @@ if (isset($_GET['add'])) {
 elseif(isset($_POST['update_lti_app']))
 {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'],null, false,
-        true, getDirectReference($_GET['id']), LTI_TYPE);
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_version'], $_POST['lti_key'], $_POST['lti_secret'],
+        $_POST['lti_public_keyset_url'], $_POST['lti_initiate_login_url'], $_POST['lti_redirection_uri'], $_POST['lti_launchcontainer'],
+        $_POST['status'], $_POST['lti_courses'],LTI_TYPE, $course_id, false, true, getDirectReference($_GET['id']));
         Session::flash('message',$langLTIAppAddSuccessful);
         Session::flash('alert-class', 'alert-success');
     redirect("../course_tools/index.php?course=$course_code");
@@ -113,15 +113,21 @@ elseif(isset($_GET['choice']))
 
 } elseif(isset($_POST['new_lti_app'])) { // new lti app
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-                       $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, $course_id, false,
+    add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_version'], $_POST['lti_key'], $_POST['lti_secret'],
+                       $_POST['lti_public_keyset_url'], $_POST['lti_initiate_login_url'], $_POST['lti_redirection_uri'], $_POST['lti_launchcontainer'],
+                       $_POST['status'], $_POST['lti_courses'], LTI_TYPE, $course_id, false,
                        false, null);
     Session::flash('message',$langLTIAppAddSuccessful);
     Session::flash('alert-class', 'alert-success');
 
     redirect("../course_tools/index.php?course=$course_code");
-}
-else {
+} else if (isset($_GET['show_template'])) {
+    $pageName = $langTurnitinConfDetails;
+    $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
+    $appId = getDirectReference($_GET['show_template']);
+    $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $appId);
+    $tool_content .= create_table_for_show_lti_1_3($lti);
+} else {
     lti_app_details();
 }
 add_units_navigation(TRUE);
