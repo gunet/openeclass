@@ -53,17 +53,6 @@ if (!session_id()) {
     session_start();
 }
 
-header('Content-Type: text/html; charset=UTF-8');
-
-// Will add headers to prevent against clickjacking.
-//add_framebusting_headers();
-
-add_xxsfilter_headers();
-
-add_nosniff_headers();
-
-//add_hsts_headers();
-
 if (file_exists('config/config.php')) { // read config file
     include_once 'config/config.php';
 } else {
@@ -84,6 +73,8 @@ try {
 } catch (Exception $ex) { // db credentials are wrong
     redirect(guess_base_url() . 'include/not_installed.php?err=db');
 }
+
+header('Content-Type: text/html; charset=UTF-8');
 
 require_once 'modules/admin/extconfig/externals.php';
 
@@ -561,6 +552,15 @@ if (isset($require_user_registration) && $require_user_registration) {
         $toolContent_ErrorExists = $langCheckUserRegistration;
     }
 }
+
+// Add headers to prevent against clickjacking.
+add_framebusting_headers();
+
+add_xxsfilter_headers();
+
+add_nosniff_headers();
+
+//add_hsts_headers();
 
 // get message array for copyright info
 require_once "license_info.php";
