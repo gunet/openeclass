@@ -41,7 +41,7 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langE
 
 $ex = Database::get()->querySingle("SELECT * FROM exercise WHERE id = ?d AND course_id = ?d", $exerciseId, $course_id);
 if ($ex->assign_to_specific == 1) { // specific users
-    $user_ids_no_sub = Database::get()->queryArray("SELECT u.id AS user_id, u.givenname, u.surname, u.email 
+    $user_ids_no_sub = Database::get()->queryArray("SELECT DISTINCT u.id AS user_id, u.givenname, u.surname, u.email 
                                                     FROM exercise_to_specific ets 
                                                     JOIN user u ON ets.user_id = u.id 
                                                     WHERE ets.exercise_id = ?d 
@@ -53,7 +53,7 @@ if ($ex->assign_to_specific == 1) { // specific users
         $group_ids[] = $g->group_id; 
     }
     $group_ids_str = implode(',',$group_ids);
-    $user_ids_no_sub = Database::get()->queryArray("SELECT u.id AS user_id, u.givenname, u.surname, u.email
+    $user_ids_no_sub = Database::get()->queryArray("SELECT DISTINCT u.id AS user_id, u.givenname, u.surname, u.email
                                                     FROM group_members gm
                                                     JOIN user u ON gm.user_id = u.id
                                                     WHERE gm.user_id IN (SELECT user_id FROM group_members WHERE group_id IN ($group_ids_str))
@@ -61,7 +61,7 @@ if ($ex->assign_to_specific == 1) { // specific users
                                                     AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d)", 0, $exerciseId);
 
 } else { // all users - only students
-    $user_ids_no_sub = Database::get()->queryArray("SELECT u.id AS user_id, u.givenname, u.surname, u.email
+    $user_ids_no_sub = Database::get()->queryArray("SELECT DISTINCT u.id AS user_id, u.givenname, u.surname, u.email
                                                     FROM course_user cu
                                                     JOIN user u ON cu.user_id = u.id
                                                     WHERE cu.course_id = ?d
