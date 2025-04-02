@@ -475,6 +475,10 @@ if (!$nbrExercises) {
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
                               'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
                               'show' => course_status($course_id) == COURSE_OPEN),
+                        array(
+                              'title' => $langExerciseUserGroupNoSubmission,
+                              'url' => "users_no_submission.php?course=$course_code&amp;exerciseId=$row->id",
+                              'icon' => 'fa-minus-square'),
                         array('title' => $langUsage,
                               'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
                               'icon' => 'fa-line-chart'),
