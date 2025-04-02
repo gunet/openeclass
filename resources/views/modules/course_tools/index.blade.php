@@ -2,7 +2,7 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-    <script type="text/javascript">
+    <script>
         var langEmptyGroupName = '{{ trans('langNoPgTitle') }}'
     </script>
 @endpush
@@ -10,7 +10,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} module-container py-lg-0'>
+    <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             @include('layouts.partials.left_menu')
@@ -26,7 +26,7 @@
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="{{ trans('langClose') }}"></button>
                         </div>
                         <div class="offcanvas-body">
-                            @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                            @include('layouts.partials.sidebar', ['is_editor' => $is_editor])
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                                 <h3>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
                             <div class='card-body'>
-                                <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
+                                <form name="courseTools" action="{{ $post_url }}" method="post" enctype="multipart/form-data">
                                     <div class="table-responsive mt-0">
                                         <table class="table-default rounded-2">
                                             <thead><tr class='list-header'>
@@ -75,7 +75,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    {!! $csrf !!}
+                                    {!! generate_csrf_token_form_field() !!}
                                 </form>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                     {{ trans('langOperations') }}
                                 </h3>
                                 <div>
-                                    <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg ps-2'>{{ trans('langAddExtLink') }}</span></a>
+                                    <a class='btn submitAdminBtn' href='{{ $post_url }}&amp;add=link'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg ps-2'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
 
                             </div>
@@ -105,7 +105,7 @@
                                                             <small class='text-muted'>{{ $externalLinks->url }}</small>
                                                         </div>
                                                         <div class='col-2 d-flex justify-content-end align-items-center'>
-                                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa-solid fa-xmark Accent-200-cl'></span></a>
+                                                            <a class='text-danger' href='{{ $post_url }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa-solid fa-xmark Accent-200-cl'></span></a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -120,7 +120,8 @@
                         </div>
                     </div>
 
-                    @if((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course))
+                    @if ((isset($is_collaborative_course) and !$is_collaborative_course) or is_null($is_collaborative_course))
+
                     <div class='col-12 mt-5'>
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
@@ -137,102 +138,141 @@
 
                             </div>
                             <div class='card-body'>
-                                @php
-                                    load_js('trunk8');
-                                    $head_content .= head_content_for_modal_lti_1_3();
-                                    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
-                                    $result = Database::get()->queryArray("SELECT * FROM lti_apps
-                                        WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
-                                @endphp
-
-                                @if($result)
-                                        <div class='table-responsive mt-0'>
-                                            <table class='table-default rounded-2'>
-                                                <thead><tr class='list-header'>
+                                @if ($lti_apps)
+                                    <div class='table-responsive mt-0'>
+                                        <table class='table-default rounded-2'>
+                                            <thead>
+                                                <tr class='list-header'>
                                                     <th style='width:30%'>{{ trans('langTitle') }}</th>
                                                     <th class='text-start'>{{ trans('langUnitDescr') }}</th>
                                                     <th class='text-start'>{{ trans('langLTIAppActions') }}</th>
                                                     @if ($is_editor)
                                                         <th class='text-center' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
                                                     @endif
-                                                </tr></thead>
+                                                </tr>
+                                            </thead>
 
-                                                @foreach ($result as $row)
-                                                        @php
-                                                            $id = $row->id;
-                                                            $title = $row->title;
-                                                            $desc = isset($row->description)? $row->description: '';
-                                                            $canJoin = ($row->enabled == 1 || $is_editor);
-                                                        @endphp
-
-                                                        @if ($canJoin)
-                                                            @if ($row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED)
-                                                                @php $joinLink = create_launch_button($row->id); @endphp
-                                                            @else
-                                                                @php
-                                                                    $joinLink = create_join_button_for_ltitool($row);
-                                                                @endphp
-                                                            @endif
-                                                        @else
-                                                            @php $joinLink = q($title); @endphp
-                                                        @endif
-
-                                                        @if ($is_editor)
-                                                            @php
-                                                                $buttonActions = array();
-                                                                $ltiTitle = $row->title;
-                                                                if ($row->lti_version === LTI_VERSION_1_3) {
-                                                                    $buttonActions[] = array(
-                                                                        'title' => trans('langViewShow'),
-                                                                        'url' => "$_SERVER[SCRIPT_NAME]?show_lti_template=" . getIndirectReference($row->id),
-                                                                        'icon' => 'fa-eye'
-                                                                    );
-                                                                    $ltiTitle = create_a_href_for_modal_lti_1_3($row);
-                                                                }
-                                                                $buttonActions[] = array('title' => trans('langEditChange'),
-                                                                    'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
-                                                                    'icon' => 'fa-edit');
-                                                                $buttonActions[] = array('title' => $row->enabled? trans('langDeactivate') : trans('langActivate'),
-                                                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
-                                                                            ($row->enabled? 'disable' : 'enable'),
-                                                                    'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash');
-                                                                $buttonActions[] = array(  'title' => trans('langDelete'),
-                                                                    'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                                                                    'icon' => 'fa-xmark',
-                                                                    'class' => 'delete',
-                                                                    'confirm' => trans('langConfirmDelete'));
-                                                            @endphp
-                                                            <tr {!!($row->enabled? '': " class='not_visible'")!!}>
-                                                                <td class='text-start'><p>{!! $ltiTitle !!}</p></td>
-                                                                <td><p>{!! $desc !!}</p></td>
-                                                                <td class='text-nowrap'>{!! $joinLink !!}</td>
-                                                                <td class='option-btn-cell text-center'>
-                                                                {!! action_button($buttonActions) !!}
-                                                                </td></tr>
-                                                        @else
-                                                            <tr>
-                                                                <td class='text-center'><p>{!! $title !!}</p></td>
-                                                                <td><p>{!! $desc !!}</p></td>
-                                                                <td class='text-center text-nowrap'>{!! $joinLink !!}</td>
-                                                            </tr>
-                                                        @endif
-                                                @endforeach
-                                            </table>
-(??)                                        
-                                        </div>
+                                            @foreach ($lti_apps as $app)
+                                                @if ($is_editor)
+                                                    <tr {!!($app->enabled? '': " class='not_visible'")!!}>
+                                                        <td class='text-start'><p>{!! $app->title !!}</p></td>
+                                                        <td><p>{!! $app->description !!}</p></td>
+                                                        <td class='text-nowrap'>{!! $app->joinLink !!}</td>
+                                                        <td class='option-btn-cell text-center'>
+                                                            {!! action_button([
+                                                                [ 'title' => trans('langEditChange'),
+                                                                  'url' => $app->editUrl,
+                                                                  'icon' => 'fa-edit' ],
+                                                                [ 'title' => $app->enabled? trans('langDeactivate') : trans('langActivate'),
+                                                                  'url' => $app->enableUrl,
+                                                                  'icon' => $app->enabled? 'fa-eye': 'fa-eye-slash' ],
+                                                                [ 'title' => trans('langDelete'),
+                                                                  'url' => $app->deleteUrl,
+                                                                  'icon' => 'fa-xmark',
+                                                                  'class' => 'delete',
+                                                                  'confirm' => trans('langConfirmDelete') ],
+                                                                ])
+                                                            !!}
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td class='text-center'><p>{!! $app->title !!}</p></td>
+                                                        <td><p>{!! $app->description !!}</p></td>
+                                                        <td class='text-center text-nowrap'>{!! $app->joinLink !!}</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </table>
+                                    </div>
                                 @else
-                                    {{trans('langNoLTIApps')}}
+                                    {{ trans('langNoLTIApps') }}
                                 @endif
                             </div>
                         </div>
                     </div>
+
+                    <div class='col-12 mt-5'>
+                        <div class='card panelCard card-default px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+
+                                <h3>
+                                    {{ trans('langLtiPublishTool') }}
+                                </h3>
+
+                                <div>
+                                    <a class='btn submitAdminBtn' href='editpublish.php?course={{ $course_code }}'>
+                                        <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs hidden-lg ps-2'>{{ trans('langAdd') }}</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class='card-body'>
+                                @if ($lti_providers)
+                                    <div class='table-responsive mt-0'>
+                                        <table class='table-default rounded-2'>
+                                            <thead>
+                                                <tr class='list-header'>
+                                                    <th style='width:30%'>{{ trans('langTitle') }}</th>
+                                                    <th class='text-start'>{{ trans('langUnitDescr') }}</th>
+                                                    <th class='text-start'>{{ trans('langNewLTIAppSessionDesc') }}</th>
+                                                    @if ($is_editor)
+                                                        <th class='text-center' aria-label="{{ trans('langSettingSelect') }}">{!! icon('fa-gears') !!}</th>
+                                                    @endif
+                                                </tr>
+                                            </thead>
+
+                                            @foreach ($lti_providers as $provider)
+                                                @if ($is_editor)
+                                                    <tr {!!($provider->enabled? '': " class='not_visible'")!!}>
+                                                        <td class='text-start'><p>{!! $provider->title !!}</p></td>
+                                                        <td><p>{!! $provider->description !!}</p></td>
+                                                        <td class='option-btn-cell text-center'>
+                                                            {!! action_button([
+                                                                [ 'title' => trans('langEditChange'),
+                                                                  'url' => $provider->editUrl,
+                                                                  'icon' => 'fa-edit' ],
+                                                                [ 'title' => trans('langViewShow'),
+                                                                  'url' => $provider->showUrl,
+                                                                  'icon' => 'fa-archive' ],
+                                                                [ 'title' => $provider->enabled? trans('langDeactivate') : trans('langActivate'),
+                                                                  'url' => $provider->enableUrl,
+                                                                  'icon' => $provider->enabled? 'fa-eye': 'fa-eye-slash' ],
+                                                                [ 'title' => trans('langDelete'),
+                                                                  'url' => $provider->deleteUrl,
+                                                                  'icon' => 'fa-xmark',
+                                                                  'class' => 'delete',
+                                                                  'confirm' => trans('langConfirmDelete') ],
+                                                                ])
+                                                            !!}
+                                                        </td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td class='text-center'><p>{!! $provider->title !!}</p></td>
+                                                        <td><p>{!! $provider->description !!}</p></td>
+                                                        <td class='text-center'>
+                                                            <a href='{{ $provider->showUrl }}'>{{trans('langViewShow') }}</a>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </table>
+                                    </div>
+                                @else
+                                    {{ trans('langNoPUBLTIApps') }}
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                     @endif
                 </div>
             </div>
 
         </div>
 
-</div>
+  </div>
 </div>
 
 @endsection
