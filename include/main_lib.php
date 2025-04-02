@@ -11992,7 +11992,7 @@ function theme_initialization() {
                 .body-learning-path,
                 .iframe-learningPath,
                 .body-learningPath{
-                    background-color:$theme_options_styles[bgColor]; 
+                    background-color:$theme_options_styles[bgColor];
                 }
             ";
         }
