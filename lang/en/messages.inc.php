@@ -2004,6 +2004,12 @@ $langImportExercise = "Import Exercise";
 $langAskExercise = "Locate the Exercise file";
 $langExerciseNoTitle = "The exercise has no title!";
 $langExerciseWrongDates = "The exercise has wrong dates!";
+$langExerciseUserGroupNoSubmission = "Users/Groups without submission - Reminder";
+$langNoUsersForExerSubmission = "There are no users without submission to the exercise.";
+$langNotifyUnSubmittedUsers = "We remind you that you have not submitted your answers to the lesson exercise.";
+$langNotifyUsersViaEmail = "Notify users at their email address to submit their responses.";
+$langUsersListWithNoSubmission = "The list of users who have not submitted their answers to the exercise.";
+$langNotifyEmailToUsers = "The reminder was sent to";
 $langSubTitle = "<br><strong>Tip: </strong>If you want to add a link to a page,
 		go to that page, cut and paste its address in the
 		URL bar on the top of your browser and insert it into the \"link\" field below.<br><br>";

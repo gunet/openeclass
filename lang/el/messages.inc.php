@@ -2258,6 +2258,12 @@ $langImportExercise = "Εισαγωγή Άσκησης";
 $langAskExercise = "Εντοπισμός του αρχείου Άσκησης";
 $langExerciseNoTitle = "Η άσκηση δεν έχει τίτλο!";
 $langExerciseWrongDates = "Η άσκηση έχει λάθος ημερομηνίες!";
+$langExerciseUserGroupNoSubmission = "Χρήστες/Ομάδες χωρίς υποβολή - Υπενθύμιση";
+$langNoUsersForExerSubmission = "Δεν υπάρχουν χρήστες χωρίς υποβολή στην άσκηση.";
+$langNotifyUnSubmittedUsers = "Σας υπενθυμίζουμε ότι δεν έχετε υποβάλει τις απαντήσεις σας στην άσκηση του μάθηματος.";
+$langNotifyUsersViaEmail = "Ειδοποίηση χρηστών στην ηλεκτρονική τους διεύθυνση ώστε να υποβάλουν τις απαντήσεις τους.";
+$langUsersListWithNoSubmission = "Η λίστα των χρηστών που δεν έχουν υποβάλει τις απαντήσεις τους στην άσκηση.";
+$langNotifyEmailToUsers = "Η υπενθύμιση στάλθηκε σε";
 /* * *********************************************
  * external_module.php
  * ********************************************* */
