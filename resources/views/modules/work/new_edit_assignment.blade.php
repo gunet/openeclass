@@ -897,6 +897,9 @@
             $('#lti_templates').on('change', function(e) {
                 checkLtiSelectContentRequired();
             });
+            @if (isset($assignment_id))
+            checkLtiSelectContentRequired();
+            @endif
 
         });
 
