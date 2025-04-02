@@ -156,46 +156,6 @@
     </div>
 
     <script type='text/javascript'>
-        // Formats a date string that can be parsed, i.e. as derived from remote LTI content selection, into specific format (DD-MM-YYYY HH:mm).
-        function formatReturnDate(dt) {
-            const unixtime = Date.parse(dt);
-            const dtobject = new Date(unixtime);
-            const day = dtobject.getDate().toString().padStart(2, '0');
-            const month = (dtobject.getMonth() + 1).toString().padStart(2, '0');
-            const year = dtobject.getFullYear().toString();
-            const hours = dtobject.getHours().toString().padStart(2, '0');
-            const minutes = dtobject.getMinutes().toString().padStart(2, '0');
-            return day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
-        }
-
-        // populate local assignment form from remote LTI content selection and hide modal
-        window.processContentItemReturnData = function(returnData) {
-            if (returnData === undefined) {
-                return;
-            }
-            if (returnData.title !== undefined) {
-                $('#title').val(returnData.title);
-            }
-            if (returnData.maxscore !== undefined) {
-                $('#max_grade').val(returnData.maxscore);
-            }
-            if (returnData.startdate !== undefined) {
-                $('#WorkStart').val(formatReturnDate(returnData.startdate));
-            }
-            if (returnData.enddate !== undefined) {
-                $('#WorkEnd').val(formatReturnDate(returnData.enddate));
-            }
-            if (returnData.feedbackdate !== undefined) {
-                $('#tii_feedbackreleasedate').val(formatReturnDate(returnData.feedbackdate));
-            }
-            if (returnData.instructorcustomparameters !== undefined) {
-                $('#tii_instructorcustomparameters').val(returnData.instructorcustomparameters);
-            }
-            $('#SelectContentModal').modal('hide');
-            let selected_content_indicator = $("{!! get_selected_content_indicator() !!}");
-            $('#tii_selected_content_span').html('').append(selected_content_indicator);
-        }
-
         $(document).ready(function() {
             $('#assignment_table_{{ $course_code }}').DataTable ({
                 'stateSave': true,
