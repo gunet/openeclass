@@ -74,7 +74,7 @@ function new_publish_ltiapp() {
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
                             </div>
-                        </div>        
+                        </div>
                         <div class='form-group mt-4'>
                             <label for='lti_secret' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
                             <div class='col-sm-12'>
@@ -162,7 +162,7 @@ function edit_publish_ltiapp($id) {
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
             </div>
-        </div>        
+        </div>
         <div class='form-group mt-4'>
             <label for='lti_secret' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
             <div class='col-sm-12'>
@@ -273,85 +273,29 @@ function update_publish_ltiapp($id, $title, $desc, $key, $secret, $status) {
  * Display available published LTI configurations.
  */
 function lti_provider_details() {
-    global $course_id, $tool_content, $is_editor, $course_code,
-           $langConfirmDelete, $langNewLTIAppSessionDesc, $langTitle, $langActivate,
-           $langDeactivate, $langEditChange, $langDelete, $langNoPUBLTIApps, $langViewShow, $langSettingSelect;
-
-    load_js('trunk8');
+    global $course_id, $tool_content, $is_editor, $course_code;
 
     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
     $result = Database::get()->queryArray("SELECT * FROM course_lti_publish
         WHERE course_id = ?s $activeClause ORDER BY title ASC", $course_id);
     if ($result) {
-        $headingsSent = false;
-        $headings = "
-                       <div class='col-sm-12'>
-                         <div class='table-responsive'>
-                           <table class='table-default'>
-                           <thead>
-                             <tr class='list-header'>
-                               <th style='width:30%'>$langTitle</th>
-                               <th>$langNewLTIAppSessionDesc</th>";
-        if ($is_editor) {
-            $headings .= "<th aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>";
-        }
-        $headings .= "</tr></thead>";
+        $result = array_map(function ($item) {
+            global $course_code, $is_editor, $urlAppend;
 
-        foreach ($result as $row) {
-            $id = $row->id;
-            $title = $row->title;
-
-            $desc = $row->description ?? '';
-
+            $indirect_id = getIndirectReference($item->id);
+            $baseUrl = "{$urlAppend}modules/course_tools/editpublish.php?course=$course_code&amp;id=$indirect_id&amp;choice=";
+            $item->showUrl = $baseUrl . 'show';
             if ($is_editor) {
-                if (!$headingsSent) {
-                    $tool_content .= $headings;
-                    $headingsSent = true;
-                }
-                $showUrl = "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=show";
-                $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td class='text-start'><a href='$showUrl'>$title</</td>
-                    <td>$desc</td>
-                    <td class='option-btn-cell text-end'>".
-                    action_button(array(
-                        array('title' => $langEditChange,
-                            'url' => "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
-                            'icon' => 'fa-edit'),
-                        array('title' => $langViewShow,
-                            'url' => $showUrl,
-                            'icon' => 'fa-archive'),
-                        array('title' => $row->enabled? $langDeactivate : $langActivate,
-                            'url' => "editpublish.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
-                                ($row->enabled? 'disable' : 'enable'),
-                            'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
-                        array('title' => $langDelete,
-                            'url' => "editpublish.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                            'icon' => 'fa-xmark',
-                            'class' => 'delete',
-                            'confirm' => $langConfirmDelete)
-                    )) .
-                    "</td></tr>";
-            } else {
-                if (!$headingsSent) {
-                    $tool_content .= $headings;
-                    $headingsSent = true;
-                }
-                $tool_content .= "<tr>
-                    <td>$title</td>
-                    <td>$desc</td>
-                    </tr>";
+                $item->editUrl = $baseUrl . 'edit';
+                $item->enableUrl = $baseUrl . ($item->enabled? 'do_disable' : 'do_enable');
+                $item->deleteUrl = $baseUrl . 'choice=do_delete';
             }
-        }
-        if ($headingsSent) {
-            $tool_content .= "</table></div></div>";
-        }
-
-        if (!$is_editor and !$headingsSent) {
-            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoPUBLTIApps</span></div>";
-        }
+            return $item;
+        }, $result);
     } else {
-        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoPUBLTIApps</span></div>";
+        $result = [];
     }
+    return $result;
 }
 
 function disable_publish_ltiapp($id) {
