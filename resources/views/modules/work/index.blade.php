@@ -192,7 +192,7 @@
                 $('#tii_instructorcustomparameters').val(returnData.instructorcustomparameters);
             }
             $('#SelectContentModal').modal('hide');
-            let selected_content_indicator = $(\"" . get_selected_content_indicator() ."\");
+            let selected_content_indicator = $("{!! get_selected_content_indicator() !!}");
             $('#tii_selected_content_span').html('').append(selected_content_indicator);
         }
 
