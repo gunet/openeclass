@@ -45,7 +45,9 @@ if ($ex->assign_to_specific == 1) { // specific users
                                                     FROM exercise_to_specific ets 
                                                     JOIN user u ON ets.user_id = u.id 
                                                     WHERE ets.exercise_id = ?d 
-                                                    AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d)", $exerciseId, $exerciseId);
+                                                    AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d 
+                                                                        AND attempt_status = ?d
+                                                                        OR attempt_status = ?d)", $exerciseId, $exerciseId, ATTEMPT_COMPLETED, ATTEMPT_PENDING);
 } elseif ($ex->assign_to_specific == 2) { // specific group
     $group_ids = [];
     $g_ids = Database::get()->queryArray("SELECT group_id FROM exercise_to_specific WHERE exercise_id = ?d", $exerciseId);
@@ -58,7 +60,9 @@ if ($ex->assign_to_specific == 1) { // specific users
                                                     JOIN user u ON gm.user_id = u.id
                                                     WHERE gm.user_id IN (SELECT user_id FROM group_members WHERE group_id IN ($group_ids_str))
                                                     AND gm.is_tutor = ?d
-                                                    AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d)", 0, $exerciseId);
+                                                    AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d
+                                                                        AND attempt_status = ?d
+                                                                        OR attempt_status = ?d)", 0, $exerciseId, ATTEMPT_COMPLETED, ATTEMPT_PENDING);
 
 } else { // all users - only students
     $user_ids_no_sub = Database::get()->queryArray("SELECT DISTINCT u.id AS user_id, u.givenname, u.surname, u.email
@@ -70,7 +74,9 @@ if ($ex->assign_to_specific == 1) { // specific users
                                                     AND cu.editor = ?d
                                                     AND cu.reviewer = ?d
                                                     AND cu.course_reviewer = ?d
-                                                    AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d)", $course_id, USER_STUDENT, 0, 0, 0, 0, $exerciseId);
+                                                    AND u.id NOT IN (SELECT `uid` FROM exercise_user_record WHERE eid = ?d
+                                                                        AND attempt_status = ?d
+                                                                        OR attempt_status = ?d)", $course_id, USER_STUDENT, 0, 0, 0, 0, $exerciseId, ATTEMPT_COMPLETED, ATTEMPT_PENDING);
 }
 
 if (isset($_GET['notify_users'])) {
