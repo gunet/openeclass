@@ -36,7 +36,7 @@ add_units_navigation(TRUE);
 load_js('tools.js');
 load_js('trunk8');
 
-$page_url = "modules/course_tools/?course=$course_code";
+$page_url = "modules/course_tools/index.php?course=$course_code";
 $data['post_url'] = $urlAppend . $page_url;
 
 $table_modules = '';
