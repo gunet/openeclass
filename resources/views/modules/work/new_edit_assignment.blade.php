@@ -56,145 +56,7 @@
                                             </div>
 
                                             @if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id))
-                                                <div class='row form-group mt-4'>
-                                                    <div class='col-12 control-label-notes mb-1'>{{ trans('langAssignmentType') }}</div>
-                                                    <div class='col-12'>
-                                                        <div class='radio mb-2'>
-                                                            <label>
-                                                                <input type='radio' name='assignment_type' value='0' @if($assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif>
-                                                                {{ trans('langAssignmentTypeEclass') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='radio'>
-                                                            <label>
-                                                                <input type='radio' name='assignment_type' value='1' @if($assignment_type == ASSIGNMENT_TYPE_TURNITIN) checked @endif>
-                                                                {{ trans('langAssignmentTypeTurnitin') }}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class='col-12 form-group @if ($assignment_type == ASSIGNMENT_TYPE_ECLASS) hidden @endif mt-4 mb-4 p-3' id='lti_label' style='margin-top: 30px; margin-bottom:30px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
-                                                    <div class='TextBold larg-text'>
-                                                        {{ trans('langLTIOptions') }}
-                                                    </div>
-                                                    <div class='col-12'>
-                                                        <span class='help-block'>{{ trans('langTurnitinNewAssignNotice') }}</span>
-                                                    </div>
-                                                    <div class='form-group mt-4 @if ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) hidden @endif'>
-                                                        <label for='lti_templates' class='col-sm-12 control-label-notes'>{{ trans('langTiiApp') }}</label>
-                                                        <div class='col-12'>
-                                                            <select name='lti_template' class='form-select' id='lti_templates' @if ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) disabled @endif>
-                                                                {!! $lti_template_options !!}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class='form-group mt-3 @if ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) hidden @endif'>
-                                                        <label for='lti_launchcontainer' class='col-sm-12 control-label-notes'>{{ trans('langLTILaunchContainer') }}</label>
-                                                        <div class='col-sm-12'>
-                                                            @if (isset($assignment_id))
-                                                                {!! selection(lti_get_containers_selection(), 'lti_launchcontainer', $launch_container, 'id="lti_launchcontainer"' . $lti_disabled) !!}
-                                                            @else
-                                                                {!! selection(lti_get_containers_selection(), 'lti_launchcontainer', LTI_LAUNCHCONTAINER_EMBED, 'id="lti_launchcontainer" disabled') !!}
-                                                            @endif
-                                                        </div>
-                                                    </div>
-
-                                                    <div class='form-group mt-4 @if ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) hidden @endif'>
-                                                        <div class='col-sm-12 control-label-notes mb-1'>
-                                                            {{ trans('langTiiCompareAgainst') }}
-                                                        </div>
-                                                        <div class='col-sm-12'>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1'
-                                                                       @if ($student_papercheck == 1 or $assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif {!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiStudentPaperCheck') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1'
-                                                                       @if ($internetcheck == 1 or $assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif {!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiInternetCheck') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1'
-                                                                       @if ($journalcheck == 1 or $assignment_type == ASSIGNMENT_TYPE_ECLASS) checked @endif{!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiJournalCheck') }}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class='form-group hidden mt-4'>
-                                                        <label for='tii_report_gen_speed' class='col-sm-12 control-label-notes mb-1'>{{ trans('langTiiSimilarityReport') }}</label>
-                                                        <div class='col-sm-12'>
-                                                            <select name='tii_report_gen_speed' class='form-select' id='tii_report_gen_speed' {!! $lti_disabled !!}>
-                                                                <option value='0' @if ($report_gen_speed == 0) selected @endif>{{ trans('langTiiReportGenImmediatelyNoResubmit') }}</option>
-                                                                <option value='1' @if ($report_gen_speed == 1) selected @endif>{{ trans('langTiiReportGenImmediatelyWithResubmit') }}</option>
-                                                                <option value='2' @if ($report_gen_speed == 2) selected @endif>{{ trans('langTiiReportGenOnDue') }}</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class='col-sm-12 mt-4'>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' @if ($tii_s_view_reports == 1) checked @endif value='1' {!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiSViewReports') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' @if ($tii_use_biblio_exclusion == 1) checked @endif value='1' {!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiExcludeBiblio') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' @if ($tii_use_quoted_exclusion == 1) checked @endif value='1' {!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiExcludeQuoted') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='checkbox'>
-                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                                    <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' @if ($tii_exclude_type != 'none') checked @endif value='1' {!! $lti_disabled !!}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langTiiExcludeSmall') }}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class='form-group mt-4 @if ($tii_exclude_type == 'none') hidden @endif'>
-                                                        <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langTiiExcludeType') }}</div>
-                                                        <div class='col-sm-12'>
-                                                            <div class='radio'>
-                                                                <label>
-                                                                    <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' checked {!! $lti_disabled !!}>
-                                                                    {{ trans('langTiiExcludeTypeWords') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='radio'>
-                                                                <label>
-                                                                    <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' @if ($tii_exclude_type == 'percentage') checked @endif {!! $lti_disabled !!}>
-                                                                    {{ trans('langPercentage') }}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class='form-group @if ($tii_exclude_type == 'none') hidden @endif mt-4'>
-                                                        <label for='tii_exclude_value' class='col-sm-6 control-label-notes'>{{ trans('langTiiExcludeValue') }}:</label>
-                                                        <div class='col-sm-12'>
-                                                            <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='{{ intval($tii_exclude_value) }}' {!! $lti_disabled !!}>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                {!! $divs_for_lti_templates !!}
                                             @else
                                                 <input type='hidden' name='assignment_type' value='0' />
                                             @endif
@@ -406,27 +268,7 @@
                                             </div>
 
                                             @if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id))
-                                                <div class='row input-append date form-group hidden @if (Session::getError('WorkFeedbackRelease')) has-error @endif mt-4' id='feedbackreleasedatepicker' data-date='{{ $WorkFeedbackRelease }}' data-date-format='dd-mm-yyyy'>
-                                                    <label for='tii_feedbackreleasedate' class='col-12 control-label-notes mb-1'>{{ trans('langTiiFeedbackReleaseDate') }}</label>
-                                                    <div class='col-12'>
-                                                        <div class='input-group'>
-                                                           <span class='input-group-addon'>
-                                                            <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                             <input class='mt-0' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1' @if ($enableWorkFeedbackRelease) checked @endif >
-                                                             <span class='checkmark'></span></label>
-                                                         </span>
-                                                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='{{ $WorkFeedbackRelease }}' @if (!$enableWorkFeedbackRelease) disabled @endif>
-                                                        </div>
-                                                        <span class='help-block'>
-                                                            @if (Session::hasError('WorkFeedbackRelease'))
-                                                                {{ Session::getError('WorkFeedbackRelease') }}
-                                                            @else
-                                                                &nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> {{ trans('langAssignmentFeedbackReleaseHelpBlock') }}
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                {!! $divs_for_lti_templates_feedback_release_date !!}
                                             @endif
 
                                             <div class='mt-4 form-group @if (!$WorkEnd) hide @endif mt-4' id='late_sub_row'>
@@ -746,13 +588,14 @@
         </div>
     </div>
 
+    {!! js_for_lti_templates($lti_templates) !!}
     <script type='text/javascript'>
         $(function() {
             $('#scales').select2({ width: '100%' });
             $('#rubrics').select2({ width: '100%' });
             $('#reviews').select2({ width: '100%' });
             $('input[name=grading_type]').on('change', function(e){
-                var choice = $(this).val();
+                let choice = $(this).val();
                 if (choice == 0) {
                     $('#max_grade')
                         .prop('disabled', false)
@@ -841,64 +684,9 @@
                 }
             });
             $('input[name=assignment_type]').on('change', function(e) {
-                var choice = $(this).val();
+                let choice = $(this).val();
                 if (choice == 0) {
-                    // lti fields
-                    $('#lti_label')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#lti_templates')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#lti_launchcontainer')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_feedbackreleasedate')
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_internetcheck')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    /*$('#tii_institutioncheck')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');*/
-                    $('#tii_journalcheck')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_report_gen_speed')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_s_view_reports')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_studentpapercheck')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    /*$('#tii_submit_papers_to')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');*/
-                    $('#tii_use_biblio_exclusion')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_use_quoted_exclusion')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
-                    $('#tii_use_small_exclusion')
-                        .prop('disabled', true)
-                        .closest('div.form-group')
-                        .addClass('hidden');
+                    hideLtiAllFields();
 
                     // user groups
                     $('#group_button')
@@ -921,62 +709,7 @@
                         .prop('disabled', false);
 
                 } else if (choice == 1) {
-                    // lti fields
-                    $('#lti_label')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#lti_templates')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#lti_launchcontainer')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_feedbackreleasedate')
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_internetcheck')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    /*$('#tii_institutioncheck')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');*/
-                    $('#tii_journalcheck')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_report_gen_speed')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_s_view_reports')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_studentpapercheck')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    /*$('#tii_submit_papers_to')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');*/
-                    $('#tii_use_biblio_exclusion')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_use_quoted_exclusion')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
-                    $('#tii_use_small_exclusion')
-                        .prop('disabled', false)
-                        .closest('div.form-group')
-                        .removeClass('hidden');
+                    showLtiAllFields();
 
                     // user groups
                     $('#user_button')
@@ -1014,6 +747,9 @@
                     $('#tii_feedbackreleasedate').val('{{ $tii_fwddate }}');
                     $('#enableWorkStart_review').trigger('click');
                     $('#enableWorkEnd_review').trigger('click');
+
+                    // check for select content
+                    checkLtiSelectContentRequired();
                 }
             });
             $('#WorkEnd, #WorkStart,#WorkStart_review, #WorkEnd_review,#tii_feedbackreleasedate').datetimepicker({
@@ -1099,6 +835,28 @@
             $('input[id=assign_button_some]').click(ajaxAssignees);
             $('input[id=assign_button_group]').click(ajaxAssignees);
             $('input[id=assign_button_all]').click(hideAssignees);
+
+            let selectContentModalEl = document.getElementById('SelectContentModal')
+            selectContentModalEl.addEventListener('show.bs.modal', function (event) {
+                setSelectContentFrameHtml('" . $langPleaseWait . "');
+            });
+            selectContentModalEl.addEventListener('shown.bs.modal', function (event) {
+                let selectedTemplate = Number($('#lti_templates').find(':selected').val());
+                $.ajax({
+                    method: 'POST',
+                    url: '" . $urlAppend . "modules/lti/contentitem.php',
+                    data: { id: selectedTemplate, course: $course_id, resourcetype: '" . RESOURCE_LINK_TYPE_ASSIGNMENT . "'  }
+                })
+                    .done(function(data) {
+                        setSelectContentFrameHtml(data);
+                    });
+            });
+            //selectContentModalEl.addEventListener('hidden.bs.modal', function (event) {
+            //
+            //});
+            $('#lti_templates').on('change', function(e) {
+                checkLtiSelectContentRequired();
+            });
 
         });
 
