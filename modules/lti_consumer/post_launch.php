@@ -42,4 +42,4 @@ if (!$lti_app) {
 }
 
 echo create_join_button_for_ltitool($lti_app);
-echo create_js_for_immediatelaunch($lti);
+echo create_js_for_immediatelaunch($lti_app);

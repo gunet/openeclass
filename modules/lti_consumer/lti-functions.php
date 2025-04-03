@@ -861,7 +861,7 @@ function create_join_button_for_ltitool($lti) {
     return $joinLink;
 }
 
-function create_js_for_immediatelaunch(stdClass$lti): ?string {
+function create_js_for_immediatelaunch(stdClass $lti): ?string {
     $retJs = null;
     if ($lti->lti_version === LTI_VERSION_1_1) {
         $retJs = '<script type="text/javascript">' . "\n" .
