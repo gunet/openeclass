@@ -104,9 +104,6 @@ function new_edit_assignment($assignment_id = null) {
         $data['desc'] = Session::has('desc') ? Session::get('desc') : $row->description;
         $data['lti_templates'] = $lti_templates;
         $data['divs_for_lti_templates'] = divs_for_lti_templates($lti_templates, $row);
-        $data['work_feedback_release_hidden'] = ($row->assignment_type == 1) ? '' : 'hidden';
-        $data['WorkFeedbackRelease'] = $row->tii_feedbackreleasedate ? DateTime::createFromFormat('Y-m-d H:i:s', $row->tii_feedbackreleasedate)->format('d-m-Y H:i') : NULL;
-        $data['work_feedback_release_disabled'] = is_null($row->tii_feedbackreleasedate) ? 'disabled' : '';
         $data['launch_container'] = $row->launchcontainer;
         $data['lti_disabled'] = ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) ? 'disabled' : '';
         $data['student_papercheck'] = $row->tii_studentpapercheck;
@@ -132,6 +129,9 @@ function new_edit_assignment($assignment_id = null) {
         $data['WorkEnd'] = $WorkEnd = $row->deadline ? DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline)->format('d-m-Y H:i') : NULL;
         $data['WorkStart_review'] = $WorkStart_review = $row->start_date_review ? DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date_review)->format('d-m-Y H:i') : NULL;
         $data['WorkEnd_review'] = $WorkEnd_review = $row->due_date_review ? DateTime::createFromFormat('Y-m-d H:i:s', $row->due_date_review)->format('d-m-Y H:i') : NULL;
+        $data['WorkFeedbackRelease'] = $row->tii_feedbackreleasedate ? DateTime::createFromFormat('Y-m-d H:i:s', $row->tii_feedbackreleasedate)->format('d-m-Y H:i') : NULL;
+        $data['work_feedback_release_hidden'] = ($row->assignment_type == 1) ? '' : 'hidden';
+        $data['work_feedback_release_disabled'] = is_null($row->tii_feedbackreleasedate) ? 'disabled' : '';
         $data['max_grade'] = Session::has('max_grade') ? Session::get('max_grade') : ($row->max_grade ? $row->max_grade : 10);
         $data['reviews_per_user'] = Session::has('reviews_per_user') ? Session::get('reviews_per_user') : ($row->reviews_per_assignment ? $row->reviews_per_assignment : 5);
         $data['enableWorkStart'] = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : ($WorkStart ? 1 : 0);
@@ -182,9 +182,6 @@ function new_edit_assignment($assignment_id = null) {
         $data['desc'] = Session::has('desc') ? Session::get('desc') : '';
         $data['lti_templates'] = $lti_templates;
         $data['divs_for_lti_templates'] = divs_for_lti_templates($lti_templates, null);
-        $data['work_feedback_release_hidden'] = 'hidden';
-        $data['WorkFeedbackRelease'] = Session::has('WorkFeedbackRelease') ? Session::get('WorkFeedbackRelease') : null;
-        $data['work_feedback_release_disabled'] = Session::has('WorkFeedbackRelease') ? '' : 'disabled';
         $data['tii_exclude_value'] = 0;
         $data['student_papercheck'] = $data['internetcheck'] = $data['journalcheck'] = $data['lti_disabled'] = '';
         $data['report_gen_speed'] = $data['institutioncheck'] = $data['tii_s_view_reports'] = $data['tii_use_biblio_exclusion'] = $data['tii_use_quoted_exclusion'] = $data['tii_exclude_type'] = 'none';
@@ -207,6 +204,9 @@ function new_edit_assignment($assignment_id = null) {
         $data['enableWorkEnd'] = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
         $data['enableWorkStart_review'] = Session::has('enableWorkStart_review') ? Session::get('enableWorkStart_review') : null;
         $data['enableWorkEnd_review'] = Session::has('enableWorkEnd_review') ? Session::get('enableWorkEnd_review') : ($WorkEnd_review ? 1 : 0);
+        $data['WorkFeedbackRelease'] = Session::has('WorkFeedbackRelease') ? Session::get('WorkFeedbackRelease') : null;
+        $data['work_feedback_release_hidden'] = 'hidden';
+        $data['work_feedback_release_disabled'] = Session::has('WorkFeedbackRelease') ? '' : 'disabled';
         $data['assignmentPasswordLock'] = Session::has('assignmentPasswordLock') ? Session::get('assignmentPasswordLock') : '';
         $assignmentIPLock = Session::has('assignmentIPLock') ? Session::get('assignmentIPLock') : array();
         $data['assignmentIPLockOptions'] = implode('', array_map(
