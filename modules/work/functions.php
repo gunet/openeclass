@@ -104,7 +104,9 @@ function new_edit_assignment($assignment_id = null) {
         $data['desc'] = Session::has('desc') ? Session::get('desc') : $row->description;
         $data['lti_templates'] = $lti_templates;
         $data['divs_for_lti_templates'] = divs_for_lti_templates($lti_templates, $row);
-        $data['divs_for_lti_templates_feedback_release_date'] = divs_for_lti_templates_feedback_release_date($row);
+        $data['work_feedback_release_hidden'] = ($row->assignment_type == 1) ? '' : 'hidden';
+        $data['WorkFeedbackRelease'] = $row->tii_feedbackreleasedate ? DateTime::createFromFormat('Y-m-d H:i:s', $row->tii_feedbackreleasedate)->format('d-m-Y H:i') : NULL;
+        $data['work_feedback_release_disabled'] = is_null($row->tii_feedbackreleasedate) ? 'disabled' : '';
         $data['launch_container'] = $row->launchcontainer;
         $data['lti_disabled'] = ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) ? 'disabled' : '';
         $data['student_papercheck'] = $row->tii_studentpapercheck;
@@ -180,7 +182,9 @@ function new_edit_assignment($assignment_id = null) {
         $data['desc'] = Session::has('desc') ? Session::get('desc') : '';
         $data['lti_templates'] = $lti_templates;
         $data['divs_for_lti_templates'] = divs_for_lti_templates($lti_templates, null);
-        $data['divs_for_lti_templates_feedback_release_date'] = divs_for_lti_templates_feedback_release_date(null);
+        $data['work_feedback_release_hidden'] = 'hidden';
+        $data['WorkFeedbackRelease'] = Session::has('WorkFeedbackRelease') ? Session::get('WorkFeedbackRelease') : null;
+        $data['work_feedback_release_disabled'] = Session::has('WorkFeedbackRelease') ? '' : 'disabled';
         $data['tii_exclude_value'] = 0;
         $data['student_papercheck'] = $data['internetcheck'] = $data['journalcheck'] = $data['lti_disabled'] = '';
         $data['report_gen_speed'] = $data['institutioncheck'] = $data['tii_s_view_reports'] = $data['tii_use_biblio_exclusion'] = $data['tii_use_quoted_exclusion'] = $data['tii_exclude_type'] = 'none';
@@ -248,6 +252,8 @@ function new_edit_assignment($assignment_id = null) {
     $data['rubric_error'] = Session::getError('rubric');
     $data['review_error_user'] = Session::getError('reviews_per_user');
     $data['review_error_rubric'] = Session::getError('rubric_review');
+    $data['work_feedback_release_haserror'] = Session::getError('WorkFeedbackRelease') ? 'has-error' : '';
+    $data['work_feedback_release_checked'] = (Session::has('enableWorkFeedbackRelease') ? Session::get('enableWorkFeedbackRelease') : ($data['WorkFeedbackRelease'] ? 1 : 0)) ? 'checked' : '';
 
     rich_text_editor(null, null, null, null);
 
@@ -3580,45 +3586,6 @@ function divs_for_lti_templates(array $lti_templates, ?stdClass $assignment): st
                 </iframe>
             </div>
         </div>
-    </div>
-</div>
-";
-}
-
-function divs_for_lti_templates_feedback_release_date(?stdClass $assignment): string {
-    global $langTiiFeedbackReleaseDate, $langSelect, $langAssignmentFeedbackReleaseHelpBlock;
-
-    // default values for new_mode
-    $lti_hidden = 'hidden';
-    $WorkFeedbackRelease = Session::has('WorkFeedbackRelease') ? Session::get('WorkFeedbackRelease') : null;
-
-    // default values for edit_mode
-    if (!is_null($assignment)) {
-        $assignment_type = $assignment->assignment_type;
-        $lti_hidden = ($assignment_type == 1) ? '' : 'hidden';
-        $WorkFeedbackRelease = $assignment->tii_feedbackreleasedate ? DateTime::createFromFormat('Y-m-d H:i:s', $assignment->tii_feedbackreleasedate)->format('d-m-Y H:i') : NULL;
-    }
-
-    // default values for all modes
-    $enableWorkFeedbackRelease = Session::has('enableWorkFeedbackRelease') ? Session::get('enableWorkFeedbackRelease') : ($WorkFeedbackRelease ? 1 : 0);
-
-    return "
-<div class='row input-append date form-group $lti_hidden" . (Session::getError('WorkFeedbackRelease') ? " has-error" : "") . " mt-4' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
-    <label for='tii_feedbackreleasedate' class='col-12 control-label-notes mb-1'>$langTiiFeedbackReleaseDate</label>
-    <div class='col-12'>
-        <div class='input-group'>
-            <span class='input-group-addon'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input class='mt-0' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'" . ($enableWorkFeedbackRelease ? ' checked' : '') . ">
-                    <span class='checkmark'></span>
-                </label>
-            </span>
-            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-            <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'" . ($enableWorkFeedbackRelease ? '' : ' disabled') . ">
-        </div>
-        <span class='help-block'>" .
-        (Session::hasError('WorkFeedbackRelease') ? Session::getError('WorkFeedbackRelease') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentFeedbackReleaseHelpBlock") . "
-        </span>
     </div>
 </div>
 ";

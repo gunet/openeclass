@@ -42,7 +42,7 @@ window.processContentItemReturnData = function(returnData) {
 }
 
 function checkLtiSelectContentRequired() {
-    const ltiTemplate1P3Ids = [{!! resolve_lti_template_1P3_ids_js($lti_templates) !!}];
+    const ltiTemplate1P3Ids = [{{ resolve_lti_template_1P3_ids_js($lti_templates) }}];
     let selectedTemplate = $('#lti_templates').find(':selected').val();
     if (ltiTemplate1P3Ids.includes(Number(selectedTemplate))) {
         $('#SelectContentModalDiv').removeClass('hidden');
