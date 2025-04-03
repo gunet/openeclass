@@ -267,9 +267,7 @@
                                                 </div>
                                             </div>
 
-                                            @if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id))
-                                                {!! $divs_for_lti_templates_feedback_release_date !!}
-                                            @endif
+                                            @include('modules.work.lti_app_feedback_release_date')
 
                                             <div class='mt-4 form-group @if (!$WorkEnd) hide @endif mt-4' id='late_sub_row'>
                                                 <div class='col-12'>
