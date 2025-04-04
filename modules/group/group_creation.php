@@ -287,15 +287,15 @@ if (isset($_GET['all'])) {
                 <div class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</div>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label class='label-container' aria-label='$langSelect'>
-                     <input type='checkbox' name='allow_unreg'>
-                     <span class='checkmark'></span>$langGroupAllowStudentUnregister
-                   </label>
-                 </div>
+                        <label class='label-container' aria-label='$langSelect'>
+                            <input type='checkbox' name='allow_unreg'>
+                            <span class='checkmark'></span>$langGroupAllowStudentUnregister
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class='form-group mt-4'>
-                 <div class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</div>
+                <div class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</div>
                 <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
