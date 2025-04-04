@@ -259,7 +259,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToGoogleMeetLink</span></div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank' aria-label='$langOpenNewTab'>$langGoToGoogleMeetLinkText</a></div>";
 
-            $tool_content .= "<div class='form-group'>
+            $tool_content .= "<div class='form-group mb-4'>
                 <label for='title_id' class='col-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
                     <input id='title_id' class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>
@@ -271,7 +271,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='alert alert-info'>$langGoToMicrosoftTeamsLink</div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://teams.live.com/' target='_blank' aria-label='$langOpenNewTab'>$langGoToMicrosoftTeamsLinkText</a></div>";
 
-            $tool_content .= "<div class='form-group mt-4'>
+            $tool_content .= "<div class='form-group mb-4'>
                             <label for='microsoft_teams_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
                             <div class='col-sm-12'>
                                 <input id='microsoft_teams_link_id' class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50' $disabled>
@@ -303,7 +303,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
                     $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToZoomLinkText</a></div>";
                 }
-                $tool_content .= "<div class='form-group'>
+                $tool_content .= "<div class='form-group mb-4'>
                     <label for='zoom_link_id' class='col-12 control-label-notes'>$langLink:</label>
                     <div class='col-12'>
                         <input id='zoom_link_id' class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
@@ -317,7 +317,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
                 $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='$langOpenNewTab'>$langGoToWebexLinkText</a></div>";
             }
-            $tool_content .= "<div class='form-group'>
+            $tool_content .= "<div class='form-group mb-4'>
                 <label for='webex_link_id' class='col-sm-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
                     <input id='webex_link_id' class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50' $disabled>
@@ -325,7 +325,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>";
         }
 
-        $tool_content .= "<div class='form-group mt-4'>
+        $tool_content .= "<div class='form-group'>
             <label for='title' class='col-12 control-label-notes'>$langTitle: <span class='asterisk Accent-200-cl'>(*)</span></label>
             <div class='col-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
