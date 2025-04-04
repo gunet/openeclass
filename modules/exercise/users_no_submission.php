@@ -30,12 +30,12 @@ $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();
 $found = $objExercise->read($exerciseId);
 if (!$found) { // exercise not found
-    Session::flash('message',$langExerciseNotFound);
+    Session::flash('message', $langExerciseNotFound);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-$toolName = $langExerciseUserGroupNoSubmission;
+$toolName = $langWorkUserGroupNoSubmission;
 $pageName = $objExercise->selectTitle();
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
@@ -52,7 +52,7 @@ if ($ex->assign_to_specific == 1) { // specific users
     $group_ids = [];
     $g_ids = Database::get()->queryArray("SELECT group_id FROM exercise_to_specific WHERE exercise_id = ?d", $exerciseId);
     foreach ($g_ids as $g) {
-        $group_ids[] = $g->group_id; 
+        $group_ids[] = $g->group_id;
     }
     $group_ids_str = implode(',',$group_ids);
     $user_ids_no_sub = Database::get()->queryArray("SELECT DISTINCT u.id AS user_id, u.givenname, u.surname, u.email
@@ -93,16 +93,15 @@ if (count($user_ids_no_sub) > 0) {
                 <div class='col-12'>
                   <div class='alert alert-warning'>
                         <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
-                        <span>$langUsersListWithNoSubmission</span>
+                        <span>". sprintf($langUsersListWithNoSubmission, count($user_ids_no_sub)). "</span>
                   </div>
-                  <ul class='list-group list-group-flush mt-3'>
-                    <li class='list-group-item list-group-item-action'>$langUsers</li>";
+                  <ul class='list-group list-group-flush mt-3'>";
                     foreach ($user_ids_no_sub as $u) {
                         $tool_content .= "<li class='list-group-item element d-flex justify-content-between align-items-center'>" . display_user($u->user_id) . "<p>$u->email</p></li>";
                     }
 $tool_content .= "</ul>
-                  <div class='mt-4'><small class='helpblock Accent-200-cl'>(*)$langNotifyUsersViaEmail</small></div>
-                  <a class='btn submitAdminBtn d-inline-flex mt-2' href='{$urlAppend}modules/exercise/users_no_submission.php?course=$course_code&amp;exerciseId=$exerciseId&amp;notify_users=true'>$langSendReminder</a>
+                  <a class='btn submitAdminBtn d-inline-flex mt-4' href='{$urlAppend}modules/exercise/users_no_submission.php?course=$course_code&amp;exerciseId=$exerciseId&amp;notify_users=true'>$langSendReminder</a>
+                  <div class='mt-3'><small class='helpblock Accent-200-cl'>(*) $langNotifyUsersViaEmail</small></div>                  
                 </div>";
 } else {
     $tool_content .= "<div class='col-12'>
@@ -125,8 +124,8 @@ draw($tool_content, 2, null, $head_content);
  * @param array $users_info
  */
 function ex_notify_users($ex_title, $ex_start, $ex_end, $users_info = array()) {
-    global $course_code, $course_id, $siteName, $langStartDate, $langEndDate, 
-            $langNotifyUnSubmittedUsers, $langProblem, $langManager, $langTel, 
+    global $course_code, $course_id, $siteName, $langStartDate, $langEndDate,
+            $langNotifyUnSubmittedUsers, $langProblem, $langManager, $langTel,
             $langEmail, $langTitle, $langLink;
 
     $course_title = course_code_to_title($course_code);
@@ -183,5 +182,5 @@ function ex_notify_users($ex_title, $ex_start, $ex_end, $users_info = array()) {
             send_mail_multipart('', '', '', $u->email, $emailsubject, $emailPlainBody, $emailbody);
         }
     }
-    
+
 }
