@@ -33,6 +33,7 @@ function new_edit_assignment($assignment_id = null) {
 
     $assignee_options = '';
     $unassigned_options = '';
+    $lti_templates = resolve_lti_templates();
 
     if ($assignment_id != null) { // edit assignment
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
@@ -53,7 +54,6 @@ function new_edit_assignment($assignment_id = null) {
         foreach ($rubrics as $rub) {
             $rubric_option_review .= "<option value='$rub->id'" . (($row->grading_scale_id == $rub->id && $grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) ? " selected" : "") . ">$rub->name</option>";
         }
-        $lti_templates = resolve_lti_templates();
 
         if ($row->assign_to_specific) {
             //preparing options in select boxes for assigning to specific users/groups
@@ -102,8 +102,6 @@ function new_edit_assignment($assignment_id = null) {
 
         $data['title'] = Session::has('title') ? Session::get('title') : $row->title;
         $data['desc'] = Session::has('desc') ? Session::get('desc') : $row->description;
-        $data['lti_templates'] = $lti_templates;
-        $data['divs_for_lti_templates'] = divs_for_lti_templates($lti_templates, $row);
         $data['launch_container'] = $row->launchcontainer;
         $data['lti_disabled'] = ($assignment_type != ASSIGNMENT_TYPE_TURNITIN) ? 'disabled' : '';
         $data['student_papercheck'] = $row->tii_studentpapercheck;
@@ -161,6 +159,50 @@ function new_edit_assignment($assignment_id = null) {
         }
         $data['auto_judge_scenarios'] = $auto_judge_scenarios;
         $data['submit_name'] = 'do_edit';
+
+        $data['lti_template_options'] = resolve_lti_template_options($lti_templates, $row);
+        $lti_hidden = ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? '' : 'hidden';
+        $data['lti_hidden'] = $lti_hidden;
+        $data['lti_disabled'] = ($assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? '' : 'disabled';
+        $data['lti_launchcontainer'] = $row->launchcontainer;
+        $data['tii_submit_papers_to'] = $row->tii_submit_papers_to;
+        $data['assignment_type_radios_class'] = 'col-12 d-inline-flex';
+        $data['assignment_type_eclass_div_class'] = 'radio';
+        $data['assignment_type_turnitin_div_class'] = 'radio ms-3';
+        $data['help_block_div_class'] = 'col-12 mt-1 mb-1';
+        $data['ltiopts_div_class'] = 'TextBold large-text col-sm-offset-1';
+        $data['tiiapp_label_class'] = 'col-sm-6 control-label-notes';
+        $data['lti_template_div_class'] = 'col-sm-12';
+        $data['tii_selected_content'] = (!empty($row->tii_instructorcustomparameters)) ? get_selected_content_indicator() : '';
+        $data['lti_launchcontainer_div_class'] = "form-group $lti_hidden mt-4";
+        $data['lti_launchcontainer_label_class'] = 'col-sm-6 control-label-notes';
+        $data['tii_submit_papers_to_div_class'] = "form-group $lti_hidden mt-3";
+        $data['tii_submit_papers_to_label_class'] = 'col-sm-6 control-label-notes';
+        $data['tii_compare_against_div_class'] = 'col-sm-12 control-label-notes';
+        $data['tii_studentpapercheck_checked'] = ((($row->tii_studentpapercheck == 1) or ($assignment_type == ASSIGNMENT_TYPE_ECLASS)) ? 'checked' : '');
+        $data['tii_internetcheck_checked'] = ((($row->tii_internetcheck == 1)  or ($assignment_type == ASSIGNMENT_TYPE_ECLASS)) ? 'checked' : '');
+        $data['tii_journalcheck_checked'] = ((($row->tii_journalcheck == 1) or ($assignment_type == ASSIGNMENT_TYPE_ECLASS)) ? 'checked' : '');
+        $data['tii_institutioncheck_checked'] = (($row->tii_institutioncheck == 1) ? 'checked' : '');
+        $data['tii_report_gen_speed_label_class'] = 'col-sm-12 control-label-notes';
+        $data['tii_report_gen_speed'] = $row->tii_report_gen_speed;
+        $data['tii_s_view_reports_div_class'] = 'col-sm-12 mt-3';
+        $data['tii_s_view_reports_checked'] = (($row->tii_s_view_reports == 1) ? 'checked' : '');
+        $data['tii_use_biblio_exclusion_checked'] = (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '');
+        $data['tii_use_quoted_exclusion'] = (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '');
+        $data['tii_use_small_exclusion'] = (($row->tii_exclude_type != 'none') ? 'checked' : '');
+        $data['tii_exclude_type_group_div_class'] = 'row form-group ' . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . ' mt-4';
+        $data['tii_exclude_type_div_label_class'] = 'col-12 control-label-notes';
+        $data['tii_exclude_type_div_inner_class'] = 'col-12';
+        $data['tii_exclude_type_words_checked'] = (($row->tii_exclude_type == 'words' || $row->tii_exclude_type == 'none') ? 'checked' : '');
+        $data['tii_exclude_type_percentage_checked'] = (($row->tii_exclude_type == 'percentage') ? 'checked' : '');
+        $data['tii_exclude_value_group_div_class'] = 'row form-group ' . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . ' mt-4';
+        $data['tii_exclude_value_label_div_class'] = 'col-12 control-label-notes';
+        $data['tii_exclude_value_div_class'] = 'col-12';
+        $data['tii_exclude_value'] = intval($row->tii_exclude_value);
+        $data['tii_instructorcustomparameters_group_div_class'] = "form-group $lti_hidden mt-4";
+        $data['tii_instructorcustomparameters_label_div_class'] = 'col-12 control-label-notes';
+        $data['tii_instructorcustomparameters_div_class'] = 'col-12';
+        $data['tii_instructorcustomparameters'] = $row->tii_instructorcustomparameters;
     } else { // new assignment
 
         $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
@@ -173,15 +215,12 @@ function new_edit_assignment($assignment_id = null) {
         foreach ($rubrics as $rubric) {
             $rubric_options .= "<option value='$rubric->id'>$rubric->name</option>";
         }
-        $lti_templates = resolve_lti_templates();
 
         $interval = new DateInterval('P1M');
         $data['tii_fwddate'] = (new DateTime('NOW'))->add($interval)->format('d-m-Y H:i');
 
         $data['title'] = Session::has('title') ? Session::get('title') : '';
         $data['desc'] = Session::has('desc') ? Session::get('desc') : '';
-        $data['lti_templates'] = $lti_templates;
-        $data['divs_for_lti_templates'] = divs_for_lti_templates($lti_templates, null);
         $data['tii_exclude_value'] = 0;
         $data['student_papercheck'] = $data['internetcheck'] = $data['journalcheck'] = $data['lti_disabled'] = '';
         $data['report_gen_speed'] = $data['institutioncheck'] = $data['tii_s_view_reports'] = $data['tii_use_biblio_exclusion'] = $data['tii_use_quoted_exclusion'] = $data['tii_exclude_type'] = 'none';
@@ -223,6 +262,50 @@ function new_edit_assignment($assignment_id = null) {
         $data['auto_judge_scenarios'] = null;
         $data['auto_judge'] = false;
         $data['submit_name'] = 'new_assign';
+
+        $data['lti_template_options'] = resolve_lti_template_options($lti_templates, null);
+        $data['assignment_type'] = Session::has('assignment_type') ? Session::get('assignment_type') : 0;
+        $data['lti_hidden'] = 'hidden';
+        $data['lti_disabled'] = 'disabled';
+        $data['lti_launchcontainer'] = LTI_LAUNCHCONTAINER_EMBED;
+        $data['tii_submit_papers_to'] = TII_SUBMIT_PAPERS_STANDARD;
+        $data['assignment_type_radios_class'] = 'col-12';
+        $data['assignment_type_eclass_div_class'] = 'radio mb-2';
+        $data['assignment_type_turnitin_div_class'] = 'radio';
+        $data['help_block_div_class'] = 'col-12';
+        $data['ltiopts_div_class'] = 'TextBold large-text';
+        $data['tiiapp_label_class'] = 'col-sm-12 control-label-notes';
+        $data['lti_template_div_class'] = 'col-12';
+        $data['tii_selected_content'] = '';
+        $data['lti_launchcontainer_div_class'] = "form-group hidden mt-3";
+        $data['lti_launchcontainer_label_class'] = 'col-sm-12 control-label-notes';
+        $data['tii_submit_papers_to_div_class'] = "form-group hidden mt-4";
+        $data['tii_submit_papers_to_label_class'] = 'col-sm-12 control-label-notes mb-1';
+        $data['tii_compare_against_div_class'] = 'col-sm-12 control-label-notes mb-1';
+        $data['tii_studentpapercheck_checked'] = 'checked';
+        $data['tii_internetcheck_checked'] = 'checked';
+        $data['tii_journalcheck_checked'] = 'checked';
+        $data['tii_institutioncheck_checked'] = 'checked';
+        $data['tii_report_gen_speed_label_class'] = 'col-sm-12 control-label-notes mb-1';
+        $data['tii_report_gen_speed'] = TII_REPORT_GEN_IMMEDIATELY_NO_RESUBMIT;
+        $data['tii_s_view_reports_div_class'] = 'col-sm-12 mt-4';
+        $data['tii_s_view_reports_checked'] = '';
+        $data['tii_use_biblio_exclusion_checked'] = '';
+        $data['tii_use_quoted_exclusion'] = '';
+        $data['tii_use_small_exclusion'] = '';
+        $data['tii_exclude_type_group_div_class'] = "form-group hidden mt-4";
+        $data['tii_exclude_type_div_label_class'] = 'col-sm-12 control-label-notes mb-1';
+        $data['tii_exclude_type_div_inner_class'] = 'col-sm-12';
+        $data['tii_exclude_type_words_checked'] = 'checked';
+        $data['tii_exclude_type_percentage_checked'] = '';
+        $data['tii_exclude_value_group_div_class'] = "form-group hidden mt-4";
+        $data['tii_exclude_value_label_div_class'] = 'col-sm-6 control-label-notes';
+        $data['tii_exclude_value_div_class'] = 'col-sm-12';
+        $data['tii_exclude_value'] = 0;
+        $data['tii_instructorcustomparameters_group_div_class'] = "form-group hidden mt-4";
+        $data['tii_instructorcustomparameters_label_div_class'] = 'col-sm-6 control-label-notes';
+        $data['tii_instructorcustomparameters_div_class'] = 'col-sm-12';
+        $data['tii_instructorcustomparameters'] = '';
     }
 
     $data['autojudge_enabled'] = false;
@@ -254,6 +337,7 @@ function new_edit_assignment($assignment_id = null) {
     $data['review_error_rubric'] = Session::getError('rubric_review');
     $data['work_feedback_release_haserror'] = Session::getError('WorkFeedbackRelease') ? 'has-error' : '';
     $data['work_feedback_release_checked'] = (Session::has('enableWorkFeedbackRelease') ? Session::get('enableWorkFeedbackRelease') : ($data['WorkFeedbackRelease'] ? 1 : 0)) ? 'checked' : '';
+    $data['lti_templates'] = $lti_templates;
 
     rich_text_editor(null, null, null, null);
 
@@ -3285,7 +3369,7 @@ function resolve_lti_template_options(array $lti_templates, ?stdClass $assignmen
     }
     foreach ($lti_templates as $lti) {
         if (!is_null($assignment)) {
-            $lti_template_options .= "<option value='$lti->id'" . (($assignment->lti_template == $lti->id && $assignment_type == 1) ? " selected" : "") . ">$lti->title</option>";
+            $lti_template_options .= "<option value='$lti->id'" . (($assignment->lti_template == $lti->id && $assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? " selected" : "") . ">$lti->title</option>";
         } else {
             $lti_template_options .= "<option value='$lti->id'>$lti->title</option>";
         }
@@ -3306,287 +3390,4 @@ function resolve_lti_template_1P3_ids_js(array $lti_templates): string {
 function get_selected_content_indicator(): string {
     global $langTiiSelectedContent;
     return "<span><i class='icon fa fa-check text-success fa-fw me-1' title='$langTiiSelectedContent' role='img' aria-label='$langTiiSelectedContent'></i>$langTiiSelectedContent</span>";
-}
-
-function divs_for_lti_templates(array $lti_templates, ?stdClass $assignment): string {
-    global $langAssignmentType, $langAssignmentTypeEclass, $langAssignmentTypeTurnitin, $langTurnitinNewAssignNotice,
-           $langLTIOptions, $langTiiApp, $langTiiSelectContent, $langTiiSelectContentDesc, $langLTILaunchContainer,
-           $langTiiSubmissionSettings, $langTiiSubmissionNoStore, $langTiiSubmissionStandard, $langTiiSubmissionInstitutional,
-           $langTiiCompareAgainst, $langSelect, $langTiiStudentPaperCheck, $langTiiInternetCheck, $langTiiJournalCheck,
-           $langTiiInstitutionCheck, $langTiiSimilarityReport, $langTiiReportGenImmediatelyNoResubmit, $langTiiReportGenImmediatelyWithResubmit,
-           $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted, $langTiiExcludeSmall, $langTiiExcludeType,
-           $langTiiExcludeTypeWords, $langPercentage, $langTiiExcludeValue, $langTiiInstructorCustomParameters, $langClose;
-
-    // default values for all modes
-    $lti_template_options = resolve_lti_template_options($lti_templates, $assignment);
-    $assignment_type = Session::has('assignment_type') ? Session::get('assignment_type') : 0;
-
-    // default values for new_mode
-    $lti_hidden = 'hidden';
-    $lti_disabled = 'disabled';
-    $lti_launchcontainer = LTI_LAUNCHCONTAINER_EMBED;
-    $tii_submit_papers_to = TII_SUBMIT_PAPERS_STANDARD;
-    $assignment_type_radios_class = 'col-12';
-    $assignment_type_eclass_div_class = 'radio mb-2';
-    $assignment_type_turnitin_div_class = 'radio';
-    $help_block_div_class = 'col-12';
-    $ltiopts_div_class = 'TextBold large-text';
-    $tiiapp_label_class = 'col-sm-12 control-label-notes';
-    $lti_template_div_class = 'col-12';
-    $tii_selected_content = '';
-    $lti_launchcontainer_div_class = "form-group $lti_hidden mt-3";
-    $lti_launchcontainer_label_class = 'col-sm-12 control-label-notes';
-    $tii_submit_papers_to_div_class = "form-group $lti_hidden mt-4";
-    $tii_submit_papers_to_label_class = 'col-sm-12 control-label-notes mb-1';
-    $tii_compare_against_div_class = 'col-sm-12 control-label-notes mb-1';
-    $tii_studentpapercheck_checked = 'checked';
-    $tii_internetcheck_checked = 'checked';
-    $tii_journalcheck_checked = 'checked';
-    $tii_institutioncheck_checked = 'checked';
-    $tii_report_gen_speed_label_class = 'col-sm-12 control-label-notes mb-1';
-    $tii_report_gen_speed = TII_REPORT_GEN_IMMEDIATELY_NO_RESUBMIT;
-    $tii_s_view_reports_div_class = 'col-sm-12 mt-4';
-    $tii_s_view_reports_checked = '';
-    $tii_use_biblio_exclusion_checked = '';
-    $tii_use_quoted_exclusion = '';
-    $tii_use_small_exclusion = '';
-    $tii_exclude_type_group_div_class = "form-group $lti_hidden mt-4";
-    $tii_exclude_type_div_label_class = 'col-sm-12 control-label-notes mb-1';
-    $tii_exclude_type_div_inner_class = 'col-sm-12';
-    $tii_exclude_type_words_checked = 'checked';
-    $tii_exclude_type_percentage_checked = '';
-    $tii_exclude_value_group_div_class = "form-group $lti_hidden mt-4";
-    $tii_exclude_value_label_div_class = 'col-sm-6 control-label-notes';
-    $tii_exclude_value_div_class = 'col-sm-12';
-    $tii_exclude_value = 0;
-    $tii_instructorcustomparameters_group_div_class = "form-group $lti_hidden mt-4";
-    $tii_instructorcustomparameters_label_div_class = 'col-sm-6 control-label-notes';
-    $tii_instructorcustomparameters_div_class = 'col-sm-12';
-    $tii_instructorcustomparameters = '';
-
-    // default values for edit_mode
-    if (!is_null($assignment)) {
-        $assignment_type = $assignment->assignment_type;
-        $lti_hidden = ($assignment_type == 1) ? '' : 'hidden';
-        $lti_disabled = ($assignment_type == 1) ? '' : 'disabled';
-        $lti_launchcontainer = $assignment->launchcontainer;
-        $tii_submit_papers_to = $assignment->tii_submit_papers_to;
-        $assignment_type_radios_class = 'col-12 d-inline-flex';
-        $assignment_type_eclass_div_class = 'radio';
-        $assignment_type_turnitin_div_class = 'radio ms-3';
-        $help_block_div_class = 'col-12 mt-1 mb-1';
-        $ltiopts_div_class = 'TextBold large-text col-sm-offset-1';
-        $tiiapp_label_class = 'col-sm-6 control-label-notes';
-        $lti_template_div_class = 'col-sm-12';
-        if (!empty($assignment->tii_instructorcustomparameters)) {
-            $tii_selected_content = get_selected_content_indicator();
-        }
-        $lti_launchcontainer_div_class = "form-group $lti_hidden mt-4";
-        $lti_launchcontainer_label_class = 'col-sm-6 control-label-notes';
-        $tii_submit_papers_to_div_class = "form-group $lti_hidden mt-3";
-        $tii_submit_papers_to_label_class = 'col-sm-6 control-label-notes';
-        $tii_compare_against_div_class = 'col-sm-12 control-label-notes';
-        $tii_studentpapercheck_checked = ((($assignment->tii_studentpapercheck == 1) or ($assignment_type == 0)) ? 'checked' : '');
-        $tii_internetcheck_checked = ((($assignment->tii_internetcheck == 1)  or ($assignment_type == 0)) ? 'checked' : '');
-        $tii_journalcheck_checked = ((($assignment->tii_journalcheck == 1) or ($assignment_type == 0)) ? 'checked' : '');
-        $tii_institutioncheck_checked = (($assignment->tii_institutioncheck == 1) ? 'checked' : '');
-        $tii_report_gen_speed_label_class = 'col-sm-12 control-label-notes';
-        $tii_report_gen_speed = $assignment->tii_report_gen_speed;
-        $tii_s_view_reports_div_class = 'col-sm-12 mt-3';
-        $tii_s_view_reports_checked = (($assignment->tii_s_view_reports == 1) ? 'checked' : '');
-        $tii_use_biblio_exclusion_checked = (($assignment->tii_use_biblio_exclusion == 1) ? 'checked' : '');
-        $tii_use_quoted_exclusion = (($assignment->tii_use_quoted_exclusion == 1) ? 'checked' : '');
-        $tii_use_small_exclusion = (($assignment->tii_exclude_type != 'none') ? 'checked' : '');
-        $tii_exclude_type_group_div_class = 'row form-group ' . (($assignment->tii_exclude_type == 'none') ? 'hidden' : '') . ' mt-4';
-        $tii_exclude_type_div_label_class = 'col-12 control-label-notes';
-        $tii_exclude_type_div_inner_class = 'col-12';
-        $tii_exclude_type_words_checked = (($assignment->tii_exclude_type == 'words' || $assignment->tii_exclude_type == 'none') ? 'checked' : '');
-        $tii_exclude_type_percentage_checked = (($assignment->tii_exclude_type == 'percentage') ? 'checked' : '');
-        $tii_exclude_value_group_div_class = 'row form-group ' . (($assignment->tii_exclude_type == 'none') ? 'hidden' : '') . ' mt-4';
-        $tii_exclude_value_label_div_class = 'col-12 control-label-notes';
-        $tii_exclude_value_div_class = 'col-12';
-        $tii_exclude_value = intval($assignment->tii_exclude_value);
-        $tii_instructorcustomparameters_group_div_class = "form-group $lti_hidden mt-4";
-        $tii_instructorcustomparameters_label_div_class = 'col-12 control-label-notes';
-        $tii_instructorcustomparameters_div_class = 'col-12';
-        $tii_instructorcustomparameters = $assignment->tii_instructorcustomparameters;
-    }
-
-    return "
-<div class='row form-group mt-4'>
-    <div class='col-12 control-label-notes mb-1'>$langAssignmentType</div>
-    <div class='$assignment_type_radios_class'>
-        <div class='$assignment_type_eclass_div_class'>
-            <label>
-                <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
-                $langAssignmentTypeEclass
-            </label>
-        </div>
-        <div class='$assignment_type_turnitin_div_class'>
-            <label>
-                <input type='radio' name='assignment_type' value='1'" . ($assignment_type == 1 ? " checked" : "") . ">
-                $langAssignmentTypeTurnitin
-            </label>
-        </div>
-    </div>
-    <div class='$help_block_div_class'>
-        <span class='help-block'>$langTurnitinNewAssignNotice</span>
-    </div>
-</div>
-
-<div class='col-12 form-group $lti_hidden mt-4 mb-4 p-3' id='lti_label' style='box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
-    <div class='$ltiopts_div_class'>$langLTIOptions</div>
-    <div class='form-group $lti_hidden mt-4'>
-        <label for='lti_templates' class='$tiiapp_label_class'>$langTiiApp</label>
-        <div class='$lti_template_div_class'>
-            <select name='lti_template' class='form-select' id='lti_templates' $lti_disabled>$lti_template_options</select>
-        </div>
-    </div>
-    <div class='form-group mt-4' id='SelectContentModalDiv'>
-        <div class='col-sm-12'>
-            <button type='button' class='btn submitAdminBtn' style='display: inline; margin-bottom: 10px; margin-right: 10px;' data-bs-toggle='modal' data-bs-target='#SelectContentModal'>$langTiiSelectContent</button>
-            <span id='tii_selected_content_span'>$tii_selected_content</span>
-        </div>
-        <div class='col-sm-12'>$langTiiSelectContentDesc</div>
-    </div>
-    <div class='$lti_launchcontainer_div_class'>
-        <label for='lti_launchcontainer' class='$lti_launchcontainer_label_class'>$langLTILaunchContainer</label>
-        <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', $lti_launchcontainer, 'id="lti_launchcontainer"' . $lti_disabled) . "</div>
-    </div>
-    <!-- <div class='$tii_submit_papers_to_div_class'>
-        <label for='tii_submit_papers_to' class='$tii_submit_papers_to_label_class'>$langTiiSubmissionSettings:</label>
-        <div class='col-sm-12'>
-          <select name='tii_submit_papers_to' class='form-select' id='tii_submit_papers_to' $lti_disabled>
-                <option value='0' " . (($tii_submit_papers_to == 0) ? 'selected' : '') . ">$langTiiSubmissionNoStore</option>
-                <option value='1' " . (($tii_submit_papers_to == 1) ? 'selected' : '') . ">$langTiiSubmissionStandard</option>
-                <option value='2' " . (($tii_submit_papers_to == 2) ? 'selected' : '') . ">$langTiiSubmissionInstitutional</option>
-          </select>
-        </div>
-    </div> -->
-    <div class='form-group $lti_hidden mt-4'>
-        <div class='$tii_compare_against_div_class'>$langTiiCompareAgainst</div>
-        <div class='col-sm-12'>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' $tii_studentpapercheck_checked $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiStudentPaperCheck
-                </label>
-            </div>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' $tii_internetcheck_checked $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiInternetCheck
-                </label>
-            </div>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' $tii_journalcheck_checked $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiJournalCheck
-                </label>
-            </div>
-            <!--<div class='checkbox'>
-            <label class='label-container' aria-label='$langSelect'>
-                <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' $tii_institutioncheck_checked $lti_disabled>
-                <span class='checkmark'></span>
-                $langTiiInstitutionCheck
-              </label>
-            </div>-->
-        </div>
-    </div>
-    <div class='form-group $lti_hidden mt-4'>
-        <label for='tii_report_gen_speed' class='$tii_report_gen_speed_label_class'>$langTiiSimilarityReport</label>
-        <div class='col-sm-12'>
-            <select name='tii_report_gen_speed' class='form-select' id='tii_report_gen_speed' $lti_disabled>
-                <option value='0' " . (($tii_report_gen_speed == 0) ? 'selected' : '') . ">$langTiiReportGenImmediatelyNoResubmit</option>
-                <option value='1' " . (($tii_report_gen_speed == 1) ? 'selected' : '') . ">$langTiiReportGenImmediatelyWithResubmit</option>
-                <option value='2' " . (($tii_report_gen_speed == 2) ? 'selected' : '') . ">$langTiiReportGenOnDue</option>
-            </select>
-        </div>
-        <div class='$tii_s_view_reports_div_class'>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' $tii_s_view_reports_checked $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiSViewReports
-                </label>
-            </div>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' $tii_use_biblio_exclusion_checked $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiExcludeBiblio
-                </label>
-            </div>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' $tii_use_quoted_exclusion $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiExcludeQuoted
-                </label>
-            </div>
-            <div class='checkbox'>
-                <label class='label-container' aria-label='$langSelect'>
-                    <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' $tii_use_small_exclusion $lti_disabled>
-                    <span class='checkmark'></span>
-                    $langTiiExcludeSmall
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class='$tii_exclude_type_group_div_class'>
-        <div class='$tii_exclude_type_div_label_class'>$langTiiExcludeType</div>
-        <div class='$tii_exclude_type_div_inner_class'>
-            <div class='radio'>
-                <label>
-                    <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' $tii_exclude_type_words_checked $lti_disabled>
-                    $langTiiExcludeTypeWords
-                </label>
-            </div>
-            <div class='radio'>
-                <label>
-                    <input type='radio' name='tii_exclude_type' id='tii_exclude_type_percentage' value='percentage' $tii_exclude_type_percentage_checked $lti_disabled>
-                    $langPercentage
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class='$tii_exclude_value_group_div_class'>
-        <label for='tii_exclude_value' class='$tii_exclude_value_label_div_class'>$langTiiExcludeValue:</label>
-        <div class='$tii_exclude_value_div_class'>
-            <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='$tii_exclude_value' $lti_disabled>
-        </div>
-    </div>
-    <div class='$tii_instructorcustomparameters_group_div_class'>
-        <label for='tii_instructorcustomparameters' class='$tii_instructorcustomparameters_label_div_class'>$langTiiInstructorCustomParameters:</label>
-        <div class='$tii_instructorcustomparameters_div_class'>
-            <textarea class='form-control' name='tii_instructorcustomparameters' id='tii_instructorcustomparameters' rows='3' $lti_disabled>$tii_instructorcustomparameters</textarea>
-        </div>
-    </div>
-</div>
-
-<div class='modal fade' id='SelectContentModal' tabindex='-1' aria-labelledby='SelectContentModalLabel' aria-hidden='true'>
-    <div class='modal-dialog modal-lg'>
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <div class='modal-title' id='SelectContentModalLabel'>$langTiiSelectContent</div>
-                <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'></button>
-            </div>
-            <div class='modal-body' id='SelectContentModalBody'>
-                <iframe id='SelectContentModalBodyContentFrame'
-                    src='about:blank'
-                    webkitallowfullscreen=''
-                    mozallowfullscreen=''
-                    allowfullscreen=''
-                    width='100%'
-                    height='800px'
-                    style='border: 1px solid #ddd; border-radius: 4px;'>
-                </iframe>
-            </div>
-        </div>
-    </div>
-</div>
-";
 }

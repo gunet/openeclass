@@ -55,11 +55,7 @@
                                                 </div>
                                             </div>
 
-                                            @if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id))
-                                                {!! $divs_for_lti_templates !!}
-                                            @else
-                                                <input type='hidden' name='assignment_type' value='0' />
-                                            @endif
+                                            @include('modules.work.lti_app_form')
 
                                             <div class='row form-group mt-4'>
                                                 <div class='col-12 control-label-notes mb-1'>
