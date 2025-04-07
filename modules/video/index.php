@@ -117,7 +117,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             }
             $q = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
             foreach ($q as $a) {
-                delete_video($a->id, 'videolink');
+                delete_video($a->id, 'videolink', $course_id, $course_code, $webDir);
             }
             delete_video_category($_GET['id']);
         } else {  // delete video / videolink
