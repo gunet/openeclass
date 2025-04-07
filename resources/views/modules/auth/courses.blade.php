@@ -78,7 +78,14 @@
                                                 @endif
                                             @else {{-- display unregistered courses--}}
                                                     <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                        <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}' @if(!is_enabled_course_registration($_SESSION['uid']) or $mycourse->visible == COURSE_CLOSED) disabled @endif @if ($mycourse->visible == COURSE_CLOSED) class='reg_closed' @endif>
+                                                        <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}'
+                                                               @if ((($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN)
+                                                                        and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $mycourse->id) == 1
+                                                                        and !in_array($fc, $user_faculty_ids))
+                                                                    or (!is_enabled_course_registration($_SESSION['uid']))
+                                                                    or $mycourse->visible == COURSE_CLOSED)
+                                                                   disabled
+                                                                @endif>
                                                         <span class='checkmark'></span>
                                                     </label>
                                             @endif

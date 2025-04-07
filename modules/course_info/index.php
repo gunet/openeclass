@@ -46,14 +46,10 @@ $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
 
-
-////////////////////////////////////////////////////////
-if(isset($_GET['course_code'])){
+if (isset($_GET['course_code'])){
     $course_code = $_GET['course_code'];
     $course_id = course_code_to_id($course_code);
 }
-////////////////////////////////////////////////////////
-
 
 // departments and validation
 $depadmin_mode = get_config('restrict_teacher_owndep') && !$is_admin;
@@ -236,6 +232,11 @@ if (isset($_POST['submit'])) {
             }
             if (isset($_POST['enable_agenda_announcement_widget_courseCompletion'])) {
                 setting_set(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $_POST['enable_agenda_announcement_widget_courseCompletion'], $course_id);
+            }
+            if (isset($_POST['faculty_users_registration'])) {
+                setting_set(SETTING_FACULTY_USERS_REGISTRATION, 1, $course_id);
+            } else {
+                setting_set(SETTING_FACULTY_USERS_REGISTRATION, 0, $course_id);
             }
             // Course settings modified, will get success message after redirect in current course language
             Session::flash('course-modify-success', true);
@@ -497,6 +498,13 @@ if (isset($_POST['submit'])) {
     }
     $data['check_enable_agenda_announcement_widget_courseCompletion'] = $check_enable_agenda_announcement_widget_courseCompletion;
     $data['check_disable_agenda_announcement_widget_courseCompletion'] = $check_disable_agenda_announcement_widget_courseCompletion;
+
+    if (setting_get(SETTING_FACULTY_USERS_REGISTRATION, $course_id) == 1) {
+        $check_enable_faculty_users_registration = ' checked';
+    } else {
+        $check_enable_faculty_users_registration = '';
+    }
+    $data['check_enable_faculty_users_registration'] = $check_enable_faculty_users_registration;
 
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
 

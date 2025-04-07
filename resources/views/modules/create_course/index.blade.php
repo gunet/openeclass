@@ -10,25 +10,6 @@
     <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
 
     <script type='text/javascript'>
-
-        function deactivate_input_password () {
-            $('#coursepassword').attr('disabled', 'disabled');
-            $('#coursepassword').closest('div.form-group').addClass('invisible');
-        }
-
-        function activate_input_password () {
-            $('#coursepassword').removeAttr('disabled', 'disabled');
-            $('#coursepassword').closest('div.form-group').removeClass('invisible');
-        }
-
-        function displayCoursePassword() {
-            if ($('#courseclose,#courseiactive').is(":checked")) {
-                    deactivate_input_password ();
-            } else {
-                    activate_input_password ();
-            }
-        }
-
         var lang = {
             pwStrengthTooShort: "{{ js_escape(trans('langPwStrengthTooShort')) }}",
             pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
@@ -36,11 +17,22 @@
             pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
         }
 
-        function showCCFields() {
-            $('#cc').show();
+        function deactivate_input_password () {
+            $('#coursepassword, #faculty_users_registration').attr('disabled', 'disabled');
+            $('#coursepassword').closest('div.form-group').addClass('invisible');
         }
-        function hideCCFields() {
-            $('#cc').hide();
+
+        function activate_input_password () {
+            $('#coursepassword, #faculty_users_registration').removeAttr('disabled', 'disabled');
+            $('#coursepassword').closest('div.form-group').removeClass('invisible');
+        }
+
+        function displayCoursePassword() {
+            if ($('#courseclose, #courseiactive').is(":checked")) {
+                deactivate_input_password ();
+            } else {
+                activate_input_password ();
+            }
         }
 
         $(document).ready(function() {
@@ -51,24 +43,19 @@
 
             displayCoursePassword();
 
-            $('#courseopen').click(function(event) {
-                    activate_input_password();
+            $('#courseopen, #coursewithregistration').click(function(event) {
+                activate_input_password();
             });
-            $('#coursewithregistration').click(function(event) {
-                    activate_input_password();
-            });
-            $('#courseclose').click(function(event) {
-                    deactivate_input_password();
-            });
-            $('#courseinactive').click(function(event) {
-                    deactivate_input_password();
+
+            $('#courseclose, #courseinactive').click(function(event) {
+                deactivate_input_password();
             });
 
             $('input[name=l_radio]').change(function () {
                 if ($('#cc_license').is(":checked")) {
-                    showCCFields();
+                    $('#cc').show();
                 } else {
-                    hideCCFields();
+                    $('#cc').hide();
                 }
             }).change();
 
@@ -80,7 +67,7 @@
                 document.getElementById('selectedImage').value = '{{ trans('langSelect') }}:'+id_img;
             });
 
-            if($("#radio_collaborative_helper").length > 0){
+            if ($("#radio_collaborative_helper").length > 0) {
                 if(document.getElementById("radio_collaborative_helper").value == 0){
                     document.getElementById("radio_collaborative").style.display="none";
                 }
@@ -124,7 +111,7 @@
                 </div>
              </div>
 
-              <div class='col-lg-6 col-12'>
+              <div class='col-lg-8 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
                   <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" enctype="multipart/form-data" onsubmit=\"return validateNodePickerForm();\">
                     <fieldset>
@@ -214,171 +201,173 @@
                         </div>
                     @endif
 
-
-                        <div class='form-group mt-4'>
-                           <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</div>
-                            <div class="radio mb-2">
-                              <label>
-                                  <input type='radio' name='view_type' value='simple' id='simple'>
-                                  {{ trans('langCourseSimpleFormat') }}
-                              </label>
-                            </div>
-                            <div class="radio mb-2">
-                              <label>
-                                <input type='radio' name='view_type' value='units' id='units' checked>
-                                {{ trans('langWithCourseUnits') }}
-                                </label>
-                            </div>
-                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_activity">
-                              <label>
-                                <input type="radio" name="view_type" value="activity" id="activity">
-                                {{trans('langCourseActivityFormat') }}
-                              </label>
-                            </div>
-                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_wall">
-                              <label>
-                                <input type='radio' name='view_type' value='wall' id='wall'>
-                                {{ trans('langCourseWallFormat') }}
-                              </label>
-                            </div>
-                            <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_flippedclassroom">
-                                <label>
-                                    <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom'>
-                                    {{ trans('langFlippedClassroom') }}
-                                </label>
-                            </div>
-
-                            <div class="radio
-                                        @if(!get_config('show_collaboration') and !get_config('show_always_collaboration'))
-                                            d-none
-                                        @elseif(is_module_disable(MODULE_ID_SESSION))
-                                            d-none
-                                        @endif" id="radio_collaborative">
-                                <label>
-                                    <input type='radio' name='view_type' value='sessions' id='sessions'>
-                                    {{ trans('langSessionType') }}
-                                </label>
-                            </div>
-
-                            @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
-                                <input type="hidden" id="radio_collaborative_helper" value="0">
-                            @endif
+                    <div class='form-group mt-4'>
+                       <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseFormat') }}</div>
+                        <div class="radio mb-2">
+                          <label>
+                              <input type='radio' name='view_type' value='simple' id='simple'>
+                              {{ trans('langCourseSimpleFormat') }}
+                          </label>
+                        </div>
+                        <div class="radio mb-2">
+                          <label>
+                            <input type='radio' name='view_type' value='units' id='units' checked>
+                            {{ trans('langWithCourseUnits') }}
+                            </label>
+                        </div>
+                        <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_activity">
+                          <label>
+                            <input type="radio" name="view_type" value="activity" id="activity">
+                            {{trans('langCourseActivityFormat') }}
+                          </label>
+                        </div>
+                        <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_wall">
+                          <label>
+                            <input type='radio' name='view_type' value='wall' id='wall'>
+                            {{ trans('langCourseWallFormat') }}
+                          </label>
+                        </div>
+                        <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_flippedclassroom">
+                            <label>
+                                <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom'>
+                                {{ trans('langFlippedClassroom') }}
+                            </label>
                         </div>
 
-                        <div class='form-group mt-4'>
-                          <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</div>
-
-                          <div class='radio mb-2'>
+                        <div class="radio
+                            @if(!get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                                d-none
+                            @elseif(is_module_disable(MODULE_ID_SESSION))
+                                d-none
+                            @endif" id="radio_collaborative">
                             <label>
-                              <input type='radio' name='l_radio' value='0' checked>
-                              {{ $license_0 }}
+                                <input type='radio' name='view_type' value='sessions' id='sessions'>
+                                {{ trans('langSessionType') }}
                             </label>
-                          </div>
-
-                          <div class='radio mb-2'>
-                            <label>
-                              <input type='radio' name='l_radio' value='10'>
-                              {{ $license_10 }}
-                            </label>
-                          </div>
-
-                          <div class='radio'>
-                            <label>
-                              <input id='cc_license' type='radio' name='l_radio' value='cc'>
-                              {{ trans("langCMeta['course_license']") }}
-                            </label>
-                          </div>
-
                         </div>
 
+                        @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
+                            <input type="hidden" id="radio_collaborative_helper" value="0">
+                        @endif
+                    </div>
 
-                        <div class='form-group mt-4' id='cc'>
-                            <div class='col-sm-12 col-sm-offset-2'>
-                                <label class='mb-0' for='course_license_id' aria-label="{{ trans('langOpenCoursesLicense') }}"></label>
-                                  {!! $selection_license !!}
+                    <div class='form-group mt-4'>
+                      <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</div>
+
+                      <div class='radio mb-2'>
+                        <label>
+                          <input type='radio' name='l_radio' value='0' checked>
+                          {{ $license_0 }}
+                        </label>
+                      </div>
+
+                      <div class='radio mb-2'>
+                        <label>
+                          <input type='radio' name='l_radio' value='10'>
+                          {{ $license_10 }}
+                        </label>
+                      </div>
+
+                      <div class='radio'>
+                        <label>
+                          <input id='cc_license' type='radio' name='l_radio' value='cc'>
+                          {{ trans("langCMeta['course_license']") }}
+                        </label>
+                      </div>
+
+                    </div>
+
+                    <div class='form-group mt-4' id='cc'>
+                        <div class='col-sm-12 col-sm-offset-2'>
+                            <label class='mb-0' for='course_license_id' aria-label="{{ trans('langOpenCoursesLicense') }}"></label>
+                              {!! $selection_license !!}
+                        </div>
+                    </div>
+
+                    <div class='form-group mt-4'>
+
+                           <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</div>
+
+                            <div class='radio mb-3'>
+                              <label>
+                                <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2'>
+                                <label for="courseopen" aria-label="{{ trans('langOpenCourse') }}">{!! $icon_course_open !!}</label>
+                                {{ trans('langOpenCourse') }}
+                              </label>
+                              <div class='help-block'>{{ trans('langPublic') }}</div>
                             </div>
+
+                            <div class='radio mb-3'>
+                              <label>
+                                <input class='input-StatusCourse' id='coursewithregistration' type='radio' name='formvisible' value='1' checked>
+                                <label for="coursewithregistration" aria-label="{{ trans('langRegCourse') }}">{!! $icon_course_registration !!}</label>
+                                {{ trans('langRegCourse') }}
+                              </label>
+                              <div class='help-block'>{{ trans('langPrivOpen') }}</div>
+                            </div>
+
+                            <div class='radio mb-3'>
+                              <label>
+                                <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0'>
+                                <label for="courseclose" aria-label="{{ trans('langClosedCourse') }}">{!! $icon_course_closed !!}</label>
+                                {{ trans('langClosedCourse') }}
+                              </label>
+                              <div class='help-block'>{{ trans('langClosedCourseShort') }}</div>
+                            </div>
+
+                            <div class='radio'>
+                              <label>
+                                  <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3'>
+                                  <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">{!! $icon_course_inactive !!}</label>
+                                  {{ trans('langInactiveCourse') }}
+                              </label>
+                              <div class='help-block'>{{ trans('langCourseInactive') }}</div>
+                            </div>
+                      </div>
+
+                     <div class='form-group mt-3'>
+                         <div class='checkbox mb-2 mt-4'>
+                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                 <input type='checkbox' id='faculty_users_registration' name='faculty_users_registration'>
+                                 <span class='checkmark'></span>{{ trans('langFacultyUsersRegistrationLegend') }}
+                             </label>
+                         </div>
+                        <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
+                        <div class='col-sm-12'>
+                              <input class='form-control' id='coursepassword' type='text' name='password' value='{{ trans('password') }}' autocomplete='off'>
                         </div>
+                        <div class='col-sm-12' text-center padding-thin>
+                            <span id='result'></span>
+                        </div>
+                     </div>
 
-                        <div class='form-group mt-4'>
+                     <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                          <input class='btn submitAdminBtn text-nowrap' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
+                          <a href='{{ $cancel_link }}' class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
+                      </div>
 
-                               <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAvailableTypes') }}</div>
-
-                                <div class='radio mb-3'>
-                                  <label>
-                                    <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2'>
-                                    <label for="courseopen" aria-label="{{ trans('langOpenCourse') }}">{!! $icon_course_open !!}</label>
-                                    {{ trans('langOpenCourse') }}
-                                  </label>
-                                  <div class='help-block'>{{ trans('langPublic') }}</div>
+                    <div class='modal fade' id='CoursesImagesModal' tabindex='-1' aria-labelledby='CoursesImagesModalLabel' aria-hidden='true'>
+                        <div class='modal-dialog modal-lg'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <div class='modal-title' id='CoursesImagesModalLabel'>{{ trans('langCourseImage') }}</div>
+                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                 </div>
-
-                                <div class='radio mb-3'>
-                                  <label>
-                                    <input class='input-StatusCourse' id='coursewithregistration' type='radio' name='formvisible' value='1' checked>
-                                    <label for="coursewithregistration" aria-label="{{ trans('langRegCourse') }}">{!! $icon_course_registration !!}</label>
-                                    {{ trans('langRegCourse') }}
-                                  </label>
-                                  <div class='help-block'>{{ trans('langPrivOpen') }}</div>
-                                </div>
-
-                                <div class='radio mb-3'>
-                                  <label>
-                                    <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0'>
-                                    <label for="courseclose" aria-label="{{ trans('langClosedCourse') }}">{!! $icon_course_closed !!}</label>
-                                    {{ trans('langClosedCourse') }}
-                                  </label>
-                                  <div class='help-block'>{{ trans('langClosedCourseShort') }}</div>
-                                </div>
-
-                                <div class='radio'>
-                                  <label>
-                                      <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3'>
-                                      <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">{!! $icon_course_inactive !!}</label>
-                                      {{ trans('langInactiveCourse') }}
-                                  </label>
-                                  <div class='help-block'>{{ trans('langCourseInactive') }}</div>
-                                </div>
-
-                          </div>
-
-
-                          <div class='form-group mt-4'>
-                                <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
-                                <div class='col-sm-12'>
-                                      <input class='form-control' id='coursepassword' type='text' name='password' value='{{ trans('password') }}' autocomplete='off'>
-                                </div>
-                                <div class='col-sm-12' text-center padding-thin>
-                                    <span id='result'></span>
-                                </div>
-                          </div>
-
-                          <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                              <input class='btn submitAdminBtn text-nowrap' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
-                              <a href='{{ $cancel_link }}' class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
-                          </div>
-
-                        <div class='modal fade' id='CoursesImagesModal' tabindex='-1' aria-labelledby='CoursesImagesModalLabel' aria-hidden='true'>
-                            <div class='modal-dialog modal-lg'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <div class='modal-title' id='CoursesImagesModalLabel'>{{ trans('langCourseImage') }}</div>
-                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
+                                <div class='modal-body'>
+                                    <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                        {!! $image_content !!}
                                     </div>
-                                    <div class='modal-body'>
-                                        <div class='row row-cols-1 row-cols-md-2 g-4'>
-                                            {!! $image_content !!}
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 {!! generate_csrf_token_form_field() !!}
                 </fieldset>
               </form>
             </div>
           </div>
-          <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+          <div class='col-lg-4 col-12 d-none d-md-none d-lg-block text-end'>
             <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
           </div>
         </div>

@@ -23,9 +23,9 @@
 */
 
 /* course status */
-define('COURSE_OPEN', 2);
-define('COURSE_REGISTRATION', 1);
 define('COURSE_CLOSED', 0);
+define('COURSE_REGISTRATION', 1);
+define('COURSE_OPEN', 2);
 define('COURSE_INACTIVE', 3);
 
 /* hierarchy node status */
@@ -149,12 +149,13 @@ define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
 define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
 define('SETTING_GROUP_MULTIPLE_REGISTRATION', 12);
 define('SETTING_GROUP_STUDENT_DESCRIPTION', 13);
-define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20);
+define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20); /* enable user request access if course is closed */
 define('SETTING_COURSE_FORUM_NOTIFICATIONS', 21);
 define('SETTING_DOCUMENTS_PUBLIC_WRITE', 22);
-define('SETTING_OFFLINE_COURSE', 23);
+define('SETTING_OFFLINE_COURSE', 23); /* enable downloading for offline use */
 define('SETTING_USERS_LIST_ACCESS', 24);
 define('SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION', 25);
+define('SETTING_FACULTY_USERS_REGISTRATION', 26); /* course registration is allowed only for faculty users */
 
 // Available user settings
 define('SETTING_FORUM_POST_VIEW', 1);
