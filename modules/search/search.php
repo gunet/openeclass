@@ -73,7 +73,7 @@ foreach ($hits as $hit) {
     }
 }
 $subscribed = array();
-if ($uid > 1) {
+if (isset($_SESSION['uid'])) {
     $res = Database::get()->queryArray("SELECT course.id
                            FROM course
                            JOIN course_user ON course.id = course_user.course_id
@@ -81,6 +81,12 @@ if ($uid > 1) {
 
     foreach ($res as $row) {
         $subscribed[] = $row->id;
+    }
+    // get user faculties
+    $userdeps = $user->getDepartmentIds($uid);
+    $subs = $tree->buildSubtreesFull($userdeps);
+    foreach ($subs as $node) {
+        $user_faculty_ids[] = $node->id;
     }
 }
 
@@ -144,17 +150,24 @@ foreach ($courses as $course) {
     // courses with password
     $requirepassword = '';
     $search_result_content .= "<tr>";
-    if ($uid > 0) {
+    if (isset($_SESSION['uid'])) {
         if (in_array($course->id, $subscribed)) {
             $search_result_content .= "<td align='center'><i class='fa-solid fa-check' title='$langAlreadySubscribe' alt='$langAlreadySubscribe' ></i></td>";
         } else {
             if (!empty($course->password) && ($course->visible == COURSE_REGISTRATION || $course->visible == COURSE_OPEN)) {
-                $requirepassword = "<br />$m[code]: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
+                $requirepassword = "<br><br>$langPassword: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
             }
 
-            $disabled = (!is_enabled_course_registration($uid) or $course->visible == COURSE_CLOSED) ? 'disabled' : '';
-            $vis_class = ($course->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
-            $search_result_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class /><span class='checkmark'></span></label>"
+            if ((($course->visible == COURSE_REGISTRATION or $course->visible == COURSE_OPEN)
+                    and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $course->id) == 1
+                    and !in_array($course->department, $user_faculty_ids))
+                or (!is_enabled_course_registration($_SESSION['uid']))
+                or $course->visible == COURSE_CLOSED) {
+                $disabled = 'disabled';
+            } else {
+                $disabled = '';
+            }
+            $search_result_content .= "<td align='center'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled><span class='checkmark'></span></label>"
                     . "<input type='hidden' name='changeCourse[]' value='" . $course->id . "' /></td>";
         }
     }

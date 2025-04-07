@@ -31,9 +31,15 @@ $toolName = $langListCourses;
 $countCallback = null;
 $data['isInOpenCoursesMode'] = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
 $tree = new Hierarchy();
+$user = new User();
 $courses_list = [];
+$user_faculty_ids = [];
 $showEmpty = true;
 $unlock_all_courses = false;
+
+if (isset($_SESSION['fc_memo'])) {
+    $fc = $_SESSION['fc_memo'];
+}
 
 if (isset($_SESSION['uid'])) {
     if ($is_power_user) {
@@ -101,29 +107,29 @@ if ($data['isInOpenCoursesMode']) {
     }
 }
 
+// get user faculties
+$userdeps = $user->getDepartmentIds($uid);
+$subs = $tree->buildSubtreesFull($userdeps);
+foreach ($subs as $node) {
+    $user_faculty_ids[] = $node->id;
+}
+
+
 if (isset($_GET['fc'])) { // fetch specific department
     $fc = intval($_GET['fc']);
+    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
 } else if (isset($_SESSION['uid'])) { // fetch user department (default) if user logged in
     $fc = getfcfromuid($_SESSION['uid']);
     if (!$fc) { // if user does not belong to department
         list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
         $fc = intval($roots[0]->id);
     }
-}
-
-// parse the faculty id in a session
-// This is needed in case the user decides to switch language.
-if (isset($fc)) {
-    $_SESSION['fc_memo'] = $fc;
-} elseif (isset($_SESSION['fc_memo'])) {
-    $fc = $_SESSION['fc_memo'];
-} else {
-    redirect_to_home_page();
+    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
 }
 
 $fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $fc);
-if (!$fac) {
-    die("ERROR: no faculty with id $data[fc]");
+if (!$fac) { // faculty doesn't exist
+    redirect_to_home_page();
 }
 // validate department
 if (!$tree->checkVisibilityRestrictions($fac->id, $fac->visible)) {
@@ -227,6 +233,7 @@ $data['childHTML'] = $childHTML;
 $data['myCourses'] = $myCourses;
 $data['courses_list'] = $courses_list;
 $data['unlock_all_courses'] = $unlock_all_courses;
+$data['user_faculty_ids'] = $user_faculty_ids;
 
 view('modules.auth.courses', $data);
 

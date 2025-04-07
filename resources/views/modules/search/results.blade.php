@@ -63,14 +63,13 @@
     </div>
 
     <script type='text/javascript'>$(course_list_init);
-        var themeimg = '{{ $themeimg }}'
         var urlAppend = '{{ $urlAppend }}'
         var lang = {
             unCourse: '{{ js_escape(trans('langUnCourse')) }}',
             cancel: '{{ js_escape(trans('langCancel')) }}',
             close: '{{ js_escape(trans('langClose')) }}',
-            unregCourse: '{{ js_escape(trans('langUnregCourse')) }}',
-            reregisterImpossible: '{{ js_escape(trans('langConfirmUnregCours')) }} {{ js_escape(trans('m[unsub]')) }}',
+            unregCourse: '{{ js_escape(trans('langDeleteUser')) }}',
+            reregisterImpossible: '{{ js_escape(trans('langConfirmUnregCours')) }}',
             invalidCode: '{{ js_escape(trans('langInvalidCode')) }}',
             prereqsNotComplete: '{{ js_escape(trans('langPrerequisitesNotComplete')) }}',
         };

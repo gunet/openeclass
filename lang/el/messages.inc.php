@@ -1677,6 +1677,7 @@ $langCourseActiveShort = "Ενεργά $langsCourses";
 $langPrivateShort = "Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του $langsOfCourse!";
 $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του $langsOfCourse!";
+$langFacultyUsersRegistrationLegend = "Η εγγραφή επιτρέπεται μόνο στους $langsOfStudentss της σχολής του $langsOfCourse.";
 
 // Admin mutiple course creation
 $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";

@@ -33,6 +33,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/course_settings.php';
 require_once 'functions.php';
 
 $tree = new Hierarchy();
@@ -148,6 +149,7 @@ if (!isset($_POST['create_course'])) {
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
 
 } else  { // create the course and the course database
+
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
@@ -318,6 +320,11 @@ if (!isset($_POST['create_course'])) {
         Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
+
+        // set course option faculty_users_registration (if checked)
+        if (isset($_POST['faculty_users_registration'])) {
+            setting_set(SETTING_FACULTY_USERS_REGISTRATION, 1, $new_course_id);
+        }
 
         $_SESSION['courses'][$code] = USER_TEACHER;
 
