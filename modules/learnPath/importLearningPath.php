@@ -176,7 +176,7 @@ function startElement($parser, $name, $attributes) {
             // 'see' that this is another file
             // for that we remove this element from the pile so it doesn't appear when we compare the
             // pile with the position of an element
-            // $poped = array_pop($elementsPile);
+            $poped = array_pop($elementsPile);
             break;
     }
 }
@@ -274,59 +274,64 @@ function elementData($parser, $data) {
 
         // found a link to another XML file, parse it ...
         case "ADLCP:LOCATION" :
-            if (!$errorFound) {
-                $xml_parser = xml_parser_create();
-                xml_set_element_handler($xml_parser, "startElement", "endElement");
-                xml_set_character_data_handler($xml_parser, "elementData");
-
-                $file = rawurldecode($data); //url of secondary manifest files is relative to the position of the base imsmanifest.xml
-                $zipFile = new ZipArchive();
-                if ($zipFile->open($pathToManifest . $file) == TRUE) {
-                     if ($zipFile->extractTo($pathToManifest)) {
-                         $zipFile->close();
-                     }
-                } else {
-                    array_push($errorMsgs, $langErrorOpeningXMLFile . $pathToManifest . $file);
-                }
-
+            $file = "imsmanifest.xml";
+            if (!($fp = @fopen($file, "r"))) {
+                $errorFound = true;
+                $errorMsgs[] = $langErrorOpeningManifest;
+            } else {
                 if (!$errorFound) {
-                    if (!isset($cache)) {
-                        $cache = "";
+                    $xml_parser = xml_parser_create();
+                    xml_set_element_handler($xml_parser, "startElement", "endElement");
+                    xml_set_character_data_handler($xml_parser, "elementData");
+
+                    $file = rawurldecode($data); //url of secondary manifest files is relative to the position of the base imsmanifest.xml
+                    $zipFile = new ZipArchive();
+                    if ($zipFile->open($pathToManifest . $file) == TRUE) {
+                        if ($zipFile->extractTo($pathToManifest)) {
+                            $zipFile->close();
+                        }
+                    } else {
+                        array_push($errorMsgs, $langErrorOpeningXMLFile . $pathToManifest . $file);
                     }
-                    while ($readdata = str_replace("\n", "", fread($fp, 4096))) {
-                        // fix for fread breaking thing
-                        // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
-                        // preg expression has been modified to match tag with inner attributes
-                        $readdata = $cache . $readdata;
-                        if (!feof($fp)) {
-                            if (preg_match_all("/<[^\>]*.>/", $readdata, $regs)) {
-                                $lastTagname = $regs[0][count($regs[0]) - 1];
-                                $split = false;
-                                for ($i = strlen($readdata) - strlen($lastTagname); $i >= strlen($lastTagname); $i--) {
-                                    if ($lastTagname == substr($readdata, $i, strlen($lastTagname))) {
-                                        $cache = substr($readdata, $i, strlen($readdata));
-                                        $readdata = substr($readdata, 0, $i);
-                                        $split = true;
-                                        break;
+
+                    if (!$errorFound) {
+                        if (!isset($cache)) {
+                            $cache = "";
+                        }
+                        while ($readdata = str_replace("\n", "", fread($fp, 4096))) {
+                            // fix for fread breaking thing
+                            // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
+                            // preg expression has been modified to match tag with inner attributes
+                            $readdata = $cache . $readdata;
+                            if (!feof($fp)) {
+                                if (preg_match_all("/<[^\>]*.>/", $readdata, $regs)) {
+                                    $lastTagname = $regs[0][count($regs[0]) - 1];
+                                    $split = false;
+                                    for ($i = strlen($readdata) - strlen($lastTagname); $i >= strlen($lastTagname); $i--) {
+                                        if ($lastTagname == substr($readdata, $i, strlen($lastTagname))) {
+                                            $cache = substr($readdata, $i, strlen($readdata));
+                                            $readdata = substr($readdata, 0, $i);
+                                            $split = true;
+                                            break;
+                                        }
                                     }
                                 }
+                                if (!$split) {
+                                    $cache = $readdata;
+                                }
                             }
-                            if (!$split) {
-                                $cache = $readdata;
+                            // end of fix
+                            if (!xml_parse($xml_parser, $readdata, feof($fp))) {
+                                // if reading of the xml file in not successfull :
+                                // set errorFound, set error msg, break while statement
+                                $errorFound = true;
+                                array_push($errorMsgs, $langErrorReadingXMLFile . $pathToManifest . $file);
+                                break;
                             }
-                        }
-                        // end of fix
-                        if (!xml_parse($xml_parser, $readdata, feof($fp))) {
-                            // if reading of the xml file in not successfull :
-                            // set errorFound, set error msg, break while statement
-                            $errorFound = true;
-                            array_push($errorMsgs, $langErrorReadingXMLFile . $pathToManifest . $file);
-                            break;
-                        }
-                    } // while $readdata
-                }    //if fopen
-                // close file
-                @fclose($fp);
+                        } // while $readdata
+                    }    //if fopen
+                    @fclose($fp); // close file
+                }
             }
             break;
 
@@ -414,7 +419,7 @@ function elementData($parser, $data) {
 }
 
 /**
- * This function checks in elementpile if the sequence of markup is the same as in array2Compare
+ * This function checks in element pile if the sequence of markup is the same as in array2Compare
  * Checks if the sequence is the same in the begining of pile.
  * If the sequences are the same then it means that the elementdata is the one we were looking for.
  *
@@ -1080,7 +1085,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $tool_content .="
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-            
+
                 <div class='form-wrapper form-edit rounded'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                         <p>$langNote:</p>
@@ -1093,7 +1098,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
                                 fileSizeHidenInput() . replaceIdHiddenInput() . "
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'><br>
-                                
+
                                 <span class='small-text help-block'>$langLearningPathUploadFile</span><br>
                                 <div class='infotext col-12 margin-bottom-fat TextBold Neutral-900-cl mt-4'>
                                     $langMaxFileSize " . ini_get('upload_max_filesize') . "
@@ -1106,8 +1111,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-end'>
-                               
-                                  
+
+
                                     ".form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
@@ -1119,9 +1124,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                                             'href' => "index.php?course=$course_code",
                                         )
                                     ))."
-                                 
-                                  
-                              
+
+
+
                             </div>
                         </div>
                     </form>
@@ -1129,7 +1134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
             </div>
             </div>
-           
+
     ";
 
 } // else if method == 'post'
