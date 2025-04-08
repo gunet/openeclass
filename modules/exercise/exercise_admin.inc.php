@@ -613,35 +613,36 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>
 
-                <div class='course-info-title clearfix mt-4'>
-                    <a class='TextBold text-decoration-none'role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                        <div class='card panelCard card-default px-0 py-1 h-100'>
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                <div class='panel-group group-section mt-4' id='accordionEx' role='tablist' aria-multiselectable='true'>
+                    <ul class='list-group list-group-flush'>
+                        <li class='list-group-item px-0 mb-4 bg-transparent'>
+                            <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
+                                <span class='fa-solid fa-chevron-down'></span> 
                                 $langCheckAccess
-                                <span class='fa fa-chevron-down fa-fw'></span> 
+                            </a>
+                            <div id='CheckAccess' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionEx'>
+                                <div class='panel-body bg-transparent Neutral-900-cl p-0'>
+                                    <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
+                                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <div class='col-12'>
+                                            <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                                            <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
+                                        </div>
+                                    </div>
+                                    <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
+                                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                        <div class='col-12'>
+                                            <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
+                                                $exerciseIPLockOptions
+                                            </select>
+                                            <span class='help-block Accent-200-cl'>".Session::getError('exerciseIPLock')."</span>
+                                        </div>
+                                    </div>" .
+                                    eClassTag::tagInput($exerciseId) . "
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div id='CheckAccess' class='collapse'>
-                    <div class='row form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
-                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode <span class='asterisk Accent-200-cl'>(*)</span></label>
-                        <div class='col-12'>
-                            <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
-                            <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
-                        </div>
-                    </div>
-                    <div class='row form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
-                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock <span class='asterisk Accent-200-cl'>(*)</span></label>
-                        <div class='col-12'>
-                            <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
-                                $exerciseIPLockOptions
-                            </select>
-                            <span class='help-block Accent-200-cl'>".Session::getError('exerciseIPLock')."</span>
-                        </div>
-                    </div>" .
-                    eClassTag::tagInput($exerciseId) . "
+                        </li>
+                    </ul>
                 </div>
 
                 <div class='row form-group mt-5'>
