@@ -1079,14 +1079,13 @@ function get_user_login_archives(): array
  * Otherwise we seek `courses` and `users` table and update the `monthly_summary`.
  * @return array
  */
-function get_monthly_archives($details = false, $month = null): array
+function get_monthly_archives($fc, $details = false, $month = null): array
 {
     $tree = new Hierarchy();
 
     if ($details and !is_null($month)) { // detailed view
-        $rgt = Database::get()->querySingle("SELECT rgt FROM hierarchy WHERE lft = 1")->rgt;
+        $rgt = Database::get()->querySingle("SELECT rgt FROM hierarchy WHERE id = ?d", $fc)->rgt;
         $dep_ids = Database::get()->queryArray("SELECT id, name FROM hierarchy WHERE lft > 1 AND lft < ?d", $rgt);
-
         foreach ($dep_ids as $dep_data) {
             $dep_id = $dep_data->id;
             $dep_name = $dep_data->name;
@@ -1203,18 +1202,17 @@ function get_monthly_archives($details = false, $month = null): array
         $interval = DateInterval::createFromDateString('first day of last month');
         $period = new DatePeriod($start, $interval, 24, DatePeriod::EXCLUDE_START_DATE); // last 12 months
 
+        $rgt = Database::get()->querySingle("SELECT rgt FROM hierarchy WHERE id = ?d", $fc)->rgt;
+        $dep_id_extra = "(SELECT id FROM hierarchy WHERE lft > 1 AND lft < $rgt)";
+
         foreach ($period as $time) {
-            /*if ($days == 1) {
-                $year_month_val = $time->format("Y-m-d");
-            } else { */
             $year_month_val = $time->format("Y-m");
-            //}
             $sql_data = Database::get()->querySingle("SELECT teachers, students, guests, courses, inactive_courses, 
-                                                    assignments, documents, exercises, 
-                                                    messages, announcements, forum_posts, DATE_FORMAT(month,'%Y-%m') AS month
-                                                    FROM monthly_summary
-                                                  WHERE DATE_FORMAT(month,'%Y-%m') = ?s
-                                                  AND dep_id = 0", $year_month_val);
+                                                assignments, documents, exercises, 
+                                                messages, announcements, forum_posts, DATE_FORMAT(month,'%Y-%m') AS month
+                                                FROM monthly_summary
+                                              WHERE DATE_FORMAT(month,'%Y-%m') = ?s
+                                              AND dep_id = ?d", $year_month_val, $fc);
             if ($sql_data) {
                 $sql_data_month_year = $sql_data->month;
                 $content[] = [
@@ -1233,19 +1231,62 @@ function get_monthly_archives($details = false, $month = null): array
                 ];
             } else {
                 $year_month_day = $time->format("Y-m-d");
-                $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course WHERE created <= ?t", $year_month_day)->cnt;
-                $cnt_courses_inactive = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course WHERE created <= ?t AND visible = " . COURSE_INACTIVE, $year_month_day)->cnt;
-                $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . " AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter(), $year_month_day)->cnt;
-                $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter(), $year_month_day)->cnt;
-                $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user 
-                                            WHERE status = " . USER_GUEST . " 
-                                            AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter(), $year_month_day)->cnt;
-                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document WHERE date <= ?t", $year_month_day)->cnt;
-                $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement WHERE date <= ?t", $year_month_day)->cnt;
-                $cnt_messages = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM dropbox_msg WHERE FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t", $year_month_day)->cnt;
-                $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise")->cnt;
-                $cnt_assignments = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM assignment")->cnt;
-                $cnt_forum_posts = Database::get()->querySingle("SELECT num_posts AS cnt FROM forum")->cnt;
+                $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course JOIN course_department 
+                                                                ON course.id = course_department.course 
+                                                                WHERE created <= ?t 
+                                                                AND department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_courses_inactive = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course JOIN course_department 
+                                                                ON course.id = course_department.course
+                                                                WHERE created <= ?t 
+                                                                AND department IN $dep_id_extra
+                                                                AND visible = " . COURSE_INACTIVE,
+                                                            $year_month_day)->cnt;
+                $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department 
+                                                                WHERE status = " . USER_TEACHER . " 
+                                                                AND registered_at <= ?t 
+                                                                AND expires_at > " . DBHelper::timeAfter() . "
+                                                                AND user_department.user = user.id
+                                                                AND user_department.department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department 
+                                                                WHERE status = " . USER_STUDENT . " 
+                                                                AND registered_at <= ?t 
+                                                                AND expires_at > " . DBHelper::timeAfter() . " 
+                                                                AND user_department.user = user.id
+                                                                AND user_department.department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user, user_department 
+                                                                WHERE status = " . USER_GUEST . " 
+                                                                AND registered_at <= ?t 
+                                                                AND expires_at > " . DBHelper::timeAfter() . "
+                                                                AND user_department.user = user.id
+                                                                AND user_department.department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document, course_department, user_department 
+                                                                WHERE date <= ?t 
+                                                                AND document.course_id = course_department.course
+                                                                AND user_department.department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement, course_department                        
+                                                                WHERE date <= ?t
+                                                                AND announcement.course_id = course_department.course
+                                                                AND department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_messages = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM dropbox_msg, course_department                        
+                                                                WHERE FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t
+                                                                AND dropbox_msg.course_id = course_department.course
+                                                                AND department IN $dep_id_extra",
+                                                            $year_month_day)->cnt;
+                $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise, course_department
+                                                                WHERE exercise.course_id = course_department.course
+                                                                AND department IN $dep_id_extra")->cnt;
+                $cnt_assignments = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM assignment, course_department 
+                                                                WHERE assignment.course_id = course_department.course
+                                                                AND department IN $dep_id_extra")->cnt;
+                $cnt_forum_posts = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM forum, course_department
+                                                                WHERE forum.course_id = course_department.course
+                                                                AND department IN $dep_id_extra")->cnt;
 
                 $content[] = [
                     'month' => $year_month_day,
@@ -1262,8 +1303,8 @@ function get_monthly_archives($details = false, $month = null): array
                     'forum_posts' => $cnt_forum_posts
                 ];
 
-                Database::get()->query("INSERT INTO monthly_summary (month, teachers, students, guests, courses, inactive_courses, documents, announcements, messages, exercises, assignments, forum_posts) VALUES (?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
-                    $year_month_day, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses, $cnt_courses_inactive, $cnt_documents, $cnt_announcements, $cnt_messages, $cnt_exercises, $cnt_assignments, $cnt_forum_posts);
+                Database::get()->query("INSERT INTO monthly_summary (month, teachers, students, guests, courses, dep_id, inactive_courses, documents, announcements, messages, exercises, assignments, forum_posts) VALUES (?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
+                    $year_month_day, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses, $fc, $cnt_courses_inactive, $cnt_documents, $cnt_announcements, $cnt_messages, $cnt_exercises, $cnt_assignments, $cnt_forum_posts);
             }
         }
     }
