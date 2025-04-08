@@ -21,19 +21,34 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $toolName = $langAdmin;
 $pageName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-if (isset($_GET['d'])) { // detailed statistics per faculty
-    $monthly_data = get_monthly_archives(true, $_GET['m']);
+
+$tree = new Hierarchy();
+
+list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
+
+$fc = ($_GET['fc'] ?? $roots[0]->id);
+
+if (count($tree->buildRootsArray()) > 1) { // multiple root tree
+    $data['buildRoots'] = $tree->buildRootsSelectForm(intval($roots[0]->id));
 } else {
-    $monthly_data = get_monthly_archives();
+    $data['buildRoots'] = '';
+}
+
+if (isset($_GET['d'])) {  // detailed statistics per faculty
+    $monthly_data = get_monthly_archives($fc, true, $_GET['m']);
+} else {
+    $monthly_data = get_monthly_archives($fc);
 }
 
 $data['monthly_data'] = $monthly_data;
+$data['fc'] = $fc;
 
 view('admin.other.stats.monthlyReport', $data);
 

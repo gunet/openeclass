@@ -17,6 +17,12 @@
                     <div class='mt-4'></div>
                 @endif
 
+                <div class='col-12 mt-4'>
+                    @if (isset($buildRoots))
+                        {!! $buildRoots !!}
+                    @endif
+                </div>
+
                 <div class='col-12'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i>
                         <span>
@@ -60,7 +66,7 @@
                                         @else
                                             <td style="background-color: aliceblue">
                                                 {{ date_format(date_create($data['month']), "n / Y") }}
-                                                <h3><a href="{{$_SERVER['SCRIPT_NAME'] }}?d=1&amp;m={{ $data['month'] }}">{{ trans('langDetails') }}</a></h3>
+                                                <h3><a href="{{ $_SERVER['SCRIPT_NAME'] }}?d=1&amp;m={{ $data['month'] }}&fc={{ $fc }}">{{ trans('langDetails') }}</a></h3>
                                             </td>
                                         @endif
                                         <td style="text-align: center;">{{ $data['teachers'] }}</td>
