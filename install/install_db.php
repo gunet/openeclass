@@ -405,11 +405,19 @@ $db->query("CREATE TABLE `loginout_summary` (
 // monthly reports
 $db->query("CREATE TABLE monthly_summary (
     id int(11) NOT NULL auto_increment,
-    `month` DATE NOT NULL,
-    profesNum int(11) NOT NULL default 0,
-    studNum int(11) NOT NULL default 0,
-    visitorsNum int(11) NOT NULL default 0,
-    coursNum int(11) NOT NULL default 0,
+    `month` date NOT NULL,
+    `teachers` int NOT NULL DEFAULT '0',
+    `students` int NOT NULL DEFAULT '0',
+    `guests` int NOT NULL DEFAULT '0',
+    `courses` int NOT NULL DEFAULT '0',
+    `dep_id` int DEFAULT '0',
+    `assignments` int DEFAULT '0',
+    `exercises` int DEFAULT '0',
+    `documents` int DEFAULT '0',
+    `messages` int DEFAULT '0',
+    `announcements` int DEFAULT '0',
+    `forum_posts` int DEFAULT '0',
+    `inactive_courses` int DEFAULT '0',            
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
