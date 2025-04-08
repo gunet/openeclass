@@ -3219,25 +3219,30 @@ function upgrade_to_4_1($tbl_options) : void {
     if (!DBHelper::fieldExists('monthly_summary', 'exercises')) {
         Database::get()->query("ALTER TABLE monthly_summary ADD exercises INT DEFAULT 0");
     }
+    if (!DBHelper::fieldExists('monthly_summary', 'messages')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD messages INT DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('monthly_summary', 'announcements')) {
+        Database::get()->query("ALTER TABLE monthly_summary ADD announcements INT DEFAULT 0");
+    }
     if (!DBHelper::fieldExists('monthly_summary', 'assignments')) {
         Database::get()->query("ALTER TABLE monthly_summary ADD assignments INT DEFAULT 0");
     }
     if (!DBHelper::fieldExists('monthly_summary', 'forum_posts')) {
         Database::get()->query("ALTER TABLE monthly_summary ADD forum_posts INT DEFAULT 0");
     }
-    if (!DBHelper::fieldExists('monthly_summary', 'profesNum')) {
+    if (DBHelper::fieldExists('monthly_summary', 'profesNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE profesNum teachers INT DEFAULT 0");
     }
-    if (!DBHelper::fieldExists('monthly_summary', 'studNum')) {
+    if (DBHelper::fieldExists('monthly_summary', 'studNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE studNum students  INT DEFAULT 0");
     }
-    if (!DBHelper::fieldExists('monthly_summary', 'visitorsNum')) {
+    if (DBHelper::fieldExists('monthly_summary', 'visitorsNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE visitorsNum guests INT DEFAULT 0");
     }
-    if (!DBHelper::fieldExists('monthly_summary', 'coursNum')) {
+    if (DBHelper::fieldExists('monthly_summary', 'coursNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE coursNum courses INT DEFAULT 0");
     }
-
     if (!DBHelper::fieldExists('course_units', 'assign_to_specific')) {
         Database::get()->query("ALTER TABLE course_units ADD assign_to_specific TINYINT NOT NULL DEFAULT 0 AFTER `order`");
     }
