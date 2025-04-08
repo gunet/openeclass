@@ -3225,16 +3225,16 @@ function upgrade_to_4_1($tbl_options) : void {
     if (!DBHelper::fieldExists('monthly_summary', 'forum_posts')) {
         Database::get()->query("ALTER TABLE monthly_summary ADD forum_posts INT DEFAULT 0");
     }
-    if (DBHelper::fieldExists('monthly_summary', 'profesNum')) {
+    if (!DBHelper::fieldExists('monthly_summary', 'profesNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE profesNum teachers INT DEFAULT 0");
     }
-    if (DBHelper::fieldExists('monthly_summary', 'studNum')) {
+    if (!DBHelper::fieldExists('monthly_summary', 'studNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE studNum students  INT DEFAULT 0");
     }
-    if (DBHelper::fieldExists('monthly_summary', 'visitorsNum')) {
+    if (!DBHelper::fieldExists('monthly_summary', 'visitorsNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE visitorsNum guests INT DEFAULT 0");
     }
-    if (DBHelper::fieldExists('monthly_summary', 'coursNum')) {
+    if (!DBHelper::fieldExists('monthly_summary', 'coursNum')) {
         Database::get()->query("ALTER TABLE monthly_summary CHANGE coursNum courses INT DEFAULT 0");
     }
 
