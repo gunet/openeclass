@@ -104,7 +104,6 @@ if ($unit) {
     require_once '../../include/baseTheme.php';
 }
 
-require_once 'template/template.inc.php';
 require_once 'include/action.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/forcedownload.php';

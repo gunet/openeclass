@@ -49,7 +49,6 @@ if (isset($toolContent_ErrorExists)) {
     exit();
 }
 
-require_once 'template/template.inc.php';
 require_once 'tools.php';
 
 /**
@@ -76,9 +75,6 @@ function view($view_file, $view_data = array()) {
 
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
-
-    // Setting $menuTypeID and Getting Side Menu
-    $menuTypeID = $view_data['menuTypeID'] ?? 2;
 
     $toolArr = [];
     if (isset($course_id) and !$is_mobile) {
@@ -111,22 +107,6 @@ function view($view_file, $view_data = array()) {
         $toolName = $pageName;
     } elseif (!$pageName and $toolName) {
         $pageName = $toolName;
-    }
-
-    // set the text and icon on the third bar (header)
-    if ($menuTypeID == 2) {
-        $section_title = $currentCourseName;
-    } elseif ($menuTypeID == 3) {
-        $section_title = trans('langAdmin');
-    } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
-        $section_title = trans('langUserPortfolio');
-    } else {
-        $homepagetitle = get_config('homepage_title');
-        if (isset($homepagetitle)) {
-            $section_title = $homepagetitle;
-        } else {
-            $section_title = $siteName;
-        }
     }
 
     // breadcrumb and page title
@@ -178,7 +158,7 @@ function view($view_file, $view_data = array()) {
         }
 
         // Breadcrumb course home entry
-        if (isset($course_code) and $menuTypeID != 3) {
+        if (isset($course_code)) {
             $item['bread_text'] = ellipsize($currentCourseName, 48);
             if ($pageName) {
                 $item['bread_href'] = $urlAppend . 'courses/' . $course_code . '/';
@@ -332,7 +312,7 @@ function view($view_file, $view_data = array()) {
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 'action_bar',
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
-            'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
+            'module_visibility', 'professor', 'pageName',
             'logo_img', 'logo_img_small', 'breadcrumbs', 'is_mobile', 'current_module_dir', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
@@ -368,12 +348,11 @@ function widget_view($view_file, $view_data = array()) {
 /**
  * @brief Old views. user for compatibility issue.
  * @param mixed $toolContent html code
- * @param int $menuTypeID
  * @param string $tool_css (optional) catalog name where a "tool.css" file exists
  * @param string $head_content (optional) code to be added to the HEAD of the UI
  */
-function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null, $perso_tool_content = null) {
-    view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null) {
+    view('legacy.index', compact('tool_content'));
 }
 
 // Simplified draw for pop-ups
