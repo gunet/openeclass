@@ -408,7 +408,7 @@
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
                                 <div class='col-12 d-flex justify-content-start mb-3 mt-5'>
-                                    <a class='btn submitAdminBtnDefault mt-0 mb-2 gap-2' href="{{ $urlServer }}modules/course_info/activity_edit.php?course{{$course_code}}">
+                                    <a class='btn submitAdminBtnDefault mt-0 mb-2 gap-2' href="{{ $urlServer }}modules/course_info/activity_edit.php?course={{$course_code}}">
                                         <i class='fa-solid fa-edit'></i>
                                         {{trans('langActivityEdit')}}
                                     </a>
