@@ -778,7 +778,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
         } else {
             $file->title = $title;
             $image = choose_image('.' . $file->format);
-            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
+            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=" . getIndirectReference($file->path);
             $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
                 "<input type='hidden' value='$download_url'>" : '';
             if (get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download){
