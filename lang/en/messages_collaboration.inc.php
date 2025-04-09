@@ -154,7 +154,6 @@ $langHelpPowerUser = "The admin assistant manages $langsCourses and users";
  * ************************************************** */
 // index
 $langSpeeSubscribe = "Register as a $langOfCourse Administrator";
-$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 12 months are presented.";
 $langListCours = "List $langOfCourses / Actions";
 $langProfReg = "Register $langOfTeacher";
 $langProfOpen = "Requests $langOfTeachers";
@@ -1333,7 +1332,7 @@ Choose one of the available forms of partnerships. </br></br>
 Specify, optionally, the distribution license of your collaboration.</br></br>
 Specify the type of access to your collaboration. </br></br>
 To complete the process of creating the collaboration, press the button with the indicator «Creating a Partnership».";
-$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 12 months are presented.";
+$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 24 months are presented.";
 $langAddingDirectoryIndex = 'Add index.html files to collaboration subdirectories';
 $langAdministratorGroup = 'Management of User Groups';
 $m['WorkToAllUsers'] = "In all the $langsOfStudentss";
