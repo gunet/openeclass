@@ -1082,15 +1082,23 @@ function get_user_login_archives(): array
 function get_monthly_archives($fc, $details = false, $month = null): array
 {
     $tree = new Hierarchy();
+    $content = [];
 
     if ($details and !is_null($month)) { // detailed view
         $node = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $fc);
         $dep_ids = Database::get()->queryArray("SELECT id, name FROM hierarchy WHERE lft > ?d AND rgt < ?d ORDER BY name", $node->lft, $node->rgt);
+        $dep_ids_to_exclude = [];
         foreach ($dep_ids as $dep_data) {
             $dep_id = $dep_data->id;
             $dep_name = $dep_data->name;
             $node = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $dep_id);
             $dep_id_extra = "(SELECT id FROM hierarchy WHERE lft >= $node->lft AND rgt <= $node->rgt)";
+
+            // exclude children departments from viewing
+            $q = Database::get()->queryArray("SELECT id FROM hierarchy WHERE lft >= $node->lft AND rgt < $node->rgt");
+            foreach ($q as $data) {
+                $dep_ids_to_exclude []= $data->id;
+            }
 
             $sql_data = Database::get()->querySingle("SELECT teachers, students, guests, courses, inactive_courses, 
                                                 assignments, documents, exercises, 
@@ -1100,6 +1108,7 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                                                 AND dep_id = ?d", $month, $dep_id);
             if ($sql_data) {
                 $content[] = [
+                    'fc' => $dep_id,
                     'faculty' => $tree->unserializeLangField($dep_name),
                     'month' => $sql_data->month,
                     'teachers' => $sql_data->teachers,
@@ -1172,6 +1181,7 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                                         AND department IN $dep_id_extra")->cnt;
 
                 $content[] = [
+                    'fc' => $dep_id,
                     'faculty' => $tree->unserializeLangField($dep_name),
                     'month' => $month,
                     'teachers' => $cnt_prof,
@@ -1191,8 +1201,14 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                     $month, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses, $dep_id, $cnt_courses_inactive, $cnt_documents, $cnt_announcements, $cnt_messages, $cnt_exercises, $cnt_assignments, $cnt_forum_posts);
             }
         }
+
+        foreach ($content as $data_key => $data) { // don't display children department below root department nodes
+            if (in_array($data['fc'], $dep_ids_to_exclude)) {
+                unset($content[$data_key]);
+            }
+        }
+
     } else { // default view
-        $content = [];
         $start = new DateTime('now');
 
         /*if ($days == 1) {
