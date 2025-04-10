@@ -374,7 +374,7 @@ class Hierarchy {
     /**
      * Loop the whole tree ordered by lft and call callback for each node.
      *
-     * @param  function $callback
+     * @param  string $callback
      * @param  array    $nodesoverride - in case we can avoid the query
      * @return array    $nodes
      */
