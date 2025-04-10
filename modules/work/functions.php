@@ -1138,7 +1138,7 @@ function display_submission_details($id) {
         } else {
             $file_comments_url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;getcomment=$sub->id";
         }
-        $file_comments_link = '<br>' . MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename);
+        $file_comments_link = '<div class="mt-2">' . MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename) . "</div>";
     } else {
         $file_comments_link = '';
     }
