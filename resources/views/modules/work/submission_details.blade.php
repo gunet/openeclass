@@ -58,8 +58,8 @@
                                 {{ trans('langGradeComments') }}
                             </div>
                         </div>
-                        <div class='col-md-9 col-12 title-default-line-height' style='white-space: pre-wrap'>
-                            {!! $grade_comments !!} {{ $file_comments_link }}
+                        <div class='col-md-9 col-12 title-default-line-height' style='white-space: pre-line'>
+                            {!! $grade_comments !!} {!! $file_comments_link !!}
                         </div>
                     </div>
                 </li>
