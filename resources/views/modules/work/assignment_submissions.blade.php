@@ -195,7 +195,8 @@
                                 <input type='hidden' name='grades_id' value='{{ $id }}'>
                                 <br>
                                 <div class='alert alert-success'>
-                                    <strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}
+                                    <i class='fa-solid fa-circle-check fa-lg'></i>
+                                    <span><strong>{{ trans('langSubmissions') }}:</strong>&nbsp;{{ $count_of_assignments }}</span>
                                 </div>
                                 {{-- button for transferring student peer review grades to teacher grades --}}
                                 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline)
@@ -247,7 +248,7 @@
                                                             {!! display_group($row->group_id) !!}
                                                         @endif
                                                         @if (!is_null(uid_to_am($row->uid)))
-                                                            <div class='text-heading-h6'>
+                                                            <div class='text-heading-h6 my-3'>
                                                                 {{ trans('langAmShort') }}: {{ uid_to_am($row->uid) }}
                                                             </div>
                                                         @endif
@@ -261,12 +262,12 @@
 
                                                             {{-- student comments --}}
                                                         @if (trim($row->comments != ''))
-                                                            <div class='mt-1'>
+                                                            <div class='my-3'>
                                                                 <small> {{ $row->comments }}</small>
                                                             </div>
                                                         @endif
 
-                                                        <div class='mt-2'>
+                                                        <div class='my-3'>
                                                             @if ($row->grade_comments or $row->grade_comments_filename) {{-- teacher comments --}}
                                                                 <strong>
                                                                     {{ trans('langGradeComments') }}
@@ -281,7 +282,7 @@
                                                                 </div>
                                                             @endif
                                                             @if ($row->grade != '') {{-- grade submission date --}}
-                                                                <div class='text-heading-h6 mt-1'>
+                                                                <div class='text-heading-h6 mt-2'>
                                                                     {{ trans('langGradedAt') }} {!! format_locale_date(strtotime($row->grade_submission_date), 'short', false) !!}
                                                                 </div>
                                                             @endif
@@ -298,7 +299,7 @@
                                                     {{-- submission files --}}
                                                     <td class='filename-col col-md-2'>
                                                         @if ($assign->submission_type == 1)
-                                                            <button class='onlineText btn btn-xs btn-default' data-id='{{ $row->id }}'>
+                                                            <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
                                                                 {{ trans('langQuestionView') }}
                                                             </button>
                                                         @elseif (!empty($row->file_name))
@@ -313,7 +314,7 @@
                                                             {!! format_locale_date(strtotime($row->submission_date)) !!}
                                                             @if ($row->deadline && $row->submission_date > $row->deadline)
                                                                 <div class='Accent-200-cl'>
-                                                                    <small style='color: red;'>{{ trans('langLateSubmission') }}</small>
+                                                                    <small class='Accent-200-cl'>{{ trans('langLateSubmission') }}</small>
                                                                 </div>
                                                             @endif
                                                         </small>

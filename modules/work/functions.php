@@ -270,7 +270,7 @@ function new_edit_assignment($assignment_id = null) {
         $data['lti_launchcontainer'] = LTI_LAUNCHCONTAINER_EMBED;
         $data['tii_submit_papers_to'] = TII_SUBMIT_PAPERS_STANDARD;
         $data['assignment_type_radios_class'] = 'col-12';
-        $data['assignment_type_eclass_div_class'] = 'radio mb-2';
+        $data['assignment_type_eclass_div_class'] = 'radio';
         $data['assignment_type_turnitin_div_class'] = 'radio';
         $data['help_block_div_class'] = 'col-12';
         $data['ltiopts_div_class'] = 'TextBold large-text';
@@ -341,6 +341,8 @@ function new_edit_assignment($assignment_id = null) {
 
     rich_text_editor(null, null, null, null);
 
+    $data['tagsAssignment'] = eClassTag::tagInput($assignment_id);
+
     view('modules.work.new_edit_assignment', $data);
 }
 
@@ -356,7 +358,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
            $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
            $langNoneWorkUserNoSubmission, $langGroupSpaceLink, $langPendingPeerSubmissions,
            $is_editor, $langGroupAssignmentPublish, $langGroupAssignmentNoGroups,
-           $langThisIsGroupAssignment;
+           $langThisIsGroupAssignment, $langBack;
 
     $_SESSION['has_unlocked'] = array();
 
@@ -457,7 +459,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
                     } elseif ($user_group_info) {
                         $group_select_form = "
                         <div class='form-group mt-4'>
-                            <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
+                            <label for='group_id' class='col-sm-12 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
                               " . selection($user_group_info, 'group_id') . "
                             </div>
@@ -477,7 +479,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
                     if (count($groups_with_no_submissions)>0) {
                         $group_select_form = "
                         <div class='form-group mt-4'>
-                            <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
+                            <label for='group_id' class='col-sm-12 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
                               " . selection($groups_with_no_submissions, 'group_id') . "
                             </div>
@@ -494,7 +496,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 if (count($users_with_no_submissions) > 0) {
                     $group_select_form = "
                     <div class='form-group mt-4'>
-                        <label for='user_id' class='col-sm-6 control-label-notes'>$langOnBehalfOf:</label>
+                        <label for='user_id' class='col-sm-12 control-label-notes'>$langOnBehalfOf:</label>
                         <div class='col-sm-12'>
                           " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
                         </div>

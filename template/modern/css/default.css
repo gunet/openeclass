@@ -1820,7 +1820,7 @@ label:has(input[type="radio"]:disabled){
   font-size: 14px;
   font-weight: 400; font-style: normal;
   color: #2B3944;
-  line-height: 16px;
+  /* line-height: 16px; */
   letter-spacing: 0px;
   cursor: not-allowed;
   /* opacity: 0.4; */

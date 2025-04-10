@@ -14,6 +14,8 @@
 
                         @include('layouts.partials.legend_view')
 
+                        @include('layouts.partials.show_alert')
+
                         <div id='operations_container'>
                             {!! $action_bar !!}
                         </div>
@@ -123,14 +125,13 @@
                                                                     array('title' => trans('langWorkSubsDelete'),
                                                                             'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                                                                             'icon' => 'fa-eraser',
-                                                                            'confirm' => trans("langWarnForSubmissions langDelSure"),
+                                                                            'confirm' => trans('langWarnForSubmissions'),
                                                                             'show' => (countSubmissions($row->id) > 0)),
                                                                     array('title' => trans('langDelete'),
                                                                             'url' => "{$urlAppend}modules/work/index.php?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                                                                             'icon' => 'fa-xmark',
                                                                             'class' => 'delete',
-                                                                            'confirm' => trans('langWorksDelConfirm'))
-                                                                ));
+                                                                            'confirm' => trans('langWorksDelConfirm'))))
                                                             !!}
                                                         @endif
                                                     </td>

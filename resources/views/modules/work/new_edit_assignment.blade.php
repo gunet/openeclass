@@ -547,7 +547,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            {!! eClassTag::tagInput(); !!}
+                                            {!! $tagsAssignment !!}
 
                                             <div class='form-group mt-5'>
                                                 <div class='col-12 d-flex justify-content-end align-items-center'>

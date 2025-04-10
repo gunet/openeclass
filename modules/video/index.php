@@ -168,7 +168,7 @@ if ($display_tools) {
 }
 
 $data['display_tools'] = $display_tools;
-$data['action_bar'] = $action_bar;
+$data['action_bar'] = $action_bar ?? '';
 $data['count_video'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d", $course_id)->count;
 $data['count_video_links'] = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
 $data['num_of_categories'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
