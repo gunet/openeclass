@@ -2830,6 +2830,7 @@ $m['tomeas'] = 'Division';
 $m['open'] = 'Open Courses (Free Access)';
 $m['closed'] = 'Closed Courses';
 $m['max_grade'] = 'Max grade';
+$langMaxGrade = 'Grade';
 $m['legend'] = 'Legend';
 $m['nolessons'] = 'There are no available courses!';
 $m['code'] = "Course password";

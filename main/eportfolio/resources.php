@@ -502,15 +502,32 @@ if ($userdata) {
                 $submission_header_content = "<h3>".q($data['title'])."</h3>";
                 $submission->course_title = $langCourse.': '. q($submission->course_title);
 
-                $submission_content = "<div class='well'>";
-                $submission_content .= "<div><button type='button' class='btn submitAdminBtn mb-3 btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
-                                       <div id='header_more_$submission->id' class='collapse panel-body px-0'>";
-                if (!empty($data['descr'])) {
-                    $submission_content .= "<div class='mb-3'><p class='title-default'>".$langDescription."</p></div><div>".$data['descr']."</div>";
-                }
-                $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
-                $submission_content .= "</div>";
-                $submission_content .= "</div>";
+                $submission_content = " <div class='well panel border-bottom-default mb-3'>
+                                            <div class='panel-group group-section' id='accordion_$submission->id' role='tablist' aria-multiselectable='true'>
+                                                <ul class='list-group list-group-flush'>
+                                                    <li class='list-group-item px-0'>";
+                                $submission_content .= "<a type='button' class='accordion-btn d-flex justify-content-start align-items-start' data-bs-toggle='collapse' href='#header_more_$submission->id' aria-expanded='false' aria-controls='#header_more_$submission->id'>
+                                                            <span class='fa-solid fa-chevron-down'></span>
+                                                            $langMore
+                                                        </a>
+                                                        <div id='header_more_$submission->id' class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' role='tabpanel' data-bs-parent='#accordion_$submission->id'>";
+                                if (!empty($data['descr'])) {
+                                    $submission_content .= "<div class='mt-3'>
+                                                                <p class='title-default'>".$langDescription."</p>
+                                                            </div>
+                                                            <div>".$data['descr']."</div>";
+                                }
+                                    $submission_content .= "<div class='mt-3'>
+                                                                <a class='link-color TextBold' href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a>
+                                                            </div>";
+                                $submission_content .= "</div>
+                                                    </li>
+                                                </ul>";
+                    $submission_content .= "</div>
+                                        </div>";
+
+
+
                 $submission_content .= "<div class='mb-3'><p class='title-default'>$langSubmit</p> " . format_locale_date(strtotime($data['subm_date'])) . "</div>
                                        <div class='mb-3'><p class='title-default'>$langGradebookGrade</p> ".$data['grade']." / ".$data['max_grade']."</div>
                                        <div class='mb-3'><p class='title-default'>".$m['group_or_user']."</p> ".$assignment_type."</div>";
@@ -518,7 +535,7 @@ if ($userdata) {
                 if (!is_null($data['subm_text'])) {
                     $submission_content .= "<div class='mb-3'><p class='title-default'>$langWorkOnlineText</p>".$data['subm_text']."</div>";
                 } else {
-                   $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
+                   $submission_content .= "<div class='mb-3'><a class='link-color TextBold' href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
                 $submission_footer = "<div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'>$submission->course_title</div>                                          
