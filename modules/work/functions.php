@@ -1623,6 +1623,7 @@ function edit_assignment($id) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         $title = $_POST['title'];
         $desc = purify($_POST['desc']);
+        $reviews_per_user = null;
         if (isset($_POST['reviews_per_user'])) {
             $reviews_per_user = $_POST['reviews_per_user'];
         }
@@ -2882,6 +2883,122 @@ function download_assignments($id) {
         return false;
     }
 }
+
+
+/**
+ * @brief Create an index.html file for assignment $id listing user submissions
+Set $online to TRUE to get an online view (on the web) - else the index.html works for the zip file
+ * @param $path
+ * @param $id
+ * @param bool $online
+ *
+ */
+function create_zip_index($path, $id) {
+    global $charset, $course_id, $langGradebookGrade, $langSubDate,
+           $langAssignment, $langAm, $langSurnameName, $langLateSubmission,
+           $langGradeComments, $langComments, $langGroupSubmit, $langOfGroup;
+
+    $fp = fopen($path, "w");
+    if (!$fp) {
+        die("Unable to create assignment index file - aborting");
+    }
+    fputs($fp, '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">
+                <style type="text/css">
+                .sep td, th { border: 1px solid; }
+                td { border: none; padding: .1em .5em; }
+                table { border-collapse: collapse; border: 2px solid; }
+                .sep { border-top: 2px solid black; }
+                </style>
+    </head>
+    <body>
+        <table class="table-default">
+            <tr>
+                <th>' . $langSurnameName . '</th>
+                <th>' . $langAm .  '</th>
+                <th>' . $langAssignment . '</th>
+                <th>' . $langSubDate . '</th>
+                <th>' . $langGradebookGrade . '</th>
+            </tr>');
+
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    $assign_type = $assignment->submission_type;
+    if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
+        $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
+        $scales = unserialize($serialized_scale_data);
+        $scale_values = array_value_recursive('scale_item_value', $scales);
+    }
+
+    $submissions = Database::get()->queryArray("SELECT a.id, a.uid, a.file_path, a.file_name,
+                a.submission_text, a.submission_date, a.grade, a.comments,
+                a.grade_comments, a.group_id, b.deadline
+            FROM assignment_submit a, assignment b
+            WHERE a.assignment_id = ?d AND a.assignment_id = b.id
+            ORDER BY a.id", $id);
+    $seen = [];
+    foreach ($submissions as $row) {
+        if (in_array($row->id, $seen)) {
+            continue;
+        }
+        if ($assign_type == 1) {
+            $filename = greek_to_latin(uid_to_name($row->uid)) . ".pdf";
+        } else {
+            $filename = preg_replace('|^[^/]+/|', '', $row->file_path);
+        }
+        $filelink = empty($filename) ? '&nbsp;' :
+            ("<a href='$filename'>" . q($row->file_name) . '</a>');
+
+        // If further files exist for this submission
+        if ($assign_type == 2 and strpos($filename, '/') !== false) {
+            $otherFiles = Database::get()->queryArray('SELECT id, file_name, file_path
+                FROM assignment_submit
+                WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d AND id <> ?d
+                ORDER BY id', $id, $row->uid, $row->group_id, $row->id);
+            foreach ($otherFiles as $file) {
+                $seen[] = $file->id;
+                $filename = preg_replace('|^[^/]+/|', '', $file->file_path);
+                $filelink .= "<br><a href='$filename'>" . q($file->file_name) . '</a>';
+            }
+        }
+
+        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div class='Accent-200-cl'>$langLateSubmission</div>" : '';
+        if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
+            if ($assignment->grading_scale_id and !is_null($row->grade)) {
+                $key = closest($row->grade, $scale_values)['key'];
+                $row->grade = $scales[$key]['scale_item_name'];
+            }
+        }
+
+        fputs($fp, '
+            <tr class="sep">
+                <td>' . q(uid_to_name($row->uid)) . '</td>
+                <td>' . q(uid_to_am($row->uid)) . '</td>
+                <td align="center">' . $filelink . '</td>
+                <td align="center">' . $row->submission_date .$late_sub_text. '</td>
+                <td align="center">' . $row->grade . '</td>
+            </tr>');
+        if (trim($row->comments != '')) {
+            fputs($fp, "
+            <tr><td colspan='6'><b>$langComments: " .
+                "</b>$row->comments</td></tr>");
+        }
+        if (trim($row->grade_comments != '')) {
+            fputs($fp, "
+            <tr><td colspan='6'><b>$langGradeComments: " .
+                "</b>$row->grade_comments</td></tr>");
+        }
+        if (!empty($row->group_id)) {
+            fputs($fp, "<tr><td colspan='6'>$langGroupSubmit " .
+                "$langOfGroup $row->group_id</td></tr>\n");
+        }
+    }
+    fputs($fp, ' </table></body></html>');
+    fclose($fp);
+}
+
 
 /*
  * @brief Show a simple html page with grades and submissions
