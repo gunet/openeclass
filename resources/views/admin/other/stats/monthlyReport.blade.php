@@ -33,6 +33,9 @@
                            @endif
                         </span>
                     </div>
+                    <strong>
+                        {{ $fc_name }}
+                    </strong>
                 </div>
 
                 <div class='col-12'>

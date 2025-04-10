@@ -992,7 +992,6 @@ function user_last_logins($u) {
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @param int $cid the id of the course
- * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_course_old_stats($cid, $mid, $start = null, $end = null)
@@ -1025,7 +1024,7 @@ function get_course_old_stats($cid, $mid, $start = null, $end = null)
 */
 function get_login_old_stats(): array
 {
-
+    $formattedr = [];
     $r = get_user_login_archives();
     foreach($r as $sql_data) {
         $formattedr['time'][] = $sql_data[0];
@@ -1075,8 +1074,7 @@ function get_user_login_archives(): array
 }
 
 /**
- * @brief get monthly statistics (e.g. courses, users).  First we seek archived statistics in `monthly_summary` table.
- * Otherwise we seek `courses` and `users` table and update the `monthly_summary`.
+ * @brief get monthly statistics (e.g. courses, users, documents, assignments etc).
  * @return array
  */
 function get_monthly_archives($fc, $details = false, $month = null): array
@@ -1085,13 +1083,13 @@ function get_monthly_archives($fc, $details = false, $month = null): array
     $content = [];
 
     if ($details and !is_null($month)) { // detailed view
-        $node = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $fc);
+        $node = $tree->getNodeLftRgt($fc);
         $dep_ids = Database::get()->queryArray("SELECT id, name FROM hierarchy WHERE lft > ?d AND rgt < ?d ORDER BY name", $node->lft, $node->rgt);
         $dep_ids_to_exclude = [];
         foreach ($dep_ids as $dep_data) {
             $dep_id = $dep_data->id;
             $dep_name = $dep_data->name;
-            $node = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $dep_id);
+            $node = $tree->getNodeLftRgt($dep_id);
             $dep_id_extra = "(SELECT id FROM hierarchy WHERE lft >= $node->lft AND rgt <= $node->rgt)";
 
             // exclude children departments from viewing
@@ -1218,7 +1216,7 @@ function get_monthly_archives($fc, $details = false, $month = null): array
         $interval = DateInterval::createFromDateString('first day of last month');
         $period = new DatePeriod($start, $interval, 24, DatePeriod::EXCLUDE_START_DATE); // last 24 months
 
-        $node = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $fc);
+        $node = $tree->getNodeLftRgt($fc);
         $dep_id_extra = "(SELECT id FROM hierarchy WHERE lft > $node->lft AND rgt < $node->rgt)";
 
         foreach ($period as $time) {

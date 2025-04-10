@@ -28,12 +28,12 @@ $pageName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-
 $tree = new Hierarchy();
 
 list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
 
 $fc = ($_GET['fc'] ?? $roots[0]->id);
+$fc_name = $tree->getNodeName($fc);
 
 if (count($tree->buildRootsArray()) > 1) { // multiple root tree
     $data['buildRoots'] = $tree->buildRootsSelectForm(intval($roots[0]->id));
@@ -49,6 +49,7 @@ if (isset($_GET['d'])) {  // detailed statistics per faculty
 
 $data['monthly_data'] = $monthly_data;
 $data['fc'] = $fc;
+$data['fc_name'] = $fc_name;
 
 view('admin.other.stats.monthlyReport', $data);
 
