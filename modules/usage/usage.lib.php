@@ -1277,10 +1277,10 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                                                                 AND user_department.user = user.id
                                                                 AND user_department.department IN $dep_id_extra",
                                                             $year_month_day)->cnt;
-                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document, course_department, user_department
+                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document, course_department
                                                                 WHERE date <= ?t
                                                                 AND document.course_id = course_department.course
-                                                                AND user_department.department IN $dep_id_extra",
+                                                                AND department IN $dep_id_extra",
                                                             $year_month_day)->cnt;
                 $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement, course_department
                                                                 WHERE date <= ?t
