@@ -1085,18 +1085,14 @@ function get_monthly_archives($fc, $details = false, $month = null): array
     if ($details and !is_null($month)) { // detailed view
         $node = $tree->getNodeLftRgt($fc);
         $dep_ids = Database::get()->queryArray("SELECT id, name FROM hierarchy WHERE lft > ?d AND rgt < ?d ORDER BY name", $node->lft, $node->rgt);
-        $dep_ids_to_exclude = [];
         foreach ($dep_ids as $dep_data) {
             $dep_id = $dep_data->id;
             $dep_name = $dep_data->name;
             $node = $tree->getNodeLftRgt($dep_id);
-            $dep_id_extra = "(SELECT id FROM hierarchy WHERE lft >= $node->lft AND rgt <= $node->rgt)";
-
-            // exclude children departments from viewing
-            $q = Database::get()->queryArray("SELECT id FROM hierarchy WHERE lft >= $node->lft AND rgt < $node->rgt");
-            foreach ($q as $data) {
-                $dep_ids_to_exclude []= $data->id;
+            if ($tree->getParent($node->lft, $node->rgt) != $tree->getRootParent($node->lft, $node->rgt)) { // exclude children departments from viewing
+                continue;
             }
+            $dep_id_extra = "(SELECT id FROM hierarchy WHERE lft >= $node->lft AND rgt <= $node->rgt)";
 
             $sql_data = Database::get()->querySingle("SELECT teachers, students, guests, courses, inactive_courses, 
                                                 assignments, documents, exercises, 
@@ -1153,7 +1149,7 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                                         AND user_department.user = user.id
                                         AND user_department.department IN $dep_id_extra",
                                     $month)->cnt;
-                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document,course_department 
+                $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document, course_department 
                                         WHERE date <= ?t 
                                         AND document.course_id = course_department.course
                                         AND department IN $dep_id_extra",
@@ -1199,13 +1195,6 @@ function get_monthly_archives($fc, $details = false, $month = null): array
                     $month, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses, $dep_id, $cnt_courses_inactive, $cnt_documents, $cnt_announcements, $cnt_messages, $cnt_exercises, $cnt_assignments, $cnt_forum_posts);
             }
         }
-
-        foreach ($content as $data_key => $data) { // don't display children department below root department nodes
-            if (in_array($data['fc'], $dep_ids_to_exclude)) {
-                unset($content[$data_key]);
-            }
-        }
-
     } else { // default view
         $start = new DateTime('now');
 
