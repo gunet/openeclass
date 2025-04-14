@@ -358,11 +358,11 @@ function display_student_assignment($id, $on_behalf_of = false) {
            $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
            $langNoneWorkUserNoSubmission, $langGroupSpaceLink, $langPendingPeerSubmissions,
            $is_editor, $langGroupAssignmentPublish, $langGroupAssignmentNoGroups,
-           $langThisIsGroupAssignment, $langBack;
+           $langThisIsGroupAssignment;
 
     $_SESSION['has_unlocked'] = array();
 
-    $group_select_form = $form_link = $back_link = $group_select_hidden_input = '';
+    $group_select_form = $form_link = $back_link = $group_select_hidden_input = $grade_field = '';
     $submissions_exist = false;
     $submit_ok = false;
     $submission_details_data = $assignment_review_data = [];
@@ -375,7 +375,14 @@ function display_student_assignment($id, $on_behalf_of = false) {
         $gids_sql_ready = "''";
     }
 
-    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
+    if ($on_behalf_of && $is_editor) {
+        $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time                                                         
+                                                     FROM assignment
+                                                     WHERE course_id = ?d
+                                                        AND id = ?d",
+        $course_id, $id);
+    } else {
+        $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                          CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
                                                          CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due
                                                      FROM assignment
@@ -388,14 +395,15 @@ function display_student_assignment($id, $on_behalf_of = false) {
                                                                 UNION
                                                                 SELECT assignment_id FROM assignment_to_specific
                                                                    WHERE group_id != 0 AND group_id IN ($gids_sql_ready)))",
-        $course_id, $id, $uid);
-
+            $course_id, $id, $uid);
+    }
     $data['count_of_assign'] = $count_of_assign = countSubmissions($id);
     $_SESSION['has_unlocked'][$id] = true;
+
     if ($row) {
         $grading_type = $row->grading_type;
         $data['reviews_per_assignment'] = $reviews_per_assignment = $row->reviews_per_assignment;
-        if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
+        if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock) and !$on_behalf_of) {
             $_SESSION['has_unlocked'][$id] = false;
             Session::flash('message',$langWrongPassword);
             Session::flash('alert-class', 'alert-warning');
@@ -433,7 +441,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
             $data = display_assignment_details($row, true); // den emfanizontai oi hmeromhnies start, due otan o foithths den exei upovalei parolo pou uparxei peer review
         }
 
-        $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
+        $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission) || $on_behalf_of;
 
         foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
             if ($row->submission_type == 2) {
@@ -492,7 +500,6 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 }
             } elseif ($on_behalf_of) {
                 $users_with_no_submissions = users_with_no_submissions($id);
-
                 if (count($users_with_no_submissions) > 0) {
                     $group_select_form = "
                     <div class='form-group mt-4'>
@@ -501,6 +508,20 @@ function display_student_assignment($id, $on_behalf_of = false) {
                           " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
                         </div>
                     </div>";
+                    if ($grading_type == ASSIGNMENT_SCALING_GRADE) {
+                        $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
+                        $scales = unserialize($serialized_scale_data);
+                        $scale_options = "<option value> - </option>";
+                        foreach ($scales as $scale) {
+                            $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
+                        }
+                        $grade_field = "<select name='grade' class='form-select' id='scales'>$scale_options</select>";
+                    } elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
+                        $valuegrade = (isset($grade)) ? $grade : '';
+                        $grade_field = "<input class='form-control' type='text' value='$valuegrade' name='grade' maxlength='4' size='3' readonly>";
+                    } else {
+                        $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3'>";
+                    }
                 } else {
                     Session::flash('message', $langNoneWorkUserNoSubmission);
                     Session::flash('alert-class', 'alert-danger');
@@ -554,12 +575,14 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['row'] = $row;
     $data['assignment_type'] = $row->assignment_type;
     $data['grading_type'] = $grading_type;
+    $data['max_grade'] = $row->max_grade;
     $data['submission_type'] = $row->submission_type;
     $data['max_submissions'] = $row->max_submissions;
     $data['count_user_group_info'] = count($user_group_info);
     $data['is_group_assignment'] = $is_group_assignment;
     $data['group_select_hidden_input'] = $group_select_hidden_input;
     $data['group_select_form'] = $group_select_form;
+    $data['grade_field'] = $grade_field;
     $data['id'] = $id;
     $data['on_behalf_of'] = $on_behalf_of;
     $data['submissions_exist'] = $submissions_exist;
@@ -1850,6 +1873,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
     } //checks for submission validity end here
+
     if ($submit_ok) {
         $success_msgs = array();
         //Preparing variables

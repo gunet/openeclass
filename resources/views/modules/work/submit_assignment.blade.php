@@ -103,10 +103,21 @@
 
                                                     @if ($on_behalf_of)
                                                         <div class='form-group mt-4'>
-                                                            <div class='col-sm-6 control-label-notes'>{{ trans('langGradebookGrade') }}:</div>
-                                                            <div class='col-sm-2'>
+                                                            <div class='col-sm-6 control-label-notes'>
+                                                                {{ trans('langGradebookGrade') }}:
+                                                            </div>
+                                                            <div class='col-sm-1'>
                                                                 {!! $grade_field !!}
                                                                 <input type='hidden' name='on_behalf_of' value='1'>
+                                                            </div>
+                                                        </div>
+                                                        @if ($grading_type == ASSIGNMENT_STANDARD_GRADE)
+                                                            <span class="help-block">({{ trans('langMaxGrade') }}: {{ $max_grade }})</span>
+                                                        @endif
+                                                        <div class='form-group mt-4'>
+                                                            <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
+                                                            <div class='col-sm-12'>
+                                                                <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-4'>
@@ -121,13 +132,6 @@
                                                             </div>
                                                         </div>
                                                     @endif
-
-                                                    <div class='form-group mt-4'>
-                                                        <label for='stud_comments' class='col-sm-6 control-label-notes'>{{ trans('langComments') }}:</label>
-                                                        <div class='col-sm-12'>
-                                                            <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
-                                                        </div>
-                                                    </div>
 
                                                     <div class='form-group mt-4'>
                                                         <div class='col-12 d-flex justify-content-end align-items-center'>
