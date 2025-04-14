@@ -232,14 +232,14 @@ foreach ($all_users_participants as $p) {
 
 if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
     foreach ($questions as $theQuestion) {
-        $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);
-        if (!$ansExists) {
-            continue;
-        }
         $this_chart_data = array();
         if ($theQuestion->qtype == QTYPE_LABEL) {
             $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$theQuestion->question_text</span></div></div>";
         } else {
+           $ansExists = Database::get()->querySingle("SELECT arid FROM poll_answer_record WHERE qid = ?d", $theQuestion->pqid);
+            if (!$ansExists) {
+                continue;
+            }
             $tool_content .= "
             <div class='col-12 mt-4'>
             <div class='card panelCard card-default px-lg-4 py-lg-3'>
@@ -548,7 +548,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                         $tool_content .= "<h3 style='margin-bottom:0px;'>$p->givenname&nbsp;$p->surname</h3>";
                                                     }
                             $tool_content .= "</div>
-                                                <div class='card-body'>";   
+                                                <div class='card-body'>";
                                     $tool_content .= "<div class='d-flex justify-content-start align-items-start gap-4 flew-wrap'>";
                                                             foreach ($sub_questions as $s) {
                                                                 $displayItem = false;
@@ -566,14 +566,14 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                 $tool_content .= "<ul class='list-group list-group-flush w-100'>
                                                                         <li class='list-group-item element'><h5 style='margin-bottom:0px;'>$s->answer_text</h5></li>";
                                                                     foreach ($answers as $a) {
-                                                                        if ($p->participants == $a->uid && $theQuestion->pqid == $a->qid && 
+                                                                        if ($p->participants == $a->uid && $theQuestion->pqid == $a->qid &&
                                                                                 $s->sub_question == $a->sub_question) {
                                                                                     $tool_content .= "<li class='list-group-item element'>$a->answer_text</li>";
                                                                         }
                                                                     }
                                                                 }
                                             $tool_content .= "</ul>";
-                                                            }                           
+                                                            }
                             $tool_content .= "          
                                                         </div>    
                                                 </div>

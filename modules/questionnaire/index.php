@@ -170,17 +170,17 @@ if ($is_editor) {
 
         // Initialize URL and parameters
         $string = $urlServer . "/modules/questionnaire/pollparticipate.php?course=" . $course_code . "&UseCase=1&pid=" . $pollID;
-    
+
         // Create QR Code
         $renderer = new ImageRenderer(new RendererStyle(256), new SvgImageBackEnd());
         $writer = new Writer($renderer);
-        
+
         // Generate the QR image
         $qr_image = $writer->writeString($string);
-        
+
         // Base64 encode the SVG string
         $qr_image_base64 = base64_encode($qr_image);
-        
+
         // Prepare the data URL for the SVG
         $qr_image_data_url = "data:image/svg+xml;base64," . $qr_image_base64;
 
@@ -193,9 +193,9 @@ if ($is_editor) {
             unlink($qrCode_dir . '/' . $fileNamePoll);
         }
         file_put_contents($qrCode_dir . '/' . $fileNamePoll, $qr_image);
-        
+
         $downloadURL = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&download_qrcode=$pollID";
-    
+
         // Prepare JavaScript content for modal
         $head_content .= "
             <script type='text/javascript'>
@@ -568,9 +568,9 @@ function printPolls() {
                     $tool_content .= "<div class='text-muted' style='font-size: 12px;'>$langQuickSurvey</div>";
                 }
 
-                $tool_content .= "</div>";
-                                    // <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
-                $tool_content .= "</div></td>";
+                $tool_content .= "</div>
+                                    <div class='mt-2'>" . standard_text_escape($thepoll->description) . "</div>
+                                    </div></td>";
                 if (isset($thepoll->start_date)) {
                     $sort_date = date("Y-m-d H:i", strtotime($thepoll->start_date));
                 } else {
