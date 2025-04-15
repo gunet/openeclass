@@ -1386,7 +1386,6 @@ Don't allow $langsOfCourses to be created by $langsTeachers in classes they don'
 $lang_allow_teacher_clone_course = "Allow $langsOfCourses to be cloned from $langsTeachers";
 $lang_disable_log_course_actions = "Disable logging of user actions within $langsCourses";
 $lang_disable_log_system_actions = "Disable logging of user actions outside of $langsOfCourses";
-$langUnsubscribeCourse = "Disable collaboration opt-out";
 $langDefaultInstitutionName = 'GUNet Academic Internet';
 $lang_course_metadata = "Postcomment $langOfCourses";
 /* * **********************************************************
