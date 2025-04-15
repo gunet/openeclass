@@ -1337,7 +1337,6 @@ $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημι�
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
 $lang_disable_log_course_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών μέσα στα $langsCourses";
 $lang_disable_log_system_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών εκτός $langsOfCourses";
-$langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής συνεργασίας";
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUNet';
 $lang_course_metadata = "Μετασχολιασμός $langOfCourses";
 /* * **********************************************************

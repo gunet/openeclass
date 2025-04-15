@@ -2796,7 +2796,6 @@ $lang_disable_log_actions = "Απενεργοποίηση καταγραφής �
 $lang_disable_cron_jobs = "Απενεργοποίηση μηνιαίων ενεργειών στατιστικών";
 $lang_disable_log_course_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών μέσα στα $langsCourses";
 $lang_disable_log_system_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών εκτός $langsOfCourses";
-$langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
 $lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το όνομα και το επώνυμο";
 $lang_disable_email_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το e-mail";
 $lang_disable_am_change = "Να μην επιτρέπεται να αλλάζουν τον αριθμό μητρώου";
@@ -6668,7 +6667,6 @@ $langCustomMailHelp = "
   <li>[password] : Κωδικός χρήστη</li>
 </ul>";
 
-$langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
 $lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το όνομα και το επώνυμο";
 $lang_disable_email_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το e-mail";
 $lang_disable_am_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες τον αριθμό μητρώου";
