@@ -60,7 +60,7 @@
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                         </div>
                                     </div>
-                                    {!! $csrf !!}
+                                    {!! generate_csrf_token_form_field() !!}
                                 </form>
                             </div>
                         </div>
