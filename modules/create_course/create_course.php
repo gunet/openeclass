@@ -114,7 +114,7 @@ if (!isset($_POST['create_course'])) {
                     <div class='col'>
                         <div class='card panelCard card-default h-100'>
                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                            <div class='card-body'>                                
+                            <div class='card-body'>
                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
                             </div>
                         </div>
@@ -123,6 +123,7 @@ if (!isset($_POST['create_course'])) {
             }
         }
         $data['image_content'] = $image_content;
+        $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {
