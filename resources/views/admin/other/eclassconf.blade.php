@@ -456,7 +456,6 @@
                                             </div>
                                         </div>
 
-
                                     </fieldset>
                                 </div>
                             </div>
@@ -538,9 +537,29 @@
                                                         <input type='checkbox' name='show_modal_openCourses' value='1' {{ $cbox_allow_modal_courses }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('lang_openCourse_inModal') }}
-
                                                     </label>
                                                     <span class="help-block">{{ trans('lang_openCourse_inModal_Info') }}</span>
+                                                </div>
+
+                                                <div class='form-group mt-1'>
+                                                    <label for='default_course_access' class='col-sm-12 control-label-notes'>{{
+                                                        trans('langDefaultCourseAccess')}}:</label>
+                                                    <div class='col-sm-12'>
+                                                        <select class="form-select" name="default_course_access">
+                                                            <option value="{{ COURSE_CLOSED }}"
+                                                                @if ($default_course_access === COURSE_CLOSED) selected @endif>{{
+                                                                    trans('langTypeOpen') }}</option>
+                                                            <option value="{{ COURSE_REGISTRATION }}"
+                                                                @if ($default_course_access === COURSE_REGISTRATION) selected @endif>{{
+                                                                    trans('langTypeRegistration') }}</option>
+                                                            <option value="{{ COURSE_OPEN }}"
+                                                                @if ($default_course_access === COURSE_OPEN) selected @endif>{{
+                                                                    trans('langTypeClosed') }}</option>
+                                                            <option value="{{ COURSE_INACTIVE }}"
+                                                                @if ($default_course_access === COURSE_INACTIVE) selected @endif>{{
+                                                                    trans('langTypeInactive') }}</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

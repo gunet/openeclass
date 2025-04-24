@@ -715,6 +715,7 @@ $langUserNotifications = "Ειδοποιήσεις μαθημάτων";
 $langDisableUserNotifications = "Απενεργοποίηση ειδοποιήσεων";
 $langEnableUserNotifications = "Εμφάνιση ειδοποιήσεων από την τελευταία είσοδο του χρήστη";
 $langCustomEnableUserNotifications = "Εμφάνιση ειδοποιήσεων των";
+$langDefaultCourseAccess = 'Προεπιλεγμένος τύπος πρόσβασης';
 
 $langFlippedClassroom = "Μοντέλο Ανεστραμμένης Τάξης";
 $langCEnabled = "Ενεργό";

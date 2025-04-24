@@ -60,7 +60,9 @@ if (isset($_POST['submit'])) {
         set_config('default_language', $_POST['default_language']);
     }
 
-    set_config('maintenance_theme', $_POST['maintenance_theme']);
+    if (isset($_POST['maintenance_theme'])) {
+        set_config('maintenance_theme', $_POST['maintenance_theme']);
+    }
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
     set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
@@ -166,7 +168,8 @@ if (isset($_POST['submit'])) {
         'show_modal_openCourses' => true,
         'individual_group_bookings' => true,
         'enable_quick_note' => true,
-        'user_notifications' => true
+        'user_notifications' => true,
+        'default_course_access' => true,
         ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -341,6 +344,7 @@ else {     // Display config.php edit form
     $data['cbox_course_invitation'] = get_config('course_invitation') ? 'checked' : '';
     $data['cbox_individual_group_bookings'] = get_config('individual_group_bookings') ? 'checked' : '';
     $data['cbox_enable_quick_note'] = get_config('enable_quick_note') ? 'checked' : '';
+    $data['default_course_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
 
     $user_notifications_interval = get_config('user_notifications_interval');
     $user_notifications = get_config('user_notifications');
