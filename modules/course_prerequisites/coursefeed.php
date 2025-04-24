@@ -23,6 +23,7 @@ $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
 
+$courses = [];
 if (isset($_GET['term'])) {
     $q = $_GET['term'];
 
@@ -35,12 +36,7 @@ if (isset($_GET['term'])) {
         foreach ($courselist as $course) {
             $courses[] = array('id' => $course->id, 'text' => $course->title . ' (' . $course->public_code . ')');
         }
-    } else {
-        $courses[] = [];
     }
-
-} else {
-    $courses[] = [];
 }
 
 echo json_encode(['results' => $courses], JSON_UNESCAPED_UNICODE);
