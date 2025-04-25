@@ -73,6 +73,9 @@ function view($view_file, $view_data = array()) {
         $course_id = $course_code = null;
     }
 
+    if (!isset($_SESSION['provider'])) {
+        $_SESSION['provider'] = null;
+    }
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
 
