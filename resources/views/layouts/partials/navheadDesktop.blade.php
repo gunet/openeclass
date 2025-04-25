@@ -1,3 +1,8 @@
+{{--<pre>--}}
+{{--    @php--}}
+{{--        print_r($_SESSION);--}}
+{{--        @endphp--}}
+{{--</pre>--}}
 <header>
     <div id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
         <div class='{{ $container }} header-container py-0'>
@@ -6,11 +11,11 @@
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
-                        <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
+                        <a class='me-lg-4 me-xl-5' href="@if(isset($_SESSION['provider']) && $_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
 
-                        @if($_SESSION['provider'] !== 'lti_publish')
+                        @if(isset($_SESSION['provider']) && $_SESSION['provider'] !== 'lti_publish')
                         <ul class="container-items nav">
                             @if(!get_config('hide_login_link'))
                                 <li class="nav-item">
