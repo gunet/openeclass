@@ -1,8 +1,3 @@
-{{--<pre>--}}
-{{--    @php--}}
-{{--        print_r($_SESSION);--}}
-{{--        @endphp--}}
-{{--</pre>--}}
 <header>
     <div id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
         <div class='{{ $container }} header-container py-0'>
@@ -11,11 +6,11 @@
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
-                        <a class='me-lg-4 me-xl-5' href="@if(isset($_SESSION['provider']) && $_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
+                        <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
 
-                        @if(isset($_SESSION['provider']) && $_SESSION['provider'] !== 'lti_publish')
+                        @if($_SESSION['provider'] !== 'lti_publish')
                         <ul class="container-items nav">
                             @if(!get_config('hide_login_link'))
                                 <li class="nav-item">
@@ -135,7 +130,10 @@
                                                 @if($_SESSION['provider'] !== 'lti_publish')
                                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
-                                                        <span class='TextBold user-name'>{{ $_SESSION['uname'] }}</span>
+                                                        <span class='TextBold user-name'>
+                                                            {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                            {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                        </span>
                                                         <i class="fa-solid fa-chevron-down"></i>
                                                 </button>
                                                 <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user" aria-labelledby="btnGroupDrop1">
@@ -296,7 +294,10 @@
                                                 @else
                                                 <div id="lti_menu_btn" class="rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0">
                                                     <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
-                                                    <span class='TextBold user-name'>{{ $_SESSION['uname'] }}</span>
+                                                    <span class='TextBold user-name'>
+                                                        {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                        {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
+                                                    </span>
                                                 </div>
                                                 @endif
                                             </div>
