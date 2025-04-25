@@ -495,9 +495,9 @@ if ($userdata) {
                     $data['grade'] = '-';
                 }
                 if ($data['group_id'] == 0) {
-                    $assignment_type = $m['user_work'];
+                    $assignment_type = $langUserAssignment;
                 } else {
-                    $assignment_type = $m['group_work'];
+                    $assignment_type = $langGroupAssignment;
                 }
                 $submission_header_content = "<h3>".q($data['title'])."</h3>";
                 $submission->course_title = $langCourse.': '. q($submission->course_title);
@@ -530,7 +530,7 @@ if ($userdata) {
 
                 $submission_content .= "<div class='mb-3'><p class='title-default'>$langSubmit</p> " . format_locale_date(strtotime($data['subm_date'])) . "</div>
                                        <div class='mb-3'><p class='title-default'>$langGradebookGrade</p> ".$data['grade']." / ".$data['max_grade']."</div>
-                                       <div class='mb-3'><p class='title-default'>".$m['group_or_user']."</p> ".$assignment_type."</div>";
+                                       <div class='mb-3'><p class='title-default'>".$langAssignmentType."</p> ".$assignment_type."</div>";
 
                 if (!is_null($data['subm_text'])) {
                     $submission_content .= "<div class='mb-3'><p class='title-default'>$langWorkOnlineText</p>".$data['subm_text']."</div>";

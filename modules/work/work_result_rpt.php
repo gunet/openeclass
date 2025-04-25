@@ -56,7 +56,7 @@ if (isset($_GET['assignment']) && isset($_GET['submission'])) {
             draw($tool_content, 2);
         }
     } else {
-        Session::flash('message',$m['WorkNoSubmission']);
+        Session::flash('message', $langWorkNoSubmission);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }

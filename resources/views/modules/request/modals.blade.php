@@ -2,9 +2,9 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <div class='modal-title' id='assigneesModalLabel'>{{ trans("m['WorkAssignTo']") }}...</div>
+                <div class='modal-title' id='assigneesModalLabel'>{{ trans('langWorkAssignTo') }}...</div>
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'></button>
-                
+
             </div>
             <form method='post' action='{{ $targetUrl }}'>
                 {!! generate_csrf_token_form_field() !!}
@@ -33,7 +33,7 @@
             <div class='modal-header'>
                 <div class='modal-title' id='watchersModalLabel'>{{ trans("langWatchers") }}...</div>
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'></button>
-                
+
             </div>
             <form method='post' action='{{ $targetUrl }}'>
                 {!! generate_csrf_token_form_field() !!}

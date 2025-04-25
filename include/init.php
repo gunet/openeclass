@@ -662,7 +662,7 @@ $activities = array(
                                                                           MODULE_ID_WIKI,
                                                                           MODULE_ID_TC,
                                                                           MODULE_ID_H5P)),
-    MODULE_ID_PROJECT => array('title' => $langFCProject,'tools' => array(MODULE_ID_ASSIGN,MODULE_ID_EXERCISE, MODULE_ID_WIKI, MODULE_ID_LINKS,MODULE_ID_H5P)),
+    MODULE_ID_PROJECT => array('title' => $langGroupAssignment,'tools' => array(MODULE_ID_ASSIGN,MODULE_ID_EXERCISE, MODULE_ID_WIKI, MODULE_ID_LINKS,MODULE_ID_H5P)),
     MODULE_ID_BRAINSTORMING => array('title' => $langFCBrainstorming,'tools' => array(MODULE_ID_WALL, MODULE_ID_BLOG, MODULE_ID_FORUM, MODULE_ID_CHAT,MODULE_ID_H5P)),
     MODULE_ID_WORK_PAPER => array('title' => $langFCWorkPaper,'tools' => array(MODULE_ID_DOCS,
                                                                                MODULE_ID_WALL,

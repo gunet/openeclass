@@ -228,7 +228,7 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="row form-group mt-4">
-        <label for="log_typeID" class="col-12 control-label-notes">' . $langActions . ' <span class="asterisk Accent-200-cl">(*)</span></label>        
+        <label for="log_typeID" class="col-12 control-label-notes">' . $langActions . '</label>        
          <div class="col-12">';
 
 if (isset($_GET['from_other'])) {   // system actions
@@ -245,7 +245,7 @@ $tool_content .= selection($log_types, 'logtype', $logtype, "class='row form-con
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='row input-append date form-group mt-4' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     
-        <label class='col-12 control-label-notes' for='user_date_start'>$langStartDate <span class='asterisk Accent-200-cl'>(*)</span></label>
+        <label class='col-12 control-label-notes' for='user_date_start'>$langFrom</label>
         <div class='col-12'> 
             <div class='input-group'>
                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
@@ -257,7 +257,7 @@ $tool_content .= "<div class='row input-append date form-group mt-4' data-date =
 </div>";
 $tool_content .= "<div class='row input-append date form-group mt-4' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
     
-        <label class='col-12 control-label-notes' for='user_date_end'>$langEndDate <span class='asterisk Accent-200-cl'>(*)</span></label>
+        <label class='col-12 control-label-notes' for='user_date_end'>$langTill</label>
         <div class='col-12'>
             <div class='input-group'>   
                 <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>

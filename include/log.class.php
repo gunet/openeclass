@@ -562,7 +562,7 @@ class Log {
     private function assignment_action_details($details): string
     {
 
-        global $langTitle, $langDescription, $m, $langGradebookGrade;
+        global $langTitle, $langDescription, $langComments, $langFileName, $langGradebookGrade;
 
         $details = unserialize($details);
         $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
@@ -570,10 +570,10 @@ class Log {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
         }
         if (!empty($details['filename'])) {
-            $content .= "&nbsp;&mdash;&nbsp; " . q($m['filename']) . " &laquo" . q($details['filename']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; " . q($langFileName) . " &laquo" . q($details['filename']) . "&raquo";
         }
         if (!empty($details['comments'])) {
-            $content .= "&nbsp;&mdash;&nbsp; " . q($m['comments']) . " &laquo" . q($details['comments']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; " . q($langComments) . " &laquo" . q($details['comments']) . "&raquo";
         }
         if (!empty($details['grade'])) {
             $content .= "&nbsp;&mdash;&nbsp; " . q($langGradebookGrade) . " &laquo" . q($details['grade']) . "&raquo";
