@@ -793,7 +793,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <div class='col-sm-12 '>$disp_score_message</div>";
 
     if ($exerciseAssignToSpecific > 0) {
-        $tool_content .= "<div class='col-sm-12 '>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
+        $tool_content .= "<div class='col-sm-12 '>$langWorkAssignTo: <b>$assign_to_users_message</b></div>";
     }
 
     $tags_list = $moduleTag->showTags();

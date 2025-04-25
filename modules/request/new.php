@@ -155,7 +155,7 @@ if (isset($_POST['requestTitle'])) {
                       <div id='mail-body'>
                           <br>
                           <div><b>$langType:</b> <span class='left-space'>".q($type_name)."</span></div><br>
-                          <div><b>$m[WorkAssignTo]:</b> <span class='left-space'>".q($assignedNames)."</span></div><br>
+                          <div><b>$langWorkAssignTo:</b> <span class='left-space'>".q($assignedNames)."</span></div><br>
                           <div><b>$langWatchers:</b> <span class='left-space'>".q($watcherNames)."</span></div><br>
                           <div><b>$langNewBBBSessionStatus:</b> <span class='left-space'>".q($stateName)."</span></div><br>
                           <hr>
