@@ -1075,7 +1075,8 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
 function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_name) {
 
     global $id, $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
-            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks;
+            $langWasDeleted, $course_id, $course_code, $langPassCode, $langWorks,
+            $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $title = q($title);
     $res_prereq_icon = '';
@@ -1112,9 +1113,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         $assign_to_users_message = '';
         if ($is_editor) {
             if ($work->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($work->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_unit_completion($_GET['id'], $work_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
@@ -1163,7 +1164,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
-        $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises;
+        $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1209,9 +1211,9 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $assign_to_users_message = '';
         if ($is_editor) {
             if ($exercise->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($exercise->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_unit_completion($_GET['id'], $exercise_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
@@ -1339,7 +1341,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_name) {
 
-    global $course_id, $course_code, $is_editor, $urlServer, $id, $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq, $m, $langQuestionnaire;
+    global $course_id, $course_code, $is_editor, $urlServer, $id, 
+           $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq, 
+           $m, $langQuestionnaire, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $res_prereq_icon = '';
 
@@ -1377,9 +1381,9 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         $assign_to_users_message = '';
         if ($is_editor) {
             if ($poll->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
             } else if ($poll->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small>";
             }
             if (resource_belongs_to_unit_completion($_GET['id'], $poll_id)) {
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);

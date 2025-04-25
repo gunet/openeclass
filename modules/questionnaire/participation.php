@@ -127,7 +127,7 @@ $tool_content .= "
             </div>"): '') . "
             <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
-                    <strong>$m[WorkAssignTo]:</strong>
+                    <strong>$langWorkAssignTo:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $assign_details

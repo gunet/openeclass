@@ -335,7 +335,7 @@ if (isset($_GET['action'])) {
                             </div>
                   
                             <div class='form-group mt-4' id='courses-list'>
-                                <label for='select-courses' class='col-sm-12 control-label-notes'>$m[WorkAssignTo]:&nbsp;&nbsp;
+                                <label for='select-courses' class='col-sm-12 control-label-notes'>$langWorkAssignTo:&nbsp;&nbsp;
                                 <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langToAllCoursesInfo'></span></label>
                                 <div class='col-sm-12'>
                                 <select class='form-control' name='cert_template_courses[]' multiple class='form-control' id='select-courses'>";

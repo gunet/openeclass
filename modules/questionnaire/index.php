@@ -102,7 +102,7 @@ $head_content .= "<script type='text/javascript'>
                     success: function(data) {
                         var dialog = bootbox.dialog({
                             message: data,
-                            title : '$m[WorkAssignTo]',
+                            title : '$langWorkAssignTo',
                             onEscape: true,
                             backdrop: true,
                             buttons: {
@@ -458,7 +458,8 @@ function printPolls() {
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
-        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson, $langGenQrCode;
+        $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson, $langGenQrCode,
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -545,9 +546,9 @@ function printPolls() {
                         $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
                     }
                     if ($thepoll->assign_to_specific == 1) {
-                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
+                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$langWorkAssignTo: $langWorkToUser</small></a>";
                     } else if ($thepoll->assign_to_specific == 2) {
-                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
+                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$langWorkAssignTo: $langWorkToGroup</small></a>";
                     } else {
                         $assign_to_users_message = '';
                     }
