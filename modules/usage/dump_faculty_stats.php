@@ -60,7 +60,7 @@ if (isset($_GET['c'])) {
     $data[] = [ $langTeacher, $course->prof_names ];
     $data[] = [ $langUsers, $users ];
     $data[] = [];
-    $data[] = [ $langMonth, $langTeachers, $langStudents, $langGuests, $langDoc, $langExercises, $langWorks, $langAnnouncements, $langMessages, $langForums ];
+    $data[] = [ $langMonth, $langTeachers, $langStudents, $langGuests, $langDoc, $langAnnouncements, $langMessages, $langExercises, $langWorks, $langForums ];
 
     foreach ($period as $dt) {
         $start = $dt->format('Y-m-d');

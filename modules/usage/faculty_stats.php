@@ -129,12 +129,9 @@ if (isset($_GET['stats_submit'])) {
                                                     WHERE course_id = ?d                                                    
                                                     AND FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t",
                                             $_GET['c'], $start)->cnt;
-            $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise WHERE course_id = ?d",
-                                            $_GET['c'])->cnt;
-            $cnt_assignments = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM assignment WHERE course_id = ?d",
-                                            $_GET['c'])->cnt;
-            $cnt_forum_posts = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM forum WHERE course_id = ?d",
-                                            $_GET['c'])->cnt;
+            $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise WHERE course_id = ?d", $_GET['c'])->cnt;
+            $cnt_assignments = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM assignment WHERE course_id = ?d", $_GET['c'])->cnt;
+            $cnt_forum_posts = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM forum WHERE course_id = ?d", $_GET['c'])->cnt;
             $month_stats[] = [
                 'start' => $dt->format('m-Y'),
                 'prof' => $cnt_prof,
