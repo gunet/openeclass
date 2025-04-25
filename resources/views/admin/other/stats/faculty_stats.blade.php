@@ -108,10 +108,10 @@
                                                         <th class='text-center'>{{ trans('langStudents') }}</th>
                                                         <th class='text-center'>{{ trans('langGuests') }}</th>
                                                         <th class='text-center'>{{ trans('langDoc') }}</th>
-                                                        <th class='text-center'>{{ trans('langExercises') }}</th>
-                                                        <th class='text-center'>{{ trans('langWorks') }}</th>
                                                         <th class='text-center'>{{ trans('langAnnouncements') }}</th>
                                                         <th class='text-center'>{{ trans('langMessages') }}</th>
+                                                        <th class='text-center'>{{ trans('langExercises') }}</th>
+                                                        <th class='text-center'>{{ trans('langWorks') }}</th>
                                                         <th class='text-center'>{{ trans('langForums') }}</th>
                                                     </tr>
                                                 </thead>
@@ -133,10 +133,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            @else
-                                {{--  courses list --}}
+                            @else {{--  courses list --}}
                                 <div class='table-responsive'>
-
                                     <div class='alert alert-info'>
                                         <i class='fa-solid fa-circle-info fa-lg'></i><span>{{ $s }} {{ trans('langCourses') }}({{ trans('langFrom2') }} {{ $all }} {{ trans('langSumFrom') }})</span>
                                     </div>
@@ -152,7 +150,11 @@
                                             </thead>
 
                                             @foreach ($sql as $data)
-                                                <tr>
+                                                @if ($data->visible == COURSE_INACTIVE)
+                                                    <tr class='not_visible'>
+                                                @else
+                                                    <tr>
+                                                @endif
                                                     <td><a href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $data->id }}&amp;user_date_start={{ $user_date_start }}&user_date_end={{ $user_date_end }}&stats_submit=true'>{{ $data->title }}</a><br/><small>({{ $data->code }})</small></td>
                                                     <td>{{ $data->prof_names }}</td>
                                                     <td>{!! format_locale_date(strtotime($data->creation_time), 'short') !!}</td>

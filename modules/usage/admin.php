@@ -22,7 +22,7 @@ $tool_content .= "
             <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-start gap-3 flex-wrap pb-4'>
                 <a class='quickLink' href='../usage/displaylog.php?from_other=TRUE'><i class='fa-solid fa-glasses'></i>$langSystemActions</a>
                 <a class='quickLink' href='../admin/monthlyReport.php'><i class='fa-solid fa-chalkboard'></i>$langMonthlyReport</a>                                                                            
-                <a class='quickLink' href='../admin/login_stats.php'><i class='fa-solid fa-users-line'></i>$langLoginUser $langUsersOf</a>
+                <a class='quickLink' href='../admin/login_stats.php'><i class='fa-solid fa-users-line'></i>$langReports $langUsersOf</a>
                 <a class='quickLink' href='faculty_stats.php'><i class='fa-solid fa-bar-chart'></i>$langStatOfFaculty</a>            
                 <a class='quickLink' href='index.php?t=a&g_stats'><i class='fa-solid fa-chart-simple'></i>$langCharts</a>                
             </div>
