@@ -1063,6 +1063,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
     global $session, $auth_ids;
 
     $_SESSION['canChangePassword'] = false;
+    $_SESSION['provider'] = $provider;
     $pass_match = false;
 
     if (is_null($provider)) {

@@ -6,9 +6,11 @@
             <div class='d-none d-lg-block w-100 header-large-screen'>
                 <div class='col-12 h-100 d-flex justify-content-between align-items-center gap-5'>
                     <nav class='d-flex justify-content-start align-items-center h-100'>
-                        <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label="{{ trans('langHomePage') }}">
+                        <a class='me-lg-4 me-xl-5' href="@if($_SESSION['provider'] !== 'lti_publish'){{ $urlAppend }}@endif" aria-label="{{ trans('langHomePage') }}">
                             <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="{{ trans('langLogo') }}"/>
                         </a>
+
+                        @if($_SESSION['provider'] !== 'lti_publish')
                         <ul class="container-items nav">
                             @if(!get_config('hide_login_link'))
                                 <li class="nav-item">
@@ -53,6 +55,7 @@
                                 @endif
                             @endif
                         </ul>
+                        @endif
                     </nav>
                     <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
                         @if (get_config('enable_search'))
@@ -124,6 +127,7 @@
                                     <div class='d-flex justify-content-end p-0 h-80px'>
                                         <div class="btn-group" role="group" aria-label="{{ trans('langMenu') }}">
                                             <div class="btn-group" role="group">
+                                                @if($_SESSION['provider'] !== 'lti_publish')
                                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
                                                         <span class='TextBold user-name'>{{ $_SESSION['uname'] }}</span>
@@ -284,6 +288,12 @@
                                                         </li>
                                                     </ul>
                                                 </div>
+                                                @else
+                                                <div id="lti_menu_btn" class="rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0">
+                                                    <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
+                                                    <span class='TextBold user-name'>{{ $_SESSION['uname'] }}</span>
+                                                </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

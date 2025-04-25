@@ -132,7 +132,7 @@ function view($view_file, $view_data = array()) {
         }
 
         // Breadcrumb first entry (home / portfolio)
-        if ($session->status != USER_GUEST) {
+        if ($session->status != USER_GUEST && $_SESSION['provider'] !== 'lti_publish') {
             if (isset($_SESSION['uid'])) {
                 $item['bread_text'] = trans('langPortfolio');
                 if (isset($require_current_course) or $pageName) {
