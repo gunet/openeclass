@@ -267,7 +267,7 @@ if ($is_editor) {
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {
-                $pageName = $m['WorkEdit'];
+                $pageName = $langWorkEdit;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
                 new_edit_assignment($id);

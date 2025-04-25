@@ -142,7 +142,7 @@ if (isset($_GET['group_as'])) {
             $deadline = (int)$row->deadline ? format_locale_date(strtotime($row->deadline)) : $langNoDeadline;
             $tool_content .= "<td>
                                 <a href='../work/index.php?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
-                                <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
+                                <br><small class='text-muted'>".($row->group_submissions? $langGroupAssignment : $langUserAssignment)."</small>
                             </td>
                             <td>$num_submitted</td>
                             <td>$num_ungraded</td>

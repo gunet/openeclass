@@ -2323,10 +2323,17 @@ function delete_user_assignment($id) {
     return $return;
 }
 
-// Delete submissions to assignment $id if submitted by user $uid or group $gid
-// Doesn't delete files if they are one of the $files_to_keep
+/**
+ * @brief Delete submissions to assignment $id if submitted by user $uid or group $gid
+ * Doesn't delete files if they are one of the $files_to_keep
+ * @param $uid
+ * @param $gid
+ * @param $id
+ * @param $files_to_keep
+ * @return string
+ */
 function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
-    global $m, $workPath;
+    global $workPath, $langDeletedWorkByGroup, $langDeletedWorkByUser;
 
     $return = '';
     $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
@@ -2350,9 +2357,9 @@ function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
         triggerAssignmentAnalytics($ass_cid, $row->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
         triggerAssignmentAnalytics($ass_cid, $row->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         if ($GLOBALS['uid'] == $row->uid) {
-            $return .= $m['deleted_work_by_user'];
+            $return .= $langDeletedWorkByUser;
         } else {
-            $return .= $m['deleted_work_by_group'];
+            $return .= $langDeletedWorkByGroup;
         }
         $return .= ' "<i>' . q($row->file_name) . '</i>". ';
     }

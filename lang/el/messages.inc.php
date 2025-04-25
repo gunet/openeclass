@@ -747,7 +747,6 @@ $langFCVideoInteract = "Εκπόνηση αλληλεπιδραστικού βί
 $langFCRevision = "Επανάληψη/Σύνοψη εννοιών";
 $langFCGames = "Εκπαιδευτικό παιχνίδι";
 $langFCDiscuss = "Συζήτηση";
-$langFCProject = "Ομαδική εργασία";
 $langFCBrainstorming = "Καταιγισμός ιδεών";
 $langFCWorkPaper = "Φύλλα Εργασίας";
 $langFCRolePlay= "Παιχνίδι ρόλων";
@@ -3162,7 +3161,7 @@ $langAllTutorials = "Γενικοί οδηγοί";
 $langOnlyInEnglish = "Μόνο στα Αγγλικά";
 
 /* * *******************************************************
- * open course.php
+ * courses.php
  * ******************************************************* */
 $langSelectFac = "Επιλογή $langOfFaculty";
 $listtomeis = "Τομείς";
@@ -3171,21 +3170,15 @@ $langDepartmentsList = "Ακολουθεί ο κατάλογος τμημάτω�
 $langWrongPassCourse = "Λάθος συνθηματικό $langsOfCourse";
 $langAvCourses = "διαθέσιμα $langsCourses";
 $langAvCours = "διαθέσιμο $langsCourse";
-$m['tomeas'] = 'Τομέας';
 $m['open'] = "Ανοικτά $langsCourses (Ελεύθερη Πρόσβαση)";
 $m['closed'] = "Κλειστά $langsCourses";
-$m['max_grade'] = 'Μέγιστη βαθμολογία';
 $langMaxGrade = 'Μέγιστη βαθμολογία';
 $m['legend'] = 'Υπόμνημα';
-$m['nolessons'] = 'Δεν υπάρχουν διαθέσιμα $langsCourses!';
 $langNoCourses = "Δεν υπάρχουν διαθέσιμα $langsCourses στην συγκεκριμένη κατηγορία!";
 $m['code'] = "Συνθηματικό $langsOfCourse";
 $m['mailprof'] = "Για να εγγραφείτε στο $langsCourse θα πρέπει να στείλετε mail στον διδάσκοντα του $langsOfCourse
 κάνοντας κλικ";
-$m['here'] = " εδώ.";
-$m['unsub'] = "Το $langsCourse είναι κλειστό και δεν θα μπορέσετε να επανεγγραφείτε.";
 $langWarningUnsub = "Το $langsCourse είναι κλειστό και δεν θα μπορέσετε να επανεγγραφείτε.";
-
 $langMyPersoAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
 $langMyPersoMessages = "Τα τελευταία μου μηνύματα";
 $langAssignment = "Εργασία";
@@ -4400,7 +4393,7 @@ $langIpAddress = "Διεύθυνση IP";
 $langLoginUser = "Είσοδοι";
 $langUsageCoursesHeader = "Σύνολο $langsOfCourses";
 $langUsageUsers = "Σύνολο χρηστών";
-$langStatOfFaculty = "Στατιστικά $langsOfFaculty";
+$langStatOfFaculty = "Αναφορές $langsOfFaculty";
 $langHaveCreated = "Έχουν δημιουργηθεί";
 $langInfoUserDuration = "Στους παρακάτω χρόνους συμμετοχής <strong>δεν</strong> συμπεριλαμβάνονται οι χρόνοι στη Τηλεσυνεργασία</em>.";
 $langInfoUserDuration2 = "Για αυτά τα υποσυστήματα, κάντε κλικ στα αντίστοιχα κουμπιά.";
@@ -4607,47 +4600,23 @@ $langBackAssignment = "Επιστροφή στη σελίδα της εργασ�
 $m['deadline_notif'] = "(Kενό για εργασία χωρίς προθεσμία υποβολής)";
 $m['with_deadline'] = "Με Προθεσμία Υποβολής";
 $m['late_submission'] = "Εκπρόθεσμη Υποβολή";
-$m['late_submission_enable'] = "Ενεργοποίηση εκπρόθεσμης υποβολής";
 $langLateSubmissionEnable = "Ενεργοποίηση εκπρόθεσμης υποβολής";
 $m['username'] = "Όνομα " . $langsOfStudent . " ";
-$m['filename'] = "Όνομα αρχείου";
 $m['dirname'] = "Όνομα καταλόγου";
-$m['sub_date'] = "Ημ/νία αποστολής";
 $m['max_grade'] = "Βαθμός";
-$m['gradecomments'] = "Σχόλια βαθμολογητή";
-$m['addgradecomments'] = "Προσθήκη σχολίων βαθμολογητή";
 $langAddGradeComments = "Προσθήκη σχολίων βαθμολογητή";
-$m['edit'] = "Αλλαγή";
-$m['start_date'] = "Ημερομηνία έναρξης";
-$m['am'] = "Αρ. Mητρώου";
-$m['in'] = "σε";
-$m['from'] = "από";
-$m['today'] = "σήμερα";
 $m['tomorrow'] = "αύριο";
-$m['submitted'] = "Έχει αποσταλεί";
 $m['pending'] = "Προς επιβεβαίωση";
-$m['groupsubmit'] = "Υποβλήθηκε εκ μέρους της";
 $m['ofgroup'] = "ομάδας";
-$m['deleted_work_by_user'] = "Διαγράφηκε η προηγούμενη υποβληθείσα
-	εργασία που είχατε στείλει με το αρχείο";
-$m['deleted_work_by_group'] = "Διαγράφηκε η προηγούμενη εργασία που
-	είχε υποβληθεί από κάποιο μέλος της ομάδας σας και βρισκόταν στο αρχείο";
-$m['by_groupmate'] = 'Από άλλο μέλος της ομάδας σας';
+$langDeletedWorkByUser = "Διαγράφηκε η προηγούμενη υποβληθείσα εργασία που είχατε στείλει με το αρχείο";
+$langDeletedWorkByGroup = "Διαγράφηκε η προηγούμενη εργασία που είχε υποβληθεί από κάποιο μέλος της ομάδας σας και βρισκόταν στο αρχείο";
 $langByGroupMate = 'Από άλλο μέλος της ομάδας σας';
-$m['the_file'] = 'Το αρχείο';
 $langTheFile = 'Το αρχείο';
-$m['was_submitted'] = 'υποβλήθηκε στην εργασία.';
 $langWasSubmitted = 'υποβλήθηκε στην εργασία.';
-$m['group_sub'] = 'Επιλέξτε αν θέλετε να υποβάλετε το αρχείο αυτό
-	εκ μέρους της ομάδας σας';
+$m['group_sub'] = 'Επιλέξτε αν θέλετε να υποβάλετε το αρχείο αυτό εκ μέρους της ομάδας σας';
 $m['group'] = 'ομάδα';
-$m['already_group_sub'] = 'Έχει ήδη υποβληθεί η εργασία αυτή από κάποιο
-	μέλος της ομάδας σας';
-$m['group_or_user'] = 'Τύπος εργασίας';
-$m['group_work'] = 'Ομαδική εργασία';
-$m['user_work'] = 'Ατομική εργασία';
+$m['already_group_sub'] = 'Έχει ήδη υποβληθεί η εργασία αυτή από κάποιο μέλος της ομάδας σας';
 $m['delete_work'] = 'Διαγραφή';
-$m['submitted_by_other_member'] = 'Το αρχείο αυτό υποβλήθηκε από άλλο μέλος της';
 $langSubmittedByOtherMember = 'Το αρχείο αυτό υποβλήθηκε από άλλο μέλος της';
 $langYourGroup = 'ομάδας σας';
 $langThisIsGroupAssignment = 'Η εργασία αυτή είναι ομαδική.';
@@ -4661,37 +4630,23 @@ $langOneNonSubmission = 'Δεν έχει υποβληθεί μία εργασί�
 $m['more_submissions'] = 'Έχουν υποβληθεί %d εργασίες';
 $langMoreNonSubmissions = 'Δεν έχουν υποβληθεί %d εργασίες';
 $m['plainview'] = 'Συνοπτική λίστα εργασιών - βαθμολογίας';
-$m['WorkInfo'] = 'Στοιχεία εργασίας';
 $m['WorkView'] = "Εργασίες $langsOfCourse";
 $m['WorkSubsDelete']= 'Διαγραφή υποβολών εργασίας';
 $langWorkDeleteAssignmentFile = 'Διαγραφή αρχείου εργασίας';
 $langWorkDeleteAssignmentFileConfirm = 'Επιβεβαίωση διαγραφής αρχείου εργασίας';
-$m['WorkEdit'] = 'Τροποποίηση εργασίας';
-$m['WorkToAllUsers'] = "Σε όλους τους $langsOfStudentss";
-$m['WorkToUser'] = "Συγκεκριμένους $langsOfStudentss";
-$m['WorkToAllGroups'] = 'Σε όλες τις  '.$langGroups;
-$m['WorkToGroup'] = 'Συγκεκριμένες '.$langGroups;
-$m['WorkAssignTo'] = 'Ανάθεση σε';
-$m['WorkNoSubmission'] = 'Η υποβεβλημένη εργασία που ψάχνετε δεν υπάρχει.';
+$langWorkEdit = 'Τροποποίηση εργασίας';
 $langWorkNoSubmission = 'Η εργασία δεν υπάρχει.';
 $m['WorkGroupNoSubmission'] = 'Ομάδες χρηστών που δεν έχουν υποβάλει εργασία';
 $langNoneWorkGroupNoSubmission = 'Δεν υπάρχουν ομάδες χρηστών που δεν έχουν υποβάλει εργασία';
 $langWorkUserNoSubmission = 'Χρήστες που δεν έχουν υποβάλει εργασία';
 $langNoneWorkUserNoSubmission = 'Δεν υπάρχουν χρήστες που δεν έχουν υποβάλει εργασία';
 $m['WorkTitleValidation'] = 'Παρακαλώ εισάγετε Τίτλο Εργασίας';
-$m['SubmissionWorkInfo'] = 'Στοιχεία υποβολής εργασίας';
 $langSubmissionWorkInfo = 'Στοιχεία υποβολής εργασίας';
-$m['SubmissionStatusWorkInfo'] = 'Κατάσταση υποβολής εργασίας';
 $langSubmissionStatusWorkInfo = 'Κατάσταση υποβολής εργασίας';
-$m['subm'] = 'Υποβλ.';
-$m['nogr'] = 'Μη βαθμ.';
 $m['comments_exist'] = 'Υπάρχουν σχόλια';
 $m['email_users'] = 'Ενημέρωση μέσω ηλεκτρονικού ταχυδρομείου';
-$m['work_email_message'] = "Το παρακάτω μήνυμα αναφέρεται στην υποβολή σας στην εργασία με τίτλο «%s» του $langsOfCourse «%s»:";
 $langWorkEmailMessage = "Το παρακάτω μήνυμα αναφέρεται στην υποβολή σας στην εργασία με τίτλο «%s» του $langsOfCourse «%s»:";
-$m['work_email_subject'] = 'Ενημέρωση εργασίας: %s';
 $langWorkEmailSubject = 'Ενημέρωση εργασίας: %s';
-$m['link_follows'] = 'Δείτε περισσότερα στον παρακάτω σύνδεσμο:';
 $langLinkFollows = 'Δείτε περισσότερα στον παρακάτω σύνδεσμο:';
 $m['grade_comment_date'] = 'Ημερομηνία σχολίων/βαθμολόγησης';
 $langMoreSubmissions = 'Έχουν υποβληθεί %d εργασίες';
@@ -4894,14 +4849,13 @@ $langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
 $langNoPeerReviewMultipleFiles = "Η εργασία δεν μπορεί να ανατεθεί προς αξιολόγηση επειδή δέχεται πολλαπλά αρχεία από τον κάθε χρήστη";
 
 /* * ***********************************************************
- * listerqusers.php
+ * list requests.php
  * ************************************************************ */
 $langRequestStudent = "Η αίτηση έκλεισε!";
 $langRequestReject = "Η αίτηση σας απορρίφθηκε!";
 $langRequestApproved = "Η αίτηση σας εγκρίθηκε!";
 $langWithCourseCreationRightsInfo = "Έχετε δικαιώματα δημιουργίας $langsOfCourses";
 $langInPlatform = "στην πλατφόρμα";
-
 $langInformativeEmail = "Στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση";
 $langRequest = "Αίτηση";
 
