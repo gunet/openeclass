@@ -455,9 +455,9 @@ function printPolls() {
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
-        $langHasNotParticipated, $uid, $langConfirmDelete,
+        $langHasNotParticipated, $uid, $langConfirmDelete, $langResults,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
-        $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
+        $langCreateDuplicateIn, $langCurrentCourse, $langDate,
         $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson, $langGenQrCode,
         $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
@@ -594,7 +594,7 @@ function printPolls() {
                             ['title' => $visibility ? $langDeactivate : $langActivate,
                                 'icon' => $visibility ? 'fa-toggle-off' : 'fa-toggle-on',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"],
-                            ['title' => $langUsage,
+                            ['title' => $langResults,
                                 'level' => 'primary',
                                 'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
@@ -656,7 +656,7 @@ function printPolls() {
                     }
                     $tool_content .= "</td>";
 
-                    $line_chart_link = ($has_participated && $thepoll->show_results && ($thepoll->type == 0 || $thepoll->type == 3))? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "" ;
+                    $line_chart_link = ($has_participated && $thepoll->show_results && ($thepoll->type == POLL_NORMAL || $thepoll->type == POLL_QUICK))? "" . icon('fa-line-chart', $langResults, "pollresults.php?course=$course_code&pid=$pid") : "" ;
                     $tool_content .= "<td class='text-end option-btn-cell'>
                                         <div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div>
                                       </td></tr>";
@@ -670,10 +670,10 @@ function printPolls() {
               <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                   <form action='$_SERVER[SCRIPT_NAME]' method='POST' id='clone_form'>
-                    <div class='modal-header'> 
+                    <div class='modal-header'>
                         <div class='modal-title'>$langCreateDuplicateIn</div>
                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langCancel'></button>
-                     
+
                     </div>
                     <div class='modal-body'>
                         <div class='form-group'>
