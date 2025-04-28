@@ -59,8 +59,7 @@ if (isset($_GET['unit'])) {
     $returl = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$_GET[unit]";
 } else {
     $unitParam = '';
-    $returl = "navigation/viewModule.php?course=$course_code&amp;go=" .
-        ($is_editor ? 'learningPathAdmin' : 'learningPath');
+    $returl = "index.php?course=$course_code";
 }
 
 if ($uid) {
