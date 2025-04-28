@@ -659,14 +659,21 @@ function initialize_filemodal(lang) {
   $('.fileModal').click(function (e) {
     e.preventDefault();
     var fileURL = $(this).attr('href');
-    var downloadURL = fileURL + '&download=true';
+    var downloadUrl = $(this).data('downloadUrl');
     var fileTitle = $(this).text();
     var buttons = {};
+    if (!downloadUrl) {
+      downloadUrl = fileURL + '&download=true';
+    }
     buttons.download = {
       label: '<i class="fa fa-download"></i> ' + lang.download,
       className: 'submitAdminBtn gap-1',
       callback: function (d) {
-        window.location = downloadURL;
+        var downloadLink = document.createElement('a');
+        downloadLink.href = downloadURL;
+        downloadLink.target = '_blank';
+        downloadLink.download = 'download';
+        downloadLink.click();
       }
     };
     buttons.print = {
