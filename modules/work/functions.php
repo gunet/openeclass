@@ -502,7 +502,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 $users_with_no_submissions = users_with_no_submissions($id);
                 if (count($users_with_no_submissions) > 0) {
                     $group_select_form = "
-                    <div class='form-group mt-4'>
+                    <div class='form-group my-4'>
                         <label for='user_id' class='col-sm-12 control-label-notes'>$langOnBehalfOf:</label>
                         <div class='col-sm-12'>
                           " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
