@@ -25,7 +25,7 @@ require_once 'classes/H5PFactory.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
 uploadContent();
-header("location: index.php");
+redirect_to_home_page('modules/h5p/?course=' . $course_code);
 
 /**
  * @brief upload h5p content
@@ -40,10 +40,9 @@ function uploadContent(): bool {
     }
     mkdir($upload_dir, 0755, true);
     if (getPureFileExtension($_FILES['userFile']['name']) != 'h5p') {
-        Session::flash('message', trans('langUploadedFileNotAllowed') . " <b>" .
-            q($_FILES['userFile']['name']) . "</b>");
-        Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page('modules/h5p/index.php?course=' . $course_code);
+        Session::Messages(trans('langUploadedFileNotAllowed') .
+            " <b>" . q($_FILES['userFile']['name']) . "</b>", 'alert-danger');
+        redirect_to_home_page('modules/h5p/?course=' . $course_code);
     }
     $target_file = $upload_dir . "/" . my_basename($_FILES["userFile"]["name"]);
     move_uploaded_file($_FILES["userFile"]["tmp_name"], $target_file);
@@ -78,8 +77,7 @@ function uploadContent(): bool {
         return true;
     } else {
         foreach ($framework->getMessages('error') as $errObj) {
-            Session::flash('message', $errObj->code . ": " . $errObj->message);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($errObj->code . ": " . $errObj->message, 'alert-warning');
         }
         return false;
     }
