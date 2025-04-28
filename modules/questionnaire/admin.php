@@ -299,7 +299,7 @@ if (isset($_GET['pid'])) {
     $attempt_counter = 0;
 }
 // question type text array
-$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.'/'.$langComment, $langScale);
+$aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel.' / '.$langComment, $langScale, $langTable);
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
@@ -1225,8 +1225,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <div class='title-default'>$langResults</div>
                     </div>
                     <div class='col-md-9 col-12 title-default-line-height'>
-                        ".(($poll->anonymized) ? icon('fa-square-check') : icon('fa-square'))." $langPollAnonymize <br>
-                        ".(($poll->show_results) ? icon('fa-square-check') : icon('fa-square'))." $langPollShowResults
+                        " . (($poll->anonymized) ? icon('regular fa-check') : icon('regular fa-xmark')) ." $langPollAnonymize <br>
+                        " . (($poll->show_results) ? icon('regular fa-check') : icon('regular fa-xmark')) ." $langPollShowResults
                     </div>
                 </div>
             </li>
@@ -1237,8 +1237,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <div class='title-default'>$langAnswers</div>
                     </div>
                     <div class='col-md-9 col-12 title-default-line-height'>
-                        ".(($poll->multiple_submissions) ? icon('fa-check-square') : icon('fa-square'))." $langActivateMulSubmissions <br>
-                        ".(($poll->default_answer) ? icon('fa-check-square') : icon('fa-square'))." $langActivateDefaultAnswer
+                        ".(($poll->multiple_submissions) ? icon('regular fa-check') : icon('regular fa-xmark'))." $langActivateMulSubmissions <br>
+                        ".(($poll->default_answer) ? icon('regular fa-check') : icon('regular fa-xmark'))." $langActivateDefaultAnswer
                     </div>
                 </div>
             </li>
@@ -1260,7 +1260,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <div class='title-default'>$langShowFront</div>
                     </div>
                     <div class='col-md-9 col-12 title-default-line-height'>
-                        ".(($poll->display_position) ? icon('fa-check-square') : icon('fa-square'))." $langYes
+                        ".(($poll->display_position) ? $langYes : $langNo)."
                     </div>
                 </div>
             </li>
