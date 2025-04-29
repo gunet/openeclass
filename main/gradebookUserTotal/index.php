@@ -25,7 +25,7 @@ $helpTopic = 'Gradebook';
 require_once '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 
-if (is_module_disable(MODULE_ID_GRADEBOOK)) {
+if (is_module_disable(MODULE_ID_GRADEBOOK,MODULE_ID_GRADEBOOK)) {
     redirect_to_home_page();
 }
 

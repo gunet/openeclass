@@ -25,7 +25,7 @@ $helpTopic = 'Gradebook';
 require_once '../include/baseTheme.php';
 require_once 'modules/progress/Game.php';
 
-if (is_module_disable(MODULE_ID_PROGRESS)) {
+if (is_module_disable(MODULE_ID_PROGRESS,MODULE_ID_PROGRESS)) {
     redirect_to_home_page();
 }
 
