@@ -132,7 +132,7 @@
                                                         <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langUser') }}:{{ $uname }}">
 
                                                         <div class="header-login-text pt-1 pb-1">
-                                                            <span class='TextBold user-name fs-6'>
+                                                            <span class='TextBold fs-6'>
                                                                 {{ isset($_SESSION['surname']) ? mb_strtoupper(mb_substr(trim($_SESSION['surname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
                                                                 {{ isset($_SESSION['givenname']) ? mb_strtoupper(mb_substr(trim($_SESSION['givenname']), 0, 1, 'UTF-8'), 'UTF-8') : '' }}
                                                             </span>
