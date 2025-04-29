@@ -1188,7 +1188,7 @@ function visible_module($module_id, $course_id = null): bool
  *        If called inside of a course, takes in account course / collaboration setting
  * @return boolean
  */
-function is_module_disable($module_id) {
+function is_module_disable($module_id, $extra = null) {
     global $require_current_course, $is_collaborative_course;
 
     if ((get_config('show_collaboration') && get_config('show_always_collaboration')) or
@@ -1197,7 +1197,7 @@ function is_module_disable($module_id) {
         if ($q) {
             return true;
         }
-    } elseif (!$require_current_course && get_config('show_collaboration') && !get_config('show_always_collaboration')){
+    } elseif (!$require_current_course && get_config('show_collaboration') && !get_config('show_always_collaboration') && is_null($extra)){
         $q1 = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
         $q2 = Database::get()->querySingle("SELECT * FROM module_disable_collaboration WHERE module_id = ?d", $module_id);
         if ($q1 or $q2) {
