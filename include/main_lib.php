@@ -5725,6 +5725,10 @@ function theme_initialization() {
                 .split-content{
                     border-left: solid 1px $theme_options_styles[linkColorHeader];
                 }
+                
+                .user-menu-btn .header-login-text .fa-chevron-down::before {
+                    color:$theme_options_styles[linkColorHeader];
+                }
 
             ";
         }
@@ -7064,7 +7068,7 @@ function theme_initialization() {
                 @media(min-width:992px){
                     .header-login-text,
                     .header-login-text:hover,
-                    .header-login-text:focus{
+                    .header-login-text:focus, .user-menu-btn .header-login-text .fa-chevron-down::before{
                          color:$theme_options_styles[buttonTextColor];
                     }
                 }
