@@ -19,7 +19,7 @@
  */
 
 function api_method($access) {
-    global $webDir;
+    global $webDir, $username, $firstname, $lastname, $emailaddress, $adt, $password;
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
@@ -32,9 +32,10 @@ function api_method($access) {
             'lastname' => true,
             'emailaddress' => true,
             'adt' => false,
+            'password' => false,
         ]);
         if (!$ok) {
-            Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt]');
+            Access::error(2, 'Required parameters for user creation missing: username, firstname, lastname, emailaddress, [adt], [password]');
         }
         if (get_config('case_insensitive_usernames')) {
             $qry = "COLLATE utf8mb4_general_ci = ?s";
@@ -43,12 +44,25 @@ function api_method($access) {
         }
         $user = Database::get()->querySingle("SELECT * FROM user WHERE username $qry", $username);
         if ($user) {
-            if ($user->surname != $lastname or $user->givenname != $firstname or $user->email != $emailaddress) {
+            $admin_check = Database::get()->querySingle('SELECT * FROM admin WHERE user_id = ?d LIMIT 1', $user->id);
+            if ($admin_check) {
+                Access::error(403, 'Mofifying privileged users is not allowed');
+            }
+            if ($user->surname != $lastname or $user->givenname != $firstname or $user->email != $emailaddress or $user->am != $adt or $password !== '') {
                 Database::get()->query('UPDATE user SET surname = ?s, givenname = ?s, email = ?s
-                    WHERE id = ?d', $user->id);
+                    WHERE id = ?d',
+                    $lastname, $firstname, $emailaddress, $user->id);
+                if ($password !== '') {
+                    Database::get()->query('UPDATE user SET password = ?s WHERE id = ?d',
+                        password_hash($password, PASSWORD_DEFAULT), $user->id);
+                }
+                if (isset($_POST['adt'])) {
+                    Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                        $adt, $user->id);
+                }
             }
             $statusmsg = 'updated';
-            $user_id = $user_id;
+            $user_id = $user->id;
         } else {
             $password = choose_password_strength();
             $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
@@ -58,9 +72,9 @@ function api_method($access) {
                     expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
                     lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
                     description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
-                $GLOBALS['lastname'], $GLOBALS['firstname'], $GLOBALS['username'], $password_encrypted,
-                mb_strtolower(trim($GLOBALS['emailaddress'])), USER_STUDENT, get_config('default_language'),
-                $GLOBALS['adt']);
+                $lastname, $firstname, $username, $password_encrypted,
+                mb_strtolower(trim($emailaddress)), USER_STUDENT, get_config('default_language'),
+                $adt);
             if (!$user) {
                 Access::error(20, 'Error creating user');
             }
@@ -70,7 +84,11 @@ function api_method($access) {
         }
         user_hook($id);
         header('Content-Type: application/json');
-        echo json_encode(['id' => $user_id, 'status' => $statusmsg]);
+        $response = ['id' => $user_id, 'status' => $statusmsg];
+        if (isset($password) and $password !== '') {
+            $response['password'] = $password;
+        }
+        echo json_encode($response);
         exit();
     } elseif (isset($_GET['id']) or isset($_GET['username'])) {
         if (isset($_GET['username'])) {
