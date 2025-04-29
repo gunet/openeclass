@@ -1115,10 +1115,11 @@ b a {
   margin-top: -4px;
 }
 
-.user-menu-btn:hover .fa-chevron-down,
-.user-menu-btn:focus .fa-chevron-down{
-  color: #0073E6;
-}
+/*.user-menu-btn:hover .fa-chevron-down,*/
+/*.user-menu-btn:focus .fa-chevron-down{*/
+/*  color: #0073E6;*/
+/*}*/
+
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .fa-chevron-down,
 #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus .fa-chevron-down{
   margin-top: -4px;
