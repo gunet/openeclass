@@ -58,8 +58,20 @@ if (count($courses) > 0) {
                 $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
                 $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title)</td>
                     <td>
-                    <a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content .
-                            "</td></tr>";
+                        <div class='d-flex justify-content-between gap-5'>
+                            <div><a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content ."</div>
+                            <div>
+                                ". action_button(array(
+                                    array(
+                                        'title' => $langAddResePortfolio,
+                                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=my_certificates&amp;rid=".$data->cert_id,
+                                        'icon' => 'fa-star',
+                                        'show' => (get_config('eportfolio_enable'))
+                                    ),
+                                ))."
+                            </div>
+                        </div>
+                    </td></tr>";
         }
     }
 
