@@ -286,7 +286,30 @@ if ($userdata) {
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class','alert-success');
                         } elseif ($userBadge && $userBadge->completed_criteria < $userBadge->total_criteria) {
-                            Session::flash('message', $langNoCompletedBadge);
+                            Session::flash('message', $langNoCompleted);
+                            Session::flash('alert-class', 'alert-warning');
+                        }
+                    }
+                    redirect_to_home_page("main/mycertificates.php");
+                } elseif ($rtype == 'my_certificates') {
+                    $certificateExists = Database::get()->querySingle("SELECT id FROM eportfolio_resource WHERE user_id = ?d AND resource_id = ?d AND resource_type = ?s", $uid, $rid, $rtype);
+                    if ($certificateExists) {
+                        Session::flash('message', $langResourceExists);
+                        Session::flash('alert-class', 'alert-warning');
+                    } else {
+                        $userCertificate = Database::get()->querySingle("SELECT id,completed_criteria,total_criteria FROM user_certificate WHERE user = ?d AND `certificate` = ?d", $uid, $rid);
+                        if ($userCertificate && $userCertificate->completed_criteria == $userCertificate->total_criteria) {
+                            $certificateInfo = Database::get()->querySingle("SELECT * FROM `certificate` WHERE id = ?d", $rid);
+                            $data = array('title' => $certificateInfo->title, 'issuer' => $certificateInfo->issuer, 'description' => $certificateInfo->description, 
+                                          'template' => $certificateInfo->template, 'message' => $certificateInfo->message, 'course_id' => course_id_to_title($certificateInfo->course_id),
+                                          'date_created' => $certificateInfo->created, 'date_expired' => $certificateInfo->expires, 'certificateId' => $rid);
+
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
+                                    VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'my_certificates', $certificateInfo->course_id ,course_id_to_title($certificateInfo->course_id), serialize($data));
+                            Session::flash('message', $langePortfolioResourceAdded);
+                            Session::flash('alert-class','alert-success');
+                        } elseif ($userCertificate && $userCertificate->completed_criteria < $userCertificate->total_criteria) {
+                            Session::flash('message', $langNoCompleted);
                             Session::flash('alert-class', 'alert-warning');
                         }
                     }
@@ -415,9 +438,10 @@ if ($userdata) {
     $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'work_submission');
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'mydocs');
     $myBadges = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'my_badges');
+    $myCertificates = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'my_certificates');
 
     //hide tabs when there are no resources
-    if (!$blog_posts && !$submissions && !$docs && !$myBadges) {
+    if (!$blog_posts && !$submissions && !$docs && !$myBadges && !$myCertificates) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioNoResInCollection</span></div></div>";
     } else {
 
@@ -471,11 +495,24 @@ if ($userdata) {
             $myBadges_li = '';
         }
 
+        if ($myCertificates) {
+            $myCertificates_li = '<li class="nav-item" role="presentation"><button id="certificatestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mycertificates">'.$langCertificates.'</button></li>';
+            if ($active_class != '') {
+                $myCertificates_div_class = 'tab-pane fade show active';
+            } else {
+                $myCertificates_div_class = 'tab-pane fade';
+            }
+            $active_class = '';
+        } else {
+            $myCertificates_li = '';
+        }
+
         $tool_content .= '<div class="col-12"><ul class="nav nav-tabs" role="tablist">
                             '.$blog_li.'
                             '.$work_li.'
                             '.$mydocs_li.'
                             '.$myBadges_li.'
+                            '.$myCertificates_li.'
                           </ul></div>';
         $tool_content .= '<div class="col-12"><div class="tab-content pb-4">';
 
@@ -693,6 +730,53 @@ if ($userdata) {
                                         <img style='height:150px; width:150px;' src='{$urlServer}" . BADGE_TEMPLATE_PATH . get_badge_filename($data['badgeId']) ."' class='card-img-top m-auto d-block mt-3' alt='badge'>
                                         <div class='card-body text-center'>
                                             <a class='link-color' href='{$urlServer}modules/progress/index.php?course=" . course_id_to_code($mybadge->course_id) . "&amp;badge_id= " .  $data['badgeId'] . "&amp;u=" . $mybadge->user_id . "'>
+                                                " . ellipsize($data['title'], 40) . "
+                                                " . format_locale_date(strtotime($data['date_created'] ?? ''), null, false) . "
+                                                " . $data['issuer'] . "
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>";
+            $tool_content .= "</div>";
+            }
+            $tool_content .= "
+                            </div>
+                          </div>";
+        }
+
+        //show my certificates collection
+        if ($myCertificates) {
+            $tool_content .= '<div id="mycertificates" role="tabpanel" class="'.$myCertificates_div_class.'" aria-labelledby="mycertificatestab" >';
+            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+
+            foreach ($myCertificates as $mycertificate) {
+                $tool_content .= "<div class='col'>";
+                $data = unserialize($mycertificate->data);
+                if (!empty($mycertificate->course_title)) {
+                    $mycertificate->course_title = $langCourse.': '.q($mycertificate->course_title);
+                } else {
+                    $mycertificate->course_title = $langCertificates;
+                }
+                $identifier = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE cert_id = ?d AND template_id = ?d AND user_id = ?d", $mycertificate->resource_id, $data['template'], $mycertificate->user_id)->identifier;
+                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
+                                    <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
+                                        <h3>".q($data['title'])."</h3>                                    
+                                        <div>
+                                            ". action_button(array(
+                                                array(
+                                                    'title' => $langePortfolioRemoveResource,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=my_certificates&amp;er_id=".$mycertificate->id,
+                                                    'icon' => 'fa-xmark',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langePortfolioSureToRemoveResource,
+                                                    'show' => ($mycertificate->user_id == $uid)
+                                                )))."
+                                        </div>                                          
+                                    </div>
+                                    <div class='card-body'>
+                                        <img style='height:150px; width:150px;' src='{$urlServer}resources/img/game/badge.png' target='_blank' class='card-img-top m-auto d-block mt-3' alt='certificate'>
+                                        <div class='card-body text-center'>
+                                            <a class='link-color' href='{$urlServer}main/out.php?i={$identifier}'>
                                                 " . ellipsize($data['title'], 40) . "
                                                 " . format_locale_date(strtotime($data['date_created'] ?? ''), null, false) . "
                                                 " . $data['issuer'] . "
